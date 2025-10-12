@@ -1,0 +1,12 @@
+{
+  "parse_jobs": [
+    { "file_path": "./samples/sample.pdf", "output_folder": "./output_test/pdf" },
+    { "file_path": "./samples/sample.xlsx", "output_folder": "./output_test/excel" },
+    { "file_path": "./samples/sample.csv", "output_folder": "./output_test/csv" },
+    { "file_path": "./samples/sample.png", "output_folder": "./output_test/image" },
+    { "file_path": "./samples/sample.json", "output_folder": "./output_test/json" },
+    { "file_path": "./samples/sample.docx", "output_folder": "./output_test/docx" },
+    { "file_path": "./samples/sample.html", "output_folder": "./output_test/html" },
+    { "file_path": "./samples/sample.txt", "output_folder": "./output_test/txt" }
+  ]
+}

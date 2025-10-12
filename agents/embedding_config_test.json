@@ -1,0 +1,22 @@
+{
+  "primary_embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "fallback_embedding_model": "jhgan/ko-sbert-nli", 
+  "embedding_jobs": [
+    {
+      "input_folder": "./chunk/test/text",
+      "output_folder": "./embedding/test/text"
+    },
+    {
+      "input_folder": "./chunk/test/table",
+      "output_folder": "./embedding/test/table"
+    },
+    {
+      "input_folder": "./chunk/test/docx",
+      "output_folder": "./embedding/test/docx"
+    },
+    {
+      "input_folder": "./chunk/test/image",
+      "output_folder": "./embedding/test/image"
+    }
+  ]
+}

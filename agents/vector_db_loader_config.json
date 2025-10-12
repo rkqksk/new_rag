@@ -1,0 +1,19 @@
+{
+  "vector_db_loader_jobs": [
+    {
+      "embedding_folder": "./embedding/competitor_a/pdf",
+      "faiss_index_path": "./vector_db/competitor_a_pdf.index",
+      "metadata_path": "./vector_db/competitor_a_pdf_meta.json"
+    },
+    {
+      "embedding_folder": "./embedding/competitor_a/excel",
+      "faiss_index_path": "./vector_db/competitor_a_excel.index",
+      "metadata_path": "./vector_db/competitor_a_excel_meta.json"
+    },
+    {
+      "embedding_folder": "./embedding/partner_b/docx",
+      "faiss_index_path": "./vector_db/partner_b_docx.index",
+      "metadata_path": "./vector_db/partner_b_docx_meta.json"
+    }
+  ]
+}

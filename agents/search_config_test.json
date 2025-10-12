@@ -1,0 +1,15 @@
+{
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "search_jobs": [
+    {
+      "faiss_index_path": "./vector_db/test_text.index",
+      "metadata_path": "./vector_db/test_text_meta.json",
+      "topk": 3
+    },
+    {
+      "faiss_index_path": "./vector_db/test_table.index",
+      "metadata_path": "./vector_db/test_table_meta.json",
+      "topk": 3
+    }
+  ]
+}

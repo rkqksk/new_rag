@@ -1,0 +1,13 @@
+__pycache__/
+.env
+*.sqlite3
+/documents/
+/images/
+.DS_Store
+.vscode/
+node_modules/
+
+# Cursor & Claude
+.claude/
+.checkpoints/
+

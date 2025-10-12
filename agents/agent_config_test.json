@@ -1,0 +1,40 @@
+{
+  "agent_name": "CrawlerAgent",
+  "sites": [
+    {
+      "site_name": "청진_제품정보",
+      "base_url": "http://chungjinkorea.com/kr/product/list.php?part_idx=1",
+      "domain_keyword": "chungjinkorea.com",
+      "detail_url_pattern": "/product/list.php?part_idx=1~2000",
+      "output_folder": "./crawl/chungjinkorea",
+      "product_keywords": ["PE", "PET", "PETG", "PP", "용기", "인쇄", "description"],
+      "description_selectors": ["li", "img"],
+      "login_required": false,
+      "login_fields": [],
+      "headers": {
+        "User-Agent": "Mozilla/5.0",
+        "Referer": "https://google.com"
+      },
+      "max_depth": 5,
+      "sleep_sec": 2
+    },
+    {
+      "site_name": "경쟁사A_제품정보",
+      "base_url": "https://competitor-a.com/products",
+      "domain_keyword": "competitor-a.com",
+      "detail_url_pattern": "/products/view",
+      "output_folder": "./crawl/competitor_a",
+      "product_keywords": ["PETG", "용기", "인쇄", "치수", "스펙", "펌프"],
+      "description_selectors": ["li", ".spec-item"],
+      "login_required": false,
+      "login_fields": [],
+      "headers": {
+        "User-Agent": "Mozilla/5.0",
+        "Referer": "https://google.com"
+      },
+      "max_depth": 4,
+      "sleep_sec": 1
+    }
+  ]
+}
+

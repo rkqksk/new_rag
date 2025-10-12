@@ -1,0 +1,41 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+langchain==0.1.0
+langchain-community==0.0.13
+easyocr==1.7.1
+pandas==2.1.4
+numpy==1.26.4
+tabula-py==2.8.1
+pdfminer.six==20221105
+camelot-py[cv]==0.11.0
+openpyxl==3.1.2
+qdrant-client==1.7.0
+redis==5.0.1
+psycopg[binary]==3.1.15
+sqlalchemy==2.0.23
+python-dotenv==1.0.0
+prometheus-client==0.19.0
+pytest==7.4.3
+pytest-asyncio==0.21.1
+beautifulsoup4==4.12.2
+lxml==4.9.3
+requests==2.31.0
+httpx==0.25.2
+aiohttp==3.9.1
+selenium==4.15.2
+playwright==1.38.0
+unstructured==0.11.6
+transformers==4.36.0
+sentence-transformers==2.2.2
+peft==0.7.1
+bitsandbytes==0.42.0
+accelerate==0.24.1
+scikit-learn==1.7.2
+schedule==1.2.1
+anthropic==0.19.0
+# docling==1.0.0
+# deepsearch-glm==(기존에 넣었던 버전)
+# claude-sdk==1.5.0
+# claude-code-sdk==0.0.23
+# clip-by-openai
+# (혹시 docling-core를 직접 썼으면) # docling-core==(버전)

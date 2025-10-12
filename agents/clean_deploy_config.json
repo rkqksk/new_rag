@@ -1,0 +1,13 @@
+{
+  "clean_targets": [
+    "./crawl",
+    "./parse",
+    "./chunk",
+    "./embedding",
+    "./vector_db",
+    "./output_test"
+  ],
+  "backup_targets": [
+    "./agents"
+  ]
+}

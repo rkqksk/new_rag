@@ -1,0 +1,14 @@
+{
+  "vector_db_loader_jobs": [
+    {
+      "embedding_folder": "./embedding/test/text",
+      "faiss_index_path": "./vector_db/test_text.index",
+      "metadata_path": "./vector_db/test_text_meta.json"
+    },
+    {
+      "embedding_folder": "./embedding/test/table",
+      "faiss_index_path": "./vector_db/test_table.index",
+      "metadata_path": "./vector_db/test_table_meta.json"
+    }
+  ]
+}

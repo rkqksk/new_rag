@@ -1,0 +1,26 @@
+{
+  "primary_embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "fallback_embedding_model": "jhgan/ko-sbert-nli",
+  "embedding_jobs": [
+    {
+      "input_folder": "./chunk/competitor_a/pdf",
+      "output_folder": "./embedding/competitor_a/pdf"
+    },
+    {
+      "input_folder": "./chunk/competitor_a/excel", 
+      "output_folder": "./embedding/competitor_a/excel"
+    },
+    {
+      "input_folder": "./chunk/competitor_a/image",
+      "output_folder": "./embedding/competitor_a/image"
+    },
+    {
+      "input_folder": "./chunk/partner_b/docx",
+      "output_folder": "./embedding/partner_b/docx"
+    },
+    {
+      "input_folder": "./chunk/partner_b/html",
+      "output_folder": "./embedding/partner_b/html"
+    }
+  ]
+}

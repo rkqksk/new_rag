@@ -1,0 +1,28 @@
+{
+  "chunking_jobs": [
+    {
+      "type": "text",
+      "input_file": "./parse/competitor_a/pdf/pdf_text.txt",
+      "output_folder": "./chunk/competitor_a/pdf",
+      "chunk_size": 500
+    },
+    {
+      "type": "table",
+      "input_file": "./parse/competitor_a/excel/excel_table.json",
+      "output_folder": "./chunk/competitor_a/excel",
+      "chunk_by": "row"
+    },
+    {
+      "type": "paragraph",
+      "input_file": "./parse/partner_b/docx/docx_text.txt",
+      "output_folder": "./chunk/partner_b/docx",
+      "chunk_size": 400
+    },
+    {
+      "type": "image_ocr",
+      "input_file": "./parse/competitor_a/image/image_ocr.txt",
+      "output_folder": "./chunk/competitor_a/image",
+      "chunk_size": 300
+    }
+  ]
+}

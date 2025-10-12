@@ -1,0 +1,12 @@
+{
+  "parse_jobs": [
+    { "file_path": "./crawl/competitor_a/sample.pdf", "output_folder": "./parse/competitor_a/pdf" },
+    { "file_path": "./crawl/competitor_a/product.xlsx", "output_folder": "./parse/competitor_a/excel" },
+    { "file_path": "./crawl/competitor_a/spec.csv", "output_folder": "./parse/competitor_a/csv" },
+    { "file_path": "./crawl/competitor_a/image_1.png", "output_folder": "./parse/competitor_a/image" },
+    { "file_path": "./crawl/competitor_a/data_sample.json", "output_folder": "./parse/competitor_a/json" },
+    { "file_path": "./crawl/partner_b/catalogue.docx", "output_folder": "./parse/partner_b/docx" },
+    { "file_path": "./crawl/partner_b/detail.html", "output_folder": "./parse/partner_b/html" },
+    { "file_path": "./crawl/partner_b/description.txt", "output_folder": "./parse/partner_b/txt" }
+  ]
+}

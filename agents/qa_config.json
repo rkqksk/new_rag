@@ -1,0 +1,7 @@
+{
+  "chunk_folder": "./chunk/competitor_a/pdf",
+  "openai_model": "gpt-3.5-turbo",
+  "max_chunks": 3,
+  "instruction": "문서 내용에 근거해 답변하세요."
+}
+
