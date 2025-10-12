@@ -7,9 +7,9 @@ class FrontendAgent:
         props_str = ', '.join(props)
         code = f"""import React from 'react';
 
-const {name} = ({props_str}) => (
+const {name} = ({{ {props_str} }}) => (
   <div>
-    {/* {name} 컴포넌트 구현 */}
+    /* {name} 컴포넌트 구현 */
   </div>
 );
 
@@ -41,8 +41,8 @@ test('renders {component_name}', () => {{
 """
 
     def refactor_code(self, old_code):
-        """코드 리팩토링 (예시: 함수형 코드로 변환 등)"""
-        # 실전에서는 LLM API 활용 가능
+        """코드 리팩토링 예시"""
+        # 간단 예시: 'class ' → 'function ' 치환
         refactored_code = old_code.replace('class ', 'function ')
         return refactored_code
 
@@ -63,3 +63,8 @@ component_code = agent.generate_component('SampleButton', ['label', 'onClick'])
 docs = agent.write_docs('SampleButton', ['label', 'onClick'])
 test_code = agent.generate_test('SampleButton')
 api_code = agent.create_api_integration('https://api.example.com/data')
+
+print(component_code)
+print(docs)
+print(test_code)
+print(api_code)
