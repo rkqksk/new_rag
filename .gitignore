@@ -11,3 +11,17 @@ node_modules/
 .claude/
 .checkpoints/
 
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+# OS/IDE
+.DS_Store
+.idea/
+.vscode/
+# Node
+node_modules/
+# 모델/체크포인트(필요 시 LFS로 대체)
+models/
+checkpoints/
