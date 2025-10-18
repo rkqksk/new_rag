@@ -1,0 +1,36 @@
+{
+  "product_name": "32파이 민자캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749953.jpg",
+      "filename": "GOODS1_1661749953.jpg",
+      "alt": "32파이 민자캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "32파이 민자캡",
+    "제품 코드": "CP032-GD02",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø32"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749953.jpg",
+      "filename": "GOODS1_1661749953.jpg",
+      "alt": "32파이 민자캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_748_main_1.jpg"
+    }
+  ],
+  "idx": "748",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=748",
+  "crawled_at": "2025-10-18T21:57:59.439687"
+}

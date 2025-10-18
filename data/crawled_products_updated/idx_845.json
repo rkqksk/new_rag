@@ -1,0 +1,36 @@
+{
+  "product_name": "24파이 무광 고점도펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1689124004.jpg",
+      "filename": "GOODS1_1689124004.jpg",
+      "alt": "24파이 무광 고점도펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "24파이 무광 고점도펌프",
+    "제품 코드": "PO024-CG16(M)",
+    "재질(원료)": "기타",
+    "사양": "내경Ø24"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1689124004.jpg",
+      "filename": "GOODS1_1689124004.jpg",
+      "alt": "24파이 무광 고점도펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_845_main_1.jpg"
+    }
+  ],
+  "idx": "845",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=845",
+  "crawled_at": "2025-10-18T21:59:56.797634"
+}

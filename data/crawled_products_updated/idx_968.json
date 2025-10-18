@@ -1,0 +1,62 @@
+{
+  "product_name": "350ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1759207963.jpg",
+      "filename": "ADD_GOODS2_1759207963.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759207963.jpg",
+      "filename": "GOODS1_1759207963.jpg",
+      "alt": "350ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1759207963.jpg",
+      "filename": "ADD_GOODS1_1759207963.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "350ml 브로우용기",
+    "제품 코드": "BG350-G001",
+    "재질(원료)": "PETG",
+    "사양": "58x168(mm)/Ø24"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1759207963.jpg",
+      "filename": "ADD_GOODS2_1759207963.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_968_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759207963.jpg",
+      "filename": "GOODS1_1759207963.jpg",
+      "alt": "350ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_968_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1759207963.jpg",
+      "filename": "ADD_GOODS1_1759207963.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_968_main_3.jpg"
+    }
+  ],
+  "idx": "968",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=968",
+  "crawled_at": "2025-10-18T21:13:32.297866"
+}

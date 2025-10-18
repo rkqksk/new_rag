@@ -1,0 +1,50 @@
+{
+  "product_name": "450g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666920166.jpg",
+      "filename": "GOODS1_1666920166.jpg",
+      "alt": "450g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666920166.jpg",
+      "filename": "ADD_GOODS1_1666920166.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "450g 크림사출용기",
+    "제품 코드": "JP450-GM01",
+    "재질(원료)": "PP",
+    "사양": "Ø85x96(mm)"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=777",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666920166.jpg",
+      "filename": "GOODS1_1666920166.jpg",
+      "alt": "450g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_777_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666920166.jpg",
+      "filename": "ADD_GOODS1_1666920166.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_777_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_777_print_area.pdf",
+  "idx": "777",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=777",
+  "crawled_at": "2025-10-18T21:47:27.760807"
+}

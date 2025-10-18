@@ -1,0 +1,20 @@
+{
+  "Bottle": {
+    "processed": 0,
+    "failed": 224,
+    "uploaded": 0,
+    "collection_info": null
+  },
+  "Jar": {
+    "processed": 0,
+    "failed": 37,
+    "uploaded": 0,
+    "collection_info": null
+  },
+  "CapPump": {
+    "processed": 0,
+    "failed": 137,
+    "uploaded": 0,
+    "collection_info": null
+  }
+}

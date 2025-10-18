@@ -1,0 +1,36 @@
+{
+  "product_name": "24파이 코미스트펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748031.jpg",
+      "filename": "GOODS1_1661748031.jpg",
+      "alt": "24파이 코미스트펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "24파이 코미스트펌프",
+    "제품 코드": "SO024-CG09",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø24"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748031.jpg",
+      "filename": "GOODS1_1661748031.jpg",
+      "alt": "24파이 코미스트펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_712_main_1.jpg"
+    }
+  ],
+  "idx": "712",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=712",
+  "crawled_at": "2025-10-18T21:56:58.446598"
+}

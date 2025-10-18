@@ -1,0 +1,37 @@
+{
+  "product_name": "80ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658115502.jpg",
+      "filename": "GOODS1_1658115502.jpg",
+      "alt": "80ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "80ml 브로우용기",
+    "제품 코드": "BE080-R001",
+    "재질(원료)": "PE",
+    "사양": "38x97(mm)/Ø20"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=15",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658115502.jpg",
+      "filename": "GOODS1_1658115502.jpg",
+      "alt": "80ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_15_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_15_print_area.pdf",
+  "idx": "15",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=15",
+  "crawled_at": "2025-10-18T21:18:11.792925"
+}

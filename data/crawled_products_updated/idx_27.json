@@ -1,0 +1,37 @@
+{
+  "product_name": "1500ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658116206.jpg",
+      "filename": "GOODS1_1658116206.jpg",
+      "alt": "1500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "1500ml 브로우용기",
+    "제품 코드": "BE115-R001",
+    "재질(원료)": "PE",
+    "사양": "106x239(mm)/Ø33"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=27",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658116206.jpg",
+      "filename": "GOODS1_1658116206.jpg",
+      "alt": "1500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_27_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_27_print_area.pdf",
+  "idx": "27",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=27",
+  "crawled_at": "2025-10-18T21:38:24.334708"
+}

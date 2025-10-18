@@ -27,10 +27,18 @@ from app.services.consultation_service import (
     ConsultationResponse,
 )
 
-# Import ingestion services
-from app.services.document_ingestion_service import DocumentIngestionService
-from app.services.web_crawler_service import WebCrawlerService
-from app.api import ingestion_routes, dashboard_routes, query_routes
+# Import RAG Q&A service
+from app.services.rag_qa_service import (
+    RAGQAService,
+    QARequest,
+    QAResponse,
+)
+
+# Import ingestion services - lazy loading to avoid startup import errors
+# from app.services.document_ingestion_service import DocumentIngestionService
+# from app.services.web_crawler_service import WebCrawlerService
+from app.api import dashboard_routes, query_routes
+# from app.api import ingestion_routes, workflow_routes  # Disabled - document_ingestion not ready
 
 # Load environment variables
 load_dotenv()
@@ -83,31 +91,46 @@ consultation_service = ConsultationService(
     llm_client=None  # Will be implemented later with Ollama
 )
 
-# Initialize document ingestion service
-document_ingestion_service = DocumentIngestionService(
-    qdrant_client=qdrant_client,
-    embedding_model='sentence-transformers/all-MiniLM-L6-v2'
-)
+# Initialize RAG Q&A service (lazy initialization)
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://172.28.0.6:11434")
+OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
 
-# Initialize web crawler service
-web_crawler_service = WebCrawlerService(
-    document_ingestion_service=document_ingestion_service
-)
+rag_qa_service = None
 
-# Inject services into ingestion routes
-ingestion_routes.document_ingestion_service = document_ingestion_service
-ingestion_routes.web_crawler_service = web_crawler_service
+def get_rag_qa_service():
+    global rag_qa_service
+    if rag_qa_service is None:
+        rag_qa_service = RAGQAService(
+            qdrant_client=qdrant_client,
+            embedding_model=model,
+            ollama_url=OLLAMA_URL,
+            model_name=OLLAMA_MODEL
+        )
+    return rag_qa_service
 
-# Inject services into dashboard routes
-dashboard_routes.document_ingestion_service = document_ingestion_service
-dashboard_routes.web_crawler_service = web_crawler_service
+# Initialize document ingestion service - lazy loading
+# Commented out to avoid import errors on startup
+# document_ingestion_service = DocumentIngestionService(
+#     qdrant_client=qdrant_client,
+#     embedding_model='sentence-transformers/all-MiniLM-L6-v2'
+# )
+# web_crawler_service = WebCrawlerService(
+#     document_ingestion_service=document_ingestion_service
+# )
+
+# Inject services into routes - lazy loading
+# ingestion_routes.document_ingestion_service = document_ingestion_service
+# ingestion_routes.web_crawler_service = web_crawler_service
+# dashboard_routes.document_ingestion_service = document_ingestion_service
+# dashboard_routes.web_crawler_service = web_crawler_service
 dashboard_routes.qdrant_client = qdrant_client
 dashboard_routes.redis_client = redis_client
 
 # Register routers
-app.include_router(ingestion_routes.router)
-app.include_router(dashboard_routes.router)
-app.include_router(query_routes.router)
+app.include_router(query_routes.router)  # Query routing with Ollama LLMs
+# app.include_router(ingestion_routes.router)  # Disabled - document_ingestion not ready
+# app.include_router(dashboard_routes.router)  # Disabled - document_ingestion not ready
+# app.include_router(workflow_routes.router)  # Disabled - n8n workflows not configured
 
 # Mount static files
 import os.path as osp
@@ -147,14 +170,27 @@ async def dashboard():
         return FileResponse(dashboard_path)
     return {"error": "Dashboard not found"}
 
+@app.get("/chat")
+async def chat():
+    """Q&A Chat interface"""
+    chat_path = osp.join(osp.dirname(__file__), '..', 'static', 'qa_chat.html')
+    if osp.exists(chat_path):
+        return FileResponse(chat_path)
+    return {"error": "Chat interface not found"}
+
 @app.get("/health")
 async def health_check():
-    """Health check endpoint"""
+    """Health check endpoint with configuration validation"""
     health = {
         "api": "healthy",
         "qdrant": False,
         "redis": False,
-        "postgres": False
+        "postgres": False,
+        "config": {
+            "loaded": False,
+            "valid": False,
+            "source": "CLAUDE.md"
+        }
     }
 
     # Check Qdrant
@@ -187,6 +223,33 @@ async def health_check():
         logger.info("✓ PostgreSQL is healthy")
     except Exception as e:
         logger.error(f"✗ PostgreSQL check failed: {e}")
+
+    # Check system configuration
+    try:
+        from pathlib import Path
+        import yaml
+
+        config_path = Path("config/system_config.yaml")
+        if config_path.exists():
+            with open(config_path, 'r') as f:
+                config_data = yaml.safe_load(f)
+
+            health["config"]["loaded"] = True
+            health["config"]["version"] = config_data.get("version", "unknown")
+            health["config"]["last_sync"] = config_data.get("last_sync", "unknown")
+
+            # Basic validation
+            required_keys = ['architecture', 'llm', 'docker', 'agents']
+            is_valid = all(key in config_data for key in required_keys)
+            health["config"]["valid"] = is_valid
+
+            if is_valid:
+                logger.info("✓ System configuration is valid")
+            else:
+                logger.warning("⚠ System configuration is incomplete")
+
+    except Exception as e:
+        logger.error(f"✗ Config check failed: {e}")
 
     return health
 
@@ -369,6 +432,35 @@ async def handle_defect_inquiry(request: ConsultationRequest):
         return response
     except Exception as e:
         logger.error(f"Defect inquiry error: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/v1/qa/ask")
+async def ask_question(request: QARequest):
+    """
+    RAG 기반 Q&A 엔드포인트
+
+    Request:
+        - question: 사용자 질문 (e.g., "50ml 용기 추천해줘")
+        - collection: 검색할 컬렉션 (default: "products_all")
+        - top_k: 검색할 제품 수 (default: 3)
+        - customer_id: 고객 ID (optional)
+
+    Response:
+        - qa_id: Q&A ID
+        - question: 원본 질문
+        - answer: LLM 생성 답변
+        - related_products: 관련 제품 목록 (product_id, product_name, category, similarity_score)
+        - confidence: 신뢰도 점수 (0.0-1.0)
+        - timestamp: 응답 생성 시각
+    """
+    try:
+        logger.info(f"RAG Q&A request: {request.question}")
+        service = get_rag_qa_service()
+        response = await service.answer_question(request)
+        logger.info(f"RAG Q&A response: {response.qa_id} (confidence: {response.confidence:.2f})")
+        return response
+    except Exception as e:
+        logger.error(f"RAG Q&A error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

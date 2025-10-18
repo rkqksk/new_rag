@@ -1,0 +1,37 @@
+{
+  "product_name": "250ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660633027.jpg",
+      "filename": "GOODS1_1660633027.jpg",
+      "alt": "250ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "250ml 브로우용기",
+    "제품 코드": "BG250-A004",
+    "재질(원료)": "PETG",
+    "사양": "70x40x131(mm)/Ø24"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=575",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660633027.jpg",
+      "filename": "GOODS1_1660633027.jpg",
+      "alt": "250ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_575_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_575_print_area.pdf",
+  "idx": "575",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=575",
+  "crawled_at": "2025-10-18T21:30:27.220457"
+}

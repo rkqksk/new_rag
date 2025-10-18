@@ -1,0 +1,36 @@
+{
+  "product_name": "24파이 미니건스프레이",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747515.jpg",
+      "filename": "GOODS1_1661747515.jpg",
+      "alt": "24파이 미니건스프레이",
+      "type": "main",
+      "width": 800,
+      "height": 800
+    }
+  ],
+  "specifications": {
+    "제품명": "24파이 미니건스프레이",
+    "제품 코드": "SO024-CG04",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø24"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747515.jpg",
+      "filename": "GOODS1_1661747515.jpg",
+      "alt": "24파이 미니건스프레이",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_702_main_1.jpg"
+    }
+  ],
+  "idx": "702",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=702",
+  "crawled_at": "2025-10-18T22:00:21.537388"
+}

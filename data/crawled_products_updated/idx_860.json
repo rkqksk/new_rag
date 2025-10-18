@@ -1,0 +1,50 @@
+{
+  "product_name": "50ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1699329298.jpg",
+      "filename": "GOODS1_1699329298.jpg",
+      "alt": "50ml 헤비브로우용기",
+      "type": "main",
+      "width": 1424,
+      "height": 1424
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1699329298.jpg",
+      "filename": "ADD_GOODS1_1699329298.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "50ml 헤비브로우용기",
+    "제품 코드": "HT050-RC01",
+    "재질(원료)": "PET",
+    "사양": "40x79(mm)/Ø18"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=860",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1699329298.jpg",
+      "filename": "GOODS1_1699329298.jpg",
+      "alt": "50ml 헤비브로우용기",
+      "type": "main",
+      "width": 1424,
+      "height": 1424,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_860_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1699329298.jpg",
+      "filename": "ADD_GOODS1_1699329298.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_860_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_860_print_area.pdf",
+  "idx": "860",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=860",
+  "crawled_at": "2025-10-18T21:39:54.004985"
+}

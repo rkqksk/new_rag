@@ -1,0 +1,76 @@
+{
+  "product_name": "1100ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_173433631320250321130329.jpg",
+      "filename": "ADD_GOODS2_173433631320250321130329.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_173433631320250321130329.jpg",
+      "filename": "ADD_GOODS3_173433631320250321130329.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_173433631320250321130329.jpg",
+      "filename": "GOODS1_173433631320250321130329.jpg",
+      "alt": "1100ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_173433631320250321130329.jpg",
+      "filename": "ADD_GOODS1_173433631320250321130329.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "1100ml 브로우용기",
+    "제품 코드": "BE111-R005",
+    "재질(원료)": "PE",
+    "사양": "93x208(mm)/Ø32"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=914",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_173433631320250321130329.jpg",
+      "filename": "ADD_GOODS2_173433631320250321130329.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_914_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_173433631320250321130329.jpg",
+      "filename": "ADD_GOODS3_173433631320250321130329.jpg",
+      "type": "additional_3",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_914_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_173433631320250321130329.jpg",
+      "filename": "GOODS1_173433631320250321130329.jpg",
+      "alt": "1100ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_914_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_173433631320250321130329.jpg",
+      "filename": "ADD_GOODS1_173433631320250321130329.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_914_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_914_print_area.pdf",
+  "idx": "914",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=914",
+  "crawled_at": "2025-10-18T21:33:23.689477"
+}

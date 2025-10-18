@@ -1,0 +1,49 @@
+{
+  "product_name": "14g 마스카라용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg",
+      "filename": "GOODS1_1753163399.jpg",
+      "alt": "14g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163399.jpg",
+      "filename": "ADD_GOODS1_1753163399.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "14g 마스카라용기",
+    "제품 코드": "MABT014-GS01",
+    "재질(원료)": "PET",
+    "사양": "16x95(mm)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg",
+      "filename": "GOODS1_1753163399.jpg",
+      "alt": "14g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_958_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163399.jpg",
+      "filename": "ADD_GOODS1_1753163399.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_958_main_2.jpg"
+    }
+  ],
+  "idx": "958",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=958",
+  "crawled_at": "2025-10-18T21:24:32.324629"
+}

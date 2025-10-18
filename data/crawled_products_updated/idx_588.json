@@ -1,0 +1,36 @@
+{
+  "product_name": "200ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660634072.jpg",
+      "filename": "GOODS1_1660634072.jpg",
+      "alt": "200ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "200ml 브로우용기",
+    "제품 코드": "BG200-U002",
+    "재질(원료)": "PETG",
+    "사양": "67x31x176(mm)/Ø24"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660634072.jpg",
+      "filename": "GOODS1_1660634072.jpg",
+      "alt": "200ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_588_main_1.jpg"
+    }
+  ],
+  "idx": "588",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=588",
+  "crawled_at": "2025-10-18T21:29:43.848744"
+}

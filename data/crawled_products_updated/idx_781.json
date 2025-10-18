@@ -1,0 +1,50 @@
+{
+  "product_name": "500g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921389.jpg",
+      "filename": "GOODS1_1666921389.jpg",
+      "alt": "500g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921389.jpg",
+      "filename": "ADD_GOODS1_1666921389.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "500g 크림사출용기",
+    "제품 코드": "JP500-GM02",
+    "재질(원료)": "PP",
+    "사양": "Ø92x89(mm)"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=781",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921389.jpg",
+      "filename": "GOODS1_1666921389.jpg",
+      "alt": "500g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_781_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921389.jpg",
+      "filename": "ADD_GOODS1_1666921389.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_781_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_781_print_area.pdf",
+  "idx": "781",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=781",
+  "crawled_at": "2025-10-18T21:47:37.203389"
+}

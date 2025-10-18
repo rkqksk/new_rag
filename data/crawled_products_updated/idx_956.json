@@ -1,0 +1,75 @@
+{
+  "product_name": "7g 마스카라용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1753163311.jpg",
+      "filename": "ADD_GOODS2_1753163311.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1753163311.jpg",
+      "filename": "ADD_GOODS3_1753163311.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163311.jpg",
+      "filename": "GOODS1_1753163311.jpg",
+      "alt": "7g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163311.jpg",
+      "filename": "ADD_GOODS1_1753163311.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "7g 마스카라용기",
+    "제품 코드": "MABT007-GS01",
+    "재질(원료)": "PET",
+    "사양": "16x60(mm)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1753163311.jpg",
+      "filename": "ADD_GOODS2_1753163311.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_956_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1753163311.jpg",
+      "filename": "ADD_GOODS3_1753163311.jpg",
+      "type": "additional_3",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_956_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163311.jpg",
+      "filename": "GOODS1_1753163311.jpg",
+      "alt": "7g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_956_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163311.jpg",
+      "filename": "ADD_GOODS1_1753163311.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_956_main_4.jpg"
+    }
+  ],
+  "idx": "956",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=956",
+  "crawled_at": "2025-10-18T21:18:55.792342"
+}

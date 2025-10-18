@@ -1,0 +1,36 @@
+{
+  "product_name": "20파이 에센스펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748328.jpg",
+      "filename": "GOODS1_1661748328.jpg",
+      "alt": "20파이 에센스펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "20파이 에센스펌프",
+    "제품 코드": "EO020-CG04",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø20"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748328.jpg",
+      "filename": "GOODS1_1661748328.jpg",
+      "alt": "20파이 에센스펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_716_main_1.jpg"
+    }
+  ],
+  "idx": "716",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=716",
+  "crawled_at": "2025-10-18T21:58:35.337067"
+}

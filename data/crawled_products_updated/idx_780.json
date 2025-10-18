@@ -1,0 +1,49 @@
+{
+  "product_name": "120g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921325.jpg",
+      "filename": "GOODS1_1666921325.jpg",
+      "alt": "120g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921325.jpg",
+      "filename": "ADD_GOODS1_1666921325.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "120g 크림사출용기",
+    "제품 코드": "JP120-GM02",
+    "재질(원료)": "PP",
+    "사양": "Ø62x59(mm)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921325.jpg",
+      "filename": "GOODS1_1666921325.jpg",
+      "alt": "120g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_780_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921325.jpg",
+      "filename": "ADD_GOODS1_1666921325.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_780_main_2.jpg"
+    }
+  ],
+  "idx": "780",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=780",
+  "crawled_at": "2025-10-18T21:50:18.408374"
+}

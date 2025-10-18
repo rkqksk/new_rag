@@ -1,0 +1,76 @@
+{
+  "product_name": "300ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1733474026.jpg",
+      "filename": "ADD_GOODS2_1733474026.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1733474026.jpg",
+      "filename": "ADD_GOODS3_1733474026.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1733474026.jpg",
+      "filename": "GOODS1_1733474026.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1733474026.jpg",
+      "filename": "ADD_GOODS1_1733474026.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "300ml 브로우용기",
+    "제품 코드": "BT300-R013",
+    "재질(원료)": "PET",
+    "사양": "59x148(mm)/Ø24"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=910",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1733474026.jpg",
+      "filename": "ADD_GOODS2_1733474026.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_910_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1733474026.jpg",
+      "filename": "ADD_GOODS3_1733474026.jpg",
+      "type": "additional_3",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_910_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1733474026.jpg",
+      "filename": "GOODS1_1733474026.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_910_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1733474026.jpg",
+      "filename": "ADD_GOODS1_1733474026.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_910_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_910_print_area.pdf",
+  "idx": "910",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=910",
+  "crawled_at": "2025-10-18T21:35:07.487920"
+}

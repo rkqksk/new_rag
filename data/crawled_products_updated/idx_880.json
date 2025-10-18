@@ -1,0 +1,63 @@
+{
+  "product_name": "500ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1710836287.jpg",
+      "filename": "ADD_GOODS2_1710836287.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1710836287.jpg",
+      "filename": "GOODS1_1710836287.jpg",
+      "alt": "500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1710836287.jpg",
+      "filename": "ADD_GOODS1_1710836287.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "500ml 브로우용기",
+    "제품 코드": "GT500-S002",
+    "재질(원료)": "PET",
+    "사양": "81x81x143(mm)/Ø60"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=880",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1710836287.jpg",
+      "filename": "ADD_GOODS2_1710836287.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_880_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1710836287.jpg",
+      "filename": "GOODS1_1710836287.jpg",
+      "alt": "500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_880_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1710836287.jpg",
+      "filename": "ADD_GOODS1_1710836287.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_880_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_880_print_area.pdf",
+  "idx": "880",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=880",
+  "crawled_at": "2025-10-18T21:22:19.498780"
+}

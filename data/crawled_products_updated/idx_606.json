@@ -1,0 +1,49 @@
+{
+  "product_name": "420ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660635360.jpg",
+      "filename": "GOODS1_1660635360.jpg",
+      "alt": "420ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660635360.jpg",
+      "filename": "ADD_GOODS1_1660635360.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "420ml 브로우용기",
+    "제품 코드": "BG420-K007",
+    "재질(원료)": "PETG",
+    "사양": "84x150(mm)/Ø33"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660635360.jpg",
+      "filename": "GOODS1_1660635360.jpg",
+      "alt": "420ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_606_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660635360.jpg",
+      "filename": "ADD_GOODS1_1660635360.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_606_main_2.jpg"
+    }
+  ],
+  "idx": "606",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=606",
+  "crawled_at": "2025-10-18T21:19:30.494693"
+}

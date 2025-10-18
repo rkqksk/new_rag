@@ -1,0 +1,63 @@
+{
+  "product_name": "5ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1692669350.jpg",
+      "filename": "ADD_GOODS2_1692669350.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1692669350.jpg",
+      "filename": "GOODS1_1692669350.jpg",
+      "alt": "5ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1692669350.jpg",
+      "filename": "ADD_GOODS1_1692669350.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "5ml 헤비브로우용기",
+    "제품 코드": "HT005-FW01",
+    "재질(원료)": "PET",
+    "사양": "24x45(mm)/Ø18"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=850",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1692669350.jpg",
+      "filename": "ADD_GOODS2_1692669350.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_850_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1692669350.jpg",
+      "filename": "GOODS1_1692669350.jpg",
+      "alt": "5ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_850_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1692669350.jpg",
+      "filename": "ADD_GOODS1_1692669350.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_850_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_850_print_area.pdf",
+  "idx": "850",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=850",
+  "crawled_at": "2025-10-18T21:40:50.896506"
+}

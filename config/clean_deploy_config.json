@@ -1,0 +1,242 @@
+{
+  "config_version": "2.1",
+  "project_name": "RAG Enterprise",
+  "description": "프로젝트 정리 및 배포 준비 설정",
+
+  "cleanup_rules": {
+    "development_mode": {
+      "categories": ["temporary", "build"],
+      "safe_mode": true,
+      "create_backup": true
+    },
+    "production_mode": {
+      "categories": ["temporary", "build", "development", "logs"],
+      "safe_mode": false,
+      "create_backup": true
+    }
+  },
+
+  "backup_paths": {
+    "description": "백업이 필요한 중요 데이터",
+    "critical_data": [
+      "data/crawled_products_organized/",
+      "data/rag_embeddings/",
+      "config/",
+      ".env",
+      "CLAUDE.md",
+      "PROJECT_STRUCTURE_RULES.md"
+    ],
+    "backup_location": "archives/backups",
+    "auto_backup_before_cleanup": true
+  },
+
+  "file_relocation": {
+    "description": "루트에서 적절한 위치로 파일 이동",
+    "rules": [
+      {
+        "pattern": "test_*.py",
+        "destination": "tests/integration/",
+        "action": "move",
+        "reason": "테스트 파일 정리"
+      },
+      {
+        "pattern": "crawl_*.py",
+        "destination": "scripts/crawlers/",
+        "action": "move",
+        "reason": "크롤러 스크립트 정리"
+      },
+      {
+        "pattern": "*_crawler.py",
+        "destination": "scripts/crawlers/",
+        "action": "move",
+        "reason": "크롤러 스크립트 정리"
+      },
+      {
+        "pattern": "browser_automation.py",
+        "destination": "scripts/crawlers/",
+        "action": "move",
+        "reason": "브라우저 자동화 스크립트 정리"
+      },
+      {
+        "pattern": "scan_*.py",
+        "destination": "scripts/crawlers/",
+        "action": "move",
+        "reason": "URL 스캔 스크립트 정리"
+      }
+    ]
+  },
+
+  "immediate_delete_patterns": {
+    "description": "즉시 삭제 가능한 임시 파일",
+    "patterns": [
+      "**/__pycache__/**",
+      "**/*.pyc",
+      "**/*.pyo",
+      "**/.pytest_cache/**",
+      "**/.mypy_cache/**",
+      "**/.DS_Store",
+      "**/Thumbs.db",
+      "**/*.tmp",
+      "**/*.temp",
+      "**/*.swp",
+      "**/*.swo",
+      "temp/**/*"
+    ]
+  },
+
+  "age_based_cleanup": {
+    "description": "오래된 파일 자동 정리",
+    "rules": [
+      {
+        "pattern": "logs/**/*.log",
+        "max_age_days": 90,
+        "action": "archive"
+      },
+      {
+        "pattern": "temp/**/*",
+        "max_age_days": 7,
+        "action": "delete"
+      },
+      {
+        "pattern": "data/test_*/**",
+        "max_age_days": 30,
+        "action": "delete"
+      },
+      {
+        "pattern": "archives/backups/*",
+        "max_age_days": 365,
+        "action": "compress"
+      }
+    ]
+  },
+
+  "archiving": {
+    "compression": "gzip",
+    "retention_policy": {
+      "recent_days": 7,
+      "daily_backups": 30,
+      "weekly_backups": 90,
+      "monthly_backups": 365
+    },
+    "backup_location": "archives/backups",
+    "archive_logs_location": "archives/logs",
+    "deprecated_code_location": "archives/deprecated"
+  },
+
+  "validation": {
+    "check_env_files": true,
+    "check_dependencies": true,
+    "check_project_structure": true,
+    "check_secrets": true,
+    "required_files": [
+      "requirements.txt",
+      ".env.example",
+      "docker-compose.yml",
+      "CLAUDE.md",
+      "PROJECT_STRUCTURE_RULES.md"
+    ],
+    "required_directories": [
+      "app/",
+      "agents/",
+      "config/",
+      "scripts/",
+      "tests/"
+    ]
+  },
+
+  "excluded_patterns": [
+    ".git/**",
+    "node_modules/**",
+    "venv/**",
+    ".venv/**",
+    "*.pyc",
+    "__pycache__/**",
+    "data/crawled_products_organized/**",
+    "data/rag_embeddings/**"
+  ],
+
+  "project_organization": {
+    "description": "프로젝트 파일 정리 및 재구성 규칙",
+    "enabled": true,
+
+    "core_files_to_keep_in_root": [
+      "CLAUDE.md",
+      "DEV_ENVIRONMENT.md",
+      "PROJECT_STRUCTURE_RULES.md",
+      ".mcp.json",
+      "docker-compose.yml",
+      "requirements.txt",
+      "requirements-docker.txt",
+      ".env",
+      ".env.example",
+      ".gitignore",
+      "README.md"
+    ],
+
+    "archive_documentation": {
+      "phase2_docs": {
+        "target": "archives/phase2_docs/",
+        "patterns": [
+          "PHASE2_*.md",
+          "STEP2_*.md",
+          "STEP3_*.md"
+        ]
+      },
+      "mcp_setup_guides": {
+        "target": "archives/mcp_setup_guides/",
+        "patterns": [
+          "MCP_*.md",
+          "GOOGLE_DEVTOOLS_MCP_SETUP.md"
+        ]
+      },
+      "finetuning_guides": {
+        "target": "archives/finetuning_guides/",
+        "patterns": [
+          "FINETUNING_*.md",
+          "TEACHER_STUDENT_*.md"
+        ]
+      },
+      "validation_reports": {
+        "target": "archives/validation_reports/",
+        "patterns": [
+          "VALIDATION_REPORT.md",
+          "SYSTEM_INTEGRITY_CHECK.md",
+          "CLEANUP_PLAN.md",
+          "PRE_DEVELOPMENT_CHECKLIST.md"
+        ]
+      }
+    },
+
+    "move_to_docs": {
+      "target": "docs/reference/",
+      "patterns": [
+        "COMPREHENSIVE_FORMAT_SUPPORT.md",
+        "CRAWL_DATA_STRUCTURE.md",
+        "DATA_FLOW_FOR_TRAINING.md",
+        "SUPPORTED_FORMATS.md"
+      ]
+    },
+
+    "data_cleanup": {
+      "remove_test_data": [
+        "data/test_*",
+        "data/spider_test",
+        "data/spider_quality_test"
+      ],
+      "consolidate_crawled_data": {
+        "keep": "data/crawled_products_organized/",
+        "remove": [
+          "data/crawled_products/",
+          "data/chungjin_final_crawl/"
+        ]
+      }
+    },
+
+    "duplicate_files": {
+      "tests/test_haiku_mcp.py": {
+        "keep": "tests/unit/test_haiku_mcp.py",
+        "remove": "tests/test_haiku_mcp.py"
+      }
+    }
+  }
+}

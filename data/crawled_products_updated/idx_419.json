@@ -1,0 +1,63 @@
+{
+  "product_name": "400g 크림용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594693.jpg",
+      "filename": "ADD_GOODS2_1659594693.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594693.jpg",
+      "filename": "GOODS1_1659594693.jpg",
+      "alt": "400g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594693.jpg",
+      "filename": "ADD_GOODS1_1659594693.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "400g 크림용기",
+    "제품 코드": "JT400-TM01",
+    "재질(원료)": "PET",
+    "사양": "73(mm)xØ96"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=419",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594693.jpg",
+      "filename": "ADD_GOODS2_1659594693.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_419_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594693.jpg",
+      "filename": "GOODS1_1659594693.jpg",
+      "alt": "400g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_419_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594693.jpg",
+      "filename": "ADD_GOODS1_1659594693.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_419_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_419_print_area.pdf",
+  "idx": "419",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=419",
+  "crawled_at": "2025-10-18T21:47:56.061415"
+}

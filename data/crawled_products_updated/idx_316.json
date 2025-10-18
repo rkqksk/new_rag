@@ -1,0 +1,50 @@
+{
+  "product_name": "500ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658450498.jpg",
+      "filename": "GOODS1_1658450498.jpg",
+      "alt": "500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1658450498.jpg",
+      "filename": "ADD_GOODS1_1658450498.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "500ml 브로우용기",
+    "제품 코드": "BT500-T006",
+    "재질(원료)": "PET",
+    "사양": "75x150(mm)/Ø32"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=316",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658450498.jpg",
+      "filename": "GOODS1_1658450498.jpg",
+      "alt": "500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_316_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1658450498.jpg",
+      "filename": "ADD_GOODS1_1658450498.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_316_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_316_print_area.pdf",
+  "idx": "316",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=316",
+  "crawled_at": "2025-10-18T21:25:19.758487"
+}

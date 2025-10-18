@@ -1,0 +1,49 @@
+{
+  "product_name": "6g 마스카라용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163256.jpg",
+      "filename": "GOODS1_1753163256.jpg",
+      "alt": "6g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163256.jpg",
+      "filename": "ADD_GOODS1_1753163256.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "6g 마스카라용기",
+    "제품 코드": "MABT006-GS01",
+    "재질(원료)": "PET",
+    "사양": "13x73(mm)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163256.jpg",
+      "filename": "GOODS1_1753163256.jpg",
+      "alt": "6g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_955_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163256.jpg",
+      "filename": "ADD_GOODS1_1753163256.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_955_main_2.jpg"
+    }
+  ],
+  "idx": "955",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=955",
+  "crawled_at": "2025-10-18T21:36:59.211678"
+}

@@ -1,0 +1,50 @@
+{
+  "product_name": "30ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1687324203.jpg",
+      "filename": "GOODS1_1687324203.jpg",
+      "alt": "30ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1687324203.jpg",
+      "filename": "ADD_GOODS1_1687324203.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "30ml 브로우용기",
+    "제품 코드": "BT030-RM04",
+    "재질(원료)": "PET",
+    "사양": "34x64(mm)/Ø20"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=841",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1687324203.jpg",
+      "filename": "GOODS1_1687324203.jpg",
+      "alt": "30ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_841_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1687324203.jpg",
+      "filename": "ADD_GOODS1_1687324203.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_841_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_841_print_area.pdf",
+  "idx": "841",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=841",
+  "crawled_at": "2025-10-18T21:41:29.178769"
+}

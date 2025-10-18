@@ -1,0 +1,25 @@
+{
+  "Bottle": {
+    "processed": 224,
+    "failed": 0,
+    "uploaded": 224,
+    "collection_info": {}
+  },
+  "Jar": {
+    "processed": 37,
+    "failed": 0,
+    "uploaded": 37,
+    "collection_info": {}
+  },
+  "CapPump": {
+    "processed": 137,
+    "failed": 0,
+    "uploaded": 137,
+    "collection_info": {}
+  },
+  "all": {
+    "total_products": 398,
+    "uploaded": 398,
+    "collection_info": {}
+  }
+}

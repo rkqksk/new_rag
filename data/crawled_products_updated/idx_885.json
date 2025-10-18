@@ -1,0 +1,37 @@
+{
+  "product_name": "1000ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711695916.jpg",
+      "filename": "GOODS1_1711695916.jpg",
+      "alt": "1000ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "1000ml 브로우용기",
+    "제품 코드": "BT111-L001",
+    "재질(원료)": "PET",
+    "사양": "88x224(mm)/Ø32"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=885",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711695916.jpg",
+      "filename": "GOODS1_1711695916.jpg",
+      "alt": "1000ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_885_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_885_print_area.pdf",
+  "idx": "885",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=885",
+  "crawled_at": "2025-10-18T21:44:43.982671"
+}

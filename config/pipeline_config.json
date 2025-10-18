@@ -1,0 +1,43 @@
+{
+  "pipeline_name": "RAG Enterprise Master Pipeline",
+  "version": "2.0",
+
+  "enable_pre_cleanup": true,
+  "enable_post_cleanup": true,
+  "enable_archiving": true,
+  "enable_validation": true,
+
+  "cleanup_categories": ["temporary", "build", "logs"],
+
+  "crawler_config": {
+    "sites": [
+      {
+        "site_name": "ChungJin Korea",
+        "base_url": "http://chungjinkorea.com/kr/product/list.php?part_idx=1",
+        "domain_keyword": "chungjinkorea.com",
+        "detail_url_pattern": "/product/view",
+        "output_folder": "data/crawled_products",
+        "sleep_sec": 1,
+        "max_depth": 4
+      }
+    ]
+  },
+
+  "workflow_config": {
+    "max_workers": 4,
+    "retry_attempts": 3,
+    "chunk_size": 500,
+    "chunk_overlap": 50,
+    "primary_embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "fallback_embedding_model": "jhgan/ko-sbert-nli",
+    "faiss_index_path": "./data/faiss.index",
+    "metadata_path": "./data/metadata.json"
+  },
+
+  "monitoring": {
+    "enable_logging": true,
+    "log_level": "INFO",
+    "enable_metrics": true,
+    "metrics_interval": 60
+  }
+}

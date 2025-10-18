@@ -1,0 +1,49 @@
+{
+  "product_name": "20파이 프레스캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748986.jpg",
+      "filename": "GOODS1_1661748986.jpg",
+      "alt": "20파이 프레스캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661748986.jpg",
+      "filename": "ADD_GOODS1_1661748986.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "20파이 프레스캡",
+    "제품 코드": "RP020-GG01",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø20"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748986.jpg",
+      "filename": "GOODS1_1661748986.jpg",
+      "alt": "20파이 프레스캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_726_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661748986.jpg",
+      "filename": "ADD_GOODS1_1661748986.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_726_main_2.jpg"
+    }
+  ],
+  "idx": "726",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=726",
+  "crawled_at": "2025-10-18T22:00:37.646536"
+}

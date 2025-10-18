@@ -1,0 +1,50 @@
+{
+  "product_name": "50g 헤비크림용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595130.jpg",
+      "filename": "GOODS1_1659595130.jpg",
+      "alt": "50g 헤비크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595130.jpg",
+      "filename": "ADD_GOODS1_1659595130.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "50g 헤비크림용기",
+    "제품 코드": "VT050-G002",
+    "재질(원료)": "PET",
+    "사양": "Ø59x42(mm)"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=423",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595130.jpg",
+      "filename": "GOODS1_1659595130.jpg",
+      "alt": "50g 헤비크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_423_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595130.jpg",
+      "filename": "ADD_GOODS1_1659595130.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_423_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_423_print_area.pdf",
+  "idx": "423",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=423",
+  "crawled_at": "2025-10-18T21:48:33.700009"
+}

@@ -1,0 +1,75 @@
+{
+  "product_name": "30ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1749027036.jpg",
+      "filename": "ADD_GOODS2_1749027036.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1749027036.jpg",
+      "filename": "ADD_GOODS3_1749027036.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1749027036.jpg",
+      "filename": "GOODS1_1749027036.jpg",
+      "alt": "30ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1749027036.jpg",
+      "filename": "ADD_GOODS1_1749027036.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "30ml 헤비브로우용기",
+    "제품 코드": "HT030-RC01",
+    "재질(원료)": "PET",
+    "사양": "36x65(mm)/Ø18"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1749027036.jpg",
+      "filename": "ADD_GOODS2_1749027036.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_944_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1749027036.jpg",
+      "filename": "ADD_GOODS3_1749027036.jpg",
+      "type": "additional_3",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_944_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1749027036.jpg",
+      "filename": "GOODS1_1749027036.jpg",
+      "alt": "30ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_944_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1749027036.jpg",
+      "filename": "ADD_GOODS1_1749027036.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_944_main_4.jpg"
+    }
+  ],
+  "idx": "944",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=944",
+  "crawled_at": "2025-10-18T21:31:19.788620"
+}

@@ -1,0 +1,75 @@
+{
+  "product_name": "300ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1724304373.jpg",
+      "filename": "ADD_GOODS2_1724304373.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1724304373.jpg",
+      "filename": "ADD_GOODS3_1724304373.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1724304373.jpg",
+      "filename": "GOODS1_1724304373.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1724304373.jpg",
+      "filename": "ADD_GOODS1_1724304373.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "300ml 브로우용기",
+    "제품 코드": "BE300-G007",
+    "재질(원료)": "PE",
+    "사양": "51x186(mm)/Ø24"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1724304373.jpg",
+      "filename": "ADD_GOODS2_1724304373.jpg",
+      "type": "additional_2",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_899_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1724304373.jpg",
+      "filename": "ADD_GOODS3_1724304373.jpg",
+      "type": "additional_3",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_899_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1724304373.jpg",
+      "filename": "GOODS1_1724304373.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_899_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1724304373.jpg",
+      "filename": "ADD_GOODS1_1724304373.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_899_main_4.jpg"
+    }
+  ],
+  "idx": "899",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=899",
+  "crawled_at": "2025-10-18T21:32:31.438638"
+}

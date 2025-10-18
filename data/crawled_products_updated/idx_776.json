@@ -1,0 +1,49 @@
+{
+  "product_name": "270g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666919759.jpg",
+      "filename": "GOODS1_1666919759.jpg",
+      "alt": "270g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666919759.jpg",
+      "filename": "ADD_GOODS1_1666919759.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "270g 크림사출용기",
+    "제품 코드": "JP270-GM01",
+    "재질(원료)": "PP",
+    "사양": "Ø85x63(mm)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666919759.jpg",
+      "filename": "GOODS1_1666919759.jpg",
+      "alt": "270g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_776_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666919759.jpg",
+      "filename": "ADD_GOODS1_1666919759.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_776_main_2.jpg"
+    }
+  ],
+  "idx": "776",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=776",
+  "crawled_at": "2025-10-18T21:47:46.659103"
+}

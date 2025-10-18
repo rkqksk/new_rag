@@ -1,0 +1,50 @@
+{
+  "product_name": "10ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660636305.jpg",
+      "filename": "GOODS1_1660636305.jpg",
+      "alt": "10ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660636305.jpg",
+      "filename": "ADD_GOODS1_1660636305.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "10ml 브로우용기",
+    "제품 코드": "BG010-C010",
+    "재질(원료)": "PETG",
+    "사양": "17x75(mm)/Ø12"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=619",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660636305.jpg",
+      "filename": "GOODS1_1660636305.jpg",
+      "alt": "10ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_619_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660636305.jpg",
+      "filename": "ADD_GOODS1_1660636305.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_619_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_619_print_area.pdf",
+  "idx": "619",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=619",
+  "crawled_at": "2025-10-18T21:13:58.861015"
+}

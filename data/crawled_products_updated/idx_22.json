@@ -1,0 +1,37 @@
+{
+  "product_name": "350ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658115955.jpg",
+      "filename": "GOODS1_1658115955.jpg",
+      "alt": "350ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "350ml 브로우용기",
+    "제품 코드": "BE350-R001",
+    "재질(원료)": "PE",
+    "사양": "57x191(mm)/Ø24"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=22",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658115955.jpg",
+      "filename": "GOODS1_1658115955.jpg",
+      "alt": "350ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_22_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_22_print_area.pdf",
+  "idx": "22",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=22",
+  "crawled_at": "2025-10-18T21:17:04.833584"
+}

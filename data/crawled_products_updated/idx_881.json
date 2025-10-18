@@ -1,0 +1,50 @@
+{
+  "product_name": "450ml 다층브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1710984860.jpg",
+      "filename": "GOODS1_1710984860.jpg",
+      "alt": "450ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1710984860.jpg",
+      "filename": "ADD_GOODS1_1710984860.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "450ml 다층브로우용기",
+    "제품 코드": "MH450-G001",
+    "재질(원료)": "혼합",
+    "사양": "73x143(mm)/Ø28"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=881",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1710984860.jpg",
+      "filename": "GOODS1_1710984860.jpg",
+      "alt": "450ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_881_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1710984860.jpg",
+      "filename": "ADD_GOODS1_1710984860.jpg",
+      "type": "main",
+      "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_881_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_881_print_area.pdf",
+  "idx": "881",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=881",
+  "crawled_at": "2025-10-18T21:36:32.945296"
+}

@@ -1,0 +1,2168 @@
+{
+  "category": "Jar",
+  "category_url": "http://chungjinkorea.com/kr/product/list.php?part_idx=2",
+  "total_pages": 4,
+  "total_products": 37,
+  "success": 37,
+  "error": 0,
+  "results": [
+    {
+      "status": "success",
+      "idx": "422",
+      "data": {
+        "product_name": "80g 헤비크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595018.jpg",
+            "filename": "GOODS1_1659595018.jpg",
+            "alt": "80g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595018.jpg",
+            "filename": "ADD_GOODS1_1659595018.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "80g 헤비크림용기",
+          "제품 코드": "VT080-G001",
+          "재질(원료)": "PET",
+          "사양": "Ø60x62(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=422",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595018.jpg",
+            "filename": "GOODS1_1659595018.jpg",
+            "alt": "80g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_422_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595018.jpg",
+            "filename": "ADD_GOODS1_1659595018.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_422_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_422_print_area.pdf",
+        "idx": "422",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=422",
+        "crawled_at": "2025-10-18T21:46:37.062027"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_422.json"
+    },
+    {
+      "status": "success",
+      "idx": "963",
+      "data": {
+        "product_name": "150g 무광 이중 크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg",
+            "filename": "GOODS1_1755565387.jpg",
+            "alt": "150g 무광 이중 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1755565387.jpg",
+            "filename": "ADD_GOODS1_1755565387.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "150g 무광 이중 크림용기",
+          "제품 코드": "JP150-GN09(M)",
+          "재질(원료)": "PP",
+          "사양": "86x70(mm)/Ø82"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg",
+            "filename": "GOODS1_1755565387.jpg",
+            "alt": "150g 무광 이중 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_963_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1755565387.jpg",
+            "filename": "ADD_GOODS1_1755565387.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_963_main_2.jpg"
+          }
+        ],
+        "idx": "963",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=963",
+        "crawled_at": "2025-10-18T21:46:45.849874"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_963.json"
+    },
+    {
+      "status": "success",
+      "idx": "807",
+      "data": {
+        "product_name": "220g 원터치패드 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1673593068.jpg",
+            "filename": "ADD_GOODS2_1673593068.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1673593068.jpg",
+            "filename": "GOODS1_1673593068.jpg",
+            "alt": "220g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1673593068.jpg",
+            "filename": "ADD_GOODS1_1673593068.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "220g 원터치패드 크림용기",
+          "제품 코드": "JT220-G003",
+          "재질(원료)": "PET",
+          "사양": "77x72(mm)/Ø71"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1673593068.jpg",
+            "filename": "ADD_GOODS2_1673593068.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_807_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1673593068.jpg",
+            "filename": "GOODS1_1673593068.jpg",
+            "alt": "220g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_807_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1673593068.jpg",
+            "filename": "ADD_GOODS1_1673593068.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_807_main_3.jpg"
+          }
+        ],
+        "idx": "807",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=807",
+        "crawled_at": "2025-10-18T21:46:54.829660"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_807.json"
+    },
+    {
+      "status": "success",
+      "idx": "783",
+      "data": {
+        "product_name": "300g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921662.jpg",
+            "filename": "GOODS1_1666921662.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921662.jpg",
+            "filename": "ADD_GOODS1_1666921662.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 크림사출용기",
+          "제품 코드": "JP300-GK04",
+          "재질(원료)": "PP",
+          "사양": "Ø102x50(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=783",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921662.jpg",
+            "filename": "GOODS1_1666921662.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_783_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921662.jpg",
+            "filename": "ADD_GOODS1_1666921662.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_783_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_783_print_area.pdf",
+        "idx": "783",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=783",
+        "crawled_at": "2025-10-18T21:47:04.102974"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_783.json"
+    },
+    {
+      "status": "success",
+      "idx": "792",
+      "data": {
+        "product_name": "300g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666927787.jpg",
+            "filename": "GOODS1_1666927787.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666927787.jpg",
+            "filename": "ADD_GOODS1_1666927787.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 크림사출용기",
+          "제품 코드": "JP300-TK01",
+          "재질(원료)": "PP",
+          "사양": "Ø98x55(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=792",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666927787.jpg",
+            "filename": "GOODS1_1666927787.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_792_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666927787.jpg",
+            "filename": "ADD_GOODS1_1666927787.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_792_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_792_print_area.pdf",
+        "idx": "792",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=792",
+        "crawled_at": "2025-10-18T21:47:13.493248"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_792.json"
+    },
+    {
+      "status": "success",
+      "idx": "777",
+      "data": {
+        "product_name": "450g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666920166.jpg",
+            "filename": "GOODS1_1666920166.jpg",
+            "alt": "450g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666920166.jpg",
+            "filename": "ADD_GOODS1_1666920166.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "450g 크림사출용기",
+          "제품 코드": "JP450-GM01",
+          "재질(원료)": "PP",
+          "사양": "Ø85x96(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=777",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666920166.jpg",
+            "filename": "GOODS1_1666920166.jpg",
+            "alt": "450g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_777_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666920166.jpg",
+            "filename": "ADD_GOODS1_1666920166.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_777_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_777_print_area.pdf",
+        "idx": "777",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=777",
+        "crawled_at": "2025-10-18T21:47:27.760807"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_777.json"
+    },
+    {
+      "status": "success",
+      "idx": "781",
+      "data": {
+        "product_name": "500g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921389.jpg",
+            "filename": "GOODS1_1666921389.jpg",
+            "alt": "500g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921389.jpg",
+            "filename": "ADD_GOODS1_1666921389.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "500g 크림사출용기",
+          "제품 코드": "JP500-GM02",
+          "재질(원료)": "PP",
+          "사양": "Ø92x89(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=781",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921389.jpg",
+            "filename": "GOODS1_1666921389.jpg",
+            "alt": "500g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_781_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921389.jpg",
+            "filename": "ADD_GOODS1_1666921389.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_781_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_781_print_area.pdf",
+        "idx": "781",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=781",
+        "crawled_at": "2025-10-18T21:47:37.203389"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_781.json"
+    },
+    {
+      "status": "success",
+      "idx": "776",
+      "data": {
+        "product_name": "270g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666919759.jpg",
+            "filename": "GOODS1_1666919759.jpg",
+            "alt": "270g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666919759.jpg",
+            "filename": "ADD_GOODS1_1666919759.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "270g 크림사출용기",
+          "제품 코드": "JP270-GM01",
+          "재질(원료)": "PP",
+          "사양": "Ø85x63(mm)"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666919759.jpg",
+            "filename": "GOODS1_1666919759.jpg",
+            "alt": "270g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_776_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666919759.jpg",
+            "filename": "ADD_GOODS1_1666919759.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_776_main_2.jpg"
+          }
+        ],
+        "idx": "776",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=776",
+        "crawled_at": "2025-10-18T21:47:46.659103"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_776.json"
+    },
+    {
+      "status": "success",
+      "idx": "419",
+      "data": {
+        "product_name": "400g 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594693.jpg",
+            "filename": "ADD_GOODS2_1659594693.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594693.jpg",
+            "filename": "GOODS1_1659594693.jpg",
+            "alt": "400g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594693.jpg",
+            "filename": "ADD_GOODS1_1659594693.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "400g 크림용기",
+          "제품 코드": "JT400-TM01",
+          "재질(원료)": "PET",
+          "사양": "73(mm)xØ96"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=419",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594693.jpg",
+            "filename": "ADD_GOODS2_1659594693.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_419_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594693.jpg",
+            "filename": "GOODS1_1659594693.jpg",
+            "alt": "400g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_419_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594693.jpg",
+            "filename": "ADD_GOODS1_1659594693.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_419_main_3.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_419_print_area.pdf",
+        "idx": "419",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=419",
+        "crawled_at": "2025-10-18T21:47:56.061415"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_419.json"
+    },
+    {
+      "status": "success",
+      "idx": "788",
+      "data": {
+        "product_name": "500g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666923436.jpg",
+            "filename": "GOODS1_1666923436.jpg",
+            "alt": "500g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666923436.jpg",
+            "filename": "ADD_GOODS1_1666923436.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "500g 크림사출용기",
+          "제품 코드": "JP500-GM07",
+          "재질(원료)": "PP",
+          "사양": "Ø89x100(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=788",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666923436.jpg",
+            "filename": "GOODS1_1666923436.jpg",
+            "alt": "500g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_788_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666923436.jpg",
+            "filename": "ADD_GOODS1_1666923436.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_788_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_788_print_area.pdf",
+        "idx": "788",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=788",
+        "crawled_at": "2025-10-18T21:48:05.844072"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_788.json"
+    },
+    {
+      "status": "success",
+      "idx": "790",
+      "data": {
+        "product_name": "50g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666925263.jpg",
+            "filename": "GOODS1_1666925263.jpg",
+            "alt": "50g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666925263.jpg",
+            "filename": "ADD_GOODS1_1666925263.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "50g 크림사출용기",
+          "제품 코드": "JP050-RM02",
+          "재질(원료)": "PP",
+          "사양": "Ø58x50(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=790",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666925263.jpg",
+            "filename": "GOODS1_1666925263.jpg",
+            "alt": "50g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_790_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666925263.jpg",
+            "filename": "ADD_GOODS1_1666925263.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_790_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_790_print_area.pdf",
+        "idx": "790",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=790",
+        "crawled_at": "2025-10-18T21:48:14.881251"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_790.json"
+    },
+    {
+      "status": "success",
+      "idx": "928",
+      "data": {
+        "product_name": "500g 원터치패드 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1742537848.jpg",
+            "filename": "ADD_GOODS2_1742537848.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1742537848.jpg",
+            "filename": "GOODS1_1742537848.jpg",
+            "alt": "500g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1742537848.jpg",
+            "filename": "ADD_GOODS1_1742537848.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "500g 원터치패드 크림용기",
+          "제품 코드": "JT500-GM04",
+          "재질(원료)": "PET",
+          "사양": "94x87(mm)/Ø90"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=928",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1742537848.jpg",
+            "filename": "ADD_GOODS2_1742537848.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_928_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1742537848.jpg",
+            "filename": "GOODS1_1742537848.jpg",
+            "alt": "500g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_928_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1742537848.jpg",
+            "filename": "ADD_GOODS1_1742537848.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_928_main_3.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_928_print_area.pdf",
+        "idx": "928",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=928",
+        "crawled_at": "2025-10-18T21:48:24.452628"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_928.json"
+    },
+    {
+      "status": "success",
+      "idx": "423",
+      "data": {
+        "product_name": "50g 헤비크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595130.jpg",
+            "filename": "GOODS1_1659595130.jpg",
+            "alt": "50g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595130.jpg",
+            "filename": "ADD_GOODS1_1659595130.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "50g 헤비크림용기",
+          "제품 코드": "VT050-G002",
+          "재질(원료)": "PET",
+          "사양": "Ø59x42(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=423",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595130.jpg",
+            "filename": "GOODS1_1659595130.jpg",
+            "alt": "50g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_423_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595130.jpg",
+            "filename": "ADD_GOODS1_1659595130.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_423_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_423_print_area.pdf",
+        "idx": "423",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=423",
+        "crawled_at": "2025-10-18T21:48:33.700009"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_423.json"
+    },
+    {
+      "status": "success",
+      "idx": "937",
+      "data": {
+        "product_name": "300g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1746681287.jpg",
+            "filename": "GOODS1_1746681287.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1746681287.jpg",
+            "filename": "ADD_GOODS1_1746681287.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 크림사출용기",
+          "제품 코드": "JP300-GM01",
+          "재질(원료)": "PP",
+          "사양": "Ø86x64(mm)"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1746681287.jpg",
+            "filename": "GOODS1_1746681287.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_937_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1746681287.jpg",
+            "filename": "ADD_GOODS1_1746681287.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_937_main_2.jpg"
+          }
+        ],
+        "idx": "937",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=937",
+        "crawled_at": "2025-10-18T21:48:42.519229"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_937.json"
+    },
+    {
+      "status": "success",
+      "idx": "904",
+      "data": {
+        "product_name": "400g 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1727849342.jpg",
+            "filename": "ADD_GOODS2_1727849342.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1727849342.jpg",
+            "filename": "GOODS1_1727849342.jpg",
+            "alt": "400g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1727849342.jpg",
+            "filename": "ADD_GOODS1_1727849342.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "400g 크림용기",
+          "제품 코드": "JE400-R002",
+          "재질(원료)": "PE",
+          "사양": "99x67(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=904",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1727849342.jpg",
+            "filename": "ADD_GOODS2_1727849342.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_904_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1727849342.jpg",
+            "filename": "GOODS1_1727849342.jpg",
+            "alt": "400g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_904_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1727849342.jpg",
+            "filename": "ADD_GOODS1_1727849342.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_904_main_3.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_904_print_area.pdf",
+        "idx": "904",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=904",
+        "crawled_at": "2025-10-18T21:48:52.122728"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_904.json"
+    },
+    {
+      "status": "success",
+      "idx": "417",
+      "data": {
+        "product_name": "220g 크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594592.jpg",
+            "filename": "GOODS1_1659594592.jpg",
+            "alt": "220g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594592.jpg",
+            "filename": "ADD_GOODS1_1659594592.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "220g 크림용기",
+          "제품 코드": "JT220-G002",
+          "재질(원료)": "PET",
+          "사양": "Ø76x74(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=417",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594592.jpg",
+            "filename": "GOODS1_1659594592.jpg",
+            "alt": "220g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_417_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594592.jpg",
+            "filename": "ADD_GOODS1_1659594592.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_417_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_417_print_area.pdf",
+        "idx": "417",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=417",
+        "crawled_at": "2025-10-18T21:49:01.341636"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_417.json"
+    },
+    {
+      "status": "success",
+      "idx": "425",
+      "data": {
+        "product_name": "100g 헤비크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659595265.jpg",
+            "filename": "ADD_GOODS2_1659595265.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595265.jpg",
+            "filename": "GOODS1_1659595265.jpg",
+            "alt": "100g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595265.jpg",
+            "filename": "ADD_GOODS1_1659595265.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "100g 헤비크림용기",
+          "제품 코드": "VT100-T001",
+          "재질(원료)": "PET",
+          "사양": "Ø72x45(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=425",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659595265.jpg",
+            "filename": "ADD_GOODS2_1659595265.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_425_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595265.jpg",
+            "filename": "GOODS1_1659595265.jpg",
+            "alt": "100g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_425_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595265.jpg",
+            "filename": "ADD_GOODS1_1659595265.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_425_main_3.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_425_print_area.pdf",
+        "idx": "425",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=425",
+        "crawled_at": "2025-10-18T21:49:10.518893"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_425.json"
+    },
+    {
+      "status": "success",
+      "idx": "813",
+      "data": {
+        "product_name": "200g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676963.jpg",
+            "filename": "GOODS1_1675676963.jpg",
+            "alt": "200g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1675676963.jpg",
+            "filename": "ADD_GOODS1_1675676963.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "200g 크림사출용기",
+          "제품 코드": "JP200-GK08",
+          "재질(원료)": "PP",
+          "사양": "Ø99x41(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=813",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676963.jpg",
+            "filename": "GOODS1_1675676963.jpg",
+            "alt": "200g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_813_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1675676963.jpg",
+            "filename": "ADD_GOODS1_1675676963.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_813_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_813_print_area.pdf",
+        "idx": "813",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=813",
+        "crawled_at": "2025-10-18T21:49:18.490482"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_813.json"
+    },
+    {
+      "status": "success",
+      "idx": "854",
+      "data": {
+        "product_name": "300g 원터치패드 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1695020960.jpg",
+            "filename": "ADD_GOODS2_1695020960.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1695020960.jpg",
+            "filename": "GOODS1_1695020960.jpg",
+            "alt": "300g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1695020960.jpg",
+            "filename": "ADD_GOODS1_1695020960.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 원터치패드 크림용기",
+          "제품 코드": "JP300-GM08",
+          "재질(원료)": "PP",
+          "사양": "86x70(mm)/Ø82"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=854",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1695020960.jpg",
+            "filename": "ADD_GOODS2_1695020960.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_854_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1695020960.jpg",
+            "filename": "GOODS1_1695020960.jpg",
+            "alt": "300g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_854_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1695020960.jpg",
+            "filename": "ADD_GOODS1_1695020960.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_854_main_3.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_854_print_area.pdf",
+        "idx": "854",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=854",
+        "crawled_at": "2025-10-18T21:49:26.805347"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_854.json"
+    },
+    {
+      "status": "success",
+      "idx": "787",
+      "data": {
+        "product_name": "300g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666923385.jpg",
+            "filename": "GOODS1_1666923385.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666923385.jpg",
+            "filename": "ADD_GOODS1_1666923385.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 크림사출용기",
+          "제품 코드": "JP300-GM07",
+          "재질(원료)": "PP",
+          "사양": "Ø89x63(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=787",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666923385.jpg",
+            "filename": "GOODS1_1666923385.jpg",
+            "alt": "300g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_787_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666923385.jpg",
+            "filename": "ADD_GOODS1_1666923385.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_787_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_787_print_area.pdf",
+        "idx": "787",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=787",
+        "crawled_at": "2025-10-18T21:49:35.362862"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_787.json"
+    },
+    {
+      "status": "success",
+      "idx": "418",
+      "data": {
+        "product_name": "300g 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594652.jpg",
+            "filename": "ADD_GOODS2_1659594652.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594652.jpg",
+            "filename": "GOODS1_1659594652.jpg",
+            "alt": "300g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594652.jpg",
+            "filename": "ADD_GOODS1_1659594652.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 크림용기",
+          "제품 코드": "JT300-TM01",
+          "재질(원료)": "PET",
+          "사양": "65(mm)xØ89"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=418",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594652.jpg",
+            "filename": "ADD_GOODS2_1659594652.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_418_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594652.jpg",
+            "filename": "GOODS1_1659594652.jpg",
+            "alt": "300g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_418_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594652.jpg",
+            "filename": "ADD_GOODS1_1659594652.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_418_main_3.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_418_print_area.pdf",
+        "idx": "418",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=418",
+        "crawled_at": "2025-10-18T21:49:43.729887"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_418.json"
+    },
+    {
+      "status": "success",
+      "idx": "784",
+      "data": {
+        "product_name": "500g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921709.jpg",
+            "filename": "GOODS1_1666921709.jpg",
+            "alt": "500g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921709.jpg",
+            "filename": "ADD_GOODS1_1666921709.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "500g 크림사출용기",
+          "제품 코드": "JP500-GK04",
+          "재질(원료)": "PP",
+          "사양": "Ø102x79(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=784",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921709.jpg",
+            "filename": "GOODS1_1666921709.jpg",
+            "alt": "500g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_784_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921709.jpg",
+            "filename": "ADD_GOODS1_1666921709.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_784_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_784_print_area.pdf",
+        "idx": "784",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=784",
+        "crawled_at": "2025-10-18T21:49:53.099544"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_784.json"
+    },
+    {
+      "status": "success",
+      "idx": "812",
+      "data": {
+        "product_name": "150g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676873.jpg",
+            "filename": "GOODS1_1675676873.jpg",
+            "alt": "150g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1675676873.jpg",
+            "filename": "ADD_GOODS1_1675676873.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "150g 크림사출용기",
+          "제품 코드": "JP150-GK08",
+          "재질(원료)": "PP",
+          "사양": "Ø99x35(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=812",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676873.jpg",
+            "filename": "GOODS1_1675676873.jpg",
+            "alt": "150g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_812_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1675676873.jpg",
+            "filename": "ADD_GOODS1_1675676873.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_812_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_812_print_area.pdf",
+        "idx": "812",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=812",
+        "crawled_at": "2025-10-18T21:50:02.661768"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_812.json"
+    },
+    {
+      "status": "success",
+      "idx": "884",
+      "data": {
+        "product_name": "600g 크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg",
+            "filename": "GOODS1_1711671186.jpg",
+            "alt": "600g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1711671186.jpg",
+            "filename": "ADD_GOODS1_1711671186.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "600g 크림용기",
+          "제품 코드": "JE600-R002",
+          "재질(원료)": "PE",
+          "사양": "99x94(mm)"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg",
+            "filename": "GOODS1_1711671186.jpg",
+            "alt": "600g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_884_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1711671186.jpg",
+            "filename": "ADD_GOODS1_1711671186.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_884_main_2.jpg"
+          }
+        ],
+        "idx": "884",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=884",
+        "crawled_at": "2025-10-18T21:50:10.138900"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_884.json"
+    },
+    {
+      "status": "success",
+      "idx": "780",
+      "data": {
+        "product_name": "120g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921325.jpg",
+            "filename": "GOODS1_1666921325.jpg",
+            "alt": "120g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921325.jpg",
+            "filename": "ADD_GOODS1_1666921325.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "120g 크림사출용기",
+          "제품 코드": "JP120-GM02",
+          "재질(원료)": "PP",
+          "사양": "Ø62x59(mm)"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921325.jpg",
+            "filename": "GOODS1_1666921325.jpg",
+            "alt": "120g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_780_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921325.jpg",
+            "filename": "ADD_GOODS1_1666921325.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_780_main_2.jpg"
+          }
+        ],
+        "idx": "780",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=780",
+        "crawled_at": "2025-10-18T21:50:18.408374"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_780.json"
+    },
+    {
+      "status": "success",
+      "idx": "962",
+      "data": {
+        "product_name": "150g 이중 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1755565317.jpg",
+            "filename": "ADD_GOODS2_1755565317.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565317.jpg",
+            "filename": "GOODS1_1755565317.jpg",
+            "alt": "150g 이중 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1755565317.jpg",
+            "filename": "ADD_GOODS1_1755565317.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "150g 이중 크림용기",
+          "제품 코드": "JP150-GN09",
+          "재질(원료)": "PP",
+          "사양": "86x70(mm)/Ø82"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1755565317.jpg",
+            "filename": "ADD_GOODS2_1755565317.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_962_additional_2_1.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565317.jpg",
+            "filename": "GOODS1_1755565317.jpg",
+            "alt": "150g 이중 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_962_main_2.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1755565317.jpg",
+            "filename": "ADD_GOODS1_1755565317.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_962_main_3.jpg"
+          }
+        ],
+        "idx": "962",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=962",
+        "crawled_at": "2025-10-18T21:50:26.269648"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_962.json"
+    },
+    {
+      "status": "success",
+      "idx": "490",
+      "data": {
+        "product_name": "660g 크림브로우용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660007620.jpg",
+            "filename": "GOODS1_1660007620.jpg",
+            "alt": "660g 크림브로우용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660007620.jpg",
+            "filename": "ADD_GOODS1_1660007620.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "660g 크림브로우용기",
+          "제품 코드": "JE660-R003",
+          "재질(원료)": "PE",
+          "사양": "94x154(mm)/Ø32"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=490",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660007620.jpg",
+            "filename": "GOODS1_1660007620.jpg",
+            "alt": "660g 크림브로우용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_490_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660007620.jpg",
+            "filename": "ADD_GOODS1_1660007620.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_490_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_490_print_area.pdf",
+        "idx": "490",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=490",
+        "crawled_at": "2025-10-18T21:50:34.599834"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_490.json"
+    },
+    {
+      "status": "success",
+      "idx": "487",
+      "data": {
+        "product_name": "300g 크림브로우용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660007285.jpg",
+            "filename": "GOODS1_1660007285.jpg",
+            "alt": "300g 크림브로우용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660007285.jpg",
+            "filename": "ADD_GOODS1_1660007285.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "300g 크림브로우용기",
+          "제품 코드": "JE300-R001",
+          "재질(원료)": "PE",
+          "사양": "84x69(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=487",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660007285.jpg",
+            "filename": "GOODS1_1660007285.jpg",
+            "alt": "300g 크림브로우용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_487_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660007285.jpg",
+            "filename": "ADD_GOODS1_1660007285.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_487_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_487_print_area.pdf",
+        "idx": "487",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=487",
+        "crawled_at": "2025-10-18T21:50:42.591577"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_487.json"
+    },
+    {
+      "status": "success",
+      "idx": "779",
+      "data": {
+        "product_name": "100g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921258.jpg",
+            "filename": "GOODS1_1666921258.jpg",
+            "alt": "100g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921258.jpg",
+            "filename": "ADD_GOODS1_1666921258.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "100g 크림사출용기",
+          "제품 코드": "JP100-GM02",
+          "재질(원료)": "PP",
+          "사양": "Ø62x54(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=779",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921258.jpg",
+            "filename": "GOODS1_1666921258.jpg",
+            "alt": "100g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_779_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921258.jpg",
+            "filename": "ADD_GOODS1_1666921258.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_779_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_779_print_area.pdf",
+        "idx": "779",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=779",
+        "crawled_at": "2025-10-18T21:50:52.831936"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_779.json"
+    },
+    {
+      "status": "success",
+      "idx": "877",
+      "data": {
+        "product_name": "50g 헤비 크림용기",
+        "images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_171082991720250627124617.jpg",
+            "filename": "ADD_GOODS2_171082991720250627124617.jpg",
+            "type": "additional_2"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_171082991720250627124617.jpg",
+            "filename": "ADD_GOODS3_171082991720250627124617.jpg",
+            "type": "additional_3"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_171082991720250627124617.jpg",
+            "filename": "GOODS1_171082991720250627124617.jpg",
+            "alt": "50g 헤비 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_171082991720250627124617.jpg",
+            "filename": "ADD_GOODS1_171082991720250627124617.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "50g 헤비 크림용기",
+          "제품 코드": "VT050-G003",
+          "재질(원료)": "PET",
+          "사양": "Ø60x48(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=877",
+        "downloaded_images": [
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_171082991720250627124617.jpg",
+            "filename": "ADD_GOODS2_171082991720250627124617.jpg",
+            "type": "additional_2",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_877_additional_2_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_171082991720250627124617.jpg",
+            "filename": "ADD_GOODS3_171082991720250627124617.jpg",
+            "type": "additional_3",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_877_additional_3_2.jpg"
+          },
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_171082991720250627124617.jpg",
+            "filename": "GOODS1_171082991720250627124617.jpg",
+            "alt": "50g 헤비 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_877_main_3.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_171082991720250627124617.jpg",
+            "filename": "ADD_GOODS1_171082991720250627124617.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_877_main_4.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_877_print_area.pdf",
+        "idx": "877",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=877",
+        "crawled_at": "2025-10-18T21:51:01.343507"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_877.json"
+    },
+    {
+      "status": "success",
+      "idx": "420",
+      "data": {
+        "product_name": "500g 크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594766.jpg",
+            "filename": "GOODS1_1659594766.jpg",
+            "alt": "500g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594766.jpg",
+            "filename": "ADD_GOODS1_1659594766.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "500g 크림용기",
+          "제품 코드": "JT500-TM01",
+          "재질(원료)": "PET",
+          "사양": "77(mm)xØ105"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=420",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594766.jpg",
+            "filename": "GOODS1_1659594766.jpg",
+            "alt": "500g 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_420_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594766.jpg",
+            "filename": "ADD_GOODS1_1659594766.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_420_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_420_print_area.pdf",
+        "idx": "420",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=420",
+        "crawled_at": "2025-10-18T21:51:10.649968"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_420.json"
+    },
+    {
+      "status": "success",
+      "idx": "831",
+      "data": {
+        "product_name": "500g 원터치패드 크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1681286069.jpg",
+            "filename": "GOODS1_1681286069.jpg",
+            "alt": "500g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1681286069.jpg",
+            "filename": "ADD_GOODS1_1681286069.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "500g 원터치패드 크림용기",
+          "제품 코드": "JT500-GM03",
+          "재질(원료)": "PET",
+          "사양": "86x99(mm)/Ø81"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=831",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1681286069.jpg",
+            "filename": "GOODS1_1681286069.jpg",
+            "alt": "500g 원터치패드 크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_831_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1681286069.jpg",
+            "filename": "ADD_GOODS1_1681286069.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_831_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_831_print_area.pdf",
+        "idx": "831",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=831",
+        "crawled_at": "2025-10-18T21:51:18.678911"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_831.json"
+    },
+    {
+      "status": "success",
+      "idx": "424",
+      "data": {
+        "product_name": "100g 헤비크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595205.jpg",
+            "filename": "GOODS1_1659595205.jpg",
+            "alt": "100g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595205.jpg",
+            "filename": "ADD_GOODS1_1659595205.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "100g 헤비크림용기",
+          "제품 코드": "VT100-G002",
+          "재질(원료)": "PET",
+          "사양": "Ø72x46(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=424",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595205.jpg",
+            "filename": "GOODS1_1659595205.jpg",
+            "alt": "100g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_424_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595205.jpg",
+            "filename": "ADD_GOODS1_1659595205.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_424_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_424_print_area.pdf",
+        "idx": "424",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=424",
+        "crawled_at": "2025-10-18T21:51:27.810857"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_424.json"
+    },
+    {
+      "status": "success",
+      "idx": "421",
+      "data": {
+        "product_name": "50g 헤비크림용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594813.jpg",
+            "filename": "GOODS1_1659594813.jpg",
+            "alt": "50g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594813.jpg",
+            "filename": "ADD_GOODS1_1659594813.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "50g 헤비크림용기",
+          "제품 코드": "VT050-G001",
+          "재질(원료)": "PET",
+          "사양": "Ø60x50(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=421",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594813.jpg",
+            "filename": "GOODS1_1659594813.jpg",
+            "alt": "50g 헤비크림용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_421_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594813.jpg",
+            "filename": "ADD_GOODS1_1659594813.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_421_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_421_print_area.pdf",
+        "idx": "421",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=421",
+        "crawled_at": "2025-10-18T21:51:35.839157"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_421.json"
+    },
+    {
+      "status": "success",
+      "idx": "782",
+      "data": {
+        "product_name": "250g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921459.jpg",
+            "filename": "GOODS1_1666921459.jpg",
+            "alt": "250g 크림사출용기",
+            "type": "main",
+            "width": 1424,
+            "height": 1424
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921459.jpg",
+            "filename": "ADD_GOODS1_1666921459.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "250g 크림사출용기",
+          "제품 코드": "JP250-GM03",
+          "재질(원료)": "PP",
+          "사양": "Ø92x62(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=782",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921459.jpg",
+            "filename": "GOODS1_1666921459.jpg",
+            "alt": "250g 크림사출용기",
+            "type": "main",
+            "width": 1424,
+            "height": 1424,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_782_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921459.jpg",
+            "filename": "ADD_GOODS1_1666921459.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_782_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_782_print_area.pdf",
+        "idx": "782",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=782",
+        "crawled_at": "2025-10-18T21:51:45.296148"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_782.json"
+    },
+    {
+      "status": "success",
+      "idx": "785",
+      "data": {
+        "product_name": "15g 크림사출용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921792.jpg",
+            "filename": "GOODS1_1666921792.jpg",
+            "alt": "15g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921792.jpg",
+            "filename": "ADD_GOODS1_1666921792.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "15g 크림사출용기",
+          "제품 코드": "JA015-GM05",
+          "재질(원료)": "PP",
+          "사양": "Ø50x22(mm)"
+        },
+        "print_area_url": null,
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666921792.jpg",
+            "filename": "GOODS1_1666921792.jpg",
+            "alt": "15g 크림사출용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_785_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666921792.jpg",
+            "filename": "ADD_GOODS1_1666921792.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_785_main_2.jpg"
+          }
+        ],
+        "idx": "785",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=785",
+        "crawled_at": "2025-10-18T21:51:53.718198"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_785.json"
+    },
+    {
+      "status": "success",
+      "idx": "491",
+      "data": {
+        "product_name": "450g 크림브로우용기",
+        "images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660007668.jpg",
+            "filename": "GOODS1_1660007668.jpg",
+            "alt": "450g 크림브로우용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660007668.jpg",
+            "filename": "ADD_GOODS1_1660007668.jpg",
+            "type": "main"
+          }
+        ],
+        "specifications": {
+          "제품명": "450g 크림브로우용기",
+          "제품 코드": "JE450-G001",
+          "재질(원료)": "PE",
+          "사양": "91x95(mm)"
+        },
+        "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=491",
+        "downloaded_images": [
+          {
+            "source": "img_tag",
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660007668.jpg",
+            "filename": "GOODS1_1660007668.jpg",
+            "alt": "450g 크림브로우용기",
+            "type": "main",
+            "width": 1000,
+            "height": 1000,
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_491_main_1.jpg"
+          },
+          {
+            "source": "css_background",
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660007668.jpg",
+            "filename": "ADD_GOODS1_1660007668.jpg",
+            "type": "main",
+            "local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/images/idx_491_main_2.jpg"
+          }
+        ],
+        "print_area_local_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/print_area/idx_491_print_area.pdf",
+        "idx": "491",
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=491",
+        "crawled_at": "2025-10-18T21:52:01.689165"
+      },
+      "json_path": "/Users/oypnus/Project/rag-enterprise/data/crawled_products_updated/idx_491.json"
+    }
+  ],
+  "timestamp": "2025-10-18T21:52:01.733212"
+}
