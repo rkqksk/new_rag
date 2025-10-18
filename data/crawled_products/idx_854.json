@@ -1,0 +1,62 @@
+{
+  "product_name": "300g 원터치패드 크림용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1695020960.jpg",
+      "filename": "ADD_GOODS2_1695020960.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1695020960.jpg",
+      "filename": "GOODS1_1695020960.jpg",
+      "alt": "300g 원터치패드 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1695020960.jpg",
+      "filename": "ADD_GOODS1_1695020960.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=854",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1695020960.jpg",
+      "filename": "ADD_GOODS2_1695020960.jpg",
+      "type": "additional_2",
+      "local_path": "data/test_jar_category/images/idx_854_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1695020960.jpg",
+      "filename": "GOODS1_1695020960.jpg",
+      "alt": "300g 원터치패드 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_jar_category/images/idx_854_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1695020960.jpg",
+      "filename": "ADD_GOODS1_1695020960.jpg",
+      "type": "main",
+      "local_path": "data/test_jar_category/images/idx_854_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/test_jar_category/print_area/idx_854_print_area.pdf",
+  "idx": "854",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=854",
+  "crawled_at": "2025-10-18T02:49:54.174507"
+}

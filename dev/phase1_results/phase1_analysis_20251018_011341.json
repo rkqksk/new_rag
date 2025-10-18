@@ -1,0 +1,806 @@
+{
+  "timestamp": "2025-10-18T01:11:12.649242",
+  "base_url": "http://chungjinkorea.com",
+  "categories": [
+    {
+      "index": 1,
+      "text": "제품소개",
+      "href": "http://chungjinkorea.com/kr/product/list.php",
+      "idx": null,
+      "parent_class": "gnb2 on",
+      "parent_tag": "LI"
+    },
+    {
+      "index": 2,
+      "text": "Bottle",
+      "href": "http://chungjinkorea.com/kr/product/list.php?part_idx=1",
+      "idx": null,
+      "parent_class": "",
+      "parent_tag": "LI"
+    },
+    {
+      "index": 3,
+      "text": "Jar",
+      "href": "http://chungjinkorea.com/kr/product/list.php?part_idx=2",
+      "idx": null,
+      "parent_class": "",
+      "parent_tag": "LI"
+    },
+    {
+      "index": 4,
+      "text": "Cap&Pump",
+      "href": "http://chungjinkorea.com/kr/product/list.php?part_idx=3",
+      "idx": null,
+      "parent_class": "",
+      "parent_tag": "LI"
+    }
+  ],
+  "samples": [
+    {
+      "category": "제품소개",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=965",
+      "idx": "965",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=965",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1757573433.jpg",
+              "alt": "120ml 브로우용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1757573433.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1757573433.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 528,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:11:39.484766"
+    },
+    {
+      "category": "제품소개",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=961",
+      "idx": "961",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=961",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1754461698.jpg",
+              "alt": "80ml 헤비브로우용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1754461698.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1754461698.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 531,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:11:47.730022"
+    },
+    {
+      "category": "제품소개",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=958",
+      "idx": "958",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=958",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg",
+              "alt": "14g 마스카라용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 524,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:11:55.085416"
+    },
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=968",
+      "idx": "968",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=968",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759207963.jpg",
+              "alt": "350ml 브로우용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1759207963.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1759207963.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 526,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:12:16.296748"
+    },
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=958",
+      "idx": "958",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=958",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg",
+              "alt": "14g 마스카라용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163399.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 524,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:12:23.643962"
+    },
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=965",
+      "idx": "965",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=965",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1757573433.jpg",
+              "alt": "120ml 브로우용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1757573433.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1757573433.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 528,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:12:31.626958"
+    },
+    {
+      "category": "Jar",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=813",
+      "idx": "813",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=813",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676963.jpg",
+              "alt": "200g 크림사출용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676963.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1675676963.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 527,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:12:51.242984"
+    },
+    {
+      "category": "Jar",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=884",
+      "idx": "884",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=884",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg",
+              "alt": "600g 크림용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 524,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:12:58.501558"
+    },
+    {
+      "category": "Jar",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=963",
+      "idx": "963",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=963",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg",
+              "alt": "150g 무광 이중 크림용기",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 524,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:13:05.792136"
+    },
+    {
+      "category": "Cap&Pump",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=948",
+      "idx": "948",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=948",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1750818322.jpg",
+              "alt": "20파이 오일펌프",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1750818322.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1750818322.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 522,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:13:25.879444"
+    },
+    {
+      "category": "Cap&Pump",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=952",
+      "idx": "952",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=952",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108546.jpg",
+              "alt": "24파이 뾰족캡",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108546.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108546.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 524,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:13:33.174210"
+    },
+    {
+      "category": "Cap&Pump",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=934",
+      "idx": "934",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=934",
+        "title": "제품소개 - 제품소개 - 청진",
+        "product_name": "Menu",
+        "images": {
+          "total_images": 4,
+          "product_images_count": 1,
+          "details": [
+            {
+              "index": 1,
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342967.jpg",
+              "alt": "24파이 물감캡",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent_tag": "DIV",
+              "parent_class": "only-img",
+              "parent_id": ""
+            }
+          ]
+        },
+        "containers": [
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342967.jpg"
+            ]
+          },
+          {
+            "pattern": "div[class*=\"product\"]",
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_urls": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342967.jpg"
+            ]
+          }
+        ],
+        "tables": [],
+        "print_area": null,
+        "dom_stats": {
+          "total_elements": 526,
+          "total_divs": 54,
+          "total_tables": 0
+        }
+      },
+      "timestamp": "2025-10-18T01:13:40.462664"
+    }
+  ],
+  "patterns": {
+    "image_distribution": {
+      "min": 1,
+      "max": 1,
+      "avg": 1.0,
+      "counts": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "container_patterns": {
+      "div[class*=\"product\"]": 24
+    },
+    "print_area": {
+      "with_print_area": 0,
+      "without_print_area": 12,
+      "percentage": 0.0
+    }
+  },
+  "recommendations": [
+    {
+      "category": "이미지 처리",
+      "finding": "대부분 제품이 단일 이미지",
+      "action": "단순 이미지 추출 로직으로 충분"
+    },
+    {
+      "category": "컨테이너 패턴",
+      "finding": "가장 많은 패턴: div[class*=\"product\"]",
+      "action": "우선적으로 div[class*=\"product\"] 패턴 사용, fallback 패턴 준비"
+    },
+    {
+      "category": "인쇄영역",
+      "finding": "0.0% 제품만 인쇄영역 보유",
+      "action": "인쇄영역이 없는 경우 대체 전략 필수 (제품 정보 테이블 활용)"
+    }
+  ]
+}

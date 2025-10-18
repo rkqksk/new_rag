@@ -1,0 +1,24 @@
+{
+  "visited_urls": [
+    "http://chungjinkorea.com/kr/product/list.php?part_idx=1",
+    "http://chungjinkorea.com/kr/product/list.php?part_idx=3",
+    "http://chungjinkorea.com/kr/product/list.php?part_idx=2",
+    "http://chungjinkorea.com/kr/product/list.php"
+  ],
+  "product_urls": [
+    "http://chungjinkorea.com/kr/product/view.php?idx=970",
+    "http://chungjinkorea.com/kr/product/view.php?idx=969",
+    "http://chungjinkorea.com/kr/product/view.php?idx=968",
+    "http://chungjinkorea.com/kr/product/view.php?idx=970",
+    "http://chungjinkorea.com/kr/product/view.php?idx=969",
+    "http://chungjinkorea.com/kr/product/view.php?idx=968",
+    "http://chungjinkorea.com/kr/product/view.php?idx=963",
+    "http://chungjinkorea.com/kr/product/view.php?idx=962",
+    "http://chungjinkorea.com/kr/product/view.php?idx=937",
+    "http://chungjinkorea.com/kr/product/view.php?idx=964",
+    "http://chungjinkorea.com/kr/product/view.php?idx=953",
+    "http://chungjinkorea.com/kr/product/view.php?idx=952"
+  ],
+  "failed_urls": [],
+  "last_updated": "2025-10-17T23:45:35.632576"
+}

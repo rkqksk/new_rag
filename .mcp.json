@@ -2,162 +2,23 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./documents"],
-      "description": "Document filesystem access for RAG pipeline",
-      "enabled": true
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./documents"]
+    },
+    "claude_haiku": {
+      "command": "python",
+      "args": ["-m", "mcp_servers.claude_haiku_server"]
+    },
+    "google_devtools": {
+      "command": "python",
+      "args": ["-m", "mcp_servers.google_devtools.server"]
     },
     "qdrant": {
       "command": "python",
-      "args": ["-m", "mcp_servers.qdrant_server"],
-      "description": "Vector database for embeddings",
-      "config": {
-        "host": "localhost",
-        "port": 6333,
-        "collection": "rag_enterprise",
-        "timeout": 30
-      },
-      "enabled": true
+      "args": ["-m", "mcp_servers.qdrant_server"]
     },
-    "redis": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "--name", "rag-redis",
-        "-p", "6379:6379",
-        "-v", "./data/redis:/data",
-        "redis:7.2-alpine",
-        "redis-server", "--appendonly", "yes",
-        "--maxmemory", "2gb", "--maxmemory-policy", "allkeys-lru"
-      ],
-      "description": "Cache and session storage",
-      "enabled": true
-    },
-    "postgres": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "--name", "rag-postgres",
-        "-e", "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}",
-        "-e", "POSTGRES_DB=rag_enterprise",
-        "-e", "POSTGRES_USER=${POSTGRES_USER}",
-        "-p", "5432:5432",
-        "-v", "./data/postgres:/var/lib/postgresql/data",
-        "postgres:15-alpine"
-      ],
-      "description": "Metadata and configuration storage",
-      "enabled": true
-    },
-    "mongodb": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "--name", "rag-mongodb",
-        "-p", "27017:27017",
-        "-v", "./data/mongodb:/data/db",
-        "-e", "MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}",
-        "-e", "MONGO_INITDB_ROOT_PASSWORD=${MONGO_PASSWORD}",
-        "mongo:7.0"
-      ],
-      "description": "Document storage for parsed content",
-      "enabled": false
-    },
-    "n8n": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "--name", "rag-n8n",
-        "-p", "5678:5678",
-        "-v", "./data/n8n:/home/node/.n8n",
-        "-e", "N8N_BASIC_AUTH_ACTIVE=true",
-        "-e", "N8N_BASIC_AUTH_USER=${N8N_USER}",
-        "-e", "N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}",
-        "n8nio/n8n:latest"
-      ],
-      "description": "Workflow automation engine",
-      "enabled": true
-    },
-    "prometheus": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "--name", "rag-prometheus",
-        "-p", "9090:9090",
-        "-v", "./config/prometheus.yml:/etc/prometheus/prometheus.yml",
-        "-v", "./data/prometheus:/prometheus", "prom/prometheus:latest"
-      ],
-      "description": "Metrics collection and monitoring",
-      "enabled": false
-    },
-    "grafana": {
-      "command": "docker",
-      "args": [
-        "run", "--rm", "--name", "rag-grafana",
-        "-p", "3000:3000",
-        "-v", "./data/grafana:/var/lib/grafana",
-        "-e", "GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}",
-        "grafana/grafana:latest"
-      ],
-      "description": "Monitoring dashboard",
-      "enabled": false
-    },
-    "custom_agents": {
-      "workflow_orchestrator": {
-        "command": "python",
-        "args": ["-m", "agents.workflow_orchestrator"],
-        "description": "Central pipeline orchestrator",
-        "enabled": true,
-        "config": {
-          "max_workers": 4,
-          "batch_size": 10,
-          "retry_attempts": 3
-        }
-      },
-      "crawler_scheduler": {
-        "command": "python",
-        "args": ["-m", "agents.crawler_scheduler"],
-        "description": "Automated crawling scheduler",
-        "enabled": true,
-        "config": {
-          "schedule": "0 */6 * * *",
-          "targets": "./config/crawl_targets.json"
-        }
-      },
-      "quality_monitor": {
-        "command": "python",
-        "args": ["-m", "agents.quality_monitor"],
-        "description": "RAG quality monitoring agent",
-        "enabled": false,
-        "config": {
-          "evaluation_interval": 3600,
-          "metrics": ["relevance", "accuracy", "latency"]
-        }
-      }
+    "ollama": {
+      "command": "python",
+      "args": ["-m", "mcp_servers.ollama_server"]
     }
-  },
-  "environment": {
-    "production": {
-      "enabled_servers": ["filesystem", "qdrant", "redis", "postgres", "n8n"],
-      "log_level": "INFO",
-      "debug": false
-    },
-    "development": {
-      "enabled_servers": [
-        "filesystem", "qdrant", "redis", "postgres", "mongodb", "n8n", "prometheus", "grafana"
-      ],
-      "log_level": "DEBUG",
-      "debug": true
-    },
-    "testing": {
-      "enabled_servers": ["filesystem", "qdrant", "redis"],
-      "log_level": "DEBUG",
-      "debug": true,
-      "use_mock_data": true
-    }
-  },
-  "health_checks": {
-    "interval": 30,
-    "timeout": 5,
-    "endpoints": {
-      "qdrant": "http://localhost:6333/health",
-      "redis": "redis://localhost:6379/ping",
-      "postgres": "postgresql://localhost:5432/rag_enterprise",
-      "n8n": "http://localhost:5678/healthz"
-    }
-  },
-  "version": "2.0.0"
+  }
 }

@@ -1,0 +1,75 @@
+{
+  "product_name": "220ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1720754508.jpg",
+      "filename": "ADD_GOODS2_1720754508.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1720754508.jpg",
+      "filename": "ADD_GOODS3_1720754508.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1720754508.jpg",
+      "filename": "GOODS1_1720754508.jpg",
+      "alt": "220ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1720754508.jpg",
+      "filename": "ADD_GOODS1_1720754508.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=894",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1720754508.jpg",
+      "filename": "ADD_GOODS2_1720754508.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products/images/idx_894_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1720754508.jpg",
+      "filename": "ADD_GOODS3_1720754508.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products/images/idx_894_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1720754508.jpg",
+      "filename": "GOODS1_1720754508.jpg",
+      "alt": "220ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products/images/idx_894_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1720754508.jpg",
+      "filename": "ADD_GOODS1_1720754508.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products/images/idx_894_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products/print_area/idx_894_print_area.pdf",
+  "idx": "894",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=894",
+  "crawled_at": "2025-10-18T12:38:37.258893"
+}

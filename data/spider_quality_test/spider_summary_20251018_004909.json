@@ -1,0 +1,126 @@
+{
+  "status": "completed",
+  "start_time": "2025-10-18T00:48:28.798460",
+  "end_time": "2025-10-18T00:49:09.838915",
+  "duration_seconds": 41.040455,
+  "categories_found": 4,
+  "products_found": 3,
+  "products_crawled": 3,
+  "success": 3,
+  "error": 0,
+  "results": [
+    {
+      "status": "success",
+      "product_data": {
+        "product_images": [
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759210565.png",
+            "alt": "50ml 브로우용기",
+            "type": "main"
+          }
+        ],
+        "image_url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759210565.png",
+        "image_alt": "50ml 브로우용기",
+        "specifications": {
+          "제품명": "50ml 브로우용기",
+          "제품 코드": "BG050-G004",
+          "재질(원료)": "PETG",
+          "사양": "36x78(mm)/Ø24"
+        },
+        "product_name": "50ml 브로우용기",
+        "local_images": [
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759210565.png",
+            "local_path": "data/spider_quality_test/images/main_1_GOODS1_1759210565.png",
+            "type": "main",
+            "alt": "50ml 브로우용기"
+          }
+        ],
+        "local_image_path": "data/spider_quality_test/images/main_1_GOODS1_1759210565.png",
+        "crawled_at": "2025-10-18T00:48:57.470996",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=970",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_quality_test/BG050-G004.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "product_images": [
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg",
+            "alt": "150g 무광 이중 크림용기",
+            "type": "main"
+          },
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1755565387.jpg",
+            "alt": "",
+            "type": "thumbnail"
+          }
+        ],
+        "image_url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg",
+        "image_alt": "150g 무광 이중 크림용기",
+        "specifications": {
+          "제품명": "150g 무광 이중 크림용기",
+          "제품 코드": "JP150-GN09(M)",
+          "재질(원료)": "PP",
+          "사양": "86x70(mm)/Ø82"
+        },
+        "product_name": "150g 무광 이중 크림용기",
+        "local_images": [
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1755565387.jpg",
+            "local_path": "data/spider_quality_test/images/main_1_GOODS1_1755565387.jpg",
+            "type": "main",
+            "alt": "150g 무광 이중 크림용기"
+          },
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1755565387.jpg",
+            "local_path": "data/spider_quality_test/images/thumbnail_2_ADD_GOODS1_1755565387.jpg",
+            "type": "thumbnail",
+            "alt": ""
+          }
+        ],
+        "local_image_path": "data/spider_quality_test/images/main_1_GOODS1_1755565387.jpg",
+        "crawled_at": "2025-10-18T00:49:03.679557",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=963",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_quality_test/JP150-GN09(M).json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "product_images": [
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1756270577.jpg",
+            "alt": "24파이 온오프펌프",
+            "type": "main"
+          }
+        ],
+        "image_url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1756270577.jpg",
+        "image_alt": "24파이 온오프펌프",
+        "specifications": {
+          "제품명": "24파이 온오프펌프",
+          "제품 코드": "PO024-CG18(민)",
+          "재질(원료)": "기타",
+          "사양": "내경 Ø24"
+        },
+        "product_name": "24파이 온오프펌프",
+        "local_images": [
+          {
+            "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1756270577.jpg",
+            "local_path": "data/spider_quality_test/images/main_1_GOODS1_1756270577.jpg",
+            "type": "main",
+            "alt": "24파이 온오프펌프"
+          }
+        ],
+        "local_image_path": "data/spider_quality_test/images/main_1_GOODS1_1756270577.jpg",
+        "crawled_at": "2025-10-18T00:49:09.810009",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=964",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_quality_test/PO024-CG18(민).json"
+    }
+  ]
+}

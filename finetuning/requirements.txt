@@ -1,0 +1,27 @@
+# LoRA Fine-tuning 환경 의존성
+# External Linux (RTX 3070Ti) 환경용
+
+# 기본 의존성
+torch>=2.0.0,<3.0.0
+torchvision
+torchaudio
+
+# 변환 모델 및 토크나이저
+transformers>=4.36.0
+tokenizers>=0.14.0
+
+# 훈련 데이터 처리
+datasets>=2.14.0
+numpy>=1.24.0
+
+# LoRA 미세조정
+peft>=0.7.0
+bitsandbytes>=0.41.0
+
+# 훈련 최적화
+accelerate>=0.24.0
+safetensors>=0.4.0
+
+# 유틸리티
+tqdm>=4.66.0
+PyYAML>=6.0

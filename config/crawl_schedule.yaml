@@ -1,0 +1,54 @@
+# 청진코리아 크롤링 스케줄 설정
+# Cron 표현식: 분 시 일 월 요일
+
+schedules:
+  jar:
+    enabled: true
+    script: "crawl_jar_incremental.py"
+    cron: "0 2 1 * *"  # 매월 1일 새벽 2시
+    description: "Jar 카테고리 월간 증분 업데이트"
+    retry:
+      max_attempts: 3
+      delay_minutes: 30
+
+  cap_pump:
+    enabled: true
+    script: "crawl_cap_pump_incremental.py"
+    cron: "0 3 1 * *"  # 매월 1일 새벽 3시
+    description: "Cap&Pump 카테고리 월간 증분 업데이트"
+    retry:
+      max_attempts: 3
+      delay_minutes: 30
+
+  bottle:
+    enabled: true
+    script: "crawl_bottle_adaptive.py"
+    cron: "0 4 1 * *"  # 매월 1일 새벽 4시
+    description: "Bottle 카테고리 월간 증분 업데이트 (적응형)"
+    retry:
+      max_attempts: 3
+      delay_minutes: 30
+
+notifications:
+  email:
+    enabled: false
+    to: "admin@example.com"
+    on_error: true
+    on_success: false
+
+  slack:
+    enabled: false
+    webhook_url: "https://hooks.slack.com/services/YOUR/WEBHOOK/URL"
+    on_error: true
+    on_success: true
+
+logging:
+  level: "INFO"
+  directory: "logs/scheduler"
+  rotation: "weekly"
+  retention_days: 90
+
+output:
+  directory: "data/crawled_products"
+  backup_before_crawl: true
+  backup_directory: "data/backups"

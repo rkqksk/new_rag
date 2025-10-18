@@ -1,0 +1,48 @@
+{
+  "product_name": "270g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666919759.jpg",
+      "filename": "GOODS1_1666919759.jpg",
+      "alt": "270g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666919759.jpg",
+      "filename": "ADD_GOODS1_1666919759.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666919759.jpg",
+      "filename": "GOODS1_1666919759.jpg",
+      "alt": "270g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_jar_category/images/idx_776_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666919759.jpg",
+      "filename": "ADD_GOODS1_1666919759.jpg",
+      "type": "main",
+      "local_path": "data/test_jar_category/images/idx_776_main_2.jpg"
+    }
+  ],
+  "idx": "776",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=776",
+  "crawled_at": "2025-10-18T02:49:04.904451"
+}

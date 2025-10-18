@@ -1,0 +1,35 @@
+{
+  "product_name": "43파이 오버캡형 무광 거품펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1676887929.jpg",
+      "filename": "GOODS1_1676887929.jpg",
+      "alt": "43파이 오버캡형 무광 거품펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1676887929.jpg",
+      "filename": "GOODS1_1676887929.jpg",
+      "alt": "43파이 오버캡형 무광 거품펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_820_main_1.jpg"
+    }
+  ],
+  "idx": "820",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=820",
+  "crawled_at": "2025-10-18T07:03:09.619785"
+}

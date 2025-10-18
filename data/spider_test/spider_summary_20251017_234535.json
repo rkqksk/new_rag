@@ -1,0 +1,184 @@
+{
+  "status": "completed",
+  "start_time": "2025-10-17T23:44:25.687712",
+  "end_time": "2025-10-17T23:45:35.632914",
+  "duration_seconds": 69.945202,
+  "categories_found": 4,
+  "products_found": 9,
+  "products_crawled": 9,
+  "success": 9,
+  "error": 0,
+  "results": [
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "50ml 브로우용기",
+          "제품 코드": "BG050-G004",
+          "재질(원료)": "PETG",
+          "사양": "36x78(mm)/Ø24"
+        },
+        "product_name": "50ml 브로우용기",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:44:51.976260",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=970",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/BG050-G004.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "350ml 브로우용기",
+          "제품 코드": "BG350-R003",
+          "재질(원료)": "PETG",
+          "사양": "56x190(mm)/Ø24"
+        },
+        "product_name": "350ml 브로우용기",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:44:57.420073",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=969",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/BG350-R003.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "350ml 브로우용기",
+          "제품 코드": "BG350-G001",
+          "재질(원료)": "PETG",
+          "사양": "58x168(mm)/Ø24"
+        },
+        "product_name": "350ml 브로우용기",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:02.897011",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=968",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/BG350-G001.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "150g 무광 이중 크림용기",
+          "제품 코드": "JP150-GN09(M)",
+          "재질(원료)": "PP",
+          "사양": "86x70(mm)/Ø82"
+        },
+        "product_name": "150g 무광 이중 크림용기",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:08.346784",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=963",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/JP150-GN09(M).json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "150g 이중 크림용기",
+          "제품 코드": "JP150-GN09",
+          "재질(원료)": "PP",
+          "사양": "86x70(mm)/Ø82"
+        },
+        "product_name": "150g 이중 크림용기",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:13.825632",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=962",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/JP150-GN09.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "300g 크림사출용기",
+          "제품 코드": "JP300-GM01",
+          "재질(원료)": "PP",
+          "사양": "Ø86x64(mm)"
+        },
+        "product_name": "300g 크림사출용기",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:19.245684",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=937",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/JP300-GM01.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "24파이 온오프펌프",
+          "제품 코드": "PO024-CG18(민)",
+          "재질(원료)": "기타",
+          "사양": "내경 Ø24"
+        },
+        "product_name": "24파이 온오프펌프",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:24.782360",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=964",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/PO024-CG18(민).json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "24파이 회오리캡",
+          "제품 코드": "PTP024-CP02",
+          "재질(원료)": "PP",
+          "사양": "26x52(mm)/Ø24"
+        },
+        "product_name": "24파이 회오리캡",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:30.265514",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=953",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/PTP024-CP02.json"
+    },
+    {
+      "status": "success",
+      "product_data": {
+        "image_url": "http://chungjinkorea.com/images/common/logo.png",
+        "image_alt": "청진",
+        "specifications": {
+          "제품명": "24파이 뾰족캡",
+          "제품 코드": "PTE024-CG01",
+          "재질(원료)": "PE",
+          "사양": "27x42(mm)/내경Ø24"
+        },
+        "product_name": "24파이 뾰족캡",
+        "local_image_path": "data/spider_test/images/product_logo.png",
+        "crawled_at": "2025-10-17T23:45:35.608553",
+        "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=952",
+        "page_title": "제품소개 - 제품소개 - 청진"
+      },
+      "json_path": "data/spider_test/PTE024-CG01.json"
+    }
+  ]
+}

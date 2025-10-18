@@ -1,0 +1,17 @@
+{
+  "image_url": "http://chungjinkorea.com/images/common/logo.png",
+  "image_alt": "청진",
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=224",
+  "specifications": {
+    "제품명": "400ml 브로우용기",
+    "제품 코드": "BT400-R005",
+    "재질(원료)": "PET",
+    "사양": "61x177(mm)/Ø24"
+  },
+  "product_name": "400ml 브로우용기",
+  "local_image_path": "data/crawled_products/images/product_logo.png",
+  "local_printarea_path": "data/crawled_products/files/printarea_20251017_233433.pdf",
+  "crawled_at": "2025-10-17T23:34:34.113206",
+  "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=224",
+  "page_title": "제품소개 - 제품소개 - 청진"
+}

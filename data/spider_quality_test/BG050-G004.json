@@ -1,0 +1,30 @@
+{
+  "product_images": [
+    {
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759210565.png",
+      "alt": "50ml 브로우용기",
+      "type": "main"
+    }
+  ],
+  "image_url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759210565.png",
+  "image_alt": "50ml 브로우용기",
+  "specifications": {
+    "제품명": "50ml 브로우용기",
+    "제품 코드": "BG050-G004",
+    "재질(원료)": "PETG",
+    "사양": "36x78(mm)/Ø24"
+  },
+  "product_name": "50ml 브로우용기",
+  "local_images": [
+    {
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1759210565.png",
+      "local_path": "data/spider_quality_test/images/main_1_GOODS1_1759210565.png",
+      "type": "main",
+      "alt": "50ml 브로우용기"
+    }
+  ],
+  "local_image_path": "data/spider_quality_test/images/main_1_GOODS1_1759210565.png",
+  "crawled_at": "2025-10-18T00:48:57.470996",
+  "source_url": "http://chungjinkorea.com/kr/product/view.php?idx=970",
+  "page_title": "제품소개 - 제품소개 - 청진"
+}

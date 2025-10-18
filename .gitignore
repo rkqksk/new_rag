@@ -1,44 +1,163 @@
-__pycache__/
-.env
-*.sqlite3
-/documents/
-/images/
-.DS_Store
-.vscode/
-node_modules/
+# ============================================
+# RAG Enterprise .gitignore
+# ============================================
 
-# Cursor & Claude
+# ============================================
+# Environment & Secrets
+# ============================================
+.env
+.env.local
+.env.*.local
+.envrc.local
+*.secret
+*.key
+
+# ============================================
+# Python
+# ============================================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+ENV/
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ============================================
+# Node.js
+# ============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ============================================
+# IDE / Editors
+# ============================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.cursor/
+
+# ============================================
+# Claude Code & AI Tools
+# ============================================
 .claude/
 .checkpoints/
 
-# Python
-venv/
-__pycache__/
-*.pyc
-.env
-# OS/IDE
-.DS_Store
-.idea/
-.vscode/
-# Node
-node_modules/
-# 모델/체크포인트(필요 시 LFS로 대체)
+# ============================================
+# Database & Data
+# ============================================
+*.sqlite3
+*.db
+/documents/
+/images/
+/data/qdrant/
+/data/redis/
+/data/postgres/
+/data/mongodb/
+/data/n8n/
+/data/ollama/
+/data/prometheus/
+/data/grafana/
+
+# ============================================
+# ML Models & Checkpoints
+# ============================================
 models/
 checkpoints/
-# Python
-venv/
-__pycache__/
-*.pyc
-.env
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
 
-# Node
-node_modules/
+# ============================================
+# Logs
+# ============================================
+*.log
+logs/
+*.out
 
-# OS/IDE
+# ============================================
+# Docker
+# ============================================
+docker-compose.override.yml
+
+# ============================================
+# Temporary Files
+# ============================================
+tmp/
+temp/
+*.tmp
+*.bak
+*.cache
+
+# ============================================
+# OS Files
+# ============================================
 .DS_Store
-.idea/
-.vscode/
+Thumbs.db
+desktop.ini
 
-# (옵션) 대형 산출물/모델
-models/
-checkpoints/
+# ============================================
+# Testing
+# ============================================
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+
+# ============================================
+# Development
+# ============================================
+dev/experiments/
+dev/prototypes/
+dev/sandbox/
+dev/notebooks/
+
+# ============================================
+# Claude Code Generated
+# ============================================
+claudedocs/
+claude-code/
+
+# ============================================
+# Archives
+# ============================================
+archives/*
+!archives/.gitkeep
+
+# ============================================
+# Temporary
+# ============================================
+temp/
+*.tmp
+
+# ============================================
+# User-specific
+# ============================================
+!.env.example

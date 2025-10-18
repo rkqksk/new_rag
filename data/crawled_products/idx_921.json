@@ -1,0 +1,61 @@
+{
+  "product_name": "20파이 이중 원터치캡",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1740381116.jpg",
+      "filename": "ADD_GOODS2_1740381116.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740381116.jpg",
+      "filename": "GOODS1_1740381116.jpg",
+      "alt": "20파이 이중 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740381116.jpg",
+      "filename": "ADD_GOODS1_1740381116.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1740381116.jpg",
+      "filename": "ADD_GOODS2_1740381116.jpg",
+      "type": "additional_2",
+      "local_path": "data/test_cap_pump_category/images/idx_921_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740381116.jpg",
+      "filename": "GOODS1_1740381116.jpg",
+      "alt": "20파이 이중 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_921_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740381116.jpg",
+      "filename": "ADD_GOODS1_1740381116.jpg",
+      "type": "main",
+      "local_path": "data/test_cap_pump_category/images/idx_921_main_3.jpg"
+    }
+  ],
+  "idx": "921",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=921",
+  "crawled_at": "2025-10-18T06:52:39.298491"
+}

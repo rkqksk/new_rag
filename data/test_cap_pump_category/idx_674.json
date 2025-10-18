@@ -1,0 +1,35 @@
+{
+  "product_name": "28파이 일반펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661745588.jpg",
+      "filename": "GOODS1_1661745588.jpg",
+      "alt": "28파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661745588.jpg",
+      "filename": "GOODS1_1661745588.jpg",
+      "alt": "28파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_674_main_1.jpg"
+    }
+  ],
+  "idx": "674",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=674",
+  "crawled_at": "2025-10-18T06:49:49.721472"
+}

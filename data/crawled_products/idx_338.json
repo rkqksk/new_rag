@@ -1,0 +1,49 @@
+{
+  "product_name": "300ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658454951.jpg",
+      "filename": "GOODS1_1658454951.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658454951_1.jpg",
+      "filename": "1658454951_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=338",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658454951.jpg",
+      "filename": "GOODS1_1658454951.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products/images/idx_338_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658454951_1.jpg",
+      "filename": "1658454951_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products/images/idx_338_unknown_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products/print_area/idx_338_print_area.pdf",
+  "idx": "338",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=338",
+  "crawled_at": "2025-10-18T13:04:36.156456"
+}

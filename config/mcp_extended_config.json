@@ -1,0 +1,118 @@
+{
+  "description": "Extended MCP configuration for RAG Enterprise (not loaded by Claude Code)",
+  "note": "This file contains custom configuration for internal use only",
+
+  "mcp_servers_config": {
+    "claude_haiku": {
+      "model": "claude-haiku-4-5-20251001",
+      "max_tokens": 8192,
+      "temperature": 0.3
+    },
+    "qdrant": {
+      "host": "localhost",
+      "grpc_port": 6334,
+      "http_port": 6333,
+      "collection": "rag_enterprise",
+      "timeout": 30,
+      "prefer_grpc": true
+    },
+    "ollama": {
+      "host": "localhost",
+      "port": 11434,
+      "default_model": "qwen2.5:7b-instruct-q4_K_M",
+      "timeout": 120,
+      "keep_alive": "5m"
+    }
+  },
+
+  "docker_services": {
+    "redis": {
+      "host": "172.28.0.3",
+      "port": 6379,
+      "db": 0,
+      "ttl": 3600,
+      "health_check": "docker exec rag-redis redis-cli ping"
+    },
+    "postgres": {
+      "host": "172.28.0.4",
+      "port": 5432,
+      "database": "rag_enterprise",
+      "health_check": "docker exec rag-postgres pg_isready"
+    },
+    "n8n": {
+      "host": "172.28.0.5",
+      "port": 5678,
+      "webhook_url": "http://localhost:5678",
+      "health_check": "curl -f http://localhost:5678/healthz"
+    },
+    "mongodb": {
+      "enabled": false,
+      "port": 27017
+    },
+    "prometheus": {
+      "enabled": false,
+      "port": 9090
+    },
+    "grafana": {
+      "enabled": false,
+      "port": 3000
+    }
+  },
+
+  "custom_agents": {
+    "workflow_orchestrator": {
+      "command": "python -m agents.workflow_orchestrator",
+      "config": {
+        "max_workers": 4,
+        "batch_size": 10,
+        "retry_attempts": 3
+      }
+    },
+    "crawler_scheduler": {
+      "command": "python -m agents.crawler_scheduler",
+      "config": {
+        "schedule": "0 */6 * * *",
+        "targets": "./config/crawl_targets.json"
+      }
+    },
+    "quality_monitor": {
+      "enabled": false,
+      "command": "python -m agents.quality_monitor",
+      "config": {
+        "evaluation_interval": 3600,
+        "metrics": ["relevance", "accuracy", "latency"]
+      }
+    }
+  },
+
+  "environment": {
+    "production": {
+      "enabled_servers": ["filesystem", "qdrant", "claude_haiku", "ollama"],
+      "log_level": "INFO",
+      "debug": false
+    },
+    "development": {
+      "enabled_servers": ["filesystem", "qdrant", "claude_haiku", "ollama"],
+      "log_level": "DEBUG",
+      "debug": true
+    },
+    "testing": {
+      "enabled_servers": ["filesystem", "qdrant"],
+      "log_level": "DEBUG",
+      "debug": true,
+      "use_mock_data": true
+    }
+  },
+
+  "health_checks": {
+    "interval": 30,
+    "timeout": 5,
+    "endpoints": {
+      "qdrant": "http://localhost:6333/health",
+      "redis": "redis://localhost:6379/ping",
+      "postgres": "postgresql://localhost:5432/rag_enterprise",
+      "n8n": "http://localhost:5678/healthz",
+      "ollama": "http://localhost:11434/api/tags"
+    }
+  }
+}

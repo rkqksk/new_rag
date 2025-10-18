@@ -1,0 +1,62 @@
+{
+  "product_name": "160ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1660636479.jpg",
+      "filename": "ADD_GOODS2_1660636479.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660636479.jpg",
+      "filename": "GOODS1_1660636479.jpg",
+      "alt": "160ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660636479.jpg",
+      "filename": "ADD_GOODS1_1660636479.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=622",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1660636479.jpg",
+      "filename": "ADD_GOODS2_1660636479.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products/images/idx_622_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660636479.jpg",
+      "filename": "GOODS1_1660636479.jpg",
+      "alt": "160ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products/images/idx_622_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660636479.jpg",
+      "filename": "ADD_GOODS1_1660636479.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products/images/idx_622_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products/print_area/idx_622_print_area.pdf",
+  "idx": "622",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=622",
+  "crawled_at": "2025-10-18T12:40:19.937892"
+}

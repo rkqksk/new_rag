@@ -1,32 +1,227 @@
-version: '3'
+
+# Colima 최적화: 네트워크 및 리소스 관리
+networks:
+  rag_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+volumes:
+  qdrant_data:
+    driver: local
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  n8n_data:
+    driver: local
+  ollama_models:
+    driver: local
+
 services:
   qdrant:
-    image: qdrant/qdrant:latest
+    image: qdrant/qdrant:v1.11.3  # 안정 버전 고정
+    container_name: rag-qdrant
     ports:
       - "6333:6333"
+      - "6334:6334"  # gRPC port
     volumes:
-      - ./data/qdrant:/qdrant/storage
-  
+      - qdrant_data:/qdrant/storage
+    networks:
+      rag_network:
+        ipv4_address: 172.28.0.2
+    healthcheck:
+      test: ["CMD", "test", "-f", "/qdrant/storage/raft_state.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    # Colima 리소스 최적화
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
   redis:
-    image: redis:7-alpine
+    image: redis:7.2-alpine
+    container_name: rag-redis
     ports:
       - "6379:6379"
     volumes:
-      - ./data/redis:/data
-  
+      - redis_data:/data
+    networks:
+      rag_network:
+        ipv4_address: 172.28.0.3
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 2gb
+      --maxmemory-policy allkeys-lru
+      --save 60 1000
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 2G
+
   postgres:
     image: postgres:15-alpine
+    container_name: rag-postgres
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_PASSWORD: changeme
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}  # .env에서 주입
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_DB: rag_enterprise
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --locale=C"
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-  
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      rag_network:
+        ipv4_address: 172.28.0.4
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d rag_enterprise"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+
   n8n:
     image: n8nio/n8n:latest
+    container_name: rag-n8n
     ports:
       - "5678:5678"
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: ${N8N_BASIC_AUTH_ACTIVE:-true}
+      N8N_BASIC_AUTH_USER: ${N8N_USER:-admin}
+      N8N_BASIC_AUTH_PASSWORD: ${N8N_PASSWORD:-changeme}
+      N8N_HOST: ${N8N_HOST:-localhost}
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      WEBHOOK_URL: ${N8N_WEBHOOK_URL:-http://localhost:5678}
+      GENERIC_TIMEZONE: Asia/Seoul
     volumes:
-      - ./data/n8n:/home/node/.n8n
+      - n8n_data:/home/node/.n8n
+    networks:
+      rag_network:
+        ipv4_address: 172.28.0.5
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:5678/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 3G
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    environment:
+      OLLAMA_HOST: 0.0.0.0:11434
+      OLLAMA_MODELS: /root/.ollama/models
+      OLLAMA_KEEP_ALIVE: 5m
+      OLLAMA_NUM_PARALLEL: 2
+    networks:
+      rag_network:
+        ipv4_address: 172.28.0.6
+    healthcheck:
+      test: ["CMD", "test", "-d", "/root/.ollama/models/manifests"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    # Colima GPU 지원 (선택사항)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 8G
+        reservations:
+          cpus: '2.0'
+          memory: 4G
+
+  fastapi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-fastapi
+    ports:
+      - "8000:8000"
+    environment:
+      QDRANT_HOST: 172.28.0.2
+      QDRANT_HTTP_PORT: 6333
+      REDIS_HOST: 172.28.0.3
+      REDIS_PORT: 6379
+      POSTGRES_HOST: 172.28.0.4
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: rag_enterprise
+      OLLAMA_HOST: 172.28.0.6
+      OLLAMA_PORT: 11434
+    networks:
+      rag_network:
+        ipv4_address: 172.28.0.7
+    depends_on:
+      qdrant:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G

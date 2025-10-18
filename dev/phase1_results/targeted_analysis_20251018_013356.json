@@ -1,0 +1,282 @@
+{
+  "timestamp": "2025-10-18T01:33:56.058104",
+  "total_analyzed": 8,
+  "results": [
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=960",
+      "idx": "960",
+      "error": "'alt'"
+    },
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=969",
+      "idx": "969",
+      "error": "'alt'"
+    },
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=967",
+      "idx": "967",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=967",
+        "page_title": "제품소개 - 제품소개 - 청진",
+        "product_names": {
+          "h1": "",
+          "h2": "Menu",
+          "img_alt": "120ml 브로우용기"
+        },
+        "images": {
+          "total_img_tags": 4,
+          "product_images_count": 1,
+          "all_product_images": [
+            {
+              "index": 1,
+              "source": "img_tag",
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1758154116.png",
+              "filename": "GOODS1_1758154116.png",
+              "alt": "120ml 브로우용기",
+              "type_guess": "main",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1024,
+              "naturalHeight": 1024,
+              "className": "",
+              "id": "",
+              "parent": {
+                "tag": "DIV",
+                "class": "only-img",
+                "id": ""
+              }
+            }
+          ]
+        },
+        "image_containers": [
+          {
+            "pattern": "div[class*=\"image\"]",
+            "element_index": 1,
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_srcs": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1758154116.png"
+            ],
+            "html_snippet": "<div class=\"product-view-top-image\">\n\t\t\t\t\t\t\t<!-- 이미지 권장사이즈 515x515 -->\n\t\t\t\t\t\t\t<div class=\"image-box\">\n\t\t\t\t\t\t\t\t<div class=\"only-img\"><img src=\"http://chungjinkorea.com/data/goodsImages/GOODS1_175815411"
+          },
+          {
+            "pattern": "div[class*=\"image\"]",
+            "element_index": 2,
+            "tag": "DIV",
+            "className": "image-box",
+            "id": "",
+            "image_count": 1,
+            "image_srcs": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1758154116.png"
+            ],
+            "html_snippet": "<div class=\"image-box\">\n\t\t\t\t\t\t\t\t<div class=\"only-img\"><img src=\"http://chungjinkorea.com/data/goodsImages/GOODS1_1758154116.png\" alt=\"120ml 브로우용기\"></div>\n\t\t\t\t\t\t\t</div>"
+          }
+        ],
+        "product_info": {
+          "tables": [],
+          "definition_lists": [
+            {
+              "index": 1,
+              "className": "",
+              "id": "",
+              "data": {
+                "Phone": "032-674- 2748~9"
+              }
+            },
+            {
+              "index": 2,
+              "className": "",
+              "id": "",
+              "data": {
+                "Fax": "032-681-2748"
+              }
+            },
+            {
+              "index": 3,
+              "className": "",
+              "id": "",
+              "data": {
+                "Email": "chungjin@chungjinkorea.com"
+              }
+            }
+          ],
+          "divs": [
+            {
+              "pattern": "div[class*=\"product\"]",
+              "index": 4,
+              "className": "product-view-bottom",
+              "id": "",
+              "text_preview": "Description\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품명\n\t\t\t\t\t\t\t\t\t120ml 브로우용기\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품 코드\n\t\t\t\t\t\t\t\t\tBG120-L002\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t재질(원료)\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPETG\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t사양\n\t\t\t\t\t\t\t\t\t43x119(mm)/Ø24\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t",
+              "html_snippet": "<div class=\"product-view-bottom\" data-scroll=\"fade-up\">\n\t\t\t\t\t\t<div class=\"product-view-bottom-item\">\n\t\t\t\t\t\t\t<h5 class=\"item-title font-Josefin\">Description</h5>\n\t\t\t\t\t\t\t<ul class=\"feature-list\">\n\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<h5 class=\"tit\">제품명</h5>\n\t\t\t\t\t\t\t\t\t<p class=\"txt\">120ml 브로우용기</p>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t"
+            },
+            {
+              "pattern": "div[class*=\"product\"]",
+              "index": 5,
+              "className": "product-view-bottom-item",
+              "id": "",
+              "text_preview": "Description\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품명\n\t\t\t\t\t\t\t\t\t120ml 브로우용기\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품 코드\n\t\t\t\t\t\t\t\t\tBG120-L002\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t재질(원료)\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\tPETG\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t사양\n\t\t\t\t\t\t\t\t\t43x119(mm)/Ø24",
+              "html_snippet": "<div class=\"product-view-bottom-item\">\n\t\t\t\t\t\t\t<h5 class=\"item-title font-Josefin\">Description</h5>\n\t\t\t\t\t\t\t<ul class=\"feature-list\">\n\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<h5 class=\"tit\">제품명</h5>\n\t\t\t\t\t\t\t\t\t<p class=\"txt\">120ml 브로우용기</p>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<h5 class=\"tit\">제품 코드</h5>\n\t\t\t\t\t\t\t\t\t<"
+            }
+          ]
+        },
+        "special_areas": {},
+        "dom_stats": {
+          "total_elements": 522,
+          "total_divs": 54,
+          "total_tables": 0,
+          "total_lists": 27
+        }
+      },
+      "timestamp": "2025-10-18T01:33:07.592849"
+    },
+    {
+      "category": "Bottle",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=912",
+      "idx": "912",
+      "error": "'alt'"
+    },
+    {
+      "category": "Jar",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=928",
+      "idx": "928",
+      "error": "'alt'"
+    },
+    {
+      "category": "Jar",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=937",
+      "idx": "937",
+      "error": "'alt'"
+    },
+    {
+      "category": "Cap&Pump",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=946",
+      "idx": "946",
+      "analysis": {
+        "url": "http://chungjinkorea.com/kr/product/view.php?idx=946",
+        "page_title": "제품소개 - 제품소개 - 청진",
+        "product_names": {
+          "h1": "",
+          "h2": "Menu",
+          "img_alt": "24파이 풀커버 일반미스트"
+        },
+        "images": {
+          "total_img_tags": 4,
+          "product_images_count": 1,
+          "all_product_images": [
+            {
+              "index": 1,
+              "source": "img_tag",
+              "src": "http://chungjinkorea.com/data/goodsImages/GOODS1_1749027118.jpg",
+              "filename": "GOODS1_1749027118.jpg",
+              "alt": "24파이 풀커버 일반미스트",
+              "type_guess": "main",
+              "width": 515,
+              "height": 515,
+              "naturalWidth": 1000,
+              "naturalHeight": 1000,
+              "className": "",
+              "id": "",
+              "parent": {
+                "tag": "DIV",
+                "class": "only-img",
+                "id": ""
+              }
+            }
+          ]
+        },
+        "image_containers": [
+          {
+            "pattern": "div[class*=\"image\"]",
+            "element_index": 1,
+            "tag": "DIV",
+            "className": "product-view-top-image",
+            "id": "",
+            "image_count": 1,
+            "image_srcs": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1749027118.jpg"
+            ],
+            "html_snippet": "<div class=\"product-view-top-image\">\n\t\t\t\t\t\t\t<!-- 이미지 권장사이즈 515x515 -->\n\t\t\t\t\t\t\t<div class=\"image-box\">\n\t\t\t\t\t\t\t\t<div class=\"only-img\"><img src=\"http://chungjinkorea.com/data/goodsImages/GOODS1_174902711"
+          },
+          {
+            "pattern": "div[class*=\"image\"]",
+            "element_index": 2,
+            "tag": "DIV",
+            "className": "image-box",
+            "id": "",
+            "image_count": 1,
+            "image_srcs": [
+              "http://chungjinkorea.com/data/goodsImages/GOODS1_1749027118.jpg"
+            ],
+            "html_snippet": "<div class=\"image-box\">\n\t\t\t\t\t\t\t\t<div class=\"only-img\"><img src=\"http://chungjinkorea.com/data/goodsImages/GOODS1_1749027118.jpg\" alt=\"24파이 풀커버 일반미스트\"></div>\n\t\t\t\t\t\t\t</div>"
+          }
+        ],
+        "product_info": {
+          "tables": [],
+          "definition_lists": [
+            {
+              "index": 1,
+              "className": "",
+              "id": "",
+              "data": {
+                "Phone": "032-674- 2748~9"
+              }
+            },
+            {
+              "index": 2,
+              "className": "",
+              "id": "",
+              "data": {
+                "Fax": "032-681-2748"
+              }
+            },
+            {
+              "index": 3,
+              "className": "",
+              "id": "",
+              "data": {
+                "Email": "chungjin@chungjinkorea.com"
+              }
+            }
+          ],
+          "divs": [
+            {
+              "pattern": "div[class*=\"product\"]",
+              "index": 4,
+              "className": "product-view-bottom",
+              "id": "",
+              "text_preview": "Description\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품명\n\t\t\t\t\t\t\t\t\t24파이 풀커버 일반미스트\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품 코드\n\t\t\t\t\t\t\t\t\tSO024-CE22\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t재질(원료)\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t기타\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t사양\n\t\t\t\t\t\t\t\t\t내경Ø24\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t",
+              "html_snippet": "<div class=\"product-view-bottom\" data-scroll=\"fade-up\">\n\t\t\t\t\t\t<div class=\"product-view-bottom-item\">\n\t\t\t\t\t\t\t<h5 class=\"item-title font-Josefin\">Description</h5>\n\t\t\t\t\t\t\t<ul class=\"feature-list\">\n\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<h5 class=\"tit\">제품명</h5>\n\t\t\t\t\t\t\t\t\t<p class=\"txt\">24파이 풀커버 일반미스트</p>\n\t\t\t\t\t\t\t\t</li>\n\t\t"
+            },
+            {
+              "pattern": "div[class*=\"product\"]",
+              "index": 5,
+              "className": "product-view-bottom-item",
+              "id": "",
+              "text_preview": "Description\n\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품명\n\t\t\t\t\t\t\t\t\t24파이 풀커버 일반미스트\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t제품 코드\n\t\t\t\t\t\t\t\t\tSO024-CE22\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t재질(원료)\n\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t기타\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\n\t\t\t\t\t\t\t\t\t사양\n\t\t\t\t\t\t\t\t\t내경Ø24",
+              "html_snippet": "<div class=\"product-view-bottom-item\">\n\t\t\t\t\t\t\t<h5 class=\"item-title font-Josefin\">Description</h5>\n\t\t\t\t\t\t\t<ul class=\"feature-list\">\n\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<h5 class=\"tit\">제품명</h5>\n\t\t\t\t\t\t\t\t\t<p class=\"txt\">24파이 풀커버 일반미스트</p>\n\t\t\t\t\t\t\t\t</li>\n\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t<li>\n\t\t\t\t\t\t\t\t\t<h5 class=\"tit\">제품 코드</h5>\n\t\t\t\t\t\t\t"
+            }
+          ]
+        },
+        "special_areas": {},
+        "dom_stats": {
+          "total_elements": 522,
+          "total_divs": 54,
+          "total_tables": 0,
+          "total_lists": 27
+        }
+      },
+      "timestamp": "2025-10-18T01:33:45.655772"
+    },
+    {
+      "category": "Cap&Pump",
+      "url": "http://chungjinkorea.com/kr/product/view.php?idx=934",
+      "idx": "934",
+      "error": "'alt'"
+    }
+  ]
+}

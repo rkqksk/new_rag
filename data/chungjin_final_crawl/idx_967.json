@@ -1,0 +1,35 @@
+{
+  "product_name": "120ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1758154116.png",
+      "filename": "GOODS1_1758154116.png",
+      "alt": "120ml 브로우용기",
+      "type": "main",
+      "width": 1024,
+      "height": 1024
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1758154116.png",
+      "filename": "GOODS1_1758154116.png",
+      "alt": "120ml 브로우용기",
+      "type": "main",
+      "width": 1024,
+      "height": 1024,
+      "local_path": "data/chungjin_final_crawl/images/idx_967_main_1.jpg"
+    }
+  ],
+  "idx": "967",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=967",
+  "crawled_at": "2025-10-18T01:55:53.487671"
+}
