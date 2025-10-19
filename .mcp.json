@@ -2,15 +2,24 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./documents"]
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users/oypnus",
+        "/Users/oypnus/Project/rag-enterprise"
+      ]
     },
     "claude_haiku": {
       "command": "python",
       "args": ["-m", "mcp_servers.claude_haiku_server"]
     },
-    "google_devtools": {
+    "rag_crawler": {
       "command": "python",
       "args": ["-m", "mcp_servers.google_devtools.server"]
+    },
+    "chrome_devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"]
     },
     "qdrant": {
       "command": "python",

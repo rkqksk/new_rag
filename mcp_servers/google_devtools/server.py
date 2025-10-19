@@ -729,9 +729,16 @@ async def call_tool(name: str, arguments: dict) -> List[types.TextContent]:
 
 async def main():
     """MCP 서버 실행"""
-    async with server:
-        logger.info("✓ Google DevTools MCP Server started")
-        await server.wait_for_shutdown()
+    from mcp.server.stdio import stdio_server
+
+    logger.info("✓ Google DevTools MCP Server starting...")
+
+    async with stdio_server() as (read_stream, write_stream):
+        await server.run(
+            read_stream,
+            write_stream,
+            server.create_initialization_options()
+        )
 
 
 if __name__ == "__main__":
