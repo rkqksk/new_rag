@@ -172,9 +172,10 @@ def get_rag_qa_service(
     from app.services.rag_qa_service import RAGQAService
 
     return RAGQAService(
-        search_client=qdrant_client,
+        qdrant_client=qdrant_client,
         embedding_model=embedding_model,
-        llm_url=config.ollama_url
+        ollama_url=config.ollama_url,
+        model_name=config.ollama_model
     )
 
 
