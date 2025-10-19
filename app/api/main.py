@@ -55,12 +55,20 @@ app = FastAPI(
 )
 
 # Add CORS middleware
+# Get allowed origins from environment, default to localhost for development
+ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS if origin.strip()]
+
+# Validate CORS configuration in production
+if os.getenv("ENVIRONMENT") == "production" and ALLOWED_ORIGINS == ["http://localhost:3000"]:
+    logger.warning("CORS configuration uses development defaults in production. Set ALLOWED_ORIGINS environment variable.")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
 
 # Register ingestion routes later after service initialization
@@ -72,7 +80,15 @@ REDIS_HOST = os.getenv("REDIS_HOST", "172.28.0.3")
 REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
 POSTGRES_HOST = os.getenv("POSTGRES_HOST", "172.28.0.4")
 POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD", "changeme")
+
+# Validate critical credentials are set
+POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+if not POSTGRES_PASSWORD:
+    raise ValueError(
+        "POSTGRES_PASSWORD environment variable is required and must not be empty. "
+        "Set a strong password in your .env file or production secrets."
+    )
+
 POSTGRES_DB = os.getenv("POSTGRES_DB", "rag_enterprise")
 
 logger.info(f"Connecting to Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
@@ -147,9 +163,9 @@ try:
         collection_name=COLLECTION_NAME,
         vectors_config=VectorParams(size=384, distance=Distance.COSINE),
     )
-    print(f"Created collection: {COLLECTION_NAME}")
-except:
-    print(f"Collection {COLLECTION_NAME} already exists")
+    logger.info(f"Created collection: {COLLECTION_NAME}")
+except Exception as e:
+    logger.info(f"Collection {COLLECTION_NAME} already exists or creation skipped: {e}")
 
 @app.get("/")
 async def root():

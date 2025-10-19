@@ -97,8 +97,8 @@ async def test_simple_scraping():
         # 브라우저가 열려있으면 종료
         try:
             await automation.close_browser()
-        except:
-            pass
+        except Exception as e:
+            logger.debug(f"Error closing browser: {e}")
 
 
 async def test_advanced_scraping():

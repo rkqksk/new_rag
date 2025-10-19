@@ -37,9 +37,13 @@ class APIKeyRouter:
         self.backup_key = os.getenv("ANTHROPIC_API_KEY_BACKUP", "").strip()
         self.key_usage = {}
         self.last_rotation = datetime.now()
-        
-        if not self.primary_key:
-            logger.warning("No ANTHROPIC_API_KEY found in environment")
+
+        # Validate at least one API key is configured
+        if not self.primary_key and not self.backup_key:
+            raise ValueError(
+                "ANTHROPIC_API_KEY must be set in environment variables. "
+                "Optionally set ANTHROPIC_API_KEY_BACKUP for failover."
+            )
 
     def get_current_key(self) -> str:
         """현재 사용할 API 키 반환"""

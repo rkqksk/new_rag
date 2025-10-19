@@ -178,7 +178,8 @@ class RAGSiteCrawler:
                         "url": url,
                         "data": json_data
                     }
-                except:
+                except (json.JSONDecodeError, ValueError) as e:
+                    logger.debug(f"JSON parse failed for {endpoint_name}: {e}")
                     results[endpoint_name.lower()] = {
                         "status": "success",
                         "url": url,

@@ -82,8 +82,8 @@ async def analyze_category_pagination(category_name: str, base_url: str):
                     if 'page=' in link['href']:
                         page_num = int(link['href'].split('page=')[1].split('&')[0])
                         page_numbers.append(page_num)
-                except:
-                    pass
+                except (ValueError, KeyError, IndexError) as e:
+                    logger.debug(f"Error parsing pagination link: {e}")
 
             if page_numbers:
                 max_page = max(page_numbers)

@@ -90,8 +90,9 @@ def get_category_from_summary(summary_path: Path) -> str:
         with open(summary_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
         return data.get('category', 'Unknown')
-    except:
+    except (json.JSONDecodeError, FileNotFoundError, IOError) as e:
         # 파일명에서 추출 시도 (category_Bottle_*.json)
+        logger.debug(f"Failed to read category from {summary_path}: {e}")
         parts = summary_path.stem.split('_')
         if len(parts) >= 2:
             return parts[1]
