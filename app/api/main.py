@@ -35,6 +35,9 @@ from app.core.dependencies import (
 from app.core.metrics import REGISTRY
 from app.core.middleware import MetricsMiddleware
 
+# Import schemas
+from app.models.schemas import QARequest, QAResponse, ConsultationRequest, ConsultationResponse
+
 # Import route handlers
 from app.api import dashboard_routes, query_routes, ingestion_routes
 # Note: workflow_routes has agent dependencies - loaded lazily if needed
