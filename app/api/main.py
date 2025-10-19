@@ -3,7 +3,7 @@ RAG Enterprise API Server
 Basic implementation for document upload and search
 """
 
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Depends
 from fastapi.responses import JSONResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -20,18 +20,15 @@ from dotenv import load_dotenv
 import logging
 from pydantic import BaseModel
 
-# Import consultation service
-from app.services.consultation_service import (
-    ConsultationService,
-    ConsultationRequest,
-    ConsultationResponse,
-)
-
-# Import RAG Q&A service
-from app.services.rag_qa_service import (
-    RAGQAService,
-    QARequest,
-    QAResponse,
+# Import dependency injection
+from app.core.dependencies import (
+    get_config,
+    get_qdrant_client,
+    get_redis_client,
+    get_embedding_model,
+    get_rag_qa_service,
+    get_consultation_service,
+    get_document_ingestion_service,
 )
 
 # Import route handlers
@@ -52,103 +49,22 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Add CORS middleware
-# Get allowed origins from environment, default to localhost for development
-ALLOWED_ORIGINS = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
-ALLOWED_ORIGINS = [origin.strip() for origin in ALLOWED_ORIGINS if origin.strip()]
+# Get configuration (initializes all validation)
+_config = get_config()
 
-# Validate CORS configuration in production
-if os.getenv("ENVIRONMENT") == "production" and ALLOWED_ORIGINS == ["http://localhost:3000"]:
-    logger.warning("CORS configuration uses development defaults in production. Set ALLOWED_ORIGINS environment variable.")
-
+# Add CORS middleware with configuration from DI
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
+    allow_origins=_config.allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
 )
 
-# Register ingestion routes later after service initialization
-
-# Environment variables
-QDRANT_HOST = os.getenv("QDRANT_HOST", "172.28.0.2")
-QDRANT_PORT = int(os.getenv("QDRANT_HTTP_PORT", "6333"))
-REDIS_HOST = os.getenv("REDIS_HOST", "172.28.0.3")
-REDIS_PORT = int(os.getenv("REDIS_PORT", "6379"))
-POSTGRES_HOST = os.getenv("POSTGRES_HOST", "172.28.0.4")
-POSTGRES_USER = os.getenv("POSTGRES_USER", "postgres")
-
-# Validate critical credentials are set
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-if not POSTGRES_PASSWORD:
-    raise ValueError(
-        "POSTGRES_PASSWORD environment variable is required and must not be empty. "
-        "Set a strong password in your .env file or production secrets."
-    )
-
-POSTGRES_DB = os.getenv("POSTGRES_DB", "rag_enterprise")
-
-logger.info(f"Connecting to Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
-logger.info(f"Connecting to Redis at {REDIS_HOST}:{REDIS_PORT}")
-logger.info(f"Connecting to PostgreSQL at {POSTGRES_HOST}")
-
-# Embedding model configuration (configurable via environment)
-EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
-EMBEDDING_DIMENSION = int(os.getenv("EMBEDDING_DIM", "384"))
-
-# Initialize services
-qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
-redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
-model = SentenceTransformer(EMBEDDING_MODEL)
-logger.info(f"Loaded embedding model: {EMBEDDING_MODEL} (dimension: {EMBEDDING_DIMENSION})")
-
-# Initialize consultation service
-consultation_service = ConsultationService(
-    search_client=qdrant_client,
-    embedding_model=model,
-    llm_client=None  # Will be implemented later with Ollama
-)
-
-# Initialize RAG Q&A service (lazy initialization)
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://172.28.0.6:11434")
-OLLAMA_MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
-
-rag_qa_service = None
-
-def get_rag_qa_service():
-    global rag_qa_service
-    if rag_qa_service is None:
-        rag_qa_service = RAGQAService(
-            qdrant_client=qdrant_client,
-            embedding_model=model,
-            ollama_url=OLLAMA_URL,
-            model_name=OLLAMA_MODEL
-        )
-    return rag_qa_service
-
-# Initialize document ingestion service - lazy loading
-# Commented out to avoid import errors on startup
-# document_ingestion_service = DocumentIngestionService(
-#     qdrant_client=qdrant_client,
-#     embedding_model='sentence-transformers/all-MiniLM-L6-v2'
-# )
-# web_crawler_service = WebCrawlerService(
-#     document_ingestion_service=document_ingestion_service
-# )
-
-# Inject services into routes - lazy loading
-# ingestion_routes.document_ingestion_service = document_ingestion_service
-# ingestion_routes.web_crawler_service = web_crawler_service
-# dashboard_routes.document_ingestion_service = document_ingestion_service
-# dashboard_routes.web_crawler_service = web_crawler_service
-dashboard_routes.qdrant_client = qdrant_client
-dashboard_routes.redis_client = redis_client
-
-# Register routers
-app.include_router(query_routes.router)  # Query routing with Ollama LLMs
-app.include_router(ingestion_routes.router)  # Document ingestion & crawling
-app.include_router(dashboard_routes.router)  # Dashboard & monitoring
+# Register routers (services are injected via FastAPI DI)
+app.include_router(query_routes.router)       # Query routing with Ollama LLMs
+app.include_router(ingestion_routes.router)   # Document ingestion & crawling
+app.include_router(dashboard_routes.router)   # Dashboard & monitoring
 # Note: workflow_routes disabled due to agent module dependencies (will be lazy-loaded if needed)
 
 # Mount static files
@@ -160,15 +76,38 @@ if osp.exists(static_dir):
 # Collection name
 COLLECTION_NAME = "documents"
 
-# Initialize Qdrant collection
-try:
-    qdrant_client.create_collection(
-        collection_name=COLLECTION_NAME,
-        vectors_config=VectorParams(size=EMBEDDING_DIMENSION, distance=Distance.COSINE),
-    )
-    logger.info(f"Created collection: {COLLECTION_NAME} (dimension: {EMBEDDING_DIMENSION})")
-except Exception as e:
-    logger.info(f"Collection {COLLECTION_NAME} already exists or creation skipped: {e}")
+@app.on_event("startup")
+async def startup_event():
+    """Initialize services on startup"""
+    logger.info("🚀 Starting RAG Enterprise API...")
+
+    # Get config to validate environment
+    config = get_config()
+    logger.info(f"✅ Configuration validated")
+
+    # Initialize Qdrant collection
+    try:
+        qdrant = get_qdrant_client(config)
+        qdrant.create_collection(
+            collection_name=COLLECTION_NAME,
+            vectors_config=VectorParams(
+                size=config.embedding_dim,
+                distance=Distance.COSINE
+            ),
+        )
+        logger.info(
+            f"✅ Qdrant collection initialized "
+            f"(dimension: {config.embedding_dim})"
+        )
+    except Exception as e:
+        logger.info(f"ℹ️ Collection already exists or creation skipped: {e}")
+
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    """Cleanup on shutdown"""
+    logger.info("🛑 Shutting down RAG Enterprise API...")
+
 
 @app.get("/")
 async def root():
@@ -198,7 +137,11 @@ async def chat():
     return {"error": "Chat interface not found"}
 
 @app.get("/health")
-async def health_check():
+async def health_check(
+    qdrant_client: QdrantClient = Depends(get_qdrant_client),
+    redis_client: redis.Redis = Depends(get_redis_client),
+    config = Depends(get_config)
+):
     """Health check endpoint with configuration validation"""
     health = {
         "api": "healthy",
@@ -206,9 +149,9 @@ async def health_check():
         "redis": False,
         "postgres": False,
         "config": {
-            "loaded": False,
-            "valid": False,
-            "source": "CLAUDE.md"
+            "loaded": True,
+            "valid": True,
+            "source": "DI Container"
         }
     }
 
@@ -231,11 +174,11 @@ async def health_check():
     # Check PostgreSQL
     try:
         conn = psycopg2.connect(
-            host=POSTGRES_HOST,
+            host=config.postgres_host,
             port=5432,
-            database=POSTGRES_DB,
-            user=POSTGRES_USER,
-            password=POSTGRES_PASSWORD
+            database=config.postgres_db,
+            user=config.postgres_user,
+            password=config.postgres_password
         )
         conn.close()
         health["postgres"] = True
