@@ -33,9 +33,19 @@ docs/
 
 ## 🔗 관련 문서
 
-- [프로젝트 규칙](./.claude/README.md) - 코딩 컨벤션 및 개발 규칙
-- [기술 스택](./.claude/tech-stack.md) - 사용 기술 및 도구
-- [컨텍스트 정보](./.claude/context.md) - 프로젝트 배경 및 목표
+### 핵심 문서
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - 5-layer system architecture
+- [TECH_STACK.md](./TECH_STACK.md) - Technology stack and tools
+- [TESTING.md](./TESTING.md) - Testing strategy and patterns
+- [PERFORMANCE.md](./PERFORMANCE.md) - Performance optimization
+- [OPERATIONS.md](./OPERATIONS.md) - Deployment and operations
+
+### Observability Documentation (NEW)
+- **[OBSERVABILITY_INDEX.md](./OBSERVABILITY_INDEX.md)** - Start here for health checks & metrics
+- [OBSERVABILITY_ARCHITECTURE.md](./OBSERVABILITY_ARCHITECTURE.md) - Complete technical specification (49KB)
+- [OBSERVABILITY_QUICKSTART.md](./OBSERVABILITY_QUICKSTART.md) - Implementation guide (20KB)
+- [OBSERVABILITY_DESIGN_DECISIONS.md](./OBSERVABILITY_DESIGN_DECISIONS.md) - Design rationale (16KB)
+- [OBSERVABILITY_VISUAL_REFERENCE.md](./OBSERVABILITY_VISUAL_REFERENCE.md) - Diagrams and flows (47KB)
 
 ## 📝 문서 작성 가이드
 

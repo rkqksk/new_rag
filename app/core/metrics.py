@@ -1,335 +1,667 @@
 """
-Prometheus Metrics Collection
+Prometheus metrics collection system for RAG Enterprise.
 
-Defines all metrics for RAG Enterprise including:
-- HTTP request metrics (latency, throughput, errors)
-- Embedding generation metrics
-- Vector search metrics
-- Cache performance metrics
-- Service-level metrics
+This module provides comprehensive metrics collection for monitoring
+application performance, API usage, and system health. Metrics are
+exposed in Prometheus exposition format.
+
+Classes:
+    MetricsCollector: Thread-safe metrics collection and management
+    RequestTracker: Context manager for HTTP request tracking
+    LLMQueryTracker: Context manager for LLM query tracking
+
+Example:
+    >>> collector = MetricsCollector()
+    >>> async with collector.track_request("/api/query") as tracker:
+    ...     tracker.set_status(200)
+    ...     tracker.add_size(4096)
 """
+
+import asyncio
+import time
+from contextlib import asynccontextmanager
+from threading import Lock
+from typing import Any, Dict, Optional
+
 from prometheus_client import (
+    REGISTRY,
     Counter,
-    Histogram,
     Gauge,
+    Histogram,
     CollectorRegistry,
+    generate_latest
 )
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 
-# Create registry for metrics
-REGISTRY = CollectorRegistry()
+from app.core.logging import get_logger
 
-# ============================================================
-# HTTP Request Metrics
-# ============================================================
+logger = get_logger(__name__)
 
-http_requests_total = Counter(
-    'http_requests_total',
-    'Total HTTP requests',
-    ['method', 'endpoint', 'status'],
-    registry=REGISTRY
-)
 
-http_request_duration_seconds = Histogram(
-    'http_request_duration_seconds',
-    'HTTP request latency in seconds',
-    ['method', 'endpoint'],
-    buckets=(0.01, 0.05, 0.1, 0.5, 1.0, 2.5, 5.0, 10.0),
-    registry=REGISTRY
-)
+class RequestTracker:
+    """Context manager for tracking HTTP request metrics.
 
-http_request_size_bytes = Histogram(
-    'http_request_size_bytes',
-    'HTTP request size in bytes',
-    ['method', 'endpoint'],
-    buckets=(100, 1000, 10000, 100000, 1000000),
-    registry=REGISTRY
-)
+    Attributes:
+        collector: Parent metrics collector
+        endpoint: Request endpoint path
+        method: HTTP method
+        start_time: Request start timestamp
+        status_code: HTTP response status code
+        request_size: Request body size in bytes
+        response_size: Response body size in bytes
+    """
 
-http_response_size_bytes = Histogram(
-    'http_response_size_bytes',
-    'HTTP response size in bytes',
-    ['method', 'endpoint'],
-    buckets=(100, 1000, 10000, 100000, 1000000),
-    registry=REGISTRY
-)
+    def __init__(
+        self,
+        collector: "MetricsCollector",
+        endpoint: str,
+        method: str = "GET"
+    ):
+        """Initialize request tracker.
 
-# ============================================================
-# Embedding Metrics
-# ============================================================
+        Args:
+            collector: Parent metrics collector instance
+            endpoint: Request endpoint path
+            method: HTTP method (default: GET)
+        """
+        self.collector = collector
+        self.endpoint = endpoint
+        self.method = method
+        self.start_time = time.time()
+        self.status_code: Optional[int] = None
+        self.request_size: int = 0
+        self.response_size: int = 0
 
-embedding_generation_total = Counter(
-    'embedding_generation_total',
-    'Total embeddings generated',
-    ['model'],
-    registry=REGISTRY
-)
+    def set_status(self, status_code: int) -> None:
+        """Set HTTP response status code.
 
-embedding_generation_duration_seconds = Histogram(
-    'embedding_generation_duration_seconds',
-    'Embedding generation latency in seconds',
-    ['model'],
-    buckets=(0.1, 0.5, 1.0, 2.0, 5.0, 10.0),
-    registry=REGISTRY
-)
+        Args:
+            status_code: HTTP status code
+        """
+        self.status_code = status_code
 
-embedding_batch_size = Histogram(
-    'embedding_batch_size',
-    'Embedding batch size',
-    ['model'],
-    buckets=(1, 8, 16, 32, 64, 128),
-    registry=REGISTRY
-)
+    def add_request_size(self, size_bytes: int) -> None:
+        """Add request body size.
 
-embedding_cache_hits = Counter(
-    'embedding_cache_hits',
-    'Embedding cache hits',
-    ['cache_type'],
-    registry=REGISTRY
-)
+        Args:
+            size_bytes: Request size in bytes
+        """
+        self.request_size = size_bytes
 
-embedding_cache_misses = Counter(
-    'embedding_cache_misses',
-    'Embedding cache misses',
-    registry=REGISTRY
-)
+    def add_response_size(self, size_bytes: int) -> None:
+        """Add response body size.
 
-embedding_cache_hit_rate = Gauge(
-    'embedding_cache_hit_rate',
-    'Embedding cache hit rate (0-1)',
-    registry=REGISTRY
-)
+        Args:
+            size_bytes: Response size in bytes
+        """
+        self.response_size = size_bytes
 
-# ============================================================
-# Vector Search Metrics
-# ============================================================
+    def add_size(self, size_bytes: int) -> None:
+        """Add size (alias for add_response_size).
 
-vector_search_total = Counter(
-    'vector_search_total',
-    'Total vector searches',
-    ['collection'],
-    registry=REGISTRY
-)
+        Args:
+            size_bytes: Response size in bytes
+        """
+        self.add_response_size(size_bytes)
 
-vector_search_duration_seconds = Histogram(
-    'vector_search_duration_seconds',
-    'Vector search latency in seconds',
-    ['collection'],
-    buckets=(0.01, 0.05, 0.1, 0.5, 1.0, 5.0),
-    registry=REGISTRY
-)
+    async def __aenter__(self) -> "RequestTracker":
+        """Enter async context manager.
 
-vector_search_results_returned = Histogram(
-    'vector_search_results_returned',
-    'Number of results returned from vector search',
-    ['collection'],
-    buckets=(1, 5, 10, 20, 50, 100),
-    registry=REGISTRY
-)
+        Returns:
+            RequestTracker instance
+        """
+        # Increment in-flight requests
+        self.collector._http_requests_in_flight.inc()
+        return self
 
-vector_search_similarity_score = Histogram(
-    'vector_search_similarity_score',
-    'Similarity scores from vector search',
-    ['collection'],
-    buckets=(0.1, 0.3, 0.5, 0.7, 0.9, 1.0),
-    registry=REGISTRY
-)
+    async def __aexit__(
+        self,
+        exc_type: Any,
+        exc_val: Any,
+        exc_tb: Any
+    ) -> None:
+        """Exit async context manager and record metrics.
 
-# ============================================================
-# Qdrant Database Metrics
-# ============================================================
+        Args:
+            exc_type: Exception type if raised
+            exc_val: Exception value if raised
+            exc_tb: Exception traceback if raised
+        """
+        # Decrement in-flight requests
+        self.collector._http_requests_in_flight.dec()
 
-qdrant_upsert_total = Counter(
-    'qdrant_upsert_total',
-    'Total points upserted to Qdrant',
-    ['collection'],
-    registry=REGISTRY
-)
+        # Calculate duration
+        duration = time.time() - self.start_time
 
-qdrant_upsert_duration_seconds = Histogram(
-    'qdrant_upsert_duration_seconds',
-    'Qdrant upsert latency in seconds',
-    ['collection'],
-    buckets=(0.01, 0.1, 0.5, 1.0, 5.0, 10.0),
-    registry=REGISTRY
-)
+        # Determine status code
+        if exc_type is not None:
+            status = 500
+        else:
+            status = self.status_code or 200
 
-qdrant_collection_size = Gauge(
-    'qdrant_collection_size',
-    'Number of points in Qdrant collection',
-    ['collection'],
-    registry=REGISTRY
-)
+        # Record metrics
+        self.collector._http_requests_total.labels(
+            method=self.method,
+            endpoint=self.endpoint,
+            status_code=status
+        ).inc()
 
-# ============================================================
-# Redis Cache Metrics
-# ============================================================
+        self.collector._http_request_duration_seconds.labels(
+            endpoint=self.endpoint
+        ).observe(duration)
 
-redis_operations_total = Counter(
-    'redis_operations_total',
-    'Total Redis operations',
-    ['operation', 'status'],
-    registry=REGISTRY
-)
+        if self.request_size > 0:
+            self.collector._http_request_size_bytes.labels(
+                endpoint=self.endpoint
+            ).observe(self.request_size)
 
-redis_operation_duration_seconds = Histogram(
-    'redis_operation_duration_seconds',
-    'Redis operation latency in seconds',
-    ['operation'],
-    buckets=(0.001, 0.01, 0.05, 0.1, 0.5, 1.0),
-    registry=REGISTRY
-)
+        if self.response_size > 0:
+            self.collector._http_response_size_bytes.labels(
+                endpoint=self.endpoint
+            ).observe(self.response_size)
 
-redis_key_count = Gauge(
-    'redis_key_count',
-    'Number of keys in Redis',
-    registry=REGISTRY
-)
 
-# ============================================================
-# Document Processing Metrics
-# ============================================================
+class LLMQueryTracker:
+    """Context manager for tracking LLM query metrics.
 
-document_ingestion_total = Counter(
-    'document_ingestion_total',
-    'Total documents ingested',
-    ['format', 'status'],
-    registry=REGISTRY
-)
+    Attributes:
+        collector: Parent metrics collector
+        model: LLM model name
+        endpoint: API endpoint
+        start_time: Query start timestamp
+        status: Query status (success/error)
+        input_tokens: Number of input tokens
+        output_tokens: Number of output tokens
+    """
 
-document_ingestion_duration_seconds = Histogram(
-    'document_ingestion_duration_seconds',
-    'Document ingestion latency in seconds',
-    ['format'],
-    buckets=(0.5, 1.0, 2.0, 5.0, 10.0, 30.0),
-    registry=REGISTRY
-)
+    def __init__(
+        self,
+        collector: "MetricsCollector",
+        model: str,
+        endpoint: str = "messages"
+    ):
+        """Initialize LLM query tracker.
 
-document_chunk_count = Histogram(
-    'document_chunk_count',
-    'Number of chunks per document',
-    buckets=(1, 10, 50, 100, 500, 1000),
-    registry=REGISTRY
-)
+        Args:
+            collector: Parent metrics collector instance
+            model: LLM model name
+            endpoint: API endpoint (default: messages)
+        """
+        self.collector = collector
+        self.model = model
+        self.endpoint = endpoint
+        self.start_time = time.time()
+        self.status: str = "success"
+        self.input_tokens: int = 0
+        self.output_tokens: int = 0
 
-document_size_bytes = Histogram(
-    'document_size_bytes',
-    'Document size in bytes',
-    ['format'],
-    buckets=(1000, 10000, 100000, 1000000, 10000000),
-    registry=REGISTRY
-)
+    def set_status(self, status: str) -> None:
+        """Set query status.
 
-# ============================================================
-# LLM Query Metrics
-# ============================================================
+        Args:
+            status: Query status (success/error/timeout)
+        """
+        self.status = status
 
-llm_query_total = Counter(
-    'llm_query_total',
-    'Total LLM queries',
-    ['model', 'status'],
-    registry=REGISTRY
-)
+    def add_tokens(self, input_tokens: int, output_tokens: int) -> None:
+        """Add token counts.
 
-llm_query_duration_seconds = Histogram(
-    'llm_query_duration_seconds',
-    'LLM query latency in seconds',
-    ['model'],
-    buckets=(1.0, 2.0, 5.0, 10.0, 30.0, 60.0),
-    registry=REGISTRY
-)
+        Args:
+            input_tokens: Number of input tokens
+            output_tokens: Number of output tokens
+        """
+        self.input_tokens = input_tokens
+        self.output_tokens = output_tokens
 
-llm_tokens_generated = Histogram(
-    'llm_tokens_generated',
-    'Tokens generated by LLM',
-    ['model'],
-    buckets=(10, 50, 100, 500, 1000, 5000),
-    registry=REGISTRY
-)
+    async def __aenter__(self) -> "LLMQueryTracker":
+        """Enter async context manager.
 
-llm_confidence_score = Histogram(
-    'llm_confidence_score',
-    'LLM response confidence score',
-    buckets=(0.1, 0.3, 0.5, 0.7, 0.9, 1.0),
-    registry=REGISTRY
-)
+        Returns:
+            LLMQueryTracker instance
+        """
+        return self
 
-# ============================================================
-# System Health Metrics
-# ============================================================
+    async def __aexit__(
+        self,
+        exc_type: Any,
+        exc_val: Any,
+        exc_tb: Any
+    ) -> None:
+        """Exit async context manager and record metrics.
 
-active_requests = Gauge(
-    'active_requests',
-    'Number of active requests',
-    ['endpoint'],
-    registry=REGISTRY
-)
+        Args:
+            exc_type: Exception type if raised
+            exc_val: Exception value if raised
+            exc_tb: Exception traceback if raised
+        """
+        # Calculate duration
+        duration = time.time() - self.start_time
 
-errors_total = Counter(
-    'errors_total',
-    'Total errors',
-    ['error_type', 'endpoint'],
-    registry=REGISTRY
-)
+        # Determine status
+        if exc_type is not None:
+            status = "error"
+        else:
+            status = self.status
 
-exception_total = Counter(
-    'exception_total',
-    'Total exceptions',
-    ['exception_type'],
-    registry=REGISTRY
-)
+        # Record metrics
+        self.collector._claude_api_calls_total.labels(
+            model=self.model,
+            endpoint=self.endpoint,
+            status=status
+        ).inc()
 
-database_connection_errors = Counter(
-    'database_connection_errors',
-    'Database connection errors',
-    ['database'],
-    registry=REGISTRY
-)
+        self.collector._claude_api_duration_seconds.labels(
+            model=self.model
+        ).observe(duration)
 
-# ============================================================
-# Cache Performance Metrics
-# ============================================================
+        if self.input_tokens > 0:
+            self.collector._claude_tokens_total.labels(
+                model=self.model,
+                direction="input"
+            ).inc(self.input_tokens)
 
-cache_hit_ratio = Gauge(
-    'cache_hit_ratio',
-    'Cache hit ratio (0-1)',
-    ['cache_type'],
-    registry=REGISTRY
-)
+        if self.output_tokens > 0:
+            self.collector._claude_tokens_total.labels(
+                model=self.model,
+                direction="output"
+            ).inc(self.output_tokens)
 
-cache_evictions_total = Counter(
-    'cache_evictions_total',
-    'Total cache evictions',
-    ['cache_type'],
-    registry=REGISTRY
-)
 
-cache_memory_bytes = Gauge(
-    'cache_memory_bytes',
-    'Cache memory usage in bytes',
-    ['cache_type'],
-    registry=REGISTRY
-)
+class MetricsCollector:
+    """Thread-safe Prometheus metrics collector.
 
-# ============================================================
-# Performance Tracking
-# ============================================================
+    Provides comprehensive metrics collection for HTTP requests,
+    Claude API calls, RAG pipeline operations, database queries,
+    and cache operations.
 
-p95_latency_seconds = Gauge(
-    'p95_latency_seconds',
-    'P95 latency in seconds',
-    ['operation'],
-    registry=REGISTRY
-)
+    Attributes:
+        registry: Prometheus collector registry
+        _lock: Thread lock for metric registration
+    """
 
-p99_latency_seconds = Gauge(
-    'p99_latency_seconds',
-    'P99 latency in seconds',
-    ['operation'],
-    registry=REGISTRY
-)
+    def __init__(self, registry: Optional[CollectorRegistry] = None):
+        """Initialize metrics collector.
 
-throughput_requests_per_second = Gauge(
-    'throughput_requests_per_second',
-    'Throughput in requests per second',
-    registry=REGISTRY
-)
+        Args:
+            registry: Prometheus registry (default: global REGISTRY)
+        """
+        self.registry = registry or REGISTRY
+        self._lock = Lock()
+        self.logger = get_logger(__name__)
+
+        # Initialize all metrics
+        self._initialize_http_metrics()
+        self._initialize_claude_metrics()
+        self._initialize_rag_metrics()
+        self._initialize_database_metrics()
+        self._initialize_cache_metrics()
+
+        self.logger.info("Metrics collector initialized")
+
+    def _initialize_http_metrics(self) -> None:
+        """Initialize HTTP request metrics."""
+        with self._lock:
+            self._http_requests_total = Counter(
+                "http_requests_total",
+                "Total HTTP requests by method, endpoint, and status",
+                ["method", "endpoint", "status_code"],
+                registry=self.registry
+            )
+
+            self._http_request_duration_seconds = Histogram(
+                "http_request_duration_seconds",
+                "HTTP request duration in seconds",
+                ["endpoint"],
+                registry=self.registry,
+                buckets=(
+                    0.005, 0.01, 0.025, 0.05, 0.1,
+                    0.25, 0.5, 1.0, 2.5, 5.0, 10.0
+                )
+            )
+
+            self._http_requests_in_flight = Gauge(
+                "http_requests_in_flight",
+                "Number of HTTP requests currently being processed",
+                registry=self.registry
+            )
+
+            self._http_request_size_bytes = Histogram(
+                "http_request_size_bytes",
+                "HTTP request body size in bytes",
+                ["endpoint"],
+                registry=self.registry,
+                buckets=(
+                    100, 1000, 10000, 100000,
+                    1000000, 10000000
+                )
+            )
+
+            self._http_response_size_bytes = Histogram(
+                "http_response_size_bytes",
+                "HTTP response body size in bytes",
+                ["endpoint"],
+                registry=self.registry,
+                buckets=(
+                    100, 1000, 10000, 100000,
+                    1000000, 10000000
+                )
+            )
+
+    def _initialize_claude_metrics(self) -> None:
+        """Initialize Claude API metrics."""
+        with self._lock:
+            self._claude_api_calls_total = Counter(
+                "claude_api_calls_total",
+                "Total Claude API calls by model, endpoint, and status",
+                ["model", "endpoint", "status"],
+                registry=self.registry
+            )
+
+            self._claude_api_duration_seconds = Histogram(
+                "claude_api_duration_seconds",
+                "Claude API request duration in seconds",
+                ["model"],
+                registry=self.registry,
+                buckets=(
+                    0.1, 0.25, 0.5, 1.0, 2.0,
+                    5.0, 10.0, 30.0, 60.0
+                )
+            )
+
+            self._claude_tokens_total = Counter(
+                "claude_tokens_total",
+                "Total Claude API tokens by model and direction",
+                ["model", "direction"],
+                registry=self.registry
+            )
+
+    def _initialize_rag_metrics(self) -> None:
+        """Initialize RAG pipeline metrics."""
+        with self._lock:
+            self._rag_pipeline_duration_seconds = Histogram(
+                "rag_pipeline_duration_seconds",
+                "RAG pipeline execution duration in seconds",
+                registry=self.registry,
+                buckets=(
+                    0.1, 0.25, 0.5, 1.0, 2.0,
+                    5.0, 10.0, 30.0
+                )
+            )
+
+            self._rag_documents_retrieved = Gauge(
+                "rag_documents_retrieved",
+                "Number of documents retrieved in last RAG query",
+                registry=self.registry
+            )
+
+            self._rag_confidence_scores = Histogram(
+                "rag_confidence_scores",
+                "RAG query confidence scores",
+                registry=self.registry,
+                buckets=(
+                    0.1, 0.2, 0.3, 0.4, 0.5,
+                    0.6, 0.7, 0.8, 0.9, 1.0
+                )
+            )
+
+    def _initialize_database_metrics(self) -> None:
+        """Initialize database metrics."""
+        with self._lock:
+            self._db_connections_active = Gauge(
+                "db_connections_active",
+                "Number of active database connections",
+                ["db_type"],
+                registry=self.registry
+            )
+
+            self._db_query_duration_seconds = Histogram(
+                "db_query_duration_seconds",
+                "Database query duration in seconds",
+                ["db_type"],
+                registry=self.registry,
+                buckets=(
+                    0.001, 0.005, 0.01, 0.025, 0.05,
+                    0.1, 0.25, 0.5, 1.0, 5.0
+                )
+            )
+
+            self._db_errors_total = Counter(
+                "db_errors_total",
+                "Total database errors by type",
+                ["db_type", "error_type"],
+                registry=self.registry
+            )
+
+    def _initialize_cache_metrics(self) -> None:
+        """Initialize cache metrics."""
+        with self._lock:
+            self._cache_operations_total = Counter(
+                "cache_operations_total",
+                "Total cache operations by operation and status",
+                ["operation", "status"],
+                registry=self.registry
+            )
+
+            self._cache_hit_ratio = Gauge(
+                "cache_hit_ratio",
+                "Cache hit ratio (0.0 to 1.0)",
+                registry=self.registry
+            )
+
+    @asynccontextmanager
+    async def track_request(
+        self,
+        endpoint: str,
+        method: str = "GET"
+    ):
+        """Track HTTP request metrics.
+
+        Args:
+            endpoint: Request endpoint path
+            method: HTTP method (default: GET)
+
+        Yields:
+            RequestTracker instance
+
+        Example:
+            >>> async with collector.track_request("/api/query") as t:
+            ...     t.set_status(200)
+            ...     t.add_size(4096)
+        """
+        tracker = RequestTracker(self, endpoint, method)
+        async with tracker:
+            yield tracker
+
+    @asynccontextmanager
+    async def track_llm_query(
+        self,
+        model: str,
+        endpoint: str = "messages"
+    ):
+        """Track LLM query metrics.
+
+        Args:
+            model: LLM model name
+            endpoint: API endpoint (default: messages)
+
+        Yields:
+            LLMQueryTracker instance
+
+        Example:
+            >>> async with collector.track_llm_query("claude-3") as t:
+            ...     t.set_status("success")
+            ...     t.add_tokens(100, 200)
+        """
+        tracker = LLMQueryTracker(self, model, endpoint)
+        async with tracker:
+            yield tracker
+
+    def record_rag_pipeline(
+        self,
+        duration_seconds: float,
+        documents_retrieved: int,
+        confidence_score: float
+    ) -> None:
+        """Record RAG pipeline metrics.
+
+        Args:
+            duration_seconds: Pipeline execution duration
+            documents_retrieved: Number of documents retrieved
+            confidence_score: Query confidence score (0.0 to 1.0)
+        """
+        self._rag_pipeline_duration_seconds.observe(duration_seconds)
+        self._rag_documents_retrieved.set(documents_retrieved)
+        self._rag_confidence_scores.observe(confidence_score)
+
+    def record_db_connection(self, db_type: str, count: int) -> None:
+        """Record database connection count.
+
+        Args:
+            db_type: Database type (postgresql, redis, qdrant)
+            count: Number of active connections
+        """
+        self._db_connections_active.labels(db_type=db_type).set(count)
+
+    def record_db_query(
+        self,
+        db_type: str,
+        duration_seconds: float
+    ) -> None:
+        """Record database query duration.
+
+        Args:
+            db_type: Database type (postgresql, redis, qdrant)
+            duration_seconds: Query execution duration
+        """
+        self._db_query_duration_seconds.labels(
+            db_type=db_type
+        ).observe(duration_seconds)
+
+    def record_db_error(
+        self,
+        db_type: str,
+        error_type: str
+    ) -> None:
+        """Record database error.
+
+        Args:
+            db_type: Database type (postgresql, redis, qdrant)
+            error_type: Error classification
+        """
+        self._db_errors_total.labels(
+            db_type=db_type,
+            error_type=error_type
+        ).inc()
+
+    def record_cache_operation(
+        self,
+        operation: str,
+        status: str
+    ) -> None:
+        """Record cache operation.
+
+        Args:
+            operation: Cache operation (get, set, delete)
+            status: Operation status (hit, miss, error)
+        """
+        self._cache_operations_total.labels(
+            operation=operation,
+            status=status
+        ).inc()
+
+    def update_cache_hit_ratio(self, ratio: float) -> None:
+        """Update cache hit ratio metric.
+
+        Args:
+            ratio: Hit ratio (0.0 to 1.0)
+        """
+        self._cache_hit_ratio.set(ratio)
+
+    def generate_metrics(self) -> bytes:
+        """Generate Prometheus exposition format metrics.
+
+        Returns:
+            Metrics in Prometheus text format
+        """
+        return generate_latest(self.registry)
+
+    def get_middleware(self):
+        """Get FastAPI middleware for automatic request tracking.
+
+        Returns:
+            Starlette BaseHTTPMiddleware instance
+
+        Example:
+            >>> app.add_middleware(collector.get_middleware())
+        """
+        collector = self
+
+        class MetricsMiddleware(BaseHTTPMiddleware):
+            """FastAPI middleware for automatic metrics collection."""
+
+            async def dispatch(
+                self,
+                request: Request,
+                call_next
+            ) -> Response:
+                """Process request and collect metrics.
+
+                Args:
+                    request: Incoming HTTP request
+                    call_next: Next middleware in chain
+
+                Returns:
+                    HTTP response
+                """
+                # Extract endpoint and method
+                endpoint = request.url.path
+                method = request.method
+
+                # Get request size
+                request_size = int(
+                    request.headers.get("content-length", 0)
+                )
+
+                # Track request
+                async with collector.track_request(
+                    endpoint,
+                    method
+                ) as tracker:
+                    tracker.add_request_size(request_size)
+
+                    # Process request
+                    response = await call_next(request)
+
+                    # Record response metrics
+                    tracker.set_status(response.status_code)
+
+                    # Get response size if available
+                    if hasattr(response, "body"):
+                        tracker.add_response_size(len(response.body))
+
+                    return response
+
+        return MetricsMiddleware
+
+
+# Global metrics collector instance
+_metrics_collector: Optional[MetricsCollector] = None
+_collector_lock = Lock()
+
+
+def get_metrics_collector() -> MetricsCollector:
+    """Get global metrics collector instance.
+
+    Returns:
+        MetricsCollector singleton instance
+    """
+    global _metrics_collector
+
+    if _metrics_collector is None:
+        with _collector_lock:
+            if _metrics_collector is None:
+                _metrics_collector = MetricsCollector()
+
+    return _metrics_collector

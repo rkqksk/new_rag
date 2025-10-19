@@ -40,6 +40,7 @@ from app.models.schemas import QARequest, QAResponse, ConsultationRequest, Consu
 
 # Import route handlers
 from app.api import dashboard_routes, query_routes, ingestion_routes
+from app.api.routes import health as health_routes
 # Note: workflow_routes has agent dependencies - loaded lazily if needed
 
 # Load environment variables
@@ -72,6 +73,7 @@ app.add_middleware(
 )
 
 # Register routers (services are injected via FastAPI DI)
+app.include_router(health_routes.router)      # Health check & monitoring endpoints
 app.include_router(query_routes.router)       # Query routing with Ollama LLMs
 app.include_router(ingestion_routes.router)   # Document ingestion & crawling
 app.include_router(dashboard_routes.router)   # Dashboard & monitoring
@@ -130,20 +132,6 @@ async def root():
         "docs": "/docs"
     }
 
-@app.get("/metrics")
-async def metrics():
-    """Prometheus metrics endpoint"""
-    from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
-    return JSONResponse(
-        content=generate_latest(REGISTRY).decode('utf-8'),
-        media_type=CONTENT_TYPE_LATEST
-    )
-
-@app.get("/health")
-async def health():
-    """Health check endpoint"""
-    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
-
 @app.get("/dashboard")
 async def dashboard():
     """Dashboard page"""
@@ -159,85 +147,6 @@ async def chat():
     if osp.exists(chat_path):
         return FileResponse(chat_path)
     return {"error": "Chat interface not found"}
-
-@app.get("/health")
-async def health_check(
-    qdrant_client: QdrantClient = Depends(get_qdrant_client),
-    redis_client: redis.Redis = Depends(get_redis_client),
-    config = Depends(get_config)
-):
-    """Health check endpoint with configuration validation"""
-    health = {
-        "api": "healthy",
-        "qdrant": False,
-        "redis": False,
-        "postgres": False,
-        "config": {
-            "loaded": True,
-            "valid": True,
-            "source": "DI Container"
-        }
-    }
-
-    # Check Qdrant
-    try:
-        collections = qdrant_client.get_collections()
-        health["qdrant"] = True
-        logger.info("✓ Qdrant is healthy")
-    except Exception as e:
-        logger.error(f"✗ Qdrant check failed: {e}")
-
-    # Check Redis
-    try:
-        redis_client.ping()
-        health["redis"] = True
-        logger.info("✓ Redis is healthy")
-    except Exception as e:
-        logger.error(f"✗ Redis check failed: {e}")
-
-    # Check PostgreSQL
-    try:
-        conn = psycopg2.connect(
-            host=config.postgres_host,
-            port=5432,
-            database=config.postgres_db,
-            user=config.postgres_user,
-            password=config.postgres_password
-        )
-        conn.close()
-        health["postgres"] = True
-        logger.info("✓ PostgreSQL is healthy")
-    except Exception as e:
-        logger.error(f"✗ PostgreSQL check failed: {e}")
-
-    # Check system configuration
-    try:
-        from pathlib import Path
-        import yaml
-
-        config_path = Path("config/system_config.yaml")
-        if config_path.exists():
-            with open(config_path, 'r') as f:
-                config_data = yaml.safe_load(f)
-
-            health["config"]["loaded"] = True
-            health["config"]["version"] = config_data.get("version", "unknown")
-            health["config"]["last_sync"] = config_data.get("last_sync", "unknown")
-
-            # Basic validation
-            required_keys = ['architecture', 'llm', 'docker', 'agents']
-            is_valid = all(key in config_data for key in required_keys)
-            health["config"]["valid"] = is_valid
-
-            if is_valid:
-                logger.info("✓ System configuration is valid")
-            else:
-                logger.warning("⚠ System configuration is incomplete")
-
-    except Exception as e:
-        logger.error(f"✗ Config check failed: {e}")
-
-    return health
 
 @app.post("/api/v1/documents/upload")
 async def upload_document(file: UploadFile = File(...)):
