@@ -5,21 +5,18 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/Users/oypnus",
         "/Users/oypnus/Project/rag-enterprise"
       ]
     },
-    "claude_haiku": {
+    "claude_api": {
       "command": "python",
-      "args": ["-m", "mcp_servers.claude_haiku_server"]
-    },
-    "rag_crawler": {
-      "command": "python",
-      "args": ["-m", "mcp_servers.google_devtools.server"]
+      "args": ["-m", "mcp_servers.claude_api_server"],
+      "description": "Unified Claude API server (Haiku 4.5 + Sonnet 4.5)"
     },
     "chrome_devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"]
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "description": "Official Google Chrome DevTools MCP for browser automation"
     },
     "qdrant": {
       "command": "python",
