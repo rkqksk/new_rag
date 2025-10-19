@@ -1,124 +1,556 @@
-# RAG Enterprise - 제조업 특화 멀티모달 AI 플랫폼
+# CLAUDE.md
 
-## 🎯 Core Vision
-**목적**: 산업 문서(거래명세서, 견적서, MSDS, 도면) 자동 수집·분석·검색
-**목표**: LLM 상담 자동화 | 비정형 데이터 검색·추천 | 멀티모달 매칭 | RBAC | 지속 학습(LoRA)
-
-## 🏗️ 5-Layer Architecture
-
-```
-L1: UI/UX → 관리자 대시보드 | 사용자 포털(Internal/Client)
-L2: Orchestration → Teacher(Qwen2.5-7B) | Student(gemma-1B, Qwen2.5-3B) | 지식 증류
-L3: RAG → Qdrant 벡터 검색 | sentence-transformers | Re-ranking
-L4: Ingestion → 업로드/크롤링 | 오토라벨링 | CLIP/BLIP-2 특징 추출
-L5: Infra → MLX/Ollama(로컬) | Groq/OpenAI/Claude(클라우드) | Docker/K8s
-```
-
-**상세**: → `docs/ARCHITECTURE.md`
-
-## 🔧 Tech Stack
-
-```yaml
-Runtime: Python 3.11 | FastAPI | asyncio
-DB: Qdrant(벡터) | Redis(캐시) | PostgreSQL(메타) | MongoDB(문서)
-ML: Transformers | sentence-transformers | OpenCLIP | PEFT/LoRA
-Env: direnv (.envrc 자동 활성화) | Docker (Colima)
-```
-
-**LLM 라우팅**: 복잡도 기반 자동 선택
-- Haiku 4.5: 간단한 작업 (complexity < 0.7) → 비용 절감
-- Sonnet 4.5: 복잡한 작업 (complexity ≥ 0.7) → 고품질
-
-**임베딩 모델**: gte-Qwen2-7B-instruct (텍스트), OpenCLIP-ViT-H-14 (이미지)
-**파서**: Docling (PDF), Pandas (Excel), EasyOCR (이미지), CLIP/BLIP-2 (멀티모달)
-**검색**: 하이브리드 (Dense + Sparse BM25) + Cross-encoder Re-ranking
-
-**상세**: → `docs/TECH_STACK.md`
-
-## 🐳 Docker Services (rag_network 172.28.0.0/16)
-
-| Service | IP | Port | CPU/RAM | Role |
-|---------|-----|------|---------|------|
-| Qdrant | .2 | 6333/6334 | 2/4G | 벡터 검색 |
-| Redis | .3 | 6379 | 1/2G | 캐싱 |
-| PostgreSQL | .4 | 5432 | 2/4G | 메타데이터 |
-| N8N | .5 | 5678 | 2/3G | 워크플로우 |
-| Ollama | .6 | 11434 | 4/8G | 로컬 LLM |
-| FastAPI | .7 | 8000 | 2/4G | API 서버 |
-
-**명령**: `docker-compose up -d` | `docker-compose ps` | `docker-compose logs -f [service]`
-**상세**: → `DEV_ENVIRONMENT.md`
-
-## 🔌 MCP Servers & Agents
-
-**Docker MCP**: qdrant, redis, postgres, n8n, ollama
-**Python MCP (.mcp.json)**: filesystem, claude_haiku, qdrant_server, ollama_server
-
-**Custom Agents**:
-```yaml
-workflow_orchestrator: 파이프라인 조정 (max_workers:4, batch:10)
-crawler_scheduler: 크롤링 (6시간 간격)
-quality_monitor: RAG 품질 (1시간 간격, metrics: relevance|accuracy|latency)
-```
-
-**상세**: → `docs/MCP_AGENTS.md`
-
-## 🎯 Development Status (Phase 1/5)
-
-**완료** ✅:
-- RAG 파이프라인 설계
-- Docker 환경 (Qdrant|Redis|Postgres|N8N|Ollama)
-- FastAPI 컨테이너화
-- 기본 API (업로드|검색|통계)
-- Health Check
-
-**진행중** 🔄:
-- Teacher-Student LLM 구조
-- 워크플로우 오케스트레이션
-- 상담 시스템 (제품 추천, 불량 문의)
-
-**상세 로드맵**: → `docs/ROADMAP.md` (5단계 상세 전략 + 체크리스트)
-
-## 🗂️ Project Structure
-
-```
-app/         → 메인 애플리케이션
-mcp_servers/ → MCP 서버 구현
-agents/      → AI 에이전트
-config/      → 설정 파일 (system_config.yaml 포함)
-tests/       → 테스트 (unit|integration|e2e)
-dev/         → 실험/프로토타입 (gitignore)
-docs/        → 문서
-data/        → Docker 볼륨 (gitignore)
-```
-
-**규칙**: 루트 파일 금지 → 적절한 디렉토리 사용
-**상세**: → `PROJECT_STRUCTURE_RULES.md`
-
-## 📊 Operations
-
-**모니터링**: Prometheus (documents_processed, embedding_latency, search_accuracy, system_health)
-**알림**: Critical (즉시) | Warning (1시간) | Info (일일)
-**보안**: JWT + RBAC | AES-256 | TLS 1.3 | Audit 로깅
-**배포**: Clean Deploy (clean_deploy.sh) | Blue-Green | 점진적 롤아웃
-
-**상세**: → `docs/OPERATIONS.md`
-
-## 📚 Reference Docs
-
-| 문서 | 내용 |
-|------|------|
-| `docs/ARCHITECTURE.md` | 5계층 상세 설계, 데이터 플로우, 컴포넌트 인터페이스 |
-| `docs/TECH_STACK.md` | 임베딩 모델, 파서, 검색 파이프라인, QA 에이전트 |
-| `docs/ROADMAP.md` | Phase 1-5 상세 전략, 체크리스트, 성공 기준 |
-| `docs/OPERATIONS.md` | 모니터링, 배포, 보안, 알림 정책 |
-| `docs/MCP_AGENTS.md` | MCP 서버 및 커스텀 에이전트 상세 |
-| `DEV_ENVIRONMENT.md` | 개발 환경, Docker 명령어, 환경변수 |
-| `PROJECT_STRUCTURE_RULES.md` | 디렉토리 구조 및 파일 생성 규칙 |
-| `claude12.md` | MOSO / RAG 기반 AI 오케스트레이션 기술 백서 |
-| `VALIDATION_REPORT.md` | MCP & Docker 설정 검증 리포트 |
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ---
 
-**Version**: 2.2 | **Updated**: 2025-10-18 | **Team**: RAG Enterprise
-**Config Sync**: Enabled | **System Integration**: Active
+## 🎯 Project Overview
+
+**RAG Enterprise** is a manufacturing-specialized multimodal AI platform designed for:
+- Automatic collection and analysis of industrial documents (invoices, quotes, MSDS, technical drawings)
+- Hybrid RAG search for unstructured data
+- Teacher-Student LLM architecture with knowledge distillation
+- Multi-modal retrieval (text + images)
+- RBAC-based access control
+
+**Architecture**: 5-layer system (UI/Orchestration/RAG/Ingestion/Infrastructure)
+**Primary Language**: Python 3.11 (FastAPI backend)
+**Tech Stack**: FastAPI, Qdrant, PostgreSQL, Redis, N8N, Ollama, Transformers, sentence-transformers
+
+For detailed architecture, tech stack, and project structure rules, see:
+- `docs/ARCHITECTURE.md` - 5-layer design, data flow, component interfaces
+- `docs/TECH_STACK.md` - Embedding models, parsers, search pipelines, QA agents
+- `PROJECT_STRUCTURE_RULES.md` - Directory structure and file creation rules
+
+---
+
+## 🚀 Quick Start
+
+### Environment Setup
+```bash
+# Install dependencies
+pip install -r requirements.txt
+
+# Activate direnv (automatic environment loading)
+direnv allow
+
+# Verify .env exists (template: .env.example if needed)
+cat .env | head -5
+```
+
+### Docker Services (rag_network: 172.28.0.0/16)
+```bash
+# Start all services
+docker-compose up -d
+
+# Check service status
+docker-compose ps
+
+# View logs for specific service
+docker-compose logs -f [service_name]  # qdrant|redis|postgres|n8n|ollama|fastapi
+
+# Stop services
+docker-compose down
+```
+
+**Services and IP Addresses**:
+| Service | IP | Port | Purpose |
+|---------|-----|------|---------|
+| Qdrant | 172.28.0.2 | 6333/6334 | Vector search (gRPC port 6334) |
+| Redis | 172.28.0.3 | 6379 | Caching layer |
+| PostgreSQL | 172.28.0.4 | 5432 | Metadata storage |
+| N8N | 172.28.0.5 | 5678 | Workflow automation |
+| Ollama | 172.28.0.6 | 11434 | Local LLM inference |
+| FastAPI | 172.28.0.7 | 8000 | Main API server |
+
+---
+
+## 📦 Core Development Commands
+
+### Run FastAPI Server
+```bash
+# Development mode (auto-reload)
+uvicorn app.api.main:app --reload --host 0.0.0.0 --port 8000
+
+# Production mode
+uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --workers 4
+```
+
+### Testing
+
+#### Run All Tests
+```bash
+# Full test suite with coverage
+pytest --cov=app --cov-report=html tests/
+
+# Run with verbose output
+pytest -v tests/
+
+# Run specific test file
+pytest tests/test_pipeline_e2e.py -v
+
+# Run specific test function
+pytest tests/test_pipeline_e2e.py::test_function_name -v
+```
+
+#### Test Categories
+```bash
+# Unit tests (fast, isolated)
+pytest tests/unit/ -v
+
+# Integration tests (services, DAL)
+pytest tests/integration/ -v
+
+# End-to-end tests (full pipelines)
+pytest tests/e2e/ -v
+
+# Async tests
+pytest tests/ -v -k async
+```
+
+#### Test with Specific Markers
+```bash
+# Only tests with @pytest.mark.unit
+pytest -m unit tests/
+
+# Exclude slow tests
+pytest -m "not slow" tests/
+```
+
+### Code Quality
+
+#### Linting & Type Checking
+```bash
+# Type checking (strict mode)
+mypy app/ --strict 2>/dev/null || true
+
+# Code quality issues (if ruff installed)
+ruff check app/
+```
+
+#### Code Formatting
+```bash
+# Check if code is formatted (black style)
+black --check app/
+
+# Format code
+black app/
+```
+
+### Cleanup & Maintenance
+
+#### Project Structure Validation
+```bash
+# Verify directory structure compliance
+bash scripts/setup_project_structure.sh --validate
+
+# Run cleanup (remove old temps, archive logs)
+bash scripts/cleanup.sh
+```
+
+#### Remove Dangling Docker Resources
+```bash
+# Clean up unused Docker images/containers
+docker system prune -f
+
+# Remove unused volumes (WARNING: destroys data)
+docker volume prune -f
+```
+
+---
+
+## 🏗️ Code Architecture & Key Components
+
+### Directory Structure (Compliance Required)
+```
+app/                    # Main application code
+├── api/                # FastAPI routes (dashboard, ingestion, workflow, query)
+├── core/               # Core logic (routing, LLM router, intent router)
+├── services/           # Business logic (document ingestion, web crawler, RAG QA, teacher model)
+├── models/             # Data schemas and Pydantic models
+└── utils/              # Utilities (helpers, error handling)
+
+mcp_servers/            # MCP (Model Context Protocol) implementations
+├── claude_haiku_server.py          # Haiku complexity-based routing
+├── qdrant_server.py                # Vector database operations
+├── ollama_server.py                # Local LLM integration
+└── google_devtools/                # Web scraping utilities
+
+agents/                 # AI agents for specialized tasks
+├── workflow_orchestrator.py        # Pipeline coordination (max_workers:4, batch:10)
+├── crawler_agent.py                # Web crawling (6-hour intervals)
+├── embedding_agent.py              # Vector generation
+└── clean_deploy_agent.py           # Deployment automation
+
+config/                 # Configuration files
+├── system_config.yaml              # System parameters and thresholds
+└── [environment-specific configs]
+
+tests/                  # Test suite
+├── unit/               # Isolated component tests
+├── integration/        # Multi-component tests
+├── e2e/                # Full pipeline tests
+└── test_*.py           # Test files
+```
+
+**Key Constraint**: No root-level test files (`test_*.py`). All tests must be in `tests/` directory.
+
+### Critical Data Flow
+
+```
+[Query] → [Intent Router] → [Complexity Router] → [Model Selection]
+                                                      ↓
+                                              [Teacher/Student LLM]
+                                                      ↓
+                    [Vector Embedding] ← Query
+                            ↓
+                    [Qdrant Search] ← Top-20 approximate
+                            ↓
+                    [Cross-encoder Re-ranking] ← Top-5 exact
+                            ↓
+                    [Context Assembly & Generation]
+                            ↓
+                    [Response with Citations]
+```
+
+### LLM Routing (Complexity-Based)
+```python
+Complexity < 0.3:  Student 1 (gemma-3-1B)     - Simple queries, low latency
+Complexity 0.3-0.7: Student 2 (Qwen2.5-3B)   - Medium complexity
+Complexity >= 0.7:  Teacher (Qwen2.5-7B)     - Complex reasoning, high quality
+```
+
+Complexity factors: query length, entity count, reasoning keywords, multimodal content.
+
+### Search Pipeline
+1. **Dense Retrieval**: Vector similarity search in Qdrant (gte-Qwen2-7B-instruct embeddings)
+2. **Sparse Retrieval**: BM25 keyword matching as fallback
+3. **Hybrid Fusion**: Reciprocal Rank Fusion (RRF) with 70% dense / 30% sparse weighting
+4. **Re-ranking**: Cross-encoder (cross-encoder/ms-marco-MiniLM-L-6-v2) narrows top-20 to top-5
+
+### Embedding Models
+- **Text**: `gte-Qwen2-7B-instruct` (4096-dim, Korean-optimized)
+- **Fallback**: `multilingual-e5-large` (1024-dim, lighter)
+- **Images**: `OpenCLIP-ViT-H-14` (1024-dim, multimodal space)
+
+### Document Processing (Layer 4: Ingestion)
+1. **Parsing**: Docling (PDF) → structured extraction of text/tables/images
+2. **OCR**: EasyOCR for image text extraction
+3. **Chunking**: Semantic chunking preserving document structure
+4. **Embedding**: Batch processing with caching (Redis for 24h)
+5. **Storage**: Upsert to Qdrant with metadata
+
+---
+
+## 🔌 MCP Servers (Model Context Protocol)
+
+**Registered Servers** (in `.mcp.json`):
+```
+- filesystem: NPX-based file operations
+- claude_haiku: Complexity-based LLM routing
+- google_devtools: Web scraping and browser automation
+- qdrant: Vector database operations
+- ollama: Local LLM inference
+```
+
+**Usage Pattern**:
+```python
+# Example: Using Qdrant MCP
+from mcp_servers.qdrant_server import search_collection
+results = await search_collection("query", top_k=5)
+```
+
+---
+
+## 📊 Configuration & Customization
+
+### System Configuration (`config/system_config.yaml`)
+- **Embedding batch size**: 32 (adjust for GPU memory)
+- **Qdrant search top-k**: 20 (before re-ranking)
+- **Re-ranking threshold**: 0.7 confidence minimum
+- **Crawler interval**: 6 hours
+- **Quality monitor**: 1-hour metrics check
+
+### Environment Variables
+Key variables (from `.env`):
+```
+# Database
+QDRANT_URL=http://172.28.0.2:6333
+REDIS_URL=redis://172.28.0.3:6379
+DATABASE_URL=postgresql://user:pass@172.28.0.4:5432/rag_db
+
+# LLM
+ANTHROPIC_API_KEY=your_key
+OLLAMA_BASE_URL=http://172.28.0.6:11434
+
+# Models
+EMBEDDING_MODEL=gte-Qwen2-7B-instruct
+TEACHER_MODEL=Qwen2.5-7B
+STUDENT_MODELS=gemma-3-1B,Qwen2.5-3B
+```
+
+---
+
+## ✅ Code Quality Standards
+
+### Mandatory Patterns
+1. **Async-First**: Use `async/await` for I/O operations
+2. **Error Handling**: Always catch specific exceptions, log errors with context
+3. **Logging**: Use `logging` module (not print); include operation context
+4. **Type Hints**: All function signatures must include type hints
+5. **Pydantic Models**: Use for all API request/response validation
+6. **Docstrings**: Module, class, and function docstrings (reStructuredText format)
+
+### Example Code Structure
+```python
+"""Module docstring explaining purpose."""
+import asyncio
+import logging
+from typing import List, Dict, Optional
+
+logger = logging.getLogger(__name__)
+
+class MyService:
+    """Service docstring."""
+
+    async def process(
+        self,
+        query: str,
+        top_k: int = 5
+    ) -> List[Dict]:
+        """
+        Process query and return results.
+
+        Args:
+            query: User query string
+            top_k: Number of results to return
+
+        Returns:
+            List of result dictionaries with 'id' and 'score' keys
+
+        Raises:
+            ValueError: If query is empty
+        """
+        if not query.strip():
+            raise ValueError("Query cannot be empty")
+
+        logger.info(f"Processing query: {query[:50]}...")
+
+        try:
+            results = await self._search(query, top_k)
+            return results
+        except Exception as e:
+            logger.error(f"Search failed: {e}", exc_info=True)
+            raise
+```
+
+### Pre-Commit Checks
+Before committing, verify:
+- [ ] No `print()` statements (use `logging`)
+- [ ] All functions have type hints and docstrings
+- [ ] No hardcoded credentials or API keys
+- [ ] `tests/` covers new code paths (aim for 80%+ coverage)
+- [ ] No root-level files (`.py`, `.tmp`, test files must be in subdirectories)
+- [ ] Docker services start without errors: `docker-compose up -d && docker-compose ps`
+
+---
+
+## 🧪 Testing Best Practices
+
+### Test Organization
+- **Unit Tests**: Mock external dependencies, test isolated functions
+- **Integration Tests**: Test with real services (Qdrant, Redis, PostgreSQL)
+- **E2E Tests**: Full query-to-response pipeline with real LLMs
+
+### Example Unit Test
+```python
+import pytest
+from app.core.routing.llm_router import estimate_complexity
+
+@pytest.mark.unit
+def test_estimate_complexity_simple():
+    """Test complexity estimation for simple queries."""
+    query = "What is the price?"
+    complexity = estimate_complexity(query)
+    assert 0 <= complexity < 0.3, f"Expected low complexity, got {complexity}"
+
+@pytest.mark.unit
+def test_estimate_complexity_complex():
+    """Test complexity estimation for complex reasoning queries."""
+    query = "Compare the mechanical properties, cost-benefit analysis, and environmental impact of three sustainable materials for automotive applications"
+    complexity = estimate_complexity(query)
+    assert complexity >= 0.7, f"Expected high complexity, got {complexity}"
+```
+
+### Example Async Integration Test
+```python
+import pytest
+from app.services.rag_qa_service import RAGQAService
+
+@pytest.mark.asyncio
+@pytest.mark.integration
+async def test_rag_qa_end_to_end():
+    """Test RAG QA with real Qdrant instance."""
+    service = RAGQAService()
+
+    # Ensure test data is loaded
+    await service.load_test_fixtures()
+
+    response = await service.query("Product specifications")
+
+    assert response['answer'] is not None
+    assert len(response['citations']) > 0
+    assert response['confidence'] > 0
+```
+
+---
+
+## 🔍 Debugging & Troubleshooting
+
+### Common Issues
+
+#### Docker Service Connection Errors
+```bash
+# Check if service is running
+docker-compose ps
+
+# View service logs
+docker-compose logs qdrant | tail -50
+
+# Verify network connectivity
+docker exec rag-fastapi ping 172.28.0.2  # ping Qdrant
+
+# Restart specific service
+docker-compose restart qdrant
+```
+
+#### Vector Embedding Errors
+```bash
+# Test embedding model loading
+python -c "from sentence_transformers import SentenceTransformer; m = SentenceTransformer('gte-Qwen2-7B-instruct')"
+
+# Check GPU availability
+python -c "import torch; print(torch.cuda.is_available())"
+```
+
+#### Qdrant Search Issues
+```bash
+# Check collection status
+python
+>>> from qdrant_client import QdrantClient
+>>> client = QdrantClient(host="172.28.0.2", port=6333)
+>>> client.get_collections()
+```
+
+### Performance Profiling
+```bash
+# Profile specific function
+python -m cProfile -s cumtime app/services/rag_qa_service.py
+
+# Memory profiling (requires memory_profiler)
+python -m memory_profiler app/services/rag_qa_service.py
+```
+
+---
+
+## 📚 Key File Locations & Patterns
+
+### API Routes
+- **Dashboard**: `app/api/dashboard_routes.py` - Metrics, monitoring, admin functions
+- **Ingestion**: `app/api/ingestion_routes.py` - Document upload, batch processing
+- **Workflow**: `app/api/workflow_routes.py` - Pipeline orchestration endpoints
+- **Query**: `app/api/query_routes.py` - Main search and QA endpoints
+
+### Services (Business Logic)
+- **RAG QA**: `app/services/rag_qa_service.py` - Core retrieval and generation
+- **Document Ingestion**: `app/services/document_ingestion_service.py` - Parsing and vectorization
+- **Web Crawler**: `app/services/web_crawler_service.py` - Crawling and scraping
+- **Teacher Service**: `app/services/teacher_service.py` - Knowledge distillation
+
+### Routing Logic
+- **LLM Router**: `app/core/routing/llm_router.py` - Model selection by complexity
+- **Intent Router**: `app/core/routing/intent_router.py` - Query intent classification
+
+### Configuration
+- **System Config**: `config/system_config.yaml` - Global parameters
+- **Schemas**: `app/models/schemas.py` - Pydantic models for validation
+
+---
+
+## 🎯 Development Workflow
+
+### Adding a New Feature
+1. Create feature branch: `git checkout -b feature/description`
+2. Create experimental code in `dev/experiments/` if uncertain
+3. Write tests in `tests/unit/` or `tests/integration/` first (TDD)
+4. Implement feature in appropriate `app/` subdirectory
+5. Run test suite: `pytest tests/ -v --cov=app`
+6. Verify Docker services work: `docker-compose ps` (all healthy)
+7. Create tests in `tests/e2e/` for full pipeline integration
+8. Commit with clear message: `git commit -m "feat: describe feature"`
+
+### Modifying Existing Code
+1. Locate service in `app/services/` or logic in `app/core/`
+2. Check existing tests: `grep -r "function_name" tests/`
+3. Modify code with type hints and docstrings
+4. Run targeted tests: `pytest tests/test_file.py::test_name -v`
+5. Verify no regressions: `pytest tests/ -v`
+
+### Adding Database Migrations
+1. New schema changes → `app/models/schemas.py` (Pydantic)
+2. PostgreSQL migrations: Use SQLAlchemy and Alembic if applicable
+3. Test with fresh database: `docker-compose down -v && docker-compose up -d postgres`
+
+---
+
+## 📋 Before Committing (Verification Checklist)
+
+```bash
+# 1. Run full test suite
+pytest tests/ -v --cov=app --tb=short
+
+# 2. Check Docker services health
+docker-compose ps | grep -c "healthy"
+
+# 3. Validate project structure (no root .py files)
+ls -la | grep "\.py$" && echo "ERROR: Root-level Python files found!" || true
+
+# 4. Verify no hardcoded credentials
+grep -r "api_key\|password\|secret" app/ --include="*.py" | grep -v "\.env" && echo "WARNING: Credentials found!" || true
+
+# 5. Type check (if mypy available)
+mypy app/ --ignore-missing-imports 2>/dev/null || true
+
+# 6. Preview changes
+git diff --stat
+```
+
+---
+
+## 🔗 Reference Documentation
+
+| Document | Purpose |
+|----------|---------|
+| `docs/ARCHITECTURE.md` | 5-layer design, component interfaces, data flow |
+| `docs/TECH_STACK.md` | Embedding models, parsers, search algorithms, QA agents |
+| `docs/ROADMAP.md` | Phase 1-5 milestones, success criteria, timeline |
+| `docs/OPERATIONS.md` | Monitoring, deployment, security, alerting policies |
+| `docs/MCP_AGENTS.md` | MCP servers and custom agent specifications |
+| `DEV_ENVIRONMENT.md` | Docker setup, environment variables, troubleshooting |
+| `PROJECT_STRUCTURE_RULES.md` | Directory rules, file creation, organization standards |
+
+---
+
+## 📞 Team & Versioning
+
+**Version**: 2.3
+**Last Updated**: 2025-10-19
+**Team**: RAG Enterprise
+**Config Sync**: Enabled
+**System Integration**: Active (Docker MCP, Python MCP, custom agents)
+
+**When Opening Issues or PRs**:
+- Reference relevant docs (e.g., "See `docs/ARCHITECTURE.md` Layer 3")
+- Include test results: `pytest output`
+- For Docker issues: Include `docker-compose logs`
+- For performance: Include profiling data or metrics
