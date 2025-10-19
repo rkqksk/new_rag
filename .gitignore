@@ -81,6 +81,14 @@ yarn-error.log*
 /data/ollama/
 /data/prometheus/
 /data/grafana/
+/data/crawled_products_organized/
+/data/crawled_products/
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.webp
+*.pdf
 
 # ============================================
 # ML Models & Checkpoints
@@ -95,11 +103,15 @@ checkpoints/
 *.onnx
 
 # ============================================
-# Logs
+# Logs & Reports
 # ============================================
 *.log
 logs/
 *.out
+*_REPORT.md
+*_DEBUGGING_*.md
+*_results.json
+benchmark_*.json
 
 # ============================================
 # Docker
