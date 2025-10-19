@@ -52,8 +52,10 @@ class AppConfig:
         self.embedding_dim = int(os.getenv("EMBEDDING_DIM", "384"))
 
         # Ollama Configuration
-        self.ollama_url = os.getenv("OLLAMA_URL", "http://172.28.0.6:11434")
-        self.ollama_model = os.getenv("OLLAMA_MODEL", "qwen2.5:7b")
+        # Default to localhost for development (local Ollama app)
+        # Use Docker IP (172.28.0.6:11434) in production via .env
+        self.ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
+        self.ollama_model = os.getenv("OLLAMA_MODEL", "qwen2.5:7b-instruct-q4_K_M")
 
         # CORS Configuration
         self.allowed_origins = os.getenv(
@@ -266,6 +268,7 @@ def override_dependencies_for_testing():
         config.embedding_model = "test-model"
         config.embedding_dim = 384
         config.ollama_url = "http://localhost:11434"
+        config.ollama_model = "qwen2.5:7b-instruct-q4_K_M"
         return config
 
     return {
