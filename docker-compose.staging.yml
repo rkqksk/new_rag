@@ -1,0 +1,180 @@
+# =============================================================================
+# RAG Enterprise Docker Compose - Staging Overrides
+# =============================================================================
+# Staging environment configuration that extends the base docker-compose.yml
+#
+# Usage:
+#   docker-compose -f docker-compose.yml -f docker-compose.staging.yml up -d
+#
+# Features:
+#   - Image-based deployment (no hot-reload)
+#   - Production-like settings with moderate resources
+#   - Sentry integration enabled
+#   - Optimized health checks
+#   - INFO-level logging
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL - Staging Configuration
+  # ---------------------------------------------------------------------------
+  postgres:
+    environment:
+      # Moderate connection limits for staging
+      POSTGRES_MAX_CONNECTIONS: 200
+
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 3G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  # ---------------------------------------------------------------------------
+  # Redis - Staging Configuration
+  # ---------------------------------------------------------------------------
+  redis:
+    command: >
+      redis-server
+      --appendonly yes
+      --maxmemory 2gb
+      --maxmemory-policy allkeys-lru
+      --save 300 100
+      --tcp-keepalive 300
+
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # Qdrant - Staging Configuration
+  # ---------------------------------------------------------------------------
+  qdrant:
+    environment:
+      QDRANT__SERVICE__MAX_REQUEST_SIZE_MB: 64
+      QDRANT__SERVICE__GRPC_PORT: 6334
+
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 3G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  # ---------------------------------------------------------------------------
+  # Prometheus - Staging Configuration
+  # ---------------------------------------------------------------------------
+  prometheus:
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=15d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1.5G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # ---------------------------------------------------------------------------
+  # FastAPI Application - Staging Configuration
+  # ---------------------------------------------------------------------------
+  api:
+    # Override to use pre-built image instead of building
+    image: rag-enterprise-api:staging
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+      cache_from:
+        - rag-enterprise-api:staging
+
+    environment:
+      # Application Settings
+      ENVIRONMENT: staging
+      LOG_LEVEL: INFO
+      DEBUG: "false"
+
+      # Service Configuration
+      UVICORN_WORKERS: 2
+      UVICORN_TIMEOUT_KEEP_ALIVE: 75
+      UVICORN_BACKLOG: 2048
+
+      # Security Configuration (enforce stronger requirements)
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}  # Must be provided via .env
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 30
+
+      # Monitoring - Sentry Integration
+      SENTRY_DSN: ${SENTRY_DSN}  # Must be provided via .env
+      SENTRY_ENVIRONMENT: staging
+      SENTRY_TRACES_SAMPLE_RATE: 0.3
+      SENTRY_PROFILES_SAMPLE_RATE: 0.1
+
+      # Performance Tuning
+      REDIS_POOL_MAX_CONNECTIONS: 50
+      POSTGRES_POOL_SIZE: 20
+      POSTGRES_MAX_OVERFLOW: 10
+      QDRANT_TIMEOUT: 30
+
+    volumes:
+      # Remove hot-reload mounts in staging
+      - ./logs:/app/logs
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 20s
+      timeout: 10s
+      retries: 3
+      start_period: 45s
+
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 3G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+# -----------------------------------------------------------------------------
+# Staging Configuration Summary
+# -----------------------------------------------------------------------------
+# Differences from Development:
+#   - Image-based deployment (no source code mounts)
+#   - 2 Uvicorn workers
+#   - INFO-level logging
+#   - Sentry integration enabled
+#   - Moderate resource limits (2-3GB per service)
+#   - Longer health check intervals
+#   - Production-like security settings
+#
+# Resource Allocation (Staging):
+#   - PostgreSQL: 1GB-3GB, 1-2 CPUs
+#   - Redis:      512MB-2GB, 0.5-1.5 CPUs
+#   - Qdrant:     1GB-3GB, 1-2 CPUs
+#   - Prometheus: 512MB-1.5GB, 0.5-1 CPUs
+#   - API:        1GB-3GB, 1-2 CPUs
+#   Total:        ~4GB-12.5GB, 4-8.5 CPUs
+#
+# Environment Variables Required:
+#   - JWT_SECRET_KEY: JWT signing secret (minimum 32 characters)
+#   - SENTRY_DSN: Sentry error tracking DSN
+#   - POSTGRES_PASSWORD: Database password
+# -----------------------------------------------------------------------------

@@ -1,0 +1,583 @@
+# =============================================================================
+# RAG Enterprise Deployment Pipeline
+# =============================================================================
+# Automated deployment workflow with canary strategy and rollback capability.
+#
+# Environments:
+#   - Staging: Auto-deploy on main branch push
+#   - Production: Manual approval required, canary deployment
+#
+# Features:
+#   - Full CI validation before deployment
+#   - Database migration safety
+#   - Health check validation
+#   - Canary deployment (10% → 100% traffic)
+#   - Automatic rollback on failure
+#   - Comprehensive monitoring
+#   - Slack notifications
+#
+# Deployment flow:
+#   1. Build → Push image to registry
+#   2. Deploy to staging → Integration tests
+#   3. (Manual approval) → Deploy to production
+#   4. Canary deployment → Monitor → Full rollout
+# =============================================================================
+
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        type: choice
+        options:
+          - staging
+          - production
+      skip_tests:
+        description: 'Skip integration tests'
+        required: false
+        type: boolean
+        default: false
+
+# Prevent concurrent deployments
+concurrency:
+  group: deploy-${{ github.event.inputs.environment || 'staging' }}
+  cancel-in-progress: false  # Don't cancel ongoing deployments
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  DEPLOYMENT_TIMEOUT: 600  # 10 minutes
+
+jobs:
+  # ===========================================================================
+  # Job 1: Build - Create and Push Docker Image
+  # Duration: ~5-7 minutes
+  # ===========================================================================
+  build:
+    name: Build & Push Image
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    permissions:
+      contents: read
+      packages: write  # For pushing to GHCR
+
+    outputs:
+      image-tag: ${{ steps.meta.outputs.tags }}
+      image-digest: ${{ steps.build.outputs.digest }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run CI pipeline first
+        uses: ./.github/workflows/ci.yml
+        with:
+          skip_docker: 'true'  # We'll build here instead
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=sha,prefix={{branch}}-
+            type=semver,pattern={{version}}
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build and push Docker image
+        id: build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: runtime
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+            GIT_COMMIT=${{ github.sha }}
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ steps.meta.outputs.tags }}
+          format: spdx-json
+          output-file: sbom.spdx.json
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.spdx.json
+          retention-days: 90
+
+      - name: Sign image with Cosign
+        if: github.ref == 'refs/heads/main'
+        run: |
+          # Install cosign
+          curl -sSL https://github.com/sigstore/cosign/releases/download/v2.0.0/cosign-linux-amd64 -o /usr/local/bin/cosign
+          chmod +x /usr/local/bin/cosign
+
+          # Sign image
+          cosign sign --key env://COSIGN_KEY ${{ steps.meta.outputs.tags }}@${{ steps.build.outputs.digest }}
+        env:
+          COSIGN_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+
+  # ===========================================================================
+  # Job 2: Deploy to Staging
+  # Duration: ~10-15 minutes
+  # ===========================================================================
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    needs: build
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'staging'
+
+    environment:
+      name: staging
+      url: https://staging.rag-enterprise.example.com
+
+    steps:
+      - name: Checkout deployment scripts
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install deployment tools
+        run: |
+          # Install kubectl
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+
+          # Install helm
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --name rag-enterprise-staging --region ${{ secrets.AWS_REGION }}
+
+      - name: Create backup before deployment
+        run: |
+          timestamp=$(date +%Y%m%d-%H%M%S)
+          ./scripts/deploy.sh backup staging $timestamp
+
+      - name: Run database migrations
+        run: |
+          # Run migrations in staging namespace
+          kubectl exec -n staging deployment/rag-api -- python -m alembic upgrade head
+
+      - name: Deploy application
+        run: |
+          helm upgrade --install rag-enterprise ./helm/rag-enterprise \
+            --namespace staging \
+            --create-namespace \
+            --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} \
+            --set image.tag=${{ github.sha }} \
+            --set environment=staging \
+            --set replicaCount=2 \
+            --values helm/values-staging.yaml \
+            --wait \
+            --timeout ${DEPLOYMENT_TIMEOUT}s
+
+      - name: Wait for rollout
+        run: |
+          kubectl rollout status deployment/rag-api -n staging --timeout=${DEPLOYMENT_TIMEOUT}s
+
+      - name: Verify health checks
+        run: |
+          MAX_ATTEMPTS=30
+          ATTEMPT=0
+
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            echo "Health check attempt $((ATTEMPT+1))/$MAX_ATTEMPTS"
+
+            # Get service endpoint
+            ENDPOINT=$(kubectl get svc rag-api -n staging -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+            # Check liveness
+            if curl -f "http://${ENDPOINT}/health/live"; then
+              echo "✅ Liveness check passed"
+
+              # Check readiness
+              if curl -f "http://${ENDPOINT}/health/ready"; then
+                echo "✅ Readiness check passed"
+                exit 0
+              fi
+            fi
+
+            ATTEMPT=$((ATTEMPT+1))
+            sleep 10
+          done
+
+          echo "::error::Health checks failed after ${MAX_ATTEMPTS} attempts"
+          exit 1
+
+      - name: Run smoke tests
+        run: |
+          ENDPOINT=$(kubectl get svc rag-api -n staging -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+          # Test basic endpoints
+          curl -f "http://${ENDPOINT}/" || exit 1
+          curl -f "http://${ENDPOINT}/health" || exit 1
+          curl -f "http://${ENDPOINT}/health/metrics" || exit 1
+
+          echo "✅ Smoke tests passed"
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "::error::Deployment failed, rolling back..."
+          ./scripts/rollback.sh staging
+          exit 1
+
+      - name: Notify Slack
+        if: always()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Staging Deployment ${{ job.status }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Staging Deployment:* ${{ job.status }}\n*Commit:* ${{ github.sha }}\n*Author:* ${{ github.actor }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  # ===========================================================================
+  # Job 3: Integration Tests on Staging
+  # Duration: ~10-15 minutes
+  # ===========================================================================
+  integration-tests:
+    name: Integration Tests
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    needs: deploy-staging
+    if: github.event.inputs.skip_tests != 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio httpx
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Get staging endpoint
+        id: endpoint
+        run: |
+          aws eks update-kubeconfig --name rag-enterprise-staging --region ${{ secrets.AWS_REGION }}
+          ENDPOINT=$(kubectl get svc rag-api -n staging -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+          echo "endpoint=$ENDPOINT" >> $GITHUB_OUTPUT
+
+      - name: Run E2E tests
+        env:
+          API_BASE_URL: http://${{ steps.endpoint.outputs.endpoint }}
+          TEST_ENVIRONMENT: staging
+        run: |
+          pytest tests/e2e/ -v --tb=short --maxfail=3
+
+      - name: Run API validation tests
+        env:
+          API_BASE_URL: http://${{ steps.endpoint.outputs.endpoint }}
+        run: |
+          pytest tests/integration/ -m "not slow" -v --tb=short
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-results
+          path: |
+            test-results/
+            logs/
+          retention-days: 14
+
+  # ===========================================================================
+  # Job 4: Deploy to Production (Manual Approval)
+  # Duration: ~10-15 minutes + canary monitoring
+  # ===========================================================================
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+
+    needs: [build, integration-tests]
+    if: github.ref == 'refs/heads/main' || github.event.inputs.environment == 'production'
+
+    environment:
+      name: production
+      url: https://rag-enterprise.example.com
+
+    steps:
+      - name: Checkout deployment scripts
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_PROD }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_PROD }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install deployment tools
+        run: |
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --name rag-enterprise-prod --region ${{ secrets.AWS_REGION }}
+
+      - name: Create production backup
+        run: |
+          timestamp=$(date +%Y%m%d-%H%M%S)
+          ./scripts/deploy.sh backup production $timestamp
+          echo "BACKUP_TIMESTAMP=$timestamp" >> $GITHUB_ENV
+
+      - name: Run database migrations
+        run: |
+          # Dry run first
+          kubectl exec -n production deployment/rag-api -- python -m alembic upgrade head --sql > migration.sql
+
+          # Review migration
+          cat migration.sql
+
+          # Apply migration
+          kubectl exec -n production deployment/rag-api -- python -m alembic upgrade head
+
+      # =========================================================================
+      # Canary Deployment Strategy: 10% → Monitor → 100%
+      # =========================================================================
+
+      - name: Deploy canary (10% traffic)
+        run: |
+          helm upgrade --install rag-enterprise ./helm/rag-enterprise \
+            --namespace production \
+            --create-namespace \
+            --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} \
+            --set image.tag=${{ github.sha }} \
+            --set environment=production \
+            --set replicaCount=10 \
+            --set canary.enabled=true \
+            --set canary.weight=10 \
+            --values helm/values-production.yaml \
+            --wait \
+            --timeout ${DEPLOYMENT_TIMEOUT}s
+
+      - name: Monitor canary metrics (5 minutes)
+        run: |
+          echo "🔍 Monitoring canary deployment for 5 minutes..."
+
+          END_TIME=$(($(date +%s) + 300))
+          ALERT_COUNT=0
+
+          while [ $(date +%s) -lt $END_TIME ]; do
+            # Query Prometheus for error rate
+            ERROR_RATE=$(curl -s "http://prometheus.production.svc.cluster.local:9090/api/v1/query?query=rate(http_requests_total{status=~\"5..\",version=\"canary\"}[1m])" | jq -r '.data.result[0].value[1]')
+
+            # Query for latency p99
+            LATENCY_P99=$(curl -s "http://prometheus.production.svc.cluster.local:9090/api/v1/query?query=histogram_quantile(0.99,rate(http_request_duration_seconds_bucket{version=\"canary\"}[1m]))" | jq -r '.data.result[0].value[1]')
+
+            echo "Error rate: ${ERROR_RATE}, Latency p99: ${LATENCY_P99}s"
+
+            # Check thresholds
+            if (( $(echo "$ERROR_RATE > 0.01" | bc -l) )); then
+              ALERT_COUNT=$((ALERT_COUNT+1))
+              echo "::warning::Canary error rate elevated: ${ERROR_RATE}"
+            fi
+
+            if (( $(echo "$LATENCY_P99 > 2.0" | bc -l) )); then
+              ALERT_COUNT=$((ALERT_COUNT+1))
+              echo "::warning::Canary latency elevated: ${LATENCY_P99}s"
+            fi
+
+            # Rollback if too many alerts
+            if [ $ALERT_COUNT -gt 5 ]; then
+              echo "::error::Canary metrics exceeded thresholds, rolling back"
+              ./scripts/rollback.sh production
+              exit 1
+            fi
+
+            sleep 30
+          done
+
+          echo "✅ Canary metrics within acceptable range"
+
+      - name: Promote to full deployment (100% traffic)
+        run: |
+          helm upgrade --install rag-enterprise ./helm/rag-enterprise \
+            --namespace production \
+            --set image.repository=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }} \
+            --set image.tag=${{ github.sha }} \
+            --set environment=production \
+            --set replicaCount=10 \
+            --set canary.enabled=false \
+            --values helm/values-production.yaml \
+            --wait \
+            --timeout ${DEPLOYMENT_TIMEOUT}s
+
+      - name: Verify production health
+        run: |
+          MAX_ATTEMPTS=30
+          ATTEMPT=0
+
+          while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
+            echo "Production health check $((ATTEMPT+1))/$MAX_ATTEMPTS"
+
+            ENDPOINT=$(kubectl get svc rag-api -n production -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+            if curl -f "https://${ENDPOINT}/health/ready"; then
+              echo "✅ Production deployment healthy"
+              exit 0
+            fi
+
+            ATTEMPT=$((ATTEMPT+1))
+            sleep 10
+          done
+
+          echo "::error::Production health checks failed"
+          ./scripts/rollback.sh production
+          exit 1
+
+      - name: Create deployment record
+        run: |
+          # Record deployment in database
+          kubectl exec -n production deployment/rag-api -- python -c "
+          from app.models import Deployment
+          from app.core.database import get_db
+
+          deployment = Deployment(
+              version='${{ github.sha }}',
+              environment='production',
+              deployed_by='${{ github.actor }}',
+              deployed_at='$(date -u +%Y-%m-%dT%H:%M:%SZ)',
+              status='success'
+          )
+
+          db = next(get_db())
+          db.add(deployment)
+          db.commit()
+          "
+
+      - name: Notify Slack - Success
+        if: success()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "🚀 Production Deployment Successful",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Deployment Successful* ✅\n*Version:* ${{ github.sha }}\n*Deployed by:* ${{ github.actor }}\n*Time:* $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify Slack - Failure
+        if: failure()
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "🚨 Production Deployment Failed",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Production Deployment Failed* ❌\n*Version:* ${{ github.sha }}\n*Deployed by:* ${{ github.actor }}\n*Backup:* ${{ env.BACKUP_TIMESTAMP }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+# =============================================================================
+# Deployment Pipeline Summary
+# =============================================================================
+# Environments:
+#   - Staging: Auto-deploy on main branch push
+#   - Production: Manual approval + canary deployment
+#
+# Deployment Strategy:
+#   1. Build image → Push to GHCR
+#   2. Deploy to staging → Health checks → Integration tests
+#   3. (Manual approval) → Deploy canary to production (10%)
+#   4. Monitor canary (5 min) → Promote to 100%
+#   5. Verify health → Notify team
+#
+# Rollback triggers:
+#   - Health check failures
+#   - Integration test failures
+#   - Canary metrics exceeded
+#   - Manual intervention
+#
+# Safety features:
+#   - Database backups before deployment
+#   - Migration dry-run validation
+#   - Canary deployment monitoring
+#   - Automatic rollback on failure
+#   - Slack notifications
+# =============================================================================

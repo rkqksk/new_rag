@@ -1,0 +1,405 @@
+# =============================================================================
+# RAG Enterprise Security Scanning
+# =============================================================================
+# Automated security scanning workflow for proactive vulnerability detection.
+#
+# Triggers:
+#   - Scheduled: Daily at 02:00 UTC
+#   - Manual: workflow_dispatch
+#   - Pull requests (quick scan)
+#
+# Scans:
+#   - SAST: Bandit Python security linter
+#   - Dependency vulnerabilities: Safety
+#   - Container scanning: Trivy
+#   - Secret detection: GitLeaks
+#
+# Actions:
+#   - Create GitHub issues for CRITICAL/HIGH vulnerabilities
+#   - Slack alerts for immediate action
+#   - Security dashboard updates
+# =============================================================================
+
+name: Security Scan
+
+on:
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 02:00 UTC
+
+  pull_request:
+    branches:
+      - main
+      - develop
+
+  workflow_dispatch:
+    inputs:
+      scan_type:
+        description: 'Type of security scan'
+        required: false
+        type: choice
+        options:
+          - all
+          - sast
+          - dependencies
+          - containers
+          - secrets
+        default: 'all'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ===========================================================================
+  # Job 1: SAST - Static Application Security Testing
+  # ===========================================================================
+  sast:
+    name: SAST Scanning
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+
+    if: github.event.inputs.scan_type == 'all' || github.event.inputs.scan_type == 'sast' || github.event_name == 'schedule' || github.event_name == 'pull_request'
+
+    permissions:
+      contents: read
+      security-events: write  # For SARIF upload
+      issues: write           # For creating security issues
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Bandit
+        run: pip install bandit[toml]
+
+      - name: Run Bandit SAST scan
+        run: |
+          bandit -r app/ agents/ \
+            -f json -o bandit-report.json \
+            --exit-zero \
+            --confidence-level medium \
+            --severity-level medium
+
+      - name: Generate SARIF report
+        run: |
+          bandit -r app/ agents/ \
+            -f sarif -o bandit.sarif \
+            --exit-zero \
+            --confidence-level medium \
+            --severity-level medium
+
+      - name: Upload SARIF to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: bandit.sarif
+
+      - name: Analyze results
+        id: analyze
+        run: |
+          CRITICAL=$(jq '[.results[] | select(.issue_severity == "CRITICAL")] | length' bandit-report.json)
+          HIGH=$(jq '[.results[] | select(.issue_severity == "HIGH")] | length' bandit-report.json)
+          MEDIUM=$(jq '[.results[] | select(.issue_severity == "MEDIUM")] | length' bandit-report.json)
+
+          echo "critical=$CRITICAL" >> $GITHUB_OUTPUT
+          echo "high=$HIGH" >> $GITHUB_OUTPUT
+          echo "medium=$MEDIUM" >> $GITHUB_OUTPUT
+
+          echo "## SAST Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Critical: $CRITICAL" >> $GITHUB_STEP_SUMMARY
+          echo "- High: $HIGH" >> $GITHUB_STEP_SUMMARY
+          echo "- Medium: $MEDIUM" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create issue for critical vulnerabilities
+        if: steps.analyze.outputs.critical > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const critical = ${{ steps.analyze.outputs.critical }};
+            const high = ${{ steps.analyze.outputs.high }};
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🚨 CRITICAL: ${critical} security vulnerabilities detected`,
+              body: `# Security Alert\n\n**Critical vulnerabilities:** ${critical}\n**High vulnerabilities:** ${high}\n\n**Scan Date:** ${new Date().toISOString()}\n\nPlease review the security scan results and address these issues immediately.\n\nView details in the [Security tab](https://github.com/${context.repo.owner}/${context.repo.repo}/security).`,
+              labels: ['security', 'critical']
+            });
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sast-results
+          path: |
+            bandit-report.json
+            bandit.sarif
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 2: Dependency Vulnerability Scanning
+  # ===========================================================================
+  dependencies:
+    name: Dependency Scan
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+
+    if: github.event.inputs.scan_type == 'all' || github.event.inputs.scan_type == 'dependencies' || github.event_name == 'schedule' || github.event_name == 'pull_request'
+
+    permissions:
+      contents: read
+      security-events: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pip install safety pip-audit
+
+      - name: Run Safety check
+        run: |
+          safety check --json --output safety-report.json || true
+          safety check --output safety-report.txt || true
+
+      - name: Run pip-audit
+        run: |
+          pip-audit --desc --format json --output pip-audit.json || true
+
+      - name: Analyze vulnerability count
+        id: analyze
+        run: |
+          VULNS=$(jq '.vulnerabilities | length' safety-report.json 2>/dev/null || echo "0")
+          echo "vulnerabilities=$VULNS" >> $GITHUB_OUTPUT
+
+          echo "## Dependency Vulnerabilities" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Total vulnerabilities: $VULNS" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create issue for vulnerabilities
+        if: steps.analyze.outputs.vulnerabilities > 5
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const vulns = ${{ steps.analyze.outputs.vulnerabilities }};
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `⚠️ ${vulns} dependency vulnerabilities detected`,
+              body: `# Dependency Vulnerabilities\n\n**Total vulnerabilities:** ${vulns}\n**Scan Date:** ${new Date().toISOString()}\n\nPlease review and update vulnerable dependencies.\n\nRun \`safety check\` locally for details.`,
+              labels: ['security', 'dependencies']
+            });
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dependency-scan-results
+          path: |
+            safety-report.*
+            pip-audit.json
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 3: Container Image Scanning
+  # ===========================================================================
+  container:
+    name: Container Scan
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    if: github.event.inputs.scan_type == 'all' || github.event.inputs.scan_type == 'containers' || github.event_name == 'schedule'
+
+    permissions:
+      contents: read
+      security-events: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image for scanning
+        run: |
+          docker build -t rag-enterprise:scan -f Dockerfile .
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'rag-enterprise:scan'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run Trivy for JSON report
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'rag-enterprise:scan'
+          format: 'json'
+          output: 'trivy-report.json'
+
+      - name: Analyze container vulnerabilities
+        id: analyze
+        run: |
+          CRITICAL=$(jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "CRITICAL")] | length' trivy-report.json)
+          HIGH=$(jq '[.Results[]?.Vulnerabilities[]? | select(.Severity == "HIGH")] | length' trivy-report.json)
+
+          echo "critical=$CRITICAL" >> $GITHUB_OUTPUT
+          echo "high=$HIGH" >> $GITHUB_OUTPUT
+
+          echo "## Container Scan Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Critical: $CRITICAL" >> $GITHUB_STEP_SUMMARY
+          echo "- High: $HIGH" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create issue for critical container vulnerabilities
+        if: steps.analyze.outputs.critical > 0
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const critical = ${{ steps.analyze.outputs.critical }};
+            const high = ${{ steps.analyze.outputs.high }};
+
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `🐳 Container: ${critical} CRITICAL vulnerabilities in Docker image`,
+              body: `# Container Security Alert\n\n**Critical vulnerabilities:** ${critical}\n**High vulnerabilities:** ${high}\n\n**Scan Date:** ${new Date().toISOString()}\n\nPlease update base images and dependencies.`,
+              labels: ['security', 'docker', 'critical']
+            });
+
+      - name: Upload artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: container-scan-results
+          path: |
+            trivy-results.sarif
+            trivy-report.json
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 4: Secret Detection
+  # ===========================================================================
+  secrets:
+    name: Secret Detection
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    if: github.event.inputs.scan_type == 'all' || github.event.inputs.scan_type == 'secrets' || github.event_name == 'schedule' || github.event_name == 'pull_request'
+
+    permissions:
+      contents: read
+      security-events: write
+      issues: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for secret detection
+
+      - name: Run GitLeaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_SUMMARY: true
+
+      - name: Create issue if secrets found
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '🔐 URGENT: Secrets detected in repository',
+              body: `# Secret Detection Alert\n\n**Status:** Secrets or credentials detected in repository\n**Scan Date:** ${new Date().toISOString()}\n\n**IMMEDIATE ACTION REQUIRED:**\n1. Review GitLeaks report\n2. Rotate exposed credentials\n3. Remove secrets from history\n4. Update .gitignore\n\nView scan results in the Actions tab.`,
+              labels: ['security', 'critical', 'secrets']
+            });
+
+  # ===========================================================================
+  # Job 5: Security Summary and Notifications
+  # ===========================================================================
+  notify:
+    name: Security Summary
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+
+    needs: [sast, dependencies, container, secrets]
+    if: always() && github.event_name == 'schedule'
+
+    steps:
+      - name: Aggregate results
+        run: |
+          echo "## Daily Security Scan Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Scan Date:** $(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Scan Type | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| SAST | ${{ needs.sast.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Dependencies | ${{ needs.dependencies.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Container | ${{ needs.container.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Secrets | ${{ needs.secrets.result }} |" >> $GITHUB_STEP_SUMMARY
+
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Daily Security Scan Complete",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Daily Security Scan Results*\n\n*SAST:* ${{ needs.sast.result }}\n*Dependencies:* ${{ needs.dependencies.result }}\n*Container:* ${{ needs.container.result }}\n*Secrets:* ${{ needs.secrets.result }}\n\n<https://github.com/${{ github.repository }}/actions|View Details>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_SECURITY_WEBHOOK_URL }}
+
+# =============================================================================
+# Security Scanning Summary
+# =============================================================================
+# Scan Types:
+#   1. SAST (Bandit): Python code security analysis
+#   2. Dependencies (Safety, pip-audit): Vulnerable package detection
+#   3. Container (Trivy): Docker image vulnerability scanning
+#   4. Secrets (GitLeaks): Credential and secret detection
+#
+# Schedule:
+#   - Daily at 02:00 UTC
+#   - On pull requests (quick scan)
+#   - Manual dispatch available
+#
+# Alerting:
+#   - GitHub Security tab (SARIF upload)
+#   - GitHub Issues (CRITICAL/HIGH vulnerabilities)
+#   - Slack notifications (daily summary)
+#
+# Retention:
+#   - Scan results: 90 days
+#   - Security issues: Until resolved
+# =============================================================================

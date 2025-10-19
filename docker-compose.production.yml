@@ -1,0 +1,280 @@
+# =============================================================================
+# RAG Enterprise Docker Compose - Production Overrides
+# =============================================================================
+# Production environment configuration that extends the base docker-compose.yml
+#
+# Usage:
+#   docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
+#
+# Features:
+#   - Maximum performance configuration
+#   - API service replicas for load balancing
+#   - Production security settings
+#   - Optimized database parameters
+#   - WARNING-level logging
+#   - High resource limits
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # PostgreSQL - Production Configuration
+  # ---------------------------------------------------------------------------
+  postgres:
+    environment:
+      # Production-optimized PostgreSQL settings
+      POSTGRES_MAX_CONNECTIONS: 500
+      POSTGRES_SHARED_BUFFERS: 512MB
+      POSTGRES_EFFECTIVE_CACHE_SIZE: 2GB
+      POSTGRES_WORK_MEM: 16MB
+      POSTGRES_MAINTENANCE_WORK_MEM: 256MB
+      POSTGRES_WAL_BUFFERS: 16MB
+      POSTGRES_CHECKPOINT_COMPLETION_TARGET: 0.9
+      POSTGRES_RANDOM_PAGE_COST: 1.1
+      POSTGRES_EFFECTIVE_IO_CONCURRENCY: 200
+
+    command: >
+      postgres
+      -c shared_buffers=512MB
+      -c effective_cache_size=2GB
+      -c work_mem=16MB
+      -c maintenance_work_mem=256MB
+      -c checkpoint_completion_target=0.9
+      -c wal_buffers=16MB
+      -c random_page_cost=1.1
+      -c effective_io_concurrency=200
+      -c max_worker_processes=4
+      -c max_parallel_workers_per_gather=2
+      -c max_parallel_workers=4
+
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
+        reservations:
+          cpus: '2.0'
+          memory: 2G
+
+  # ---------------------------------------------------------------------------
+  # Redis - Production Configuration
+  # ---------------------------------------------------------------------------
+  redis:
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 4gb
+      --maxmemory-policy allkeys-lru
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --tcp-keepalive 300
+      --timeout 300
+      --tcp-backlog 511
+      --maxclients 10000
+
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+
+  # ---------------------------------------------------------------------------
+  # Qdrant - Production Configuration
+  # ---------------------------------------------------------------------------
+  qdrant:
+    environment:
+      QDRANT__SERVICE__MAX_REQUEST_SIZE_MB: 128
+      QDRANT__SERVICE__GRPC_PORT: 6334
+      QDRANT__SERVICE__HTTP_PORT: 6333
+      QDRANT__SERVICE__ENABLE_TLS: "false"
+      QDRANT__STORAGE__PERFORMANCE__MAX_SEARCH_THREADS: 4
+
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 6G
+        reservations:
+          cpus: '2.0'
+          memory: 3G
+
+  # ---------------------------------------------------------------------------
+  # Prometheus - Production Configuration
+  # ---------------------------------------------------------------------------
+  prometheus:
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--storage.tsdb.retention.size=10GB'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '1.0'
+          memory: 1G
+
+  # ---------------------------------------------------------------------------
+  # FastAPI Application - Production Configuration
+  # ---------------------------------------------------------------------------
+  api:
+    # Use pre-built production image
+    image: rag-enterprise-api:production
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+      cache_from:
+        - rag-enterprise-api:production
+
+    # Deploy multiple replicas for load balancing
+    # Requires Docker Swarm or Kubernetes for full replica support
+    # For Docker Compose, this creates multiple containers with scale command
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      update_config:
+        parallelism: 1
+        delay: 10s
+        failure_action: rollback
+        order: start-first
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 4G
+        reservations:
+          cpus: '2.0'
+          memory: 2G
+
+    environment:
+      # Application Settings
+      ENVIRONMENT: production
+      LOG_LEVEL: WARNING
+      DEBUG: "false"
+
+      # Service Configuration
+      UVICORN_WORKERS: 4
+      UVICORN_TIMEOUT_KEEP_ALIVE: 120
+      UVICORN_BACKLOG: 4096
+      UVICORN_LIMIT_CONCURRENCY: 1000
+      UVICORN_LIMIT_MAX_REQUESTS: 10000
+
+      # Security Configuration (strict requirements)
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}  # REQUIRED: Minimum 64 characters
+      JWT_ALGORITHM: HS256
+      JWT_ACCESS_TOKEN_EXPIRE_MINUTES: 15
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-https://production.example.com}
+
+      # Monitoring - Sentry Production Configuration
+      SENTRY_DSN: ${SENTRY_DSN}  # REQUIRED
+      SENTRY_ENVIRONMENT: production
+      SENTRY_TRACES_SAMPLE_RATE: 1.0
+      SENTRY_PROFILES_SAMPLE_RATE: 0.5
+
+      # Performance Tuning - Production Optimized
+      REDIS_POOL_MAX_CONNECTIONS: 100
+      REDIS_POOL_MIN_IDLE: 10
+      POSTGRES_POOL_SIZE: 50
+      POSTGRES_MAX_OVERFLOW: 20
+      POSTGRES_POOL_TIMEOUT: 30
+      POSTGRES_POOL_RECYCLE: 3600
+      QDRANT_TIMEOUT: 60
+      QDRANT_RETRY_ATTEMPTS: 3
+
+      # Cache Configuration
+      CACHE_TTL_DEFAULT: 3600
+      CACHE_TTL_EMBEDDINGS: 86400
+      CACHE_TTL_SEARCH_RESULTS: 1800
+
+      # Rate Limiting
+      RATE_LIMIT_PER_MINUTE: 100
+      RATE_LIMIT_BURST: 20
+
+    volumes:
+      # No source code mounts in production
+      # Only persistent logs
+      - ./logs:/app/logs:rw
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+# -----------------------------------------------------------------------------
+# Production Configuration Summary
+# -----------------------------------------------------------------------------
+# Key Differences from Staging:
+#   - 4 Uvicorn workers per API instance
+#   - 3 API replicas (requires Docker Swarm or scale command)
+#   - WARNING-level logging
+#   - Maximum resource allocation
+#   - Optimized database parameters
+#   - Higher connection pool sizes
+#   - Shorter JWT token expiration (15 minutes)
+#   - Full Sentry traces sample rate
+#   - Strict security settings
+#
+# Resource Allocation (Production per instance):
+#   - PostgreSQL: 2GB-4GB, 2-4 CPUs
+#   - Redis:      2GB-4GB, 1-2 CPUs
+#   - Qdrant:     3GB-6GB, 2-4 CPUs
+#   - Prometheus: 1GB-2GB, 1-2 CPUs
+#   - API (x3):   2GB-4GB each, 2-4 CPUs each
+#   Total:        ~14GB-28GB, 14-28 CPUs (for 3 API replicas)
+#
+# PostgreSQL Tuning:
+#   - 500 max connections
+#   - 512MB shared buffers
+#   - 2GB effective cache size
+#   - Parallel query execution enabled
+#
+# Redis Tuning:
+#   - 4GB max memory
+#   - AOF persistence with everysec fsync
+#   - 10,000 max clients
+#   - Multiple save points for durability
+#
+# Qdrant Tuning:
+#   - 128MB max request size
+#   - 4 search threads
+#   - gRPC and HTTP enabled
+#
+# API Tuning:
+#   - 4 workers × 3 replicas = 12 total workers
+#   - 1,000 concurrent connections per instance
+#   - 10,000 max requests before worker restart
+#   - 100 Redis pool connections
+#   - 50 PostgreSQL pool connections
+#
+# Required Environment Variables:
+#   - JWT_SECRET_KEY: Production secret (minimum 64 characters)
+#   - SENTRY_DSN: Sentry error tracking DSN (required)
+#   - POSTGRES_PASSWORD: Strong database password
+#   - ALLOWED_ORIGINS: Comma-separated list of allowed origins
+#
+# Deployment Commands:
+#   Build:   docker-compose -f docker-compose.yml -f docker-compose.production.yml build
+#   Up:      docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d
+#   Scale:   docker-compose -f docker-compose.yml -f docker-compose.production.yml up -d --scale api=3
+#   Logs:    docker-compose -f docker-compose.yml -f docker-compose.production.yml logs -f api
+#   Stop:    docker-compose -f docker-compose.yml -f docker-compose.production.yml down
+# -----------------------------------------------------------------------------

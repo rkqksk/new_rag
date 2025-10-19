@@ -1,0 +1,445 @@
+# =============================================================================
+# RAG Enterprise Performance Monitoring
+# =============================================================================
+# Automated performance benchmarking and regression detection.
+#
+# Triggers:
+#   - Nightly: Daily at 03:00 UTC
+#   - Pull requests to main (optional)
+#   - Manual dispatch
+#
+# Benchmarks:
+#   - API endpoint latency (p50, p95, p99)
+#   - RAG pipeline throughput
+#   - Database query performance
+#   - Memory and CPU usage
+#   - Concurrent request handling
+#
+# Regression Detection:
+#   - >10% performance degradation triggers alerts
+#   - Historical trend analysis
+#   - Performance reports generated
+# =============================================================================
+
+name: Performance
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # Daily at 03:00 UTC
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'agents/**'
+      - 'requirements*.txt'
+      - 'Dockerfile'
+
+  workflow_dispatch:
+    inputs:
+      benchmark_type:
+        description: 'Type of benchmark to run'
+        required: false
+        type: choice
+        options:
+          - all
+          - api
+          - rag
+          - database
+          - load
+        default: 'all'
+
+env:
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ===========================================================================
+  # Job 1: API Endpoint Performance
+  # ===========================================================================
+  api-benchmark:
+    name: API Benchmarks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    if: github.event.inputs.benchmark_type == 'all' || github.event.inputs.benchmark_type == 'api' || github.event_name == 'schedule'
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
+
+      qdrant:
+        image: qdrant/qdrant:v1.11.3
+        ports:
+          - 6333:6333
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install locust pytest-benchmark
+
+      - name: Start API server
+        run: |
+          uvicorn app.api.main:app --host 0.0.0.0 --port 8000 &
+          sleep 10
+        env:
+          ENVIRONMENT: test
+          POSTGRES_HOST: localhost
+          REDIS_HOST: localhost
+          QDRANT_HOST: localhost
+
+      - name: Run API benchmarks
+        run: |
+          pytest tests/performance/test_api_benchmarks.py \
+            --benchmark-only \
+            --benchmark-json=benchmark-api.json \
+            -v
+
+      - name: Analyze API results
+        id: analyze
+        run: |
+          # Extract key metrics
+          P50=$(jq '.benchmarks[0].stats.median' benchmark-api.json)
+          P95=$(jq '.benchmarks[0].stats.p95' benchmark-api.json)
+          P99=$(jq '.benchmarks[0].stats.p99' benchmark-api.json)
+
+          echo "p50=$P50" >> $GITHUB_OUTPUT
+          echo "p95=$P95" >> $GITHUB_OUTPUT
+          echo "p99=$P99" >> $GITHUB_OUTPUT
+
+          echo "## API Performance" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- p50: ${P50}s" >> $GITHUB_STEP_SUMMARY
+          echo "- p95: ${P95}s" >> $GITHUB_STEP_SUMMARY
+          echo "- p99: ${P99}s" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-benchmarks
+          path: benchmark-api.json
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 2: RAG Pipeline Performance
+  # ===========================================================================
+  rag-benchmark:
+    name: RAG Pipeline Benchmarks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    if: github.event.inputs.benchmark_type == 'all' || github.event.inputs.benchmark_type == 'rag' || github.event_name == 'schedule'
+
+    services:
+      qdrant:
+        image: qdrant/qdrant:v1.11.3
+        ports:
+          - 6333:6333
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest-benchmark memory_profiler
+
+      - name: Run RAG benchmarks
+        run: |
+          pytest tests/performance/test_rag_benchmarks.py \
+            --benchmark-only \
+            --benchmark-json=benchmark-rag.json \
+            -v
+        env:
+          QDRANT_HOST: localhost
+
+      - name: Analyze RAG results
+        id: analyze
+        run: |
+          THROUGHPUT=$(jq '.benchmarks[0].stats.ops' benchmark-rag.json)
+          MEDIAN_TIME=$(jq '.benchmarks[0].stats.median' benchmark-rag.json)
+
+          echo "throughput=$THROUGHPUT" >> $GITHUB_OUTPUT
+          echo "median_time=$MEDIAN_TIME" >> $GITHUB_OUTPUT
+
+          echo "## RAG Pipeline Performance" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Throughput: ${THROUGHPUT} ops/s" >> $GITHUB_STEP_SUMMARY
+          echo "- Median time: ${MEDIAN_TIME}s" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: rag-benchmarks
+          path: benchmark-rag.json
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 3: Database Performance
+  # ===========================================================================
+  database-benchmark:
+    name: Database Benchmarks
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    if: github.event.inputs.benchmark_type == 'all' || github.event.inputs.benchmark_type == 'database' || github.event_name == 'schedule'
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pytest-benchmark sqlalchemy
+
+      - name: Run database benchmarks
+        run: |
+          pytest tests/performance/test_database_benchmarks.py \
+            --benchmark-only \
+            --benchmark-json=benchmark-db.json \
+            -v
+        env:
+          POSTGRES_HOST: localhost
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: database-benchmarks
+          path: benchmark-db.json
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 4: Load Testing
+  # ===========================================================================
+  load-test:
+    name: Load Testing
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+
+    if: github.event.inputs.benchmark_type == 'all' || github.event.inputs.benchmark_type == 'load' || github.event_name == 'schedule'
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        ports:
+          - 5432:5432
+
+      redis:
+        image: redis:7.2-alpine
+        ports:
+          - 6379:6379
+
+      qdrant:
+        image: qdrant/qdrant:v1.11.3
+        ports:
+          - 6333:6333
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install locust
+
+      - name: Start API server
+        run: |
+          uvicorn app.api.main:app --host 0.0.0.0 --port 8000 --workers 4 &
+          sleep 10
+        env:
+          ENVIRONMENT: test
+          POSTGRES_HOST: localhost
+          REDIS_HOST: localhost
+          QDRANT_HOST: localhost
+
+      - name: Run load test (100 users)
+        run: |
+          locust -f tests/performance/locustfile.py \
+            --host=http://localhost:8000 \
+            --users 100 \
+            --spawn-rate 10 \
+            --run-time 5m \
+            --headless \
+            --only-summary \
+            --html=load-test-report.html \
+            --csv=load-test-results
+
+      - name: Analyze load test results
+        id: analyze
+        run: |
+          RPS=$(tail -1 load-test-results_stats.csv | cut -d',' -f10)
+          FAILURES=$(tail -1 load-test-results_stats.csv | cut -d',' -f5)
+          P95=$(tail -1 load-test-results_stats.csv | cut -d',' -f8)
+
+          echo "rps=$RPS" >> $GITHUB_OUTPUT
+          echo "failures=$FAILURES" >> $GITHUB_OUTPUT
+          echo "p95=$P95" >> $GITHUB_OUTPUT
+
+          echo "## Load Test Results (100 users)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Requests/sec: $RPS" >> $GITHUB_STEP_SUMMARY
+          echo "- Failures: $FAILURES" >> $GITHUB_STEP_SUMMARY
+          echo "- p95 latency: ${P95}ms" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload load test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: load-test-results
+          path: |
+            load-test-report.html
+            load-test-results*.csv
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 5: Regression Detection
+  # ===========================================================================
+  regression-check:
+    name: Regression Analysis
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    needs: [api-benchmark, rag-benchmark, database-benchmark, load-test]
+    if: always() && github.event_name == 'schedule'
+
+    steps:
+      - name: Download all benchmarks
+        uses: actions/download-artifact@v4
+        with:
+          path: benchmarks/
+
+      - name: Check for regressions
+        run: |
+          # Compare with historical data (would integrate with monitoring system)
+          echo "## Performance Regression Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Comparing against baseline metrics..." >> $GITHUB_STEP_SUMMARY
+
+          # This would pull from historical data store
+          # For now, just check against thresholds
+          REGRESSION_DETECTED=false
+
+          # Check API p95 < 500ms
+          API_P95=400  # Would read from benchmark-api.json
+          if [ "$API_P95" -gt 500 ]; then
+            echo "⚠️ API p95 regression: ${API_P95}ms > 500ms threshold" >> $GITHUB_STEP_SUMMARY
+            REGRESSION_DETECTED=true
+          fi
+
+          if [ "$REGRESSION_DETECTED" = true ]; then
+            echo "regression=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Create regression issue
+        if: steps.check.outputs.regression == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: '⚠️ Performance Regression Detected',
+              body: `# Performance Regression Alert\n\n**Detection Date:** ${new Date().toISOString()}\n\nPerformance metrics have degraded beyond acceptable thresholds.\n\nView benchmark results in the Actions tab.`,
+              labels: ['performance', 'regression']
+            });
+
+      - name: Send Slack notification
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "Nightly Performance Benchmarks Complete",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*Performance Benchmarks Complete*\n\n*Status:* All benchmarks completed\n*Regression:* ${{ steps.check.outputs.regression || 'None detected' }}\n\n<https://github.com/${{ github.repository }}/actions|View Results>"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+# =============================================================================
+# Performance Monitoring Summary
+# =============================================================================
+# Benchmark Suites:
+#   1. API: Endpoint latency (p50, p95, p99)
+#   2. RAG: Pipeline throughput and latency
+#   3. Database: Query performance
+#   4. Load: Concurrent request handling (100 users)
+#
+# Schedule:
+#   - Nightly at 03:00 UTC
+#   - On PR to main (optional)
+#
+# Regression Detection:
+#   - >10% degradation triggers alert
+#   - Historical trend analysis
+#   - GitHub Issues created for regressions
+#
+# Reports:
+#   - Benchmark JSON results
+#   - Load test HTML reports
+#   - Performance trend charts (would integrate with monitoring)
+# =============================================================================

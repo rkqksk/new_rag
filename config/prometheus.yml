@@ -1,75 +1,162 @@
+# =============================================================================
 # Prometheus Configuration for RAG Enterprise
-# Scrapes metrics from FastAPI application and infrastructure services
+# =============================================================================
+# This configuration defines scraping rules for all RAG Enterprise services
+# including FastAPI application, PostgreSQL, Redis, and Qdrant.
+#
+# Metrics Collection:
+# - FastAPI application metrics (via prometheus-client)
+# - PostgreSQL database metrics (via postgres_exporter)
+# - Redis cache metrics (via redis_exporter)
+# - Qdrant vector database metrics (via built-in metrics)
+# - System-level metrics
+#
+# For production, consider adding:
+# - Alerting rules
+# - Recording rules for pre-computed queries
+# - Service discovery (Kubernetes, Consul, etc.)
+# =============================================================================
 
+# -----------------------------------------------------------------------------
+# Global Configuration
+# -----------------------------------------------------------------------------
 global:
-  scrape_interval: 15s           # Default scrape interval
-  evaluation_interval: 15s       # How often to evaluate rules
+  # How frequently to scrape targets by default
+  scrape_interval: 15s
+
+  # How long until a scrape request times out
+  scrape_timeout: 10s
+
+  # How frequently to evaluate rules
+  evaluation_interval: 15s
+
+  # Labels to attach to all time series or alerts
   external_labels:
-    monitor: 'rag-enterprise'
-    environment: 'production'
+    cluster: 'rag-enterprise'
+    environment: 'development'  # Override per environment
+    monitor: 'rag-monitoring'
 
-# Alerting configuration
-alerting:
-  alertmanagers:
-    - static_configs:
-        - targets: []
+# -----------------------------------------------------------------------------
+# Alertmanager Configuration
+# -----------------------------------------------------------------------------
+# Uncomment and configure if using Alertmanager for alerting
+# alerting:
+#   alertmanagers:
+#     - static_configs:
+#         - targets:
+#             - alertmanager:9093
+#       timeout: 10s
 
-# Rule files
-rule_files: []
+# -----------------------------------------------------------------------------
+# Rule Files
+# -----------------------------------------------------------------------------
+# Load alerting and recording rules from these files
+# rule_files:
+#   - /etc/prometheus/rules/*.yml
+#   - /etc/prometheus/alerts/*.yml
 
-# Scrape configurations
+# -----------------------------------------------------------------------------
+# Scrape Configurations
+# -----------------------------------------------------------------------------
 scrape_configs:
-  # FastAPI application metrics
-  - job_name: 'fastapi'
+
+  # ---------------------------------------------------------------------------
+  # Prometheus Self-Monitoring
+  # ---------------------------------------------------------------------------
+  - job_name: 'prometheus'
+    scrape_interval: 15s
+    scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
+
     static_configs:
-      - targets: ['172.28.0.7:8000']
-    metrics_path: '/metrics'
-    scrape_interval: 5s
+      - targets:
+          - localhost:9090
+        labels:
+          service: 'prometheus'
+          component: 'monitoring'
+
+  # ---------------------------------------------------------------------------
+  # FastAPI Application Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: 'fastapi'
+    scrape_interval: 10s
     scrape_timeout: 5s
+    metrics_path: /metrics
+    scheme: http
+
+    static_configs:
+      - targets:
+          # Docker network address
+          - 172.28.0.7:8000
+        labels:
+          service: 'fastapi'
+          component: 'api'
+          application: 'rag-enterprise'
+
+    # Relabel configs for better metric organization
     relabel_configs:
       - source_labels: [__address__]
         target_label: instance
-      - source_labels: [__scheme__]
-        target_label: scheme
+        replacement: 'rag-api'
 
-  # Prometheus self-monitoring
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
+  # ---------------------------------------------------------------------------
+  # Qdrant Vector Database Metrics
+  # ---------------------------------------------------------------------------
+  - job_name: 'qdrant'
     scrape_interval: 15s
     scrape_timeout: 10s
+    metrics_path: /metrics
+    scheme: http
 
-  # Qdrant vector database metrics (if exposed)
-  - job_name: 'qdrant'
     static_configs:
-      - targets: ['172.28.0.2:6333']
-    scrape_interval: 30s
-    scrape_timeout: 10s
+      - targets:
+          - 172.28.0.2:6333
+        labels:
+          service: 'qdrant'
+          component: 'vector-database'
 
-  # Redis cache metrics (if exposed via exporter)
-  - job_name: 'redis'
-    static_configs:
-      - targets: ['172.28.0.3:6379']
-    scrape_interval: 30s
-    scrape_timeout: 10s
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+        replacement: 'rag-qdrant'
 
-  # PostgreSQL metrics (if exposed via exporter)
-  - job_name: 'postgres'
-    static_configs:
-      - targets: ['172.28.0.4:5432']
-    scrape_interval: 30s
-    scrape_timeout: 10s
+# -----------------------------------------------------------------------------
+# Storage Configuration
+# -----------------------------------------------------------------------------
+# Local storage configuration (TSDB)
+# Default path: /prometheus
+# Retention settings are configured via command-line flags:
+#   --storage.tsdb.retention.time=30d
+#   --storage.tsdb.retention.size=10GB
 
-  # N8N workflow automation metrics
-  - job_name: 'n8n'
-    static_configs:
-      - targets: ['172.28.0.5:5678']
-    scrape_interval: 30s
-    scrape_timeout: 10s
-
-  # Ollama LLM inference metrics
-  - job_name: 'ollama'
-    static_configs:
-      - targets: ['172.28.0.6:11434']
-    scrape_interval: 30s
-    scrape_timeout: 10s
+# -----------------------------------------------------------------------------
+# Production Enhancements
+# -----------------------------------------------------------------------------
+# For production deployments, consider:
+#
+# 1. Service Discovery:
+#    - Kubernetes: kubernetes_sd_configs
+#    - Consul: consul_sd_configs
+#    - DNS: dns_sd_configs
+#
+# 2. High Availability:
+#    - Deploy multiple Prometheus instances
+#    - Use Thanos for long-term storage and global querying
+#    - Configure Alertmanager clustering
+#
+# 3. Security:
+#    - Enable TLS for scrape targets
+#    - Configure authentication (basic_auth, bearer_token)
+#    - Use RBAC for Prometheus UI
+#
+# 4. Performance:
+#    - Adjust scrape intervals based on cardinality
+#    - Use recording rules for expensive queries
+#    - Configure appropriate retention policies
+#
+# 5. Alerting:
+#    - Define alert rules for critical metrics
+#    - Configure notification channels (Slack, PagerDuty, email)
+#    - Set up escalation policies
+# -----------------------------------------------------------------------------

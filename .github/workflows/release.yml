@@ -1,0 +1,382 @@
+# =============================================================================
+# RAG Enterprise Release Automation
+# =============================================================================
+# Automated release creation with semantic versioning and changelog generation.
+#
+# Triggers:
+#   - Push of semantic version tags (v1.2.3, v2.0.0-beta.1)
+#
+# Features:
+#   - Semantic version validation
+#   - Automated changelog generation
+#   - Docker image tagging with version
+#   - GitHub release creation with artifacts
+#   - Release notes from commits
+#   - Slack/email notifications
+# =============================================================================
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'          # v1.2.3
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'        # v1.2.3-beta.1
+
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., v1.2.3)'
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ===========================================================================
+  # Job 1: Validate Release
+  # ===========================================================================
+  validate:
+    name: Validate Release
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+
+    outputs:
+      version: ${{ steps.get-version.outputs.version }}
+      is-prerelease: ${{ steps.check-prerelease.outputs.is-prerelease }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for changelog
+
+      - name: Get version from tag
+        id: get-version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION=${GITHUB_REF#refs/tags/}
+          fi
+
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Validate semantic version
+        run: |
+          VERSION="${{ steps.get-version.outputs.version }}"
+
+          # Remove 'v' prefix
+          VERSION_NUMBER="${VERSION#v}"
+
+          # Validate semantic version format
+          if ! echo "$VERSION_NUMBER" | grep -E '^[0-9]+\.[0-9]+\.[0-9]+(-[a-zA-Z0-9.]+)?$'; then
+            echo "::error::Invalid semantic version: $VERSION"
+            exit 1
+          fi
+
+          echo "✅ Valid semantic version: $VERSION"
+
+      - name: Check if pre-release
+        id: check-prerelease
+        run: |
+          VERSION="${{ steps.get-version.outputs.version }}"
+
+          if echo "$VERSION" | grep -E '\-(alpha|beta|rc)'; then
+            echo "is-prerelease=true" >> $GITHUB_OUTPUT
+            echo "Pre-release detected"
+          else
+            echo "is-prerelease=false" >> $GITHUB_OUTPUT
+            echo "Stable release"
+          fi
+
+      - name: Check tag doesn't exist
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          VERSION="${{ steps.get-version.outputs.version }}"
+
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "::error::Tag $VERSION already exists"
+            exit 1
+          fi
+
+  # ===========================================================================
+  # Job 2: Build Release Artifacts
+  # ===========================================================================
+  build:
+    name: Build Release Artifacts
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    needs: validate
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract version metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=semver,pattern={{version}},value=${{ needs.validate.outputs.version }}
+            type=semver,pattern={{major}}.{{minor}},value=${{ needs.validate.outputs.version }}
+            type=semver,pattern={{major}},value=${{ needs.validate.outputs.version }}
+            type=raw,value=latest,enable=${{ needs.validate.outputs.is-prerelease == 'false' }}
+
+      - name: Build and push release image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          target: runtime
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            VERSION=${{ needs.validate.outputs.version }}
+            GIT_COMMIT=${{ github.sha }}
+            BUILD_DATE=${{ github.event.head_commit.timestamp }}
+
+      - name: Generate SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.validate.outputs.version }}
+          format: spdx-json
+          output-file: sbom-${{ needs.validate.outputs.version }}.spdx.json
+
+      - name: Create release archive
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+
+          # Create release directory
+          mkdir -p release
+
+          # Copy essential files
+          cp -r app/ release/
+          cp -r agents/ release/
+          cp requirements*.txt release/
+          cp Dockerfile release/
+          cp docker-compose*.yml release/
+          cp README.md LICENSE release/ 2>/dev/null || true
+
+          # Create tarball
+          tar -czf rag-enterprise-${VERSION}.tar.gz release/
+
+          # Create checksum
+          sha256sum rag-enterprise-${VERSION}.tar.gz > rag-enterprise-${VERSION}.tar.gz.sha256
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            rag-enterprise-*.tar.gz
+            rag-enterprise-*.tar.gz.sha256
+            sbom-*.spdx.json
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 3: Generate Changelog
+  # ===========================================================================
+  changelog:
+    name: Generate Changelog
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    needs: validate
+
+    outputs:
+      changelog: ${{ steps.generate.outputs.changelog }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Generate changelog
+        id: generate
+        run: |
+          VERSION="${{ needs.validate.outputs.version }}"
+
+          # Get previous tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
+          if [ -z "$PREVIOUS_TAG" ]; then
+            echo "First release, including all commits"
+            COMMIT_RANGE="HEAD"
+          else
+            echo "Changes since $PREVIOUS_TAG"
+            COMMIT_RANGE="${PREVIOUS_TAG}..HEAD"
+          fi
+
+          # Generate changelog
+          {
+            echo "# Changelog for $VERSION"
+            echo ""
+            echo "## 🚀 Features"
+            git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^feat" || echo "- No new features"
+            echo ""
+            echo ""
+            echo "## 🐛 Bug Fixes"
+            git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^fix" || echo "- No bug fixes"
+            echo ""
+            echo ""
+            echo "## 📚 Documentation"
+            git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --grep="^docs" || echo "- No documentation changes"
+            echo ""
+            echo ""
+            echo "## 🔧 Other Changes"
+            git log $COMMIT_RANGE --pretty=format:"- %s (%h)" --invert-grep --grep="^feat" --grep="^fix" --grep="^docs" || echo "- No other changes"
+            echo ""
+          } > CHANGELOG.md
+
+          # Output for GitHub
+          CHANGELOG=$(cat CHANGELOG.md)
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Upload changelog
+        uses: actions/upload-artifact@v4
+        with:
+          name: changelog
+          path: CHANGELOG.md
+          retention-days: 90
+
+  # ===========================================================================
+  # Job 4: Create GitHub Release
+  # ===========================================================================
+  release:
+    name: Create GitHub Release
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+
+    needs: [validate, build, changelog]
+
+    permissions:
+      contents: write  # For creating releases
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ needs.validate.outputs.version }}
+          name: Release ${{ needs.validate.outputs.version }}
+          body: ${{ needs.changelog.outputs.changelog }}
+          draft: false
+          prerelease: ${{ needs.validate.outputs.is-prerelease == 'true' }}
+          files: |
+            artifacts/release-artifacts/*.tar.gz
+            artifacts/release-artifacts/*.sha256
+            artifacts/release-artifacts/*.spdx.json
+            artifacts/changelog/CHANGELOG.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ===========================================================================
+  # Job 5: Notify Team
+  # ===========================================================================
+  notify:
+    name: Notify Team
+    runs-on: ubuntu-22.04
+    timeout-minutes: 5
+
+    needs: [validate, release]
+    if: always()
+
+    steps:
+      - name: Notify Slack
+        uses: slackapi/slack-github-action@v1
+        with:
+          payload: |
+            {
+              "text": "New Release: ${{ needs.validate.outputs.version }}",
+              "blocks": [
+                {
+                  "type": "section",
+                  "text": {
+                    "type": "mrkdwn",
+                    "text": "*New Release Published* 🎉\n*Version:* ${{ needs.validate.outputs.version }}\n*Type:* ${{ needs.validate.outputs.is-prerelease == 'true' && 'Pre-release' || 'Stable' }}\n*Published by:* ${{ github.actor }}\n*View release:* https://github.com/${{ github.repository }}/releases/tag/${{ needs.validate.outputs.version }}"
+                  }
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Send email notification
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: 'RAG Enterprise Release ${{ needs.validate.outputs.version }}'
+          to: ${{ secrets.RELEASE_NOTIFICATION_EMAIL }}
+          from: 'RAG Enterprise CI <ci@example.com>'
+          body: |
+            A new release of RAG Enterprise has been published:
+
+            Version: ${{ needs.validate.outputs.version }}
+            Type: ${{ needs.validate.outputs.is-prerelease == 'true' && 'Pre-release' || 'Stable Release' }}
+            Published by: ${{ github.actor }}
+
+            View release:
+            https://github.com/${{ github.repository }}/releases/tag/${{ needs.validate.outputs.version }}
+
+            Docker image:
+            docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.validate.outputs.version }}
+
+# =============================================================================
+# Release Automation Summary
+# =============================================================================
+# Triggered by: Semantic version tags (v1.2.3)
+#
+# Process:
+#   1. Validate semantic version format
+#   2. Build Docker images with version tags
+#   3. Generate changelog from git commits
+#   4. Create GitHub release with artifacts
+#   5. Notify team via Slack and email
+#
+# Artifacts:
+#   - Docker images (tagged with version)
+#   - Source code archive
+#   - SBOM (Software Bill of Materials)
+#   - Changelog
+#   - Checksums
+#
+# Version tags:
+#   - Stable: v1.2.3 → images tagged: 1.2.3, 1.2, 1, latest
+#   - Pre-release: v1.2.3-beta.1 → image tagged: 1.2.3-beta.1
+# =============================================================================

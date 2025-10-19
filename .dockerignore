@@ -1,0 +1,218 @@
+# =============================================================================
+# Docker Build Context Exclusions
+# Reduces build context from ~500MB to <50MB
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Python Artifacts
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.manifest
+*.spec
+
+# -----------------------------------------------------------------------------
+# Virtual Environments
+# -----------------------------------------------------------------------------
+.venv/
+venv/
+ENV/
+env/
+.env/
+env.bak/
+venv.bak/
+
+# -----------------------------------------------------------------------------
+# Testing & Coverage
+# -----------------------------------------------------------------------------
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+.hypothesis/
+*.cover
+.cache
+nosetests.xml
+coverage.xml
+*.log
+*.log.*
+
+# -----------------------------------------------------------------------------
+# Development Tools
+# -----------------------------------------------------------------------------
+.git/
+.gitignore
+.gitattributes
+.github/
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+
+# -----------------------------------------------------------------------------
+# Documentation & Guides
+# -----------------------------------------------------------------------------
+*.md
+docs/
+documentation/
+claudedocs/
+README*
+CHANGELOG*
+LICENSE*
+CONTRIBUTING*
+*.rst
+*.txt.backup
+
+# -----------------------------------------------------------------------------
+# Data & Temporary Files
+# -----------------------------------------------------------------------------
+data/
+temp/
+tmp/
+*.tmp
+documents/
+files/
+exports/
+archives/
+
+# -----------------------------------------------------------------------------
+# Docker Files (exclude other Docker configs)
+# -----------------------------------------------------------------------------
+docker-compose*.yml
+.dockerignore
+Dockerfile.*
+*.dockerfile
+
+# -----------------------------------------------------------------------------
+# CI/CD & Configuration
+# -----------------------------------------------------------------------------
+.github/
+.gitlab-ci.yml
+.travis.yml
+.circleci/
+Jenkinsfile
+.claude/
+.claude-plugin/
+.claudeignore
+
+# -----------------------------------------------------------------------------
+# Environment Files (secrets should never be in image)
+# -----------------------------------------------------------------------------
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.crt
+secrets/
+
+# -----------------------------------------------------------------------------
+# Build & Deployment
+# -----------------------------------------------------------------------------
+build/
+dist/
+*.egg-info/
+.eggs/
+*.spec
+
+# -----------------------------------------------------------------------------
+# Logs & Databases
+# -----------------------------------------------------------------------------
+logs/
+*.log
+*.log.*
+*.sqlite
+*.db
+
+# -----------------------------------------------------------------------------
+# OS Generated
+# -----------------------------------------------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# -----------------------------------------------------------------------------
+# Project-Specific Exclusions
+# -----------------------------------------------------------------------------
+# Test directories (not needed in production)
+tests/
+test/
+__tests__/
+
+# Scripts (development only)
+scripts/
+dev/
+local/
+
+# MCP servers (development only)
+mcp_servers/
+
+# Plugins (development only)
+plugins/
+
+# Fine-tuning data
+finetuning/
+
+# Benchmarks
+*benchmark*.log
+*benchmark*.json
+
+# Reports
+*_REPORT.md
+*_SUMMARY.md
+
+# Configuration files
+.envrc
+.direnv/
+config/grafana/
+config/prometheus/datasources/
+config/prometheus/dashboards/
+
+# -----------------------------------------------------------------------------
+# Size Optimization Summary
+# -----------------------------------------------------------------------------
+# Typical reductions:
+# - .git/: 20-50MB
+# - .venv/: 200-500MB
+# - tests/: 10-20MB
+# - docs/: 5-10MB
+# - __pycache__/: 5-10MB
+# - logs/: 10-50MB
+# - data/: 50-200MB
+#
+# Total reduction: ~400-850MB
+# Final context size: <50MB
+# -----------------------------------------------------------------------------
