@@ -31,6 +31,10 @@ from app.core.dependencies import (
     get_document_ingestion_service,
 )
 
+# Import metrics and middleware
+from app.core.metrics import REGISTRY
+from app.core.middleware import MetricsMiddleware
+
 # Import route handlers
 from app.api import dashboard_routes, query_routes, ingestion_routes
 # Note: workflow_routes has agent dependencies - loaded lazily if needed
@@ -51,6 +55,9 @@ app = FastAPI(
 
 # Get configuration (initializes all validation)
 _config = get_config()
+
+# Add metrics middleware (must be added first for proper wrapping)
+app.add_middleware(MetricsMiddleware)
 
 # Add CORS middleware with configuration from DI
 app.add_middleware(
@@ -119,6 +126,20 @@ async def root():
         "dashboard": "/static/index.html",
         "docs": "/docs"
     }
+
+@app.get("/metrics")
+async def metrics():
+    """Prometheus metrics endpoint"""
+    from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+    return JSONResponse(
+        content=generate_latest(REGISTRY).decode('utf-8'),
+        media_type=CONTENT_TYPE_LATEST
+    )
+
+@app.get("/health")
+async def health():
+    """Health check endpoint"""
+    return {"status": "healthy", "timestamp": datetime.utcnow().isoformat()}
 
 @app.get("/dashboard")
 async def dashboard():

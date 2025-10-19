@@ -1,0 +1,75 @@
+# Prometheus Configuration for RAG Enterprise
+# Scrapes metrics from FastAPI application and infrastructure services
+
+global:
+  scrape_interval: 15s           # Default scrape interval
+  evaluation_interval: 15s       # How often to evaluate rules
+  external_labels:
+    monitor: 'rag-enterprise'
+    environment: 'production'
+
+# Alerting configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: []
+
+# Rule files
+rule_files: []
+
+# Scrape configurations
+scrape_configs:
+  # FastAPI application metrics
+  - job_name: 'fastapi'
+    static_configs:
+      - targets: ['172.28.0.7:8000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: instance
+      - source_labels: [__scheme__]
+        target_label: scheme
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 15s
+    scrape_timeout: 10s
+
+  # Qdrant vector database metrics (if exposed)
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['172.28.0.2:6333']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Redis cache metrics (if exposed via exporter)
+  - job_name: 'redis'
+    static_configs:
+      - targets: ['172.28.0.3:6379']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # PostgreSQL metrics (if exposed via exporter)
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['172.28.0.4:5432']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # N8N workflow automation metrics
+  - job_name: 'n8n'
+    static_configs:
+      - targets: ['172.28.0.5:5678']
+    scrape_interval: 30s
+    scrape_timeout: 10s
+
+  # Ollama LLM inference metrics
+  - job_name: 'ollama'
+    static_configs:
+      - targets: ['172.28.0.6:11434']
+    scrape_interval: 30s
+    scrape_timeout: 10s
