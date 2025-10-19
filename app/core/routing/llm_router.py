@@ -12,9 +12,12 @@ Strategy:
 """
 
 import re
+import logging
 from typing import Dict
 from dataclasses import dataclass
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class ClaudeModel(Enum):
@@ -270,9 +273,9 @@ if __name__ == "__main__":
 
     router = ClaudeRouter()
 
-    print("=" * 70)
-    print("Claude Model Router Test - Haiku 4.5 vs Sonnet 4.5")
-    print("=" * 70)
+    logger.info("=" * 70)
+    logger.info("Claude Model Router Test - Haiku 4.5 vs Sonnet 4.5")
+    logger.info("=" * 70)
 
     for query, context in test_queries:
         result = router.route(query, context)
@@ -280,8 +283,8 @@ if __name__ == "__main__":
         cost_emoji = "💰" if result.cost_type == "deposit" else "🎯"
         model_emoji = "💡" if result.model == ClaudeModel.HAIKU_4_5 else "🧠"
 
-        print(f"\n질의: {query}")
-        print(f"{model_emoji} {result.model.value}")
-        print(f"{cost_emoji} Cost: {result.cost_type.upper()}")
-        print(f"📊 복잡도: {result.complexity_score.total}/100")
-        print(f"💬 사유: {result.reason}")
+        logger.info(f"\n질의: {query}")
+        logger.info(f"{model_emoji} {result.model.value}")
+        logger.info(f"{cost_emoji} Cost: {result.cost_type.upper()}")
+        logger.info(f"📊 복잡도: {result.complexity_score.total}/100")
+        logger.info(f"💬 사유: {result.reason}")

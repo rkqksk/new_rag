@@ -34,11 +34,9 @@ from app.services.rag_qa_service import (
     QAResponse,
 )
 
-# Import ingestion services - lazy loading to avoid startup import errors
-# from app.services.document_ingestion_service import DocumentIngestionService
-# from app.services.web_crawler_service import WebCrawlerService
-from app.api import dashboard_routes, query_routes
-# from app.api import ingestion_routes, workflow_routes  # Disabled - document_ingestion not ready
+# Import route handlers
+from app.api import dashboard_routes, query_routes, ingestion_routes
+# Note: workflow_routes has agent dependencies - loaded lazily if needed
 
 # Load environment variables
 load_dotenv()
@@ -95,10 +93,15 @@ logger.info(f"Connecting to Qdrant at {QDRANT_HOST}:{QDRANT_PORT}")
 logger.info(f"Connecting to Redis at {REDIS_HOST}:{REDIS_PORT}")
 logger.info(f"Connecting to PostgreSQL at {POSTGRES_HOST}")
 
+# Embedding model configuration (configurable via environment)
+EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2")
+EMBEDDING_DIMENSION = int(os.getenv("EMBEDDING_DIM", "384"))
+
 # Initialize services
 qdrant_client = QdrantClient(host=QDRANT_HOST, port=QDRANT_PORT)
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, decode_responses=True)
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+model = SentenceTransformer(EMBEDDING_MODEL)
+logger.info(f"Loaded embedding model: {EMBEDDING_MODEL} (dimension: {EMBEDDING_DIMENSION})")
 
 # Initialize consultation service
 consultation_service = ConsultationService(
@@ -144,9 +147,9 @@ dashboard_routes.redis_client = redis_client
 
 # Register routers
 app.include_router(query_routes.router)  # Query routing with Ollama LLMs
-# app.include_router(ingestion_routes.router)  # Disabled - document_ingestion not ready
-# app.include_router(dashboard_routes.router)  # Disabled - document_ingestion not ready
-# app.include_router(workflow_routes.router)  # Disabled - n8n workflows not configured
+app.include_router(ingestion_routes.router)  # Document ingestion & crawling
+app.include_router(dashboard_routes.router)  # Dashboard & monitoring
+# Note: workflow_routes disabled due to agent module dependencies (will be lazy-loaded if needed)
 
 # Mount static files
 import os.path as osp
@@ -161,9 +164,9 @@ COLLECTION_NAME = "documents"
 try:
     qdrant_client.create_collection(
         collection_name=COLLECTION_NAME,
-        vectors_config=VectorParams(size=384, distance=Distance.COSINE),
+        vectors_config=VectorParams(size=EMBEDDING_DIMENSION, distance=Distance.COSINE),
     )
-    logger.info(f"Created collection: {COLLECTION_NAME}")
+    logger.info(f"Created collection: {COLLECTION_NAME} (dimension: {EMBEDDING_DIMENSION})")
 except Exception as e:
     logger.info(f"Collection {COLLECTION_NAME} already exists or creation skipped: {e}")
 
@@ -389,8 +392,8 @@ async def get_stats():
         return {
             "total_documents": collection_info.vectors_count,
             "collection": COLLECTION_NAME,
-            "embedding_dimension": 384,
-            "model": "sentence-transformers/all-MiniLM-L6-v2"
+            "embedding_dimension": EMBEDDING_DIMENSION,
+            "model": EMBEDDING_MODEL
         }
     except Exception as e:
         return {"error": str(e)}

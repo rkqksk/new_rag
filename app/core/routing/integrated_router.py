@@ -22,11 +22,14 @@ Workflow:
     Response with Transparency Message
 """
 
+import logging
 from typing import Dict, Optional, List
 from dataclasses import dataclass
 
 from .intent_router import MCPRouter, IntentResult, Intent
 from .llm_router import ClaudeRouter, ModelSelection, ClaudeModel
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -264,5 +267,5 @@ if __name__ == "__main__":
         decision = router.route(query, context)
         explanation = router.explain_decision(decision)
 
-        print(f"\n질의: {query}")
-        print(explanation)
+        logger.info(f"\n질의: {query}")
+        logger.info(explanation)

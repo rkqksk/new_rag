@@ -12,9 +12,12 @@ Available MCP Servers:
 """
 
 import re
+import logging
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
+
+logger = logging.getLogger(__name__)
 
 
 class Intent(Enum):
@@ -288,8 +291,8 @@ if __name__ == "__main__":
 
     for query in test_queries:
         tool, result = router.route(query)
-        print(f"\n질의: {query}")
-        print(f"→ Intent: {result.intent.value}")
-        print(f"→ Confidence: {result.confidence:.2f}")
-        print(f"→ MCP Tool: {tool}")
-        print(f"→ Params: {result.params}")
+        logger.info(f"\n질의: {query}")
+        logger.info(f"→ Intent: {result.intent.value}")
+        logger.info(f"→ Confidence: {result.confidence:.2f}")
+        logger.info(f"→ MCP Tool: {tool}")
+        logger.info(f"→ Params: {result.params}")

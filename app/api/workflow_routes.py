@@ -3,15 +3,13 @@ Workflow API Routes
 워크플로우 오케스트레이션 API 엔드포인트
 """
 
+import logging
 from fastapi import APIRouter, BackgroundTasks, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any
 from enum import Enum
 
-from agents.workflow_orchestrator_v3 import (
-    WorkflowOrchestratorV3,
-    WorkflowType
-)
+logger = logging.getLogger(__name__)
 
 # 라우터 초기화
 router = APIRouter(
@@ -19,8 +17,21 @@ router = APIRouter(
     tags=["workflow"]
 )
 
-# Workflow Orchestrator 인스턴스 (싱글톤)
-orchestrator = WorkflowOrchestratorV3()
+# Lazy loading to avoid circular imports
+_orchestrator = None
+
+def get_orchestrator():
+    """Get or initialize Workflow Orchestrator (lazy loading)"""
+    global _orchestrator
+    if _orchestrator is None:
+        try:
+            from agents.workflow_orchestrator_v3 import WorkflowOrchestratorV3
+            _orchestrator = WorkflowOrchestratorV3()
+            logger.info("Workflow Orchestrator initialized")
+        except ImportError as e:
+            logger.error(f"Failed to import WorkflowOrchestratorV3: {e}")
+            _orchestrator = None
+    return _orchestrator
 
 
 # Request/Response 모델
