@@ -60,8 +60,16 @@ docker-compose down
 | Redis | 172.28.0.3 | 6379 | Caching layer |
 | PostgreSQL | 172.28.0.4 | 5432 | Metadata storage |
 | N8N | 172.28.0.5 | 5678 | Workflow automation |
-| Ollama | 172.28.0.6 | 11434 | Local LLM inference |
+| **Ollama** | **localhost** | **11434** | **Local LLM (Native App)** ⚡ |
 | FastAPI | 172.28.0.7 | 8000 | Main API server |
+
+**Ollama Configuration (Development)**:
+- Uses **Local Ollama App** at `http://localhost:11434` (not Docker)
+- Models: `qwen2.5:7b-instruct-q4_K_M` (4.7GB, recommended), `qwen2.5:3b` (1.9GB, fast)
+- Verify: `curl http://localhost:11434/api/tags`
+- Pull models: `ollama pull qwen2.5:7b-instruct-q4_K_M`
+
+**Production**: Use Docker Ollama (172.28.0.6:11434) via environment variable override
 
 ---
 
