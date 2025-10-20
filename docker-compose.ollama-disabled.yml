@@ -1,0 +1,87 @@
+# =============================================================================
+# RAG Enterprise - Ollama Disabled Overlay
+# =============================================================================
+# This overlay file disables the Docker Ollama service for users who prefer
+# to use a local Ollama installation instead of running Ollama in Docker.
+#
+# Benefits of using local Ollama:
+#   - Saves 8GB+ RAM and 2-4 CPU cores from Docker
+#   - Saves ~10GB Docker image disk space
+#   - Faster model loading (no container overhead)
+#   - Easier model management (native CLI)
+#   - Better performance on macOS (native Metal acceleration)
+#   - Shared models across projects (no duplication)
+#
+# Prerequisites:
+#   1. Install Ollama locally: https://ollama.com/download
+#   2. Pull required models: ollama pull qwen2.5:7b-instruct-q4_K_M
+#   3. Verify Ollama is running: curl http://localhost:11434/api/tags
+#   4. Update .env: OLLAMA_URL=http://localhost:11434
+#
+# Usage:
+#   docker-compose -f docker-compose.yml -f docker-compose.ollama-disabled.yml up -d
+#
+# To re-enable Docker Ollama:
+#   docker-compose up -d
+#
+# See docs/OLLAMA_SETUP.md for detailed setup instructions
+# See docs/MIGRATION_OLLAMA_LOCAL.md for migration details
+# =============================================================================
+
+version: '3.8'
+
+services:
+  # ---------------------------------------------------------------------------
+  # Remove Ollama Service (using local Ollama app instead)
+  # ---------------------------------------------------------------------------
+  # Note: This overlay removes the ollama service definition from docker-compose.yml
+  # The FastAPI service will connect to localhost:11434 instead
+
+  # ---------------------------------------------------------------------------
+  # FastAPI Application - Updated Environment for Local Ollama
+  # ---------------------------------------------------------------------------
+  api:
+    environment:
+      # Override LLM configuration to use local Ollama
+      OLLAMA_HOST: host.docker.internal  # Docker special DNS for host machine
+      OLLAMA_PORT: 11434
+      OLLAMA_DEFAULT_MODEL: qwen2.5:7b-instruct-q4_K_M
+
+      # Alternative: Use localhost if host.docker.internal doesn't work
+      # OLLAMA_URL: http://localhost:11434
+
+# =============================================================================
+# Configuration Notes
+# =============================================================================
+#
+# Network Access (Docker to Host):
+#   - macOS/Windows: Use host.docker.internal or localhost
+#   - Linux: Use 172.17.0.1 (Docker bridge gateway) or --network=host
+#   - Verify: docker exec -it rag-api curl http://host.docker.internal:11434/api/tags
+#
+# Resource Savings:
+#   - RAM: 8GB+ freed (Ollama no longer in Docker)
+#   - CPU: 2-4 cores freed (no container overhead)
+#   - Disk: ~10GB Docker image space freed
+#   - Total Docker Footprint: Reduced from ~10GB to ~2GB
+#
+# Troubleshooting:
+#   - If API can't connect to localhost Ollama:
+#     * On macOS/Windows: Use OLLAMA_HOST=host.docker.internal
+#     * On Linux: Use OLLAMA_URL=http://172.17.0.1:11434
+#   - Verify Ollama is running: curl http://localhost:11434/api/tags
+#   - Check Ollama logs:
+#     * macOS: tail -f ~/.ollama/logs/server.log
+#     * Linux: journalctl -u ollama -f
+#
+# Production Deployment:
+#   - Re-enable Docker Ollama service for production
+#   - Use docker-compose.yml without this overlay
+#   - Configure OLLAMA_URL=http://172.28.0.6:11434
+#   - Or use dedicated Ollama service on separate infrastructure
+#
+# Rollback to Docker Ollama:
+#   1. Remove this overlay from docker-compose command
+#   2. Update .env: OLLAMA_URL=http://172.28.0.6:11434
+#   3. Run: docker-compose up -d
+# =============================================================================

@@ -1,0 +1,40 @@
+{
+  "text_chunking": {
+    "method": "field_level",
+    "approaches": {
+      "field_level": {
+        "units": [
+          "product_name",
+          "description",
+          "specifications"
+        ],
+        "rationale": "Preserve semantic completeness per field"
+      },
+      "hierarchical_context": {
+        "format": "{category}/{product_name} → {field}",
+        "rationale": "Enable category-aware queries"
+      }
+    },
+    "max_tokens": 512,
+    "overlap": 50
+  },
+  "image_chunking": {
+    "method": "per_image_with_metadata",
+    "metadata_injection": [
+      "product_name",
+      "category",
+      "image_type"
+    ],
+    "embedding_model": "OpenCLIP-ViT-H-14",
+    "dimension": 1024
+  },
+  "document_chunking": {
+    "method": "recursive_character_split",
+    "chunk_size": 1000,
+    "overlap": 200,
+    "document_types": [
+      "print_area",
+      "spec_sheet"
+    ]
+  }
+}

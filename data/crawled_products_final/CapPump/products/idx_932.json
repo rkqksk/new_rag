@@ -1,0 +1,62 @@
+{
+  "product_name": "28파이 디퓨저 캡",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1744342190.jpg",
+      "filename": "ADD_GOODS2_1744342190.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342190.jpg",
+      "filename": "GOODS1_1744342190.jpg",
+      "alt": "28파이 디퓨저 캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1744342190.jpg",
+      "filename": "ADD_GOODS1_1744342190.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1744342190.jpg",
+      "filename": "ADD_GOODS2_1744342190.jpg",
+      "type": "additional_2",
+      "local_path": "data/test_cap_pump_category/images/idx_932_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342190.jpg",
+      "filename": "GOODS1_1744342190.jpg",
+      "alt": "28파이 디퓨저 캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_932_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1744342190.jpg",
+      "filename": "ADD_GOODS1_1744342190.jpg",
+      "type": "main",
+      "local_path": "data/test_cap_pump_category/images/idx_932_main_3.jpg"
+    }
+  ],
+  "idx": "932",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=932",
+  "crawled_at": "2025-10-18T06:45:43.642152",
+  "category": "CapPump"
+}

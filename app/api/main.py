@@ -31,9 +31,8 @@ from app.core.dependencies import (
     get_document_ingestion_service,
 )
 
-# Import metrics and middleware
-from app.core.metrics import REGISTRY
-from app.core.middleware import MetricsMiddleware
+# Import metrics
+from app.core.metrics import get_metrics_collector
 
 # Import schemas
 from app.models.schemas import QARequest, QAResponse, ConsultationRequest, ConsultationResponse
@@ -60,8 +59,9 @@ app = FastAPI(
 # Get configuration (initializes all validation)
 _config = get_config()
 
-# Add metrics middleware (must be added first for proper wrapping)
-app.add_middleware(MetricsMiddleware)
+# Get metrics collector and add middleware (must be added first for proper wrapping)
+_metrics = get_metrics_collector()
+app.add_middleware(_metrics.get_middleware())
 
 # Add CORS middleware with configuration from DI
 app.add_middleware(
@@ -330,7 +330,10 @@ async def handle_defect_inquiry(request: ConsultationRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/api/v1/qa/ask")
-async def ask_question(request: QARequest):
+async def ask_question(
+    request: QARequest,
+    service = Depends(get_rag_qa_service)
+):
     """
     RAG 기반 Q&A 엔드포인트
 
@@ -350,7 +353,6 @@ async def ask_question(request: QARequest):
     """
     try:
         logger.info(f"RAG Q&A request: {request.question}")
-        service = get_rag_qa_service()
         response = await service.answer_question(request)
         logger.info(f"RAG Q&A response: {response.qa_id} (confidence: {response.confidence:.2f})")
         return response

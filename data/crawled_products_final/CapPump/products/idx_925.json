@@ -1,0 +1,49 @@
+{
+  "product_name": "18파이 일반미스트",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729892.jpg",
+      "filename": "GOODS1_1740729892.jpg",
+      "alt": "18파이 일반미스트",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740729892.jpg",
+      "filename": "ADD_GOODS1_1740729892.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729892.jpg",
+      "filename": "GOODS1_1740729892.jpg",
+      "alt": "18파이 일반미스트",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_925_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740729892.jpg",
+      "filename": "ADD_GOODS1_1740729892.jpg",
+      "type": "main",
+      "local_path": "data/test_cap_pump_category/images/idx_925_main_2.jpg"
+    }
+  ],
+  "idx": "925",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=925",
+  "crawled_at": "2025-10-18T06:54:59.390871",
+  "category": "CapPump"
+}

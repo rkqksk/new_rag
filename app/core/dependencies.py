@@ -54,8 +54,10 @@ class AppConfig:
         # Ollama Configuration
         # Default to localhost for development (local Ollama app)
         # Use Docker IP (172.28.0.6:11434) in production via .env
-        self.ollama_url = os.getenv("OLLAMA_URL", "http://localhost:11434")
-        self.ollama_model = os.getenv("OLLAMA_MODEL", "qwen2.5:7b-instruct-q4_K_M")
+        ollama_host = os.getenv("OLLAMA_HOST", "localhost")
+        ollama_port = os.getenv("OLLAMA_PORT", "11434")
+        self.ollama_url = f"http://{ollama_host}:{ollama_port}"
+        self.ollama_model = os.getenv("OLLAMA_DEFAULT_MODEL", "qwen2.5:7b-instruct-q4_K_M")
 
         # CORS Configuration
         self.allowed_origins = os.getenv(

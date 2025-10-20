@@ -1,0 +1,36 @@
+{
+  "product_name": "20파이 민자 단캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749863.jpg",
+      "filename": "GOODS1_1661749863.jpg",
+      "alt": "20파이 민자 단캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749863.jpg",
+      "filename": "GOODS1_1661749863.jpg",
+      "alt": "20파이 민자 단캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_745_main_1.jpg"
+    }
+  ],
+  "idx": "745",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=745",
+  "crawled_at": "2025-10-18T06:58:19.762529",
+  "category": "CapPump"
+}

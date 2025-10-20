@@ -1,0 +1,36 @@
+{
+  "product_name": "32파이 룰렛 원터치캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1741758778.jpg",
+      "filename": "GOODS1_1741758778.jpg",
+      "alt": "32파이 룰렛 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1741758778.jpg",
+      "filename": "GOODS1_1741758778.jpg",
+      "alt": "32파이 룰렛 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_927_main_1.jpg"
+    }
+  ],
+  "idx": "927",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=927",
+  "crawled_at": "2025-10-18T06:45:52.159635",
+  "category": "CapPump"
+}

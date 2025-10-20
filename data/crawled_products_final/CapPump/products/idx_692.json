@@ -1,0 +1,36 @@
+{
+  "product_name": "32파이 고점도펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747042.jpg",
+      "filename": "GOODS1_1661747042.jpg",
+      "alt": "32파이 고점도펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747042.jpg",
+      "filename": "GOODS1_1661747042.jpg",
+      "alt": "32파이 고점도펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/test_cap_pump_category/images/idx_692_main_1.jpg"
+    }
+  ],
+  "idx": "692",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=692",
+  "crawled_at": "2025-10-18T07:03:59.807734",
+  "category": "CapPump"
+}
