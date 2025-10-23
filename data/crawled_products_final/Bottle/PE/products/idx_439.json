@@ -76,5 +76,81 @@
     "pricing_updated_at": "2025-10-23T20:42:24.108357"
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:51.813473"
+  "pricing_updated_at": "2025-10-23T18:25:51.813473",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.699397",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "439",
+      "product_name": "30ml 튜브브로우용기",
+      "product_code": "TE030-G001",
+      "category_type": "BOTTLE",
+      "neck_size": "19파이",
+      "capacity_ml": 30.0,
+      "material": "PE"
+    },
+    "compatible_caps_pumps": {
+      "count": 0,
+      "items": []
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "앰플",
+        "세럼",
+        "아이크림",
+        "립밤"
+      ],
+      "by_material": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "combined_recommendation": [],
+      "recommended_neck_sizes": [
+        "20파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "material_warnings": [],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    },
+    "material_info": {
+      "name": "Polyethylene (폴리에틸렌)",
+      "characteristics": "내화학성 우수, 유연성, 경제적",
+      "suitable_products": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    }
+  }
 }

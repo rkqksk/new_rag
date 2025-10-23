@@ -264,28 +264,64 @@ class ContextualRAG:
         additional_filters: Dict = None
     ) -> Dict:
         """기본 검색 쿼리 처리 (스마트 추천 통합)"""
-        # 1. 제품 유형 감지 (이를 통해 용량 필터 설정)
+        # 1. 제품 유형 감지
         product_type = self.intent_recommender.detect_product_type(query)
 
-        # 2. 필터 구성 (제품 유형의 용량 범위 포함)
+        # 2. 정확한 용량값 추출 (예: "50미리" → 50)
+        exact_capacity = self._extract_exact_capacity(query)
+
+        # 3. 필터 구성
         filters = self._build_filters(entities, context, additional_filters)
-        if product_type:
+
+        # 정확 용량이 있으면 우선 검색, 없으면 범위 검색
+        if exact_capacity:
+            filters["capacity_exact"] = exact_capacity
+            search_mode = "exact"
+        elif product_type:
             profile = self.intent_recommender.product_profiles.get(product_type, {})
             cap_min, cap_max = profile.get("capacity_range", (0, 10000))
             filters["capacity_min"] = cap_min
             filters["capacity_max"] = cap_max
+            search_mode = "range"
+        else:
+            search_mode = "general"
 
-        # 3. 파일 기반 검색으로 후보 제품 수집
+        # 4. 파일 기반 검색으로 후보 제품 수집
         products = self._search_products(query, filters)
 
-        if not products:
+        # 5. 정확 용량 검색이었는데 결과가 없으면 범위 검색으로 폴백
+        if search_mode == "exact" and not products and product_type:
+            # 범위 검색으로 폴백
+            profile = self.intent_recommender.product_profiles.get(product_type, {})
+            cap_min, cap_max = profile.get("capacity_range", (0, 10000))
+
+            # 범위 필터로 변경
+            filters.pop("capacity_exact", None)
+            filters["capacity_min"] = cap_min
+            filters["capacity_max"] = cap_max
+
+            products = self._search_products(query, filters)
+
+            if products:
+                response_msg = f"{exact_capacity}ml {product_type} 제품이 없습니다. 비슷한 용량 제품을 추천합니다."
+            else:
+                return {
+                    "products": [],
+                    "response": f"{exact_capacity}ml {product_type} 제품을 찾을 수 없습니다.",
+                    "total_count": 0,
+                    "matched_profile": product_type
+                }
+        elif not products:
             return {
                 "products": [],
                 "response": "검색 결과가 없습니다. 다른 조건으로 검색해보세요.",
-                "total_count": 0
+                "total_count": 0,
+                "matched_profile": product_type
             }
+        else:
+            response_msg = None
 
-        # 4. 스마트 추천 엔진 적용
+        # 6. 스마트 추천 엔진 적용
         if product_type:
             # 의도 기반 추천 적용
             recommended_products = self.intent_recommender.recommend(
@@ -294,11 +330,15 @@ class ContextualRAG:
                 limit=10
             )
 
-            response_msg = f"{product_type} 제품을 추천합니다."
+            if response_msg is None:
+                if exact_capacity:
+                    response_msg = f"{exact_capacity}ml {product_type} 제품을 추천합니다."
+                else:
+                    response_msg = f"{product_type} 제품을 추천합니다."
         else:
             # 추천 프로필 없으면 관련성 점수만 사용
             recommended_products = products[:10]
-            response_msg = self._generate_search_response(products, entities)
+            response_msg = response_msg or self._generate_search_response(products, entities)
 
         return {
             "products": recommended_products,
@@ -306,7 +346,8 @@ class ContextualRAG:
             "total_count": len(products),
             "filters_applied": filters,
             "matched_profile": product_type,
-            "recommendation_applied": product_type is not None
+            "recommendation_applied": product_type is not None,
+            "exact_capacity": exact_capacity
         }
 
     def _search_products(
@@ -386,8 +427,21 @@ class ContextualRAG:
             if material.upper() != filters["material"].upper():
                 return False
 
-        # 용량 필터
-        if "capacity_min" in filters or "capacity_max" in filters:
+        # 용량 필터 - 정확 용량 우선
+        if "capacity_exact" in filters:
+            capacity_str = specs.get("capacity", "")
+            if not capacity_str:
+                # 용량 정보가 없으면 제외
+                return False
+            import re
+            match = re.search(r'(\d+)', capacity_str)
+            if match:
+                capacity = float(match.group(1))
+                if capacity != filters["capacity_exact"]:
+                    return False
+            else:
+                return False
+        elif "capacity_min" in filters or "capacity_max" in filters:
             capacity_str = specs.get("capacity", "")
             if capacity_str:
                 import re
@@ -598,3 +652,88 @@ class ContextualRAG:
         except Exception as e:
             print(f"제품 로드 실패 {file_path}: {e}")
             return None
+
+    def _extract_exact_capacity(self, query: str) -> Optional[float]:
+        """쿼리에서 정확한 용량값 추출 (예: '50미리' → 50.0)"""
+        import re
+        # "미리", "ml", "mL" 패턴 찾기
+        match = re.search(r'(\d+)\s*(?:미리|ml|mL)', query)
+        if match:
+            return float(match.group(1))
+        return None
+
+    def _find_nearby_capacities(self, exact_capacity: float, product_type: str) -> Optional[str]:
+        """정확 용량이 없을 때 근처 용량 찾기"""
+        profile = self.intent_recommender.product_profiles.get(product_type, {})
+        if not profile:
+            return None
+
+        cap_min, cap_max = profile.get("capacity_range", (0, 10000))
+
+        # 범위 내의 모든 제품 용량 수집
+        all_capacities = set()
+        for category in ["Bottle", "Cappump", "Pump", "Jar"]:
+            category_path = self.data_root / category
+            if not category_path.exists():
+                continue
+
+            for json_file in category_path.rglob("*.json"):
+                try:
+                    with open(json_file, 'r', encoding='utf-8') as f:
+                        product = json.load(f)
+                    specs = product.get("specifications", {})
+                    capacity_str = specs.get("capacity", "")
+                    if capacity_str:
+                        import re
+                        match = re.search(r'(\d+)', capacity_str)
+                        if match:
+                            cap = float(match.group(1))
+                            if cap_min <= cap <= cap_max:
+                                all_capacities.add(cap)
+                except Exception:
+                    continue
+
+        if not all_capacities:
+            return None
+
+        # 가장 가까운 2개 용량 찾기
+        sorted_caps = sorted(all_capacities)
+        nearby = []
+
+        # 가장 가까운 값 찾기
+        for cap in sorted_caps:
+            if cap != exact_capacity:
+                nearby.append(cap)
+                if len(nearby) >= 2:
+                    break
+
+        if nearby:
+            return ", ".join([f"{int(c)}" for c in nearby])
+        return None
+
+    def _search_nearby_products(
+        self,
+        query: str,
+        nearby_capacities_str: str,
+        filters: Dict,
+        product_type: str
+    ) -> List[Dict]:
+        """근처 용량으로 제품 재검색"""
+        products = []
+
+        # 근처 용량들을 범위로 변환
+        try:
+            nearby_nums = [float(x.strip()) for x in nearby_capacities_str.split(",")]
+            if nearby_nums:
+                cap_min = min(nearby_nums) - 5
+                cap_max = max(nearby_nums) + 5
+        except (ValueError, AttributeError):
+            return []
+
+        # 근처 용량 범위로 검색
+        search_filters = filters.copy()
+        search_filters.pop("capacity_exact", None)
+        search_filters["capacity_min"] = cap_min
+        search_filters["capacity_max"] = cap_max
+
+        return self._search_products(query, search_filters)

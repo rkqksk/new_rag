@@ -93,5 +93,152 @@
     "pricing_updated_at": "2025-10-23T20:42:24.180671"
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:52.021083"
+  "pricing_updated_at": "2025-10-23T18:25:52.021083",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.826756",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "650",
+      "product_name": "20ml 헤비브로우용기",
+      "product_code": "HG020-T003",
+      "category_type": "BOTTLE",
+      "neck_size": "18파이",
+      "capacity_ml": 20.0,
+      "material": "PETG"
+    },
+    "compatible_caps_pumps": {
+      "count": 5,
+      "items": [
+        {
+          "idx": "720",
+          "product_name": "18파이 에센스펌프",
+          "product_code": "EO018-CD07",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 에센스펌프",
+          "vendor": "두코",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "719",
+          "product_name": "18파이 에센스펌프(소)",
+          "product_code": "EO018-CG05",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 에센스펌프(소)",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "926",
+          "product_name": "18파이 일반미스트",
+          "product_code": "SO018-CE21",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "18파이 일반미스트",
+          "vendor": "에코팩",
+          "pricing": {
+            "supply_price": 250.0,
+            "selling_price": 320.0
+          }
+        },
+        {
+          "idx": "925",
+          "product_name": "18파이 일반미스트",
+          "product_code": "SO018-CE15",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 페이셜 미스트펌프",
+          "vendor": "에코팩",
+          "pricing": {
+            "supply_price": 280.0,
+            "selling_price": 350.0
+          }
+        },
+        {
+          "idx": "924",
+          "product_name": "18파이 민자 단캡",
+          "product_code": "CP018-GW02",
+          "neck_size": "18파이",
+          "category_type": "CAP",
+          "material": "기타",
+          "spec": "18파이 민자 단캡",
+          "vendor": "원플라텍",
+          "pricing": {
+            "supply_price": 70.0,
+            "selling_price": 90.0
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "앰플",
+        "세럼",
+        "아이크림",
+        "립밤"
+      ],
+      "by_material": [
+        "PET 적용 가능 제품 전체",
+        "프리미엄 앰플",
+        "세럼",
+        "고가 에센스"
+      ],
+      "combined_recommendation": [
+        "프리미엄 앰플",
+        "세럼"
+      ],
+      "recommended_neck_sizes": [
+        "20파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)"
+      ],
+      "material_warnings": [
+        "UV 차단 코팅 권장"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "fair",
+        "alcohol_low": "good",
+        "ph_range": "3-9"
+      }
+    },
+    "material_info": {
+      "name": "PETG (PET Glycol-modified)",
+      "characteristics": "PET보다 내충격성 우수, 투명 유지, 프리미엄 느낌",
+      "suitable_products": [
+        "PET 적용 가능 제품 전체",
+        "프리미엄 앰플",
+        "세럼",
+        "고가 에센스"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)"
+      ],
+      "warnings": [
+        "UV 차단 코팅 권장"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "fair",
+        "alcohol_low": "good",
+        "ph_range": "3-9"
+      }
+    }
+  }
 }

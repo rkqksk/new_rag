@@ -78,5 +78,230 @@
     "pricing_capacity_ml": 250
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:51.933700"
+  "pricing_updated_at": "2025-10-23T18:25:51.933700",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.855594",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "233",
+      "product_name": "250ml 브로우용기",
+      "product_code": "BT250-R008",
+      "category_type": "BOTTLE",
+      "neck_size": "24파이",
+      "capacity_ml": 250.0,
+      "material": "PET"
+    },
+    "compatible_caps_pumps": {
+      "count": 52,
+      "items": [
+        {
+          "idx": "691",
+          "product_name": "24파이 고점도펌프",
+          "product_code": "PO024-CG12",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "687",
+          "product_name": "24파이 고점도펌프",
+          "product_code": "PO024-CG07",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 고점도펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "845",
+          "product_name": "24파이 무광 고점도펌프",
+          "product_code": "PO024-CG16(M)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "849",
+          "product_name": "24파이 무광 고점도펌프",
+          "product_code": "PO024-CG13(M)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "874",
+          "product_name": "24파이 무광 온오프펌프",
+          "product_code": "PO024-CG15(M)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 무광 온오프펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": 340.0,
+            "selling_price": 500.0
+          }
+        },
+        {
+          "idx": "701",
+          "product_name": "24파이 미니건스프레이",
+          "product_code": "SO024-CG03",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미니건스프레이 ",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "702",
+          "product_name": "24파이 미니건스프레이",
+          "product_code": "SO024-CG04",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미니건스프레이",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "714",
+          "product_name": "24파이 미세분사 미스트펌프",
+          "product_code": "SO024-CG15",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미세분사 미스트펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "707",
+          "product_name": "24파이 미스트펌프",
+          "product_code": "SO024-CG06",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미스트펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "704",
+          "product_name": "24파이 미스트펌프",
+          "product_code": "SO024-CG05(N)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미스트펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "토너",
+        "스킨",
+        "샴푸",
+        "바디워시"
+      ],
+      "by_material": [
+        "수분 기반 토너",
+        "미스트",
+        "에센스",
+        "수딩젤",
+        "알로에젤"
+      ],
+      "combined_recommendation": [
+        "수분 기반 토너"
+      ],
+      "recommended_neck_sizes": [
+        "24파이",
+        "28파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)",
+        "고온 충전 제품"
+      ],
+      "material_warnings": [
+        "UV 차단 코팅 권장 (감광성 원료 함유 시)",
+        "자외선 노출 시 품질 저하 가능"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "fair",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "acid_high": "avoid",
+        "ph_range": "3-9"
+      }
+    },
+    "material_info": {
+      "name": "Polyethylene Terephthalate (폴리에틸렌 테레프탈레이트)",
+      "characteristics": "투명성 우수, 가벼움, 재활용성 높음",
+      "suitable_products": [
+        "수분 기반 토너",
+        "미스트",
+        "에센스",
+        "수딩젤",
+        "알로에젤"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)",
+        "고온 충전 제품"
+      ],
+      "warnings": [
+        "UV 차단 코팅 권장 (감광성 원료 함유 시)",
+        "자외선 노출 시 품질 저하 가능"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "fair",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "acid_high": "avoid",
+        "ph_range": "3-9"
+      }
+    }
+  }
 }

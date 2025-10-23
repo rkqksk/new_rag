@@ -77,5 +77,38 @@
     "package": null,
     "note": "JP300-GM08",
     "updated_at": "2025-10-23T20:44:03.793204"
+  },
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.936630",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "893",
+      "product_name": "86파이 크림 중간캡",
+      "product_code": "YP086-GM10",
+      "category_type": "CAP",
+      "neck_size": "86파이",
+      "capacity_ml": null,
+      "material": "PP"
+    },
+    "material_info": {
+      "name": "Polypropylene (폴리프로필렌)",
+      "characteristics": "내열성, 내화학성 우수, 스팀 살균 가능",
+      "suitable_products": [
+        "캡/펌프 소재로 주로 사용",
+        "고온 충전 제품",
+        "다양한 화학 제형"
+      ],
+      "unsuitable_products": [
+        "극강산 (pH <2)",
+        "극강염기 (pH >12)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "oil_based": "excellent",
+        "alcohol": "excellent",
+        "heat_resistance": "excellent",
+        "ph_range": "2-12"
+      }
+    }
   }
 }

@@ -52,6 +52,7 @@ class ChatQueryResponse(BaseModel):
     response: str
     total_count: int
     matched_profile: Optional[str] = None
+    exact_capacity: Optional[float] = None
 
 
 class SessionInfoResponse(BaseModel):

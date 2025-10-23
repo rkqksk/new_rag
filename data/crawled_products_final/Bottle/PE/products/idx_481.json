@@ -59,5 +59,154 @@
     "material_detail": "PE/PET",
     "pricing_updated_at": "2025-10-23T20:42:24.108738"
   },
-  "pricing_updated_at": "2025-10-23T18:25:51.814210"
+  "pricing_updated_at": "2025-10-23T18:25:51.814210",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.700803",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "481",
+      "product_name": "320ml 튜브브로우용기",
+      "product_code": "TE320-H002",
+      "category_type": "BOTTLE",
+      "neck_size": "18파이",
+      "capacity_ml": 320.0,
+      "material": "PE"
+    },
+    "compatible_caps_pumps": {
+      "count": 5,
+      "items": [
+        {
+          "idx": "720",
+          "product_name": "18파이 에센스펌프",
+          "product_code": "EO018-CD07",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 에센스펌프",
+          "vendor": "두코",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "719",
+          "product_name": "18파이 에센스펌프(소)",
+          "product_code": "EO018-CG05",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 에센스펌프(소)",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "926",
+          "product_name": "18파이 일반미스트",
+          "product_code": "SO018-CE21",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "18파이 일반미스트",
+          "vendor": "에코팩",
+          "pricing": {
+            "supply_price": 250.0,
+            "selling_price": 320.0
+          }
+        },
+        {
+          "idx": "925",
+          "product_name": "18파이 일반미스트",
+          "product_code": "SO018-CE15",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 페이셜 미스트펌프",
+          "vendor": "에코팩",
+          "pricing": {
+            "supply_price": 280.0,
+            "selling_price": 350.0
+          }
+        },
+        {
+          "idx": "924",
+          "product_name": "18파이 민자 단캡",
+          "product_code": "CP018-GW02",
+          "neck_size": "18파이",
+          "category_type": "CAP",
+          "material": "기타",
+          "spec": "18파이 민자 단캡",
+          "vendor": "원플라텍",
+          "pricing": {
+            "supply_price": 70.0,
+            "selling_price": 90.0
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "바디로션",
+        "샴푸",
+        "클렌징",
+        "핸드워시"
+      ],
+      "by_material": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "combined_recommendation": [],
+      "recommended_neck_sizes": [
+        "28파이",
+        "32파이",
+        "43파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "material_warnings": [],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    },
+    "material_info": {
+      "name": "Polyethylene (폴리에틸렌)",
+      "characteristics": "내화학성 우수, 유연성, 경제적",
+      "suitable_products": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    }
+  }
 }

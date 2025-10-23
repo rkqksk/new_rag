@@ -61,5 +61,154 @@
     "pricing_capacity_ml": 120
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:51.842312"
+  "pricing_updated_at": "2025-10-23T18:25:51.842312",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.732780",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "189",
+      "product_name": "120ml 브로우용기",
+      "product_code": "BE120-H004(18)",
+      "category_type": "BOTTLE",
+      "neck_size": "18파이",
+      "capacity_ml": 120.0,
+      "material": "PE"
+    },
+    "compatible_caps_pumps": {
+      "count": 5,
+      "items": [
+        {
+          "idx": "720",
+          "product_name": "18파이 에센스펌프",
+          "product_code": "EO018-CD07",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 에센스펌프",
+          "vendor": "두코",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "719",
+          "product_name": "18파이 에센스펌프(소)",
+          "product_code": "EO018-CG05",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 에센스펌프(소)",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "926",
+          "product_name": "18파이 일반미스트",
+          "product_code": "SO018-CE21",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "18파이 일반미스트",
+          "vendor": "에코팩",
+          "pricing": {
+            "supply_price": 250.0,
+            "selling_price": 320.0
+          }
+        },
+        {
+          "idx": "925",
+          "product_name": "18파이 일반미스트",
+          "product_code": "SO018-CE15",
+          "neck_size": "18파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø18 페이셜 미스트펌프",
+          "vendor": "에코팩",
+          "pricing": {
+            "supply_price": 280.0,
+            "selling_price": 350.0
+          }
+        },
+        {
+          "idx": "924",
+          "product_name": "18파이 민자 단캡",
+          "product_code": "CP018-GW02",
+          "neck_size": "18파이",
+          "category_type": "CAP",
+          "material": "기타",
+          "spec": "18파이 민자 단캡",
+          "vendor": "원플라텍",
+          "pricing": {
+            "supply_price": 70.0,
+            "selling_price": 90.0
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "로션",
+        "에멀젼",
+        "토너"
+      ],
+      "by_material": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "combined_recommendation": [
+        "수분 기반 토너",
+        "로션/에멀젼"
+      ],
+      "recommended_neck_sizes": [
+        "24파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "material_warnings": [],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    },
+    "material_info": {
+      "name": "Polyethylene (폴리에틸렌)",
+      "characteristics": "내화학성 우수, 유연성, 경제적",
+      "suitable_products": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    }
+  }
 }

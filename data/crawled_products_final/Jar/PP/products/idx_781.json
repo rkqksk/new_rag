@@ -52,5 +52,73 @@
   "idx": "781",
   "url": "http://chungjinkorea.com/kr/product/view.php?idx=781",
   "crawled_at": "2025-10-18T21:47:37.203389",
-  "category_label": "jar"
+  "category_label": "jar",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.953252",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "781",
+      "product_name": "500g 크림사출용기",
+      "product_code": "JP500-GM02",
+      "category_type": "JAR",
+      "neck_size": "92파이",
+      "capacity_ml": 500.0,
+      "material": "PP"
+    },
+    "compatible_caps_pumps": {
+      "count": 0,
+      "items": []
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "바디로션",
+        "샴푸",
+        "클렌징",
+        "핸드워시"
+      ],
+      "by_material": [
+        "캡/펌프 소재로 주로 사용",
+        "고온 충전 제품",
+        "다양한 화학 제형"
+      ],
+      "combined_recommendation": [],
+      "recommended_neck_sizes": [
+        "28파이",
+        "32파이",
+        "43파이"
+      ],
+      "unsuitable_products": [
+        "극강산 (pH <2)",
+        "극강염기 (pH >12)"
+      ],
+      "material_warnings": [],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "oil_based": "excellent",
+        "alcohol": "excellent",
+        "heat_resistance": "excellent",
+        "ph_range": "2-12"
+      }
+    },
+    "material_info": {
+      "name": "Polypropylene (폴리프로필렌)",
+      "characteristics": "내열성, 내화학성 우수, 스팀 살균 가능",
+      "suitable_products": [
+        "캡/펌프 소재로 주로 사용",
+        "고온 충전 제품",
+        "다양한 화학 제형"
+      ],
+      "unsuitable_products": [
+        "극강산 (pH <2)",
+        "극강염기 (pH >12)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "oil_based": "excellent",
+        "alcohol": "excellent",
+        "heat_resistance": "excellent",
+        "ph_range": "2-12"
+      }
+    }
+  }
 }

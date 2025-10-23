@@ -90,5 +90,84 @@
     "pricing_capacity_ml": 200
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:51.922023"
+  "pricing_updated_at": "2025-10-23T18:25:51.922023",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.779161",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "882",
+      "product_name": "200ml 알약용기",
+      "product_code": "BE200-P001",
+      "category_type": "BOTTLE",
+      "neck_size": "38파이",
+      "capacity_ml": 200.0,
+      "material": "PE"
+    },
+    "compatible_caps_pumps": {
+      "count": 0,
+      "items": []
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "토너",
+        "스킨",
+        "샴푸",
+        "바디워시"
+      ],
+      "by_material": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "combined_recommendation": [
+        "수분 기반 토너"
+      ],
+      "recommended_neck_sizes": [
+        "24파이",
+        "28파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "material_warnings": [],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    },
+    "material_info": {
+      "name": "Polyethylene (폴리에틸렌)",
+      "characteristics": "내화학성 우수, 유연성, 경제적",
+      "suitable_products": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    }
+  }
 }

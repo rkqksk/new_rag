@@ -80,5 +80,73 @@
     "pricing_capacity_ml": 1000
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:51.910227"
+  "pricing_updated_at": "2025-10-23T18:25:51.910227",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.766253",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "50",
+      "product_name": "1000ml 브로우용기",
+      "product_code": "BE111-R006",
+      "category_type": "BOTTLE",
+      "neck_size": "33파이",
+      "capacity_ml": 1000.0,
+      "material": "PE"
+    },
+    "compatible_caps_pumps": {
+      "count": 0,
+      "items": []
+    },
+    "recommended_applications": {
+      "by_capacity": [],
+      "by_material": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "combined_recommendation": [],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "material_warnings": [],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    },
+    "material_info": {
+      "name": "Polyethylene (폴리에틸렌)",
+      "characteristics": "내화학성 우수, 유연성, 경제적",
+      "suitable_products": [
+        "수분 기반 토너",
+        "로션/에멀젼",
+        "에센스 (저점도)",
+        "민감성 제품",
+        "베이비 케어"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>30%)",
+        "고농도 알코올 (>30%)",
+        "강산성 제품 (pH <3)",
+        "강염기성 제품 (pH >11)"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "poor",
+        "alcohol_low": "good",
+        "alcohol_high": "avoid",
+        "ph_range": "4-10"
+      }
+    }
+  }
 }

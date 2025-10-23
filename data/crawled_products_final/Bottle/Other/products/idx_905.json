@@ -103,5 +103,177 @@
     "pricing_capacity_ml": 200
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:28:04.191431"
+  "pricing_updated_at": "2025-10-23T18:28:04.191431",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.851335",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "905",
+      "product_name": "200ml 다층 튜브용기",
+      "product_code": "TH200-R001",
+      "category_type": "BOTTLE",
+      "neck_size": "32파이",
+      "capacity_ml": 200.0,
+      "material": "다층"
+    },
+    "compatible_caps_pumps": {
+      "count": 18,
+      "items": [
+        {
+          "idx": "692",
+          "product_name": "32파이 고점도펌프",
+          "product_code": "PO032-CG12",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "689",
+          "product_name": "32파이 고점도펌프",
+          "product_code": "PO032-CG07",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 고점도펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "694",
+          "product_name": "32파이 리무버 펌프",
+          "product_code": "PO032-CG14",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 리무버 펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "693",
+          "product_name": "32파이 무광 고점도펌프",
+          "product_code": "PO032-CG13(M)",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "847",
+          "product_name": "32파이 무광 고점도펌프",
+          "product_code": "PO032-CG16(M)",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "681",
+          "product_name": "32파이 일반펌프",
+          "product_code": "PO032-CG04",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "669",
+          "product_name": "32파이 일반펌프",
+          "product_code": "PO032-CG02",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "675",
+          "product_name": "32파이 일반펌프",
+          "product_code": "PO032-CG03",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "686",
+          "product_name": "32파이 일반펌프",
+          "product_code": "PO032-CG06(민)",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "684",
+          "product_name": "32파이 일반펌프",
+          "product_code": "PO032-CG05(민)",
+          "neck_size": "32파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "32파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "토너",
+        "스킨",
+        "샴푸",
+        "바디워시"
+      ],
+      "by_material": [],
+      "combined_recommendation": [],
+      "recommended_neck_sizes": [
+        "24파이",
+        "28파이"
+      ]
+    }
+  }
 }

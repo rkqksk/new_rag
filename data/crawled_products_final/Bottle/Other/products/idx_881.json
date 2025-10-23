@@ -81,5 +81,178 @@
     "pricing_updated_at": "2025-10-23T20:42:24.194291"
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:28:04.188689"
+  "pricing_updated_at": "2025-10-23T18:28:04.188689",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.846224",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "881",
+      "product_name": "450ml 다층브로우용기",
+      "product_code": "MH450-G001",
+      "category_type": "BOTTLE",
+      "neck_size": "28파이",
+      "capacity_ml": 450.0,
+      "material": "다층"
+    },
+    "compatible_caps_pumps": {
+      "count": 23,
+      "items": [
+        {
+          "idx": "698",
+          "product_name": "28파이 건스프레이",
+          "product_code": "SO028-CG02",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø28 건스프레이 ",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "697",
+          "product_name": "28파이 건스프레이 ",
+          "product_code": "SO028-CG01",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø28 건스프레이 ",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "688",
+          "product_name": "28파이 고점도펌프",
+          "product_code": "PO028-CG07",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 고점도펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "848",
+          "product_name": "28파이 무광 고점도 펌프",
+          "product_code": "PO028-CG13(M)",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "846",
+          "product_name": "28파이 무광 고점도펌프",
+          "product_code": "PO028-CG16(M)",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "930",
+          "product_name": "28파이 오일펌프",
+          "product_code": "IO028-CJ01",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 오일펌프",
+          "vendor": "정상",
+          "pricing": {
+            "supply_price": 490.0,
+            "selling_price": 570.0
+          }
+        },
+        {
+          "idx": "859",
+          "product_name": "28파이 온오프펌프",
+          "product_code": "PO028-CG18(민)",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 온오프펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "857",
+          "product_name": "28파이 온오프펌프",
+          "product_code": "PO028-CG17",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 온오프펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": 160.0
+          }
+        },
+        {
+          "idx": "680",
+          "product_name": "28파이 일반펌프",
+          "product_code": "PO028-CG04(민)",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "679",
+          "product_name": "28파이 일반펌프",
+          "product_code": "PO028-CG04",
+          "neck_size": "28파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "28파이 일반펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "바디로션",
+        "샴푸",
+        "클렌징",
+        "핸드워시"
+      ],
+      "by_material": [],
+      "combined_recommendation": [],
+      "recommended_neck_sizes": [
+        "28파이",
+        "32파이",
+        "43파이"
+      ]
+    }
+  }
 }

@@ -78,5 +78,82 @@
     "pricing_capacity_ml": 80
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:52.018495"
+  "pricing_updated_at": "2025-10-23T18:25:52.018495",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.823285",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "535",
+      "product_name": "80ml 브로우용기",
+      "product_code": "BG080-G005",
+      "category_type": "BOTTLE",
+      "neck_size": "22파이",
+      "capacity_ml": 80.0,
+      "material": "PETG"
+    },
+    "compatible_caps_pumps": {
+      "count": 0,
+      "items": []
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "에센스",
+        "토너",
+        "미스트",
+        "세럼"
+      ],
+      "by_material": [
+        "PET 적용 가능 제품 전체",
+        "프리미엄 앰플",
+        "세럼",
+        "고가 에센스"
+      ],
+      "combined_recommendation": [
+        "세럼",
+        "고가 에센스"
+      ],
+      "recommended_neck_sizes": [
+        "20파이",
+        "24파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)"
+      ],
+      "material_warnings": [
+        "UV 차단 코팅 권장"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "fair",
+        "alcohol_low": "good",
+        "ph_range": "3-9"
+      }
+    },
+    "material_info": {
+      "name": "PETG (PET Glycol-modified)",
+      "characteristics": "PET보다 내충격성 우수, 투명 유지, 프리미엄 느낌",
+      "suitable_products": [
+        "PET 적용 가능 제품 전체",
+        "프리미엄 앰플",
+        "세럼",
+        "고가 에센스"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)"
+      ],
+      "warnings": [
+        "UV 차단 코팅 권장"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "fair",
+        "alcohol_low": "good",
+        "ph_range": "3-9"
+      }
+    }
+  }
 }

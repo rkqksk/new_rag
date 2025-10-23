@@ -80,5 +80,223 @@
     "pricing_updated_at": "2025-10-23T20:42:24.155189"
   },
   "pricing_added_at": "2025-10-23",
-  "pricing_updated_at": "2025-10-23T18:25:51.991738"
+  "pricing_updated_at": "2025-10-23T18:25:51.991738",
+  "compatibility_analysis": {
+    "analyzed_at": "2025-10-24T01:29:09.790946",
+    "analysis_version": "1.0.0",
+    "product_info": {
+      "idx": "970",
+      "product_name": "50ml 브로우용기",
+      "product_code": "BG050-G004",
+      "category_type": "BOTTLE",
+      "neck_size": "24파이",
+      "capacity_ml": 50.0,
+      "material": "PETG"
+    },
+    "compatible_caps_pumps": {
+      "count": 52,
+      "items": [
+        {
+          "idx": "691",
+          "product_name": "24파이 고점도펌프",
+          "product_code": "PO024-CG12",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "687",
+          "product_name": "24파이 고점도펌프",
+          "product_code": "PO024-CG07",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 고점도펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "845",
+          "product_name": "24파이 무광 고점도펌프",
+          "product_code": "PO024-CG16(M)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "849",
+          "product_name": "24파이 무광 고점도펌프",
+          "product_code": "PO024-CG13(M)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 무광 고점도펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "874",
+          "product_name": "24파이 무광 온오프펌프",
+          "product_code": "PO024-CG15(M)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "24파이 무광 온오프펌프",
+          "vendor": "지에프",
+          "pricing": {
+            "supply_price": 340.0,
+            "selling_price": 500.0
+          }
+        },
+        {
+          "idx": "701",
+          "product_name": "24파이 미니건스프레이",
+          "product_code": "SO024-CG03",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미니건스프레이 ",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "702",
+          "product_name": "24파이 미니건스프레이",
+          "product_code": "SO024-CG04",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미니건스프레이",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "714",
+          "product_name": "24파이 미세분사 미스트펌프",
+          "product_code": "SO024-CG15",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미세분사 미스트펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "707",
+          "product_name": "24파이 미스트펌프",
+          "product_code": "SO024-CG06",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미스트펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        },
+        {
+          "idx": "704",
+          "product_name": "24파이 미스트펌프",
+          "product_code": "SO024-CG05(N)",
+          "neck_size": "24파이",
+          "category_type": "PUMP",
+          "material": "기타",
+          "spec": "Ø24 미스트펌프",
+          "vendor": "지에프테크",
+          "pricing": {
+            "supply_price": null,
+            "selling_price": null
+          }
+        }
+      ]
+    },
+    "recommended_applications": {
+      "by_capacity": [
+        "에센스",
+        "토너",
+        "미스트",
+        "세럼"
+      ],
+      "by_material": [
+        "PET 적용 가능 제품 전체",
+        "프리미엄 앰플",
+        "세럼",
+        "고가 에센스"
+      ],
+      "combined_recommendation": [
+        "세럼",
+        "고가 에센스"
+      ],
+      "recommended_neck_sizes": [
+        "20파이",
+        "24파이"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)"
+      ],
+      "material_warnings": [
+        "UV 차단 코팅 권장"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "fair",
+        "alcohol_low": "good",
+        "ph_range": "3-9"
+      }
+    },
+    "material_info": {
+      "name": "PETG (PET Glycol-modified)",
+      "characteristics": "PET보다 내충격성 우수, 투명 유지, 프리미엄 느낌",
+      "suitable_products": [
+        "PET 적용 가능 제품 전체",
+        "프리미엄 앰플",
+        "세럼",
+        "고가 에센스"
+      ],
+      "unsuitable_products": [
+        "고농도 오일 (>20%)",
+        "강산성 제품 (pH <3)"
+      ],
+      "warnings": [
+        "UV 차단 코팅 권장"
+      ],
+      "chemical_resistance": {
+        "water_based": "excellent",
+        "low_oil": "good",
+        "high_oil": "fair",
+        "alcohol_low": "good",
+        "ph_range": "3-9"
+      }
+    }
+  }
 }
