@@ -1,0 +1,69 @@
+{
+  "product_name": "800ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658124594.jpg",
+      "filename": "GOODS1_1658124594.jpg",
+      "alt": "800ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "800ml 브로우용기",
+    "제품 코드": "BE800-G011",
+    "재질(원료)": "PE",
+    "사양": "77x212(mm)",
+    "capacity": "800ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.652523",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658124594.jpg",
+      "filename": "GOODS1_1658124594.jpg",
+      "alt": "800ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_105_main_1.jpg"
+    }
+  ],
+  "idx": "105",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=105",
+  "crawled_at": "2025-10-21T21:19:37.841362",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 800,
+    "matched_price_range": "1000",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 400,
+    "discount_price": 380,
+    "pricing_capacity_ml": 750,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.140188"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.908647"
+}

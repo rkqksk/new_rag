@@ -1,0 +1,52 @@
+{
+  "product_name": "28파이 일반펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661745588.jpg",
+      "filename": "GOODS1_1661745588.jpg",
+      "alt": "28파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_674_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PO028-CG03(민)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661745588.jpg",
+      "filename": "GOODS1_1661745588.jpg",
+      "alt": "28파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_674_main_1.jpg"
+    }
+  ],
+  "idx": "674",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=674",
+  "crawled_at": "2025-10-18T06:49:49.721472",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.574260",
+  "product_code": "PO028-CG03(민)",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "Ø28 펌프 216DVP",
+    "spec": "28파이 일반펌프",
+    "detail": "내경 Ø28",
+    "package": "800ea",
+    "note": "GF-216D (28Ø)",
+    "updated_at": "2025-10-23T20:34:42.108779"
+  }
+}

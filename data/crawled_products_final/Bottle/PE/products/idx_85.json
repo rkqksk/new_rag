@@ -1,0 +1,106 @@
+{
+  "product_name": "50ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_165812344920250225150646.jpg",
+      "filename": "ADD_GOODS2_165812344920250225150646.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_165812344920250225150646.jpg",
+      "filename": "ADD_GOODS3_165812344920250225150646.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165812344920250225150646.jpg",
+      "filename": "GOODS1_165812344920250225150646.jpg",
+      "alt": "50ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_165812344920250225150646.jpg",
+      "filename": "ADD_GOODS1_165812344920250225150646.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "50ml 브로우용기",
+    "제품 코드": "BE050-G003",
+    "재질(원료)": "PE",
+    "사양": "32x102(mm)",
+    "capacity": "50ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.656623",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=85",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_165812344920250225150646.jpg",
+      "filename": "ADD_GOODS2_165812344920250225150646.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_85_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_165812344920250225150646.jpg",
+      "filename": "ADD_GOODS3_165812344920250225150646.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_85_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165812344920250225150646.jpg",
+      "filename": "GOODS1_165812344920250225150646.jpg",
+      "alt": "50ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_85_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_165812344920250225150646.jpg",
+      "filename": "ADD_GOODS1_165812344920250225150646.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_85_additional_2_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_85_print_area.pdf",
+  "idx": "85",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=85",
+  "crawled_at": "2025-10-21T21:16:58.647430",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 50,
+    "matched_price_range": "10-50",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 10,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.143475"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.912625"
+}

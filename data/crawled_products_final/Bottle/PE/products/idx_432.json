@@ -1,0 +1,77 @@
+{
+  "product_name": "280ml 거품브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659927580.jpg",
+      "filename": "GOODS1_1659927580.jpg",
+      "alt": "280ml 거품브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1659927580_1.jpg",
+      "filename": "1659927580_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "280ml 거품브로우용기",
+    "제품 코드": "GE280-U001",
+    "재질(원료)": "PE",
+    "사양": "96x64x109(mm)",
+    "capacity": "280ml",
+    "dimensions": "Ø43",
+    "neck_size": "43파이",
+    "neck_size_mm": 43,
+    "neck_updated_at": "2025-10-23T21:00:50.610966",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=432",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659927580.jpg",
+      "filename": "GOODS1_1659927580.jpg",
+      "alt": "280ml 거품브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_432_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1659927580_1.jpg",
+      "filename": "1659927580_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_432_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_432_print_area.pdf",
+  "idx": "432",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=432",
+  "crawled_at": "2025-10-21T21:56:39.940350",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 280,
+    "matched_price_range": "300",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 300,
+      "discount": 230
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 280,
+    "discount_price": 220,
+    "pricing_capacity_ml": 250,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.125640"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.845721"
+}

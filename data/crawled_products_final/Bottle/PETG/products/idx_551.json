@@ -1,0 +1,97 @@
+{
+  "product_name": "40ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660631504.jpg",
+      "filename": "GOODS1_1660631504.jpg",
+      "alt": "40ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660631504.jpg",
+      "filename": "ADD_GOODS1_1660631504.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "40ml 브로우용기",
+    "제품 코드": "BG040-L001",
+    "재질(원료)": "PETG",
+    "사양": "29x96(mm)",
+    "capacity": "40ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.687988",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=551",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660631504.jpg",
+      "filename": "GOODS1_1660631504.jpg",
+      "alt": "40ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_551_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660631504.jpg",
+      "filename": "ADD_GOODS1_1660631504.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_551_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_551_print_area.pdf",
+  "idx": "551",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=551",
+  "crawled_at": "2025-10-21T22:12:23.644932",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 40,
+    "matched_price_range": "10-50",
+    "material": "PETG",
+    "thickness": "얇은",
+    "base_price": {
+      "regular": 220,
+      "discount": 160
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "coating_capacity_range": "10-50",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 220,
+      "discount": 160
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 220,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:15.024013",
+    "regular_price": 240,
+    "discount_price": 180,
+    "pricing_capacity_ml": 10,
+    "material_detail": "PETG(얇은)",
+    "pricing_updated_at": "2025-10-23T20:42:24.160120"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.999092"
+}

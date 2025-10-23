@@ -1,0 +1,98 @@
+{
+  "product_name": "5ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1692669350.jpg",
+      "filename": "ADD_GOODS2_1692669350.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_850_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1692669350.jpg",
+      "filename": "GOODS1_1692669350.jpg",
+      "alt": "5ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_850_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1692669350.jpg",
+      "filename": "ADD_GOODS1_1692669350.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_850_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "5ml 헤비브로우용기",
+    "제품 코드": "HT005-FW01",
+    "재질(원료)": "PET",
+    "사양": "24x45(mm)",
+    "capacity": "5ml",
+    "dimensions": "Ø18",
+    "neck_size": "18파이",
+    "neck_size_mm": 18,
+    "neck_updated_at": "2025-10-23T21:00:50.773012",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=850",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1692669350.jpg",
+      "filename": "ADD_GOODS2_1692669350.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_850_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1692669350.jpg",
+      "filename": "GOODS1_1692669350.jpg",
+      "alt": "5ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_850_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1692669350.jpg",
+      "filename": "ADD_GOODS1_1692669350.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_850_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_850_print_area.pdf",
+  "idx": "850",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=850",
+  "crawled_at": "2025-10-18T21:40:50.896506",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 5,
+    "matched_price_range": "10-50",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "coating_capacity_range": "10-50",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 220,
+      "discount": 160
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.961641"
+}

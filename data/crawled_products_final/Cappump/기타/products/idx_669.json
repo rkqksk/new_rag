@@ -1,0 +1,71 @@
+{
+  "product_name": "32파이 일반펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661745347.jpg",
+      "filename": "GOODS1_1661745347.jpg",
+      "alt": "32파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_669_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661745347.jpg",
+      "filename": "ADD_GOODS1_1661745347.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_669_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "32파이 일반펌프",
+    "제품 코드": "PO032-CG02",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø32",
+    "dimensions": "Ø32",
+    "neck_size": "32파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661745347.jpg",
+      "filename": "GOODS1_1661745347.jpg",
+      "alt": "32파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_669_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661745347.jpg",
+      "filename": "ADD_GOODS1_1661745347.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_669_main_2.jpg"
+    }
+  ],
+  "idx": "669",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=669",
+  "crawled_at": "2025-10-18T22:00:30.165957",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 120,
+    "cap_product_type": "캡_원터치캡"
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "PUMP",
+  "product_code": "PO032-CG02",
+  "product_code_updated_at": "2025-10-23T20:43:45.368613",
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "Ø32 펌프 322VP ",
+    "spec": "32파이 일반펌프",
+    "detail": "내경 Ø32",
+    "package": "500ea(노즐180이상 450)",
+    "note": "GF-322 (33Ø)",
+    "updated_at": "2025-10-23T20:44:03.795964"
+  }
+}

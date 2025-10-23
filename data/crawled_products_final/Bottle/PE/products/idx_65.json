@@ -1,0 +1,70 @@
+{
+  "product_name": "600ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658121339.jpg",
+      "filename": "GOODS1_1658121339.jpg",
+      "alt": "600ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "600ml 브로우용기",
+    "제품 코드": "BE600-R011",
+    "재질(원료)": "PE",
+    "사양": "75x195(mm)",
+    "capacity": "600ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.596780",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=65",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658121339.jpg",
+      "filename": "GOODS1_1658121339.jpg",
+      "alt": "600ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_65_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_65_print_area.pdf",
+  "idx": "65",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=65",
+  "crawled_at": "2025-10-21T21:14:09.430640",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 600,
+    "matched_price_range": "750",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 350,
+    "discount_price": 260,
+    "pricing_capacity_ml": 500,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.111734"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.825595"
+}

@@ -1,0 +1,76 @@
+{
+  "product_name": "90ml 튜브브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660005283.jpg",
+      "filename": "GOODS1_1660005283.jpg",
+      "alt": "90ml 튜브브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660005283.jpg",
+      "filename": "ADD_GOODS1_1660005283.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "90ml 튜브브로우용기",
+    "제품 코드": "TE090-U002",
+    "재질(원료)": "PE",
+    "사양": "30x145(mm)",
+    "capacity": "90ml",
+    "dimensions": "Ø18",
+    "neck_size": "18파이",
+    "neck_size_mm": 18,
+    "neck_updated_at": "2025-10-23T21:00:50.623012",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=469",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660005283.jpg",
+      "filename": "GOODS1_1660005283.jpg",
+      "alt": "90ml 튜브브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_469_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660005283.jpg",
+      "filename": "ADD_GOODS1_1660005283.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_469_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_469_print_area.pdf",
+  "idx": "469",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=469",
+  "crawled_at": "2025-10-21T22:01:34.248211",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 90,
+    "matched_price_range": "100",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 180,
+      "discount": 130
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 80,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.128243"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.857597"
+}

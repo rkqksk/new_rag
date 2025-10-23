@@ -30,16 +30,20 @@ class AppConfig:
         load_dotenv()
 
         # Qdrant Configuration
-        self.qdrant_host = os.getenv("QDRANT_HOST", "172.28.0.2")
+        # Default to localhost for development (local Qdrant via docker-compose)
+        # Use Docker IP (172.28.0.2) in production via .env
+        self.qdrant_host = os.getenv("QDRANT_HOST", "localhost")
         self.qdrant_port = int(os.getenv("QDRANT_HTTP_PORT", "6333"))
         self.qdrant_url = f"http://{self.qdrant_host}:{self.qdrant_port}"
 
         # Redis Configuration
-        self.redis_host = os.getenv("REDIS_HOST", "172.28.0.3")
+        # Default to localhost for development
+        self.redis_host = os.getenv("REDIS_HOST", "localhost")
         self.redis_port = int(os.getenv("REDIS_PORT", "6379"))
 
         # PostgreSQL Configuration
-        self.postgres_host = os.getenv("POSTGRES_HOST", "172.28.0.4")
+        # Default to localhost for development
+        self.postgres_host = os.getenv("POSTGRES_HOST", "localhost")
         self.postgres_user = os.getenv("POSTGRES_USER", "postgres")
         self.postgres_password = os.getenv("POSTGRES_PASSWORD")
         self.postgres_db = os.getenv("POSTGRES_DB", "rag_enterprise")
@@ -88,10 +92,9 @@ def get_config() -> AppConfig:
 # Infrastructure Dependencies
 # ============================================================
 
-@lru_cache()
 def get_qdrant_client(config: AppConfig = Depends(get_config)) -> QdrantClient:
     """
-    Get Qdrant client (singleton)
+    Get Qdrant client (no caching to allow config changes)
 
     Args:
         config: Application configuration
@@ -180,6 +183,40 @@ def get_rag_qa_service(
         embedding_model=embedding_model,
         ollama_url=config.ollama_url,
         model_name=config.ollama_model
+    )
+
+
+def get_async_rag_qa_service(
+    qdrant_client: QdrantClient = Depends(get_qdrant_client),
+    embedding_model: SentenceTransformer = Depends(get_embedding_model),
+    config: AppConfig = Depends(get_config)
+):
+    """
+    Get Async RAG QA Service (request-scoped - new instance per request)
+
+    Provides async/await optimized version of RAG QA service with:
+    - Connection pooling for HTTP requests
+    - Batch processing support
+    - Intelligent retry logic
+    - Thread pool execution for CPU-bound tasks
+
+    Args:
+        qdrant_client: Qdrant vector database client
+        embedding_model: Sentence transformer model
+        config: Application configuration
+
+    Returns:
+        AsyncRAGQAService instance
+    """
+    from app.services.async_rag_qa_service import AsyncRAGQAService
+
+    return AsyncRAGQAService(
+        qdrant_client=qdrant_client,
+        embedding_model=embedding_model,
+        ollama_url=config.ollama_url,
+        model_name=config.ollama_model,
+        timeout=30,
+        max_retries=3
     )
 
 

@@ -1,0 +1,85 @@
+{
+  "product_name": "450ml 다층브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1710984860.jpg",
+      "filename": "GOODS1_1710984860.jpg",
+      "alt": "450ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_881_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1710984860.jpg",
+      "filename": "ADD_GOODS1_1710984860.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_881_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "450ml 다층브로우용기",
+    "제품 코드": "MH450-G001",
+    "재질(원료)": "혼합",
+    "사양": "73x143(mm)",
+    "capacity": "450ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.740275",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=881",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1710984860.jpg",
+      "filename": "GOODS1_1710984860.jpg",
+      "alt": "450ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_881_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1710984860.jpg",
+      "filename": "ADD_GOODS1_1710984860.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_881_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/Other/print_area/idx_881_print_area.pdf",
+  "idx": "881",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=881",
+  "crawled_at": "2025-10-18T21:36:32.945296",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 450,
+    "matched_price_range": "500",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 500,
+      "discount": 430
+    },
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "material_metadata": null,
+    "regular_price": 380,
+    "discount_price": 320,
+    "pricing_capacity_ml": 400,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.194291"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.188689"
+}

@@ -1,0 +1,42 @@
+{
+  "product_name": "20파이 내지캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661750503.jpg",
+      "filename": "GOODS1_1661750503.jpg",
+      "alt": "20파이 내지캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_759_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CL020-CG11"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661750503.jpg",
+      "filename": "GOODS1_1661750503.jpg",
+      "alt": "20파이 내지캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_759_main_1.jpg"
+    }
+  ],
+  "idx": "759",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=759",
+  "crawled_at": "2025-10-18T06:46:00.822305",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.568796",
+  "product_code": "CL020-CG11"
+}

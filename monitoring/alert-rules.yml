@@ -1,0 +1,68 @@
+# Prometheus Alert Rules for RAG Enterprise
+
+groups:
+  - name: rag_enterprise_alerts
+    interval: 30s
+    rules:
+      # High error rate alert
+      - alert: HighErrorRate
+        expr: rate(errors_total[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+          component: '{{ $labels.component }}'
+        annotations:
+          summary: "High error rate detected"
+          description: "Error rate is {{ $value }} errors/sec for {{ $labels.component }}"
+
+      # Slow Q&A response time
+      - alert: SlowQAResponse
+        expr: histogram_quantile(0.95, rate(qa_request_duration_seconds_bucket[5m])) > 5
+        for: 5m
+        labels:
+          severity: warning
+          service: '{{ $labels.service_type }}'
+        annotations:
+          summary: "Slow Q&A response time"
+          description: "95th percentile response time is {{ $value }}s for {{ $labels.service_type }}"
+
+      # High active requests
+      - alert: HighActiveRequests
+        expr: active_requests > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High number of active requests"
+          description: "{{ $value }} active requests detected"
+
+      # LLM timeout rate
+      - alert: HighLLMTimeoutRate
+        expr: rate(llm_requests_total{status="timeout"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: critical
+          model: '{{ $labels.model }}'
+        annotations:
+          summary: "High LLM timeout rate"
+          description: "LLM timeout rate is {{ $value }} for {{ $labels.model }}"
+
+      # Low confidence scores
+      - alert: LowConfidenceScores
+        expr: avg_over_time(qa_confidence_score[15m]) < 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low average confidence scores"
+          description: "Average confidence score is {{ $value }}"
+
+      # Qdrant search latency
+      - alert: HighQdrantLatency
+        expr: histogram_quantile(0.95, rate(qdrant_search_duration_seconds_bucket[5m])) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Qdrant search latency"
+          description: "95th percentile Qdrant search latency is {{ $value }}s"

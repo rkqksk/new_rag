@@ -1,0 +1,66 @@
+{
+  "product_name": "20파이 원터치캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749295.jpg",
+      "filename": "GOODS1_1661749295.jpg",
+      "alt": "20파이 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_732_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661749295.jpg",
+      "filename": "ADD_GOODS1_1661749295.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_732_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "NP020-GM01"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749295.jpg",
+      "filename": "GOODS1_1661749295.jpg",
+      "alt": "20파이 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_732_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661749295.jpg",
+      "filename": "ADD_GOODS1_1661749295.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_732_main_2.jpg"
+    }
+  ],
+  "idx": "732",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=732",
+  "crawled_at": "2025-10-18T06:53:32.538414",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.569677",
+  "product_code": "NP020-GM01",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "모소",
+    "description": null,
+    "spec": "20파이 원터치캡",
+    "detail": "23x19mm / 내경 Ø20",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.101835"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "product_name": "24파이 원터치캡(3파이)",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749333.jpg",
+      "filename": "GOODS1_1661749333.jpg",
+      "alt": "24파이 원터치캡(3파이)",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_733_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661749333.jpg",
+      "filename": "ADD_GOODS1_1661749333.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_733_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "NP024-GM01(3)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749333.jpg",
+      "filename": "GOODS1_1661749333.jpg",
+      "alt": "24파이 원터치캡(3파이)",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_733_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661749333.jpg",
+      "filename": "ADD_GOODS1_1661749333.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_733_main_2.jpg"
+    }
+  ],
+  "idx": "733",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=733",
+  "crawled_at": "2025-10-18T06:46:19.147302",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.570817",
+  "product_code": "NP024-GM01(3)",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "모소",
+    "description": null,
+    "spec": "24파이 원터치캡(Ø3)",
+    "detail": "27x22mm / 내경 Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.103866"
+  }
+}

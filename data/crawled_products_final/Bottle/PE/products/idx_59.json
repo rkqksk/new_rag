@@ -1,0 +1,67 @@
+{
+  "product_name": "25ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658119815.jpg",
+      "filename": "GOODS1_1658119815.jpg",
+      "alt": "25ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "25ml 브로우용기",
+    "제품 코드": "BE025-R009",
+    "재질(원료)": "PE",
+    "사양": "33x59(mm)",
+    "capacity": "25ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.621079",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=59",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658119815.jpg",
+      "filename": "GOODS1_1658119815.jpg",
+      "alt": "25ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_59_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_59_print_area.pdf",
+  "idx": "59",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=59",
+  "crawled_at": "2025-10-21T21:13:16.822160",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 25,
+    "matched_price_range": "10-50",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 10,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.127127"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.849681"
+}

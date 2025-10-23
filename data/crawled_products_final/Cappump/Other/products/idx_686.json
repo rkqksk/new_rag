@@ -1,0 +1,52 @@
+{
+  "product_name": "32파이 일반펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661746541.jpg",
+      "filename": "GOODS1_1661746541.jpg",
+      "alt": "32파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_686_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PO032-CG06(민)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661746541.jpg",
+      "filename": "GOODS1_1661746541.jpg",
+      "alt": "32파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_686_main_1.jpg"
+    }
+  ],
+  "idx": "686",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=686",
+  "crawled_at": "2025-10-18T06:46:27.815212",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.575573",
+  "product_code": "PO032-CG06(민)",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "Ø32 펌프 319FS",
+    "spec": "32파이 일반펌프",
+    "detail": "내경 Ø32",
+    "package": "500ea(노즐180이상 450)",
+    "note": "GF-319(33Ø)",
+    "updated_at": "2025-10-23T20:34:42.109379"
+  }
+}

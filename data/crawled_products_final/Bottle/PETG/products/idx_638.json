@@ -1,0 +1,82 @@
+{
+  "product_name": "150ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660637711.jpg",
+      "filename": "GOODS1_1660637711.jpg",
+      "alt": "150ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "150ml 헤비브로우용기",
+    "제품 코드": "HG150-G001",
+    "재질(원료)": "PETG",
+    "사양": "41x161(mm)",
+    "capacity": "150ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.686678",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=638",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660637711.jpg",
+      "filename": "GOODS1_1660637711.jpg",
+      "alt": "150ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_638_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_638_print_area.pdf",
+  "idx": "638",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=638",
+  "crawled_at": "2025-10-21T22:17:07.787397",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 150,
+    "matched_price_range": "150",
+    "material": "PETG",
+    "thickness": "얇은",
+    "base_price": {
+      "regular": 300,
+      "discount": 250
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "coating_capacity_range": "-200",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 260,
+      "discount": 220
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 260,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:15.023183",
+    "regular_price": 300,
+    "discount_price": 250,
+    "capacity_ml": 150,
+    "material_detail": "PETG(얇은)",
+    "pricing_updated_at": "2025-10-23T20:42:24.157919",
+    "pricing_capacity_ml": 150
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.996577"
+}

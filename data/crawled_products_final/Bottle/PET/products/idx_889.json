@@ -1,0 +1,97 @@
+{
+  "product_name": "120ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1712046731.jpg",
+      "filename": "GOODS1_1712046731.jpg",
+      "alt": "120ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_889_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1712046731.jpg",
+      "filename": "ADD_GOODS1_1712046731.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_889_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "120ml 헤비브로우용기",
+    "제품 코드": "HT120-NS01",
+    "재질(원료)": "PET",
+    "사양": "49x49x100(mm)",
+    "capacity": "120ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.778645",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=889",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1712046731.jpg",
+      "filename": "GOODS1_1712046731.jpg",
+      "alt": "120ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_889_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1712046731.jpg",
+      "filename": "ADD_GOODS1_1712046731.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_889_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_889_print_area.pdf",
+  "idx": "889",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=889",
+  "crawled_at": "2025-10-18T21:20:57.206762",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 120,
+    "matched_price_range": "120",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 200,
+      "discount": 150
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "coating_capacity_range": "-200",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 260,
+      "discount": 220
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 260,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:14.999737",
+    "regular_price": 200,
+    "discount_price": 150,
+    "capacity_ml": 120,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.240163",
+    "pricing_capacity_ml": 120
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.968891"
+}

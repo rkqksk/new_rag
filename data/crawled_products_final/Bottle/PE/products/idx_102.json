@@ -1,0 +1,78 @@
+{
+  "product_name": "80ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658124447.jpg",
+      "filename": "GOODS1_1658124447.jpg",
+      "alt": "80ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1658124447.jpg",
+      "filename": "ADD_GOODS1_1658124447.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "80ml 브로우용기",
+    "제품 코드": "BE080-G010",
+    "재질(원료)": "PE",
+    "사양": "36x118(mm)",
+    "capacity": "80ml",
+    "dimensions": "Ø22",
+    "neck_size": "22파이",
+    "neck_size_mm": 22,
+    "neck_updated_at": "2025-10-23T21:00:50.657899",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=102",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658124447.jpg",
+      "filename": "GOODS1_1658124447.jpg",
+      "alt": "80ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_102_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1658124447.jpg",
+      "filename": "ADD_GOODS1_1658124447.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_102_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_102_print_area.pdf",
+  "idx": "102",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=102",
+  "crawled_at": "2025-10-21T21:19:14.946419",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 80,
+    "matched_price_range": "80",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 160,
+      "discount": 130
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "capacity_ml": 80,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.144194",
+    "pricing_capacity_ml": 80
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.914719"
+}

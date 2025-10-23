@@ -1,0 +1,83 @@
+{
+  "product_name": "20파이 물감캡",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1744342904.jpg",
+      "filename": "ADD_GOODS2_1744342904.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_933_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342904.jpg",
+      "filename": "GOODS1_1744342904.jpg",
+      "alt": "20파이 물감캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_933_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1744342904.jpg",
+      "filename": "ADD_GOODS1_1744342904.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_933_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PTP020-CW03"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1744342904.jpg",
+      "filename": "ADD_GOODS2_1744342904.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_933_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744342904.jpg",
+      "filename": "GOODS1_1744342904.jpg",
+      "alt": "20파이 물감캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_933_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1744342904.jpg",
+      "filename": "ADD_GOODS1_1744342904.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_933_main_3.jpg"
+    }
+  ],
+  "idx": "933",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=933",
+  "crawled_at": "2025-10-18T06:56:53.741343",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.569865",
+  "product_code": "PTP020-CW03",
+  "pricing": {
+    "supply_price": 80.0,
+    "selling_price": 120.0
+  },
+  "product_list_info": {
+    "vendor": "우진정밀",
+    "description": null,
+    "spec": "20파이 물감캡",
+    "detail": "24x29(mm)/내경Ø18",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.102145"
+  }
+}

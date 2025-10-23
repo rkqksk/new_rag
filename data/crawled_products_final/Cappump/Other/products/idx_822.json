@@ -1,0 +1,52 @@
+{
+  "product_name": "20파이 풀커버 에센스펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1676888012.jpg",
+      "filename": "GOODS1_1676888012.jpg",
+      "alt": "20파이 풀커버 에센스펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_822_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "EO020-CG10"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1676888012.jpg",
+      "filename": "GOODS1_1676888012.jpg",
+      "alt": "20파이 풀커버 에센스펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_822_main_1.jpg"
+    }
+  ],
+  "idx": "822",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=822",
+  "crawled_at": "2025-10-18T06:48:48.101920",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.575089",
+  "product_code": "EO020-CG10",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "지에프",
+    "description": "Ø20 풀커버 에센스 펌프",
+    "spec": "Ø20 에센스펌프",
+    "detail": "내경 Ø20",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.109156"
+  }
+}

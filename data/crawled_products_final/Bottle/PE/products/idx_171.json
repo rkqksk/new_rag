@@ -1,0 +1,82 @@
+{
+  "product_name": "450ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658132712.jpg",
+      "filename": "GOODS1_1658132712.jpg",
+      "alt": "450ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658132712_1.jpg",
+      "filename": "1658132712_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "450ml 브로우용기",
+    "제품 코드": "BE450-U010",
+    "재질(원료)": "PE",
+    "사양": "88x68x137(mm)",
+    "capacity": "450ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.604525",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658132712.jpg",
+      "filename": "GOODS1_1658132712.jpg",
+      "alt": "450ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_171_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658132712_1.jpg",
+      "filename": "1658132712_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_171_main_1.jpg"
+    }
+  ],
+  "idx": "171",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=171",
+  "crawled_at": "2025-10-21T21:28:42.664434",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 450,
+    "matched_price_range": "500",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 350,
+      "discount": 260
+    },
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "material_metadata": null,
+    "regular_price": 330,
+    "discount_price": 250,
+    "pricing_capacity_ml": 400,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.119627"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.835707"
+}

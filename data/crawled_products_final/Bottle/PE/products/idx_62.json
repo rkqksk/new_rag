@@ -1,0 +1,71 @@
+{
+  "product_name": "500ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658121129.jpg",
+      "filename": "GOODS1_1658121129.jpg",
+      "alt": "500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "500ml 브로우용기",
+    "제품 코드": "BE500-R009",
+    "재질(원료)": "PE",
+    "사양": "83x141(mm)",
+    "capacity": "500ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.600509",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=62",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658121129.jpg",
+      "filename": "GOODS1_1658121129.jpg",
+      "alt": "500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_62_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_62_print_area.pdf",
+  "idx": "62",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=62",
+  "crawled_at": "2025-10-21T21:13:43.020949",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 500,
+    "matched_price_range": "500",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 350,
+      "discount": 260
+    },
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "material_metadata": null,
+    "regular_price": 350,
+    "discount_price": 260,
+    "capacity_ml": 500,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.115527",
+    "pricing_capacity_ml": 500
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.829082"
+}

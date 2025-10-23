@@ -1,0 +1,82 @@
+{
+  "product_name": "100ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165839366820230215093851.jpg",
+      "filename": "GOODS1_165839366820230215093851.jpg",
+      "alt": "100ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "100ml 브로우용기",
+    "제품 코드": "BT100-G005",
+    "재질(원료)": "PET",
+    "사양": "35x137(mm)",
+    "capacity": "100ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.763216",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=278",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165839366820230215093851.jpg",
+      "filename": "GOODS1_165839366820230215093851.jpg",
+      "alt": "100ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_278_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_278_print_area.pdf",
+  "idx": "278",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=278",
+  "crawled_at": "2025-10-21T21:44:10.335752",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 100,
+    "matched_price_range": "100",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 180,
+      "discount": 130
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "coating_capacity_range": "-100",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 240,
+      "discount": 180
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 240,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:14.987740",
+    "regular_price": 180,
+    "discount_price": 130,
+    "capacity_ml": 100,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.222091",
+    "pricing_capacity_ml": 100
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.952200"
+}

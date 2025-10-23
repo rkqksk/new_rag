@@ -1,0 +1,100 @@
+{
+  "product_name": "1000ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1734335988.jpg",
+      "filename": "ADD_GOODS2_1734335988.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_913_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1734335988.jpg",
+      "filename": "GOODS1_1734335988.jpg",
+      "alt": "1000ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_913_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1734335988.jpg",
+      "filename": "ADD_GOODS1_1734335988.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_913_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "1000ml 브로우용기",
+    "제품 코드": "BE111-G016",
+    "재질(원료)": "PE",
+    "사양": "86x215(mm)",
+    "capacity": "1000ml",
+    "dimensions": "Ø32",
+    "neck_size": "32파이",
+    "neck_size_mm": 32,
+    "neck_updated_at": "2025-10-23T21:00:50.657126",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=913",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1734335988.jpg",
+      "filename": "ADD_GOODS2_1734335988.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_913_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1734335988.jpg",
+      "filename": "GOODS1_1734335988.jpg",
+      "alt": "1000ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_913_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1734335988.jpg",
+      "filename": "ADD_GOODS1_1734335988.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_913_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PE/print_area/idx_913_print_area.pdf",
+  "idx": "913",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=913",
+  "crawled_at": "2025-10-18T21:31:01.224441",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 1000,
+    "matched_price_range": "1000",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 460,
+    "discount_price": 420,
+    "capacity_ml": 1000,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.143819",
+    "pricing_capacity_ml": 1000
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.913829"
+}

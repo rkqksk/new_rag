@@ -1,0 +1,10 @@
+product_code,product_name,material,spec,dimensions,category,packaging,mold,cost,price,production,note,images_count,image_files,has_print_area,source_file,source_type
+JP270-GK01,JP270-GK01 270g / PP,PP,270g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP300-GM01,JP300-GM01 300g / PP,PP,300g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP450-GK01,JP450-GK01 450g / PP,PP,450g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP450-GM01,JP450-GM01 450g / PP,PP,450g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP111-GM01,"JP111-GM01 1,000g / PP",PP,"1,000g / PP",,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP150-TK01,JP150-TK01 150g / PP,PP,150g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP200-TK01,JP200-TK01 200g / PP,PP,200g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+JP300-TK01,JP300-TK01 300g / PP,PP,300g / PP,,Unknown/PP,,,,,,,0,,false,"제품 리스트_4.기타(PP,PS,ABS).xlsx",excel
+80x145(mm)/Ø32,80x145(mm)/Ø32 복합PP,PP,복합PP,,Unknown/PP,,,,,,,0,,false,제품 리스트_6.전용몰드.xlsx,excel

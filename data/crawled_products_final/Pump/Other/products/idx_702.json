@@ -1,0 +1,57 @@
+{
+  "product_name": "24파이 미니건스프레이",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747515.jpg",
+      "filename": "GOODS1_1661747515.jpg",
+      "alt": "24파이 미니건스프레이",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_702_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "24파이 미니건스프레이",
+    "제품 코드": "SO024-CG04",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø24",
+    "dimensions": "Ø24",
+    "neck_size": "24파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747515.jpg",
+      "filename": "GOODS1_1661747515.jpg",
+      "alt": "24파이 미니건스프레이",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_702_main_1.jpg"
+    }
+  ],
+  "idx": "702",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=702",
+  "crawled_at": "2025-10-21T22:21:09.196022",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡"
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "PUMP",
+  "product_code": "SO024-CG04",
+  "product_code_updated_at": "2025-10-23T20:43:45.370756",
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": null,
+    "spec": "Ø24 미니건스프레이",
+    "detail": "내경 Ø24",
+    "package": "1,000ea",
+    "note": null,
+    "updated_at": "2025-10-23T20:44:03.796462"
+  }
+}

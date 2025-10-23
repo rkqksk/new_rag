@@ -1,0 +1,83 @@
+{
+  "product_name": "850ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165839366820230719135306.jpg",
+      "filename": "GOODS1_165839366820230719135306.jpg",
+      "alt": "850ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658393668_1.jpg",
+      "filename": "1658393668_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "850ml 브로우용기",
+    "제품 코드": "BE850-C009",
+    "재질(원료)": "PE",
+    "사양": "106x64x232(mm)",
+    "capacity": "850ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.621925",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=280",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165839366820230719135306.jpg",
+      "filename": "GOODS1_165839366820230719135306.jpg",
+      "alt": "850ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_280_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658393668_1.jpg",
+      "filename": "1658393668_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_280_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_280_print_area.pdf",
+  "idx": "280",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=280",
+  "crawled_at": "2025-10-21T21:44:28.766760",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 850,
+    "matched_price_range": "1000",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 400,
+    "discount_price": 380,
+    "pricing_capacity_ml": 750,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.127618"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.850400"
+}

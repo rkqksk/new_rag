@@ -1,0 +1,52 @@
+{
+  "product_name": "20파이 스킨각캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749981.jpg",
+      "filename": "GOODS1_1661749981.jpg",
+      "alt": "20파이 스킨각캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_749_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CP020-GM03"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749981.jpg",
+      "filename": "GOODS1_1661749981.jpg",
+      "alt": "20파이 스킨각캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_749_main_1.jpg"
+    }
+  ],
+  "idx": "749",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=749",
+  "crawled_at": "2025-10-18T06:54:21.278456",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.569771",
+  "product_code": "CP020-GM03",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "모소",
+    "description": null,
+    "spec": "20파이 스킨 각캡",
+    "detail": "24x22(mm) / 내경 Ø20",
+    "package": null,
+    "note": "기본 2.5t",
+    "updated_at": "2025-10-23T20:34:42.102002"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "product_name": "32파이 룰렛 원터치캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1741758778.jpg",
+      "filename": "GOODS1_1741758778.jpg",
+      "alt": "32파이 룰렛 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_927_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "NP032-GM04"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1741758778.jpg",
+      "filename": "GOODS1_1741758778.jpg",
+      "alt": "32파이 룰렛 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_927_main_1.jpg"
+    }
+  ],
+  "idx": "927",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=927",
+  "crawled_at": "2025-10-18T06:45:52.159635",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.566880",
+  "product_code": "NP032-GM04",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "모소",
+    "description": null,
+    "spec": "32파이 룰렛 원터치캡",
+    "detail": "35x19mm / 내경 Ø32",
+    "package": null,
+    "note": "노출 X",
+    "updated_at": "2025-10-23T20:34:42.097343"
+  }
+}

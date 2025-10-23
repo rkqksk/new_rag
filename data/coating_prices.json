@@ -1,0 +1,153 @@
+{
+  "capacity_based": {
+    "10-50": {
+      "무광코팅": {
+        "regular": 220,
+        "discount": 160
+      },
+      "2코팅(색상+무광)": {
+        "regular": 270,
+        "discount": 240
+      },
+      "1컬러 그라데이션": {
+        "regular": 270,
+        "discount": 240
+      },
+      "2컬러 그라데이션": {
+        "regular": 290,
+        "discount": 260
+      }
+    },
+    "-100": {
+      "무광코팅": {
+        "regular": 240,
+        "discount": 180
+      },
+      "2코팅(색상+무광)": {
+        "regular": 290,
+        "discount": 250
+      },
+      "1컬러 그라데이션": {
+        "regular": 290,
+        "discount": 250
+      },
+      "2컬러 그라데이션": {
+        "regular": 310,
+        "discount": 270
+      }
+    },
+    "-200": {
+      "무광코팅": {
+        "regular": 260,
+        "discount": 220
+      },
+      "2코팅(색상+무광)": {
+        "regular": 310,
+        "discount": 270
+      },
+      "1컬러 그라데이션": {
+        "regular": 310,
+        "discount": 270
+      },
+      "2컬러 그라데이션": {
+        "regular": 330,
+        "discount": 290
+      }
+    },
+    "-300": {
+      "무광코팅": {
+        "regular": 280,
+        "discount": 250
+      },
+      "2코팅(색상+무광)": {
+        "regular": 330,
+        "discount": 300
+      },
+      "1컬러 그라데이션": {
+        "regular": 330,
+        "discount": 300
+      },
+      "2컬러 그라데이션": {
+        "regular": 350,
+        "discount": 320
+      }
+    },
+    "-500": {
+      "무광코팅": {
+        "regular": 340,
+        "discount": 290
+      },
+      "2코팅(색상+무광)": {
+        "regular": 390,
+        "discount": 360
+      },
+      "1컬러 그라데이션": {
+        "regular": 390,
+        "discount": 360
+      },
+      "2컬러 그라데이션": {
+        "regular": 410,
+        "discount": 380
+      }
+    },
+    "-1000": {
+      "무광코팅": {
+        "regular": 560,
+        "discount": 520
+      },
+      "2코팅(색상+무광)": null,
+      "1컬러 그라데이션": null,
+      "2컬러 그라데이션": null
+    }
+  },
+  "special_items": {
+    "크림용기": {
+      "무광코팅": {
+        "regular": 220,
+        "discount": 160
+      },
+      "2코팅(색상+무광)": {
+        "regular": 290,
+        "discount": 250
+      },
+      "1컬러 그라데이션": {
+        "regular": 260,
+        "discount": 230
+      },
+      "2컬러 그라데이션": {
+        "regular": 300,
+        "discount": 250
+      }
+    },
+    "스킨캡(PP)": {
+      "무광코팅": {
+        "regular": 200,
+        "discount": 150
+      },
+      "2코팅(색상+무광)": {
+        "regular": 250,
+        "discount": 220
+      },
+      "1컬러 그라데이션": null,
+      "2컬러 그라데이션": null
+    },
+    "크림캡(ABS)": {
+      "무광코팅": {
+        "regular": 200,
+        "discount": 150
+      },
+      "2코팅(색상+무광)": {
+        "regular": 250,
+        "discount": 220
+      },
+      "1컬러 그라데이션": null,
+      "2컬러 그라데이션": null
+    }
+  },
+  "coating_types": [
+    "무광코팅",
+    "2코팅(색상+무광)",
+    "1컬러 그라데이션",
+    "2컬러 그라데이션"
+  ]
+}

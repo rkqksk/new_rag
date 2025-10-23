@@ -1,0 +1,78 @@
+{
+  "product_name": "250ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165812286820240530124811.jpg",
+      "filename": "GOODS1_165812286820240530124811.jpg",
+      "alt": "250ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_165812286820240530124811.jpg",
+      "filename": "ADD_GOODS1_165812286820240530124811.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "250ml 브로우용기",
+    "제품 코드": "BE250-G001",
+    "재질(원료)": "PE",
+    "사양": "48x170(mm)",
+    "capacity": "250ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.601618",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=74",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_165812286820240530124811.jpg",
+      "filename": "GOODS1_165812286820240530124811.jpg",
+      "alt": "250ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_74_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_165812286820240530124811.jpg",
+      "filename": "ADD_GOODS1_165812286820240530124811.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_74_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_74_print_area.pdf",
+  "idx": "74",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=74",
+  "crawled_at": "2025-10-21T21:15:26.992144",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 250,
+    "matched_price_range": "250",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 280,
+      "discount": 220
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 280,
+    "discount_price": 220,
+    "capacity_ml": 250,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.117309",
+    "pricing_capacity_ml": 250
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.830940"
+}

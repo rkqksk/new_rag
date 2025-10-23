@@ -1,0 +1,81 @@
+{
+  "product_name": "86파이 크림 중간캡",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1716432170.jpg",
+      "filename": "ADD_GOODS2_1716432170.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_893_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1716432170.jpg",
+      "filename": "GOODS1_1716432170.jpg",
+      "alt": "86파이 크림 중간캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_893_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1716432170.jpg",
+      "filename": "ADD_GOODS1_1716432170.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_893_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "86파이 크림 중간캡",
+    "제품 코드": "YP086-GM10",
+    "재질(원료)": "PP",
+    "사양": "Ø86x88+α(mm)",
+    "dimensions": "Ø86x88",
+    "neck_size": "86파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1716432170.jpg",
+      "filename": "ADD_GOODS2_1716432170.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_893_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1716432170.jpg",
+      "filename": "GOODS1_1716432170.jpg",
+      "alt": "86파이 크림 중간캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_893_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1716432170.jpg",
+      "filename": "ADD_GOODS1_1716432170.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_893_main_3.jpg"
+    }
+  ],
+  "idx": "893",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=893",
+  "crawled_at": "2025-10-18T21:58:09.008014",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code": "YP086-GM10",
+  "product_code_updated_at": "2025-10-23T20:43:45.361254",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "모소",
+    "description": null,
+    "spec": "86파이 크림 중간캡",
+    "detail": "Ø86x88+α(mm)",
+    "package": null,
+    "note": "JP300-GM08",
+    "updated_at": "2025-10-23T20:44:03.793204"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "product_name": "50ml 다층브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665032955.jpg",
+      "filename": "GOODS1_1665032955.jpg",
+      "alt": "50ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "50ml 다층브로우용기",
+    "제품 코드": "MH050-G001",
+    "재질(원료)": "혼합",
+    "사양": "35x75(mm)",
+    "capacity": "50ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.743480",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=764",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665032955.jpg",
+      "filename": "GOODS1_1665032955.jpg",
+      "alt": "50ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_764_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_764_print_area.pdf",
+  "idx": "764",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=764",
+  "crawled_at": "2025-10-21T22:22:13.400636",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 50,
+    "matched_price_range": "10-50",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 250,
+      "discount": 230
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "regular_price": 190,
+    "discount_price": 150,
+    "pricing_capacity_ml": 10,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.196662"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.192060"
+}

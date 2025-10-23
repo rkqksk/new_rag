@@ -1,0 +1,55 @@
+{
+  "product_name": "24파이 온오프펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748858.jpg",
+      "filename": "GOODS1_1661748858.jpg",
+      "alt": "24파이 온오프펌프",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_724_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PO024-CG15"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748858.jpg",
+      "filename": "GOODS1_1661748858.jpg",
+      "alt": "24파이 온오프펌프",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_724_main_1.jpg"
+    }
+  ],
+  "idx": "724",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=724",
+  "crawled_at": "2025-10-18T06:51:36.119023",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.579331",
+  "product_code": "PO024-CG15",
+  "pricing": {
+    "supply_price": 310.0,
+    "selling_price": 390.0
+  },
+  "product_list_info": {
+    "vendor": "지에프",
+    "description": null,
+    "spec": "24파이 온오프펌프",
+    "detail": "내경 Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.121960"
+  }
+}

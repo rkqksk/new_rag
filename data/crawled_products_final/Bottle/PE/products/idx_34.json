@@ -1,0 +1,66 @@
+{
+  "product_name": "180ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658116516.jpg",
+      "filename": "GOODS1_1658116516.jpg",
+      "alt": "180ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_34_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "180ml 브로우용기",
+    "제품 코드": "BE180-R002",
+    "재질(원료)": "PE",
+    "사양": "47x143(mm)",
+    "capacity": "180ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.622799",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=34",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658116516.jpg",
+      "filename": "GOODS1_1658116516.jpg",
+      "alt": "180ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_34_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PE/print_area/idx_34_print_area.pdf",
+  "idx": "34",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=34",
+  "crawled_at": "2025-10-18T21:42:44.047341",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 180,
+    "matched_price_range": "180",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 240,
+      "discount": 170
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 240,
+    "discount_price": 170,
+    "capacity_ml": 180,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.128147",
+    "pricing_capacity_ml": 180
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.857301"
+}

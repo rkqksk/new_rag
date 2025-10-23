@@ -1,0 +1,70 @@
+{
+  "product_name": "550ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658125705.jpg",
+      "filename": "GOODS1_1658125705.jpg",
+      "alt": "550ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "550ml 브로우용기",
+    "제품 코드": "BE550-F001",
+    "재질(원료)": "PE",
+    "사양": "81x165(mm)",
+    "capacity": "550ml",
+    "dimensions": "Ø32",
+    "neck_size": "32파이",
+    "neck_size_mm": 32,
+    "neck_updated_at": "2025-10-23T21:00:50.658039",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=114",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658125705.jpg",
+      "filename": "GOODS1_1658125705.jpg",
+      "alt": "550ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_114_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_114_print_area.pdf",
+  "idx": "114",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=114",
+  "crawled_at": "2025-10-21T21:20:50.454747",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 550,
+    "matched_price_range": "750",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 350,
+    "discount_price": 260,
+    "pricing_capacity_ml": 500,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.144306"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.915219"
+}

@@ -1,0 +1,71 @@
+{
+  "product_name": "24파이 회오리캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108647.jpg",
+      "filename": "GOODS1_1752108647.jpg",
+      "alt": "24파이 회오리캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_953_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1752108647.jpg",
+      "filename": "ADD_GOODS1_1752108647.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_953_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "24파이 회오리캡",
+    "제품 코드": "PTP024-CP02",
+    "재질(원료)": "PP",
+    "사양": "26x52(mm)/Ø24",
+    "dimensions": "Ø24",
+    "neck_size": "24파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108647.jpg",
+      "filename": "GOODS1_1752108647.jpg",
+      "alt": "24파이 회오리캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_953_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1752108647.jpg",
+      "filename": "ADD_GOODS1_1752108647.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_953_main_2.jpg"
+    }
+  ],
+  "idx": "953",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=953",
+  "crawled_at": "2025-10-18T21:56:49.897207",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡"
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "CAP",
+  "product_code": "PTP024-CP02",
+  "product_code_updated_at": "2025-10-23T20:43:45.361369",
+  "product_list_info": {
+    "vendor": "팩킹샵",
+    "description": null,
+    "spec": "24파이 회오리캡",
+    "detail": "26x52mm / 내경 Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:44:03.793365"
+  }
+}

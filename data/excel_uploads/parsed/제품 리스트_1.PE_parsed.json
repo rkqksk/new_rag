@@ -1,0 +1,4940 @@
+{
+  "file": "제품 리스트_1.PE.xlsx",
+  "material": "PE",
+  "parsing_method": "pattern-based",
+  "pattern": {
+    "type": "repeating_blocks",
+    "block_size": 11,
+    "anchor_label": "CODE",
+    "anchor_count": 138,
+    "first_anchor_row": 5,
+    "anchor_column": 5,
+    "consistency": 1.0,
+    "total_code_cells": 1087,
+    "columns_with_code": 8
+  },
+  "products": [
+    {
+      "material": "PE",
+      "product_code": "BE040-R001",
+      "spec": "PE / 40ml",
+      "dimensions": "대(B)",
+      "packaging": "7",
+      "mold": "122.43200663349917",
+      "cost": 140.79680762852402,
+      "price": 9000.0,
+      "production": "20파이 막캡만 가능",
+      "note": null,
+      "source_row": 5
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-R001",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "174.33333333333334",
+      "cost": 200.48333333333332,
+      "price": 7500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 16
+    },
+    {
+      "material": "PE",
+      "product_code": "BE111-R001",
+      "spec": "PE / 1,000ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 27
+    },
+    {
+      "material": "PE",
+      "product_code": "BE050-R002",
+      "spec": "PE / 50ml",
+      "dimensions": "대",
+      "packaging": "8",
+      "mold": "131.33936651583707",
+      "cost": 151.04027149321263,
+      "price": 8500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 38
+    },
+    {
+      "material": "PE",
+      "product_code": "BE750-R002",
+      "spec": "PE / 750ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 49
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-R003",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "25",
+      "mold": "175.5952380952381",
+      "cost": 201.9345238095238,
+      "price": 7500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 60
+    },
+    {
+      "material": "PE",
+      "product_code": "BE100-R004",
+      "spec": "PE / 100ml",
+      "dimensions": "대",
+      "packaging": "12",
+      "mold": "153.44871794871796",
+      "cost": 176.46602564102562,
+      "price": 7500.0,
+      "production": "PE더블, 24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 71
+    },
+    {
+      "material": "PE",
+      "product_code": "BE060-R005",
+      "spec": "PE / 60ml",
+      "dimensions": "대",
+      "packaging": "8",
+      "mold": "124.44444444444444",
+      "cost": 143.1111111111111,
+      "price": 9000.0,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 82
+    },
+    {
+      "material": "PE",
+      "product_code": "BE111-R005",
+      "spec": "PE / 1100ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 93
+    },
+    {
+      "material": "PE",
+      "product_code": "BE111-R006",
+      "spec": "PE / 1,000ml",
+      "dimensions": "대",
+      "packaging": "70",
+      "mold": "305.1515151515151",
+      "cost": 350.9242424242424,
+      "price": 5500.0,
+      "production": "24/32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 104
+    },
+    {
+      "material": "PE",
+      "product_code": "BE150-R007",
+      "spec": "PE / 150ml",
+      "dimensions": "대",
+      "packaging": "20",
+      "mold": "158.81944444444446",
+      "cost": 182.64236111111111,
+      "price": 8000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 115
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-R008",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "28",
+      "mold": "190.96825396825398",
+      "cost": 219.61349206349206,
+      "price": 7000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 126
+    },
+    {
+      "material": "PE",
+      "product_code": "BE025-R009",
+      "spec": "PE / 25ml",
+      "dimensions": "소(B)",
+      "packaging": "8",
+      "mold": "124.40522875816994",
+      "cost": 143.0660130718954,
+      "price": 9000.0,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 137
+    },
+    {
+      "material": "PE",
+      "product_code": "BE470-R010",
+      "spec": "PE / 470ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 148
+    },
+    {
+      "material": "PE",
+      "product_code": "BE600-R011",
+      "spec": "PE / 600ml",
+      "dimensions": "대",
+      "packaging": "55",
+      "mold": "248.56837606837607",
+      "cost": 285.85363247863245,
+      "price": 6500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 159
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-R012",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "55",
+      "mold": "246.34615384615384",
+      "cost": 283.2980769230769,
+      "price": 6500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 170
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-R013",
+      "spec": "PE/300ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 181
+    },
+    {
+      "material": "PE",
+      "product_code": "BE010-GU01",
+      "spec": "PE / 10ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 192
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-G001",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "25",
+      "mold": "166.9",
+      "cost": 191.935,
+      "price": 8000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 203
+    },
+    {
+      "material": "PE",
+      "product_code": "BE030-G002",
+      "spec": "PE / 30ml",
+      "dimensions": "대",
+      "packaging": "7",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 214
+    },
+    {
+      "material": "PE",
+      "product_code": "BE050-G003",
+      "spec": "PE / 50ml",
+      "dimensions": "대",
+      "packaging": "8",
+      "mold": "125.00766283524905",
+      "cost": 143.7588122605364,
+      "price": 9000.0,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 225
+    },
+    {
+      "material": "PE",
+      "product_code": "BE100-G004",
+      "spec": "PE / 100ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 236
+    },
+    {
+      "material": "PE",
+      "product_code": "BE520-G004",
+      "spec": "PE / 520ml",
+      "dimensions": "대",
+      "packaging": "48",
+      "mold": "236.84615384615384",
+      "cost": 272.3730769230769,
+      "price": 6500.0,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 247
+    },
+    {
+      "material": "PE",
+      "product_code": "BE150-G005",
+      "spec": "PE / 150ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": "금형없음",
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 258
+    },
+    {
+      "material": "PE",
+      "product_code": "BE220-G006",
+      "spec": "PE / 220ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "194.62876254180603",
+      "cost": 223.8230769230769,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 269
+    },
+    {
+      "material": "PE",
+      "product_code": "BE180-G007",
+      "spec": "PE / 180ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 280
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-G008",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "33",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 291
+    },
+    {
+      "material": "PE",
+      "product_code": "BE060-G009",
+      "spec": "PE / 60ml",
+      "dimensions": "대",
+      "packaging": "10",
+      "mold": "134.54361054766733",
+      "cost": 154.72515212981742,
+      "price": 8500.0,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 302
+    },
+    {
+      "material": "PE",
+      "product_code": "BE080-G010",
+      "spec": "PE / 80ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "22파이 캡, 펌프류",
+      "note": null,
+      "source_row": 313
+    },
+    {
+      "material": "PE",
+      "product_code": "BE080-G011",
+      "spec": "PE / 500ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 324
+    },
+    {
+      "material": "PE",
+      "product_code": "BE280-G012",
+      "spec": "PE / 280ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "모던 전용 원터치캡",
+      "note": null,
+      "source_row": 335
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-G013",
+      "spec": "PE / 300ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 346
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-G014",
+      "spec": "PE / 250ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 357
+    },
+    {
+      "material": "PE",
+      "product_code": "BE220-G015",
+      "spec": "PE / 220ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "194.62876254180603",
+      "cost": 223.8230769230769,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 368
+    },
+    {
+      "material": "PE",
+      "product_code": "BE111-G016",
+      "spec": "PE / 1000ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 379
+    },
+    {
+      "material": "PE",
+      "product_code": "BE120-T001",
+      "spec": "PE / 120ml",
+      "dimensions": "대",
+      "packaging": "12",
+      "mold": "154.08333333333334",
+      "cost": 177.19583333333333,
+      "price": 7500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 390
+    },
+    {
+      "material": "PE",
+      "product_code": "BE180-T002",
+      "spec": "PE / 180ml",
+      "dimensions": "대",
+      "packaging": "22",
+      "mold": "172.80392156862746",
+      "cost": 198.72450980392156,
+      "price": 7500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 401
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-T003",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "32",
+      "mold": "201.2040749260598",
+      "cost": 231.38468616496877,
+      "price": 6800.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 412
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-T004",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 423
+    },
+    {
+      "material": "PE",
+      "product_code": "BE550-F001",
+      "spec": "PE / 550ml",
+      "dimensions": "대",
+      "packaging": "55",
+      "mold": "254.90143369175627",
+      "cost": 293.13664874551966,
+      "price": 6200.0,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 434
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-F002",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "28",
+      "mold": "195.93382352941177",
+      "cost": 225.32389705882352,
+      "price": 6800.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 445
+    },
+    {
+      "material": "PE",
+      "product_code": "BE120-L001",
+      "spec": "PE / 120ml",
+      "dimensions": "대",
+      "packaging": "16",
+      "mold": "159.95238095238096",
+      "cost": 183.9452380952381,
+      "price": 7500.0,
+      "production": "24415 캡,펌프류",
+      "note": null,
+      "source_row": 456
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-L002",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "45",
+      "mold": "239.79032258064515",
+      "cost": 275.7588709677419,
+      "price": 6200.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 467
+    },
+    {
+      "material": "PE",
+      "product_code": "BE200-P001",
+      "spec": "PE / 200ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "코드 숨기기",
+      "note": null,
+      "source_row": 478
+    },
+    {
+      "material": "PE",
+      "product_code": "BE270-S001",
+      "spec": "PE / 270ml",
+      "dimensions": "대",
+      "packaging": "32",
+      "mold": "218.74074074074073",
+      "cost": 251.55185185185184,
+      "price": 6000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 489
+    },
+    {
+      "material": "PE",
+      "product_code": "BE160-S002",
+      "spec": "PE / 160ml",
+      "dimensions": "대",
+      "packaging": "22",
+      "mold": "178.9126984126984",
+      "cost": 205.74960317460315,
+      "price": 7000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 500
+    },
+    {
+      "material": "PE",
+      "product_code": "BE380-S003",
+      "spec": "PE / 380ml",
+      "dimensions": "대",
+      "packaging": "45",
+      "mold": "257.17532467532465",
+      "cost": 295.75162337662334,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 511
+    },
+    {
+      "material": "PE",
+      "product_code": "BE400-S004",
+      "spec": "PE / 400ml",
+      "dimensions": "대",
+      "packaging": "50",
+      "mold": "264.67532467532465",
+      "cost": 304.37662337662334,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 522
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-S005",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "50",
+      "mold": "267.8181818181818",
+      "cost": 307.99090909090904,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 533
+    },
+    {
+      "material": "PE",
+      "product_code": "BE200-S006",
+      "spec": "PE / 200ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "240.50819672131146",
+      "cost": 276.58442622950815,
+      "price": 5000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 544
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-S007",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "52",
+      "mold": "241.0128205128205",
+      "cost": 277.1647435897435,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 555
+    },
+    {
+      "material": "PE",
+      "product_code": "BE150-S008",
+      "spec": "PE / 150ml",
+      "dimensions": "대",
+      "packaging": "20",
+      "mold": "176.52380952380952",
+      "cost": 203.00238095238092,
+      "price": 7000.0,
+      "production": "20파이 전용 원터치캡",
+      "note": null,
+      "source_row": 566
+    },
+    {
+      "material": "PE",
+      "product_code": "BE060-S009",
+      "spec": "PE / 60ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 577
+    },
+    {
+      "material": "PE",
+      "product_code": "BE140-S010",
+      "spec": "PE / 140ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 588
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-S011",
+      "spec": "PE / 300ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 599
+    },
+    {
+      "material": "PE",
+      "product_code": "BE150-S012",
+      "spec": "PE / 150ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 610
+    },
+    {
+      "material": "PE",
+      "product_code": "BE111-SU13",
+      "spec": "PE / 1000ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 621
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-A001",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "48",
+      "mold": "265.39712918660285",
+      "cost": 305.20669856459324,
+      "price": 5500.0,
+      "production": "33파이 캡, 펌프류",
+      "note": null,
+      "source_row": 632
+    },
+    {
+      "material": "PE",
+      "product_code": "BE400-A002",
+      "spec": "PE / 400ml",
+      "dimensions": "대",
+      "packaging": "43",
+      "mold": "225.98504273504273",
+      "cost": 259.8827991452991,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 643
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-A003",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "43",
+      "mold": "225.98504273504273",
+      "cost": 259.8827991452991,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 654
+    },
+    {
+      "material": "PE",
+      "product_code": "BE111-A004",
+      "spec": "PE / 1000ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 665
+    },
+    {
+      "material": "PE",
+      "product_code": "BE550-A005",
+      "spec": "PE / 550ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 676
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-B001",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 687
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-M001",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "52",
+      "mold": "256.2456140350877",
+      "cost": 294.68245614035084,
+      "price": 6000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 698
+    },
+    {
+      "material": "PE",
+      "product_code": "BE030-U001",
+      "spec": "PE / 30ml",
+      "dimensions": "소",
+      "packaging": "8",
+      "mold": "131.48039215686273",
+      "cost": 151.20245098039214,
+      "price": 8500.0,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 709
+    },
+    {
+      "material": "PE",
+      "product_code": "BE050-U002",
+      "spec": "PE / 50ml",
+      "dimensions": "소",
+      "packaging": "7",
+      "mold": "130.34705882352938",
+      "cost": 149.89911764705877,
+      "price": 8500.0,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 720
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-U003",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "44",
+      "mold": "237.75925925925924",
+      "cost": 273.42314814814813,
+      "price": 6000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 731
+    },
+    {
+      "material": "PE",
+      "product_code": "BE220-U004",
+      "spec": "PE / 220ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "183.10424710424712",
+      "cost": 210.56988416988418,
+      "price": 7000.0,
+      "production": "24이 캡, 펌프류",
+      "note": null,
+      "source_row": 742
+    },
+    {
+      "material": "PE",
+      "product_code": "BE220-U005",
+      "spec": "PE / 220ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "182.78571428571428",
+      "cost": 210.2035714285714,
+      "price": 7000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 753
+    },
+    {
+      "material": "PE",
+      "product_code": "BE220-U006",
+      "spec": "PE / 220ml",
+      "dimensions": "대",
+      "packaging": "26",
+      "mold": "186.85714285714286",
+      "cost": 214.88571428571427,
+      "price": 7000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 764
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-U007",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "28",
+      "mold": "201.7601323407775",
+      "cost": 232.0241521918941,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 775
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-U008",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "26",
+      "mold": "198.08424908424908",
+      "cost": 227.79688644688642,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 786
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-U009",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "28",
+      "mold": "209.40143369175627",
+      "cost": 240.81164874551968,
+      "price": 6200.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 797
+    },
+    {
+      "material": "PE",
+      "product_code": "BE450-U010",
+      "spec": "PE / 450ml",
+      "dimensions": "대",
+      "packaging": "48",
+      "mold": "250.88888888888889",
+      "cost": 288.5222222222222,
+      "price": 6000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 808
+    },
+    {
+      "material": "PE",
+      "product_code": "BE400-U011",
+      "spec": "PE / 400ml",
+      "dimensions": "대",
+      "packaging": "45",
+      "mold": "239.79032258064515",
+      "cost": 275.7588709677419,
+      "price": 6200.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 819
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-U012",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "28",
+      "mold": "193.45882352941177",
+      "cost": 222.47764705882352,
+      "price": 6800.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 830
+    },
+    {
+      "material": "PE",
+      "product_code": "BE200-U013",
+      "spec": "PE / 200ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 841
+    },
+    {
+      "material": "PE",
+      "product_code": "BE480-U014",
+      "spec": "PE / 480ml",
+      "dimensions": "대",
+      "packaging": "46",
+      "mold": "245.06837606837607",
+      "cost": 281.82863247863247,
+      "price": 6000.0,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 852
+    },
+    {
+      "material": "PE",
+      "product_code": "BE480-U015",
+      "spec": "PE / 480ml",
+      "dimensions": "대",
+      "packaging": "50",
+      "mold": "251.66666666666666",
+      "cost": 289.41666666666663,
+      "price": 6000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 863
+    },
+    {
+      "material": "PE",
+      "product_code": "BE120-U016",
+      "spec": "PE / 120ml",
+      "dimensions": "대",
+      "packaging": "17",
+      "mold": "171.5",
+      "cost": 197.225,
+      "price": 7000.0,
+      "production": "20파이 전용 원터치캡",
+      "note": null,
+      "source_row": 874
+    },
+    {
+      "material": "PE",
+      "product_code": "BE200-U017",
+      "spec": "PE / 200ml",
+      "dimensions": "대",
+      "packaging": "24",
+      "mold": "184.0952380952381",
+      "cost": 211.7095238095238,
+      "price": 7000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 885
+    },
+    {
+      "material": "PE",
+      "product_code": "BE150-U018",
+      "spec": "PE / 150ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 896
+    },
+    {
+      "material": "PE",
+      "product_code": "BE120-U019",
+      "spec": "PE / 120ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "20파이 캡, 펌프류",
+      "note": null,
+      "source_row": 907
+    },
+    {
+      "material": "PE",
+      "product_code": "BE140-K001",
+      "spec": "PE / 140ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 918
+    },
+    {
+      "material": "PE",
+      "product_code": "BE200-K002",
+      "spec": "PE / 200ml",
+      "dimensions": "대",
+      "packaging": "20",
+      "mold": "177.85714285714286",
+      "cost": 204.53571428571428,
+      "price": 7000.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 929
+    },
+    {
+      "material": "PE",
+      "product_code": "BE400-K003",
+      "spec": "PE / 400ml",
+      "dimensions": "대",
+      "packaging": "36",
+      "mold": "214.31674208144796",
+      "cost": 246.46425339366513,
+      "price": 6500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 940
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-K004",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "28",
+      "mold": "195.16993464052288",
+      "cost": 224.4454248366013,
+      "price": 6800.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 951
+    },
+    {
+      "material": "PE",
+      "product_code": "BE060-H001",
+      "spec": "PE / 60ml",
+      "dimensions": "대",
+      "packaging": "8",
+      "mold": "131.48039215686273",
+      "cost": 151.20245098039214,
+      "price": 8500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 962
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-H002",
+      "spec": "PE / 250ml",
+      "dimensions": "대",
+      "packaging": "27",
+      "mold": "193.3482972136223",
+      "cost": 222.3505417956656,
+      "price": 6800.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 973
+    },
+    {
+      "material": "PE",
+      "product_code": "BE330-H003",
+      "spec": "PETG / 330ml",
+      "dimensions": "대",
+      "packaging": "30",
+      "mold": "204.63562753036436",
+      "cost": 235.330971659919,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 984
+    },
+    {
+      "material": "PE",
+      "product_code": "BE120-H004(18)",
+      "spec": "PE / 120ml",
+      "dimensions": "대",
+      "packaging": "13",
+      "mold": "155.8063063063063",
+      "cost": 179.17725225225223,
+      "price": 7500.0,
+      "production": "18파이 캡, 펌프류",
+      "note": null,
+      "source_row": 995
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-H005",
+      "spec": "PE / 300ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "SAIMD-BE300-2",
+      "note": null,
+      "source_row": 1006
+    },
+    {
+      "material": "PE",
+      "product_code": "BE150-Q001",
+      "spec": "PE / 150ml",
+      "dimensions": "대",
+      "packaging": "20",
+      "mold": "166.77083333333334",
+      "cost": 191.78645833333334,
+      "price": 7500.0,
+      "production": "24 캡,펌프/ 20파이 전용캡",
+      "note": null,
+      "source_row": 1017
+    },
+    {
+      "material": "PE",
+      "product_code": "BE250-Q002",
+      "spec": "PE / 250ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "32 캡,펌프/ 32파이 전용캡",
+      "note": null,
+      "source_row": 1028
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-C001",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "50",
+      "mold": "257.41379310344826",
+      "cost": 296.02586206896547,
+      "price": 5800.0,
+      "production": "32파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1039
+    },
+    {
+      "material": "PE",
+      "product_code": "BE400-C002",
+      "spec": "PE / 400ml",
+      "dimensions": "대",
+      "packaging": "55",
+      "mold": "262.55268199233717",
+      "cost": 301.9355842911877,
+      "price": 5800.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1050
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-C003",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "36",
+      "mold": "227.45679012345678",
+      "cost": 261.57530864197525,
+      "price": 6000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1061
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-C004",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "52",
+      "mold": "272.04040404040404",
+      "cost": 312.8464646464646,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1072
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-C005",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "50",
+      "mold": "297.9166666666667",
+      "cost": 342.6041666666667,
+      "price": 5000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1083
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-C006",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "48",
+      "mold": "264.8181818181818",
+      "cost": 304.54090909090905,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1094
+    },
+    {
+      "material": "PE",
+      "product_code": "BE650-C007",
+      "spec": "PE / 650ml",
+      "dimensions": "대",
+      "packaging": "55",
+      "mold": "275.89712918660285",
+      "cost": 317.2816985645933,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1105
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-C008",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "60",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 1116
+    },
+    {
+      "material": "PE",
+      "product_code": "BE550-C009",
+      "spec": "PE / 550ml",
+      "dimensions": "대",
+      "packaging": "55",
+      "mold": "274.9977934686672",
+      "cost": 316.2474624889673,
+      "price": 5500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1127
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-C010",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "32",
+      "mold": "219.9047619047619",
+      "cost": 252.89047619047616,
+      "price": 6000.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1138
+    },
+    {
+      "material": "PE",
+      "product_code": "BE270-C011",
+      "spec": "PE / 270ml",
+      "dimensions": "대",
+      "packaging": "27",
+      "mold": "192.1421568627451",
+      "cost": 220.96348039215687,
+      "price": 6800.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1149
+    },
+    {
+      "material": "PE",
+      "product_code": "BE300-C012",
+      "spec": "PE / 370ml",
+      "dimensions": "대",
+      "packaging": "34",
+      "mold": "211.31674208144796",
+      "cost": 243.01425339366514,
+      "price": 6500.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1160
+    },
+    {
+      "material": "PE",
+      "product_code": "BE500-C013",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "48",
+      "mold": "253.58045977011494",
+      "cost": 291.61752873563216,
+      "price": 5800.0,
+      "production": "28파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1171
+    },
+    {
+      "material": "PE",
+      "product_code": "BE380-C014",
+      "spec": "PE / 380ml",
+      "dimensions": "대",
+      "packaging": "36",
+      "mold": "214.31674208144796",
+      "cost": 246.46425339366513,
+      "price": 6500.0,
+      "production": "24파이 캡, 펌프류",
+      "note": null,
+      "source_row": 1182
+    },
+    {
+      "material": "PE",
+      "product_code": "GE300-R001",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "32",
+      "mold": "209.17948717948718",
+      "cost": 240.55641025641023,
+      "price": 6500.0,
+      "production": "43파이 거품펌프",
+      "note": null,
+      "source_row": 1193
+    },
+    {
+      "material": "PE",
+      "product_code": "GE150-G001",
+      "spec": "PE / 150ml",
+      "dimensions": "대",
+      "packaging": "18",
+      "mold": "173.54841802492808",
+      "cost": 199.5806807286673,
+      "price": 7000.0,
+      "production": "43파이 거품펌프",
+      "note": null,
+      "source_row": 1204
+    },
+    {
+      "material": "PE",
+      "product_code": "GE500-G002",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "52",
+      "mold": "270.8181818181818",
+      "cost": 311.4409090909091,
+      "price": 5500.0,
+      "production": "43파이 거품펌프",
+      "note": null,
+      "source_row": 1215
+    },
+    {
+      "material": "PE",
+      "product_code": "GE280-U001",
+      "spec": "PE / 280ml",
+      "dimensions": "대",
+      "packaging": "32",
+      "mold": "222.30555555555554",
+      "cost": 255.65138888888885,
+      "price": 6000.0,
+      "production": "43파이 거품펌프",
+      "note": null,
+      "source_row": 1226
+    },
+    {
+      "material": "PE",
+      "product_code": "GE300-S001",
+      "spec": "PE / 300ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "43파이 거품펌프",
+      "note": null,
+      "source_row": 1237
+    },
+    {
+      "material": "PE",
+      "product_code": "GE230-S002",
+      "spec": "PE / 230ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "43파이 거품펌프",
+      "note": null,
+      "source_row": 1248
+    },
+    {
+      "material": "PE",
+      "product_code": "WE150-G001",
+      "spec": "PE / 150ml",
+      "dimensions": "대",
+      "packaging": "22",
+      "mold": "179.1904761904762",
+      "cost": 206.0690476190476,
+      "price": 7000.0,
+      "production": "전용 원터치캡",
+      "note": null,
+      "source_row": 1259
+    },
+    {
+      "material": "PE",
+      "product_code": "TE010-G001",
+      "spec": "PE / 10ml",
+      "dimensions": "소",
+      "packaging": "4",
+      "mold": "56.55",
+      "cost": 65.03249999999998,
+      "price": 20000.0,
+      "production": "물감캡(소),물감박킹(소)",
+      "note": null,
+      "source_row": 1270
+    },
+    {
+      "material": "PE",
+      "product_code": "TE030-G002",
+      "spec": "PE / 30ml",
+      "dimensions": "소",
+      "packaging": "8",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 원터치캡",
+      "note": null,
+      "source_row": 1281
+    },
+    {
+      "material": "PE",
+      "product_code": "TE030-G003",
+      "spec": "PE / 30ml",
+      "dimensions": "소",
+      "packaging": "8",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "24파이 원터치캡",
+      "note": null,
+      "source_row": 1292
+    },
+    {
+      "material": "PE",
+      "product_code": "TE150-G004",
+      "spec": "PE / 150ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "캡 이슈로 코드변경",
+      "note": null,
+      "source_row": 1303
+    },
+    {
+      "material": "PE",
+      "product_code": "TE320-R001",
+      "spec": "PE / 320ml",
+      "dimensions": "대",
+      "packaging": "34",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "전용 원터치캡",
+      "note": null,
+      "source_row": 1314
+    },
+    {
+      "material": "PE",
+      "product_code": "TE200-R002",
+      "spec": "PE / 200ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "전용 원터치캡",
+      "note": null,
+      "source_row": 1325
+    },
+    {
+      "material": "PE",
+      "product_code": "TE030-T001",
+      "spec": "PE / 30ml",
+      "dimensions": "대",
+      "packaging": "7",
+      "mold": "122.90522875816994",
+      "cost": 141.34101307189542,
+      "price": 9000.0,
+      "production": "리무버캡",
+      "note": null,
+      "source_row": 1336
+    },
+    {
+      "material": "PE",
+      "product_code": "TE030-T002",
+      "spec": "PE / 30ml",
+      "dimensions": "소",
+      "packaging": "8",
+      "mold": "124.21111111111111",
+      "cost": 142.84277777777777,
+      "price": 9000.0,
+      "production": "물감캡(소),물감박킹(소)",
+      "note": null,
+      "source_row": 1347
+    },
+    {
+      "material": "PE",
+      "product_code": "TE070-U001",
+      "spec": "PE / 70ml",
+      "dimensions": "대",
+      "packaging": "8",
+      "mold": "132.54179566563465",
+      "cost": 152.42306501547984,
+      "price": 8500.0,
+      "production": "타원형 원터치캡(중)",
+      "note": null,
+      "source_row": 1358
+    },
+    {
+      "material": "PE",
+      "product_code": "TE090-U002",
+      "spec": "PE / 90ml",
+      "dimensions": "대",
+      "packaging": "17",
+      "mold": "152.79166666666666",
+      "cost": 175.71041666666665,
+      "price": 8000.0,
+      "production": "타원형 원터치캡(소)",
+      "note": null,
+      "source_row": 1369
+    },
+    {
+      "material": "PE",
+      "product_code": "TE065-U003",
+      "spec": "PE / 65ml",
+      "dimensions": null,
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "타원형 원터치캡(소)",
+      "note": null,
+      "source_row": 1380
+    },
+    {
+      "material": "PE",
+      "product_code": "TE070-K001",
+      "spec": "PE / 70ml",
+      "dimensions": "대",
+      "packaging": "8",
+      "mold": "",
+      "cost": null,
+      "price": 8000.0,
+      "production": "타원형 원터치캡(소)",
+      "note": null,
+      "source_row": 1391
+    },
+    {
+      "material": "PE",
+      "product_code": "TE200-K002",
+      "spec": "PE / 200ml",
+      "dimensions": "대",
+      "packaging": "22",
+      "mold": "183.3921568627451",
+      "cost": 210.90098039215687,
+      "price": 6800.0,
+      "production": "타원형 원터치캡(중)",
+      "note": null,
+      "source_row": 1402
+    },
+    {
+      "material": "PE",
+      "product_code": "TE060-H001",
+      "spec": "PE / 60ml",
+      "dimensions": "대(B)",
+      "packaging": "7",
+      "mold": "137.07142857142858",
+      "cost": 157.63214285714287,
+      "price": 8000.0,
+      "production": "타원형 원터치캡(소)",
+      "note": null,
+      "source_row": 1413
+    },
+    {
+      "material": "PE",
+      "product_code": "TE300-H002",
+      "spec": "PE / 300ml",
+      "dimensions": "대",
+      "packaging": "30",
+      "mold": "198.93382352941177",
+      "cost": 228.7738970588235,
+      "price": 6800.0,
+      "production": "타원형 원터치캡(중)",
+      "note": null,
+      "source_row": 1424
+    },
+    {
+      "material": "PE",
+      "product_code": "DE111-R012",
+      "spec": "PE / 1000ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "43파이 세제캡류",
+      "note": null,
+      "source_row": 1435
+    },
+    {
+      "material": "PE",
+      "product_code": "DE500-S001",
+      "spec": "PE / 500ml",
+      "dimensions": "대",
+      "packaging": "60",
+      "mold": null,
+      "cost": null,
+      "price": 6200.0,
+      "production": "38파이 세제캡",
+      "note": null,
+      "source_row": 1446
+    },
+    {
+      "material": "PE",
+      "product_code": "DE600-S002",
+      "spec": "PE / 600ml",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "38파이 세제캡",
+      "note": null,
+      "source_row": 1457
+    },
+    {
+      "material": "PE",
+      "product_code": "DE111-C001",
+      "spec": "PE / 1,000ml",
+      "dimensions": "대",
+      "packaging": "90",
+      "mold": "347.6780626780627",
+      "cost": 399.82977207977206,
+      "price": 5200.0,
+      "production": "38파이 세제캡",
+      "note": null,
+      "source_row": 1468
+    },
+    {
+      "material": "PE",
+      "product_code": "JE300-R001",
+      "spec": "PE / 300g",
+      "dimensions": "대",
+      "packaging": "33",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 1479
+    },
+    {
+      "material": "PE",
+      "product_code": "JE300-RM02",
+      "spec": "PE / 300g",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": "설비노후로 생산 불가능",
+      "note": null,
+      "source_row": 1490
+    },
+    {
+      "material": "PE",
+      "product_code": "JE660-R003",
+      "spec": "PE / 660g",
+      "dimensions": "대",
+      "packaging": null,
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 1501
+    },
+    {
+      "material": "PE",
+      "product_code": "JE450-G001",
+      "spec": "PE / 450g",
+      "dimensions": "대",
+      "packaging": "46",
+      "mold": null,
+      "cost": null,
+      "price": null,
+      "production": null,
+      "note": null,
+      "source_row": 1512
+    }
+  ],
+  "images": [
+    {
+      "index": 1,
+      "row": 4,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_001_r4c11.png",
+      "size": {
+        "width": 176,
+        "height": 167
+      }
+    },
+    {
+      "index": 2,
+      "row": 136,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_002_r136c11.png",
+      "size": {
+        "width": 174,
+        "height": 163
+      }
+    },
+    {
+      "index": 3,
+      "row": 136,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_003_r136c20.png",
+      "size": {
+        "width": 145,
+        "height": 182
+      }
+    },
+    {
+      "index": 4,
+      "row": 257,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_004_r257c5.png",
+      "size": {
+        "width": 174,
+        "height": 169
+      }
+    },
+    {
+      "index": 5,
+      "row": 730,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_005_r730c5.png",
+      "size": {
+        "width": 153,
+        "height": 181
+      }
+    },
+    {
+      "index": 6,
+      "row": 928,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_006_r928c5.png",
+      "size": {
+        "width": 173,
+        "height": 167
+      }
+    },
+    {
+      "index": 7,
+      "row": 939,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_007_r939c5.png",
+      "size": {
+        "width": 151,
+        "height": 165
+      }
+    },
+    {
+      "index": 8,
+      "row": 1016,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_008_r1016c8.png",
+      "size": {
+        "width": 174,
+        "height": 169
+      }
+    },
+    {
+      "index": 9,
+      "row": 1159,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_009_r1159c5.png",
+      "size": {
+        "width": 157,
+        "height": 172
+      }
+    },
+    {
+      "index": 10,
+      "row": 1148,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_010_r1148c5.png",
+      "size": {
+        "width": 314,
+        "height": 414
+      }
+    },
+    {
+      "index": 11,
+      "row": 1170,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_011_r1170c5.png",
+      "size": {
+        "width": 309,
+        "height": 413
+      }
+    },
+    {
+      "index": 12,
+      "row": 1346,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_012_r1346c5.png",
+      "size": {
+        "width": 313,
+        "height": 401
+      }
+    },
+    {
+      "index": 13,
+      "row": 37,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_013_r37c5.png",
+      "size": {
+        "width": 272,
+        "height": 354
+      }
+    },
+    {
+      "index": 14,
+      "row": 213,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_014_r213c8.png",
+      "size": {
+        "width": 244,
+        "height": 396
+      }
+    },
+    {
+      "index": 15,
+      "row": 191,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_015_r191c14.png",
+      "size": {
+        "width": 296,
+        "height": 386
+      }
+    },
+    {
+      "index": 16,
+      "row": 323,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_016_r323c5.png",
+      "size": {
+        "width": 341,
+        "height": 330
+      }
+    },
+    {
+      "index": 17,
+      "row": 323,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_017_r323c8.png",
+      "size": {
+        "width": 425,
+        "height": 403
+      }
+    },
+    {
+      "index": 18,
+      "row": 323,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_018_r323c14.png",
+      "size": {
+        "width": 436,
+        "height": 463
+      }
+    },
+    {
+      "index": 19,
+      "row": 4,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_019_r4c8.png",
+      "size": {
+        "width": 291,
+        "height": 388
+      }
+    },
+    {
+      "index": 20,
+      "row": 4,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_020_r4c26.png",
+      "size": {
+        "width": 263,
+        "height": 394
+      }
+    },
+    {
+      "index": 21,
+      "row": 4,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_021_r4c5.png",
+      "size": {
+        "width": 277,
+        "height": 376
+      }
+    },
+    {
+      "index": 22,
+      "row": 15,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_022_r15c14.png",
+      "size": {
+        "width": 266,
+        "height": 400
+      }
+    },
+    {
+      "index": 23,
+      "row": 15,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_023_r15c11.png",
+      "size": {
+        "width": 305,
+        "height": 404
+      }
+    },
+    {
+      "index": 24,
+      "row": 15,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_024_r15c23.png",
+      "size": {
+        "width": 291,
+        "height": 394
+      }
+    },
+    {
+      "index": 25,
+      "row": 15,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_025_r15c17.png",
+      "size": {
+        "width": 322,
+        "height": 403
+      }
+    },
+    {
+      "index": 26,
+      "row": 15,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_026_r15c8.png",
+      "size": {
+        "width": 300,
+        "height": 404
+      }
+    },
+    {
+      "index": 27,
+      "row": 37,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_027_r37c20.png",
+      "size": {
+        "width": 292,
+        "height": 411
+      }
+    },
+    {
+      "index": 28,
+      "row": 37,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_028_r37c11.png",
+      "size": {
+        "width": 291,
+        "height": 400
+      }
+    },
+    {
+      "index": 29,
+      "row": 37,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_029_r37c8.png",
+      "size": {
+        "width": 271,
+        "height": 394
+      }
+    },
+    {
+      "index": 30,
+      "row": 37,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_030_r37c23.png",
+      "size": {
+        "width": 307,
+        "height": 414
+      }
+    },
+    {
+      "index": 31,
+      "row": 37,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_031_r37c17.png",
+      "size": {
+        "width": 288,
+        "height": 402
+      }
+    },
+    {
+      "index": 32,
+      "row": 37,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_032_r37c14.png",
+      "size": {
+        "width": 348,
+        "height": 391
+      }
+    },
+    {
+      "index": 33,
+      "row": 37,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_033_r37c26.png",
+      "size": {
+        "width": 278,
+        "height": 419
+      }
+    },
+    {
+      "index": 34,
+      "row": 59,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_034_r59c5.png",
+      "size": {
+        "width": 275,
+        "height": 416
+      }
+    },
+    {
+      "index": 35,
+      "row": 70,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_035_r70c11.png",
+      "size": {
+        "width": 315,
+        "height": 368
+      }
+    },
+    {
+      "index": 36,
+      "row": 81,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_036_r81c11.png",
+      "size": {
+        "width": 318,
+        "height": 363
+      }
+    },
+    {
+      "index": 37,
+      "row": 81,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_037_r81c17.png",
+      "size": {
+        "width": 302,
+        "height": 396
+      }
+    },
+    {
+      "index": 38,
+      "row": 81,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_038_r81c14.png",
+      "size": {
+        "width": 298,
+        "height": 404
+      }
+    },
+    {
+      "index": 39,
+      "row": 81,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_039_r81c8.png",
+      "size": {
+        "width": 266,
+        "height": 378
+      }
+    },
+    {
+      "index": 40,
+      "row": 81,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_040_r81c5.png",
+      "size": {
+        "width": 281,
+        "height": 364
+      }
+    },
+    {
+      "index": 41,
+      "row": 114,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_041_r114c5.png",
+      "size": {
+        "width": 301,
+        "height": 378
+      }
+    },
+    {
+      "index": 42,
+      "row": 114,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_042_r114c20.png",
+      "size": {
+        "width": 319,
+        "height": 396
+      }
+    },
+    {
+      "index": 43,
+      "row": 114,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_043_r114c8.png",
+      "size": {
+        "width": 327,
+        "height": 403
+      }
+    },
+    {
+      "index": 44,
+      "row": 114,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_044_r114c11.png",
+      "size": {
+        "width": 332,
+        "height": 405
+      }
+    },
+    {
+      "index": 45,
+      "row": 125,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_045_r125c11.png",
+      "size": {
+        "width": 313,
+        "height": 397
+      }
+    },
+    {
+      "index": 46,
+      "row": 125,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_046_r125c8.png",
+      "size": {
+        "width": 337,
+        "height": 407
+      }
+    },
+    {
+      "index": 47,
+      "row": 136,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_047_r136c5.png",
+      "size": {
+        "width": 284,
+        "height": 384
+      }
+    },
+    {
+      "index": 48,
+      "row": 136,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_048_r136c14.png",
+      "size": {
+        "width": 293,
+        "height": 358
+      }
+    },
+    {
+      "index": 49,
+      "row": 136,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_049_r136c17.png",
+      "size": {
+        "width": 298,
+        "height": 333
+      }
+    },
+    {
+      "index": 50,
+      "row": 136,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_050_r136c23.png",
+      "size": {
+        "width": 298,
+        "height": 382
+      }
+    },
+    {
+      "index": 51,
+      "row": 158,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_051_r158c5.png",
+      "size": {
+        "width": 294,
+        "height": 406
+      }
+    },
+    {
+      "index": 52,
+      "row": 191,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_052_r191c8.png",
+      "size": {
+        "width": 257,
+        "height": 322
+      }
+    },
+    {
+      "index": 53,
+      "row": 191,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_053_r191c20.png",
+      "size": {
+        "width": 287,
+        "height": 381
+      }
+    },
+    {
+      "index": 54,
+      "row": 191,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_054_r191c23.png",
+      "size": {
+        "width": 284,
+        "height": 400
+      }
+    },
+    {
+      "index": 55,
+      "row": 191,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_055_r191c26.png",
+      "size": {
+        "width": 305,
+        "height": 405
+      }
+    },
+    {
+      "index": 56,
+      "row": 202,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_056_r202c14.png",
+      "size": {
+        "width": 287,
+        "height": 408
+      }
+    },
+    {
+      "index": 57,
+      "row": 202,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_057_r202c11.png",
+      "size": {
+        "width": 301,
+        "height": 403
+      }
+    },
+    {
+      "index": 58,
+      "row": 202,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_058_r202c17.png",
+      "size": {
+        "width": 298,
+        "height": 408
+      }
+    },
+    {
+      "index": 59,
+      "row": 202,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_059_r202c20.png",
+      "size": {
+        "width": 308,
+        "height": 383
+      }
+    },
+    {
+      "index": 60,
+      "row": 202,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_060_r202c8.png",
+      "size": {
+        "width": 298,
+        "height": 400
+      }
+    },
+    {
+      "index": 61,
+      "row": 202,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_061_r202c23.png",
+      "size": {
+        "width": 303,
+        "height": 383
+      }
+    },
+    {
+      "index": 62,
+      "row": 224,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_062_r224c5.png",
+      "size": {
+        "width": 286,
+        "height": 372
+      }
+    },
+    {
+      "index": 63,
+      "row": 224,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_063_r224c8.png",
+      "size": {
+        "width": 309,
+        "height": 379
+      }
+    },
+    {
+      "index": 64,
+      "row": 246,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_064_r246c5.png",
+      "size": {
+        "width": 298,
+        "height": 368
+      }
+    },
+    {
+      "index": 65,
+      "row": 257,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_065_r257c11.png",
+      "size": {
+        "width": 329,
+        "height": 387
+      }
+    },
+    {
+      "index": 66,
+      "row": 268,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_066_r268c5.png",
+      "size": {
+        "width": 264,
+        "height": 310
+      }
+    },
+    {
+      "index": 67,
+      "row": 389,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_067_r389c5.png",
+      "size": {
+        "width": 275,
+        "height": 384
+      }
+    },
+    {
+      "index": 68,
+      "row": 389,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_068_r389c14.png",
+      "size": {
+        "width": 327,
+        "height": 417
+      }
+    },
+    {
+      "index": 69,
+      "row": 400,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_069_r400c5.png",
+      "size": {
+        "width": 254,
+        "height": 360
+      }
+    },
+    {
+      "index": 70,
+      "row": 411,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_070_r411c5.png",
+      "size": {
+        "width": 332,
+        "height": 407
+      }
+    },
+    {
+      "index": 71,
+      "row": 433,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_071_r433c5.png",
+      "size": {
+        "width": 326,
+        "height": 407
+      }
+    },
+    {
+      "index": 72,
+      "row": 444,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_072_r444c5.png",
+      "size": {
+        "width": 325,
+        "height": 387
+      }
+    },
+    {
+      "index": 73,
+      "row": 455,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_073_r455c14.png",
+      "size": {
+        "width": 292,
+        "height": 412
+      }
+    },
+    {
+      "index": 74,
+      "row": 455,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_074_r455c11.png",
+      "size": {
+        "width": 283,
+        "height": 384
+      }
+    },
+    {
+      "index": 75,
+      "row": 455,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_075_r455c8.png",
+      "size": {
+        "width": 281,
+        "height": 392
+      }
+    },
+    {
+      "index": 76,
+      "row": 455,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_076_r455c5.png",
+      "size": {
+        "width": 299,
+        "height": 374
+      }
+    },
+    {
+      "index": 77,
+      "row": 455,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_077_r455c17.png",
+      "size": {
+        "width": 313,
+        "height": 422
+      }
+    },
+    {
+      "index": 78,
+      "row": 466,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_078_r466c5.png",
+      "size": {
+        "width": 326,
+        "height": 418
+      }
+    },
+    {
+      "index": 79,
+      "row": 488,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_079_r488c5.png",
+      "size": {
+        "width": 292,
+        "height": 382
+      }
+    },
+    {
+      "index": 80,
+      "row": 499,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_080_r499c8.png",
+      "size": {
+        "width": 275,
+        "height": 406
+      }
+    },
+    {
+      "index": 81,
+      "row": 499,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_081_r499c5.png",
+      "size": {
+        "width": 303,
+        "height": 397
+      }
+    },
+    {
+      "index": 82,
+      "row": 510,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_082_r510c5.png",
+      "size": {
+        "width": 275,
+        "height": 369
+      }
+    },
+    {
+      "index": 83,
+      "row": 521,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_083_r521c5.png",
+      "size": {
+        "width": 326,
+        "height": 409
+      }
+    },
+    {
+      "index": 84,
+      "row": 532,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_084_r532c8.png",
+      "size": {
+        "width": 288,
+        "height": 422
+      }
+    },
+    {
+      "index": 85,
+      "row": 532,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_085_r532c5.png",
+      "size": {
+        "width": 324,
+        "height": 412
+      }
+    },
+    {
+      "index": 86,
+      "row": 543,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_086_r543c11.png",
+      "size": {
+        "width": 349,
+        "height": 389
+      }
+    },
+    {
+      "index": 87,
+      "row": 543,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_087_r543c5.png",
+      "size": {
+        "width": 338,
+        "height": 387
+      }
+    },
+    {
+      "index": 88,
+      "row": 554,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_088_r554c8.png",
+      "size": {
+        "width": 326,
+        "height": 395
+      }
+    },
+    {
+      "index": 89,
+      "row": 554,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_089_r554c5.png",
+      "size": {
+        "width": 313,
+        "height": 411
+      }
+    },
+    {
+      "index": 90,
+      "row": 565,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_090_r565c8.png",
+      "size": {
+        "width": 304,
+        "height": 394
+      }
+    },
+    {
+      "index": 91,
+      "row": 565,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_091_r565c5.png",
+      "size": {
+        "width": 304,
+        "height": 389
+      }
+    },
+    {
+      "index": 92,
+      "row": 642,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_092_r642c5.png",
+      "size": {
+        "width": 302,
+        "height": 378
+      }
+    },
+    {
+      "index": 93,
+      "row": 697,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_093_r697c5.png",
+      "size": {
+        "width": 316,
+        "height": 408
+      }
+    },
+    {
+      "index": 94,
+      "row": 708,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_094_r708c23.png",
+      "size": {
+        "width": 287,
+        "height": 416
+      }
+    },
+    {
+      "index": 95,
+      "row": 708,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_095_r708c20.png",
+      "size": {
+        "width": 297,
+        "height": 380
+      }
+    },
+    {
+      "index": 96,
+      "row": 708,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_096_r708c14.png",
+      "size": {
+        "width": 321,
+        "height": 414
+      }
+    },
+    {
+      "index": 97,
+      "row": 708,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_097_r708c8.png",
+      "size": {
+        "width": 346,
+        "height": 375
+      }
+    },
+    {
+      "index": 98,
+      "row": 708,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_098_r708c17.png",
+      "size": {
+        "width": 307,
+        "height": 386
+      }
+    },
+    {
+      "index": 99,
+      "row": 708,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_099_r708c5.png",
+      "size": {
+        "width": 337,
+        "height": 403
+      }
+    },
+    {
+      "index": 100,
+      "row": 708,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_100_r708c11.png",
+      "size": {
+        "width": 392,
+        "height": 392
+      }
+    },
+    {
+      "index": 101,
+      "row": 719,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_101_r719c8.png",
+      "size": {
+        "width": 334,
+        "height": 400
+      }
+    },
+    {
+      "index": 102,
+      "row": 719,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_102_r719c5.png",
+      "size": {
+        "width": 289,
+        "height": 372
+      }
+    },
+    {
+      "index": 103,
+      "row": 730,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_103_r730c8.png",
+      "size": {
+        "width": 320,
+        "height": 401
+      }
+    },
+    {
+      "index": 104,
+      "row": 752,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_104_r752c5.png",
+      "size": {
+        "width": 307,
+        "height": 384
+      }
+    },
+    {
+      "index": 105,
+      "row": 752,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_105_r752c8.png",
+      "size": {
+        "width": 327,
+        "height": 418
+      }
+    },
+    {
+      "index": 106,
+      "row": 763,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_106_r763c5.png",
+      "size": {
+        "width": 338,
+        "height": 401
+      }
+    },
+    {
+      "index": 107,
+      "row": 763,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_107_r763c8.png",
+      "size": {
+        "width": 317,
+        "height": 405
+      }
+    },
+    {
+      "index": 108,
+      "row": 774,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_108_r774c5.png",
+      "size": {
+        "width": 290,
+        "height": 380
+      }
+    },
+    {
+      "index": 109,
+      "row": 774,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_109_r774c8.png",
+      "size": {
+        "width": 313,
+        "height": 412
+      }
+    },
+    {
+      "index": 110,
+      "row": 785,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_110_r785c5.png",
+      "size": {
+        "width": 296,
+        "height": 410
+      }
+    },
+    {
+      "index": 111,
+      "row": 796,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_111_r796c5.png",
+      "size": {
+        "width": 317,
+        "height": 397
+      }
+    },
+    {
+      "index": 112,
+      "row": 818,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_112_r818c5.png",
+      "size": {
+        "width": 276,
+        "height": 392
+      }
+    },
+    {
+      "index": 113,
+      "row": 807,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_113_r807c5.png",
+      "size": {
+        "width": 302,
+        "height": 413
+      }
+    },
+    {
+      "index": 114,
+      "row": 829,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_114_r829c5.png",
+      "size": {
+        "width": 281,
+        "height": 412
+      }
+    },
+    {
+      "index": 115,
+      "row": 840,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_115_r840c8.png",
+      "size": {
+        "width": 314,
+        "height": 403
+      }
+    },
+    {
+      "index": 116,
+      "row": 851,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_116_r851c5.png",
+      "size": {
+        "width": 291,
+        "height": 414
+      }
+    },
+    {
+      "index": 117,
+      "row": 862,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_117_r862c5.png",
+      "size": {
+        "width": 294,
+        "height": 413
+      }
+    },
+    {
+      "index": 118,
+      "row": 873,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_118_r873c5.png",
+      "size": {
+        "width": 313,
+        "height": 407
+      }
+    },
+    {
+      "index": 119,
+      "row": 884,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_119_r884c5.png",
+      "size": {
+        "width": 288,
+        "height": 421
+      }
+    },
+    {
+      "index": 120,
+      "row": 884,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_120_r884c8.png",
+      "size": {
+        "width": 312,
+        "height": 407
+      }
+    },
+    {
+      "index": 121,
+      "row": 917,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_121_r917c11.png",
+      "size": {
+        "width": 316,
+        "height": 378
+      }
+    },
+    {
+      "index": 122,
+      "row": 950,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_122_r950c5.png",
+      "size": {
+        "width": 320,
+        "height": 379
+      }
+    },
+    {
+      "index": 123,
+      "row": 961,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_123_r961c14.png",
+      "size": {
+        "width": 286,
+        "height": 410
+      }
+    },
+    {
+      "index": 124,
+      "row": 961,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_124_r961c5.png",
+      "size": {
+        "width": 311,
+        "height": 405
+      }
+    },
+    {
+      "index": 125,
+      "row": 961,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_125_r961c11.png",
+      "size": {
+        "width": 320,
+        "height": 402
+      }
+    },
+    {
+      "index": 126,
+      "row": 972,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_126_r972c5.png",
+      "size": {
+        "width": 299,
+        "height": 391
+      }
+    },
+    {
+      "index": 127,
+      "row": 983,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_127_r983c5.png",
+      "size": {
+        "width": 324,
+        "height": 376
+      }
+    },
+    {
+      "index": 128,
+      "row": 994,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_128_r994c5.png",
+      "size": {
+        "width": 267,
+        "height": 407
+      }
+    },
+    {
+      "index": 129,
+      "row": 1038,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_129_r1038c5.png",
+      "size": {
+        "width": 327,
+        "height": 415
+      }
+    },
+    {
+      "index": 130,
+      "row": 1049,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_130_r1049c5.png",
+      "size": {
+        "width": 309,
+        "height": 393
+      }
+    },
+    {
+      "index": 131,
+      "row": 1060,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_131_r1060c5.png",
+      "size": {
+        "width": 307,
+        "height": 410
+      }
+    },
+    {
+      "index": 132,
+      "row": 1060,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_132_r1060c8.png",
+      "size": {
+        "width": 312,
+        "height": 412
+      }
+    },
+    {
+      "index": 133,
+      "row": 1071,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_133_r1071c5.png",
+      "size": {
+        "width": 286,
+        "height": 415
+      }
+    },
+    {
+      "index": 134,
+      "row": 1082,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_134_r1082c5.png",
+      "size": {
+        "width": 306,
+        "height": 417
+      }
+    },
+    {
+      "index": 135,
+      "row": 1093,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_135_r1093c5.png",
+      "size": {
+        "width": 335,
+        "height": 400
+      }
+    },
+    {
+      "index": 136,
+      "row": 1115,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_136_r1115c5.png",
+      "size": {
+        "width": 309,
+        "height": 416
+      }
+    },
+    {
+      "index": 137,
+      "row": 1126,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_137_r1126c5.png",
+      "size": {
+        "width": 318,
+        "height": 410
+      }
+    },
+    {
+      "index": 138,
+      "row": 1126,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_138_r1126c8.png",
+      "size": {
+        "width": 313,
+        "height": 407
+      }
+    },
+    {
+      "index": 139,
+      "row": 1137,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_139_r1137c5.png",
+      "size": {
+        "width": 304,
+        "height": 421
+      }
+    },
+    {
+      "index": 140,
+      "row": 1181,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_140_r1181c5.png",
+      "size": {
+        "width": 315,
+        "height": 409
+      }
+    },
+    {
+      "index": 141,
+      "row": 1192,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_141_r1192c5.png",
+      "size": {
+        "width": 332,
+        "height": 416
+      }
+    },
+    {
+      "index": 142,
+      "row": 1203,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_142_r1203c8.png",
+      "size": {
+        "width": 321,
+        "height": 409
+      }
+    },
+    {
+      "index": 143,
+      "row": 1203,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_143_r1203c5.png",
+      "size": {
+        "width": 342,
+        "height": 403
+      }
+    },
+    {
+      "index": 144,
+      "row": 1203,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_144_r1203c11.png",
+      "size": {
+        "width": 303,
+        "height": 421
+      }
+    },
+    {
+      "index": 145,
+      "row": 1225,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_145_r1225c5.png",
+      "size": {
+        "width": 329,
+        "height": 419
+      }
+    },
+    {
+      "index": 146,
+      "row": 1258,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_146_r1258c5.png",
+      "size": {
+        "width": 327,
+        "height": 401
+      }
+    },
+    {
+      "index": 147,
+      "row": 1269,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_147_r1269c5.png",
+      "size": {
+        "width": 312,
+        "height": 386
+      }
+    },
+    {
+      "index": 148,
+      "row": 1269,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_148_r1269c8.png",
+      "size": {
+        "width": 313,
+        "height": 415
+      }
+    },
+    {
+      "index": 149,
+      "row": 1269,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_149_r1269c11.png",
+      "size": {
+        "width": 332,
+        "height": 424
+      }
+    },
+    {
+      "index": 150,
+      "row": 1335,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_150_r1335c11.png",
+      "size": {
+        "width": 325,
+        "height": 412
+      }
+    },
+    {
+      "index": 151,
+      "row": 1335,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_151_r1335c14.png",
+      "size": {
+        "width": 308,
+        "height": 407
+      }
+    },
+    {
+      "index": 152,
+      "row": 1335,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_152_r1335c8.png",
+      "size": {
+        "width": 303,
+        "height": 358
+      }
+    },
+    {
+      "index": 153,
+      "row": 1357,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_153_r1357c11.png",
+      "size": {
+        "width": 266,
+        "height": 368
+      }
+    },
+    {
+      "index": 154,
+      "row": 1357,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_154_r1357c14.png",
+      "size": {
+        "width": 304,
+        "height": 395
+      }
+    },
+    {
+      "index": 155,
+      "row": 1401,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_155_r1401c5.png",
+      "size": {
+        "width": 341,
+        "height": 411
+      }
+    },
+    {
+      "index": 156,
+      "row": 1401,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_156_r1401c8.png",
+      "size": {
+        "width": 329,
+        "height": 400
+      }
+    },
+    {
+      "index": 157,
+      "row": 1390,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_157_r1390c11.png",
+      "size": {
+        "width": 318,
+        "height": 402
+      }
+    },
+    {
+      "index": 158,
+      "row": 1390,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_158_r1390c14.png",
+      "size": {
+        "width": 306,
+        "height": 401
+      }
+    },
+    {
+      "index": 159,
+      "row": 1412,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_159_r1412c11.png",
+      "size": {
+        "width": 278,
+        "height": 412
+      }
+    },
+    {
+      "index": 160,
+      "row": 1412,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_160_r1412c8.png",
+      "size": {
+        "width": 300,
+        "height": 358
+      }
+    },
+    {
+      "index": 161,
+      "row": 1423,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_161_r1423c5.png",
+      "size": {
+        "width": 286,
+        "height": 411
+      }
+    },
+    {
+      "index": 162,
+      "row": 1423,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_162_r1423c8.png",
+      "size": {
+        "width": 314,
+        "height": 407
+      }
+    },
+    {
+      "index": 163,
+      "row": 1423,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_163_r1423c11.png",
+      "size": {
+        "width": 291,
+        "height": 407
+      }
+    },
+    {
+      "index": 164,
+      "row": 191,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_164_r191c11.png",
+      "size": {
+        "width": 423,
+        "height": 374
+      }
+    },
+    {
+      "index": 165,
+      "row": 70,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_165_r70c5.png",
+      "size": {
+        "width": 324,
+        "height": 364
+      }
+    },
+    {
+      "index": 166,
+      "row": 1016,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_166_r1016c5.png",
+      "size": {
+        "width": 324,
+        "height": 403
+      }
+    },
+    {
+      "index": 167,
+      "row": 741,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_167_r741c5.png",
+      "size": {
+        "width": 298,
+        "height": 438
+      }
+    },
+    {
+      "index": 168,
+      "row": 488,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_168_r488c8.png",
+      "size": {
+        "width": 279,
+        "height": 408
+      }
+    },
+    {
+      "index": 169,
+      "row": 741,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_169_r741c8.png",
+      "size": {
+        "width": 289,
+        "height": 409
+      }
+    },
+    {
+      "index": 170,
+      "row": 1214,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_170_r1214c5.png",
+      "size": {
+        "width": 296,
+        "height": 408
+      }
+    },
+    {
+      "index": 171,
+      "row": 1269,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_171_r1269c14.png",
+      "size": {
+        "width": 283,
+        "height": 413
+      }
+    },
+    {
+      "index": 172,
+      "row": 1335,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_172_r1335c5.png",
+      "size": {
+        "width": 276,
+        "height": 380
+      }
+    },
+    {
+      "index": 173,
+      "row": 1368,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_173_r1368c5.png",
+      "size": {
+        "width": 300,
+        "height": 474
+      }
+    },
+    {
+      "index": 174,
+      "row": 1401,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_174_r1401c11.png",
+      "size": {
+        "width": 295,
+        "height": 410
+      }
+    },
+    {
+      "index": 175,
+      "row": 1280,
+      "column": 6,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_175_r1280c6.png",
+      "size": {
+        "width": 172,
+        "height": 395
+      }
+    },
+    {
+      "index": 176,
+      "row": 1291,
+      "column": 6,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_176_r1291c6.png",
+      "size": {
+        "width": 161,
+        "height": 408
+      }
+    },
+    {
+      "index": 177,
+      "row": 1313,
+      "column": 6,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_177_r1313c6.png",
+      "size": {
+        "width": 163,
+        "height": 416
+      }
+    },
+    {
+      "index": 178,
+      "row": 1313,
+      "column": 9,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_178_r1313c9.png",
+      "size": {
+        "width": 177,
+        "height": 412
+      }
+    },
+    {
+      "index": 179,
+      "row": 290,
+      "column": 6,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_179_r290c6.png",
+      "size": {
+        "width": 214,
+        "height": 400
+      }
+    },
+    {
+      "index": 180,
+      "row": 389,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_180_r389c11.png",
+      "size": {
+        "width": 225,
+        "height": 416
+      }
+    },
+    {
+      "index": 181,
+      "row": 4,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_181_r4c17.png",
+      "size": {
+        "width": 281,
+        "height": 417
+      }
+    },
+    {
+      "index": 182,
+      "row": 1302,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_182_r1302c11.png",
+      "size": {
+        "width": 251,
+        "height": 415
+      }
+    },
+    {
+      "index": 183,
+      "row": 4,
+      "column": 21,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_183_r4c21.png",
+      "size": {
+        "width": 236,
+        "height": 411
+      }
+    },
+    {
+      "index": 184,
+      "row": 1478,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_184_r1478c5.png",
+      "size": {
+        "width": 341,
+        "height": 404
+      }
+    },
+    {
+      "index": 185,
+      "row": 1511,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_185_r1511c5.png",
+      "size": {
+        "width": 332,
+        "height": 410
+      }
+    },
+    {
+      "index": 186,
+      "row": 4,
+      "column": 24,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_186_r4c24.png",
+      "size": {
+        "width": 222,
+        "height": 414
+      }
+    },
+    {
+      "index": 187,
+      "row": 1280,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_187_r1280c8.png",
+      "size": {
+        "width": 268,
+        "height": 424
+      }
+    },
+    {
+      "index": 188,
+      "row": 1291,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_188_r1291c8.png",
+      "size": {
+        "width": 283,
+        "height": 429
+      }
+    },
+    {
+      "index": 189,
+      "row": 719,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_189_r719c14.png",
+      "size": {
+        "width": 238,
+        "height": 417
+      }
+    },
+    {
+      "index": 190,
+      "row": 389,
+      "column": 9,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_190_r389c9.png",
+      "size": {
+        "width": 221,
+        "height": 415
+      }
+    },
+    {
+      "index": 191,
+      "row": 169,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_191_r169c5.png",
+      "size": {
+        "width": 406,
+        "height": 646
+      }
+    },
+    {
+      "index": 192,
+      "row": 631,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_192_r631c8.png",
+      "size": {
+        "width": 444,
+        "height": 664
+      }
+    },
+    {
+      "index": 193,
+      "row": 1456,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_193_r1456c5.png",
+      "size": {
+        "width": 464,
+        "height": 734
+      }
+    },
+    {
+      "index": 194,
+      "row": 1104,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_194_r1104c5.png",
+      "size": {
+        "width": 442,
+        "height": 733
+      }
+    },
+    {
+      "index": 195,
+      "row": 1236,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_195_r1236c5.png",
+      "size": {
+        "width": 305,
+        "height": 402
+      }
+    },
+    {
+      "index": 196,
+      "row": 1236,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_196_r1236c8.png",
+      "size": {
+        "width": 280,
+        "height": 420
+      }
+    },
+    {
+      "index": 197,
+      "row": 301,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_197_r301c5.png",
+      "size": {
+        "width": 294,
+        "height": 389
+      }
+    },
+    {
+      "index": 198,
+      "row": 301,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_198_r301c8.png",
+      "size": {
+        "width": 312,
+        "height": 393
+      }
+    },
+    {
+      "index": 199,
+      "row": 686,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_199_r686c5.png",
+      "size": {
+        "width": 256,
+        "height": 402
+      }
+    },
+    {
+      "index": 200,
+      "row": 48,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_200_r48c5.png",
+      "size": {
+        "width": 356,
+        "height": 414
+      }
+    },
+    {
+      "index": 201,
+      "row": 15,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_201_r15c5.png",
+      "size": {
+        "width": 287,
+        "height": 414
+      }
+    },
+    {
+      "index": 202,
+      "row": 191,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_202_r191c17.png",
+      "size": {
+        "width": 334,
+        "height": 371
+      }
+    },
+    {
+      "index": 203,
+      "row": 136,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_203_r136c8.png",
+      "size": {
+        "width": 283,
+        "height": 315
+      }
+    },
+    {
+      "index": 204,
+      "row": 1456,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_204_r1456c8.png",
+      "size": {
+        "width": 318,
+        "height": 404
+      }
+    },
+    {
+      "index": 205,
+      "row": 917,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_205_r917c5.png",
+      "size": {
+        "width": 238,
+        "height": 302
+      }
+    },
+    {
+      "index": 206,
+      "row": 576,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_206_r576c5.png",
+      "size": {
+        "width": 238,
+        "height": 314
+      }
+    },
+    {
+      "index": 207,
+      "row": 576,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_207_r576c8.png",
+      "size": {
+        "width": 471,
+        "height": 675
+      }
+    },
+    {
+      "index": 208,
+      "row": 917,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_208_r917c8.png",
+      "size": {
+        "width": 294,
+        "height": 365
+      }
+    },
+    {
+      "index": 209,
+      "row": 543,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_209_r543c8.png",
+      "size": {
+        "width": 279,
+        "height": 321
+      }
+    },
+    {
+      "index": 210,
+      "row": 147,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_210_r147c5.png",
+      "size": {
+        "width": 329,
+        "height": 416
+      }
+    },
+    {
+      "index": 211,
+      "row": 994,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_211_r994c8.png",
+      "size": {
+        "width": 246,
+        "height": 352
+      }
+    },
+    {
+      "index": 212,
+      "row": 587,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_212_r587c5.png",
+      "size": {
+        "width": 301,
+        "height": 368
+      }
+    },
+    {
+      "index": 213,
+      "row": 257,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_213_r257c8.png",
+      "size": {
+        "width": 308,
+        "height": 369
+      }
+    },
+    {
+      "index": 214,
+      "row": 279,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_214_r279c14.png",
+      "size": {
+        "width": 632,
+        "height": 734
+      }
+    },
+    {
+      "index": 215,
+      "row": 202,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_215_r202c26.png",
+      "size": {
+        "width": 335,
+        "height": 415
+      }
+    },
+    {
+      "index": 216,
+      "row": 422,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_216_r422c8.png",
+      "size": {
+        "width": 349,
+        "height": 437
+      }
+    },
+    {
+      "index": 217,
+      "row": 653,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_217_r653c5.png",
+      "size": {
+        "width": 395,
+        "height": 431
+      }
+    },
+    {
+      "index": 218,
+      "row": 103,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_218_r103c5.png",
+      "size": {
+        "width": 394,
+        "height": 441
+      }
+    },
+    {
+      "index": 219,
+      "row": 1489,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_219_r1489c5.png",
+      "size": {
+        "width": 289,
+        "height": 275
+      }
+    },
+    {
+      "index": 220,
+      "row": 1500,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_220_r1500c5.png",
+      "size": {
+        "width": 382,
+        "height": 420
+      }
+    },
+    {
+      "index": 221,
+      "row": 15,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_221_r15c26.png",
+      "size": {
+        "width": 338,
+        "height": 400
+      }
+    },
+    {
+      "index": 222,
+      "row": 1324,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_222_r1324c5.png",
+      "size": {
+        "width": 279,
+        "height": 347
+      }
+    },
+    {
+      "index": 223,
+      "row": 1324,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_223_r1324c8.png",
+      "size": {
+        "width": 362,
+        "height": 401
+      }
+    },
+    {
+      "index": 224,
+      "row": 664,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_224_r664c5.png",
+      "size": {
+        "width": 351,
+        "height": 405
+      }
+    },
+    {
+      "index": 225,
+      "row": 257,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_225_r257c17.png",
+      "size": {
+        "width": 309,
+        "height": 413
+      }
+    },
+    {
+      "index": 226,
+      "row": 785,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_226_r785c8.png",
+      "size": {
+        "width": 347,
+        "height": 400
+      }
+    },
+    {
+      "index": 227,
+      "row": 719,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_227_r719c11.png",
+      "size": {
+        "width": 307,
+        "height": 337
+      }
+    },
+    {
+      "index": 228,
+      "row": 26,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_228_r26c8.png",
+      "size": {
+        "width": 303,
+        "height": 395
+      }
+    },
+    {
+      "index": 229,
+      "row": 4,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_229_r4c14.png",
+      "size": {
+        "width": 284,
+        "height": 416
+      }
+    },
+    {
+      "index": 230,
+      "row": 125,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_230_r125c5.png",
+      "size": {
+        "width": 402,
+        "height": 459
+      }
+    },
+    {
+      "index": 231,
+      "row": 1357,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_231_r1357c5.png",
+      "size": {
+        "width": 351,
+        "height": 328
+      }
+    },
+    {
+      "index": 232,
+      "row": 1027,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_232_r1027c5.png",
+      "size": {
+        "width": 376,
+        "height": 477
+      }
+    },
+    {
+      "index": 233,
+      "row": 1027,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_233_r1027c8.png",
+      "size": {
+        "width": 438,
+        "height": 478
+      }
+    },
+    {
+      "index": 234,
+      "row": 1302,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_234_r1302c8.png",
+      "size": {
+        "width": 396,
+        "height": 478
+      }
+    },
+    {
+      "index": 235,
+      "row": 1357,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_235_r1357c8.png",
+      "size": {
+        "width": 396,
+        "height": 408
+      }
+    },
+    {
+      "index": 236,
+      "row": 1412,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_236_r1412c5.png",
+      "size": {
+        "width": 366,
+        "height": 383
+      }
+    },
+    {
+      "index": 237,
+      "row": 1390,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_237_r1390c5.png",
+      "size": {
+        "width": 373,
+        "height": 412
+      }
+    },
+    {
+      "index": 238,
+      "row": 1390,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_238_r1390c8.png",
+      "size": {
+        "width": 471,
+        "height": 465
+      }
+    },
+    {
+      "index": 239,
+      "row": 213,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_239_r213c14.png",
+      "size": {
+        "width": 484,
+        "height": 498
+      }
+    },
+    {
+      "index": 240,
+      "row": 279,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_240_r279c11.png",
+      "size": {
+        "width": 447,
+        "height": 491
+      }
+    },
+    {
+      "index": 241,
+      "row": 1357,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_241_r1357c17.png",
+      "size": {
+        "width": 469,
+        "height": 486
+      }
+    },
+    {
+      "index": 242,
+      "row": 1192,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_242_r1192c8.png",
+      "size": {
+        "width": 413,
+        "height": 491
+      }
+    },
+    {
+      "index": 243,
+      "row": 70,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_243_r70c8.png",
+      "size": {
+        "width": 337,
+        "height": 337
+      }
+    },
+    {
+      "index": 244,
+      "row": 59,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_244_r59c8.png",
+      "size": {
+        "width": 498,
+        "height": 444
+      }
+    },
+    {
+      "index": 245,
+      "row": 1302,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_245_r1302c5.png",
+      "size": {
+        "width": 377,
+        "height": 427
+      }
+    },
+    {
+      "index": 246,
+      "row": 312,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_246_r312c5.png",
+      "size": {
+        "width": 456,
+        "height": 456
+      }
+    },
+    {
+      "index": 247,
+      "row": 598,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_247_r598c5.png",
+      "size": {
+        "width": 412,
+        "height": 372
+      }
+    },
+    {
+      "index": 248,
+      "row": 598,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_248_r598c8.png",
+      "size": {
+        "width": 425,
+        "height": 449
+      }
+    },
+    {
+      "index": 249,
+      "row": 114,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_249_r114c17.png",
+      "size": {
+        "width": 509,
+        "height": 496
+      }
+    },
+    {
+      "index": 250,
+      "row": 609,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_250_r609c5.png",
+      "size": {
+        "width": 440,
+        "height": 422
+      }
+    },
+    {
+      "index": 251,
+      "row": 334,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_251_r334c5.png",
+      "size": {
+        "width": 481,
+        "height": 449
+      }
+    },
+    {
+      "index": 252,
+      "row": 1005,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_252_r1005c5.png",
+      "size": {
+        "width": 517,
+        "height": 557
+      }
+    },
+    {
+      "index": 253,
+      "row": 675,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_253_r675c5.png",
+      "size": {
+        "width": 338,
+        "height": 388
+      }
+    },
+    {
+      "index": 254,
+      "row": 1379,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_254_r1379c11.png",
+      "size": {
+        "width": 486,
+        "height": 464
+      }
+    },
+    {
+      "index": 255,
+      "row": 26,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_255_r26c5.png",
+      "size": {
+        "width": 395,
+        "height": 371
+      }
+    },
+    {
+      "index": 256,
+      "row": 1379,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_256_r1379c8.png",
+      "size": {
+        "width": 349,
+        "height": 388
+      }
+    },
+    {
+      "index": 257,
+      "row": 191,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_257_r191c5.png",
+      "size": {
+        "width": 225,
+        "height": 225
+      }
+    },
+    {
+      "index": 258,
+      "row": 895,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_258_r895c5.png",
+      "size": {
+        "width": 305,
+        "height": 331
+      }
+    },
+    {
+      "index": 259,
+      "row": 840,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_259_r840c5.png",
+      "size": {
+        "width": 353,
+        "height": 368
+      }
+    },
+    {
+      "index": 260,
+      "row": 1379,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_260_r1379c5.png",
+      "size": {
+        "width": 266,
+        "height": 277
+      }
+    },
+    {
+      "index": 261,
+      "row": 906,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_261_r906c5.png",
+      "size": {
+        "width": 334,
+        "height": 374
+      }
+    },
+    {
+      "index": 262,
+      "row": 323,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_262_r323c11.png",
+      "size": {
+        "width": 289,
+        "height": 329
+      }
+    },
+    {
+      "index": 263,
+      "row": 180,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_263_r180c5.png",
+      "size": {
+        "width": 336,
+        "height": 378
+      }
+    },
+    {
+      "index": 264,
+      "row": 114,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_264_r114c14.png",
+      "size": {
+        "width": 417,
+        "height": 404
+      }
+    },
+    {
+      "index": 265,
+      "row": 257,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_265_r257c14.png",
+      "size": {
+        "width": 314,
+        "height": 354
+      }
+    },
+    {
+      "index": 266,
+      "row": 224,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_266_r224c11.png",
+      "size": {
+        "width": 303,
+        "height": 311
+      }
+    },
+    {
+      "index": 267,
+      "row": 169,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_267_r169c8.png",
+      "size": {
+        "width": 277,
+        "height": 316
+      }
+    },
+    {
+      "index": 268,
+      "row": 895,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_268_r895c8.png",
+      "size": {
+        "width": 305,
+        "height": 331
+      }
+    },
+    {
+      "index": 269,
+      "row": 345,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_269_r345c5.png",
+      "size": {
+        "width": 396,
+        "height": 527
+      }
+    },
+    {
+      "index": 270,
+      "row": 928,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_270_r928c8.png",
+      "size": {
+        "width": 380,
+        "height": 429
+      }
+    },
+    {
+      "index": 271,
+      "row": 268,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_271_r268c11.png",
+      "size": {
+        "width": 324,
+        "height": 344
+      }
+    },
+    {
+      "index": 272,
+      "row": 268,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_272_r268c14.png",
+      "size": {
+        "width": 400,
+        "height": 416
+      }
+    },
+    {
+      "index": 273,
+      "row": 422,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_273_r422c5.png",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    },
+    {
+      "index": 274,
+      "row": 1489,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_274_r1489c8.png",
+      "size": {
+        "width": 473,
+        "height": 489
+      }
+    },
+    {
+      "index": 275,
+      "row": 202,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_275_r202c5.png",
+      "size": {
+        "width": 1000,
+        "height": 1000
+      }
+    },
+    {
+      "index": 276,
+      "row": 356,
+      "column": 6,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_276_r356c6.png",
+      "size": {
+        "width": 189,
+        "height": 413
+      }
+    },
+    {
+      "index": 277,
+      "row": 367,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_277_r367c5.png",
+      "size": {
+        "width": 239,
+        "height": 234
+      }
+    },
+    {
+      "index": 278,
+      "row": 213,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_278_r213c11.png",
+      "size": {
+        "width": 282,
+        "height": 339
+      }
+    },
+    {
+      "index": 279,
+      "row": 235,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_279_r235c26.png",
+      "size": {
+        "width": 322,
+        "height": 333
+      }
+    },
+    {
+      "index": 280,
+      "row": 235,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_280_r235c23.png",
+      "size": {
+        "width": 736,
+        "height": 691
+      }
+    },
+    {
+      "index": 281,
+      "row": 235,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_281_r235c20.png",
+      "size": {
+        "width": 534,
+        "height": 454
+      }
+    },
+    {
+      "index": 282,
+      "row": 235,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_282_r235c17.png",
+      "size": {
+        "width": 291,
+        "height": 368
+      }
+    },
+    {
+      "index": 283,
+      "row": 235,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_283_r235c14.png",
+      "size": {
+        "width": 303,
+        "height": 360
+      }
+    },
+    {
+      "index": 284,
+      "row": 235,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_284_r235c11.png",
+      "size": {
+        "width": 335,
+        "height": 339
+      }
+    },
+    {
+      "index": 285,
+      "row": 235,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_285_r235c8.png",
+      "size": {
+        "width": 273,
+        "height": 366
+      }
+    },
+    {
+      "index": 286,
+      "row": 235,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_286_r235c5.png",
+      "size": {
+        "width": 300,
+        "height": 324
+      }
+    },
+    {
+      "index": 287,
+      "row": 268,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_287_r268c8.png",
+      "size": {
+        "width": 294,
+        "height": 355
+      }
+    },
+    {
+      "index": 288,
+      "row": 279,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_288_r279c8.png",
+      "size": {
+        "width": 368,
+        "height": 360
+      }
+    },
+    {
+      "index": 289,
+      "row": 279,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_289_r279c5.png",
+      "size": {
+        "width": 302,
+        "height": 325
+      }
+    },
+    {
+      "index": 290,
+      "row": 697,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_290_r697c8.png",
+      "size": {
+        "width": 311,
+        "height": 347
+      }
+    },
+    {
+      "index": 291,
+      "row": 1489,
+      "column": 14,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_291_r1489c14.png",
+      "size": {
+        "width": 600,
+        "height": 600
+      }
+    },
+    {
+      "index": 292,
+      "row": 1489,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_292_r1489c11.png",
+      "size": {
+        "width": 295,
+        "height": 259
+      }
+    },
+    {
+      "index": 293,
+      "row": 268,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_293_r268c17.png",
+      "size": {
+        "width": 283,
+        "height": 323
+      }
+    },
+    {
+      "index": 294,
+      "row": 620,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_294_r620c5.png",
+      "size": {
+        "width": 331,
+        "height": 328
+      }
+    },
+    {
+      "index": 295,
+      "row": 378,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_295_r378c5.png",
+      "size": {
+        "width": 331,
+        "height": 342
+      }
+    },
+    {
+      "index": 296,
+      "row": 59,
+      "column": 18,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_296_r59c18.png",
+      "size": {
+        "width": 233,
+        "height": 423
+      }
+    },
+    {
+      "index": 297,
+      "row": 59,
+      "column": 15,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_297_r59c15.png",
+      "size": {
+        "width": 239,
+        "height": 419
+      }
+    },
+    {
+      "index": 298,
+      "row": 1434,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_298_r1434c5.png",
+      "size": {
+        "width": 277,
+        "height": 316
+      }
+    },
+    {
+      "index": 299,
+      "row": 389,
+      "column": 17,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_299_r389c17.png",
+      "size": {
+        "width": 327,
+        "height": 417
+      }
+    },
+    {
+      "index": 300,
+      "row": 59,
+      "column": 11,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_300_r59c11.png",
+      "size": {
+        "width": 311,
+        "height": 367
+      }
+    },
+    {
+      "index": 301,
+      "row": 59,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_301_r59c20.png",
+      "size": {
+        "width": 213,
+        "height": 295
+      }
+    },
+    {
+      "index": 302,
+      "row": 92,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_302_r92c5.png",
+      "size": {
+        "width": 261,
+        "height": 340
+      }
+    },
+    {
+      "index": 303,
+      "row": 81,
+      "column": 26,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_303_r81c26.png",
+      "size": {
+        "width": 276,
+        "height": 375
+      }
+    },
+    {
+      "index": 304,
+      "row": 81,
+      "column": 23,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_304_r81c23.png",
+      "size": {
+        "width": 273,
+        "height": 381
+      }
+    },
+    {
+      "index": 305,
+      "row": 81,
+      "column": 20,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_305_r81c20.png",
+      "size": {
+        "width": 276,
+        "height": 314
+      }
+    },
+    {
+      "index": 306,
+      "row": 213,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_306_r213c5.png",
+      "size": {
+        "width": 308,
+        "height": 311
+      }
+    },
+    {
+      "index": 307,
+      "row": 477,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_307_r477c5.png",
+      "size": {
+        "width": 349,
+        "height": 359
+      }
+    },
+    {
+      "index": 308,
+      "row": 1467,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_308_r1467c5.png",
+      "size": {
+        "width": 297,
+        "height": 365
+      }
+    },
+    {
+      "index": 309,
+      "row": 961,
+      "column": 8,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_309_r961c8.png",
+      "size": {
+        "width": 280,
+        "height": 355
+      }
+    },
+    {
+      "index": 310,
+      "row": 631,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_310_r631c5.png",
+      "size": {
+        "width": 257,
+        "height": 350
+      }
+    },
+    {
+      "index": 311,
+      "row": 1445,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_311_r1445c5.png",
+      "size": {
+        "width": 300,
+        "height": 332
+      }
+    },
+    {
+      "index": 312,
+      "row": 1247,
+      "column": 5,
+      "path": "data/excel_uploads/parsed/제품 리스트_1.PE/images/image_312_r1247c5.png",
+      "size": {
+        "width": 334,
+        "height": 333
+      }
+    }
+  ],
+  "stats": {
+    "total_products": 138,
+    "total_images": 312,
+    "sheet_rows": 1522,
+    "sheet_cols": 32
+  }
+}

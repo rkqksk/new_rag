@@ -1,0 +1,64 @@
+{
+  "product_name": "60ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658306772.jpg",
+      "filename": "GOODS1_1658306772.jpg",
+      "alt": "60ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "60ml 브로우용기",
+    "제품 코드": "BE060-H001",
+    "재질(원료)": "PE",
+    "사양": "45x34x91(mm)",
+    "capacity": "60ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.601305",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=184",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658306772.jpg",
+      "filename": "GOODS1_1658306772.jpg",
+      "alt": "60ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_184_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_184_print_area.pdf",
+  "idx": "184",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=184",
+  "crawled_at": "2025-10-21T21:30:41.968265",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 60,
+    "matched_price_range": "80",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 160,
+      "discount": 130
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 80,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.117073"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.830396"
+}

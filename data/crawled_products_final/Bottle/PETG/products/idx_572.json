@@ -1,0 +1,97 @@
+{
+  "product_name": "250ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660632901.jpg",
+      "filename": "GOODS1_1660632901.jpg",
+      "alt": "250ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_572_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660632901.jpg",
+      "filename": "ADD_GOODS1_1660632901.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_572_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "250ml 브로우용기",
+    "제품 코드": "BG250-A002",
+    "재질(원료)": "PETG",
+    "사양": "54x54x119(mm)",
+    "capacity": "250ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.732898",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=572",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660632901.jpg",
+      "filename": "GOODS1_1660632901.jpg",
+      "alt": "250ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_572_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660632901.jpg",
+      "filename": "ADD_GOODS1_1660632901.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_572_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PETG/print_area/idx_572_print_area.pdf",
+  "idx": "572",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=572",
+  "crawled_at": "2025-10-18T21:26:15.902852",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 250,
+    "matched_price_range": "250",
+    "material": "PETG",
+    "thickness": "얇은",
+    "base_price": {
+      "regular": 360,
+      "discount": 300
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "coating_capacity_range": "-300",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 280,
+      "discount": 250
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 280,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:15.044488",
+    "regular_price": 360,
+    "discount_price": 300,
+    "capacity_ml": 250,
+    "material_detail": "PETG(얇은)",
+    "pricing_updated_at": "2025-10-23T20:42:24.186238",
+    "pricing_capacity_ml": 250
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:52.025301"
+}

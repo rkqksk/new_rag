@@ -1,0 +1,62 @@
+{
+  "product_name": "50g 헤비크림용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594813.jpg",
+      "filename": "GOODS1_1659594813.jpg",
+      "alt": "50g 헤비크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_421_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594813.jpg",
+      "filename": "ADD_GOODS1_1659594813.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_421_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "50g 헤비크림용기",
+    "제품 코드": "VT050-G001",
+    "재질(원료)": "PET",
+    "사양": "Ø60x50(mm)",
+    "capacity": "50g",
+    "dimensions": "Ø60x50",
+    "neck_size": "60파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=421",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594813.jpg",
+      "filename": "GOODS1_1659594813.jpg",
+      "alt": "50g 헤비크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_421_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594813.jpg",
+      "filename": "ADD_GOODS1_1659594813.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_421_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_421_print_area.pdf",
+  "idx": "421",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=421",
+  "crawled_at": "2025-10-18T21:51:35.839157",
+  "category_label": "jar",
+  "pricing": {
+    "container_price": 80,
+    "container_capacity": "10-50ml",
+    "container_material": "PET"
+  },
+  "pricing_added_at": "2025-10-23"
+}

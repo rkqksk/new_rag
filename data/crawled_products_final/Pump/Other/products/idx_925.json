@@ -1,0 +1,70 @@
+{
+  "product_name": "18파이 일반미스트",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729892.jpg",
+      "filename": "GOODS1_1740729892.jpg",
+      "alt": "18파이 일반미스트",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_925_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740729892.jpg",
+      "filename": "ADD_GOODS1_1740729892.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_925_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "18파이 일반미스트",
+    "제품 코드": "SO018-CE15",
+    "재질(원료)": "기타",
+    "사양": "내경Ø18",
+    "dimensions": "Ø18",
+    "neck_size": "18파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729892.jpg",
+      "filename": "GOODS1_1740729892.jpg",
+      "alt": "18파이 일반미스트",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_925_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740729892.jpg",
+      "filename": "ADD_GOODS1_1740729892.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_925_main_2.jpg"
+    }
+  ],
+  "idx": "925",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=925",
+  "crawled_at": "2025-10-21T22:27:14.716714",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code": "SO018-CE15",
+  "product_code_updated_at": "2025-10-23T20:43:45.373007",
+  "pricing": {
+    "supply_price": 280.0,
+    "selling_price": 350.0
+  },
+  "product_list_info": {
+    "vendor": "에코팩",
+    "description": null,
+    "spec": "Ø18 페이셜 미스트펌프",
+    "detail": "내경 Ø18",
+    "package": null,
+    "note": "컬러 제작시 MOQ 10만개",
+    "updated_at": "2025-10-23T20:44:03.797467"
+  }
+}

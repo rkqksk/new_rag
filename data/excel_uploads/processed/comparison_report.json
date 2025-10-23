@@ -1,0 +1,370 @@
+{
+  "summary": {
+    "total_crawled": 846,
+    "total_excel": 241,
+    "crawled_with_codes": 751,
+    "excel_with_codes": 208,
+    "common_codes": 90,
+    "missing_in_crawled": 118,
+    "missing_in_excel": 661,
+    "spec_mismatches": 90
+  },
+  "details": {
+    "missing_in_crawled": [
+      "BT111-RP09",
+      "BT111-RM09",
+      "HT030-RP01",
+      "HT050-RP01",
+      "HT080-RP01",
+      "HT100-RP01",
+      "HT015-SP01",
+      "HT020-SP01",
+      "HT030-SP01",
+      "HT050-SP01",
+      "HT100-SP01",
+      "JP270-GK01",
+      "JP450-GK01",
+      "JP111-GM01",
+      "JP150-TK01",
+      "JP200-TK01",
+      "MH400-G001(24)",
+      "MH400-G001(28)",
+      "PET / 200g",
+      "PE / 200g",
+      "60 x 109(mm)",
+      "PET / 25g",
+      "31 x 36(mm)",
+      "pe / 140g",
+      "pp / 140g",
+      "54 x 52(mm)",
+      "pet / 650ml",
+      "pet / 100ml",
+      "pe / 500ml",
+      "pe / 800ml",
+      "pe / 1000ml",
+      "pet / 1000ml",
+      "Ø43",
+      "hdpe / 500ml",
+      "pe / 420ml",
+      "pe / 400ml",
+      "pe / 200ml",
+      "pe / 250ml",
+      "petg / 100ml",
+      "petg / 200ml",
+      "petg / 500ml",
+      "pe / 70ml",
+      "pe / 260ml",
+      "pe / 300ml",
+      "PE / 100ml",
+      "PET / 400ml",
+      "PET / 500ml",
+      "pet / 300ml",
+      "pe / 350ml",
+      "pet / 200ml"
+    ],
+    "missing_in_excel": [
+      "NP020-GE11",
+      "YP086-GM10",
+      "PTP024-CP02",
+      "QG100-G001",
+      "QG080-G001",
+      "QG030-G001",
+      "PO024-CG01",
+      "RP020-GG01",
+      "SO020-CE22",
+      "SO024-CE22",
+      "EO020-CG11",
+      "SO028-CG01",
+      "PO032-CG04",
+      "CP024-GD02",
+      "PO028-CG18(민)",
+      "SO018-CE21",
+      "IO028-CJ01",
+      "EO020-CG04",
+      "SO028-CG02(F)",
+      "PO032-CG02",
+      "NP024-GM02(M)",
+      "PO024-CG12",
+      "PO024-CG16(M)",
+      "SO024-CG03",
+      "CA050-GW13",
+      "SO024-CG04",
+      "CP032-GD01",
+      "PO024-CG03",
+      "IO024-CG01",
+      "NP028-GG01",
+      "PO024-CG19",
+      "CP028-GD01",
+      "FO030-CG02",
+      "NP024-GM03",
+      "PO032-CG13(M)",
+      "SO028-CG02",
+      "IO020-CG01",
+      "SO018-CE15",
+      "SO020-CG19",
+      "PO024-CG17",
+      "SO024-CG09",
+      "PO028-CG17",
+      "FO043-CG02(M)",
+      "CP032-GD02",
+      "SO028-CG01(F)",
+      "OT100-S001",
+      "OT080-S001",
+      "QT100-G002",
+      "OT200-G003",
+      "OT100-G001"
+    ],
+    "spec_mismatches": [
+      {
+        "code": "BE500-S007",
+        "crawled_spec": "60x60x202(mm)/Ø28",
+        "excel_spec": "PE / 500ml"
+      },
+      {
+        "code": "BE300-F002",
+        "crawled_spec": "64x143(mm)/Ø24",
+        "excel_spec": "PE / 300ml"
+      },
+      {
+        "code": "BE140-R001",
+        "crawled_spec": "42x135(mm)/Ø24",
+        "excel_spec": "PE / 140ml"
+      },
+      {
+        "code": "BG300-G008",
+        "crawled_spec": "68x116(mm)/Ø24",
+        "excel_spec": "PETG / 300ml"
+      },
+      {
+        "code": "BG090-S006",
+        "crawled_spec": "56x26x97(mm)/Ø20",
+        "excel_spec": "PETG / 90ml 준헤비"
+      },
+      {
+        "code": "BE500-U007",
+        "crawled_spec": "118x58x146(mm)/Ø32",
+        "excel_spec": "PE / 500ml"
+      },
+      {
+        "code": "GT500-R002",
+        "crawled_spec": "85x135(mm)/Ø60",
+        "excel_spec": "PET / 500ml"
+      },
+      {
+        "code": "HG120-R003",
+        "crawled_spec": "46x120(mm)/Ø24",
+        "excel_spec": "PETG / 120ml"
+      },
+      {
+        "code": "BT250-G004",
+        "crawled_spec": "58x129(mm)/Ø24",
+        "excel_spec": "PET / 250ml"
+      },
+      {
+        "code": "BG060-R001",
+        "crawled_spec": "35x93(mm)/Ø20",
+        "excel_spec": "PETG / 60ml"
+      },
+      {
+        "code": "BG070-R001(20)",
+        "crawled_spec": "40x83(mm)/Ø20",
+        "excel_spec": "PETG / 70ml"
+      },
+      {
+        "code": "BE250-U007",
+        "crawled_spec": "93x53x118(mm)/Ø28",
+        "excel_spec": "PE / 250ml"
+      },
+      {
+        "code": "HG030-R003",
+        "crawled_spec": "33x56(mm)/Ø20",
+        "excel_spec": "PETG / 25ml"
+      },
+      {
+        "code": "DE111-R012",
+        "crawled_spec": "99x209(mm)/Ø43",
+        "excel_spec": "PE / 1000ml"
+      },
+      {
+        "code": "BT500-K001",
+        "crawled_spec": "80x58x190(mm)/Ø28",
+        "excel_spec": "PET / 500ml"
+      },
+      {
+        "code": "BE150-R001",
+        "crawled_spec": "43x147(mm)/Ø24",
+        "excel_spec": "PE / 150ml(petg 170)"
+      },
+      {
+        "code": "BG200-K003",
+        "crawled_spec": "69x39x141(mm)/Ø24",
+        "excel_spec": "PETG / 200ml"
+      },
+      {
+        "code": "BG200-G008",
+        "crawled_spec": "56x119(mm)/Ø24",
+        "excel_spec": "PETG / 200ml"
+      },
+      {
+        "code": "MH050-G001",
+        "crawled_spec": "35x75(mm)/Ø20",
+        "excel_spec": "50ml"
+      },
+      {
+        "code": "BT400-G004",
+        "crawled_spec": "65x155(mm)/Ø24",
+        "excel_spec": "PET / 400ml"
+      },
+      {
+        "code": "BT500-L003",
+        "crawled_spec": "67x203(mm)/Ø32",
+        "excel_spec": "PET / 500ml"
+      },
+      {
+        "code": "BE900-R007",
+        "crawled_spec": "85x213(mm)/Ø32",
+        "excel_spec": "PE / 900ml"
+      },
+      {
+        "code": "BE120-H004(18)",
+        "crawled_spec": "58x32x128(mm)/Ø18",
+        "excel_spec": "PE / 120ml"
+      },
+      {
+        "code": "MH100-G001(24)",
+        "crawled_spec": "47x97(mm)/Ø24",
+        "excel_spec": "100ml"
+      },
+      {
+        "code": "BG400-R010",
+        "crawled_spec": "64x182(mm)/Ø28",
+        "excel_spec": "PE / 400ml"
+      },
+      {
+        "code": "JP450-GM01",
+        "crawled_spec": "Ø85x96(mm)",
+        "excel_spec": "450g / PP"
+      },
+      {
+        "code": "BE040-R001",
+        "crawled_spec": "28x95(mm)/Ø20",
+        "excel_spec": "PE / 40ml"
+      },
+      {
+        "code": "BE200-U017",
+        "crawled_spec": "75x38x140(mm)/Ø28",
+        "excel_spec": "PE / 200ml"
+      },
+      {
+        "code": "BG120-B002",
+        "crawled_spec": "62x28x110(mm)/Ø20",
+        "excel_spec": "PETG / 120ml"
+      },
+      {
+        "code": "BT100-TM01",
+        "crawled_spec": "40x107(mm)/Ø24",
+        "excel_spec": "PET / 100ml"
+      },
+      {
+        "code": "BG100-R001",
+        "crawled_spec": "39x122(mm)/Ø24",
+        "excel_spec": "PETG / 100ml"
+      },
+      {
+        "code": "BT111-R009",
+        "crawled_spec": "89x209(mm)/Ø32",
+        "excel_spec": "PET / 1000ml"
+      },
+      {
+        "code": "BG200-R001",
+        "crawled_spec": "47x159(mm)/Ø24",
+        "excel_spec": "PETG / 200ml"
+      },
+      {
+        "code": "BE200-R001",
+        "crawled_spec": "47x158(mm)/Ø24",
+        "excel_spec": "PE / 200ml"
+      },
+      {
+        "code": "HT050-RC01",
+        "crawled_spec": "40x79(mm)/Ø18",
+        "excel_spec": "PET / 50ml"
+      },
+      {
+        "code": "BT300-G004",
+        "crawled_spec": "59x144(mm)/Ø24",
+        "excel_spec": "PET / 300ml"
+      },
+      {
+        "code": "BT500-G004",
+        "crawled_spec": "69x170(mm)/Ø32",
+        "excel_spec": "PET / 500ml"
+      },
+      {
+        "code": "BT020-GM04",
+        "crawled_spec": "30x60(mm)/Ø20",
+        "excel_spec": "PET / 20ml"
+      },
+      {
+        "code": "HT030-RC01",
+        "crawled_spec": "36x65(mm)/Ø18",
+        "excel_spec": "PET / 30ml"
+      },
+      {
+        "code": "BG140-K003",
+        "crawled_spec": "59x34x114(mm)/Ø24",
+        "excel_spec": "PETG / 140ml"
+      },
+      {
+        "code": "BT100-GS04",
+        "crawled_spec": "47x86(mm)/Ø24",
+        "excel_spec": "PET / 100ml"
+      },
+      {
+        "code": "MH100-G001(20)",
+        "crawled_spec": "47x97(mm)/Ø20",
+        "excel_spec": "100ml"
+      },
+      {
+        "code": "HG060-R003",
+        "crawled_spec": "38x85(mm)/Ø20",
+        "excel_spec": "PETG / 60ml"
+      },
+      {
+        "code": "BE120-H004(20)",
+        "crawled_spec": "60x32x132(mm)/Ø20",
+        "excel_spec": "PE / 120ml"
+      },
+      {
+        "code": "BE150-R007",
+        "crawled_spec": "54x104(mm)/Ø24",
+        "excel_spec": "PE / 150ml"
+      },
+      {
+        "code": "MH200-G001",
+        "crawled_spec": "57x116(mm)/Ø24",
+        "excel_spec": "200ml"
+      },
+      {
+        "code": "BT010-RM01",
+        "crawled_spec": "23x56(mm)/Ø20",
+        "excel_spec": "PET / 10ml"
+      },
+      {
+        "code": "BT250-T001",
+        "crawled_spec": "55x144(mm)/Ø24",
+        "excel_spec": "PET / 250ml"
+      },
+      {
+        "code": "BE650-C007",
+        "crawled_spec": "114x47x209(mm)/Ø28",
+        "excel_spec": "PE / 650ml"
+      },
+      {
+        "code": "GE500-G002",
+        "crawled_spec": "62x198(mm)/Ø43",
+        "excel_spec": "PE / 500ml"
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "product_name": "600g 크림용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg",
+      "filename": "GOODS1_1711671186.jpg",
+      "alt": "600g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PE/images/idx_884_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1711671186.jpg",
+      "filename": "ADD_GOODS1_1711671186.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PE/images/idx_884_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "600g 크림용기",
+    "제품 코드": "JE600-R002",
+    "재질(원료)": "PE",
+    "사양": "99x94(mm)",
+    "capacity": "600g"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1711671186.jpg",
+      "filename": "GOODS1_1711671186.jpg",
+      "alt": "600g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PE/images/idx_884_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1711671186.jpg",
+      "filename": "ADD_GOODS1_1711671186.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PE/images/idx_884_main_2.jpg"
+    }
+  ],
+  "idx": "884",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=884",
+  "crawled_at": "2025-10-18T21:50:10.138900",
+  "category_label": "jar"
+}

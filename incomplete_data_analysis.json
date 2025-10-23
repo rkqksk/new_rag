@@ -1,0 +1,971 @@
+{
+  "neck_size": [
+    {
+      "idx": "455",
+      "name": "320ml 튜브브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "58",
+      "name": "1000ml 브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "490",
+      "name": "660g 크림브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "456",
+      "name": "400ml 튜브브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "657",
+      "name": "100ml 오버캡 헤비 브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "656",
+      "name": "80ml 오버캡 헤비 브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "498",
+      "name": "250ml 브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "660",
+      "name": "30ml 헤비캡 헤비 브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "835",
+      "name": "100ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "834",
+      "name": "80ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "956",
+      "name": "7g 마스카라용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "805",
+      "name": "100ml 오버캡 헤비 브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "413",
+      "name": "200ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "409",
+      "name": "100ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "408",
+      "name": "80ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "412",
+      "name": "150ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "957",
+      "name": "10g 마스카라용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "411",
+      "name": "150ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "407",
+      "name": "50ml 오버캡브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "954",
+      "name": "5g 마스카라용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "958",
+      "name": "14g 마스카라용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "955",
+      "name": "6g 마스카라용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "410",
+      "name": "120ml 오버캡브로우용기",
+      "category": "bottle"
+    }
+  ],
+  "pricing, neck_size": [
+    {
+      "idx": "487",
+      "name": "300g 크림브로우용기",
+      "category": "bottle"
+    },
+    {
+      "idx": "491",
+      "name": "450g 크림브로우용기",
+      "category": "bottle"
+    }
+  ],
+  "capacity": [
+    {
+      "idx": "921",
+      "name": "20파이 이중 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "953",
+      "name": "24파이 회오리캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "659",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "726",
+      "name": "20파이 프레스캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "911",
+      "name": "20파이 에센스펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "681",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "859",
+      "name": "28파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "930",
+      "name": "28파이 오일펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "716",
+      "name": "20파이 에센스펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "669",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "736",
+      "name": "24파이 무광 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "691",
+      "name": "24파이 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "845",
+      "name": "24파이 무광 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "756",
+      "name": "50파이 이중캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "743",
+      "name": "32파이 룰렛캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "671",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "723",
+      "name": "24파이 오일펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "735",
+      "name": "28파이 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "918",
+      "name": "24파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "742",
+      "name": "28파이 룰렛캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "739",
+      "name": "24파이 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "693",
+      "name": "32파이 무광 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "948",
+      "name": "20파이 오일펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "856",
+      "name": "24파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "712",
+      "name": "24파이 코미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "857",
+      "name": "28파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "820",
+      "name": "43파이 오버캡형 무광 거품펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "746",
+      "name": "24파이 민자캡",
+      "category": "jar"
+    },
+    {
+      "idx": "748",
+      "name": "32파이 민자캡",
+      "category": "jar"
+    },
+    {
+      "idx": "950",
+      "name": "20파이 풀커버 일반미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "946",
+      "name": "24파이 풀커버 일반미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "697",
+      "name": "28파이 건스프레이 ",
+      "category": "cappump"
+    },
+    {
+      "idx": "926",
+      "name": "18파이 일반미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "700",
+      "name": "28파이 폼건스프레이",
+      "category": "cappump"
+    },
+    {
+      "idx": "701",
+      "name": "24파이 미니건스프레이",
+      "category": "cappump"
+    },
+    {
+      "idx": "702",
+      "name": "24파이 미니건스프레이",
+      "category": "cappump"
+    },
+    {
+      "idx": "698",
+      "name": "28파이 건스프레이",
+      "category": "cappump"
+    },
+    {
+      "idx": "925",
+      "name": "18파이 일반미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "821",
+      "name": "20파이 풀커버 안개미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "699",
+      "name": "28파이 폼건스프레이",
+      "category": "cappump"
+    }
+  ],
+  "capacity, pricing": [
+    {
+      "idx": "893",
+      "name": "86파이 크림 중간캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "892",
+      "name": "30파이 오버캡형 거품펌프",
+      "category": "cappump"
+    }
+  ],
+  "capacity, material, pricing": [
+    {
+      "idx": "931",
+      "name": "24파이 디퓨저 캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "927",
+      "name": "32파이 룰렛 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "675",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "858",
+      "name": "24파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "706",
+      "name": "20파이 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "680",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "696",
+      "name": "43파이 오버캡형 거품펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "679",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "678",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "707",
+      "name": "24파이 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "750",
+      "name": "24파이 스킨각캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "711",
+      "name": "20파이 코미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "674",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "727",
+      "name": "24파이 프레스캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "822",
+      "name": "20파이 풀커버 에센스펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "686",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "848",
+      "name": "28파이 무광 고점도 펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "720",
+      "name": "18파이 에센스펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "665",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "673",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "761",
+      "name": "28파이 내지캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "760",
+      "name": "24파이 내지캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "672",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "721",
+      "name": "24파이 풀커버 에센스펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "849",
+      "name": "24파이 무광 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "687",
+      "name": "24파이 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "668",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "692",
+      "name": "32파이 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "684",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "846",
+      "name": "28파이 무광 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "755",
+      "name": "45파이 이중캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "714",
+      "name": "24파이 미세분사 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "763",
+      "name": "24파이 스킨 R캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "734",
+      "name": "24파이 원터치캡(6파이)",
+      "category": "cappump"
+    },
+    {
+      "idx": "667",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "688",
+      "name": "28파이 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "759",
+      "name": "20파이 내지캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "923",
+      "name": "18파이 풀커버 에센스 펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "718",
+      "name": "24파이 에센스펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "719",
+      "name": "18파이 에센스펌프(소)",
+      "category": "cappump"
+    },
+    {
+      "idx": "666",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "689",
+      "name": "32파이 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "670",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "762",
+      "name": "32파이 내지캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "754",
+      "name": "41파이 이중캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "703",
+      "name": "20파이 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "847",
+      "name": "32파이 무광 고점도펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "685",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "677",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "732",
+      "name": "20파이 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "749",
+      "name": "20파이 스킨각캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "964",
+      "name": "24파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "694",
+      "name": "32파이 리무버 펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "682",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "704",
+      "name": "24파이 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "753",
+      "name": "40파이 이중캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "713",
+      "name": "20파이 미세분사 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "705",
+      "name": "24파이 풀커버 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "683",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "695",
+      "name": "43파이 스토퍼형 거품펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "932",
+      "name": "28파이 디퓨저 캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "709",
+      "name": "24파이 미스트펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "676",
+      "name": "32파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "733",
+      "name": "24파이 원터치캡(3파이)",
+      "category": "cappump"
+    },
+    {
+      "idx": "710",
+      "name": "24파이 일자형 미스트펌프",
+      "category": "jar"
+    },
+    {
+      "idx": "747",
+      "name": "28파이 민자캡",
+      "category": "jar"
+    }
+  ],
+  "capacity, material": [
+    {
+      "idx": "874",
+      "name": "24파이 무광 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "663",
+      "name": "24파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "751",
+      "name": "20파이 이중단캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "947",
+      "name": "30파이 오버캡형 거품펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "951",
+      "name": "20파이 뾰족캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "662",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "741",
+      "name": "24파이 룰렛캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "798",
+      "name": "20파이 이중캡 안개미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "737",
+      "name": "24파이 둥근머리원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "664",
+      "name": "28파이 일반펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "799",
+      "name": "24파이 이중캡 안개미스트",
+      "category": "cappump"
+    },
+    {
+      "idx": "740",
+      "name": "20파이 룰렛캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "738",
+      "name": "24파이 둥근머리원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "870",
+      "name": "24파이 스킨 장캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "935",
+      "name": "24파이 360도 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "934",
+      "name": "24파이 물감캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "922",
+      "name": "24파이 이중 원터치캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "797",
+      "name": "40파이 이중캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "724",
+      "name": "24파이 온오프펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "933",
+      "name": "20파이 물감캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "952",
+      "name": "24파이 뾰족캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "744",
+      "name": "43파이 룰렛캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "752",
+      "name": "24파이 이중단캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "729",
+      "name": "28파이 프레스캡",
+      "category": "cappump"
+    },
+    {
+      "idx": "725",
+      "name": "24파이 온오프 오일펌프",
+      "category": "cappump"
+    },
+    {
+      "idx": "864",
+      "name": "20파이 민자 장캡",
+      "category": "jar"
+    },
+    {
+      "idx": "919",
+      "name": "43파이 민자캡",
+      "category": "jar"
+    },
+    {
+      "idx": "745",
+      "name": "20파이 민자 단캡",
+      "category": "jar"
+    },
+    {
+      "idx": "924",
+      "name": "18파이 민자 단캡",
+      "category": "jar"
+    }
+  ],
+  "pricing": [
+    {
+      "idx": "884",
+      "name": "600g 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "904",
+      "name": "400g 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "788",
+      "name": "500g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "792",
+      "name": "300g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "784",
+      "name": "500g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "854",
+      "name": "300g 원터치패드 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "813",
+      "name": "200g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "782",
+      "name": "250g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "937",
+      "name": "300g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "777",
+      "name": "450g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "776",
+      "name": "270g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "783",
+      "name": "300g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "812",
+      "name": "150g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "780",
+      "name": "120g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "779",
+      "name": "100g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "962",
+      "name": "150g 이중 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "963",
+      "name": "150g 무광 이중 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "781",
+      "name": "500g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "787",
+      "name": "300g 크림사출용기",
+      "category": "jar"
+    },
+    {
+      "idx": "419",
+      "name": "400g 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "418",
+      "name": "300g 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "422",
+      "name": "80g 헤비크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "425",
+      "name": "100g 헤비크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "424",
+      "name": "100g 헤비크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "807",
+      "name": "220g 원터치패드 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "831",
+      "name": "500g 원터치패드 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "417",
+      "name": "220g 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "928",
+      "name": "500g 원터치패드 크림용기",
+      "category": "jar"
+    },
+    {
+      "idx": "420",
+      "name": "500g 크림용기",
+      "category": "jar"
+    }
+  ]
+}

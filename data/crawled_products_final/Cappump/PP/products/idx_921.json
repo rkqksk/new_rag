@@ -1,0 +1,87 @@
+{
+  "product_name": "20파이 이중 원터치캡",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1740381116.jpg",
+      "filename": "ADD_GOODS2_1740381116.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_921_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740381116.jpg",
+      "filename": "GOODS1_1740381116.jpg",
+      "alt": "20파이 이중 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_921_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740381116.jpg",
+      "filename": "ADD_GOODS1_1740381116.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_921_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "20파이 이중 원터치캡",
+    "제품 코드": "NP020-GE11",
+    "재질(원료)": "PP",
+    "사양": "29x22(mm)/내경Ø20",
+    "dimensions": "Ø20",
+    "neck_size": "20파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1740381116.jpg",
+      "filename": "ADD_GOODS2_1740381116.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_921_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740381116.jpg",
+      "filename": "GOODS1_1740381116.jpg",
+      "alt": "20파이 이중 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_921_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740381116.jpg",
+      "filename": "ADD_GOODS1_1740381116.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/PP/images/idx_921_main_3.jpg"
+    }
+  ],
+  "idx": "921",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=921",
+  "crawled_at": "2025-10-18T21:57:41.915956",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡",
+    "supply_price": 100.0,
+    "selling_price": 140.0
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "CAP",
+  "product_code": "NP020-GE11",
+  "product_code_updated_at": "2025-10-23T20:43:45.361065",
+  "product_list_info": {
+    "vendor": "에코팩",
+    "description": null,
+    "spec": "20파이 이중 원터치캡",
+    "detail": "29x22(mm)/내경Ø20",
+    "package": null,
+    "note": "ECC 20-410 ODC",
+    "updated_at": "2025-10-23T20:44:03.792845"
+  }
+}

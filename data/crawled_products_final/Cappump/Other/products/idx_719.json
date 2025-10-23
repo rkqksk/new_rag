@@ -1,0 +1,52 @@
+{
+  "product_name": "18파이 에센스펌프(소)",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748507.jpg",
+      "filename": "GOODS1_1661748507.jpg",
+      "alt": "18파이 에센스펌프(소)",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_719_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "EO018-CG05"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748507.jpg",
+      "filename": "GOODS1_1661748507.jpg",
+      "alt": "18파이 에센스펌프(소)",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_719_main_1.jpg"
+    }
+  ],
+  "idx": "719",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=719",
+  "crawled_at": "2025-10-18T06:57:23.492557",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.578431",
+  "product_code": "EO018-CG05",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": null,
+    "spec": "Ø18 에센스펌프(소)",
+    "detail": "내경 Ø18",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.118930"
+  }
+}

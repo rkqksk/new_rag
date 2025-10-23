@@ -1,0 +1,52 @@
+{
+  "product_name": "24파이 미스트펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747626.jpg",
+      "filename": "GOODS1_1661747626.jpg",
+      "alt": "24파이 미스트펌프",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_704_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "SO024-CG05(N)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661747626.jpg",
+      "filename": "GOODS1_1661747626.jpg",
+      "alt": "24파이 미스트펌프",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_704_main_1.jpg"
+    }
+  ],
+  "idx": "704",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=704",
+  "crawled_at": "2025-10-18T07:00:02.746097",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.579824",
+  "product_code": "SO024-CG05(N)",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "Ø24 미스트 S24410D ",
+    "spec": "Ø24 미스트펌프",
+    "detail": "내경 Ø24",
+    "package": "1,000ea",
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.123195"
+  }
+}

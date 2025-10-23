@@ -1,0 +1,59 @@
+{
+  "product_name": "20파이 풀커버 일반미스트",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1751261325.jpg",
+      "filename": "GOODS1_1751261325.jpg",
+      "alt": "20파이 풀커버 일반미스트",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_950_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "20파이 풀커버 일반미스트",
+    "제품 코드": "SO020-CE22",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø20",
+    "dimensions": "Ø20",
+    "neck_size": "20파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1751261325.jpg",
+      "filename": "GOODS1_1751261325.jpg",
+      "alt": "20파이 풀커버 일반미스트",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Pump/Other/images/idx_950_main_1.jpg"
+    }
+  ],
+  "idx": "950",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=950",
+  "crawled_at": "2025-10-21T22:27:44.954783",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡",
+    "supply_price": 330.0,
+    "selling_price": 410.0
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "PUMP",
+  "product_code": "SO020-CE22",
+  "product_code_updated_at": "2025-10-23T20:43:45.366434",
+  "product_list_info": {
+    "vendor": "에코팩",
+    "description": null,
+    "spec": "20파이 풀커버 일반미스트",
+    "detail": "내경 Ø20",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:44:03.794705"
+  }
+}

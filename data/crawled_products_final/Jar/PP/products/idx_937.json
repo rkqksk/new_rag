@@ -1,0 +1,55 @@
+{
+  "product_name": "300g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1746681287.jpg",
+      "filename": "GOODS1_1746681287.jpg",
+      "alt": "300g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_937_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1746681287.jpg",
+      "filename": "ADD_GOODS1_1746681287.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_937_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "300g 크림사출용기",
+    "제품 코드": "JP300-GM01",
+    "재질(원료)": "PP",
+    "사양": "Ø86x64(mm)",
+    "capacity": "300g",
+    "dimensions": "Ø86x64",
+    "neck_size": "86파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1746681287.jpg",
+      "filename": "GOODS1_1746681287.jpg",
+      "alt": "300g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_937_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1746681287.jpg",
+      "filename": "ADD_GOODS1_1746681287.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_937_main_2.jpg"
+    }
+  ],
+  "idx": "937",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=937",
+  "crawled_at": "2025-10-18T21:48:42.519229",
+  "category_label": "jar"
+}

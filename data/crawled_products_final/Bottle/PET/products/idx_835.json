@@ -1,0 +1,67 @@
+{
+  "product_name": "100ml 오버캡브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1683792358.jpg",
+      "filename": "GOODS1_1683792358.jpg",
+      "alt": "100ml 오버캡브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_835_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1683792358.jpg",
+      "filename": "ADD_GOODS1_1683792358.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_835_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "100ml 오버캡브로우용기",
+    "제품 코드": "OT100-S001",
+    "재질(원료)": "PET",
+    "사양": "37x37x162(mm)/Ø24",
+    "capacity": "100ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=835",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1683792358.jpg",
+      "filename": "GOODS1_1683792358.jpg",
+      "alt": "100ml 오버캡브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_835_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1683792358.jpg",
+      "filename": "ADD_GOODS1_1683792358.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_835_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_835_print_area.pdf",
+  "idx": "835",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=835",
+  "crawled_at": "2025-10-18T21:44:34.664983",
+  "category_label": "bottle",
+  "pricing": {
+    "container_price": 180,
+    "container_capacity": "100ml",
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡",
+    "coating_price": 240
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "CAP",
+  "product_code": "OT100-S001",
+  "product_code_updated_at": "2025-10-23T20:43:45.363689"
+}

@@ -1,0 +1,64 @@
+{
+  "product_name": "160ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658126590.jpg",
+      "filename": "GOODS1_1658126590.jpg",
+      "alt": "160ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "160ml 브로우용기",
+    "제품 코드": "BE160-S002",
+    "재질(원료)": "PE",
+    "사양": "51x40x120(mm)",
+    "capacity": "160ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.636182",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=124",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658126590.jpg",
+      "filename": "GOODS1_1658126590.jpg",
+      "alt": "160ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_124_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_124_print_area.pdf",
+  "idx": "124",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=124",
+  "crawled_at": "2025-10-21T21:22:17.403008",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 160,
+    "matched_price_range": "180",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 240,
+      "discount": 170
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 220,
+    "discount_price": 160,
+    "pricing_capacity_ml": 150,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.135038"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.882204"
+}

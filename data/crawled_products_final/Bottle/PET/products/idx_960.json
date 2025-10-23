@@ -1,0 +1,127 @@
+{
+  "product_name": "50ml 헤비브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1754461630.jpg",
+      "filename": "ADD_GOODS2_1754461630.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1754461630.jpg",
+      "filename": "ADD_GOODS3_1754461630.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1754461630.jpg",
+      "filename": "GOODS1_1754461630.jpg",
+      "alt": "50ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1754461630.jpg",
+      "filename": "ADD_GOODS1_1754461630.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "50ml 헤비브로우용기",
+    "제품 코드": "HT050-GM06",
+    "재질(원료)": "PET",
+    "사양": "41x77(mm)",
+    "capacity": "50ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.763744",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=960",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1754461630.jpg",
+      "filename": "ADD_GOODS2_1754461630.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1754461630.jpg",
+      "filename": "ADD_GOODS3_1754461630.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1754461630.jpg",
+      "filename": "GOODS1_1754461630.jpg",
+      "alt": "50ml 헤비브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1754461630.jpg",
+      "filename": "ADD_GOODS1_1754461630.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_960_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_960_print_area.pdf",
+  "idx": "960",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=960",
+  "crawled_at": "2025-10-18T21:20:04.794622",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 50,
+    "matched_price_range": "10-50",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "coating_capacity_range": "10-50",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 220,
+      "discount": 160
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 220,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:14.988004",
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 10,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.223313"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.952803"
+}

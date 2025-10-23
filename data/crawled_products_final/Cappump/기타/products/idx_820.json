@@ -1,0 +1,57 @@
+{
+  "product_name": "43파이 오버캡형 무광 거품펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1676887929.jpg",
+      "filename": "GOODS1_1676887929.jpg",
+      "alt": "43파이 오버캡형 무광 거품펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_820_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "43파이 오버캡형 무광 거품펌프",
+    "제품 코드": "FO043-CG02(M)",
+    "재질(원료)": "기타",
+    "사양": "내경Ø43",
+    "dimensions": "Ø43",
+    "neck_size": "43파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1676887929.jpg",
+      "filename": "GOODS1_1676887929.jpg",
+      "alt": "43파이 오버캡형 무광 거품펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_820_main_1.jpg"
+    }
+  ],
+  "idx": "820",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=820",
+  "crawled_at": "2025-10-18T21:59:10.047006",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 150,
+    "cap_product_type": "캡_막캡"
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "PUMP",
+  "product_code": "FO043-CG02(M)",
+  "product_code_updated_at": "2025-10-23T20:43:45.373598",
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "Ø43 무광거품펌프",
+    "spec": "43파이 오버캡형 무광 거품펌프",
+    "detail": "내경 Ø43",
+    "package": "350ea",
+    "note": null,
+    "updated_at": "2025-10-23T20:44:03.798067"
+  }
+}

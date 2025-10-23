@@ -1,0 +1,108 @@
+{
+  "product_name": "100ml 다층브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1733383760.jpg",
+      "filename": "ADD_GOODS2_1733383760.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1733383760.jpg",
+      "filename": "ADD_GOODS3_1733383760.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1733383760.jpg",
+      "filename": "GOODS1_1733383760.jpg",
+      "alt": "100ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1733383760.jpg",
+      "filename": "ADD_GOODS1_1733383760.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "100ml 다층브로우용기",
+    "제품 코드": "MH100-G001(20)",
+    "재질(원료)": "혼합",
+    "사양": "47x97(mm)",
+    "capacity": "100ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.742111",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=909",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1733383760.jpg",
+      "filename": "ADD_GOODS2_1733383760.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1733383760.jpg",
+      "filename": "ADD_GOODS3_1733383760.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1733383760.jpg",
+      "filename": "GOODS1_1733383760.jpg",
+      "alt": "100ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1733383760.jpg",
+      "filename": "ADD_GOODS1_1733383760.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_909_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/Other/print_area/idx_909_print_area.pdf",
+  "idx": "909",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=909",
+  "crawled_at": "2025-10-18T21:15:52.895040",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 100,
+    "matched_price_range": "100",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 280,
+      "discount": 250
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 240,
+    "discount_price": 160,
+    "capacity_ml": 100,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.195940",
+    "pricing_capacity_ml": 100
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.191107"
+}

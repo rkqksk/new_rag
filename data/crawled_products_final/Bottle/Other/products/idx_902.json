@@ -1,0 +1,110 @@
+{
+  "product_name": "50ml 다층브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_172724909120250225153226.jpg",
+      "filename": "ADD_GOODS2_172724909120250225153226.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_172724909120250225153226.jpg",
+      "filename": "ADD_GOODS3_172724909120250225153226.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_172724909120250225153226.jpg",
+      "filename": "GOODS1_172724909120250225153226.jpg",
+      "alt": "50ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_172724909120250225153226.jpg",
+      "filename": "ADD_GOODS1_172724909120250225153226.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "50ml 다층브로우용기",
+    "제품 코드": "MH050-G002(24)",
+    "재질(원료)": "혼합",
+    "사양": "39x71(mm)",
+    "capacity": "50ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.741631",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=902",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_172724909120250225153226.jpg",
+      "filename": "ADD_GOODS2_172724909120250225153226.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_172724909120250225153226.jpg",
+      "filename": "ADD_GOODS3_172724909120250225153226.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_172724909120250225153226.jpg",
+      "filename": "GOODS1_172724909120250225153226.jpg",
+      "alt": "50ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_172724909120250225153226.jpg",
+      "filename": "ADD_GOODS1_172724909120250225153226.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_902_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/Other/print_area/idx_902_print_area.pdf",
+  "idx": "902",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=902",
+  "crawled_at": "2025-10-18T21:41:09.887410",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 50,
+    "matched_price_range": "10-50",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 250,
+      "discount": 230
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "regular_price": 190,
+    "discount_price": 150,
+    "pricing_capacity_ml": 10,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.195575"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.190582"
+}

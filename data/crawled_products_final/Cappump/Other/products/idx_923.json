@@ -1,0 +1,42 @@
+{
+  "product_name": "18파이 풀커버 에센스 펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729397.jpg",
+      "filename": "GOODS1_1740729397.jpg",
+      "alt": "18파이 풀커버 에센스 펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_923_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "EO018-CG10"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729397.jpg",
+      "filename": "GOODS1_1740729397.jpg",
+      "alt": "18파이 풀커버 에센스 펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_923_main_1.jpg"
+    }
+  ],
+  "idx": "923",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=923",
+  "crawled_at": "2025-10-18T07:05:01.598907",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.578250",
+  "product_code": "EO018-CG10"
+}

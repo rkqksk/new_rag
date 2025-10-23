@@ -1,0 +1,70 @@
+{
+  "product_name": "300g 크림용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594652.jpg",
+      "filename": "ADD_GOODS2_1659594652.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_418_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594652.jpg",
+      "filename": "GOODS1_1659594652.jpg",
+      "alt": "300g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_418_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594652.jpg",
+      "filename": "ADD_GOODS1_1659594652.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_418_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "300g 크림용기",
+    "제품 코드": "JT300-TM01",
+    "재질(원료)": "PET",
+    "사양": "65(mm)xØ89",
+    "capacity": "300g",
+    "dimensions": "Ø89",
+    "neck_size": "89파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=418",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659594652.jpg",
+      "filename": "ADD_GOODS2_1659594652.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_418_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594652.jpg",
+      "filename": "GOODS1_1659594652.jpg",
+      "alt": "300g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_418_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594652.jpg",
+      "filename": "ADD_GOODS1_1659594652.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_418_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_418_print_area.pdf",
+  "idx": "418",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=418",
+  "crawled_at": "2025-10-18T21:49:43.729887",
+  "category_label": "jar"
+}

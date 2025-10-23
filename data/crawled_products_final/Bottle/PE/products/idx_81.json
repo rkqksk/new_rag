@@ -1,0 +1,63 @@
+{
+  "product_name": "1500ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658123160.jpg",
+      "filename": "GOODS1_1658123160.jpg",
+      "alt": "1500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "1500ml 브로우용기",
+    "제품 코드": "BE115-GU01",
+    "재질(원료)": "PE",
+    "사양": "96x260(mm)",
+    "capacity": "1500ml",
+    "dimensions": "Ø38",
+    "neck_size": "38파이",
+    "neck_size_mm": 38,
+    "neck_updated_at": "2025-10-23T21:00:50.603894",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=81",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658123160.jpg",
+      "filename": "GOODS1_1658123160.jpg",
+      "alt": "1500ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_81_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_81_print_area.pdf",
+  "idx": "81",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=81",
+  "crawled_at": "2025-10-21T21:16:24.036960",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 1500,
+    "matched_price_range": "100",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 180,
+      "discount": 130
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 460,
+    "discount_price": 420,
+    "pricing_capacity_ml": 1000,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.119271"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.835107"
+}

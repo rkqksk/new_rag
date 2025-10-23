@@ -1,0 +1,69 @@
+{
+  "product_name": "24파이 뾰족캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108546.jpg",
+      "filename": "GOODS1_1752108546.jpg",
+      "alt": "24파이 뾰족캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_952_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1752108546.jpg",
+      "filename": "ADD_GOODS1_1752108546.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_952_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PTE024-CG01"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1752108546.jpg",
+      "filename": "GOODS1_1752108546.jpg",
+      "alt": "24파이 뾰족캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_952_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1752108546.jpg",
+      "filename": "ADD_GOODS1_1752108546.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_952_main_2.jpg"
+    }
+  ],
+  "idx": "952",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=952",
+  "crawled_at": "2025-10-18T06:51:27.239067",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.569972",
+  "product_code": "PTE024-CG01",
+  "pricing": {
+    "supply_price": 80.0,
+    "selling_price": 120.0
+  },
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": null,
+    "spec": "24파이 뾰족캡",
+    "detail": "27x42mm / 내경 Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.102298"
+  }
+}

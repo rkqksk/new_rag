@@ -1,0 +1,113 @@
+{
+  "product_name": "10ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1681285903.jpg",
+      "filename": "ADD_GOODS2_1681285903.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_828_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1681285903.jpg",
+      "filename": "GOODS1_1681285903.jpg",
+      "alt": "10ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_828_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1681285903.jpg",
+      "filename": "ADD_GOODS1_1681285903.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_828_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "10ml 브로우용기",
+    "제품 코드": "BT010-G001",
+    "재질(원료)": "PET",
+    "사양": "25x53(mm)",
+    "capacity": "10ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.772459",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=828",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1681285903.jpg",
+      "filename": "ADD_GOODS2_1681285903.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_828_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1681285903.jpg",
+      "filename": "GOODS1_1681285903.jpg",
+      "alt": "10ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_828_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1681285903.jpg",
+      "filename": "ADD_GOODS1_1681285903.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_828_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_828_print_area.pdf",
+  "idx": "828",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=828",
+  "crawled_at": "2025-10-18T21:45:24.073880",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 10,
+    "matched_price_range": "10-50",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "coating_capacity_range": "10-50",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 220,
+      "discount": 160
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 220,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:14.996538",
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 10,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.234722"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.960725"
+}

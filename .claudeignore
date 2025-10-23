@@ -1,1 +1,128 @@
+# ============================================
+# RAG Enterprise .claudeignore
+# Claude Code가 무시할 파일/디렉토리
+# ============================================
+
+# ============================================
+# Data & Large Files
+# ============================================
+data/
+documents/
+images/
+files/
+exports/
+*.sqlite3
+*.db
+
+# ============================================
+# ML Models & Checkpoints
+# ============================================
+models/
+checkpoints/
+finetuning/models/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+
+# ============================================
+# Logs & Reports
+# ============================================
+*.log
+logs/
+htmlcov/
+.coverage
+*.out
+
+# ============================================
+# Python Cache
+# ============================================
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# ============================================
+# Virtual Environments
+# ============================================
+.venv/
+venv/
+ENV/
+env/
+
+# ============================================
+# Node Modules
+# ============================================
+node_modules/
+
+# ============================================
+# Archives & Backups
+# ============================================
+archives/
+.backups/
+*.backup
+*.bak
+*.old
+
+# ============================================
+# Temporary Files
+# ============================================
+temp/
+tmp/
+*.tmp
+.DS_Store
+
+# ============================================
+# Claude Internal
+# ============================================
 .claude/agents/_archived/
+.claude/debug/
+.claude/logs/
+.claude/shell-snapshots/
+.claude/file-history/
+
+# ============================================
+# IDE & Tools
+# ============================================
+.vscode/
+.idea/
+.cursor/
+
+# ============================================
+# Docker Volumes
+# ============================================
+data/qdrant/
+data/redis/
+data/postgres/
+data/mongodb/
+
+# ============================================
+# Test Output
+# ============================================
+htmlcov/
+.tox/
+.hypothesis/
+
+# ============================================
+# Specific Large Reports
+# ============================================
+EMBEDDING_COMPLETE_REPORT.md
+MATERIAL_EXTRACTION_REPORT.md
+MATERIAL_EXTRACTION_SUMMARY.md
+WEEK3_COVERAGE_REPORT.md
+embedding_report*.json
+qa_test_result.json
+
+# ============================================
+# Development Experiments
+# ============================================
+dev/experiments/
+dev/prototypes/
+dev/sandbox/
+dev/notebooks/
+
+# ============================================
+# Generated Documentation
+# ============================================
+claudedocs/

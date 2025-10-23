@@ -1,0 +1,107 @@
+{
+  "product_name": "90ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660632379.jpg",
+      "filename": "GOODS1_1660632379.jpg",
+      "alt": "90ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660632379.jpg",
+      "filename": "ADD_GOODS1_1660632379.jpg",
+      "type": "main"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1660632379_1.jpg",
+      "filename": "1660632379_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "90ml 브로우용기",
+    "제품 코드": "BG090-S006",
+    "재질(원료)": "PETG",
+    "사양": "56x26x97(mm)",
+    "capacity": "90ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.690780",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=567",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660632379.jpg",
+      "filename": "GOODS1_1660632379.jpg",
+      "alt": "90ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_567_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660632379.jpg",
+      "filename": "ADD_GOODS1_1660632379.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_567_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1660632379_1.jpg",
+      "filename": "1660632379_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PETG/images/idx_567_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_567_print_area.pdf",
+  "idx": "567",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=567",
+  "crawled_at": "2025-10-21T22:14:33.517377",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 90,
+    "matched_price_range": "100",
+    "material": "PETG",
+    "thickness": "얇은",
+    "base_price": {
+      "regular": 260,
+      "discount": 220
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "coating_capacity_range": "-100",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 240,
+      "discount": 180
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 240,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:15.025685",
+    "regular_price": 240,
+    "discount_price": 180,
+    "pricing_capacity_ml": 80,
+    "material_detail": "PETG(얇은)",
+    "pricing_updated_at": "2025-10-23T20:42:24.162046"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:52.001885"
+}

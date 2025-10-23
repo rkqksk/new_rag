@@ -1,0 +1,69 @@
+{
+  "product_name": "20파이 민자 장캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_170288952320231218180422.jpg",
+      "filename": "GOODS1_170288952320231218180422.jpg",
+      "alt": "20파이 민자 장캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_864_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_170288952320231218180422.jpg",
+      "filename": "ADD_GOODS1_170288952320231218180422.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_864_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CP020-GD02(L)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_170288952320231218180422.jpg",
+      "filename": "GOODS1_170288952320231218180422.jpg",
+      "alt": "20파이 민자 장캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_864_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_170288952320231218180422.jpg",
+      "filename": "ADD_GOODS1_170288952320231218180422.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_864_main_2.jpg"
+    }
+  ],
+  "idx": "864",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=864",
+  "crawled_at": "2025-10-18T06:47:02.345474",
+  "category": "CapPump",
+  "category_label": "jar",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.567752",
+  "product_code": "CP020-GD02(L)",
+  "pricing": {
+    "supply_price": 60.0,
+    "selling_price": 70.0
+  },
+  "product_list_info": {
+    "vendor": "대경테크",
+    "description": null,
+    "spec": "20파이 민자 장캡",
+    "detail": "내경 Ø20",
+    "package": "23x20(mm) / 내경 Ø20",
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.098586"
+  }
+}

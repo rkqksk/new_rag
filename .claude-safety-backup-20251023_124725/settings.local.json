@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/oypnus/**)",
+      "WebFetch(domain:chungjinkorea.com)",
+      "WebFetch(domain:*.com)",
+      "Bash(python*)",
+      "Bash(python3*)",
+      "Bash(pip install*)",
+      "Bash(docker-compose*)",
+      "Bash(curl*)",
+      "mcp__chrome_devtools__navigate_page",
+      "mcp__chrome_devtools__new_page"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "outputStyle": "code-mentor"
+}

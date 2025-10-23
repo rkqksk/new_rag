@@ -1,0 +1,59 @@
+{
+  "product_name": "24파이 오일펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748797.jpg",
+      "filename": "GOODS1_1661748797.jpg",
+      "alt": "24파이 오일펌프",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_723_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "24파이 오일펌프",
+    "제품 코드": "IO024-CG01",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø24",
+    "dimensions": "Ø24",
+    "neck_size": "24파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748797.jpg",
+      "filename": "GOODS1_1661748797.jpg",
+      "alt": "24파이 오일펌프",
+      "type": "main",
+      "width": 800,
+      "height": 800,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_723_main_1.jpg"
+    }
+  ],
+  "idx": "723",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=723",
+  "crawled_at": "2025-10-18T21:57:15.817553",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡",
+    "supply_price": 270.0,
+    "selling_price": 430.0
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "PUMP",
+  "product_code": "IO024-CG01",
+  "product_code_updated_at": "2025-10-23T20:43:45.372199",
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": null,
+    "spec": "24파이 오일펌프",
+    "detail": "내경 Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:44:03.796754"
+  }
+}

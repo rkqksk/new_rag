@@ -1,0 +1,97 @@
+{
+  "product_name": "24파이 360도 원터치캡",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1744948705.jpg",
+      "filename": "ADD_GOODS2_1744948705.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1744948705.jpg",
+      "filename": "ADD_GOODS3_1744948705.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744948705.jpg",
+      "filename": "GOODS1_1744948705.jpg",
+      "alt": "24파이 360도 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1744948705.jpg",
+      "filename": "ADD_GOODS1_1744948705.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "NP024-GM12"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1744948705.jpg",
+      "filename": "ADD_GOODS2_1744948705.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1744948705.jpg",
+      "filename": "ADD_GOODS3_1744948705.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1744948705.jpg",
+      "filename": "GOODS1_1744948705.jpg",
+      "alt": "24파이 360도 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1744948705.jpg",
+      "filename": "ADD_GOODS1_1744948705.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_935_main_4.jpg"
+    }
+  ],
+  "idx": "935",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=935",
+  "crawled_at": "2025-10-18T06:47:38.317493",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.568990",
+  "product_code": "NP024-GM12",
+  "pricing": {
+    "supply_price": 170.0,
+    "selling_price": 230.0
+  },
+  "product_list_info": {
+    "vendor": "모소",
+    "description": null,
+    "spec": "24파이 360도 원터치캡",
+    "detail": "33x34(mm)/내경Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.100438"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "product_name": "180ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_172724758020241023124412.jpg",
+      "filename": "ADD_GOODS2_172724758020241023124412.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_172724758020241023124827.jpg",
+      "filename": "ADD_GOODS3_172724758020241023124827.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_172724758020241023124412.jpg",
+      "filename": "GOODS1_172724758020241023124412.jpg",
+      "alt": "180ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_172724758020241023124412.jpg",
+      "filename": "ADD_GOODS1_172724758020241023124412.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "180ml 브로우용기",
+    "제품 코드": "BE180-G007",
+    "재질(원료)": "PE",
+    "사양": "51x123(mm)",
+    "capacity": "180ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.602316",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_172724758020241023124412.jpg",
+      "filename": "ADD_GOODS2_172724758020241023124412.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_172724758020241023124827.jpg",
+      "filename": "ADD_GOODS3_172724758020241023124827.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_172724758020241023124412.jpg",
+      "filename": "GOODS1_172724758020241023124412.jpg",
+      "alt": "180ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_172724758020241023124412.jpg",
+      "filename": "ADD_GOODS1_172724758020241023124412.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_901_main_4.jpg"
+    }
+  ],
+  "idx": "901",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=901",
+  "crawled_at": "2025-10-18T21:23:53.349062",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 180,
+    "matched_price_range": "180",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 240,
+      "discount": 170
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 240,
+    "discount_price": 170,
+    "capacity_ml": 180,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.117756",
+    "pricing_capacity_ml": 180
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.831586"
+}

@@ -1,0 +1,63 @@
+{
+  "product_name": "160ml 튜브브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660004600.jpg",
+      "filename": "GOODS1_1660004600.jpg",
+      "alt": "160ml 튜브브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "160ml 튜브브로우용기",
+    "제품 코드": "TE160-T001",
+    "재질(원료)": "PE",
+    "사양": "45x160(mm)",
+    "capacity": "160ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.585571",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660004600.jpg",
+      "filename": "GOODS1_1660004600.jpg",
+      "alt": "160ml 튜브브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_462_main_1.jpg"
+    }
+  ],
+  "idx": "462",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=462",
+  "crawled_at": "2025-10-21T22:00:29.955005",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 160,
+    "matched_price_range": "180",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 240,
+      "discount": 170
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 220,
+    "discount_price": 160,
+    "pricing_capacity_ml": 150,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.107203"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.810556"
+}

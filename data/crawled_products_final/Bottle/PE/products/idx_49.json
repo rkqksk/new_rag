@@ -1,0 +1,69 @@
+{
+  "product_name": "800ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658117432.jpg",
+      "filename": "GOODS1_1658117432.jpg",
+      "alt": "800ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "800ml 브로우용기",
+    "제품 코드": "BE800-R005",
+    "재질(원료)": "PE",
+    "사양": "87x175(mm)",
+    "capacity": "800ml",
+    "dimensions": "Ø33",
+    "neck_size": "33파이",
+    "neck_size_mm": 33,
+    "neck_updated_at": "2025-10-23T21:00:50.594006",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=49",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658117432.jpg",
+      "filename": "GOODS1_1658117432.jpg",
+      "alt": "800ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_49_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_49_print_area.pdf",
+  "idx": "49",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=49",
+  "crawled_at": "2025-10-21T21:11:49.672644",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 800,
+    "matched_price_range": "1000",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 400,
+    "discount_price": 380,
+    "pricing_capacity_ml": 750,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.110083"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.819877"
+}

@@ -1,0 +1,110 @@
+{
+  "product_name": "500ml 다층브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_166503341520241022154429.jpg",
+      "filename": "ADD_GOODS2_166503341520241022154429.jpg",
+      "type": "additional_2"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_166503341520241022154429.jpg",
+      "filename": "ADD_GOODS3_166503341520241022154429.jpg",
+      "type": "additional_3"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665033415.jpg",
+      "filename": "GOODS1_1665033415.jpg",
+      "alt": "500ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1665033415.jpg",
+      "filename": "ADD_GOODS1_1665033415.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "500ml 다층브로우용기",
+    "제품 코드": "MH500-L001",
+    "재질(원료)": "혼합",
+    "사양": "66x205(mm)",
+    "capacity": "500ml",
+    "dimensions": "Ø32",
+    "neck_size": "32파이",
+    "neck_size_mm": 32,
+    "neck_updated_at": "2025-10-23T21:00:50.743335",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=772",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_166503341520241022154429.jpg",
+      "filename": "ADD_GOODS2_166503341520241022154429.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_772_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_166503341520241022154429.jpg",
+      "filename": "ADD_GOODS3_166503341520241022154429.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_772_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665033415.jpg",
+      "filename": "GOODS1_1665033415.jpg",
+      "alt": "500ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_772_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1665033415.jpg",
+      "filename": "ADD_GOODS1_1665033415.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_772_additional_2_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_772_print_area.pdf",
+  "idx": "772",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=772",
+  "crawled_at": "2025-10-21T22:23:26.467539",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 500,
+    "matched_price_range": "500",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 500,
+      "discount": 430
+    },
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "material_metadata": null,
+    "regular_price": 420,
+    "discount_price": 400,
+    "capacity_ml": 500,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.196539",
+    "pricing_capacity_ml": 500
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.191916"
+}

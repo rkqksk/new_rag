@@ -1,0 +1,77 @@
+{
+  "product_name": "350ml 다층브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665034058.jpg",
+      "filename": "GOODS1_1665034058.jpg",
+      "alt": "350ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1665034058.jpg",
+      "filename": "ADD_GOODS1_1665034058.jpg",
+      "type": "main"
+    }
+  ],
+  "specifications": {
+    "제품명": "350ml 다층브로우용기",
+    "제품 코드": "MH350-T001",
+    "재질(원료)": "혼합",
+    "사양": "68x150(mm)",
+    "capacity": "350ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.741963",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=773",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665034058.jpg",
+      "filename": "GOODS1_1665034058.jpg",
+      "alt": "350ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_773_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1665034058.jpg",
+      "filename": "ADD_GOODS1_1665034058.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_773_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_773_print_area.pdf",
+  "idx": "773",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=773",
+  "crawled_at": "2025-10-21T22:23:35.242613",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 350,
+    "matched_price_range": "400",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 440,
+      "discount": 400
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 340,
+    "discount_price": 260,
+    "pricing_capacity_ml": 300,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.195819"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.190911"
+}

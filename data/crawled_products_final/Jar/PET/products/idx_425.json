@@ -1,0 +1,70 @@
+{
+  "product_name": "100g 헤비크림용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659595265.jpg",
+      "filename": "ADD_GOODS2_1659595265.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_425_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595265.jpg",
+      "filename": "GOODS1_1659595265.jpg",
+      "alt": "100g 헤비크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_425_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595265.jpg",
+      "filename": "ADD_GOODS1_1659595265.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_425_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "100g 헤비크림용기",
+    "제품 코드": "VT100-T001",
+    "재질(원료)": "PET",
+    "사양": "Ø72x45(mm)",
+    "capacity": "100g",
+    "dimensions": "Ø72x45",
+    "neck_size": "72파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=425",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1659595265.jpg",
+      "filename": "ADD_GOODS2_1659595265.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_425_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659595265.jpg",
+      "filename": "GOODS1_1659595265.jpg",
+      "alt": "100g 헤비크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_425_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659595265.jpg",
+      "filename": "ADD_GOODS1_1659595265.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_425_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_425_print_area.pdf",
+  "idx": "425",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=425",
+  "crawled_at": "2025-10-18T21:49:10.518893",
+  "category_label": "jar"
+}

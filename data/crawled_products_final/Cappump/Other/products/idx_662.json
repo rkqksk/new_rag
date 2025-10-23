@@ -1,0 +1,69 @@
+{
+  "product_name": "28파이 일반펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661744932.jpg",
+      "filename": "GOODS1_1661744932.jpg",
+      "alt": "28파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_662_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661744932.jpg",
+      "filename": "ADD_GOODS1_1661744932.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_662_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PO028-CG01"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661744932.jpg",
+      "filename": "GOODS1_1661744932.jpg",
+      "alt": "28파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_662_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661744932.jpg",
+      "filename": "ADD_GOODS1_1661744932.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_662_main_2.jpg"
+    }
+  ],
+  "idx": "662",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=662",
+  "crawled_at": "2025-10-18T07:04:44.050838",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.574612",
+  "product_code": "PO028-CG01",
+  "pricing": {
+    "supply_price": 140.0,
+    "selling_price": 240.0
+  },
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": null,
+    "spec": "28파이 일반펌프",
+    "detail": "내경 Ø28",
+    "package": "800ea",
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.108916"
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "dashboard": {
+    "title": "RAG Enterprise Performance Dashboard",
+    "tags": ["rag", "performance", "qa"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Q&A Request Rate",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(qa_requests_total[5m])",
+            "legendFormat": "{{service_type}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Q&A Response Time (p95)",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(qa_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "{{service_type}} - p95"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(qa_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "{{service_type}} - p50"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Confidence Score Distribution",
+        "type": "heatmap",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(qa_confidence_score_bucket[5m])",
+            "format": "heatmap"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+      },
+      {
+        "id": 4,
+        "title": "Active Requests",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "active_requests"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8}
+      },
+      {
+        "id": 5,
+        "title": "Error Rate",
+        "type": "stat",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(errors_total[5m])"
+          }
+        ],
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 8},
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 0.01, "color": "yellow"},
+                {"value": 0.1, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "LLM Request Duration",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(llm_request_duration_seconds_bucket[5m]))",
+            "legendFormat": "{{model}} - p95"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+      },
+      {
+        "id": 7,
+        "title": "Qdrant Search Duration",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(qdrant_search_duration_seconds_bucket[5m]))",
+            "legendFormat": "p95"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(qdrant_search_duration_seconds_bucket[5m]))",
+            "legendFormat": "p50"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 8,
+        "title": "HTTP Requests by Endpoint",
+        "type": "graph",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total[5m])",
+            "legendFormat": "{{method}} {{endpoint}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 24}
+      }
+    ],
+    "refresh": "10s",
+    "schemaVersion": 27,
+    "version": 1
+  }
+}

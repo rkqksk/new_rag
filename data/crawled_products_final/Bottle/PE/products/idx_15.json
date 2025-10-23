@@ -1,0 +1,66 @@
+{
+  "product_name": "80ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658115502.jpg",
+      "filename": "GOODS1_1658115502.jpg",
+      "alt": "80ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_15_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "80ml 브로우용기",
+    "제품 코드": "BE080-R001",
+    "재질(원료)": "PE",
+    "사양": "38x97(mm)",
+    "capacity": "80ml",
+    "dimensions": "Ø20",
+    "neck_size": "20파이",
+    "neck_size_mm": 20,
+    "neck_updated_at": "2025-10-23T21:00:50.608501",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=15",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658115502.jpg",
+      "filename": "GOODS1_1658115502.jpg",
+      "alt": "80ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_15_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PE/print_area/idx_15_print_area.pdf",
+  "idx": "15",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=15",
+  "crawled_at": "2025-10-18T21:18:11.792925",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 80,
+    "matched_price_range": "80",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 160,
+      "discount": 130
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "capacity_ml": 80,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.121989",
+    "pricing_capacity_ml": 80
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.839800"
+}

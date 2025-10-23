@@ -1,0 +1,79 @@
+{
+  "product_name": "6g 마스카라용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163256.jpg",
+      "filename": "GOODS1_1753163256.jpg",
+      "alt": "6g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_955_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163256.jpg",
+      "filename": "ADD_GOODS1_1753163256.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_955_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "6g 마스카라용기",
+    "제품 코드": "MABT006-GS01",
+    "재질(원료)": "PET",
+    "사양": "13x73(mm)",
+    "capacity": "6g",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163256.jpg",
+      "filename": "GOODS1_1753163256.jpg",
+      "alt": "6g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_955_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163256.jpg",
+      "filename": "ADD_GOODS1_1753163256.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_955_main_2.jpg"
+    }
+  ],
+  "idx": "955",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=955",
+  "crawled_at": "2025-10-18T21:36:59.211678",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 6,
+    "matched_price_range": "10-50",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "coating_capacity_range": "10-50",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 220,
+      "discount": 160
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.974174"
+}

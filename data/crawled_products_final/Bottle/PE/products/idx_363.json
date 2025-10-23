@@ -1,0 +1,65 @@
+{
+  "product_name": "300ml 거품브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658475141.jpg",
+      "filename": "GOODS1_1658475141.jpg",
+      "alt": "300ml 거품브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "300ml 거품브로우용기",
+    "제품 코드": "GE300-R001",
+    "재질(원료)": "PE",
+    "사양": "69x122(mm)",
+    "capacity": "300ml",
+    "dimensions": "Ø43",
+    "neck_size": "43파이",
+    "neck_size_mm": 43,
+    "neck_updated_at": "2025-10-23T21:00:50.682279",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=363",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658475141.jpg",
+      "filename": "GOODS1_1658475141.jpg",
+      "alt": "300ml 거품브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_363_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_363_print_area.pdf",
+  "idx": "363",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=363",
+  "crawled_at": "2025-10-21T21:49:01.397423",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 300,
+    "matched_price_range": "300",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 300,
+      "discount": 230
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 300,
+    "discount_price": 230,
+    "capacity_ml": 300,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.153213",
+    "pricing_capacity_ml": 300
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.930296"
+}

@@ -1,0 +1,56 @@
+{
+  "product_name": "220g 크림용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594592.jpg",
+      "filename": "GOODS1_1659594592.jpg",
+      "alt": "220g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_417_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594592.jpg",
+      "filename": "ADD_GOODS1_1659594592.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_417_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "220g 크림용기",
+    "제품 코드": "JT220-G002",
+    "재질(원료)": "PET",
+    "사양": "Ø76x74(mm)",
+    "capacity": "220g",
+    "dimensions": "Ø76x74",
+    "neck_size": "76파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=417",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1659594592.jpg",
+      "filename": "GOODS1_1659594592.jpg",
+      "alt": "220g 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_417_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1659594592.jpg",
+      "filename": "ADD_GOODS1_1659594592.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_417_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_417_print_area.pdf",
+  "idx": "417",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=417",
+  "crawled_at": "2025-10-18T21:49:01.341636",
+  "category_label": "jar"
+}

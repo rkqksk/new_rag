@@ -1,0 +1,69 @@
+{
+  "product_name": "18파이 민자 단캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729722.jpg",
+      "filename": "GOODS1_1740729722.jpg",
+      "alt": "18파이 민자 단캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_924_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740729722.jpg",
+      "filename": "ADD_GOODS1_1740729722.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_924_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CP018-GW02"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740729722.jpg",
+      "filename": "GOODS1_1740729722.jpg",
+      "alt": "18파이 민자 단캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_924_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740729722.jpg",
+      "filename": "ADD_GOODS1_1740729722.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_924_main_2.jpg"
+    }
+  ],
+  "idx": "924",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=924",
+  "crawled_at": "2025-10-18T07:01:06.755262",
+  "category": "CapPump",
+  "category_label": "jar",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.570698",
+  "product_code": "CP018-GW02",
+  "pricing": {
+    "supply_price": 70.0,
+    "selling_price": 90.0
+  },
+  "product_list_info": {
+    "vendor": "원플라텍",
+    "description": null,
+    "spec": "18파이 민자 단캡",
+    "detail": "내경 Ø18",
+    "package": "20x13(mm)/내경Ø18",
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.103577"
+  }
+}

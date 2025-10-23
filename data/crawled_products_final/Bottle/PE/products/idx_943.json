@@ -1,0 +1,106 @@
+{
+  "product_name": "320ml 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1748423091.jpg",
+      "filename": "ADD_GOODS2_1748423091.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1748423091.jpg",
+      "filename": "ADD_GOODS3_1748423091.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1748423091.jpg",
+      "filename": "GOODS1_1748423091.jpg",
+      "alt": "320ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1748423091.jpg",
+      "filename": "ADD_GOODS1_1748423091.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "320ml 브로우용기",
+    "제품 코드": "BE320-R005",
+    "재질(원료)": "PE",
+    "사양": "63x139(mm)",
+    "capacity": "320ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.652373",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1748423091.jpg",
+      "filename": "ADD_GOODS2_1748423091.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1748423091.jpg",
+      "filename": "ADD_GOODS3_1748423091.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1748423091.jpg",
+      "filename": "GOODS1_1748423091.jpg",
+      "alt": "320ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1748423091.jpg",
+      "filename": "ADD_GOODS1_1748423091.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_943_main_4.jpg"
+    }
+  ],
+  "idx": "943",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=943",
+  "crawled_at": "2025-10-18T21:22:10.004300",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 320,
+    "matched_price_range": "400",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 330,
+      "discount": 250
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 300,
+    "discount_price": 230,
+    "pricing_capacity_ml": 300,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.138692"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.908456"
+}

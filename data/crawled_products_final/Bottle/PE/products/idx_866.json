@@ -1,0 +1,79 @@
+{
+  "product_name": "190ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1703826013.jpg",
+      "filename": "GOODS1_1703826013.jpg",
+      "alt": "190ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_866_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1703826013.jpg",
+      "filename": "ADD_GOODS1_1703826013.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_866_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "190ml 브로우용기",
+    "제품 코드": "BE190-K002",
+    "재질(원료)": "PE",
+    "사양": "58x32x167(mm)",
+    "capacity": "190ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.631462",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=866",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1703826013.jpg",
+      "filename": "GOODS1_1703826013.jpg",
+      "alt": "190ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_866_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1703826013.jpg",
+      "filename": "ADD_GOODS1_1703826013.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_866_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PE/print_area/idx_866_print_area.pdf",
+  "idx": "866",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=866",
+  "crawled_at": "2025-10-18T21:30:08.763297",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 190,
+    "matched_price_range": "200",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 260,
+      "discount": 190
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 240,
+    "discount_price": 170,
+    "pricing_capacity_ml": 180,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.134157"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.876052"
+}

@@ -1,0 +1,65 @@
+{
+  "product_name": "200ml 다층브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665033123.jpg",
+      "filename": "GOODS1_1665033123.jpg",
+      "alt": "200ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "200ml 다층브로우용기",
+    "제품 코드": "MH200-G001",
+    "재질(원료)": "혼합",
+    "사양": "57x116(mm)",
+    "capacity": "200ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.740712",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=766",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1665033123.jpg",
+      "filename": "GOODS1_1665033123.jpg",
+      "alt": "200ml 다층브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_766_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_766_print_area.pdf",
+  "idx": "766",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=766",
+  "crawled_at": "2025-10-21T22:22:31.225705",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 200,
+    "matched_price_range": "200",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 380,
+      "discount": 340
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 300,
+    "discount_price": 200,
+    "capacity_ml": 200,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.194788",
+    "pricing_capacity_ml": 200
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.189567"
+}

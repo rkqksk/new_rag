@@ -1,0 +1,434 @@
+[
+  {
+    "capacity_ml": "10-50",
+    "materials": {
+      "PE/PET": {
+        "regular": 140,
+        "discount": 100
+      },
+      "MB4C": {
+        "regular": 170,
+        "discount": 140
+      },
+      "PETG(얇은)": {
+        "regular": 220,
+        "discount": 160
+      },
+      "PETG(준헤비)": {
+        "regular": 300,
+        "discount": 300
+      },
+      "다층": {
+        "regular": 250,
+        "discount": 230
+      },
+      "헤비(PET)": {
+        "regular": 450,
+        "discount": 400
+      }
+    },
+    "printing_options": {
+      "PET": {
+        "regular": 80,
+        "discount": 70
+      },
+      "PE/PP": {
+        "regular": 80,
+        "discount": 80
+      }
+    },
+    "label_option": {
+      "regular": 80,
+      "discount": 80
+    },
+    "foam_blow": {
+      "regular": 280,
+      "discount": 240
+    }
+  },
+  {
+    "capacity_ml": "80",
+    "materials": {
+      "PE/PET": {
+        "regular": 160,
+        "discount": 130
+      },
+      "MB4C": {
+        "regular": 190,
+        "discount": 150
+      },
+      "PETG(얇은)": {
+        "regular": 240,
+        "discount": 180
+      },
+      "PETG(준헤비)": {
+        "regular": 320,
+        "discount": 320
+      },
+      "다층": {
+        "regular": 260,
+        "discount": 240
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 290,
+      "discount": 240
+    }
+  },
+  {
+    "capacity_ml": "100",
+    "materials": {
+      "PE/PET": {
+        "regular": 180,
+        "discount": 130
+      },
+      "MB4C": {
+        "regular": 240,
+        "discount": 160
+      },
+      "PETG(얇은)": {
+        "regular": 260,
+        "discount": 220
+      },
+      "PETG(준헤비)": {
+        "regular": 340,
+        "discount": 340
+      },
+      "다층": {
+        "regular": 280,
+        "discount": 250
+      },
+      "헤비(PET)": {
+        "regular": 560,
+        "discount": 400
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 320,
+      "discount": 260
+    }
+  },
+  {
+    "capacity_ml": "120",
+    "materials": {
+      "PE/PET": {
+        "regular": 200,
+        "discount": 150
+      },
+      "MB4C": {
+        "regular": 260,
+        "discount": 180
+      },
+      "PETG(얇은)": {
+        "regular": 280,
+        "discount": 240
+      },
+      "PETG(준헤비)": {
+        "regular": 360,
+        "discount": 360
+      },
+      "다층": {
+        "regular": 290,
+        "discount": 250
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 340,
+      "discount": 270
+    }
+  },
+  {
+    "capacity_ml": "150",
+    "materials": {
+      "PE/PET": {
+        "regular": 220,
+        "discount": 160
+      },
+      "MB4C": {
+        "regular": 260,
+        "discount": 180
+      },
+      "PETG(얇은)": {
+        "regular": 300,
+        "discount": 250
+      },
+      "PETG(준헤비)": {
+        "regular": 380,
+        "discount": 380
+      },
+      "다층": {
+        "regular": 300,
+        "discount": 260
+      },
+      "헤비(PET)": {
+        "regular": 600,
+        "discount": 430
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 350,
+      "discount": 280
+    }
+  },
+  {
+    "capacity_ml": "180",
+    "materials": {
+      "PE/PET": {
+        "regular": 240,
+        "discount": 170
+      },
+      "MB4C": {
+        "regular": 280,
+        "discount": 200
+      },
+      "PETG(얇은)": {
+        "regular": 320,
+        "discount": 260
+      },
+      "PETG(준헤비)": {
+        "regular": 400,
+        "discount": 380
+      },
+      "다층": {
+        "regular": 320,
+        "discount": 290
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 380,
+      "discount": 300
+    }
+  },
+  {
+    "capacity_ml": "200",
+    "materials": {
+      "PE/PET": {
+        "regular": 260,
+        "discount": 190
+      },
+      "MB4C": {
+        "regular": 300,
+        "discount": 200
+      },
+      "PETG(얇은)": {
+        "regular": 340,
+        "discount": 280
+      },
+      "PETG(준헤비)": {
+        "regular": 420,
+        "discount": 380
+      },
+      "다층": {
+        "regular": 380,
+        "discount": 340
+      },
+      "헤비(PET)": {
+        "regular": 620,
+        "discount": 540
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 450,
+      "discount": 390
+    }
+  },
+  {
+    "capacity_ml": "250",
+    "materials": {
+      "PE/PET": {
+        "regular": 280,
+        "discount": 220
+      },
+      "MB4C": {
+        "regular": 320,
+        "discount": 240
+      },
+      "PETG(얇은)": {
+        "regular": 360,
+        "discount": 300
+      },
+      "PETG(준헤비)": {
+        "regular": 440,
+        "discount": 400
+      },
+      "다층": {
+        "regular": 400,
+        "discount": 360
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": {
+      "regular": 500,
+      "discount": 410
+    }
+  },
+  {
+    "capacity_ml": "300",
+    "materials": {
+      "PE/PET": {
+        "regular": 300,
+        "discount": 230
+      },
+      "MB4C": {
+        "regular": 340,
+        "discount": 260
+      },
+      "PETG(얇은)": {
+        "regular": 380,
+        "discount": 320
+      },
+      "PETG(준헤비)": {
+        "regular": 460,
+        "discount": 430
+      },
+      "다층": {
+        "regular": 420,
+        "discount": 380
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": null
+  },
+  {
+    "capacity_ml": "400",
+    "materials": {
+      "PE/PET": {
+        "regular": 330,
+        "discount": 250
+      },
+      "MB4C": {
+        "regular": 380,
+        "discount": 320
+      },
+      "PETG(얇은)": {
+        "regular": 440,
+        "discount": 420
+      },
+      "PETG(준헤비)": {
+        "regular": 520,
+        "discount": 460
+      },
+      "다층": {
+        "regular": 440,
+        "discount": 400
+      }
+    },
+    "printing_options": {},
+    "label_option": null,
+    "foam_blow": null
+  },
+  {
+    "capacity_ml": "500",
+    "materials": {
+      "PE/PET": {
+        "regular": 350,
+        "discount": 260
+      },
+      "MB4C": {
+        "regular": 420,
+        "discount": 400
+      },
+      "PETG(얇은)": {
+        "regular": 540,
+        "discount": 460
+      },
+      "다층": {
+        "regular": 500,
+        "discount": 430
+      }
+    },
+    "printing_options": {
+      "PET": {
+        "regular": 90,
+        "discount": 80
+      },
+      "PE/PP": {
+        "regular": 90,
+        "discount": 90
+      }
+    },
+    "label_option": {
+      "regular": 90,
+      "discount": 90
+    },
+    "foam_blow": null
+  },
+  {
+    "capacity_ml": "750",
+    "materials": {
+      "PE/PET": {
+        "regular": 400,
+        "discount": 380
+      },
+      "MB4C": {
+        "regular": 540,
+        "discount": 480
+      },
+      "PETG(얇은)": {
+        "regular": 600,
+        "discount": 520
+      }
+    },
+    "printing_options": {
+      "PET": {
+        "regular": 120,
+        "discount": 100
+      },
+      "PE/PP": {
+        "regular": 120,
+        "discount": 100
+      }
+    },
+    "label_option": {
+      "regular": 120,
+      "discount": 100
+    },
+    "foam_blow": null
+  },
+  {
+    "capacity_ml": "1000",
+    "materials": {
+      "PE/PET": {
+        "regular": 460,
+        "discount": 420
+      },
+      "MB4C": {
+        "regular": 620,
+        "discount": 520
+      },
+      "PETG(얇은)": {
+        "regular": 650,
+        "discount": 600
+      }
+    },
+    "printing_options": {
+      "PET": {
+        "regular": 130,
+        "discount": 110
+      },
+      "PE/PP": {
+        "regular": 130,
+        "discount": 110
+      }
+    },
+    "label_option": {
+      "regular": 130,
+      "discount": 110
+    },
+    "foam_blow": null
+  }
+]

@@ -1,0 +1,93 @@
+{
+  "product_name": "30ml 튜브브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660004081.jpg",
+      "filename": "GOODS1_1660004081.jpg",
+      "alt": "30ml 튜브브로우용기",
+      "type": "main",
+      "width": 515,
+      "height": 515
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660004081.jpg",
+      "filename": "ADD_GOODS1_1660004081.jpg",
+      "type": "main"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1660004081_1.jpg",
+      "filename": "1660004081_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "30ml 튜브브로우용기",
+    "제품 코드": "TE030-G003",
+    "재질(원료)": "PE",
+    "사양": "27x97(mm)",
+    "capacity": "30ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.621669",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=453",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1660004081.jpg",
+      "filename": "GOODS1_1660004081.jpg",
+      "alt": "30ml 튜브브로우용기",
+      "type": "main",
+      "width": 515,
+      "height": 515,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_453_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1660004081.jpg",
+      "filename": "ADD_GOODS1_1660004081.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_453_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1660004081_1.jpg",
+      "filename": "1660004081_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_453_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_453_print_area.pdf",
+  "idx": "453",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=453",
+  "crawled_at": "2025-10-21T21:59:15.630760",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 30,
+    "matched_price_range": "10-50",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "regular_price": 160,
+    "discount_price": 130,
+    "pricing_capacity_ml": 10,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.127477"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.850037"
+}

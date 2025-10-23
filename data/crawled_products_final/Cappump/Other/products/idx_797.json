@@ -1,0 +1,55 @@
+{
+  "product_name": "40파이 이중캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1669280331.jpg",
+      "filename": "GOODS1_1669280331.jpg",
+      "alt": "40파이 이중캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_797_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CA040-GW13(20)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1669280331.jpg",
+      "filename": "GOODS1_1669280331.jpg",
+      "alt": "40파이 이중캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_797_main_1.jpg"
+    }
+  ],
+  "idx": "797",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=797",
+  "crawled_at": "2025-10-18T06:51:45.269113",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.569555",
+  "product_code": "CA040-GW13(20)",
+  "pricing": {
+    "supply_price": 220.0,
+    "selling_price": 300.0
+  },
+  "product_list_info": {
+    "vendor": "원플라텍",
+    "description": null,
+    "spec": "Ø40 이중캡",
+    "detail": "40 x 34mm / 내경 Ø20",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.101491"
+  }
+}

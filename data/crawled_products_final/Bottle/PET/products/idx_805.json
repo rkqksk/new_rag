@@ -1,0 +1,81 @@
+{
+  "product_name": "100ml 오버캡 헤비 브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1671587151.jpg",
+      "filename": "ADD_GOODS2_1671587151.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_805_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1671587151.jpg",
+      "filename": "GOODS1_1671587151.jpg",
+      "alt": "100ml 오버캡 헤비 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_805_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1671587151.jpg",
+      "filename": "ADD_GOODS1_1671587151.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_805_main_3.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "100ml 오버캡 헤비 브로우용기",
+    "제품 코드": "QT100-G002",
+    "재질(원료)": "PET",
+    "사양": "37x179(mm)/Ø24",
+    "capacity": "100ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=805",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1671587151.jpg",
+      "filename": "ADD_GOODS2_1671587151.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_805_additional_2_1.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1671587151.jpg",
+      "filename": "GOODS1_1671587151.jpg",
+      "alt": "100ml 오버캡 헤비 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_805_main_2.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1671587151.jpg",
+      "filename": "ADD_GOODS1_1671587151.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_805_main_3.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_805_print_area.pdf",
+  "idx": "805",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=805",
+  "crawled_at": "2025-10-21T22:25:45.217945",
+  "category_label": "bottle",
+  "pricing": {
+    "container_price": 180,
+    "container_capacity": "100ml",
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡",
+    "coating_price": 240
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "CAP",
+  "product_code": "QT100-G002",
+  "product_code_updated_at": "2025-10-23T20:43:45.363974"
+}

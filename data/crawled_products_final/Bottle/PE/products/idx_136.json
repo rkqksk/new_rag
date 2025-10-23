@@ -1,0 +1,71 @@
+{
+  "product_name": "1000ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658128213.jpg",
+      "filename": "GOODS1_1658128213.jpg",
+      "alt": "1000ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "1000ml 브로우용기",
+    "제품 코드": "BE111-S008",
+    "재질(원료)": "PE",
+    "사양": "102x65x228(mm)",
+    "capacity": "1000ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.587546",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=136",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658128213.jpg",
+      "filename": "GOODS1_1658128213.jpg",
+      "alt": "1000ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_136_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_136_print_area.pdf",
+  "idx": "136",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=136",
+  "crawled_at": "2025-10-21T21:23:57.452982",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 1000,
+    "matched_price_range": "1000",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 460,
+    "discount_price": 420,
+    "capacity_ml": 1000,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.107656",
+    "pricing_capacity_ml": 1000
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.811528"
+}

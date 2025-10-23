@@ -1,0 +1,61 @@
+{
+  "product_name": "50g 크림사출용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666925263.jpg",
+      "filename": "GOODS1_1666925263.jpg",
+      "alt": "50g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_790_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666925263.jpg",
+      "filename": "ADD_GOODS1_1666925263.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_790_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "50g 크림사출용기",
+    "제품 코드": "JP050-RM02",
+    "재질(원료)": "PP",
+    "사양": "Ø58x50(mm)",
+    "capacity": "50g",
+    "dimensions": "Ø58x50",
+    "neck_size": "58파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=790",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1666925263.jpg",
+      "filename": "GOODS1_1666925263.jpg",
+      "alt": "50g 크림사출용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_790_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1666925263.jpg",
+      "filename": "ADD_GOODS1_1666925263.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PP/images/idx_790_main_2.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PP/print_area/idx_790_print_area.pdf",
+  "idx": "790",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=790",
+  "crawled_at": "2025-10-18T21:48:14.881251",
+  "category_label": "jar",
+  "pricing": {
+    "container_price": 140,
+    "container_capacity": "10-50ml"
+  },
+  "pricing_added_at": "2025-10-23"
+}

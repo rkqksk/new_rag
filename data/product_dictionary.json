@@ -1,0 +1,304 @@
+{
+  "idx_13": {
+    "product_id": "idx_13",
+    "product_code": "BE040-R001",
+    "product_name": "40ml 브로우용기",
+    "enriched_info": {
+      "detailed_description": "40ml PE 브로우 용기는 소형 액상 화장품에 최적화된 경량 용기입니다. PE(폴리에틸렌) 재질의 안전성과 내구성을 바탕으로 에센스, 세럼 등 고가 화장품 포장에 적합합니다.",
+      "use_cases": [
+        "고농축 에센스 및 세럼 포장",
+        "트래블 사이즈 화장품",
+        "샘플 키트 구성용",
+        "1-2주 사용량 제품"
+      ],
+      "target_customers": [
+        "화장품 스타트업 (소량 생산)",
+        "프리미엄 스킨케어 브랜드",
+        "샘플 제작 전문 업체",
+        "트래블 키트 제조사"
+      ],
+      "material_benefits": {
+        "material": "PE (폴리에틸렌)",
+        "advantages": [
+          "식품등급 안전성",
+          "가벼운 무게 (휴대 편리)",
+          "내충격성 우수 (파손 방지)",
+          "화학적 안정성",
+          "재활용 가능"
+        ]
+      },
+      "capacity_info": {
+        "capacity": "40ml",
+        "usage_duration": "1-2주 (하루 2ml 기준)",
+        "suitable_products": ["세럼", "에센스", "앰플", "오일"],
+        "positioning": "소형/휴대용"
+      },
+      "specifications_explained": {
+        "dimensions": "28x95(mm)",
+        "diameter": "Ø20",
+        "meaning": "손에 쏙 들어오는 슬림형 디자인, 파우치에 넣기 좋은 크기"
+      },
+      "related_products": [
+        "idx_30 (65ml 브로우용기)",
+        "30ml 브로우용기",
+        "50ml 브로우용기"
+      ],
+      "keywords": [
+        "소형",
+        "휴대용",
+        "트래블",
+        "샘플",
+        "에센스용",
+        "세럼",
+        "슬림",
+        "파우치"
+      ],
+      "recommendations": {
+        "when_to_use": "고가의 농축 제품, 트래블 제품, 테스터 제작 시",
+        "when_not_to_use": "대용량 제품, 저가 제품, 바디용 제품",
+        "alternatives_if_too_small": "50ml, 65ml 브로우용기",
+        "alternatives_if_too_large": "30ml 브로우용기"
+      }
+    }
+  },
+  "idx_30": {
+    "product_id": "idx_30",
+    "product_code": "BE065-R002",
+    "product_name": "65ml 브로우용기",
+    "enriched_info": {
+      "detailed_description": "65ml PE 브로우 용기는 중소형 액상 화장품에 적합한 범용 용기입니다. 40ml보다 넉넉한 용량으로 데일리 사용 제품에 최적화되어 있습니다.",
+      "use_cases": [
+        "데일리 에센스 및 로션",
+        "토너 리필용",
+        "페이셜 오일",
+        "3-4주 사용량 제품"
+      ],
+      "target_customers": [
+        "중소형 화장품 브랜드",
+        "정규 제품 제조사",
+        "리필 제품 업체",
+        "온라인 뷰티 브랜드"
+      ],
+      "material_benefits": {
+        "material": "PE (폴리에틸렌)",
+        "advantages": [
+          "식품등급 안전성",
+          "내구성 우수",
+          "경량 설계",
+          "내화학성",
+          "환경 친화적"
+        ]
+      },
+      "capacity_info": {
+        "capacity": "65ml",
+        "usage_duration": "3-4주 (하루 2ml 기준)",
+        "suitable_products": ["에센스", "로션", "토너", "미스트"],
+        "positioning": "중소형/데일리용"
+      },
+      "specifications_explained": {
+        "dimensions": "38x84(mm)",
+        "diameter": "Ø24",
+        "meaning": "안정적인 원통형 디자인, 그립감 좋은 직경"
+      },
+      "related_products": [
+        "idx_13 (40ml 브로우용기)",
+        "50ml 브로우용기",
+        "80ml 브로우용기"
+      ],
+      "keywords": [
+        "중형",
+        "데일리",
+        "정규용",
+        "에센스",
+        "로션",
+        "안정형"
+      ],
+      "recommendations": {
+        "when_to_use": "정규 제품, 한 달 사용량, 일반 에센스/로션",
+        "when_not_to_use": "트래블 제품, 샘플 제작, 대용량 필요 시",
+        "alternatives_if_too_small": "80ml, 100ml 브로우용기",
+        "alternatives_if_too_large": "40ml, 50ml 브로우용기"
+      }
+    }
+  },
+  "idx_308": {
+    "product_id": "idx_308",
+    "product_code": "BT070-T004",
+    "product_name": "70ml 브로우용기",
+    "enriched_info": {
+      "detailed_description": "70ml PET 브로우 용기는 투명도가 높은 PET 재질로 제작되어 제품의 색상과 질감을 잘 보여줍니다. 슬림한 디자인으로 프리미엄 느낌을 연출합니다.",
+      "use_cases": [
+        "고급 에센스 및 세럼",
+        "컬러 화장품 (제품 색상 강조)",
+        "투명 디스플레이 필요 제품",
+        "3-4주 사용량"
+      ],
+      "target_customers": [
+        "프리미엄 뷰티 브랜드",
+        "컬러 화장품 제조사",
+        "럭셔리 스킨케어 라인",
+        "디자인 중심 브랜드"
+      ],
+      "material_benefits": {
+        "material": "PET (폴리에틸렌 테레프탈레이트)",
+        "advantages": [
+          "높은 투명도 (유리 대체)",
+          "내화학성 우수",
+          "가벼운 무게",
+          "파손 위험 낮음",
+          "재활용 용이"
+        ]
+      },
+      "capacity_info": {
+        "capacity": "70ml",
+        "usage_duration": "3-4주 (하루 2ml 기준)",
+        "suitable_products": ["세럼", "에센스", "오일", "컬러 화장품"],
+        "positioning": "중형/프리미엄"
+      },
+      "specifications_explained": {
+        "dimensions": "42x89(mm)",
+        "diameter": "Ø20",
+        "meaning": "슬림하고 우아한 실루엣, 고급스러운 비주얼"
+      },
+      "related_products": [
+        "65ml 브로우용기 (PE)",
+        "80ml 브로우용기",
+        "60ml 브로우용기"
+      ],
+      "keywords": [
+        "투명",
+        "프리미엄",
+        "슬림",
+        "PET",
+        "고급",
+        "디스플레이",
+        "컬러"
+      ],
+      "recommendations": {
+        "when_to_use": "제품 색상/질감 강조, 프리미엄 포지셔닝, 투명 디자인 선호",
+        "when_not_to_use": "불투명 제품, 저가 제품, 대용량 필요 시",
+        "alternatives_if_too_small": "100ml PET 브로우용기",
+        "alternatives_if_too_large": "50ml PET 브로우용기"
+      }
+    }
+  },
+  "idx_360": {
+    "product_id": "idx_360",
+    "product_code": "BT150-N002",
+    "product_name": "150ml 브로우용기",
+    "enriched_info": {
+      "detailed_description": "150ml PET 브로우 용기는 대용량 액상 제품에 적합한 실속형 용기입니다. 넓은 면적으로 라벨 디자인에 유리하며, 장기 사용 제품에 최적입니다.",
+      "use_cases": [
+        "데일리 토너 및 스킨",
+        "대용량 에센스",
+        "바디 로션/오일",
+        "2-3개월 사용량"
+      ],
+      "target_customers": [
+        "대중 화장품 브랜드",
+        "바디케어 제조사",
+        "대용량 선호 고객",
+        "가성비 중심 브랜드"
+      ],
+      "material_benefits": {
+        "material": "PET (폴리에틸렌 테레프탈레이트)",
+        "advantages": [
+          "투명도 우수",
+          "대용량에 적합한 강도",
+          "경량 설계",
+          "경제적 생산 비용",
+          "재활용성"
+        ]
+      },
+      "capacity_info": {
+        "capacity": "150ml",
+        "usage_duration": "2-3개월 (하루 2ml 기준)",
+        "suitable_products": ["토너", "스킨", "바디로션", "대용량 에센스"],
+        "positioning": "대용량/경제형"
+      },
+      "specifications_explained": {
+        "dimensions": "65x28x135(mm)",
+        "diameter": "Ø24",
+        "meaning": "넓은 라벨 면적, 안정적인 그립감, 대용량 수용"
+      },
+      "related_products": [
+        "100ml 브로우용기",
+        "120ml 브로우용기",
+        "200ml 브로우용기"
+      ],
+      "keywords": [
+        "대용량",
+        "경제형",
+        "토너",
+        "바디",
+        "실속",
+        "장기사용"
+      ],
+      "recommendations": {
+        "when_to_use": "대용량 제품, 장기 사용, 경제적 포장, 바디케어",
+        "when_not_to_use": "트래블 제품, 샘플, 프리미엄 소형 제품",
+        "alternatives_if_too_small": "200ml 브로우용기",
+        "alternatives_if_too_large": "100ml, 120ml 브로우용기"
+      }
+    }
+  },
+  "idx_417": {
+    "product_id": "idx_417",
+    "product_code": "JT220-G002",
+    "product_name": "220g 크림용기",
+    "enriched_info": {
+      "detailed_description": "220g PET 크림용기는 대용량 크림 제품에 적합한 와이드 형태의 jar 용기입니다. 넓은 개구부로 제품 사용이 편리하며, 투명 PET 재질로 내용물을 확인할 수 있습니다.",
+      "use_cases": [
+        "페이스 크림 및 수분크림",
+        "바디 크림/버터",
+        "헤어 팩/마스크",
+        "2-3개월 사용량"
+      ],
+      "target_customers": [
+        "크림 제조 전문 업체",
+        "바디케어 브랜드",
+        "헤어케어 제조사",
+        "대용량 선호 고객"
+      ],
+      "material_benefits": {
+        "material": "PET (폴리에틸렌 테레프탈레이트)",
+        "advantages": [
+          "투명도 우수 (내용물 확인)",
+          "와이드 개구부 (사용 편리)",
+          "가벼운 무게 (유리 대비)",
+          "파손 위험 낮음",
+          "재활용 가능"
+        ]
+      },
+      "capacity_info": {
+        "capacity": "220g",
+        "usage_duration": "2-3개월 (하루 3g 기준)",
+        "suitable_products": ["페이스 크림", "바디 크림", "헤어 팩", "수분 크림"],
+        "positioning": "대용량/jar형"
+      },
+      "specifications_explained": {
+        "dimensions": "Ø76x74(mm)",
+        "meaning": "넓은 직경으로 손가락/스패츌라 사용 편리, 안정적인 보관"
+      },
+      "related_products": [
+        "150g 크림용기",
+        "180g 크림용기",
+        "250g 크림용기"
+      ],
+      "keywords": [
+        "크림",
+        "대용량",
+        "jar",
+        "와이드",
+        "투명",
+        "바디케어"
+      ],
+      "recommendations": {
+        "when_to_use": "크림 제품, 대용량 필요, 바디/헤어케어, jar 형태 선호",
+        "when_not_to_use": "액상 제품, 소형 제품, 여행용",
+        "alternatives_if_too_small": "250g, 300g 크림용기",
+        "alternatives_if_too_large": "150g, 180g 크림용기"
+      }
+    }
+  }
+}

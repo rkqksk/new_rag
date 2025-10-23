@@ -1,0 +1,107 @@
+{
+  "product_name": "200ml 다층 튜브용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1729582828.jpg",
+      "filename": "ADD_GOODS2_1729582828.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1729582828.jpg",
+      "filename": "ADD_GOODS3_1729582828.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1729582828.jpg",
+      "filename": "GOODS1_1729582828.jpg",
+      "alt": "200ml 다층 튜브용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1729582828.jpg",
+      "filename": "ADD_GOODS1_1729582828.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "200ml 다층 튜브용기",
+    "제품 코드": "TH200-R001",
+    "재질(원료)": "혼합",
+    "사양": "54x118(mm)",
+    "capacity": "200ml",
+    "dimensions": "Ø32",
+    "neck_size": "32파이",
+    "neck_size_mm": 32,
+    "neck_updated_at": "2025-10-23T21:00:50.742390",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1729582828.jpg",
+      "filename": "ADD_GOODS2_1729582828.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1729582828.jpg",
+      "filename": "ADD_GOODS3_1729582828.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1729582828.jpg",
+      "filename": "GOODS1_1729582828.jpg",
+      "alt": "200ml 다층 튜브용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1729582828.jpg",
+      "filename": "ADD_GOODS1_1729582828.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/Other/images/idx_905_main_4.jpg"
+    }
+  ],
+  "idx": "905",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=905",
+  "crawled_at": "2025-10-18T21:30:44.427339",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 200,
+    "matched_price_range": "200",
+    "material": "다층",
+    "thickness": null,
+    "base_price": {
+      "regular": 380,
+      "discount": 340
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 300,
+    "discount_price": 200,
+    "capacity_ml": 200,
+    "material_detail": "MB4C",
+    "pricing_updated_at": "2025-10-23T20:42:24.196179",
+    "pricing_capacity_ml": 200
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:28:04.191431"
+}

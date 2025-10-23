@@ -1,0 +1,1398 @@
+[
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "PE",
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "unit": "원",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "PET",
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "unit": "원",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "PP",
+    "base_price": {
+      "regular": 170,
+      "discount": 140
+    },
+    "unit": "원",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "PETG",
+    "base_price": {
+      "regular": 220,
+      "discount": 160
+    },
+    "unit": "원",
+    "thickness": "얇은",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "PETG",
+    "base_price": {
+      "regular": 300,
+      "discount": 300
+    },
+    "unit": "원",
+    "thickness": "준헤비",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "다층",
+    "base_price": {
+      "regular": 250,
+      "discount": 230
+    },
+    "unit": "원",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "10-50",
+    "material": "PET",
+    "base_price": {
+      "regular": 450,
+      "discount": 400
+    },
+    "unit": "원",
+    "thickness": "헤비",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "10-50",
+    "base_price": {
+      "regular": 280,
+      "discount": 240
+    },
+    "unit": "원",
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "80",
+    "material": "PE",
+    "base_price": {
+      "regular": 160,
+      "discount": 130
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "80",
+    "material": "PET",
+    "base_price": {
+      "regular": 160,
+      "discount": 130
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "80",
+    "material": "PP",
+    "base_price": {
+      "regular": 190,
+      "discount": 150
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "80",
+    "material": "PETG",
+    "base_price": {
+      "regular": 240,
+      "discount": 180
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "80",
+    "material": "PETG",
+    "base_price": {
+      "regular": 320,
+      "discount": 320
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "80",
+    "material": "다층",
+    "base_price": {
+      "regular": 260,
+      "discount": 240
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "80",
+    "base_price": {
+      "regular": 290,
+      "discount": 240
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "PE",
+    "base_price": {
+      "regular": 180,
+      "discount": 130
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "PET",
+    "base_price": {
+      "regular": 180,
+      "discount": 130
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "PP",
+    "base_price": {
+      "regular": 240,
+      "discount": 160
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "PETG",
+    "base_price": {
+      "regular": 260,
+      "discount": 220
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "PETG",
+    "base_price": {
+      "regular": 340,
+      "discount": 340
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "다층",
+    "base_price": {
+      "regular": 280,
+      "discount": 250
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "100",
+    "material": "PET",
+    "base_price": {
+      "regular": 560,
+      "discount": 400
+    },
+    "unit": "원",
+    "thickness": "헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "100",
+    "base_price": {
+      "regular": 320,
+      "discount": 260
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "120",
+    "material": "PE",
+    "base_price": {
+      "regular": 200,
+      "discount": 150
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "120",
+    "material": "PET",
+    "base_price": {
+      "regular": 200,
+      "discount": 150
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "120",
+    "material": "PP",
+    "base_price": {
+      "regular": 260,
+      "discount": 180
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "120",
+    "material": "PETG",
+    "base_price": {
+      "regular": 280,
+      "discount": 240
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "120",
+    "material": "PETG",
+    "base_price": {
+      "regular": 360,
+      "discount": 360
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "120",
+    "material": "다층",
+    "base_price": {
+      "regular": 290,
+      "discount": 250
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "120",
+    "base_price": {
+      "regular": 340,
+      "discount": 270
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "PE",
+    "base_price": {
+      "regular": 220,
+      "discount": 160
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "PET",
+    "base_price": {
+      "regular": 220,
+      "discount": 160
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "PP",
+    "base_price": {
+      "regular": 260,
+      "discount": 180
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "PETG",
+    "base_price": {
+      "regular": 300,
+      "discount": 250
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "PETG",
+    "base_price": {
+      "regular": 380,
+      "discount": 380
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "다층",
+    "base_price": {
+      "regular": 300,
+      "discount": 260
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "150",
+    "material": "PET",
+    "base_price": {
+      "regular": 600,
+      "discount": 430
+    },
+    "unit": "원",
+    "thickness": "헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "150",
+    "base_price": {
+      "regular": 350,
+      "discount": 280
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "180",
+    "material": "PE",
+    "base_price": {
+      "regular": 240,
+      "discount": 170
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "180",
+    "material": "PET",
+    "base_price": {
+      "regular": 240,
+      "discount": 170
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "180",
+    "material": "PP",
+    "base_price": {
+      "regular": 280,
+      "discount": 200
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "180",
+    "material": "PETG",
+    "base_price": {
+      "regular": 320,
+      "discount": 260
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "180",
+    "material": "PETG",
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "180",
+    "material": "다층",
+    "base_price": {
+      "regular": 320,
+      "discount": 290
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "180",
+    "base_price": {
+      "regular": 380,
+      "discount": 300
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "PE",
+    "base_price": {
+      "regular": 260,
+      "discount": 190
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "PET",
+    "base_price": {
+      "regular": 260,
+      "discount": 190
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "PP",
+    "base_price": {
+      "regular": 300,
+      "discount": 200
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "PETG",
+    "base_price": {
+      "regular": 340,
+      "discount": 280
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "PETG",
+    "base_price": {
+      "regular": 420,
+      "discount": 380
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "다층",
+    "base_price": {
+      "regular": 380,
+      "discount": 340
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "200",
+    "material": "PET",
+    "base_price": {
+      "regular": 620,
+      "discount": 540
+    },
+    "unit": "원",
+    "thickness": "헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "200",
+    "base_price": {
+      "regular": 450,
+      "discount": 390
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "250",
+    "material": "PE",
+    "base_price": {
+      "regular": 280,
+      "discount": 220
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "250",
+    "material": "PET",
+    "base_price": {
+      "regular": 280,
+      "discount": 220
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "250",
+    "material": "PP",
+    "base_price": {
+      "regular": 320,
+      "discount": 240
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "250",
+    "material": "PETG",
+    "base_price": {
+      "regular": 360,
+      "discount": 300
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "250",
+    "material": "PETG",
+    "base_price": {
+      "regular": 440,
+      "discount": 400
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "250",
+    "material": "다층",
+    "base_price": {
+      "regular": 400,
+      "discount": 360
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블2",
+    "category": "거품 브로우",
+    "capacity_ml": "250",
+    "base_price": {
+      "regular": 500,
+      "discount": 410
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "300",
+    "material": "PE",
+    "base_price": {
+      "regular": 300,
+      "discount": 230
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "300",
+    "material": "PET",
+    "base_price": {
+      "regular": 300,
+      "discount": 230
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "300",
+    "material": "PP",
+    "base_price": {
+      "regular": 340,
+      "discount": 260
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "300",
+    "material": "PETG",
+    "base_price": {
+      "regular": 380,
+      "discount": 320
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "300",
+    "material": "PETG",
+    "base_price": {
+      "regular": 460,
+      "discount": 430
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "300",
+    "material": "다층",
+    "base_price": {
+      "regular": 420,
+      "discount": 380
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "400",
+    "material": "PE",
+    "base_price": {
+      "regular": 330,
+      "discount": 250
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "400",
+    "material": "PET",
+    "base_price": {
+      "regular": 330,
+      "discount": 250
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "400",
+    "material": "PP",
+    "base_price": {
+      "regular": 380,
+      "discount": 320
+    },
+    "unit": "원",
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "400",
+    "material": "PETG",
+    "base_price": {
+      "regular": 440,
+      "discount": 420
+    },
+    "unit": "원",
+    "thickness": "얇은"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "400",
+    "material": "PETG",
+    "base_price": {
+      "regular": 520,
+      "discount": 460
+    },
+    "unit": "원",
+    "thickness": "준헤비"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "400",
+    "material": "다층",
+    "base_price": {
+      "regular": 440,
+      "discount": 400
+    },
+    "unit": "원"
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "500",
+    "material": "PE",
+    "base_price": {
+      "regular": 350,
+      "discount": 260
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "500",
+    "material": "PET",
+    "base_price": {
+      "regular": 350,
+      "discount": 260
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 80
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "500",
+    "material": "PP",
+    "base_price": {
+      "regular": 420,
+      "discount": 400
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "500",
+    "material": "PETG",
+    "base_price": {
+      "regular": 540,
+      "discount": 460
+    },
+    "unit": "원",
+    "thickness": "얇은",
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 80
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "500",
+    "material": "다층",
+    "base_price": {
+      "regular": 500,
+      "discount": 430
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "label_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "750",
+    "material": "PE",
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "750",
+    "material": "PET",
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "750",
+    "material": "PP",
+    "base_price": {
+      "regular": 540,
+      "discount": 480
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "750",
+    "material": "PETG",
+    "base_price": {
+      "regular": 600,
+      "discount": 520
+    },
+    "unit": "원",
+    "thickness": "얇은",
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "1000",
+    "material": "PE",
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "1000",
+    "material": "PET",
+    "base_price": {
+      "regular": 460,
+      "discount": 420
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "1000",
+    "material": "PP",
+    "base_price": {
+      "regular": 620,
+      "discount": 520
+    },
+    "unit": "원",
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": {
+      "customer_terms": [
+        "복합",
+        "하이팍스",
+        "MB4C"
+      ],
+      "material_composition": "PE+PP",
+      "design_reference": "PE/PP",
+      "crawl_category_mapping": "PP",
+      "shares_with_reference": [
+        "금형",
+        "디자인",
+        "사진",
+        "치수"
+      ],
+      "note": "PE/PP와 동일한 금형 사용, 재질만 PE+PP 복합재질로 상이"
+    }
+  },
+  {
+    "sheet": "용기",
+    "table": "테이블1",
+    "category": "브로우",
+    "capacity_ml": "1000",
+    "material": "PETG",
+    "base_price": {
+      "regular": 650,
+      "discount": 600
+    },
+    "unit": "원",
+    "thickness": "얇은",
+    "printing_option": {
+      "regular_price": 130,
+      "discount_price": 110
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    }
+  }
+]

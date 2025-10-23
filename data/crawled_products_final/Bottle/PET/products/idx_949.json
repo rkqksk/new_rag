@@ -1,0 +1,124 @@
+{
+  "product_name": "150ml 거품브로우용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1750997505.jpg",
+      "filename": "ADD_GOODS2_1750997505.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1750997505.jpg",
+      "filename": "ADD_GOODS3_1750997505.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1750997505.jpg",
+      "filename": "GOODS1_1750997505.jpg",
+      "alt": "150ml 거품브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1750997505.jpg",
+      "filename": "ADD_GOODS1_1750997505.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "150ml 거품브로우용기",
+    "제품 코드": "GT150-GS04",
+    "재질(원료)": "PET",
+    "사양": "44x132(mm)",
+    "capacity": "150ml",
+    "dimensions": "Ø30",
+    "neck_size": "30파이",
+    "neck_size_mm": 30,
+    "neck_updated_at": "2025-10-23T21:00:50.798406",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1750997505.jpg",
+      "filename": "ADD_GOODS2_1750997505.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1750997505.jpg",
+      "filename": "ADD_GOODS3_1750997505.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1750997505.jpg",
+      "filename": "GOODS1_1750997505.jpg",
+      "alt": "150ml 거품브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1750997505.jpg",
+      "filename": "ADD_GOODS1_1750997505.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_949_main_4.jpg"
+    }
+  ],
+  "idx": "949",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=949",
+  "crawled_at": "2025-10-18T21:40:31.554015",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 150,
+    "matched_price_range": "150",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 220,
+      "discount": 160
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "coating_capacity_range": "-200",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 260,
+      "discount": 220
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "coating_options": [
+      {
+        "type": "matte_coating",
+        "name": "무광코팅",
+        "price": 260,
+        "note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+      }
+    ],
+    "coating_updated_at": "2025-10-23T20:34:15.020441",
+    "regular_price": 220,
+    "discount_price": 160,
+    "capacity_ml": 150,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.257685",
+    "pricing_capacity_ml": 150
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.986969"
+}

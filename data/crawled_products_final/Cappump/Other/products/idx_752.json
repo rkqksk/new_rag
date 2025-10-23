@@ -1,0 +1,55 @@
+{
+  "product_name": "24파이 이중단캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661750100.jpg",
+      "filename": "GOODS1_1661750100.jpg",
+      "alt": "24파이 이중단캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_752_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CP024-GD04"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661750100.jpg",
+      "filename": "GOODS1_1661750100.jpg",
+      "alt": "24파이 이중단캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_752_main_1.jpg"
+    }
+  ],
+  "idx": "752",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=752",
+  "crawled_at": "2025-10-18T06:50:43.279834",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.570350",
+  "product_code": "CP024-GD04",
+  "pricing": {
+    "supply_price": 90.0,
+    "selling_price": 140.0
+  },
+  "product_list_info": {
+    "vendor": "대경테크",
+    "description": null,
+    "spec": "24파이 이중단캡",
+    "detail": "33x25mm / 내경 Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.102817"
+  }
+}

@@ -145,7 +145,7 @@ services:
         ipv4_address: 172.28.0.2
 
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:6333/health"]
+      test: ["CMD-SHELL", "timeout 5 bash -c '</dev/tcp/localhost/6333' || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -230,20 +230,20 @@ services:
       UVICORN_WORKERS: ${UVICORN_WORKERS:-1}
 
       # Database Configuration
-      POSTGRES_HOST: 172.28.0.4
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
       POSTGRES_USER: ${POSTGRES_USER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
       POSTGRES_DB: ${POSTGRES_DB:-rag_enterprise}
 
       # Redis Configuration
-      REDIS_HOST: 172.28.0.3
+      REDIS_HOST: redis
       REDIS_PORT: 6379
       REDIS_DB: ${REDIS_DB:-0}
       REDIS_TTL: ${REDIS_TTL:-3600}
 
       # Qdrant Configuration
-      QDRANT_HOST: 172.28.0.2
+      QDRANT_HOST: qdrant
       QDRANT_HTTP_PORT: 6333
       QDRANT_GRPC_PORT: 6334
       QDRANT_TIMEOUT: ${QDRANT_TIMEOUT:-30}
@@ -276,6 +276,8 @@ services:
       # Mount source code for hot-reload (development only)
       - ./app:/app/app:ro
       - ./agents:/app/agents:ro
+      # Mount data directory for product images and print areas
+      - ./data:/app/data
       # Mount logs for debugging
       - ./logs:/app/logs
 

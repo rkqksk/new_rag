@@ -9,6 +9,7 @@
 import os
 import json
 import logging
+import hashlib
 from pathlib import Path
 from typing import Optional, Dict, List, Any, Tuple
 from dataclasses import dataclass, asdict
@@ -50,24 +51,32 @@ class ProductEmbedder:
 
     def __init__(
         self,
-        text_model: str = "GTE_Qwen2_7B_instruct",
+        text_model: str = "all-MiniLM-L6-v2",
         image_model: str = "openai/ViT-H-14",
         device: str = "auto"
     ):
-        self.device = device if device != "auto" else ("cuda" if torch.cuda.is_available() else "cpu")
+        # Use MPS (Metal Performance Shaders) for Apple Silicon M1/M2/M3/M4
+        if device == "auto":
+            if torch.backends.mps.is_available():
+                self.device = "mps"
+            elif torch.cuda.is_available():
+                self.device = "cuda"
+            else:
+                self.device = "cpu"
+        else:
+            self.device = device
         logger.info(f"Using device: {self.device}")
 
-        # 텍스트 모델
+        # 텍스트 모델 - PRIMARY: all-MiniLM-L6-v2 (fast, efficient, 384 dimensions)
         try:
             self.text_model = SentenceTransformer(
-                "Alibaba-NLP/gte-Qwen2-7B-instruct",
+                "sentence-transformers/all-MiniLM-L6-v2",
                 device=self.device
             )
-            logger.info("✅ Text model loaded: gte-Qwen2-7B-instruct")
+            logger.info("✅ Primary text model loaded: all-MiniLM-L6-v2 (384 dim)")
         except Exception as e:
-            logger.warning(f"Failed to load gte-Qwen2-7B-instruct: {e}")
-            self.text_model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2", device=self.device)
-            logger.info("⚠️ Using fallback model: all-MiniLM-L6-v2")
+            logger.error(f"Failed to load all-MiniLM-L6-v2: {e}")
+            raise
 
         # 이미지 모델 (OpenCLIP)
         try:
@@ -87,7 +96,7 @@ class ProductEmbedder:
     def embed_text(self, text: str) -> List[float]:
         """텍스트 임베딩"""
         if not text or not text.strip():
-            return [0.0] * 768  # 기본 벡터
+            return [0.0] * 384  # 기본 벡터 (all-MiniLM-L6-v2 dimension)
 
         try:
             embedding = self.text_model.encode(
@@ -98,7 +107,7 @@ class ProductEmbedder:
             return embedding.tolist()
         except Exception as e:
             logger.error(f"Text embedding error: {e}")
-            return [0.0] * 768
+            return [0.0] * 384  # all-MiniLM-L6-v2 dimension
 
     def embed_image(self, image_path: str) -> Optional[List[float]]:
         """이미지 임베딩"""
@@ -153,12 +162,22 @@ class ProductEmbedder:
             image_embeddings = []
             if "downloaded_images" in product_data and self.image_model:
                 for img_info in product_data["downloaded_images"][:3]:  # 최대 3개
-                    img_path = os.path.join(images_base_dir, category, "products", img_info)
+                    # Handle both dict and string formats
+                    if isinstance(img_info, dict):
+                        filename = img_info.get("filename", "")
+                    else:
+                        filename = img_info
+
+                    if not filename:
+                        continue
+
+                    # Try to find image in category/material/images directory
+                    img_path = os.path.join(images_base_dir, category, "images", filename)
                     img_embedding = self.embed_image(img_path)
                     if img_embedding:
                         image_embeddings.append(img_embedding)
 
-            # 메타데이터
+            # 메타데이터 (가격 정보 포함)
             metadata = {
                 "product_id": product_id,
                 "product_name": product_name,
@@ -168,6 +187,16 @@ class ProductEmbedder:
                 "specifications": product_data.get("specifications", {}),
                 "print_area_url": product_data.get("print_area_url"),
             }
+
+            # 가격 정보 추가 (있는 경우)
+            pricing_data = product_data.get("pricing", {})
+            if pricing_data:
+                metadata["pricing"] = pricing_data
+
+            # product_list_info 추가 (Cap/Pump의 경우)
+            product_list_info = product_data.get("product_list_info")
+            if product_list_info:
+                metadata["product_list_info"] = product_list_info
 
             return ProductEmbedding(
                 product_id=product_id,
@@ -194,10 +223,11 @@ class QdrantVectorDB:
     def create_collection(
         self,
         collection_name: str,
-        vector_size: int = 768,
+        text_dim: int = 384,  # all-MiniLM-L6-v2 dimension
+        image_dim: int = 1024,  # OpenCLIP-ViT-H-14 dimension
         distance: str = "COSINE"
     ) -> bool:
-        """컬렉션 생성"""
+        """컬렉션 생성 (Multi-Vector: text + image)"""
         try:
             existing_collections = [col.name for col in self.client.get_collections().collections]
 
@@ -205,14 +235,21 @@ class QdrantVectorDB:
                 logger.info(f"⚠️ Collection already exists: {collection_name}")
                 return True
 
+            # Multi-vector configuration: named vectors for text and image
             self.client.create_collection(
                 collection_name=collection_name,
-                vectors_config=VectorParams(
-                    size=vector_size,
-                    distance=Distance.COSINE if distance == "COSINE" else Distance.EUCLID
-                )
+                vectors_config={
+                    "text": VectorParams(
+                        size=text_dim,
+                        distance=Distance.COSINE if distance == "COSINE" else Distance.EUCLID
+                    ),
+                    "image": VectorParams(
+                        size=image_dim,
+                        distance=Distance.COSINE if distance == "COSINE" else Distance.EUCLID
+                    )
+                }
             )
-            logger.info(f"✅ Created collection: {collection_name} (dim: {vector_size})")
+            logger.info(f"✅ Created multi-vector collection: {collection_name} (text: {text_dim}, image: {image_dim})")
             return True
         except Exception as e:
             logger.error(f"Error creating collection {collection_name}: {e}")
@@ -232,19 +269,43 @@ class QdrantVectorDB:
         try:
             points = []
             for idx, emb in enumerate(embeddings):
-                # 메인 텍스트 벡터로 포인트 생성
+                # Deterministic hash using MD5 (first 8 bytes as integer)
+                hash_bytes = hashlib.md5(emb.product_id.encode()).digest()[:8]
+                deterministic_id = int.from_bytes(hash_bytes, byteorder='big') % (2**31)
+
+                # Multi-vector point: text + image embeddings
+                # Use first image embedding if available, else zero vector
+                image_vector = (
+                    emb.image_embeddings[0] if emb.image_embeddings
+                    else [0.0] * 1024  # Default zero vector for products without images
+                )
+
+                # Payload 구성 (가격 및 제품 정보 포함)
+                payload = {
+                    "product_id": emb.product_id,
+                    "product_name": emb.product_name,
+                    "category": emb.category,
+                    "text_length": emb.metadata["text_length"],
+                    "num_images": emb.metadata["num_images"],
+                    "specifications": emb.metadata.get("specifications", {}),
+                    "print_area_url": emb.metadata.get("print_area_url"),
+                }
+
+                # 가격 정보 추가
+                if "pricing" in emb.metadata:
+                    payload["pricing"] = emb.metadata["pricing"]
+
+                # 제품 리스트 정보 추가
+                if "product_list_info" in emb.metadata:
+                    payload["product_list_info"] = emb.metadata["product_list_info"]
+
                 point = PointStruct(
-                    id=hash(emb.product_id) % (2**31),  # 양수 ID
-                    vector=emb.text_embedding,
-                    payload={
-                        "product_id": emb.product_id,
-                        "product_name": emb.product_name,
-                        "category": emb.category,
-                        "text_length": emb.metadata["text_length"],
-                        "num_images": emb.metadata["num_images"],
-                        "product_name_text": emb.product_name,
-                        "category_text": emb.category,
-                    }
+                    id=deterministic_id,  # 양수 deterministic ID
+                    vector={
+                        "text": emb.text_embedding,  # 384-dim
+                        "image": image_vector        # 1024-dim
+                    },
+                    payload=payload
                 )
                 points.append(point)
 
@@ -293,43 +354,61 @@ class EmbeddingPipeline:
         self.max_workers = max_workers
 
     def process_category(self, category: str) -> Tuple[List[ProductEmbedding], int]:
-        """카테고리별 제품 처리"""
+        """카테고리별 제품 처리 (NEW: Category/Material/products 구조)"""
         category_path = os.path.join(self.data_dir, category)
-        products_path = os.path.join(category_path, "products")
 
-        if not os.path.exists(products_path):
-            logger.error(f"Products directory not found: {products_path}")
+        if not os.path.exists(category_path):
+            logger.error(f"Category directory not found: {category_path}")
             return [], 0
 
-        json_files = sorted([f for f in os.listdir(products_path) if f.endswith(".json")])
-        logger.info(f"Processing {len(json_files)} products from {category}")
-
+        materials = ["PE", "PET", "PETG", "PP", "Other"]
         embeddings = []
         failed = 0
+        total_files = 0
+
+        # Collect all JSON files across all materials
+        all_json_files = []
+        for material in materials:
+            products_path = os.path.join(category_path, material, "products")
+
+            if not os.path.exists(products_path):
+                logger.debug(f"Skipping {category}/{material} - directory not found")
+                continue
+
+            json_files = [
+                (os.path.join(products_path, f), f, material)
+                for f in os.listdir(products_path)
+                if f.endswith(".json")
+            ]
+            all_json_files.extend(json_files)
+            total_files += len(json_files)
+            logger.info(f"Found {len(json_files)} products in {category}/{material}")
+
+        logger.info(f"Processing total {total_files} products from {category} across all materials")
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             futures = {
                 executor.submit(
                     self.embedder.process_product_json,
-                    os.path.join(products_path, json_file),
-                    category,
-                    os.path.dirname(category_path)
-                ): json_file
-                for json_file in json_files
+                    json_path,
+                    f"{category}/{material}",  # Include material in category label
+                    self.data_dir
+                ): (json_file, material)
+                for json_path, json_file, material in all_json_files
             }
 
             for idx, future in enumerate(concurrent.futures.as_completed(futures)):
-                json_file = futures[future]
+                json_file, material = futures[future]
                 try:
                     result = future.result()
                     if result:
                         embeddings.append(result)
                         if (idx + 1) % 50 == 0:
-                            logger.info(f"Progress: {idx + 1}/{len(json_files)} processed")
+                            logger.info(f"Progress: {idx + 1}/{total_files} processed")
                     else:
                         failed += 1
                 except Exception as e:
-                    logger.error(f"Error processing {json_file}: {e}")
+                    logger.error(f"Error processing {json_file} ({material}): {e}")
                     failed += 1
 
         logger.info(f"✅ Completed {category}: {len(embeddings)} success, {failed} failed")
@@ -338,7 +417,7 @@ class EmbeddingPipeline:
     def run(self, categories: List[str] = None) -> Dict[str, Any]:
         """전체 파이프라인 실행"""
         if categories is None:
-            categories = ["Bottle", "Jar", "CapPump"]
+            categories = ["Bottle", "Jar", "Cap", "Pump"]
 
         logger.info(f"Starting embedding pipeline for: {categories}")
 
@@ -397,7 +476,7 @@ class EmbeddingPipeline:
 
 def main():
     """메인 실행 함수"""
-    data_dir = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_organized"
+    data_dir = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
 
     pipeline = EmbeddingPipeline(
         data_dir=data_dir,
@@ -406,7 +485,7 @@ def main():
         max_workers=4
     )
 
-    results = pipeline.run(categories=["Bottle", "Jar", "CapPump"])
+    results = pipeline.run(categories=["Bottle", "Jar", "Cap", "Pump"])
 
     # 결과 출력
     logger.info(f"\n{'='*60}")

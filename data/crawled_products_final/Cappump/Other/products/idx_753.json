@@ -1,0 +1,56 @@
+{
+  "product_name": "40파이 이중캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661750140.jpg",
+      "filename": "GOODS1_1661750140.jpg",
+      "alt": "40파이 이중캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_753_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661750140.jpg",
+      "filename": "ADD_GOODS1_1661750140.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_753_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CA040-GW13(24)"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661750140.jpg",
+      "filename": "GOODS1_1661750140.jpg",
+      "alt": "40파이 이중캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_753_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661750140.jpg",
+      "filename": "ADD_GOODS1_1661750140.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_753_main_2.jpg"
+    }
+  ],
+  "idx": "753",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=753",
+  "crawled_at": "2025-10-18T06:48:30.874583",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.570072",
+  "product_code": "CA040-GW13(24)"
+}

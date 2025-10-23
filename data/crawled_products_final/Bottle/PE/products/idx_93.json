@@ -1,0 +1,69 @@
+{
+  "product_name": "520ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658123940.jpg",
+      "filename": "GOODS1_1658123940.jpg",
+      "alt": "520ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "520ml 브로우용기",
+    "제품 코드": "BE520-G004",
+    "재질(원료)": "PE",
+    "사양": "79x139(mm)",
+    "capacity": "520ml",
+    "dimensions": "Ø33",
+    "neck_size": "33파이",
+    "neck_size_mm": 33,
+    "neck_updated_at": "2025-10-23T21:00:50.655199",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=93",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658123940.jpg",
+      "filename": "GOODS1_1658123940.jpg",
+      "alt": "520ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_93_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_93_print_area.pdf",
+  "idx": "93",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=93",
+  "crawled_at": "2025-10-21T21:18:06.189991",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 520,
+    "matched_price_range": "750",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 350,
+    "discount_price": 260,
+    "pricing_capacity_ml": 500,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.142541"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.910777"
+}

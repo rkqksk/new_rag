@@ -1,0 +1,69 @@
+{
+  "product_name": "24파이 스킨 장캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1707367065.jpg",
+      "filename": "GOODS1_1707367065.jpg",
+      "alt": "24파이 스킨 장캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_870_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1707367065.jpg",
+      "filename": "ADD_GOODS1_1707367065.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_870_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CP024-GD14"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1707367065.jpg",
+      "filename": "GOODS1_1707367065.jpg",
+      "alt": "24파이 스킨 장캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_870_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1707367065.jpg",
+      "filename": "ADD_GOODS1_1707367065.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_870_main_2.jpg"
+    }
+  ],
+  "idx": "870",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=870",
+  "crawled_at": "2025-10-18T06:57:54.271709",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.568886",
+  "product_code": "CP024-GD14",
+  "pricing": {
+    "supply_price": 180.0,
+    "selling_price": 230.0
+  },
+  "product_list_info": {
+    "vendor": "대경",
+    "description": null,
+    "spec": "24파이 스킨 장캡",
+    "detail": "29x35(mm)/내경Ø24",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.100293"
+  }
+}

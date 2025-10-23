@@ -1,0 +1,57 @@
+{
+  "product_name": "20파이 에센스펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748328.jpg",
+      "filename": "GOODS1_1661748328.jpg",
+      "alt": "20파이 에센스펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_716_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "20파이 에센스펌프",
+    "제품 코드": "EO020-CG04",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø20",
+    "dimensions": "Ø20",
+    "neck_size": "20파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661748328.jpg",
+      "filename": "GOODS1_1661748328.jpg",
+      "alt": "20파이 에센스펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_716_main_1.jpg"
+    }
+  ],
+  "idx": "716",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=716",
+  "crawled_at": "2025-10-18T21:58:35.337067",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 100,
+    "cap_product_type": "캡_원터치캡"
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "PUMP",
+  "product_code": "EO020-CG04",
+  "product_code_updated_at": "2025-10-23T20:43:45.367862",
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "GF-505VP-D",
+    "spec": "Ø20 에센스펌프",
+    "detail": "내경 Ø20",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:44:03.795700"
+  }
+}

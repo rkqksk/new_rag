@@ -1,0 +1,69 @@
+{
+  "product_name": "24파이 이중 원터치캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740381187.jpg",
+      "filename": "GOODS1_1740381187.jpg",
+      "alt": "24파이 이중 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_922_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740381187.jpg",
+      "filename": "ADD_GOODS1_1740381187.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_922_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "NP024-GE11"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1740381187.jpg",
+      "filename": "GOODS1_1740381187.jpg",
+      "alt": "24파이 이중 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_922_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1740381187.jpg",
+      "filename": "ADD_GOODS1_1740381187.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_922_main_2.jpg"
+    }
+  ],
+  "idx": "922",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=922",
+  "crawled_at": "2025-10-18T07:00:11.544466",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.569204",
+  "product_code": "NP024-GE11",
+  "pricing": {
+    "supply_price": 100.0,
+    "selling_price": 140.0
+  },
+  "product_list_info": {
+    "vendor": "에코팩",
+    "description": null,
+    "spec": "24파이 이중 원터치캡",
+    "detail": "34x22(mm)/내경Ø24",
+    "package": null,
+    "note": "ECC 24-410 ODC",
+    "updated_at": "2025-10-23T20:34:42.100830"
+  }
+}

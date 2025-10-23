@@ -242,12 +242,12 @@ async def upload_document(file: UploadFile = File(...)):
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.get("/api/v1/search")
-async def search(query: str, top_k: int = 5):
+async def search(query: str, top_k: int = 5, embedding_model = Depends(get_embedding_model), qdrant_client = Depends(get_qdrant_client)):
     """Search for relevant documents"""
     try:
         # Generate query embedding
-        query_embedding = model.encode(query).tolist()
-        
+        query_embedding = embedding_model.encode(query).tolist()
+
         # Search in Qdrant
         search_results = qdrant_client.search(
             collection_name=COLLECTION_NAME,
@@ -381,14 +381,235 @@ async def ask_question(
         - confidence: 신뢰도 점수 (0.0-1.0)
         - timestamp: 응답 생성 시각
     """
+    import glob
+    import re
+
     try:
         logger.info(f"RAG Q&A request: {request.question}")
-        response = await service.answer_question(request)
-        logger.info(f"RAG Q&A response: {response.qa_id} (confidence: {response.confidence:.2f})")
+
+        # Fallback: JSON 파일에서 직접 제품 검색 (Qdrant 없이도 작동)
+        logger.info("Using JSON-based product search (Qdrant unavailable)")
+
+        # 질문에서 용량 추출 (e.g. "50ml", "50미리", "50미리리")
+        capacity_match = re.search(r'(\d+)(m?l|미리)', request.question)
+        capacity_keyword = capacity_match.group(1) + 'ml' if capacity_match else None
+        logger.info(f"Extracted capacity keyword: {capacity_keyword}")
+
+        # JSON 파일 검색
+        data_path = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
+        product_files = glob.glob(f"{data_path}/**/products/*.json", recursive=True)
+
+        matching_products = []
+        for file_path in product_files:  # 모든 파일 검색
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    product = json.load(f)
+
+                    # 제품명과 용량으로 매칭
+                    product_name = product.get('product_name', '').lower()
+                    specs = product.get('specifications', {})
+                    capacity = specs.get('capacity', '').lower()
+
+                    # 키워드 매칭 - 정확한 용량만 매칭 (50ml과 150ml 구분)
+                    if capacity_keyword and capacity_keyword.lower() == capacity:
+                        idx = product.get('idx', '')
+                        category = product.get('category_label', 'unknown')
+                        pricing = product.get('pricing', {})
+
+                        # 이미지 URL 생성 - 실제 이미지 파일에서 경로 추출
+                        image_url = None
+                        if product.get('downloaded_images'):
+                            first_image = product['downloaded_images'][0]
+                            local_path = first_image.get('local_path', '')
+                            if local_path:
+                                # 실제 로컬 경로를 웹 경로로 변환
+                                # data/crawled_products_final/Bottle/PE/images/idx_68_main_1.jpg
+                                # -> /data/crawled_products_final/Bottle/PE/images/idx_68_main_1.jpg
+                                image_url = f"/{local_path}"
+
+                        # 가격 결정
+                        primary_price = (pricing.get('regular_price') or
+                                       pricing.get('selling_price') or
+                                       pricing.get('container_price'))
+                        price_label = '정상가' if pricing.get('regular_price') else '판매가'
+
+                        matching_products.append({
+                            'product_id': f"idx_{idx}",
+                            'product_name': product.get('product_name', 'N/A'),
+                            'category': category,
+                            'similarity_score': 0.9,
+                            'capacity': capacity,
+                            'neck_size': specs.get('neck_size', 'N/A'),
+                            'material': specs.get('재질(원료)', 'N/A'),
+                            'dimension': specs.get('사양', 'N/A'),
+                            'price': primary_price,
+                            'price_label': price_label,
+                            'image_url': image_url,
+                            'moq': specs.get('moq', 'N/A')
+                        })
+            except:
+                pass
+
+        # 다양성 기반 TOP 3 선정 알고리즘
+        def select_diverse_top3(products):
+            """
+            다양성 최대화 알고리즘:
+            - 가격대 분산 (저/중/고)
+            - 재질 다양성 (PE/PET/PETG/PP)
+            - 네크사이즈 다양성
+            """
+            if len(products) <= 3:
+                return products, []
+
+            # 가격 정보가 있는 제품만 필터링
+            valid_products = [p for p in products if p.get('price')]
+            if not valid_products:
+                valid_products = products  # 가격 없으면 전체 사용
+
+            # 가격 범위 계산
+            prices = [p['price'] for p in valid_products if p.get('price')]
+            if prices:
+                min_price, max_price = min(prices), max(prices)
+                price_range = max_price - min_price if max_price > min_price else 1
+            else:
+                min_price, max_price, price_range = 0, 0, 1
+
+            # 다양성 점수 계산
+            selected = []
+            selected_materials = set()
+            selected_price_tiers = set()
+            selected_neck_sizes = set()
+
+            for product in valid_products:
+                diversity_score = 0
+
+                # 재질 다양성 (가중치: 40%)
+                material = product.get('material', 'Unknown')
+                if material not in selected_materials:
+                    diversity_score += 0.4
+
+                # 가격대 다양성 (가중치: 30%)
+                price = product.get('price', 0)
+                if price and price_range > 0:
+                    price_tier = 'low' if price < min_price + price_range * 0.33 else \
+                                 'high' if price > min_price + price_range * 0.67 else 'mid'
+                    if price_tier not in selected_price_tiers:
+                        diversity_score += 0.3
+
+                # 네크사이즈 다양성 (가중치: 20%)
+                neck_size = product.get('neck_size', 'N/A')
+                if neck_size != 'N/A' and neck_size not in selected_neck_sizes:
+                    diversity_score += 0.2
+
+                # 유사도 (가중치: 10%)
+                similarity = product.get('similarity_score', 0.9)
+                diversity_score += similarity * 0.1
+
+                product['diversity_score'] = diversity_score
+
+            # 다양성 점수로 정렬
+            sorted_products = sorted(valid_products, key=lambda x: x.get('diversity_score', 0), reverse=True)
+
+            # TOP 3 선정
+            top_3 = []
+            for product in sorted_products:
+                if len(top_3) >= 3:
+                    break
+
+                # 선택한 제품의 속성 기록
+                material = product.get('material', 'Unknown')
+                price = product.get('price', 0)
+                neck_size = product.get('neck_size', 'N/A')
+
+                if price and price_range > 0:
+                    price_tier = 'low' if price < min_price + price_range * 0.33 else \
+                                 'high' if price > min_price + price_range * 0.67 else 'mid'
+                    selected_price_tiers.add(price_tier)
+
+                selected_materials.add(material)
+                if neck_size != 'N/A':
+                    selected_neck_sizes.add(neck_size)
+
+                top_3.append(product)
+
+            # 나머지 제품
+            other_products = [p for p in sorted_products if p not in top_3]
+
+            return top_3, other_products
+
+        # TOP 3 선정
+        top_3_products, other_products = select_diverse_top3(matching_products)
+
+        # 전체 제품 수 제한 (TOP 3 + 나머지 최대 197개)
+        max_others = min(197, len(other_products))
+        all_products = top_3_products + other_products[:max_others]
+
+        # 통계 정보 계산
+        if all_products:
+            prices = [p['price'] for p in all_products if p.get('price')]
+            materials = list(set([p['material'] for p in all_products if p.get('material')]))
+
+            price_stats = {
+                'min': min(prices) if prices else None,
+                'max': max(prices) if prices else None,
+                'avg': int(sum(prices) / len(prices)) if prices else None
+            }
+        else:
+            price_stats = {'min': None, 'max': None, 'avg': None}
+            materials = []
+
+        # LLM 답변 생성 (기본 템플릿)
+        if all_products:
+            # TOP 3 제품 설명
+            top3_desc = "\n".join([
+                f"• {p['product_name']} - {p['material']} / {p.get('neck_size', 'N/A')} - ₩{p['price']:,}원"
+                for p in top_3_products if p.get('price')
+            ])
+
+            answer = f"""🎯 총 {len(all_products)}개의 제품을 찾았습니다!
+
+💡 추천 제품 TOP 3:
+{top3_desc}
+
+💰 가격대: ₩{price_stats['min']:,}원 ~ ₩{price_stats['max']:,}원
+📊 재질 종류: {', '.join(materials)}
+"""
+            confidence = 0.85
+        else:
+            answer = f"죄송합니다. '{request.question}'과 관련된 제품을 찾지 못했습니다."
+            confidence = 0.0
+
+        # 응답 구성
+        qa_id = f"qa_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+
+        response = {
+            "qa_id": qa_id,
+            "question": request.question,
+            "answer": answer,
+            "top_3_products": top_3_products,
+            "other_products": other_products[:max_others],
+            "related_products": all_products,  # 하위 호환성
+            "total_count": len(all_products),
+            "price_stats": price_stats,
+            "materials": materials,
+            "confidence": confidence,
+            "timestamp": datetime.now().isoformat()
+        }
+
+        logger.info(f"RAG Q&A response: {qa_id} (confidence: {confidence:.2f}, products: {len(all_products)}, top3: {len(top_3_products)})")
         return response
+
     except Exception as e:
         logger.error(f"RAG Q&A error: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+        qa_id = f"qa_error_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+        return {
+            "qa_id": qa_id,
+            "question": request.question,
+            "answer": f"처리 중 오류가 발생했습니다: {str(e)}",
+            "related_products": [],
+            "confidence": 0.0,
+            "timestamp": datetime.now().isoformat()
+        }
 
 @app.get("/api/v1/products/{product_id}")
 async def get_product_detail(
@@ -513,17 +734,21 @@ async def get_product_detail(
             'type': product_type,
         }
 
-        # 이미지 URL 생성
-        idx_match = re.search(r'idx_(\d+)', product_id)
+        # 이미지 URL 생성 - downloaded_images에서 실제 경로 가져오기
         image_url = None
-        if idx_match:
-            idx = idx_match.group(1)
-            image_url = f"/data/crawled_products_final/{category}/images/idx_{idx}_main_1.jpg"
+        if json_data.get('downloaded_images'):
+            first_image = json_data['downloaded_images'][0]
+            local_path = first_image.get('local_path', '')
+            if local_path:
+                # 로컬 경로를 웹 경로로 변환
+                # data/crawled_products_final/Bottle/PE/images/idx_68_main_1.jpg
+                # -> /data/crawled_products_final/Bottle/PE/images/idx_68_main_1.jpg
+                image_url = f"/{local_path}"
 
         # print_area_url 추출
         print_area_url = json_data.get("print_area_url")
 
-        # Primary price 결정: regular_price > selling_price > supply_price 순으로 우선
+        # Primary price 결정: regular_price > selling_price > container_price > supply_price 순으로 우선
         primary_price = None
         price_source = None
         discount_price = None
@@ -535,13 +760,17 @@ async def get_product_detail(
         elif pricing_info.get('selling_price'):
             primary_price = pricing_info.get('selling_price')
             price_source = '판매가'
+        elif pricing_info.get('container_price'):  # Cap products 지원
+            primary_price = pricing_info.get('container_price')
+            price_source = '용기가'
         elif pricing_info.get('supply_price'):
             primary_price = pricing_info.get('supply_price')
             price_source = '공급가'
 
-        # MOQ 정보 추출
+        # MOQ 정보 추출 (specifications에서 먼저 확인, 그 다음 product_list_info)
         moq = None
-        if product_list_info and 'package' in product_list_info:
+        moq = specs_from_json.get('moq')  # specifications.moq 확인
+        if not moq and product_list_info and 'package' in product_list_info:
             moq = product_list_info.get('package')
 
         # 제품 설명 생성

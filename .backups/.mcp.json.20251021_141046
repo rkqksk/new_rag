@@ -1,0 +1,44 @@
+{
+  "mcpServers": {
+    "claude_api": {
+      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
+      "args": ["-m", "mcp_servers.claude_api_server"],
+      "description": "Claude API (Haiku 4.5 + Sonnet 4.5) - API charges apply",
+      "env": {
+        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
+      }
+    },
+    "qdrant": {
+      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
+      "args": ["-m", "mcp_servers.qdrant_server"],
+      "description": "Vector search and embeddings",
+      "env": {
+        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
+      }
+    },
+    "rag_orchestrator": {
+      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
+      "args": ["-m", "mcp_servers.rag_orchestrator"],
+      "description": "RAG pipeline orchestration",
+      "env": {
+        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
+      }
+    },
+    "note_keeper": {
+      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
+      "args": ["-m", "mcp_servers.note_keeper_server"],
+      "description": "Documentation and progress tracking",
+      "env": {
+        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
+      }
+    }
+  },
+  "_comment": "API profile - For API testing and development with claude_api MCP",
+  "_usage": "Use when explicitly testing Claude API integration, not for general work",
+  "_warning": "⚠️ claude_api enabled - API charges will apply",
+  "_disabled_servers": {
+    "filesystem": "Enable when needed",
+    "chrome_devtools": "Enable when needed",
+    "ollama": "Enable when needed"
+  }
+}

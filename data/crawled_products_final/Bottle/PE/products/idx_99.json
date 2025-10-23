@@ -1,0 +1,65 @@
+{
+  "product_name": "300ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658124236.jpg",
+      "filename": "GOODS1_1658124236.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    }
+  ],
+  "specifications": {
+    "제품명": "300ml 브로우용기",
+    "제품 코드": "BE300-G008",
+    "재질(원료)": "PE",
+    "사양": "65x130(mm)",
+    "capacity": "300ml",
+    "dimensions": "Ø24",
+    "neck_size": "24파이",
+    "neck_size_mm": 24,
+    "neck_updated_at": "2025-10-23T21:00:50.624541",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=99",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658124236.jpg",
+      "filename": "GOODS1_1658124236.jpg",
+      "alt": "300ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_99_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_99_print_area.pdf",
+  "idx": "99",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=99",
+  "crawled_at": "2025-10-21T21:18:53.107842",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 300,
+    "matched_price_range": "300",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 300,
+      "discount": 230
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 300,
+    "discount_price": 230,
+    "capacity_ml": 300,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.129127",
+    "pricing_capacity_ml": 300
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.865399"
+}

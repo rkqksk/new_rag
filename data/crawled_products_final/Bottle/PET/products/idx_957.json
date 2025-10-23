@@ -1,0 +1,108 @@
+{
+  "product_name": "10g 마스카라용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1753163352.jpg",
+      "filename": "ADD_GOODS2_1753163352.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1753163352.jpg",
+      "filename": "ADD_GOODS3_1753163352.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163352.jpg",
+      "filename": "GOODS1_1753163352.jpg",
+      "alt": "10g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163352.jpg",
+      "filename": "ADD_GOODS1_1753163352.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "10g 마스카라용기",
+    "제품 코드": "MABT010-GS01",
+    "재질(원료)": "PET",
+    "사양": "16x74(mm)",
+    "capacity": "10g",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_1753163352.jpg",
+      "filename": "ADD_GOODS2_1753163352.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_1753163352.jpg",
+      "filename": "ADD_GOODS3_1753163352.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1753163352.jpg",
+      "filename": "GOODS1_1753163352.jpg",
+      "alt": "10g 마스카라용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1753163352.jpg",
+      "filename": "ADD_GOODS1_1753163352.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PET/images/idx_957_main_4.jpg"
+    }
+  ],
+  "idx": "957",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=957",
+  "crawled_at": "2025-10-18T21:38:51.984206",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 10,
+    "matched_price_range": "10-50",
+    "material": "PET",
+    "thickness": null,
+    "base_price": {
+      "regular": 140,
+      "discount": 100
+    },
+    "printing_option": null,
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "material_metadata": null,
+    "coating_capacity_range": "10-50",
+    "coating_available": true,
+    "coating_price": {
+      "type": "무광코팅",
+      "regular": 220,
+      "discount": 160
+    },
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.957867"
+}

@@ -1,0 +1,90 @@
+{
+  "product_name": "50g 헤비 크림용기",
+  "images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_171082991720250627124617.jpg",
+      "filename": "ADD_GOODS2_171082991720250627124617.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_171082991720250627124617.jpg",
+      "filename": "ADD_GOODS3_171082991720250627124617.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_171082991720250627124617.jpg",
+      "filename": "GOODS1_171082991720250627124617.jpg",
+      "alt": "50g 헤비 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_171082991720250627124617.jpg",
+      "filename": "ADD_GOODS1_171082991720250627124617.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_main_4.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "50g 헤비 크림용기",
+    "제품 코드": "VT050-G003",
+    "재질(원료)": "PET",
+    "사양": "Ø60x48(mm)",
+    "capacity": "50g",
+    "dimensions": "Ø60x48",
+    "neck_size": "60파이"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=877",
+  "downloaded_images": [
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS2_171082991720250627124617.jpg",
+      "filename": "ADD_GOODS2_171082991720250627124617.jpg",
+      "type": "additional_2",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_additional_2_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS3_171082991720250627124617.jpg",
+      "filename": "ADD_GOODS3_171082991720250627124617.jpg",
+      "type": "additional_3",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_additional_3_2.jpg"
+    },
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_171082991720250627124617.jpg",
+      "filename": "GOODS1_171082991720250627124617.jpg",
+      "alt": "50g 헤비 크림용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_main_3.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_171082991720250627124617.jpg",
+      "filename": "ADD_GOODS1_171082991720250627124617.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Jar/PET/images/idx_877_main_4.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/PET/print_area/idx_877_print_area.pdf",
+  "idx": "877",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=877",
+  "crawled_at": "2025-10-18T21:51:01.343507",
+  "category_label": "jar",
+  "pricing": {
+    "container_price": 80,
+    "container_capacity": "10-50ml",
+    "container_material": "PET"
+  },
+  "pricing_added_at": "2025-10-23"
+}

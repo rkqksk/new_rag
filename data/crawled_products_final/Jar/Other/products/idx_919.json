@@ -1,0 +1,55 @@
+{
+  "product_name": "43파이 민자캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1737517140.jpg",
+      "filename": "GOODS1_1737517140.jpg",
+      "alt": "43파이 민자캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_919_main_1.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "CP043-GD02"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1737517140.jpg",
+      "filename": "GOODS1_1737517140.jpg",
+      "alt": "43파이 민자캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Jar/Other/images/idx_919_main_1.jpg"
+    }
+  ],
+  "idx": "919",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=919",
+  "crawled_at": "2025-10-18T06:47:55.355492",
+  "category": "CapPump",
+  "category_label": "jar",
+  "category_type": "CAP",
+  "product_code_updated_at": "2025-10-23T20:21:54.568608",
+  "product_code": "CP043-GD02",
+  "pricing": {
+    "supply_price": 120.0,
+    "selling_price": 150.0
+  },
+  "product_list_info": {
+    "vendor": "대경테크",
+    "description": null,
+    "spec": "43파이 민자캡",
+    "detail": "46x23(mm) / 내경 Ø43",
+    "package": null,
+    "note": null,
+    "updated_at": "2025-10-23T20:34:42.099896"
+  }
+}

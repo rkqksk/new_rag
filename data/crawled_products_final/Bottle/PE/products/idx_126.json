@@ -1,0 +1,76 @@
+{
+  "product_name": "380ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658126882.jpg",
+      "filename": "GOODS1_1658126882.jpg",
+      "alt": "380ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658126882_1.jpg",
+      "filename": "1658126882_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "380ml 브로우용기",
+    "제품 코드": "BE380-S003",
+    "재질(원료)": "PE",
+    "사양": "67x67x129(mm)",
+    "capacity": "380ml",
+    "dimensions": "Ø28",
+    "neck_size": "28파이",
+    "neck_size_mm": 28,
+    "neck_updated_at": "2025-10-23T21:00:50.603739",
+    "moq": "10,000개"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658126882.jpg",
+      "filename": "GOODS1_1658126882.jpg",
+      "alt": "380ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_126_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658126882_1.jpg",
+      "filename": "1658126882_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_126_main_1.jpg"
+    }
+  ],
+  "idx": "126",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=126",
+  "crawled_at": "2025-10-21T21:22:34.041271",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 380,
+    "matched_price_range": "400",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 330,
+      "discount": 250
+    },
+    "printing_option": null,
+    "label_option": null,
+    "material_metadata": null,
+    "regular_price": 300,
+    "discount_price": 230,
+    "pricing_capacity_ml": 300,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.119132"
+  },
+  "pricing_added_at": "2025-10-23",
+  "pricing_updated_at": "2025-10-23T18:25:51.834829"
+}

@@ -1,0 +1,95 @@
+{
+  "product_name": "600ml 브로우용기",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658128682.jpg",
+      "filename": "GOODS1_1658128682.jpg",
+      "alt": "600ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1658128682.jpg",
+      "filename": "ADD_GOODS1_1658128682.jpg",
+      "type": "main"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658128682_1.jpg",
+      "filename": "1658128682_1.jpg",
+      "type": "unknown"
+    }
+  ],
+  "specifications": {
+    "제품명": "600ml 브로우용기",
+    "제품 코드": "BE600-A001",
+    "재질(원료)": "PE",
+    "사양": "81x52x215(mm)",
+    "capacity": "600ml",
+    "dimensions": "Ø33",
+    "neck_size": "33파이",
+    "neck_size_mm": 33,
+    "neck_updated_at": "2025-10-23T21:00:50.661420",
+    "moq": "10,000개"
+  },
+  "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=143",
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1658128682.jpg",
+      "filename": "GOODS1_1658128682.jpg",
+      "alt": "600ml 브로우용기",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_143_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1658128682.jpg",
+      "filename": "ADD_GOODS1_1658128682.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_143_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/1658128682_1.jpg",
+      "filename": "1658128682_1.jpg",
+      "type": "unknown",
+      "local_path": "data/crawled_products_final/Bottle/PE/images/idx_143_main_1.jpg"
+    }
+  ],
+  "print_area_local_path": "data/crawled_products_final/temp_complete_crawl/print_area/idx_143_print_area.pdf",
+  "idx": "143",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=143",
+  "crawled_at": "2025-10-21T21:24:49.906878",
+  "category_label": "bottle",
+  "pricing": {
+    "actual_capacity_ml": 600,
+    "matched_price_range": "750",
+    "material": "PE",
+    "thickness": null,
+    "base_price": {
+      "regular": 400,
+      "discount": 380
+    },
+    "printing_option": {
+      "regular_price": 120,
+      "discount_price": 100
+    },
+    "label_option": {
+      "regular_price": 100,
+      "discount_price": 90
+    },
+    "material_metadata": null,
+    "regular_price": 350,
+    "discount_price": 260,
+    "pricing_capacity_ml": 500,
+    "material_detail": "PE/PET",
+    "pricing_updated_at": "2025-10-23T20:42:24.144656"
+  },
+  "pricing_updated_at": "2025-10-23T18:25:51.916018"
+}

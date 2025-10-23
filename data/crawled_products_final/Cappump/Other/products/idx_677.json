@@ -1,0 +1,66 @@
+{
+  "product_name": "24파이 일반펌프",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661746144.jpg",
+      "filename": "GOODS1_1661746144.jpg",
+      "alt": "24파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_677_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661746144.jpg",
+      "filename": "ADD_GOODS1_1661746144.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_677_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "Phone": "032-674- 2748~9",
+    "Fax": "032-681-2748",
+    "Email": "chungjin@chungjinkorea.com",
+    "제품 코드": "PO024-CG04"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661746144.jpg",
+      "filename": "GOODS1_1661746144.jpg",
+      "alt": "24파이 일반펌프",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_677_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661746144.jpg",
+      "filename": "ADD_GOODS1_1661746144.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/Other/images/idx_677_main_2.jpg"
+    }
+  ],
+  "idx": "677",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=677",
+  "crawled_at": "2025-10-18T06:47:29.374118",
+  "category": "CapPump",
+  "category_label": "cappump",
+  "category_type": "PUMP",
+  "product_code_updated_at": "2025-10-23T20:21:54.579176",
+  "product_code": "PO024-CG04",
+  "pricing": {},
+  "product_list_info": {
+    "vendor": "지에프테크",
+    "description": "Ø24 펌프 207EVP",
+    "spec": "24파이 일반펌프",
+    "detail": "내경 Ø24",
+    "package": "800ea",
+    "note": "GF-207E (24Ø)",
+    "updated_at": "2025-10-23T20:34:42.120633"
+  }
+}

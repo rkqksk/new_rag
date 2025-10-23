@@ -1,0 +1,62 @@
+{
+  "product_name": "28파이 원터치캡",
+  "images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749415.jpg",
+      "filename": "GOODS1_1661749415.jpg",
+      "alt": "28파이 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_735_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661749415.jpg",
+      "filename": "ADD_GOODS1_1661749415.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_735_main_2.jpg"
+    }
+  ],
+  "specifications": {
+    "제품명": "28파이 원터치캡",
+    "제품 코드": "NP028-GG01",
+    "재질(원료)": "기타",
+    "사양": "내경 Ø28",
+    "dimensions": "Ø28",
+    "neck_size": "28파이"
+  },
+  "print_area_url": null,
+  "downloaded_images": [
+    {
+      "source": "img_tag",
+      "url": "http://chungjinkorea.com/data/goodsImages/GOODS1_1661749415.jpg",
+      "filename": "GOODS1_1661749415.jpg",
+      "alt": "28파이 원터치캡",
+      "type": "main",
+      "width": 1000,
+      "height": 1000,
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_735_main_1.jpg"
+    },
+    {
+      "source": "css_background",
+      "url": "http://chungjinkorea.com/data/goodsImages/ADD_GOODS1_1661749415.jpg",
+      "filename": "ADD_GOODS1_1661749415.jpg",
+      "type": "main",
+      "local_path": "data/crawled_products_final/Cappump/기타/images/idx_735_main_2.jpg"
+    }
+  ],
+  "idx": "735",
+  "url": "http://chungjinkorea.com/kr/product/view.php?idx=735",
+  "crawled_at": "2025-10-18T21:58:26.786832",
+  "category_label": "cappump",
+  "pricing": {
+    "cap_price": 110,
+    "cap_product_type": "캡_원터치캡"
+  },
+  "pricing_added_at": "2025-10-23",
+  "category_type": "CAP",
+  "product_code": "NP028-GG01",
+  "product_code_updated_at": "2025-10-23T20:43:45.362967"
+}
