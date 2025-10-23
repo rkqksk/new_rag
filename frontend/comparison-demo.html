@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 비교 - RAG Enterprise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        /* 사이드바 */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .filter-section {
+            margin-bottom: 25px;
+        }
+
+        .filter-section label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .filter-section input,
+        .filter-section select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+
+        .filter-section input:focus,
+        .filter-section select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .metric-checkboxes {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .metric-checkboxes label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .metric-checkboxes label:hover {
+            background: #f5f5f5;
+        }
+
+        .metric-checkboxes input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 메인 영역 */
+        .main-panel {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        }
+
+        /* 제품 선택 */
+        .product-selection {
+            margin-bottom: 30px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .product-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .product-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .product-card h4 {
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .product-card .spec {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 3px 0;
+        }
+
+        /* 비교 테이블 */
+        .comparison-table-wrapper {
+            overflow-x: auto;
+            margin: 30px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .comparison-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .comparison-table td.metric-name {
+            font-weight: 500;
+            color: #555;
+            width: 150px;
+        }
+
+        .comparison-table td.best {
+            background: #d4edda;
+            font-weight: 600;
+            color: #155724;
+        }
+
+        /* 추천 */
+        .recommendation {
+            background: linear-gradient(135deg, #fff5e1 0%, #ffe4b5 100%);
+            border-left: 4px solid #ff9800;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .recommendation h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+
+        .recommendation p {
+            color: #5d4037;
+            line-height: 1.6;
+        }
+
+        /* 로딩 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 에러 */
+        .error {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            border-radius: 8px;
+            padding: 15px;
+            color: #c62828;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔍 인터랙티브 제품 비교</h1>
+            <p>최대 5개 제품을 선택하여 상세 비교하세요</p>
+        </div>
+
+        <div class="main-content">
+            <!-- 사이드바 -->
+            <div class="sidebar">
+                <h3>비교 메트릭 선택</h3>
+                <div class="filter-section">
+                    <div class="metric-checkboxes" id="metricCheckboxes">
+                        <label>
+                            <input type="checkbox" value="재질" checked>
+                            <span>재질</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="용량" checked>
+                            <span>용량</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="네크사이즈" checked>
+                            <span>네크사이즈</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="가격" checked>
+                            <span>가격</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="호환성" checked>
+                            <span>호환성</span>
+                        </label>
+                        <label>
+                            <input type="checkbox" value="투명도" checked>
+                            <span>투명도</span>
+                        </label>
+                    </div>
+                </div>
+
+                <h3>필터</h3>
+                <div class="filter-section">
+                    <label>재질</label>
+                    <select id="materialFilter">
+                        <option value="">전체</option>
+                        <option value="PET">PET</option>
+                        <option value="PE">PE</option>
+                        <option value="PETG">PETG</option>
+                        <option value="PP">PP</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <label>용량 범위 (ml)</label>
+                    <input type="number" id="minCapacity" placeholder="최소">
+                    <input type="number" id="maxCapacity" placeholder="최대" style="margin-top: 8px;">
+                </div>
+
+                <div class="filter-section">
+                    <label>최대 가격 (원)</label>
+                    <input type="number" id="maxPrice" placeholder="예: 500">
+                </div>
+
+                <button class="btn" onclick="compareProducts()">비교하기</button>
+            </div>
+
+            <!-- 메인 패널 -->
+            <div class="main-panel">
+                <div class="product-selection">
+                    <h2>제품 선택 (2-5개)</h2>
+                    <p style="color: #666; margin: 10px 0;">선택된 제품: <span id="selectedCount">0</span>/5</p>
+                    <div class="product-grid" id="productGrid">
+                        <!-- 샘플 제품들 (실제로는 API에서 로드) -->
+                    </div>
+                </div>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p style="margin-top: 15px; color: #666;">비교 중...</p>
+                </div>
+
+                <div class="error" id="error"></div>
+
+                <div id="comparisonResult" style="display: none;">
+                    <h2>비교 결과</h2>
+                    <div class="comparison-table-wrapper">
+                        <table class="comparison-table" id="comparisonTable">
+                            <!-- 동적 생성 -->
+                        </table>
+                    </div>
+
+                    <div class="recommendation" id="recommendation" style="display: none;">
+                        <h3>💡 스마트 추천</h3>
+                        <div id="recommendationText"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001';
+        let selectedProducts = new Set();
+        let availableProducts = [];
+
+        // 샘플 제품 데이터 로드
+        async function loadSampleProducts() {
+            // 실제로는 API에서 로드
+            // 여기서는 임시로 하드코딩된 idx 사용 (실제 데이터 idx)
+            const sampleIdxs = [
+                '823', '209', '248', '835', '321',
+                '264', '376', '233', '360', '225'
+            ];
+
+            const productGrid = document.getElementById('productGrid');
+
+            sampleIdxs.forEach(idx => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.dataset.idx = idx;
+                card.innerHTML = `
+                    <h4>제품 #${idx}</h4>
+                    <div class="spec">클릭하여 선택</div>
+                `;
+                card.onclick = () => toggleProduct(idx, card);
+                productGrid.appendChild(card);
+            });
+        }
+
+        function toggleProduct(idx, card) {
+            if (selectedProducts.has(idx)) {
+                selectedProducts.delete(idx);
+                card.classList.remove('selected');
+            } else {
+                if (selectedProducts.size >= 5) {
+                    showError('최대 5개까지만 선택 가능합니다.');
+                    return;
+                }
+                selectedProducts.add(idx);
+                card.classList.add('selected');
+            }
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedProducts.size;
+        }
+
+        function getSelectedMetrics() {
+            const checkboxes = document.querySelectorAll('#metricCheckboxes input:checked');
+            return Array.from(checkboxes).map(cb => cb.value);
+        }
+
+        async function compareProducts() {
+            if (selectedProducts.size < 2) {
+                showError('최소 2개 이상의 제품을 선택해주세요.');
+                return;
+            }
+
+            const metrics = getSelectedMetrics();
+            if (metrics.length === 0) {
+                showError('최소 1개 이상의 메트릭을 선택해주세요.');
+                return;
+            }
+
+            showLoading(true);
+            hideError();
+            document.getElementById('comparisonResult').style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/compare/products`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_idxs: Array.from(selectedProducts),
+                        metrics: metrics
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || '비교 실패');
+                }
+
+                const result = await response.json();
+                displayComparison(result);
+
+            } catch (error) {
+                showError(error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function displayComparison(result) {
+            const table = document.getElementById('comparisonTable');
+            table.innerHTML = '';
+
+            // 헤더 생성
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            headerRow.innerHTML = '<th>메트릭</th>';
+
+            result.products.forEach(product => {
+                const th = document.createElement('th');
+                th.textContent = product.product_name || `제품 #${product.idx}`;
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // 바디 생성
+            const tbody = document.createElement('tbody');
+
+            result.comparison_matrix.forEach(row => {
+                const tr = document.createElement('tr');
+
+                // 메트릭 이름
+                const metricTd = document.createElement('td');
+                metricTd.className = 'metric-name';
+                metricTd.textContent = row.metric;
+                tr.appendChild(metricTd);
+
+                // 각 제품의 값
+                row.values.forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value.display;
+                    if (value.highlight === 'best') {
+                        td.className = 'best';
+                    }
+                    tr.appendChild(td);
+                });
+
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            // 추천 표시
+            if (result.recommendation) {
+                document.getElementById('recommendationText').innerHTML =
+                    result.recommendation.replace(/\n/g, '<br>');
+                document.getElementById('recommendation').style.display = 'block';
+            }
+
+            document.getElementById('comparisonResult').style.display = 'block';
+        }
+
+        function showLoading(show) {
+            document.getElementById('loading').classList.toggle('active', show);
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+        }
+
+        function hideError() {
+            document.getElementById('error').classList.remove('active');
+        }
+
+        // 초기화
+        loadSampleProducts();
+    </script>
+</body>
+</html>

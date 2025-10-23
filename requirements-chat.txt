@@ -1,0 +1,27 @@
+# 컨텍스트 인식 대화 시스템 추가 의존성
+# 모두 오픈소스, 무료
+
+# Redis for session management
+redis==5.0.1
+hiredis==2.2.3
+
+# WebSocket support
+python-socketio==5.10.0
+python-engineio==4.8.0
+
+# Korean NLP (optional, for advanced intent classification)
+# transformers==4.35.0
+# torch==2.1.0
+
+# Async support
+aioredis==2.0.1
+
+# JSON handling
+orjson==3.9.10
+
+# Already in main requirements.txt:
+# fastapi
+# uvicorn
+# pydantic
+# sqlalchemy
+# qdrant-client

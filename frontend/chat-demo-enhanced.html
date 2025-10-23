@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Enterprise - 스마트 제품 추천</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            height: 90vh;
+        }
+
+        /* 왼쪽: 채팅 영역 */
+        .chat-panel {
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #e5e7eb;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f9fafb;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            display: flex;
+            gap: 12px;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 16px;
+            line-height: 1.5;
+        }
+
+        .message.assistant .message-content {
+            background: white;
+            border: 1px solid #e5e7eb;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .intent-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            margin: 4px 4px 4px 0;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 24px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 오른쪽: 제품 패널 */
+        .product-panel {
+            display: flex;
+            flex-direction: column;
+            background: #f9fafb;
+        }
+
+        .product-panel-header {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .product-panel-header h2 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .compare-bar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .selected-count {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .compare-button {
+            flex: 1;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .compare-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .product-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border: 2px solid #e5e7eb;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .product-checkbox {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            padding-right: 30px;
+        }
+
+        .product-specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+            margin: 12px 0;
+            font-size: 0.85rem;
+            color: #6b7280;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .spec-label {
+            font-weight: 500;
+            color: #4b5563;
+        }
+
+        .recommendation-score {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .score-bar {
+            flex: 1;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #10b981 100%);
+            transition: width 0.3s;
+        }
+
+        .score-value {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 0.9rem;
+        }
+
+        .recommendation-reason {
+            margin-top: 8px;
+            padding: 8px;
+            background: #fef3c7;
+            border-left: 3px solid #f59e0b;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #92400e;
+        }
+
+        .price-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #10b981;
+            color: white;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .compatibility-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: #dbeafe;
+            color: #1e40af;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* 모달 */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 1.3rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: calc(80vh - 100px);
+            overflow-y: auto;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            background: #f3f4f6;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .detail-section {
+            margin-bottom: 20px;
+        }
+
+        .detail-section h4 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .detail-value {
+            color: #111827;
+        }
+
+        .compatible-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .compatible-item {
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-size: 0.85rem;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #9ca3af;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 왼쪽: 채팅 -->
+        <div class="chat-panel">
+            <div class="chat-header">
+                <h1>💬 스마트 제품 추천</h1>
+                <div class="status">
+                    <span class="status-dot"></span>
+                    <span>연결됨</span>
+                </div>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message assistant">
+                    <div class="message-content">
+                        안녕하세요! 원하시는 용기를 자연어로 검색해보세요.<br>
+                        예: "클렌징오일 용기 추천해줘", "투명한 세럼병 찾아줘"
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="메시지를 입력하세요...">
+                    <button class="send-button" id="sendButton" onclick="sendMessage()">전송</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 오른쪽: 제품 리스트 -->
+        <div class="product-panel">
+            <div class="product-panel-header">
+                <h2>추천 제품</h2>
+                <div class="compare-bar">
+                    <span class="selected-count" id="selectedCount">0개 선택</span>
+                    <button class="compare-button" id="compareButton" disabled>비교하기</button>
+                </div>
+            </div>
+
+            <div class="product-list" id="productList">
+                <div style="text-align: center; padding: 40px; color: #9ca3af;">
+                    검색 결과가 여기에 표시됩니다
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상세 모달 -->
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">제품 상세</h3>
+                <button class="modal-close" onclick="closeDetailModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 동적으로 생성 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 비교 모달 -->
+    <div class="modal" id="compareModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>제품 비교</h3>
+                <button class="modal-close" onclick="closeCompareModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="compareModalBody">
+                <!-- 동적으로 생성 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8001';
+        let sessionId = null;
+        let ws = null;
+        let currentProducts = [];
+        let selectedProducts = new Set();
+
+        // 초기화
+        async function init() {
+            try {
+                const response = await fetch(`${API_BASE}/chat/create_session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await response.json();
+                sessionId = data.session_id;
+                console.log('Session created:', sessionId);
+
+                // WebSocket 연결
+                ws = new WebSocket(`ws://localhost:8001/chat/ws/${sessionId}`);
+                ws.onopen = () => console.log('WebSocket connected');
+                ws.onmessage = handleWebSocketMessage;
+            } catch (error) {
+                console.error('Init error:', error);
+            }
+        }
+
+        // 메시지 전송
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+
+            if (!message) {
+                alert('메시지를 입력해주세요.');
+                return;
+            }
+
+            if (!sessionId) {
+                alert('세션을 초기화하는 중입니다. 잠시 후 다시 시도해주세요.');
+                await init(); // 세션 재초기화
+                return;
+            }
+
+            addMessage('user', message);
+            input.value = '';
+
+            showTyping();
+
+            try {
+                const response = await fetch(`${API_BASE}/chat/query`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        session_id: sessionId,
+                        query: message
+                    })
+                });
+
+                const data = await response.json();
+                hideTyping();
+                handleResponse(data);
+            } catch (error) {
+                hideTyping();
+                addMessage('assistant', '❌ 오류가 발생했습니다: ' + error.message);
+                console.error('Send error:', error);
+            }
+        }
+
+        // 응답 처리
+        function handleResponse(data) {
+            let content = data.response || '';
+
+            // 인텐트 배지
+            if (data.intent) {
+                content = `<span class="intent-badge">${data.intent.intent}</span> ${content}`;
+            }
+
+            // 매칭된 프로필
+            if (data.matched_profile) {
+                content += `<br><small style="color: #6b7280;">💡 ${data.matched_profile} 프로필 적용</small>`;
+            }
+
+            addMessage('assistant', content);
+
+            // 제품 표시
+            if (data.products && data.products.length > 0) {
+                currentProducts = data.products;
+                displayProducts(data.products);
+            }
+        }
+
+        // 제품 표시
+        function displayProducts(products) {
+            const container = document.getElementById('productList');
+            container.innerHTML = '';
+
+            products.forEach((product, index) => {
+                const card = createProductCard(product, index);
+                container.appendChild(card);
+            });
+        }
+
+        // 제품 카드 생성
+        function createProductCard(product, index) {
+            const div = document.createElement('div');
+            div.className = 'product-card';
+            div.dataset.idx = product.idx;
+
+            // 추천 점수
+            const score = product.recommendation_score || 0;
+            const scorePercent = (score * 100).toFixed(0);
+
+            // 가격
+            const pricing = product.pricing || {};
+            const price = pricing.discount_price || pricing.regular_price || 0;
+
+            // 호환성
+            const compat = product.compatibility_analysis || {};
+            const compatCount = compat.compatible_caps_pumps?.count || 0;
+
+            // 추천 이유
+            const reason = product.recommendation_reason || '';
+
+            div.innerHTML = `
+                <input type="checkbox" class="product-checkbox" onchange="toggleProduct('${product.idx}')">
+                <div class="product-name" onclick="showDetail('${product.idx}')">
+                    ${product.product_name || 'N/A'}
+                </div>
+                <div class="product-specs">
+                    <div class="spec-item">
+                        <span class="spec-label">재질:</span>
+                        <span>${product.specifications?.['재질(원료)'] || 'N/A'}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">용량:</span>
+                        <span>${product.specifications?.capacity || 'N/A'}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">네크:</span>
+                        <span>${product.specifications?.neck_size || 'N/A'}</span>
+                    </div>
+                    <div class="spec-item">
+                        <span class="spec-label">가격:</span>
+                        <span class="price-tag">${price.toLocaleString()}원</span>
+                    </div>
+                </div>
+                ${compatCount > 0 ? `
+                    <div class="compatibility-badge">
+                        🔗 호환 ${compatCount}개
+                    </div>
+                ` : ''}
+                ${score > 0 ? `
+                    <div class="recommendation-score">
+                        <div class="score-bar">
+                            <div class="score-fill" style="width: ${scorePercent}%"></div>
+                        </div>
+                        <span class="score-value">${scorePercent}점</span>
+                    </div>
+                ` : ''}
+                ${reason ? `
+                    <div class="recommendation-reason">${reason}</div>
+                ` : ''}
+            `;
+
+            return div;
+        }
+
+        // 제품 선택/해제
+        function toggleProduct(idx) {
+            if (selectedProducts.has(idx)) {
+                selectedProducts.delete(idx);
+            } else {
+                if (selectedProducts.size >= 5) {
+                    alert('최대 5개까지 선택 가능합니다.');
+                    return;
+                }
+                selectedProducts.add(idx);
+            }
+
+            updateSelectedUI();
+        }
+
+        // 선택 UI 업데이트
+        function updateSelectedUI() {
+            document.getElementById('selectedCount').textContent = `${selectedProducts.size}개 선택`;
+            document.getElementById('compareButton').disabled = selectedProducts.size < 2;
+
+            // 카드 선택 상태
+            document.querySelectorAll('.product-card').forEach(card => {
+                const idx = card.dataset.idx;
+                if (selectedProducts.has(idx)) {
+                    card.classList.add('selected');
+                } else {
+                    card.classList.remove('selected');
+                }
+            });
+        }
+
+        // 상세 보기
+        function showDetail(idx) {
+            const product = currentProducts.find(p => p.idx === idx);
+            if (!product) return;
+
+            const modal = document.getElementById('detailModal');
+            document.getElementById('modalTitle').textContent = product.product_name || 'N/A';
+
+            const pricing = product.pricing || {};
+            const specs = product.specifications || {};
+            const compat = product.compatibility_analysis || {};
+
+            // 이미지 선택 (main type 또는 첫 번째 이미지)
+            const images = product.images || [];
+            const mainImage = images.find(img => img.type === 'main') || images[0];
+
+            // 로컬 경로 우선, 없으면 URL
+            let imageUrl = null;
+            if (mainImage) {
+                if (mainImage.local_path) {
+                    imageUrl = `/product-image/${mainImage.local_path}`;
+                } else if (mainImage.url) {
+                    imageUrl = mainImage.url;
+                }
+            }
+
+            let html = '';
+
+            // 이미지 표시
+            if (imageUrl) {
+                html += `<img src="${imageUrl}" alt="${product.product_name}" class="product-image" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22300%22%3E%3Crect fill=%22%23f3f4f6%22 width=%22400%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 fill=%22%239ca3af%22%3E이미지 없음%3C/text%3E%3C/svg%3E'">`;
+            }
+
+            html += `
+                <div class="detail-section">
+                    <h4>기본 정보</h4>
+                    <div class="detail-grid">
+                        <span class="detail-label">제품명</span>
+                        <span class="detail-value">${product.product_name || 'N/A'}</span>
+                        <span class="detail-label">제품코드</span>
+                        <span class="detail-value">${product.product_code || 'N/A'}</span>
+                        <span class="detail-label">카테고리</span>
+                        <span class="detail-value">${product.category_label || 'N/A'}</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>가격 정보</h4>
+                    <div class="detail-grid">
+                        <span class="detail-label">정가</span>
+                        <span class="detail-value">${(pricing.regular_price || 0).toLocaleString()}원</span>
+                        <span class="detail-label">할인가</span>
+                        <span class="detail-value">${(pricing.discount_price || 0).toLocaleString()}원</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <h4>스펙</h4>
+                    <div class="detail-grid">
+                        <span class="detail-label">재질</span>
+                        <span class="detail-value">${specs['재질(원료)'] || 'N/A'}</span>
+                        <span class="detail-label">용량</span>
+                        <span class="detail-value">${specs.capacity || 'N/A'}</span>
+                        <span class="detail-label">네크사이즈</span>
+                        <span class="detail-value">${specs.neck_size || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
+
+            // 호환성
+            if (compat.compatible_caps_pumps && compat.compatible_caps_pumps.count > 0) {
+                html += `
+                    <div class="detail-section">
+                        <h4>호환 제품 (${compat.compatible_caps_pumps.count}개)</h4>
+                        <div class="compatible-list">
+                `;
+                compat.compatible_caps_pumps.products.slice(0, 10).forEach(item => {
+                    html += `<div class="compatible-item">${item}</div>`;
+                });
+                html += '</div></div>';
+            }
+
+            document.getElementById('modalBody').innerHTML = html;
+            modal.classList.add('active');
+        }
+
+        // 비교하기
+        async function compareProducts() {
+            if (selectedProducts.size < 2) return;
+
+            const idxList = Array.from(selectedProducts);
+
+            try {
+                const response = await fetch(`${API_BASE}/compare/products`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        product_idxs: idxList,
+                        metrics: ['재질', '용량', '네크사이즈', '가격', '호환성']
+                    })
+                });
+
+                const data = await response.json();
+                displayComparison(data);
+            } catch (error) {
+                console.error('Compare error:', error);
+            }
+        }
+
+        // 비교 결과 표시
+        function displayComparison(data) {
+            let html = '<table style="width: 100%; border-collapse: collapse;">';
+            html += '<thead><tr style="background: #f3f4f6;"><th style="padding: 12px; text-align: left;">메트릭</th>';
+
+            data.products.forEach(p => {
+                html += `<th style="padding: 12px; text-align: left;">${p.product_name}</th>`;
+            });
+            html += '</tr></thead><tbody>';
+
+            data.comparison_matrix.forEach(row => {
+                html += `<tr><td style="padding: 12px; font-weight: 600; border-top: 1px solid #e5e7eb;">${row.metric}</td>`;
+                row.values.forEach(v => {
+                    const style = v.highlight === 'best' ? 'background: #d4edda; font-weight: 600;' : '';
+                    html += `<td style="padding: 12px; border-top: 1px solid #e5e7eb; ${style}">${v.display}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</tbody></table>';
+
+            if (data.recommendation) {
+                html += `<div style="margin-top: 20px; padding: 16px; background: #fff5e1; border-radius: 8px;">${data.recommendation.replace(/\n/g, '<br>')}</div>`;
+            }
+
+            document.getElementById('compareModalBody').innerHTML = html;
+            document.getElementById('compareModal').classList.add('active');
+        }
+
+        // 모달 닫기
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        function closeCompareModal() {
+            document.getElementById('compareModal').classList.remove('active');
+        }
+
+        // 메시지 추가
+        function addMessage(role, content) {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.innerHTML = `<div class="message-content">${content}</div>`;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // 타이핑 인디케이터
+        function showTyping() {
+            const container = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = 'message assistant';
+            div.id = 'typing';
+            div.innerHTML = `
+                <div class="typing-indicator">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        // WebSocket 메시지
+        function handleWebSocketMessage(event) {
+            console.log('WS:', event.data);
+        }
+
+        // 이벤트 리스너
+        document.getElementById('sendButton').addEventListener('click', sendMessage);
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        document.getElementById('compareButton').addEventListener('click', compareProducts);
+
+        // 모달 외부 클릭시 닫기
+        document.getElementById('detailModal').addEventListener('click', (e) => {
+            if (e.target.id === 'detailModal') closeDetailModal();
+        });
+        document.getElementById('compareModal').addEventListener('click', (e) => {
+            if (e.target.id === 'compareModal') closeCompareModal();
+        });
+
+        // 초기화
+        init();
+    </script>
+</body>
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>디버깅 콘솔</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .log { margin: 5px 0; }
+        .success { color: #4ec9b0; }
+        .error { color: #f48771; }
+        .info { color: #9cdcfe; }
+        h2 { color: #ce9178; }
+    </style>
+</head>
+<body>
+<h2>🔍 RAG Enterprise 디버깅 콘솔</h2>
+
+<div id="debugOutput"></div>
+
+<script>
+const API_BASE = 'http://localhost:8001';
+const debugOutput = document.getElementById('debugOutput');
+let sessionId = null;
+let currentProducts = [];
+
+function log(msg, type = 'info') {
+    const div = document.createElement('div');
+    div.className = `log ${type}`;
+    div.textContent = msg;
+    debugOutput.appendChild(div);
+    console.log(msg);
+}
+
+async function runDebug() {
+    log('=== 디버깅 시작 ===', 'info');
+
+    try {
+        // 1. 세션 생성
+        log('\n1️⃣ 세션 생성...', 'info');
+        const sessionResp = await fetch(`${API_BASE}/chat/create_session`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({})
+        });
+        const sessionData = await sessionResp.json();
+        sessionId = sessionData.session_id;
+        log(`✅ 세션 ID: ${sessionId}`, 'success');
+
+        // 2. 메시지 전송
+        log('\n2️⃣ 메시지 전송: "토너"', 'info');
+        const queryResp = await fetch(`${API_BASE}/chat/query`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                session_id: sessionId,
+                query: '토너'
+            })
+        });
+        const queryData = await queryResp.json();
+        currentProducts = queryData.products || [];
+
+        log(`✅ 응답 받음`, 'success');
+        log(`   - 총 제품: ${queryData.total_count}개`, 'info');
+        log(`   - 반환된 제품: ${currentProducts.length}개`, 'info');
+
+        // 3. 첫 번째 제품 검사
+        if (currentProducts.length > 0) {
+            const product = currentProducts[0];
+            log(`\n3️⃣ 첫 번째 제품 검사`, 'info');
+            log(`   - 제품명: ${product.product_name}`, 'success');
+            log(`   - 제품 ID: ${product.idx}`, 'success');
+
+            // 이미지 검사
+            const images = product.images || [];
+            log(`   - 이미지 수: ${images.length}개`, images.length > 0 ? 'success' : 'error');
+
+            if (images.length > 0) {
+                const img = images[0];
+                log(`   - 첫 이미지 타입: ${img.type}`, 'info');
+
+                if (img.local_path) {
+                    const imageUrl = `/product-image/${img.local_path}`;
+                    log(`   - 이미지 URL: ${imageUrl}`, 'info');
+
+                    // 이미지 로드 테스트
+                    log(`\n4️⃣ 이미지 로드 테스트...`, 'info');
+                    const img_test = new Image();
+                    img_test.onerror = () => log(`❌ 이미지 로드 실패: ${imageUrl}`, 'error');
+                    img_test.onload = () => log(`✅ 이미지 로드 성공`, 'success');
+                    img_test.src = imageUrl;
+                } else {
+                    log(`   - local_path 없음!`, 'error');
+                    if (img.url) {
+                        log(`   - URL: ${img.url}`, 'info');
+                    }
+                }
+            }
+
+            // 추천 점수 확인
+            log(`\n5️⃣ 추천 정보`, 'info');
+            log(`   - 추천 점수: ${(product.recommendation_score * 100).toFixed(1)}%`, 'success');
+            log(`   - 추천 이유: ${product.recommendation_reason || 'N/A'}`, 'info');
+        }
+
+        log('\n=== 디버깅 완료 ===', 'success');
+
+    } catch (error) {
+        log(`❌ 에러: ${error.message}`, 'error');
+    }
+}
+
+// 자동 실행
+runDebug();
+</script>
+</body>
+</html>
