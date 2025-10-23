@@ -415,6 +415,11 @@
                 return;
             }
 
+            if (!sessionId) {
+                addMessage('assistant', '⚠️ 세션 오류. 페이지를 새로고침해주세요.');
+                return;
+            }
+
             // 사용자 메시지 표시
             addMessage('user', message);
             input.value = '';
@@ -424,7 +429,10 @@
 
                 // 타임아웃 설정 (30초)
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 30000);
+                const timeoutId = setTimeout(() => {
+                    console.error('[DEBUG] 요청 타임아웃 (30초 초과)');
+                    controller.abort();
+                }, 30000);
 
                 const response = await fetch(`${API_BASE}/chat/query`, {
                     method: 'POST',

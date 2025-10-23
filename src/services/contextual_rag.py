@@ -270,6 +270,8 @@ class ContextualRAG:
         # 2. 정확한 용량값 추출 (예: "50미리" → 50)
         exact_capacity = self._extract_exact_capacity(query)
 
+        print(f"[SEARCH] Query: {query}, Type: {product_type}, ExactCap: {exact_capacity}")
+
         # 3. 필터 구성
         filters = self._build_filters(entities, context, additional_filters)
 
@@ -288,6 +290,7 @@ class ContextualRAG:
 
         # 4. 파일 기반 검색으로 후보 제품 수집
         products = self._search_products(query, filters)
+        print(f"[SEARCH] Products found: {len(products)}")
 
         # 5. 정확 용량 검색이었는데 결과가 없으면 범위 검색으로 폴백
         if search_mode == "exact" and not products and product_type:
