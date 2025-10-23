@@ -420,16 +420,37 @@
             input.value = '';
 
             try {
+                console.log('[DEBUG] 요청 전송:', message, 'Session:', sessionId);
+
+                // 타임아웃 설정 (30초)
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 30000);
+
                 const response = await fetch(`${API_BASE}/chat/query`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         session_id: sessionId,
                         query: message
-                    })
+                    }),
+                    signal: controller.signal
                 });
 
+                clearTimeout(timeoutId);
+                console.log('[DEBUG] HTTP 상태:', response.status);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
                 const data = await response.json();
+                console.log('[DEBUG] 응답 데이터:', data);
+
+                if (!data) {
+                    addMessage('assistant', '❌ 빈 응답을 받았습니다.');
+                    displayProducts([]);
+                    return;
+                }
 
                 // 어시스턴트 응답
                 let responseMsg = data.response || '응답을 받지 못했습니다.';
@@ -439,13 +460,16 @@
                 addMessage('assistant', responseMsg);
 
                 // 제품 표시
-                if (data.products && data.products.length > 0) {
+                if (data.products && Array.isArray(data.products) && data.products.length > 0) {
+                    console.log('[DEBUG] 제품 표시:', data.products.length);
                     currentProducts = data.products;
                     displayProducts(data.products);
                 } else {
+                    console.log('[DEBUG] 제품 없음');
                     displayProducts([]);
                 }
             } catch (error) {
+                console.error('[ERROR] 요청 실패:', error);
                 addMessage('assistant', '❌ 오류가 발생했습니다: ' + error.message);
             }
         }
