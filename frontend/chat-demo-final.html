@@ -160,6 +160,88 @@
             font-size: 0.8rem;
             color: #667eea;
             font-weight: 500;
+            margin-bottom: 6px;
+        }
+
+        .product-item-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-bottom: 4px;
+        }
+
+        .product-item-code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .product-item-material {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        /* 호버 팝업 */
+        .hover-popup {
+            position: fixed;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 2000;
+            max-width: 280px;
+            display: none;
+            animation: slideIn 0.2s ease-out;
+        }
+
+        .hover-popup.visible {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hover-popup-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            color: #1f2937;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 8px;
+        }
+
+        .hover-popup-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .hover-popup-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .hover-popup-label {
+            font-weight: 600;
+            min-width: 50px;
+        }
+
+        .hover-popup-value {
+            color: #1f2937;
         }
 
         .empty-state {
@@ -303,6 +385,9 @@
         </div>
     </div>
 
+    <!-- 호버 팝업 -->
+    <div class="hover-popup" id="hoverPopup"></div>
+
     <script>
         const API_BASE = 'http://localhost:8001';
         let sessionId = null;
@@ -391,13 +476,76 @@
                 div.onclick = () => showDetail(product);
 
                 const score = (product.recommendation_score * 100).toFixed(0);
+                const specs = product.specifications || {};
+                const code = product.product_code || 'N/A';
+                const material = specs['재질(원료)'] || 'N/A';
+
                 div.innerHTML = `
                     <div class="product-item-name">${product.product_name}</div>
                     <div class="product-item-score">⭐ ${score}% 추천</div>
+                    <div class="product-item-meta">
+                        <span class="product-item-code">${code}</span>
+                        <span class="product-item-material">${material}</span>
+                    </div>
                 `;
+
+                // 호버 이벤트 추가
+                let hoverTimeout;
+                div.addEventListener('mouseenter', () => {
+                    hoverTimeout = setTimeout(() => {
+                        showHoverPopup(product, div);
+                    }, 2000); // 2초 후 팝업 표시
+                });
+
+                div.addEventListener('mouseleave', () => {
+                    clearTimeout(hoverTimeout);
+                    hideHoverPopup();
+                });
 
                 container.appendChild(div);
             });
+        }
+
+        // 호버 팝업 표시
+        function showHoverPopup(product, element) {
+            const popup = document.getElementById('hoverPopup');
+            const specs = product.specifications || {};
+
+            let popupContent = `
+                <div class="hover-popup-title">${product.product_name}</div>
+                <div class="hover-popup-info">
+                    <div class="hover-popup-row">
+                        <span class="hover-popup-label">코드:</span>
+                        <span class="hover-popup-value">${product.product_code || 'N/A'}</span>
+                    </div>
+                    <div class="hover-popup-row">
+                        <span class="hover-popup-label">재질:</span>
+                        <span class="hover-popup-value">${specs['재질(원료)'] || 'N/A'}</span>
+                    </div>
+                    <div class="hover-popup-row">
+                        <span class="hover-popup-label">용량:</span>
+                        <span class="hover-popup-value">${specs.capacity || 'N/A'}</span>
+                    </div>
+                    <div class="hover-popup-row">
+                        <span class="hover-popup-label">네크:</span>
+                        <span class="hover-popup-value">${specs.neck_size || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
+
+            popup.innerHTML = popupContent;
+            popup.classList.add('visible');
+
+            // 팝업 위치 조정
+            const rect = element.getBoundingClientRect();
+            popup.style.left = (rect.right + 10) + 'px';
+            popup.style.top = rect.top + 'px';
+        }
+
+        // 호버 팝업 숨기기
+        function hideHoverPopup() {
+            const popup = document.getElementById('hoverPopup');
+            popup.classList.remove('visible');
         }
 
         // 상세 정보 표시
