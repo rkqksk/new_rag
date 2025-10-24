@@ -96,6 +96,16 @@ class IntentClassifier:
         """
         query_lower = query.lower().strip()
 
+        # 🔥 PRIORITY: 제품 유형 키워드 감지 → 무조건 SEARCH로 분류
+        # 이를 통해 짧은 제품군 쿼리("토너", "세럼")가 REFERENCE로 오분류되는 문제 해결
+        product_types = ["토너", "로션", "에센스", "세럼", "크림", "앰플",
+                        "클렌징", "샴푸", "바디워시", "미스트", "젤", "펌프", "캡",
+                        "용기", "병", "오일", "핸드크림", "아이크림", "페이스오일"]
+        for ptype in product_types:
+            if ptype in query:
+                # 제품군 키워드가 있으면 SEARCH intent로 강제 분류 (높은 신뢰도)
+                return Intent.SEARCH, 0.95
+
         # 1. 복합 패턴 우선 체크
         for pattern, intents in self.compound_patterns:
             if re.search(pattern, query):
