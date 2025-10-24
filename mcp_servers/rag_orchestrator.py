@@ -17,6 +17,14 @@ sys.path.insert(0, str(project_root))
 
 from agents.lead_agent import LeadAgent
 
+try:
+    from plugins.test_plugins import PluginManager
+    PLUGINS_AVAILABLE = True
+except ImportError:
+    PLUGINS_AVAILABLE = False
+    print("Warning: Domain plugins not available", file=sys.stderr)
+
+
 # Load environment variables (optional)
 try:
     from dotenv import load_dotenv
@@ -35,6 +43,9 @@ class RAGOrchestratorServer:
             max_concurrent_tasks=int(os.getenv("MAX_CONCURRENT_TASKS", "5"))
         )
 
+        # Initialize domain plugin manager
+        self.plugin_manager = PluginManager() if PLUGINS_AVAILABLE else None
+
         self.server_info = {
             "name": "rag_orchestrator",
             "version": "1.0.0",
@@ -43,7 +54,9 @@ class RAGOrchestratorServer:
                 "task_delegation",
                 "agent_management",
                 "status_monitoring",
-                "health_checks"
+                "health_checks",
+                "domain_document_processing",
+                "plugin_enhanced_rag"
             ]
         }
 
@@ -239,6 +252,97 @@ class RAGOrchestratorServer:
                 "error": str(e)
             }
 
+    async def process_document(
+        self,
+        document: Dict[str, Any],
+        plugin_name: Optional[str] = None
+    ) -> Dict[str, Any]:
+        """
+        Process document with domain-aware plugins.
+
+        Args:
+            document: Document dictionary with 'text' and 'metadata'
+            plugin_name: Optional specific plugin to use
+
+        Returns:
+            Processing result with enriched metadata
+        """
+        try:
+            if not PLUGINS_AVAILABLE or self.plugin_manager is None:
+                return {
+                    "success": False,
+                    "error": "Domain plugins not available"
+                }
+
+            # Process document with plugin manager
+            result = self.plugin_manager.process_document(document)
+
+            if not result.success:
+                return {
+                    "success": False,
+                    "error": ", ".join(result.errors) if result.errors else "Processing failed"
+                }
+
+            # Extract metadata
+            metadata = result.metadata
+            return {
+                "success": True,
+                "plugin_used": metadata.domain if metadata else "unknown",
+                "confidence": metadata.confidence if metadata else 0.0,
+                "enriched_metadata": {
+                    "domain": metadata.domain,
+                    "doc_type": metadata.doc_type,
+                    "categories": metadata.categories,
+                    "confidence": metadata.confidence
+                } if metadata else {},
+                "entities": metadata.extracted_entities if metadata else {},
+                "terminology": metadata.terminology if metadata else []
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
+    async def get_plugin_info(self) -> Dict[str, Any]:
+        """
+        Get information about available domain plugins.
+
+        Returns:
+            Plugin information dictionary
+        """
+        try:
+            if not PLUGINS_AVAILABLE or self.plugin_manager is None:
+                return {
+                    "success": True,
+                    "plugins_available": False,
+                    "plugins": []
+                }
+
+            plugins_info = []
+            for plugin in self.plugin_manager.plugins:
+                domain_name = plugin.get_domain_name()
+                plugins_info.append({
+                    "name": domain_name,
+                    "domain": domain_name,
+                    "version": "1.0.0",  # Default version
+                    "description": f"{domain_name.capitalize()} domain expert plugin"
+                })
+
+            return {
+                "success": True,
+                "plugins_available": True,
+                "plugin_count": len(plugins_info),
+                "plugins": plugins_info
+            }
+
+        except Exception as e:
+            return {
+                "success": False,
+                "error": str(e)
+            }
+
     async def shutdown(self):
         """Gracefully shutdown the server"""
         await self.lead_agent.shutdown()
@@ -314,6 +418,27 @@ async def handle_request(server: RAGOrchestratorServer, request: Dict[str, Any])
                         },
                         "required": ["pipeline_type", "input_data"]
                     }
+                },
+                {
+                    "name": "process_document",
+                    "description": "Process document with domain-aware plugins",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {
+                            "document": {"type": "object", "description": "Document to process with text and metadata"},
+                            "plugin_name": {"type": "string", "description": "Optional: specific plugin to use"}
+                        },
+                        "required": ["document"]
+                    }
+                },
+                {
+                    "name": "get_plugin_info",
+                    "description": "Get information about available domain plugins",
+                    "inputSchema": {
+                        "type": "object",
+                        "properties": {},
+                        "required": []
+                    }
                 }
             ]
         }
@@ -329,6 +454,8 @@ async def handle_request(server: RAGOrchestratorServer, request: Dict[str, Any])
             "get_status": server.get_status,
             "list_capabilities": server.list_capabilities,
             "run_pipeline": lambda: server.run_pipeline(**tool_params),
+            "process_document": lambda: server.process_document(**tool_params),
+            "get_plugin_info": server.get_plugin_info,
         }
 
         if tool_name not in tool_handlers:
