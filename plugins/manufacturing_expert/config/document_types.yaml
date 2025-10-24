@@ -1,0 +1,172 @@
+# Manufacturing Document Types
+# Classification rules and indicators for different manufacturing documents
+
+document_types:
+  
+  sop:
+    name: "Standard Operating Procedure"
+    description: "Step-by-step instructions for routine operations"
+    indicators:
+      - "sop"
+      - "standard operating procedure"
+      - "work instruction"
+      - "procedure"
+    required_sections:
+      - "purpose"
+      - "scope"
+      - "procedure"
+      - "safety"
+    priority: high
+    
+  equipment_spec:
+    name: "Equipment Specification"
+    description: "Technical specifications and operating parameters"
+    indicators:
+      - "equipment specification"
+      - "machine specification"
+      - "technical data sheet"
+      - "user manual"
+    required_sections:
+      - "specifications"
+      - "operating parameters"
+      - "maintenance"
+    priority: high
+    
+  control_plan:
+    name: "Process Control Plan"
+    description: "Quality control methods and acceptance criteria"
+    indicators:
+      - "control plan"
+      - "quality control plan"
+      - "inspection plan"
+    required_sections:
+      - "control characteristics"
+      - "measurement method"
+      - "sample size"
+      - "acceptance criteria"
+    priority: high
+    
+  fmea:
+    name: "Failure Mode and Effects Analysis"
+    description: "Risk analysis of potential failures"
+    indicators:
+      - "fmea"
+      - "failure mode"
+      - "risk analysis"
+    required_sections:
+      - "failure modes"
+      - "effects"
+      - "severity"
+      - "occurrence"
+      - "detection"
+      - "rpn"
+    priority: high
+    
+  defect_analysis:
+    name: "Defect Analysis Report"
+    description: "Investigation of quality issues and root causes"
+    indicators:
+      - "defect analysis"
+      - "root cause analysis"
+      - "rca"
+      - "8d report"
+      - "capa"
+    required_sections:
+      - "problem description"
+      - "root cause"
+      - "corrective action"
+      - "preventive action"
+    priority: medium
+    
+  maintenance:
+    name: "Maintenance Procedure"
+    description: "Equipment maintenance and service procedures"
+    indicators:
+      - "maintenance"
+      - "preventive maintenance"
+      - "pm schedule"
+      - "service procedure"
+    required_sections:
+      - "maintenance tasks"
+      - "frequency"
+      - "tools required"
+    priority: medium
+    
+  batch_record:
+    name: "Batch Production Record"
+    description: "Record of production batch execution"
+    indicators:
+      - "batch record"
+      - "production record"
+      - "lot record"
+      - "manufacturing record"
+    required_sections:
+      - "batch number"
+      - "date"
+      - "quantities"
+      - "signatures"
+    priority: high
+    
+  deviation:
+    name: "Deviation Report"
+    description: "Documentation of deviation from standard procedures"
+    indicators:
+      - "deviation"
+      - "non-conformance"
+      - "ncr"
+      - "discrepancy"
+    required_sections:
+      - "description"
+      - "impact assessment"
+      - "disposition"
+      - "corrective action"
+    priority: high
+
+# Document metadata extraction rules
+metadata_extraction:
+  
+  document_id:
+    patterns:
+      - "(?:doc|document)\\s*(?:id|number|#):?\\s*([A-Z0-9-]+)"
+      - "(?:sop|wi)\\s*(?:number|#):?\\s*([A-Z0-9-]+)"
+    required: true
+    
+  version:
+    patterns:
+      - "version:?\\s*([0-9.]+)"
+      - "rev(?:ision)?:?\\s*([A-Z0-9]+)"
+    required: true
+    
+  effective_date:
+    patterns:
+      - "effective\\s*date:?\\s*([0-9/\\-]+)"
+      - "issue\\s*date:?\\s*([0-9/\\-]+)"
+    required: true
+    
+  author:
+    patterns:
+      - "author:?\\s*([A-Za-z\\s]+)"
+      - "prepared\\s*by:?\\s*([A-Za-z\\s]+)"
+    required: false
+    
+  approver:
+    patterns:
+      - "approved\\s*by:?\\s*([A-Za-z\\s]+)"
+      - "approver:?\\s*([A-Za-z\\s]+)"
+    required: true
+
+# Section extraction rules
+section_headers:
+  - "purpose"
+  - "scope"
+  - "references"
+  - "definitions"
+  - "responsibilities"
+  - "procedure"
+  - "safety"
+  - "environmental"
+  - "quality"
+  - "training"
+  - "records"
+  - "attachments"
+  - "revision history"

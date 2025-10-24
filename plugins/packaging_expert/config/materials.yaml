@@ -1,0 +1,301 @@
+# Packaging Materials Database
+# Comprehensive list of packaging materials and their properties
+
+# Plastic Resins
+plastics:
+  pet:
+    full_name: "Polyethylene Terephthalate"
+    resin_code: 1
+    common_uses:
+      - bottles
+      - containers
+      - jars
+      - trays
+    properties:
+      - clarity
+      - barrier
+      - recyclable
+    
+  hdpe:
+    full_name: "High-Density Polyethylene"
+    resin_code: 2
+    common_uses:
+      - bottles
+      - containers
+      - caps
+      - closures
+    properties:
+      - rigidity
+      - chemical_resistance
+      - recyclable
+    
+  ldpe:
+    full_name: "Low-Density Polyethylene"
+    resin_code: 4
+    common_uses:
+      - film
+      - bags
+      - pouches
+      - squeeze_bottles
+    properties:
+      - flexibility
+      - clarity
+      - sealability
+    
+  pp:
+    full_name: "Polypropylene"
+    resin_code: 5
+    common_uses:
+      - containers
+      - closures
+      - labels
+      - film
+    properties:
+      - heat_resistance
+      - chemical_resistance
+      - recyclable
+    
+  ps:
+    full_name: "Polystyrene"
+    resin_code: 6
+    common_uses:
+      - foam_containers
+      - trays
+      - cups
+    properties:
+      - insulation
+      - lightweight
+      - clarity
+    
+  pvc:
+    full_name: "Polyvinyl Chloride"
+    resin_code: 3
+    common_uses:
+      - blister_packs
+      - clamshells
+      - shrink_film
+    properties:
+      - clarity
+      - barrier
+      - formability
+
+# Specialty Plastics
+specialty_plastics:
+  evoh:
+    full_name: "Ethylene Vinyl Alcohol"
+    properties:
+      - excellent_oxygen_barrier
+      - used_in_multilayer
+    
+  pvdc:
+    full_name: "Polyvinylidene Chloride"
+    properties:
+      - high_barrier
+      - moisture_resistance
+    
+  pa:
+    full_name: "Polyamide (Nylon)"
+    properties:
+      - strength
+      - puncture_resistance
+      - gas_barrier
+
+# Glass
+glass:
+  soda_lime:
+    type: "Soda-Lime Glass"
+    common_uses:
+      - bottles
+      - jars
+      - containers
+    properties:
+      - inert
+      - barrier
+      - recyclable
+      - reusable
+    
+  borosilicate:
+    type: "Borosilicate Glass"
+    common_uses:
+      - laboratory
+      - pharmaceutical
+    properties:
+      - heat_resistant
+      - chemical_resistant
+
+# Metals
+metals:
+  aluminum:
+    common_uses:
+      - cans
+      - closures
+      - foil
+      - tubes
+    properties:
+      - lightweight
+      - barrier
+      - recyclable
+      - formable
+    
+  tinplate:
+    full_name: "Tin-Plated Steel"
+    common_uses:
+      - cans
+      - containers
+      - closures
+    properties:
+      - strength
+      - barrier
+      - recyclable
+    
+  steel:
+    common_uses:
+      - cans
+      - containers
+      - drums
+    properties:
+      - strength
+      - durability
+      - recyclable
+
+# Paper & Board
+paper_products:
+  corrugated:
+    full_name: "Corrugated Cardboard"
+    common_uses:
+      - shipping_boxes
+      - outer_cartons
+      - dividers
+    properties:
+      - strength
+      - cushioning
+      - recyclable
+      - renewable
+    
+  folding_carton:
+    full_name: "Folding Carton Board"
+    common_uses:
+      - cartons
+      - boxes
+      - sleeves
+    properties:
+      - printability
+      - foldability
+      - recyclable
+    
+  kraft_paper:
+    common_uses:
+      - bags
+      - wrapping
+      - void_fill
+    properties:
+      - strength
+      - renewable
+      - biodegradable
+
+# Multilayer & Composites
+multilayer:
+  coextruded:
+    description: "Multiple plastic layers extruded simultaneously"
+    benefits:
+      - optimized_properties
+      - cost_effective
+      - barrier_enhancement
+    
+  laminated:
+    description: "Separate layers bonded together"
+    common_structures:
+      - "PET/AL/PE"
+      - "PET/EVOH/PE"
+      - "PA/PE"
+      - "Paper/PE/AL/PE"
+    benefits:
+      - high_barrier
+      - structural_strength
+      - flexibility
+
+# Sustainable Materials
+sustainable:
+  bio_based:
+    pla:
+      full_name: "Polylactic Acid"
+      source: corn_starch
+      properties:
+        - compostable
+        - renewable
+        - clarity
+    
+    pha:
+      full_name: "Polyhydroxyalkanoates"
+      source: bacterial_fermentation
+      properties:
+        - biodegradable
+        - compostable
+        - marine_degradable
+  
+  recycled_content:
+    rpet:
+      full_name: "Recycled PET"
+      source: post_consumer_recycled
+      properties:
+        - reduced_carbon_footprint
+        - recyclable
+    
+    rhdpe:
+      full_name: "Recycled HDPE"
+      source: post_consumer_recycled
+      properties:
+        - reduced_virgin_material
+        - recyclable
+
+# Closures & Components
+closures:
+  caps:
+    - continuous_thread
+    - child_resistant
+    - tamper_evident
+    - dispensing_closure
+    - flip_top
+  
+  pumps:
+    - trigger_sprayer
+    - lotion_pump
+    - foam_pump
+    - mist_sprayer
+  
+  seals:
+    - induction_seal
+    - pressure_sensitive_seal
+    - heat_seal
+    - foam_liner
+
+# Adhesives & Inks
+adhesives:
+  hot_melt:
+    properties:
+      - fast_setting
+      - no_solvent
+  
+  water_based:
+    properties:
+      - low_voc
+      - easy_cleanup
+  
+  pressure_sensitive:
+    properties:
+      - repositionable
+      - no_heat_required
+
+# Barrier Coatings
+coatings:
+  pvdc_coating:
+    purpose: oxygen_barrier
+    application: film_coating
+  
+  metallized:
+    purpose: light_moisture_barrier
+    application: vacuum_metallization
+  
+  silicon_oxide:
+    purpose: barrier_enhancement
+    application: plasma_deposition

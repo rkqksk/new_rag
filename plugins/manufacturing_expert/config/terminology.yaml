@@ -1,0 +1,179 @@
+# Manufacturing Terminology Database
+# Domain-specific terms for accurate extraction and retrieval
+
+# Process Operations
+process_operations:
+  - setup
+  - changeover
+  - validation
+  - cleaning
+  - sanitization
+  - sterilization
+  - calibration
+  - qualification
+  - verification
+  - commissioning
+  - startup
+  - shutdown
+  - lockout_tagout
+  - LOTO
+
+# Quality Metrics
+quality_metrics:
+  - cpk  # Process Capability Index
+  - ppk  # Process Performance Index
+  - cp   # Process Capability
+  - pp   # Process Performance
+  - ppm  # Parts Per Million
+  - dpmo # Defects Per Million Opportunities
+  - dpu  # Defects Per Unit
+  - oee  # Overall Equipment Effectiveness
+  - mtbf # Mean Time Between Failures
+  - mttr # Mean Time To Repair
+  - first_pass_yield
+  - fpy
+  - scrap_rate
+  - rework_rate
+  - aql  # Acceptable Quality Level
+
+# Equipment Terms
+equipment:
+  - actuator
+  - sensor
+  - plc       # Programmable Logic Controller
+  - hmi       # Human Machine Interface
+  - scada     # Supervisory Control and Data Acquisition
+  - controller
+  - interlock
+  - servo
+  - motor
+  - conveyor
+  - robot
+  - manipulator
+  - end_effector
+  - gripper
+  - vision_system
+
+# Quality Control
+quality_control:
+  - inspection
+  - sampling
+  - testing
+  - verification
+  - validation
+  - acceptance_criteria
+  - specification
+  - tolerance
+  - control_chart
+  - spc  # Statistical Process Control
+  - attribute_data
+  - variable_data
+
+# Problem Classification
+defects:
+  - scratch
+  - dent
+  - contamination
+  - dimension_out_of_spec
+  - misalignment
+  - incomplete
+  - missing_component
+  - crack
+  - delamination
+  - warpage
+
+failure_modes:
+  - mechanical_failure
+  - electrical_failure
+  - software_error
+  - operator_error
+  - material_defect
+  - wear
+  - corrosion
+  - fatigue
+  - overload
+
+# Standards & Compliance
+standards:
+  - iso_9001
+  - iso_13485
+  - iso_14001
+  - iso_45001
+  - gmp  # Good Manufacturing Practice
+  - cgmp # Current Good Manufacturing Practice
+  - fda_21_cfr_part_11
+  - six_sigma
+  - lean_manufacturing
+  - 5s
+  - kaizen
+  - poka_yoke
+  - andon
+
+# Documentation
+document_codes:
+  - sop  # Standard Operating Procedure
+  - wi   # Work Instruction
+  - fmea # Failure Mode Effects Analysis
+  - pfmea # Process FMEA
+  - dfmea # Design FMEA
+  - capa  # Corrective and Preventive Action
+  - ncr   # Non-Conformance Report
+  - car   # Corrective Action Request
+  - 8d    # 8D Problem Solving
+  - rca   # Root Cause Analysis
+
+# Manufacturing Processes
+processes:
+  - injection_molding
+  - extrusion
+  - blow_molding
+  - thermoforming
+  - machining
+  - milling
+  - turning
+  - grinding
+  - welding
+  - soldering
+  - assembly
+  - packaging
+  - labeling
+  - sterilization
+  - coating
+  - painting
+
+# Measurement Units
+units:
+  temperature:
+    - celsius
+    - fahrenheit
+    - kelvin
+  pressure:
+    - psi
+    - bar
+    - kpa
+    - mpa
+    - pascal
+  time:
+    - seconds
+    - minutes
+    - hours
+    - days
+  length:
+    - mm
+    - cm
+    - meter
+    - inch
+    - foot
+  weight:
+    - gram
+    - kg
+    - pound
+    - ounce
+  flow:
+    - lpm   # Liters Per Minute
+    - gpm   # Gallons Per Minute
+    - cfm   # Cubic Feet per Minute
+  speed:
+    - rpm
+    - mps   # Meters Per Second
+    - fpm   # Feet Per Minute
