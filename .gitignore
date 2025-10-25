@@ -85,6 +85,17 @@ yarn-error.log*
 /data/grafana/
 /data/crawled_products_organized/
 /data/crawled_products/
+
+# Large product data files (exclude content, keep structure)
+/data/crawled_products_final/**/*.json
+!/data/crawled_products_final/**/.gitkeep
+/data/*.json
+!/data/sample_requests.json
+!/data/product_dictionary_structure.json
+/data/*.tar.gz
+/data/*.backup
+
+# Media files
 *.jpg
 *.jpeg
 *.png
