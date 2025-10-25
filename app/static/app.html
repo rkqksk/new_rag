@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품 검색</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Search - Fixed at bottom */
+        .search-box {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 6px;
+            padding: 16px 12px;
+            background: #ffffff;
+            border-top: 1px solid #e0e0e0;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 10px 16px;
+            font-size: 14px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            outline: none;
+            background: #fafafa;
+        }
+
+        .search-input:focus {
+            border-color: #000000;
+            background: #ffffff;
+        }
+
+        .search-btn {
+            padding: 8px 12px;
+            background: #555555;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: pointer;
+            white-space: nowrap;
+            letter-spacing: 0.15em;
+            min-width: 80px;
+        }
+
+        .search-btn:hover {
+            background: #333333;
+        }
+
+        /* Results */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .results-count {
+            font-size: 12px;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #999999;
+        }
+
+        .load-more-btn {
+            padding: 6px 16px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: pointer;
+        }
+
+        .load-more-btn:hover {
+            background: #333333;
+        }
+
+        .load-more-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .product-card {
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-card:hover {
+            border-color: #000000;
+        }
+
+        .product-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 180px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #fafafa;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-sample,
+        .btn-inquiry {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-sample:hover {
+            background: #000;
+            color: white;
+            border-color: #000;
+        }
+
+        .btn-inquiry:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .btn-detail-sample {
+            width: 100%;
+            padding: 12px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+            margin-top: 16px;
+        }
+
+        .btn-detail-sample:hover {
+            background: #333;
+        }
+
+        .sample-form {
+            padding: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #000;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-submit {
+            background: #000;
+            color: white;
+        }
+
+        .btn-submit:hover {
+            background: #333;
+        }
+
+        .btn-cancel {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-cancel:hover {
+            background: #e0e0e0;
+        }
+
+        .product-info {
+            padding: 12px;
+        }
+
+        .product-name {
+            font-size: 13px;
+            font-family: 'Noto Sans KR', sans-serif;
+            font-weight: 500;
+            color: #000000;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+
+        .product-specs {
+            font-size: 11px;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #666666;
+            line-height: 1.5;
+        }
+
+        .product-code {
+            font-size: 10px;
+            font-family: 'Noto Sans KR', sans-serif;
+            color: #999999;
+            margin-top: 6px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 800px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #f5f5f5;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #e0e0e0;
+            transform: scale(1.05);
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .modal-header {
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #000000;
+            margin-bottom: 8px;
+            line-height: 1.4;
+            letter-spacing: -0.3px;
+        }
+
+        .modal-subtitle {
+            font-size: 14px;
+            color: #666666;
+            font-weight: 500;
+        }
+
+        /* Image Gallery */
+        .gallery-main {
+            width: 100%;
+            height: 320px;
+            background: #fafafa;
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 12px;
+            cursor: zoom-in;
+        }
+
+        .gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 4px 0;
+            margin-bottom: 24px;
+        }
+
+        .gallery-thumbnail {
+            width: 60px;
+            height: 60px;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+            border: 2px solid transparent;
+        }
+
+        .gallery-thumbnail:hover {
+            border-color: #000000;
+        }
+
+        .gallery-thumbnail.active {
+            border-color: #000000;
+        }
+
+        .gallery-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Detail Section */
+        .detail-section {
+            margin-bottom: 24px;
+        }
+
+        .detail-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+        }
+
+        .detail-item {
+            padding: 10px;
+            background: #fafafa;
+            border-radius: 4px;
+        }
+
+        .detail-label {
+            font-size: 11px;
+            color: #666666;
+            margin-bottom: 3px;
+        }
+
+        .detail-value {
+            font-size: 13px;
+            font-weight: 500;
+            color: #000000;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #000000;
+            color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .download-btn:hover {
+            background: #333333;
+        }
+
+        /* Image Zoom Modal */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        .zoom-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-content img {
+            max-width: 90vw;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .zoom-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+        }
+
+        .zoom-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 36px;
+            cursor: pointer;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+        }
+
+        .zoom-prev {
+            left: 20px;
+        }
+
+        .zoom-next {
+            right: 20px;
+        }
+
+        .download-link {
+            color: #555555;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .download-link:hover {
+            color: #000000;
+        }
+
+        /* States */
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999999;
+            font-size: 13px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 15px;
+            color: #666666;
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            color: #999999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 16px;
+                padding-bottom: 80px;
+            }
+
+            .search-box {
+                flex-direction: column;
+                padding: 12px 16px;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 12px;
+            }
+
+            .product-image {
+                height: 140px;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+
+            .gallery-main {
+                height: 240px;
+            }
+        }
+        /* Clarifying Questions */
+        .suggestion-option:hover {
+            background: #f0f0f0 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .suggestion-option:active {
+            transform: translateY(0);
+        }
+
+        /* Fade-in animation for questions */
+        .clarifying-questions {
+            animation: fadeInUp 0.4s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Results -->
+        <div class="results-header">
+            <div class="results-count" id="resultsCount"></div>
+            <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" style="display: none;">
+                more
+            </button>
+        </div>
+
+        <div id="resultsContainer"></div>
+    </div>
+
+    <!-- Search - Fixed at bottom -->
+    <div class="search-box">
+        <input type="text" class="search-input" id="searchInput"
+               placeholder="50ml pet, 100ml pe..."
+               onkeypress="if(event.key==='Enter') searchProducts()">
+        <button class="search-btn" onclick="searchProducts()">search</button>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeDetailModal()">×</button>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div id="zoomModal" class="zoom-modal">
+        <span class="zoom-close" onclick="closeZoomModal()">×</span>
+        <span class="zoom-nav zoom-prev" onclick="zoomPrev()">‹</span>
+        <div class="zoom-content">
+            <img id="zoomImage" src="" alt="">
+        </div>
+        <span class="zoom-nav zoom-next" onclick="zoomNext()">›</span>
+    </div>
+
+    <!-- Sample Request Modal -->
+    <div id="sampleModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeSampleModal()">×</button>
+            <div class="modal-body">
+                <div class="modal-title">샘플 요청</div>
+                <div id="sampleFormContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let allProducts = [];
+        let displayedProducts = [];
+        let currentPage = 0;
+        const productsPerPage = 6;
+        let currentZoomImages = [];
+        let currentZoomIndex = 0;
+
+        // Conversation state (for context-aware search)
+        let sessionId = null;
+        let conversationState = null;
+
+        // Search
+        async function searchProducts() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            showLoading();
+            currentPage = 0;
+            allProducts = [];
+            displayedProducts = [];
+
+            try {
+                // Build API URL with session_id for context-aware search
+                let apiUrl = `/api/v1/products/search?query=${encodeURIComponent(query)}&limit=100`;
+                if (sessionId) {
+                    apiUrl += `&session_id=${sessionId}`;
+                }
+
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // Update session and conversation state
+                sessionId = data.session_id;
+                conversationState = data.conversation;
+
+                // Show conversation context
+                showConversationContext(data);
+
+                allProducts = data.products || [];
+
+                // Check for ambiguity and show clarifying questions
+                if (data.ambiguity && data.ambiguity.is_ambiguous) {
+                    showClarifyingQuestions(data.ambiguity, query);
+                }
+
+                if (allProducts.length === 0) {
+                    showEmptyState(query);
+                } else {
+                    displayProducts();
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                showEmptyState(query);
+            }
+        }
+
+        // Show conversation context (intent, state, filtering info)
+        function showConversationContext(data) {
+            const context = data.context;
+            const conversation = data.conversation;
+
+            console.log('🧠 Conversation:', {
+                intent: conversation.intent,
+                state: conversation.state,
+                confidence: conversation.confidence,
+                is_filtering: context.is_filtering,
+                turn_count: context.turn_count
+            });
+
+            // Show context indicator if filtering from previous results
+            if (context.is_filtering && context.previous_count > 0) {
+                const indicator = document.createElement('div');
+                indicator.className = 'context-indicator';
+                indicator.innerHTML = `
+                    <span>🔍 이전 결과 ${context.previous_count}개 중에서 필터링됨</span>
+                    <span style="margin-left: 8px; color: #666;">의도: ${conversation.intent}</span>
+                `;
+                indicator.style.cssText = `
+                    padding: 8px 12px;
+                    margin-bottom: 12px;
+                    background: #f0f8ff;
+                    border: 1px solid #b0d4f1;
+                    border-radius: 6px;
+                    font-size: 12px;
+                    color: #333;
+                `;
+
+                const container = document.getElementById('resultsContainer');
+                container.insertBefore(indicator, container.firstChild);
+
+                // Auto-remove after 5 seconds
+                setTimeout(() => indicator.remove(), 5000);
+            }
+        }
+
+        // Show clarifying questions when search is ambiguous
+        function showClarifyingQuestions(ambiguity, originalQuery) {
+            const container = document.getElementById('resultsContainer');
+
+            const questionsDiv = document.createElement('div');
+            questionsDiv.className = 'clarifying-questions';
+            questionsDiv.style.cssText = `
+                padding: 20px;
+                margin-bottom: 24px;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 12px;
+                color: white;
+                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            `;
+
+            let html = `
+                <div style="margin-bottom: 16px;">
+                    <h3 style="margin: 0 0 8px 0; font-size: 18px; font-weight: 700;">
+                        🤔 "${originalQuery}" 검색 결과가 ${ambiguity.result_count}개입니다
+                    </h3>
+                    <p style="margin: 0; font-size: 14px; opacity: 0.9;">
+                        더 정확한 추천을 위해 몇 가지 여쭤볼게요
+                    </p>
+                </div>
+            `;
+
+            // Display each suggestion
+            ambiguity.suggestions.forEach((suggestion, index) => {
+                html += `
+                    <div style="margin-top: 16px; padding: 16px; background: rgba(255, 255, 255, 0.15); border-radius: 8px; backdrop-filter: blur(10px);">
+                        <div style="font-weight: 600; margin-bottom: 12px; font-size: 15px;">
+                            ${suggestion.question}
+                        </div>
+                        <div class="suggestion-options" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px;">
+                `;
+
+                suggestion.options.forEach(option => {
+                    html += `
+                        <button class="suggestion-option"
+                                onclick="refineSear ch('${originalQuery}', '${suggestion.type}', '${option.value}')"
+                                style="
+                                    padding: 10px 14px;
+                                    background: white;
+                                    color: #333;
+                                    border: none;
+                                    border-radius: 6px;
+                                    cursor: pointer;
+                                    font-size: 13px;
+                                    font-weight: 500;
+                                    transition: all 0.2s;
+                                    text-align: left;
+                                    display: flex;
+                                    justify-content: space-between;
+                                    align-items: center;
+                                ">
+                            <span>${option.label}</span>
+                            <span style="color: #667eea; font-weight: 700; font-size: 12px;">${option.count}</span>
+                        </button>
+                    `;
+                });
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255, 255, 255, 0.2); font-size: 13px; opacity: 0.85; text-align: center;">
+                    💡 위 옵션을 선택하시면 결과를 좁혀드립니다
+                </div>
+            `;
+
+            questionsDiv.innerHTML = html;
+            container.insertBefore(questionsDiv, container.firstChild);
+        }
+
+        // Refine search based on user selection
+        async function refineSearch(originalQuery, filterType, filterValue) {
+            // Build refined query based on filter type
+            let refinedQuery = originalQuery;
+
+            if (filterType === 'category_type') {
+                // Add product type to query
+                const typeMap = {
+                    'BOTTLE': '용기',
+                    'JAR': '자',
+                    'CAP': '캡',
+                    'PUMP': '펌프'
+                };
+                refinedQuery = `${originalQuery} ${typeMap[filterValue] || filterValue}`;
+            } else if (filterType === 'capacity_range') {
+                // Add capacity range to query
+                refinedQuery = `${originalQuery} ${filterValue}`;
+            } else if (filterType === 'material') {
+                // Add material to query
+                refinedQuery = `${originalQuery} ${filterValue}`;
+            }
+
+            // Update search input and perform search
+            document.getElementById('searchInput').value = refinedQuery;
+            await searchProducts();
+        }
+
+        // Display products
+        function displayProducts() {
+            const start = currentPage * productsPerPage;
+            const end = start + productsPerPage;
+            const newProducts = allProducts.slice(start, end);
+            displayedProducts.push(...newProducts);
+
+            const container = document.getElementById('resultsContainer');
+            const countDiv = document.getElementById('resultsCount');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+            countDiv.textContent = `${displayedProducts.length} / ${allProducts.length}`;
+
+            let html = '<div class="products-grid">';
+            displayedProducts.forEach(product => {
+                const images = product.images || [];
+                const imageUrl = images.length > 0 ? images[0].url : 'https://via.placeholder.com/280x220?text=No+Image';
+
+                html += `
+                    <div class="product-card">
+                        <div class="product-image-wrapper" onclick="showProductDetail('${product.product_id}')">
+                            <img src="${imageUrl}" alt="${product.product_name}" class="product-image"
+                                 onerror="this.src='https://via.placeholder.com/280x220?text=No+Image'">
+                        </div>
+                        <div class="product-info" onclick="showProductDetail('${product.product_id}')">
+                            <div class="product-name">${product.product_name}</div>
+                            <div class="product-specs">
+                                ${product.material || 'N/A'} · ${product.capacity || 'N/A'}
+                            </div>
+                            <div class="product-code">${product.product_code || ''}</div>
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn-sample" onclick="event.stopPropagation(); openSampleModal('${product.product_id}', '${product.product_name.replace(/'/g, "\\'")}', '${product.product_code}')">
+                                샘플 요청
+                            </button>
+                            <button class="btn-inquiry" onclick="event.stopPropagation(); showProductDetail('${product.product_id}')">
+                                상세보기
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            if (end < allProducts.length) {
+                loadMoreBtn.style.display = 'block';
+                loadMoreBtn.textContent = `더보기 (+${Math.min(productsPerPage, allProducts.length - end)})`;
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+
+            currentPage++;
+        }
+
+        // Load more
+        function loadMore() {
+            displayProducts();
+        }
+
+        // Show product detail
+        async function showProductDetail(productId) {
+            try {
+                const response = await fetch(`/api/v1/products/${productId}`);
+                const data = await response.json();
+                const product = data.product;
+
+                const modal = document.getElementById('detailModal');
+                const modalBody = document.getElementById('modalBody');
+
+                const images = product.images || [];
+                currentZoomImages = images.map(img => img.url);
+
+                let html = `
+                    <div class="modal-header">
+                        <div class="modal-title">${product.product_name}</div>
+                        <div class="modal-subtitle">${product.product_code || ''}</div>
+                    </div>
+                `;
+
+                // Images
+                if (images.length > 0) {
+                    html += `
+                        <div class="gallery-main" onclick="openZoomModal(0)">
+                            <img id="mainImage" src="${images[0].url}" alt="${product.product_name}">
+                        </div>
+                    `;
+
+                    if (images.length > 1) {
+                        html += '<div class="gallery-thumbnails">';
+                        images.forEach((img, index) => {
+                            html += `
+                                <div class="gallery-thumbnail ${index === 0 ? 'active' : ''}"
+                                     onclick="changeMainImage('${img.url}', ${index})">
+                                    <img src="${img.url}" alt="">
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                }
+
+                // Basic info
+                html += `
+                    <div class="detail-section">
+                        <h3>기본 정보</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">제품 코드</div>
+                                <div class="detail-value">${product.product_code || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">재질</div>
+                                <div class="detail-value">${product.material || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">용량</div>
+                                <div class="detail-value">${product.capacity || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">사이즈</div>
+                                <div class="detail-value">${product.dimensions || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">네크 사이즈</div>
+                                <div class="detail-value">${product.neck_size || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">MOQ</div>
+                                <div class="detail-value">${product.moq || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Pricing and Print Area (detailed cost information)
+                const pricing = product.pricing || {};
+                const basePrice = pricing.base_price || {};
+                const printingOption = pricing.printing_option || {};
+                const labelOption = pricing.label_option || {};
+                const coatingPrice_obj = pricing.coating_price || {};
+
+                const unitPrice = basePrice.regular || pricing.regular_price;
+
+                // 1. printing_option → 인쇄 (Printing)
+                const printingPrice = (typeof printingOption === 'object') ?
+                    (printingOption.regular_price || printingOption.price) : null;
+
+                // 2. label_option → 라벨 부착 (Label attachment)
+                const labelPrice = (typeof labelOption === 'object') ?
+                    (labelOption.regular_price || labelOption.price) : null;
+
+                // 3. coating_price → 코팅 (Coating)
+                const coatingPrice = coatingPrice_obj.regular || coatingPrice_obj.price;
+
+                const specs = product.specifications || {};
+                const printUrl = specs.print_area_url || product.print_area_url;
+
+                if (unitPrice || printingPrice || labelPrice || coatingPrice || printUrl) {
+                    html += `
+                        <div class="detail-section">
+                            <h3>단가</h3>
+                            <div class="detail-grid">
+                                ${unitPrice ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">용기 단가</div>
+                                    <div class="detail-value">${unitPrice}원</div>
+                                </div>` : ''}
+                                ${printingPrice ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">인쇄 단가</div>
+                                    <div class="detail-value">${printingPrice}원</div>
+                                </div>` : ''}
+                                ${labelPrice ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">라벨 부착비</div>
+                                    <div class="detail-value">${labelPrice}원</div>
+                                </div>` : ''}
+                                ${coatingPrice ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">코팅 비용</div>
+                                    <div class="detail-value">${coatingPrice}원</div>
+                                </div>` : ''}
+                                ${printUrl ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">인쇄 영역</div>
+                                    <div class="detail-value">
+                                        <a href="${printUrl}" class="download-link" download>다운로드</a>
+                                    </div>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Sample request button
+                html += `
+                    <button class="btn-detail-sample" onclick="closeDetailModal(); openSampleModal('${product.product_id}', '${product.product_name.replace(/'/g, "\\'")}', '${product.product_code}')">
+                        샘플 요청하기
+                    </button>
+                `;
+
+                modalBody.innerHTML = html;
+                modal.classList.add('active');
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        function changeMainImage(imageUrl, index) {
+            document.getElementById('mainImage').src = imageUrl;
+            const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === index);
+            });
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        function openZoomModal(index) {
+            currentZoomIndex = index;
+            document.getElementById('zoomImage').src = currentZoomImages[currentZoomIndex];
+            document.getElementById('zoomModal').classList.add('active');
+        }
+
+        function closeZoomModal() {
+            document.getElementById('zoomModal').classList.remove('active');
+        }
+
+        function zoomPrev() {
+            currentZoomIndex = (currentZoomIndex - 1 + currentZoomImages.length) % currentZoomImages.length;
+            document.getElementById('zoomImage').src = currentZoomImages[currentZoomIndex];
+        }
+
+        function zoomNext() {
+            currentZoomIndex = (currentZoomIndex + 1) % currentZoomImages.length;
+            document.getElementById('zoomImage').src = currentZoomImages[currentZoomIndex];
+        }
+
+        // Sample Request Modal
+        let currentSampleProduct = null;
+
+        function openSampleModal(productId, productName, productCode) {
+            currentSampleProduct = { productId, productName, productCode };
+
+            const formHtml = `
+                <div class="sample-form">
+                    <div style="padding: 12px; background: #f5f5f5; border-radius: 4px; margin-bottom: 20px;">
+                        <div style="font-weight: 500; color: #333; margin-bottom: 4px;">제품</div>
+                        <div style="font-size: 14px; color: #666;">${productName}</div>
+                        <div style="font-size: 12px; color: #999; margin-top: 2px;">제품코드: ${productCode}</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>회사명 <span style="color: #f00;">*</span></label>
+                        <input type="text" id="companyName" placeholder="회사명을 입력하세요" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>담당자명 <span style="color: #f00;">*</span></label>
+                        <input type="text" id="contactName" placeholder="담당자명을 입력하세요" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>연락처 <span style="color: #f00;">*</span></label>
+                        <input type="tel" id="contactPhone" placeholder="010-0000-0000" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>이메일 <span style="color: #f00;">*</span></label>
+                        <input type="email" id="contactEmail" placeholder="example@company.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>요청 수량</label>
+                        <input type="number" id="requestQty" placeholder="샘플 요청 수량" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>요청 사항</label>
+                        <textarea id="requestMessage" placeholder="추가 요청사항이나 문의사항을 입력하세요"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button class="btn-cancel" onclick="closeSampleModal()">취소</button>
+                        <button class="btn-submit" onclick="submitSampleRequest()">샘플 요청</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('sampleFormContainer').innerHTML = formHtml;
+            document.getElementById('sampleModal').classList.add('active');
+        }
+
+        function closeSampleModal() {
+            document.getElementById('sampleModal').classList.remove('active');
+            currentSampleProduct = null;
+        }
+
+        async function submitSampleRequest() {
+            // Validate required fields
+            const companyName = document.getElementById('companyName').value.trim();
+            const contactName = document.getElementById('contactName').value.trim();
+            const contactPhone = document.getElementById('contactPhone').value.trim();
+            const contactEmail = document.getElementById('contactEmail').value.trim();
+
+            if (!companyName || !contactName || !contactPhone || !contactEmail) {
+                alert('필수 항목을 모두 입력해주세요.');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(contactEmail)) {
+                alert('올바른 이메일 주소를 입력해주세요.');
+                return;
+            }
+
+            // Collect form data
+            const requestData = {
+                product_id: currentSampleProduct.productId,
+                product_name: currentSampleProduct.productName,
+                product_code: currentSampleProduct.productCode,
+                company_name: companyName,
+                contact_name: contactName,
+                contact_phone: contactPhone,
+                contact_email: contactEmail,
+                request_qty: document.getElementById('requestQty').value || null,
+                request_message: document.getElementById('requestMessage').value.trim() || null,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch('/api/v1/sample-request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (response.ok) {
+                    alert('샘플 요청이 접수되었습니다. 빠른 시일 내에 연락드리겠습니다.');
+                    closeSampleModal();
+                } else {
+                    const error = await response.json();
+                    alert('샘플 요청 중 오류가 발생했습니다: ' + (error.detail || '알 수 없는 오류'));
+                }
+            } catch (error) {
+                console.error('Sample request error:', error);
+                alert('샘플 요청 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+            }
+        }
+
+        function showLoading() {
+            document.getElementById('resultsContainer').innerHTML = '<div class="loading">검색 중...</div>';
+            document.getElementById('resultsCount').textContent = '';
+        }
+
+        function showEmptyState(query) {
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="empty-state">
+                    <h3>검색 결과 없음</h3>
+                    <p>"${query}"에 대한 제품을 찾을 수 없습니다</p>
+                </div>
+            `;
+            document.getElementById('resultsCount').textContent = '0 / 0';
+        }
+
+        // Keyboard
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDetailModal();
+                closeZoomModal();
+            }
+        });
+
+        // Click outside
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) closeDetailModal();
+        });
+
+        document.getElementById('zoomModal').addEventListener('click', function(e) {
+            if (e.target === this) closeZoomModal();
+        });
+    </script>
+</body>
+</html>
