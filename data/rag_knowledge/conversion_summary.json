@@ -1,0 +1,49 @@
+{
+  "conversion_date": "2025-01-25",
+  "purpose": "RAG knowledge base creation from plugin configs",
+  "strategy": "dual_storage",
+  "locations": {
+    "source": "plugins/*/config/*.yaml (code execution)",
+    "target": "data/rag_knowledge/*/*.json (RAG indexing)"
+  },
+  "manufacturing_expert": {
+    "terminology": {
+      "original_yaml": "/Users/oypnus/Project/rag-enterprise/plugins/manufacturing_expert/config/terminology.yaml",
+      "json_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/manufacturing/terminology.json",
+      "enriched_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/manufacturing/terminology_with_metadata.json",
+      "entries": 10
+    },
+    "document_types": {
+      "original_yaml": "/Users/oypnus/Project/rag-enterprise/plugins/manufacturing_expert/config/document_types.yaml",
+      "json_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/manufacturing/document_types.json",
+      "enriched_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/manufacturing/document_types_with_metadata.json",
+      "entries": 3
+    },
+    "patterns": {
+      "original_yaml": "/Users/oypnus/Project/rag-enterprise/plugins/manufacturing_expert/config/patterns.yaml",
+      "json_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/manufacturing/patterns.json",
+      "enriched_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/manufacturing/patterns_with_metadata.json",
+      "entries": 8
+    }
+  },
+  "packaging_expert": {
+    "materials": {
+      "original_yaml": "/Users/oypnus/Project/rag-enterprise/plugins/packaging_expert/config/materials.yaml",
+      "json_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/packaging/materials.json",
+      "enriched_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/packaging/materials_with_metadata.json",
+      "entries": 11
+    },
+    "standards": {
+      "original_yaml": "/Users/oypnus/Project/rag-enterprise/plugins/packaging_expert/config/standards.yaml",
+      "json_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/packaging/standards.json",
+      "enriched_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/packaging/standards_with_metadata.json",
+      "entries": 12
+    },
+    "patterns": {
+      "original_yaml": "/Users/oypnus/Project/rag-enterprise/plugins/packaging_expert/config/patterns.yaml",
+      "json_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/packaging/patterns.json",
+      "enriched_output": "/Users/oypnus/Project/rag-enterprise/data/rag_knowledge/packaging/patterns_with_metadata.json",
+      "entries": 13
+    }
+  }
+}

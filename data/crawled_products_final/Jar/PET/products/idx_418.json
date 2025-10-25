@@ -149,5 +149,8 @@
         "ph_range": "3-9"
       }
     }
+  },
+  "pricing": {
+    "printing_option": true
   }
 }

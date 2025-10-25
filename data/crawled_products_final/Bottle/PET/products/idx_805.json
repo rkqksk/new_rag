@@ -30,10 +30,11 @@
     "제품명": "100ml 오버캡 헤비 브로우용기",
     "제품 코드": "QT100-G002",
     "재질(원료)": "PET",
-    "사양": "37x179(mm)/Ø24",
+    "사양": "37x179(mm)",
     "capacity": "100ml",
-    "dimensions": "Ø24",
-    "neck_size": "24파이"
+    "dimensions": "37x179(mm)",
+    "neck_size": "24파이",
+    "moq": "10,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=805",
   "downloaded_images": [
@@ -72,7 +73,24 @@
     "container_capacity": "100ml",
     "cap_price": 100,
     "cap_product_type": "캡_원터치캡",
-    "coating_price": 240
+    "coating_price": 240,
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "base_price": {
+      "regular": 180,
+      "discount": null
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "coating_available": true,
+    "structure_updated_at": "2025-10-25T04:06:56.867956",
+    "pricing_updated_at": "2025-10-25T04:43:18.619293",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.278632"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",

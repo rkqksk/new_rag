@@ -55,7 +55,13 @@
   "product_code": "CP018-GW02",
   "pricing": {
     "supply_price": 70.0,
-    "selling_price": 90.0
+    "selling_price": 90.0,
+    "printing_option": true,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.066911"
   },
   "product_list_info": {
     "vendor": "원플라텍",

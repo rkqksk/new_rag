@@ -23,10 +23,11 @@
     "제품명": "80ml 오버캡브로우용기",
     "제품 코드": "OT080-S001",
     "재질(원료)": "PET",
-    "사양": "37x37x139(mm)/Ø20",
+    "사양": "37x37x139(mm)",
     "capacity": "80ml",
-    "dimensions": "Ø20",
-    "neck_size": "20파이"
+    "dimensions": "37x37x139(mm)",
+    "neck_size": "20파이",
+    "moq": "10,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=834",
   "downloaded_images": [
@@ -57,7 +58,22 @@
     "container_price": 160,
     "container_capacity": "80ml",
     "cap_price": 100,
-    "cap_product_type": "캡_원터치캡"
+    "cap_product_type": "캡_원터치캡",
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "base_price": {
+      "regular": 160,
+      "discount": null
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "coating_available": true,
+    "structure_updated_at": "2025-10-25T04:07:28.119247",
+    "pricing_updated_at": "2025-10-25T04:43:18.614484"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",

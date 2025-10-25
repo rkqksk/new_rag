@@ -26,7 +26,7 @@
     "사양": "33x119(mm)",
     "capacity": "30ml",
     "dimensions": "Ø20",
-    "moq": "10,000개",
+    "moq": "20,000개",
     "neck_size": "20파이"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=660",
@@ -58,7 +58,24 @@
     "container_price": 140,
     "container_capacity": "10-50ml",
     "cap_price": 100,
-    "cap_product_type": "캡_원터치캡"
+    "cap_product_type": "캡_원터치캡",
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 80
+    },
+    "base_price": {
+      "regular": 140,
+      "discount": null
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "coating_available": true,
+    "structure_updated_at": "2025-10-25T04:07:28.135378",
+    "pricing_updated_at": "2025-10-25T04:43:18.595324",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.273385"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",

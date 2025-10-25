@@ -134,5 +134,10 @@
         "ph_range": "3-9"
       }
     }
+  },
+  "pricing": {
+    "printing_option": true,
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.244684"
   }
 }

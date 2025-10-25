@@ -53,7 +53,13 @@
   "category_type": "CAP",
   "product_code_updated_at": "2025-10-23T20:21:54.568704",
   "product_code": "NP024-GM01(6)",
-  "pricing": {},
+  "pricing": {
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.053278"
+  },
   "product_list_info": {
     "vendor": "모소",
     "description": null,

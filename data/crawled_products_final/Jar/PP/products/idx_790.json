@@ -55,7 +55,13 @@
   "category_label": "jar",
   "pricing": {
     "container_price": 140,
-    "container_capacity": "10-50ml"
+    "container_capacity": "10-50ml",
+    "printing_option": true,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "PP material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.065350"
   },
   "pricing_added_at": "2025-10-23",
   "compatibility_analysis": {

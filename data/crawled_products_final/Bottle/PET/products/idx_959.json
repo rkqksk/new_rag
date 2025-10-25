@@ -43,7 +43,7 @@
     "neck_size": "20파이",
     "neck_size_mm": 20,
     "neck_updated_at": "2025-10-23T21:00:50.780497",
-    "moq": "10,000개"
+    "moq": "20,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=959",
   "downloaded_images": [
@@ -93,7 +93,10 @@
       "regular": 140,
       "discount": 100
     },
-    "printing_option": null,
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
     "label_option": {
       "regular_price": 60,
       "discount_price": 60
@@ -120,7 +123,9 @@
     "discount_price": 130,
     "pricing_capacity_ml": 10,
     "material_detail": "PE/PET",
-    "pricing_updated_at": "2025-10-23T20:42:24.242747"
+    "pricing_updated_at": "2025-10-25T04:43:18.640771",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.284863"
   },
   "pricing_added_at": "2025-10-23",
   "pricing_updated_at": "2025-10-23T18:25:51.971393",

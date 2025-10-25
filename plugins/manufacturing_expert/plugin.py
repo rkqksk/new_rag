@@ -8,7 +8,7 @@ import re
 from typing import Dict, List, Any
 from pathlib import Path
 
-from base_plugin import BaseDomainPlugin
+from plugins.base_plugin import BaseDomainPlugin
 
 
 class ManufacturingExpertPlugin(BaseDomainPlugin):

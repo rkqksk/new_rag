@@ -65,19 +65,27 @@
     },
     "printing_option": {
       "regular_price": 90,
-      "discount_price": 90
+      "discount_price": 80,
+      "heat_treatment": {
+        "price": 30,
+        "note": "열처리 별도"
+      }
     },
     "label_option": {
-      "regular_price": 80,
-      "discount_price": 70
+      "regular_price": 90,
+      "discount_price": 90
     },
     "material_metadata": null,
     "regular_price": 350,
     "discount_price": 260,
     "capacity_ml": 500,
     "material_detail": "PE/PET",
-    "pricing_updated_at": "2025-10-23T20:42:24.119387",
-    "pricing_capacity_ml": 500
+    "pricing_updated_at": "2025-10-25T04:43:18.514255",
+    "pricing_capacity_ml": 500,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "PE material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.112051"
   },
   "pricing_added_at": "2025-10-23",
   "pricing_updated_at": "2025-10-23T18:25:51.835303",

@@ -41,7 +41,13 @@
   "product_code": "CP020-GD02(S)",
   "pricing": {
     "supply_price": 50.0,
-    "selling_price": 60.0
+    "selling_price": 60.0,
+    "printing_option": true,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.066746"
   },
   "product_list_info": {
     "vendor": "대경테크",

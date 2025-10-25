@@ -53,7 +53,13 @@
   "category_type": "CAP",
   "product_code_updated_at": "2025-10-23T20:21:54.569677",
   "product_code": "NP020-GM01",
-  "pricing": {},
+  "pricing": {
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.057521"
+  },
   "product_list_info": {
     "vendor": "모소",
     "description": null,

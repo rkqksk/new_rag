@@ -25,7 +25,10 @@
     "재질(원료)": "기타",
     "사양": "내경Ø18",
     "dimensions": "Ø18",
-    "neck_size": "18파이"
+    "neck_size": "18파이",
+    "dosage": "0.1cc",
+    "dosage_value": 0.1,
+    "dosage_updated_at": "2025-10-25T08:43:13.735207"
   },
   "print_area_url": null,
   "downloaded_images": [
@@ -56,7 +59,14 @@
   "product_code_updated_at": "2025-10-23T20:43:45.367285",
   "pricing": {
     "supply_price": 250.0,
-    "selling_price": 320.0
+    "selling_price": 320.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.086403",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:18:42.374982"
   },
   "product_list_info": {
     "vendor": "에코팩",

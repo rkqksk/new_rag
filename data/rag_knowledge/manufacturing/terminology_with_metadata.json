@@ -1,0 +1,190 @@
+{
+  "metadata": {
+    "source": "plugins/manufacturing_expert/config",
+    "plugin": "manufacturing_expert",
+    "data_type": "terminology",
+    "format": "json",
+    "created_from": "yaml_config",
+    "purpose": "rag_indexing",
+    "searchable": true,
+    "domain": "manufacturing",
+    "total_entries": 10
+  },
+  "data": {
+    "process_operations": [
+      "setup",
+      "changeover",
+      "validation",
+      "cleaning",
+      "sanitization",
+      "sterilization",
+      "calibration",
+      "qualification",
+      "verification",
+      "commissioning",
+      "startup",
+      "shutdown",
+      "lockout_tagout",
+      "LOTO"
+    ],
+    "quality_metrics": [
+      "cpk",
+      "ppk",
+      "cp",
+      "pp",
+      "ppm",
+      "dpmo",
+      "dpu",
+      "oee",
+      "mtbf",
+      "mttr",
+      "first_pass_yield",
+      "fpy",
+      "scrap_rate",
+      "rework_rate",
+      "aql"
+    ],
+    "equipment": [
+      "actuator",
+      "sensor",
+      "plc",
+      "hmi",
+      "scada",
+      "controller",
+      "interlock",
+      "servo",
+      "motor",
+      "conveyor",
+      "robot",
+      "manipulator",
+      "end_effector",
+      "gripper",
+      "vision_system"
+    ],
+    "quality_control": [
+      "inspection",
+      "sampling",
+      "testing",
+      "verification",
+      "validation",
+      "acceptance_criteria",
+      "specification",
+      "tolerance",
+      "control_chart",
+      "spc",
+      "attribute_data",
+      "variable_data"
+    ],
+    "defects": [
+      "scratch",
+      "dent",
+      "contamination",
+      "dimension_out_of_spec",
+      "misalignment",
+      "incomplete",
+      "missing_component",
+      "crack",
+      "delamination",
+      "warpage"
+    ],
+    "failure_modes": [
+      "mechanical_failure",
+      "electrical_failure",
+      "software_error",
+      "operator_error",
+      "material_defect",
+      "wear",
+      "corrosion",
+      "fatigue",
+      "overload"
+    ],
+    "standards": [
+      "iso_9001",
+      "iso_13485",
+      "iso_14001",
+      "iso_45001",
+      "gmp",
+      "cgmp",
+      "fda_21_cfr_part_11",
+      "six_sigma",
+      "lean_manufacturing",
+      "5s",
+      "kaizen",
+      "poka_yoke",
+      "andon"
+    ],
+    "document_codes": [
+      "sop",
+      "wi",
+      "fmea",
+      "pfmea",
+      "dfmea",
+      "capa",
+      "ncr",
+      "car",
+      "8d",
+      "rca"
+    ],
+    "processes": [
+      "injection_molding",
+      "extrusion",
+      "blow_molding",
+      "thermoforming",
+      "machining",
+      "milling",
+      "turning",
+      "grinding",
+      "welding",
+      "soldering",
+      "assembly",
+      "packaging",
+      "labeling",
+      "sterilization",
+      "coating",
+      "painting"
+    ],
+    "units": {
+      "temperature": [
+        "celsius",
+        "fahrenheit",
+        "kelvin"
+      ],
+      "pressure": [
+        "psi",
+        "bar",
+        "kpa",
+        "mpa",
+        "pascal"
+      ],
+      "time": [
+        "seconds",
+        "minutes",
+        "hours",
+        "days"
+      ],
+      "length": [
+        "mm",
+        "cm",
+        "meter",
+        "inch",
+        "foot"
+      ],
+      "weight": [
+        "gram",
+        "kg",
+        "pound",
+        "ounce"
+      ],
+      "flow": [
+        "lpm",
+        "gpm",
+        "cfm"
+      ],
+      "speed": [
+        "rpm",
+        "mps",
+        "fpm"
+      ]
+    }
+  }
+}

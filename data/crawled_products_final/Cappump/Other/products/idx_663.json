@@ -41,7 +41,12 @@
   "product_code": "PO024-CG01(민)",
   "pricing": {
     "supply_price": 140.0,
-    "selling_price": 240.0
+    "selling_price": 240.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.045447"
   },
   "product_list_info": {
     "vendor": "지에프테크",

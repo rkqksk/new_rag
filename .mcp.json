@@ -6,52 +6,24 @@
         "-y",
         "@modelcontextprotocol/server-filesystem",
         "/Users/oypnus/Project/rag-enterprise"
-      ]
-    },
-    "claude_api": {
-      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
-      "args": ["-m", "mcp_servers.claude_api_server"],
-      "description": "Unified Claude API server (Haiku 4.5 + Sonnet 4.5)",
-      "env": {
-        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
-      }
+      ],
+      "description": "File system access for reading/writing project files"
     },
     "chrome_devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
-      "description": "Official Google Chrome DevTools MCP for browser automation"
+      "args": [
+        "-y",
+        "@executeautomation/chrome-devtools-mcp"
+      ],
+      "description": "Browser automation via Chrome DevTools Protocol"
     },
     "qdrant": {
       "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
-      "args": ["-m", "mcp_servers.qdrant_server"],
-      "env": {
-        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
-      }
-    },
-    "ollama": {
-      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
-      "args": ["-m", "mcp_servers.ollama_server"],
-      "env": {
-        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
-      }
-    },
-    "rag_orchestrator": {
-      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
-      "args": ["-m", "mcp_servers.rag_orchestrator"],
-      "description": "RAG pipeline orchestration and agent coordination",
-      "env": {
-        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
-      }
-    },
-    "note_keeper": {
-      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
-      "args": ["-m", "mcp_servers.note_keeper_server"],
-      "description": "Structured documentation and progress tracking",
-      "env": {
-        "PYTHONPATH": "/Users/oypnus/Project/rag-enterprise"
-      }
+      "args": [
+        "-m",
+        "mcp_servers.qdrant_server"
+      ],
+      "description": "Qdrant vector database operations"
     }
-  },
-  "_comment": "MAX profile - All 7 servers enabled for maximum functionality (~2100 tokens)",
-  "_usage": "Full capabilities: API calls, vector search, browser automation, orchestration"
+  }
 }

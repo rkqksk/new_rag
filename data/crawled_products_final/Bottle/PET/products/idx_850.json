@@ -36,7 +36,7 @@
     "neck_size": "18파이",
     "neck_size_mm": 18,
     "neck_updated_at": "2025-10-23T21:00:50.773012",
-    "moq": "10,000개"
+    "moq": "20,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=850",
   "downloaded_images": [
@@ -79,7 +79,10 @@
       "regular": 140,
       "discount": 100
     },
-    "printing_option": null,
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
     "label_option": {
       "regular_price": 60,
       "discount_price": 60
@@ -92,7 +95,10 @@
       "regular": 220,
       "discount": 160
     },
-    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "pricing_updated_at": "2025-10-25T04:43:18.630796",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.281913"
   },
   "pricing_updated_at": "2025-10-23T18:25:51.961641",
   "compatibility_analysis": {

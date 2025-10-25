@@ -1,0 +1,362 @@
+{
+  "materials": {
+    "resin_type": {
+      "patterns": [
+        "(?:resin|material)\\s*[=:]?\\s*(pet|hdpe|ldpe|pp|ps|pvc|pa)\\b",
+        "\\b(pet|hdpe|ldpe|pp|ps|pvc)\\s*resin\\b",
+        "resin\\s*code\\s*[=:]?\\s*([1-7])"
+      ]
+    },
+    "grade": {
+      "patterns": [
+        "grade\\s*[=:]?\\s*([A-Z0-9-]+)",
+        "material\\s*grade\\s*[=:]?\\s*([A-Z0-9-]+)"
+      ]
+    },
+    "supplier": {
+      "patterns": [
+        "supplier\\s*[=:]?\\s*([A-Za-z\\s&]+(?:Inc|LLC|Ltd|Corp)?)",
+        "manufacturer\\s*[=:]?\\s*([A-Za-z\\s&]+(?:Inc|LLC|Ltd|Corp)?)"
+      ]
+    }
+  },
+  "dimensions": {
+    "height": {
+      "patterns": [
+        "height\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|m|inch|in|\"|')",
+        "h\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|inch)"
+      ],
+      "unit_conversion": {
+        "mm": "millimeter",
+        "cm": "centimeter",
+        "m": "meter",
+        "inch": "inch",
+        "in": "inch",
+        "\"": "inch",
+        "'": "foot"
+      }
+    },
+    "diameter": {
+      "patterns": [
+        "diameter\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|inch|in)",
+        "dia\\.?\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|inch)",
+        "ø\\s*([\\d.]+)\\s*(mm|cm|inch)"
+      ]
+    },
+    "width": {
+      "patterns": [
+        "width\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|inch|in)",
+        "w\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|inch)"
+      ]
+    },
+    "length": {
+      "patterns": [
+        "length\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|m|inch|in)",
+        "l\\s*[=:]?\\s*([\\d.]+)\\s*(mm|cm|inch)"
+      ]
+    },
+    "thickness": {
+      "patterns": [
+        "(?:thickness|gauge|wall)\\s*[=:]?\\s*([\\d.]+)\\s*(mm|mil|micron|μm|gauge)",
+        "([\\d.]+)\\s*mil\\b",
+        "([\\d.]+)\\s*microns?\\b"
+      ],
+      "unit_conversion": {
+        "mm": "millimeter",
+        "mil": "mil",
+        "micron": "micrometer",
+        "μm": "micrometer",
+        "gauge": "gauge"
+      }
+    },
+    "volume": {
+      "patterns": [
+        "(?:volume|capacity|size)\\s*[=:]?\\s*([\\d.]+)\\s*(ml|l|oz|fl\\.?oz|gal)",
+        "([\\d.]+)\\s*ml\\b",
+        "([\\d.]+)\\s*oz\\b"
+      ],
+      "unit_conversion": {
+        "ml": "milliliter",
+        "l": "liter",
+        "oz": "ounce",
+        "fl.oz": "fluid_ounce",
+        "gal": "gallon"
+      }
+    },
+    "weight": {
+      "patterns": [
+        "weight\\s*[=:]?\\s*([\\d.]+)\\s*(g|kg|lb|oz)",
+        "([\\d.]+)\\s*grams?\\b"
+      ],
+      "unit_conversion": {
+        "g": "gram",
+        "kg": "kilogram",
+        "lb": "pound",
+        "oz": "ounce"
+      }
+    }
+  },
+  "barrier": {
+    "oxygen_transmission": {
+      "patterns": [
+        "(?:oxygen|o2)\\s*(?:transmission|permeability)\\s*(?:rate)?\\s*[=:]?\\s*([\\d.]+)\\s*(cc/m2[/-]day|cc/m²[/-]day)?",
+        "otr\\s*[=:]?\\s*([\\d.]+)"
+      ],
+      "unit": "cc/m²/day"
+    },
+    "water_vapor_transmission": {
+      "patterns": [
+        "(?:water|moisture)\\s*vapor\\s*transmission\\s*(?:rate)?\\s*[=:]?\\s*([\\d.]+)\\s*(g/m2[/-]day|g/m²[/-]day)?",
+        "wvtr\\s*[=:]?\\s*([\\d.]+)",
+        "mvtr\\s*[=:]?\\s*([\\d.]+)"
+      ],
+      "unit": "g/m²/day"
+    },
+    "co2_transmission": {
+      "patterns": [
+        "co2\\s*(?:transmission|permeability)\\s*(?:rate)?\\s*[=:]?\\s*([\\d.]+)\\s*(cc/m2[/-]day)?"
+      ],
+      "unit": "cc/m²/day"
+    }
+  },
+  "mechanical": {
+    "tensile_strength": {
+      "patterns": [
+        "tensile\\s*strength\\s*[=:]?\\s*([\\d.]+)\\s*(psi|mpa|n/mm|kg/cm)",
+        "ultimate\\s*tensile\\s*[=:]?\\s*([\\d.]+)"
+      ]
+    },
+    "elongation": {
+      "patterns": [
+        "elongation\\s*(?:at\\s*break)?\\s*[=:]?\\s*([\\d.]+)\\s*%?",
+        "stretch\\s*[=:]?\\s*([\\d.]+)\\s*%"
+      ]
+    },
+    "burst_strength": {
+      "patterns": [
+        "burst\\s*strength\\s*[=:]?\\s*([\\d.]+)\\s*(psi|kpa|kg/cm)"
+      ]
+    },
+    "drop_height": {
+      "patterns": [
+        "drop\\s*(?:test)?\\s*height\\s*[=:]?\\s*([\\d.]+)\\s*(m|cm|ft|inch)",
+        "drop\\s*from\\s*([\\d.]+)\\s*(m|cm|ft)"
+      ]
+    },
+    "seal_strength": {
+      "patterns": [
+        "seal\\s*strength\\s*[=:]?\\s*([\\d.]+)\\s*(n/15mm|lb/in|g/in)"
+      ]
+    }
+  },
+  "optical": {
+    "opacity": {
+      "patterns": [
+        "opacity\\s*[=:]?\\s*([\\d.]+)\\s*%?"
+      ]
+    },
+    "haze": {
+      "patterns": [
+        "haze\\s*[=:]?\\s*([\\d.]+)\\s*%?"
+      ]
+    },
+    "gloss": {
+      "patterns": [
+        "gloss\\s*(?:at\\s*[\\d]+°)?\\s*[=:]?\\s*([\\d.]+)"
+      ]
+    },
+    "clarity": {
+      "patterns": [
+        "clarity\\s*[=:]?\\s*(clear|transparent|translucent|opaque)"
+      ]
+    }
+  },
+  "regulatory": {
+    "fda": {
+      "patterns": [
+        "fda\\s*(?:21\\s*cfr)?\\s*([\\d.]+)",
+        "21\\s*cfr\\s*(?:part\\s*)?([\\d.]+)"
+      ]
+    },
+    "eu_regulation": {
+      "patterns": [
+        "eu\\s*(?:regulation)?\\s*([\\d/]+)",
+        "reg\\.?\\s*\\(eu\\)\\s*([\\d/]+)"
+      ]
+    },
+    "reach": {
+      "patterns": [
+        "reach\\s*(?:compliant|compliance)",
+        "ec\\s*no\\.?\\s*1907/2006"
+      ]
+    },
+    "rohs": {
+      "patterns": [
+        "rohs\\s*(?:compliant|compliance)",
+        "directive\\s*2011/65/eu"
+      ]
+    }
+  },
+  "testing": {
+    "astm_test": {
+      "patterns": [
+        "astm\\s*([A-Z]?[\\d]+(?:-[\\d]+)?)"
+      ]
+    },
+    "iso_test": {
+      "patterns": [
+        "iso\\s*([\\d]+(?:-[\\d]+)?)"
+      ]
+    },
+    "test_condition": {
+      "patterns": [
+        "(?:tested|conditioned)\\s*at\\s*([\\d.]+)\\s*°?([CF])\\s*(?:and|,)?\\s*([\\d.]+)\\s*%?\\s*rh",
+        "([\\d.]+)\\s*°([CF])/([\\d.]+)\\s*%\\s*rh"
+      ]
+    }
+  },
+  "environmental": {
+    "recycled_content": {
+      "patterns": [
+        "([\\d.]+)\\s*%\\s*(?:pcr|post[- ]consumer\\s*recycled)",
+        "recycled\\s*content\\s*[=:]?\\s*([\\d.]+)\\s*%"
+      ]
+    },
+    "recyclability": {
+      "patterns": [
+        "recyclable\\s*(?:in)?\\s*([A-Za-z\\s,]+)",
+        "resin\\s*code\\s*([1-7])"
+      ]
+    },
+    "compostability": {
+      "patterns": [
+        "compostable\\s*(?:per)?\\s*(astm\\s*d6400|en\\s*13432|bpi)?",
+        "biodegradable\\s*(?:per)?\\s*([A-Za-z0-9\\s]+)?"
+      ]
+    }
+  },
+  "identification": {
+    "batch_lot": {
+      "patterns": [
+        "(?:batch|lot)\\s*(?:number|#|no\\.?)?\\s*[=:]?\\s*([A-Z0-9-]+)"
+      ]
+    },
+    "item_number": {
+      "patterns": [
+        "(?:item|part)\\s*(?:number|#|no\\.?)?\\s*[=:]?\\s*([A-Z0-9-]+)",
+        "sku\\s*[=:]?\\s*([A-Z0-9-]+)"
+      ]
+    },
+    "drawing_number": {
+      "patterns": [
+        "drawing\\s*(?:number|#|no\\.?)?\\s*[=:]?\\s*([A-Z0-9-]+)",
+        "dwg\\s*(?:#|no\\.?)?\\s*[=:]?\\s*([A-Z0-9-]+)"
+      ]
+    },
+    "revision": {
+      "patterns": [
+        "rev(?:ision)?\\s*[=:]?\\s*([A-Z0-9.]+)",
+        "version\\s*[=:]?\\s*([0-9.]+)"
+      ]
+    }
+  },
+  "dates": {
+    "effective_date": {
+      "patterns": [
+        "effective\\s*(?:date)?\\s*[=:]?\\s*([0-9]{1,2}[/-][0-9]{1,2}[/-][0-9]{2,4})",
+        "([0-9]{4})-([0-9]{2})-([0-9]{2})"
+      ]
+    },
+    "shelf_life": {
+      "patterns": [
+        "shelf\\s*life\\s*[=:]?\\s*([\\d.]+)\\s*(months?|years?|days?)",
+        "expir(?:y|ation)\\s*[=:]?\\s*([\\d.]+)\\s*(months?|years?)"
+      ]
+    }
+  },
+  "colors": {
+    "color_spec": {
+      "patterns": [
+        "color\\s*[=:]?\\s*([A-Za-z]+(?:\\s+[A-Za-z]+)?)",
+        "pantone\\s*([\\d]+\\s*[A-Z]+)",
+        "ral\\s*([\\d]+)"
+      ]
+    },
+    "opacity_level": {
+      "patterns": [
+        "(?:color\\s*)?opacity\\s*[=:]?\\s*(clear|transparent|translucent|opaque)"
+      ]
+    }
+  },
+  "features": {
+    "child_resistant": {
+      "patterns": [
+        "child[- ]resistant",
+        "cr\\s*closure",
+        "cpsc\\s*certified"
+      ]
+    },
+    "tamper_evident": {
+      "patterns": [
+        "tamper[- ]evident",
+        "te\\s*feature",
+        "induction\\s*seal"
+      ]
+    },
+    "dispensing": {
+      "patterns": [
+        "dispensing\\s*(?:closure|cap|system)",
+        "pump\\s*(?:dispenser|type)",
+        "trigger\\s*sprayer"
+      ]
+    }
+  },
+  "korean_cosmetic_packaging": {
+    "product_code": {
+      "patterns": [
+        "B[ETPH][0-9]{3}-[A-Z][0-9]{3}",
+        "J[TP][0-9]{3}-[A-Z][0-9]{3}"
+      ],
+      "examples": [
+        "BE040-R001",
+        "BT070-T004",
+        "JT220-G002"
+      ]
+    },
+    "capacity": {
+      "patterns": [
+        "([0-9]+)\\s*ml",
+        "([0-9]+)\\s*미리",
+        "([0-9]+)\\s*g",
+        "([0-9]+)\\s*그램"
+      ],
+      "unit_conversion": {
+        "미리": "ml",
+        "그램": "g"
+      }
+    },
+    "container_type": {
+      "patterns": [
+        "브로우용기",
+        "크림용기",
+        "튜브",
+        "펌프용기",
+        "스프레이"
+      ],
+      "translations": {
+        "브로우용기": "bottle",
+        "크림용기": "jar",
+        "튜브": "tube",
+        "펌프용기": "pump_container",
+        "스프레이": "spray_bottle"
+      }
+    },
+    "dimensions": {
+      "patterns": [
+        "Ø\\s*([0-9]+)",
+        "([0-9]+)\\s*x\\s*([0-9]+)\\s*(?:x\\s*([0-9]+))?\\s*\\(mm\\)",
+        "직경\\s*([0-9]+)\\s*mm"
+      ]
+    }
+  }
+}

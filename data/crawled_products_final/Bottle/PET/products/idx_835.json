@@ -23,10 +23,11 @@
     "제품명": "100ml 오버캡브로우용기",
     "제품 코드": "OT100-S001",
     "재질(원료)": "PET",
-    "사양": "37x37x162(mm)/Ø24",
+    "사양": "37x37x162(mm)",
     "capacity": "100ml",
-    "dimensions": "Ø24",
-    "neck_size": "24파이"
+    "dimensions": "37x37x162(mm)",
+    "neck_size": "24파이",
+    "moq": "10,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=835",
   "downloaded_images": [
@@ -58,7 +59,22 @@
     "container_capacity": "100ml",
     "cap_price": 100,
     "cap_product_type": "캡_원터치캡",
-    "coating_price": 240
+    "coating_price": 240,
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "base_price": {
+      "regular": 180,
+      "discount": null
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "coating_available": true,
+    "structure_updated_at": "2025-10-25T04:06:56.863863",
+    "pricing_updated_at": "2025-10-25T04:43:18.602321"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",

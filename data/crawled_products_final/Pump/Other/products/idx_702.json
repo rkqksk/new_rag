@@ -18,7 +18,10 @@
     "재질(원료)": "기타",
     "사양": "내경 Ø24",
     "dimensions": "Ø24",
-    "neck_size": "24파이"
+    "neck_size": "24파이",
+    "dosage": "0.12cc",
+    "dosage_value": 0.12,
+    "dosage_updated_at": "2025-10-25T08:43:13.735518"
   },
   "print_area_url": null,
   "downloaded_images": [
@@ -39,7 +42,14 @@
   "category_label": "cappump",
   "pricing": {
     "cap_price": 100,
-    "cap_product_type": "캡_원터치캡"
+    "cap_product_type": "캡_원터치캡",
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.086948",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:18:42.375295"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "PUMP",

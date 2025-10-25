@@ -41,7 +41,12 @@
   "product_code": "CA040-GW13(20)",
   "pricing": {
     "supply_price": 220.0,
-    "selling_price": 300.0
+    "selling_price": 300.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.056467"
   },
   "product_list_info": {
     "vendor": "원플라텍",

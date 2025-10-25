@@ -18,7 +18,10 @@
     "재질(원료)": "기타",
     "사양": "내경 Ø20",
     "dimensions": "Ø20",
-    "neck_size": "20파이"
+    "neck_size": "20파이",
+    "dosage": "0.1cc",
+    "dosage_value": 0.1,
+    "dosage_updated_at": "2025-10-25T08:43:13.734863"
   },
   "print_area_url": null,
   "downloaded_images": [
@@ -41,7 +44,14 @@
     "cap_price": 100,
     "cap_product_type": "캡_원터치캡",
     "supply_price": 330.0,
-    "selling_price": 410.0
+    "selling_price": 410.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.085799",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:18:42.374489"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "PUMP",

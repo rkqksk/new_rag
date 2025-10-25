@@ -51,12 +51,12 @@
       "discount": 260
     },
     "printing_option": {
-      "regular_price": 90,
-      "discount_price": 80
-    },
-    "label_option": {
       "regular_price": 80,
       "discount_price": 70
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
     },
     "material_metadata": null,
     "coating_capacity_range": "-500",
@@ -80,7 +80,7 @@
     "discount_price": 250,
     "pricing_capacity_ml": 400,
     "material_detail": "PE/PET",
-    "pricing_updated_at": "2025-10-23T20:42:24.257558"
+    "pricing_updated_at": "2025-10-25T04:43:18.657932"
   },
   "pricing_added_at": "2025-10-23",
   "pricing_updated_at": "2025-10-23T18:25:51.986794",

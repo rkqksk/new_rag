@@ -23,10 +23,11 @@
     "제품명": "660g 크림브로우용기",
     "제품 코드": "JE660-R003",
     "재질(원료)": "PE",
-    "사양": "94x154(mm)/Ø32",
+    "사양": "94x154(mm)",
     "capacity": "660g",
-    "dimensions": "Ø32",
-    "neck_size": "32파이"
+    "dimensions": "94x154(mm)",
+    "neck_size": "32파이",
+    "moq": "10,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=490",
   "downloaded_images": [
@@ -55,7 +56,24 @@
   "category_label": "bottle",
   "pricing": {
     "cap_price": 120,
-    "cap_product_type": "캡_원터치캡"
+    "cap_product_type": "캡_원터치캡",
+    "printing_option": {
+      "regular_price": 90,
+      "discount_price": 80,
+      "heat_treatment": {
+        "price": 30,
+        "note": "열처리 별도"
+      }
+    },
+    "label_option": {
+      "regular_price": 90,
+      "discount_price": 90
+    },
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "PE material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.127046",
+    "pricing_updated_at": "2025-10-25T04:43:18.525440"
   },
   "pricing_added_at": "2025-10-23",
   "compatibility_analysis": {

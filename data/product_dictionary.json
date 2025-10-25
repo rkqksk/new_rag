@@ -30,7 +30,12 @@
       "capacity_info": {
         "capacity": "40ml",
         "usage_duration": "1-2주 (하루 2ml 기준)",
-        "suitable_products": ["세럼", "에센스", "앰플", "오일"],
+        "suitable_products": [
+          "세럼",
+          "에센스",
+          "앰플",
+          "오일"
+        ],
         "positioning": "소형/휴대용"
       },
       "specifications_explained": {
@@ -59,7 +64,8 @@
         "alternatives_if_too_small": "50ml, 65ml 브로우용기",
         "alternatives_if_too_large": "30ml 브로우용기"
       }
-    }
+    },
+    "spec": "28x95(mm)/Ø20"
   },
   "idx_30": {
     "product_id": "idx_30",
@@ -92,7 +98,12 @@
       "capacity_info": {
         "capacity": "65ml",
         "usage_duration": "3-4주 (하루 2ml 기준)",
-        "suitable_products": ["에센스", "로션", "토너", "미스트"],
+        "suitable_products": [
+          "에센스",
+          "로션",
+          "토너",
+          "미스트"
+        ],
         "positioning": "중소형/데일리용"
       },
       "specifications_explained": {
@@ -119,7 +130,8 @@
         "alternatives_if_too_small": "80ml, 100ml 브로우용기",
         "alternatives_if_too_large": "40ml, 50ml 브로우용기"
       }
-    }
+    },
+    "spec": "38x84(mm)/Ø24"
   },
   "idx_308": {
     "product_id": "idx_308",
@@ -152,7 +164,12 @@
       "capacity_info": {
         "capacity": "70ml",
         "usage_duration": "3-4주 (하루 2ml 기준)",
-        "suitable_products": ["세럼", "에센스", "오일", "컬러 화장품"],
+        "suitable_products": [
+          "세럼",
+          "에센스",
+          "오일",
+          "컬러 화장품"
+        ],
         "positioning": "중형/프리미엄"
       },
       "specifications_explained": {
@@ -180,7 +197,8 @@
         "alternatives_if_too_small": "100ml PET 브로우용기",
         "alternatives_if_too_large": "50ml PET 브로우용기"
       }
-    }
+    },
+    "spec": "42x89(mm)/Ø20"
   },
   "idx_360": {
     "product_id": "idx_360",
@@ -213,7 +231,12 @@
       "capacity_info": {
         "capacity": "150ml",
         "usage_duration": "2-3개월 (하루 2ml 기준)",
-        "suitable_products": ["토너", "스킨", "바디로션", "대용량 에센스"],
+        "suitable_products": [
+          "토너",
+          "스킨",
+          "바디로션",
+          "대용량 에센스"
+        ],
         "positioning": "대용량/경제형"
       },
       "specifications_explained": {
@@ -240,7 +263,8 @@
         "alternatives_if_too_small": "200ml 브로우용기",
         "alternatives_if_too_large": "100ml, 120ml 브로우용기"
       }
-    }
+    },
+    "spec": "65x28x135(mm)/Ø24"
   },
   "idx_417": {
     "product_id": "idx_417",
@@ -273,7 +297,12 @@
       "capacity_info": {
         "capacity": "220g",
         "usage_duration": "2-3개월 (하루 3g 기준)",
-        "suitable_products": ["페이스 크림", "바디 크림", "헤어 팩", "수분 크림"],
+        "suitable_products": [
+          "페이스 크림",
+          "바디 크림",
+          "헤어 팩",
+          "수분 크림"
+        ],
         "positioning": "대용량/jar형"
       },
       "specifications_explained": {
@@ -299,6 +328,7 @@
         "alternatives_if_too_small": "250g, 300g 크림용기",
         "alternatives_if_too_large": "150g, 180g 크림용기"
       }
-    }
+    },
+    "spec": "Ø76x74(mm)"
   }
 }

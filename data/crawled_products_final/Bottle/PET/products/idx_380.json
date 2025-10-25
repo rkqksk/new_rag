@@ -68,8 +68,8 @@
       "discount_price": 100
     },
     "label_option": {
-      "regular_price": 100,
-      "discount_price": 90
+      "regular_price": 120,
+      "discount_price": 100
     },
     "material_metadata": null,
     "coating_capacity_range": "-1000",
@@ -93,7 +93,7 @@
     "discount_price": 380,
     "capacity_ml": 750,
     "material_detail": "PE/PET",
-    "pricing_updated_at": "2025-10-23T20:42:24.256074",
+    "pricing_updated_at": "2025-10-25T04:43:18.655103",
     "pricing_capacity_ml": 750
   },
   "pricing_added_at": "2025-10-23",

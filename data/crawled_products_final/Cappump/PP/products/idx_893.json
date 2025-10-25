@@ -68,7 +68,13 @@
   "category_type": "CAP",
   "product_code": "YP086-GM10",
   "product_code_updated_at": "2025-10-23T20:43:45.361254",
-  "pricing": {},
+  "pricing": {
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "PP material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.041871"
+  },
   "product_list_info": {
     "vendor": "모소",
     "description": null,

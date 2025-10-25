@@ -84,7 +84,10 @@
   "pricing": {
     "container_price": 80,
     "container_capacity": "10-50ml",
-    "container_material": "PET"
+    "container_material": "PET",
+    "printing_option": true,
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.245100"
   },
   "pricing_added_at": "2025-10-23",
   "compatibility_analysis": {

@@ -55,7 +55,12 @@
   "product_code": "FO030-CG03",
   "pricing": {
     "supply_price": 400.0,
-    "selling_price": 520.0
+    "selling_price": 520.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.046833"
   },
   "product_list_info": {
     "vendor": "지에프테크",

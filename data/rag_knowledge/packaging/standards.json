@@ -1,0 +1,371 @@
+{
+  "fda": {
+    "food_contact": {
+      "cfr_21_170_199": {
+        "description": "Food Additives",
+        "scope": "Indirect food additives and substances"
+      },
+      "cfr_21_175": {
+        "description": "Adhesives and Components of Coatings",
+        "scope": "Adhesives and coating components for food contact"
+      },
+      "cfr_21_176": {
+        "description": "Paper and Paperboard Components",
+        "scope": "Paper and paperboard in contact with food"
+      },
+      "cfr_21_177": {
+        "description": "Polymers",
+        "scope": "Plastic polymers for food contact",
+        "key_sections": [
+          "177.1520 - Olefin polymers",
+          "177.1630 - Polyethylene phthalate polymers",
+          "177.1390 - Polypropylene"
+        ]
+      },
+      "cfr_21_178": {
+        "description": "Adjuvants and Production Aids",
+        "scope": "Processing aids and additives"
+      }
+    },
+    "drug_packaging": {
+      "usp_661": {
+        "description": "USP <661> Plastic Materials of Construction",
+        "scope": "Requirements for pharmaceutical packaging"
+      },
+      "usp_381": {
+        "description": "USP <381> Elastomeric Closures",
+        "scope": "Requirements for rubber closures"
+      }
+    }
+  },
+  "eu": {
+    "framework_regulation": {
+      "reg_1935_2004": {
+        "description": "Framework Regulation on Food Contact Materials",
+        "scope": "General requirements for all food contact materials",
+        "key_requirements": [
+          "Safety assessment required",
+          "GMP compliance",
+          "Traceability",
+          "Declaration of compliance"
+        ]
+      }
+    },
+    "plastics_regulation": {
+      "reg_10_2011": {
+        "description": "Plastics Regulation",
+        "scope": "Specific measures for plastic materials",
+        "key_requirements": [
+          "Positive list of authorized substances",
+          "Migration limits (OML, SML)",
+          "Overall migration limit: 10 mg/dm²",
+          "Specific migration limits for substances"
+        ]
+      }
+    },
+    "recycled_plastics": {
+      "reg_282_2008": {
+        "description": "Recycled Plastics Regulation",
+        "scope": "Requirements for recycled plastic food contact"
+      }
+    }
+  },
+  "astm": {
+    "physical_properties": {
+      "D638": {
+        "description": "Tensile Properties of Plastics",
+        "application": "Strength testing"
+      },
+      "D882": {
+        "description": "Tensile Properties of Thin Plastic Sheeting",
+        "application": "Film strength"
+      },
+      "D1922": {
+        "description": "Propagation Tear Resistance",
+        "application": "Tear strength"
+      },
+      "D4169": {
+        "description": "Performance Testing of Shipping Containers",
+        "application": "Distribution testing"
+      },
+      "D3078": {
+        "description": "Drop Impact Resistance",
+        "application": "Impact testing"
+      }
+    },
+    "barrier_properties": {
+      "D3985": {
+        "description": "Oxygen Gas Transmission Rate",
+        "application": "Oxygen permeability"
+      },
+      "F1249": {
+        "description": "Water Vapor Transmission Rate",
+        "application": "Moisture barrier"
+      },
+      "F1927": {
+        "description": "CO2 Transmission Rate",
+        "application": "Carbon dioxide barrier"
+      }
+    },
+    "migration": {
+      "E96": {
+        "description": "Water Vapor Transmission",
+        "application": "Moisture migration"
+      }
+    }
+  },
+  "iso": {
+    "quality_management": {
+      "iso_9001": {
+        "description": "Quality Management Systems",
+        "scope": "QMS requirements"
+      },
+      "iso_15378": {
+        "description": "Primary Packaging for Medicinal Products",
+        "scope": "GMP requirements for pharmaceutical packaging"
+      }
+    },
+    "environmental": {
+      "iso_14001": {
+        "description": "Environmental Management",
+        "scope": "Environmental management systems"
+      },
+      "iso_14040": {
+        "description": "Life Cycle Assessment",
+        "scope": "LCA principles and framework"
+      }
+    },
+    "testing": {
+      "iso_2248": {
+        "description": "Packaging Complete, Filled Transport Packages",
+        "scope": "Vertical impact test"
+      },
+      "iso_2233": {
+        "description": "Conditioning for Testing",
+        "scope": "Standard atmosphere"
+      }
+    }
+  },
+  "industry": {
+    "ista": {
+      "description": "International Safe Transit Association",
+      "procedures": [
+        "ISTA 1 Series: Non-Simulation Tests",
+        "ISTA 2 Series: Partial Simulation Tests",
+        "ISTA 3 Series: General Simulation Tests",
+        "ISTA 4 Series: Enhanced Simulation Tests"
+      ]
+    },
+    "tappi": {
+      "description": "Technical Association of Pulp and Paper Industry",
+      "tests": [
+        "T 804: Compression Strength",
+        "T 810: Bursting Strength",
+        "T 403: Grammage"
+      ]
+    }
+  },
+  "sustainability": {
+    "recyclability": {
+      "apr": {
+        "description": "Association of Plastic Recyclers",
+        "scope": "Design guidelines for recyclability",
+        "categories": [
+          "Preferred",
+          "Detrimental",
+          "Requires Testing"
+        ]
+      },
+      "how2recycle": {
+        "description": "Standardized Labeling System",
+        "scope": "Consumer recycling instructions"
+      }
+    },
+    "compostability": {
+      "astm_d6400": {
+        "description": "Compostable Plastics",
+        "scope": "Specifications for compostable plastics"
+      },
+      "en_13432": {
+        "description": "EU Compostability Standard",
+        "scope": "Requirements for industrial composting"
+      },
+      "bpi": {
+        "description": "Biodegradable Products Institute",
+        "scope": "Certification for compostable products"
+      }
+    }
+  },
+  "child_resistance": {
+    "us": {
+      "cpsc_16_cfr_1700": {
+        "description": "Poison Prevention Packaging Act",
+        "scope": "Child-resistant packaging requirements",
+        "test_protocol": "Testing with children under 5"
+      }
+    },
+    "iso": {
+      "iso_8317": {
+        "description": "Child-Resistant Packaging",
+        "scope": "Requirements and testing procedures"
+      }
+    }
+  },
+  "tamper_evidence": {
+    "fda_requirements": {
+      "otc_drugs": {
+        "description": "21 CFR 211.132",
+        "scope": "Tamper-evident packaging for OTC drugs"
+      },
+      "indicators": [
+        "Breakable cap",
+        "Sealed tube",
+        "Shrink band",
+        "Breakable tape",
+        "Sealed blister"
+      ]
+    }
+  },
+  "transportation": {
+    "un": {
+      "dangerous_goods": {
+        "description": "UN Recommendations on Transport",
+        "scope": "Packaging for dangerous goods",
+        "groups": [
+          "Packing Group I: High danger",
+          "Packing Group II: Medium danger",
+          "Packing Group III: Low danger"
+        ]
+      }
+    },
+    "iata": {
+      "description": "International Air Transport Association",
+      "scope": "Requirements for air shipment"
+    },
+    "dot": {
+      "description": "US Department of Transportation",
+      "scope": "US transportation regulations"
+    }
+  },
+  "pharmaceutical": {
+    "ich": {
+      "q1a": {
+        "description": "Stability Testing Guidelines",
+        "scope": "Climatic zones and testing conditions"
+      }
+    },
+    "usp": {
+      "general_chapters": [
+        "<661> Plastic Materials",
+        "<381> Elastomeric Closures",
+        "<87> Biological Reactivity Tests",
+        "<1207> Package Integrity Evaluation"
+      ]
+    }
+  },
+  "food_safety": {
+    "brc": {
+      "description": "British Retail Consortium",
+      "scope": "Global Standard for Packaging Materials"
+    },
+    "fssc_22000": {
+      "description": "Food Safety System Certification",
+      "scope": "Food packaging safety management"
+    },
+    "gfsi": {
+      "description": "Global Food Safety Initiative",
+      "scope": "Benchmarking food safety schemes"
+    }
+  },
+  "cosmetic_packaging_quality": {
+    "temperature_testing": {
+      "freeze_test": {
+        "temperature": "-20°C or below",
+        "duration": "Per product specification",
+        "evaluation": "Check for cracks and deformation"
+      },
+      "heat_test": {
+        "temperature": "50-60°C",
+        "duration": "Per product specification",
+        "evaluation": "Check for deformation, discoloration, leakage"
+      }
+    },
+    "dimensional_tolerances": {
+      "weight": {
+        "tolerance": "±5%",
+        "measurement": "Precision balance"
+      },
+      "volume": {
+        "tolerance": "±3%",
+        "measurement": "Caliper and liquid fill test"
+      }
+    },
+    "chemical_resistance": {
+      "test_method": "Immersion test",
+      "test_solutions": [
+        "alcohol",
+        "essence",
+        "acidic solution",
+        "alkaline solution"
+      ],
+      "evaluation_criteria": [
+        "discoloration",
+        "cracking",
+        "deformation",
+        "leakage"
+      ]
+    },
+    "sealing_performance": {
+      "cap_design": {
+        "requirements": [
+          "Tight contact surface between cap and neck",
+          "Ring seal (silicone ring) application",
+          "Minimized thread gap",
+          "Appropriate tightening strength"
+        ]
+      },
+      "testing": {
+        "methods": [
+          "Leak test",
+          "Torque test",
+          "Drop test"
+        ]
+      }
+    },
+    "mold_release_agent": {
+      "purpose": "Smooth separation from mold",
+      "precautions": [
+        "Excessive use causes surface contamination",
+        "May cause printing defects",
+        "Control concentration and usage cycle"
+      ]
+    },
+    "surface_treatments": {
+      "anti_scratch": {
+        "methods": [
+          "UV coating",
+          "hard coating"
+        ],
+        "benefits": "Durability and aesthetic enhancement"
+      },
+      "anti_contamination": {
+        "methods": [
+          "High gloss finish",
+          "matte finish",
+          "soft touch coating"
+        ],
+        "benefits": "Surface protection and premium feel"
+      }
+    },
+    "environmental_design": {
+      "principles": [
+        "Single material use",
+        "Easy-to-recycle structure",
+        "Minimal release agent use",
+        "Color standardization",
+        "Increased recycled content ratio"
+      ],
+      "disassembly": "Design for easy separation"
+    }
+  }
+}

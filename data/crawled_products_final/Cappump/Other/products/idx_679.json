@@ -53,7 +53,13 @@
   "category_type": "PUMP",
   "product_code_updated_at": "2025-10-23T20:21:54.573284",
   "product_code": "PO028-CG04",
-  "pricing": {},
+  "pricing": {
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.046660"
+  },
   "product_list_info": {
     "vendor": "지에프테크",
     "description": "Ø28 펌프 207FVP ",

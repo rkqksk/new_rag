@@ -69,7 +69,12 @@
   "product_code": "PTP020-CW03",
   "pricing": {
     "supply_price": 80.0,
-    "selling_price": 120.0
+    "selling_price": 120.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.058033"
   },
   "product_list_info": {
     "vendor": "우진정밀",

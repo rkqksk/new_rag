@@ -69,7 +69,12 @@
     "cap_price": 100,
     "cap_product_type": "캡_원터치캡",
     "supply_price": 100.0,
-    "selling_price": 140.0
+    "selling_price": 140.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "PP material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.041671"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",

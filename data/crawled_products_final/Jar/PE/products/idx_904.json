@@ -142,5 +142,13 @@
         "ph_range": "4-10"
       }
     }
+  },
+  "pricing": {
+    "printing_option": true,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "PE material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.061890"
   }
 }

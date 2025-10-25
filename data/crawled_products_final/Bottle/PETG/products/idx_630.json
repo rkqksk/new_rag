@@ -51,8 +51,14 @@
       "regular": 280,
       "discount": 240
     },
-    "printing_option": null,
-    "label_option": null,
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 80
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
     "material_metadata": null,
     "coating_capacity_range": "-200",
     "coating_available": true,
@@ -75,7 +81,9 @@
     "discount_price": 220,
     "pricing_capacity_ml": 100,
     "material_detail": "PETG(얇은)",
-    "pricing_updated_at": "2025-10-23T20:42:24.178668"
+    "pricing_updated_at": "2025-10-25T04:43:18.579676",
+    "moq": 10000,
+    "moq_updated_at": "2025-10-25T08:57:33.269001"
   },
   "pricing_added_at": "2025-10-23",
   "pricing_updated_at": "2025-10-23T18:25:52.017949",

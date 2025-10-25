@@ -62,5 +62,12 @@
         "제조사에 화학 호환성 문의 권장"
       ]
     }
+  },
+  "pricing": {
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.060770"
   }
 }

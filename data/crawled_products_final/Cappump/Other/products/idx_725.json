@@ -55,7 +55,12 @@
   "product_code": "IO024-CP03",
   "pricing": {
     "supply_price": 410.0,
-    "selling_price": 480.0
+    "selling_price": 480.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.060923"
   },
   "product_list_info": {
     "vendor": "파란",

@@ -41,7 +41,12 @@
   "product_code": "CP043-GD01",
   "pricing": {
     "supply_price": 120.0,
-    "selling_price": 150.0
+    "selling_price": 150.0,
+    "label_option": null,
+    "coating_available": false,
+    "coating_price": null,
+    "coating_note": "Other material does not support coating",
+    "structure_updated_at": "2025-10-25T03:35:06.059544"
   },
   "product_list_info": {
     "vendor": "대경테크",

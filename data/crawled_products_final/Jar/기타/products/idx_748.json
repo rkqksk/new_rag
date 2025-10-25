@@ -39,7 +39,8 @@
   "category_label": "jar",
   "pricing": {
     "cap_price": 120,
-    "cap_product_type": "캡_원터치캡"
+    "cap_product_type": "캡_원터치캡",
+    "printing_option": true
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",

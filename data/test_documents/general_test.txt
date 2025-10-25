@@ -1,0 +1,34 @@
+
+    RAG System Architecture Overview
+
+    Components:
+    1. Document Processing
+       - PDF/DOCX parsing
+       - OCR for scanned documents
+       - Text chunking (512 tokens)
+
+    2. Vector Database
+       - Qdrant for vector storage
+       - Hybrid search (vector + keyword)
+       - Metadata filtering
+
+    3. Embedding Models
+       - OpenAI text-embedding-3-small
+       - Sentence Transformers (local)
+       - Multilingual support
+
+    4. Retrieval
+       - Top-k vector search
+       - Reranking with cross-encoder
+       - Context window optimization
+
+    5. Answer Generation
+       - Claude Sonnet 4.5
+       - GPT-4 Turbo
+       - Local LLMs via Ollama
+
+    Performance Metrics:
+    - Search latency: < 100ms
+    - Answer generation: < 2s
+    - Accuracy (NDCG@10): > 0.85
+    

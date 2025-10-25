@@ -25,7 +25,7 @@
     "재질(원료)": "PET",
     "사양": "16x95(mm)",
     "capacity": "14g",
-    "moq": "10,000개"
+    "moq": "20,000개"
   },
   "print_area_url": null,
   "downloaded_images": [
@@ -60,7 +60,10 @@
       "regular": 140,
       "discount": 100
     },
-    "printing_option": null,
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
     "label_option": {
       "regular_price": 60,
       "discount_price": 60
@@ -73,7 +76,8 @@
       "regular": 220,
       "discount": 160
     },
-    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다"
+    "coating_note": "2코팅, 그라데이션 등 별도 코팅은 문의 바랍니다",
+    "pricing_updated_at": "2025-10-25T04:43:18.636959"
   },
   "pricing_added_at": "2025-10-23",
   "pricing_updated_at": "2025-10-23T18:25:51.968110",

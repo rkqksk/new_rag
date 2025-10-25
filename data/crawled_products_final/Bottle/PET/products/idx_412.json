@@ -23,10 +23,11 @@
     "제품명": "150ml 오버캡브로우용기",
     "제품 코드": "OT150-G003",
     "재질(원료)": "PET",
-    "사양": "47x154(mm)/Ø24",
+    "사양": "47x154(mm)",
     "capacity": "150ml",
-    "dimensions": "Ø24",
-    "neck_size": "24파이"
+    "dimensions": "47x154(mm)",
+    "neck_size": "24파이",
+    "moq": "10,000개"
   },
   "print_area_url": "http://chungjinkorea.com/bbs/goods_download.php?download=1&idx=412",
   "downloaded_images": [
@@ -57,7 +58,22 @@
     "container_price": 220,
     "container_capacity": "150ml",
     "cap_price": 100,
-    "cap_product_type": "캡_원터치캡"
+    "cap_product_type": "캡_원터치캡",
+    "printing_option": {
+      "regular_price": 80,
+      "discount_price": 70
+    },
+    "base_price": {
+      "regular": 220,
+      "discount": null
+    },
+    "label_option": {
+      "regular_price": 60,
+      "discount_price": 60
+    },
+    "coating_available": true,
+    "structure_updated_at": "2025-10-25T04:07:28.121815",
+    "pricing_updated_at": "2025-10-25T04:43:18.626444"
   },
   "pricing_added_at": "2025-10-23",
   "category_type": "CAP",
