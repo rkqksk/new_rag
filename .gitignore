@@ -75,6 +75,32 @@ yarn-error.log*
 *.db
 /documents/
 /images/
+
+# ============================================
+# DATA FOLDER - COMPLETE IGNORE
+# ============================================
+# Ignore EVERYTHING in /data/ folder except specific whitelist
+/data/*
+
+# Whitelist: Only allow specific documentation files
+!/data/.gitkeep
+!/data/**/.gitkeep
+!/data/*.md
+!/data/**/*.md
+!/data/sample_requests.json
+!/data/product_dictionary_structure.json
+
+# Crawler data directories (explicitly ignored)
+/data/onehago/
+/data/freemold/
+/data/chungjinkorea/
+/data/chunjinkorea/
+/data/crawled_products/
+/data/crawled_products_final/
+/data/crawled_products_organized/
+/data/excel_uploads/
+
+# Database directories
 /data/qdrant/
 /data/redis/
 /data/postgres/
@@ -83,17 +109,15 @@ yarn-error.log*
 /data/ollama/
 /data/prometheus/
 /data/grafana/
-/data/crawled_products_organized/
-/data/crawled_products/
 
-# Large product data files (exclude content, keep structure)
-/data/crawled_products_final/**/*.json
-!/data/crawled_products_final/**/.gitkeep
-/data/*.json
-!/data/sample_requests.json
-!/data/product_dictionary_structure.json
-/data/*.tar.gz
-/data/*.backup
+# Additional safeguards for large files
+*.tar.gz
+*.tar
+*.zip
+*.backup
+*.bak
+*.xlsx
+*.xls
 
 # Media files
 *.jpg
