@@ -189,6 +189,15 @@ dev/sandbox/
 dev/notebooks/
 
 # ============================================
+# Browser Drivers & ChromeDriver
+# ============================================
+.direnv/python-*/bin/chromedriver
+.direnv/python-*/bin/chromedriver.*
+chromedriver
+chromedriver.*
+/chromedriver*
+
+# ============================================
 # Claude Code Generated
 # ============================================
 claudedocs/
