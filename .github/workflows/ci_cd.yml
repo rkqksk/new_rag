@@ -1,0 +1,150 @@
+name: Comprehensive CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop, 'feature/**' ]
+  pull_request:
+    branches: [ main, develop ]
+
+env:
+  PYTHON_VERSION: 3.11
+  POETRY_VERSION: 1.2.2
+
+jobs:
+  # Cross-platform testing matrix
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.11]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install Poetry
+      run: |
+        pip install poetry==${{ env.POETRY_VERSION }}
+        poetry config virtualenvs.create false
+
+    - name: Install dependencies
+      run: poetry install --no-interaction
+
+    - name: Run linters
+      run: |
+        poetry run black --check .
+        poetry run isort --check-only .
+        poetry run mypy src
+
+    - name: Run tests with coverage
+      run: |
+        poetry run pytest tests/ \
+          --cov=src \
+          --cov-report=xml \
+          --cov-report=term-missing
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
+      with:
+        fail_ci_if_error: true
+        files: ./coverage.xml
+        flags: ${{ matrix.os }}
+
+  # Security scanning
+  security-scan:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Run Bandit
+      run: |
+        pip install bandit
+        bandit -r src -f custom
+
+    - name: Dependency security check
+      run: |
+        pip install safety
+        safety check
+
+  # Performance benchmarking
+  performance-benchmark:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install dependencies
+      run: |
+        pip install pytest-benchmark
+        pip install -r requirements.txt
+
+    - name: Run performance tests
+      run: |
+        pytest tests/ --benchmark-only \
+          --benchmark-json performance-results.json
+
+    - name: Archive performance results
+      uses: actions/upload-artifact@v3
+      with:
+        name: performance-benchmark
+        path: performance-results.json
+
+  # Deployment for main branch
+  deploy:
+    needs: [test, security-scan]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Install deployment tools
+      run: |
+        pip install poetry
+        pip install docker-compose
+
+    - name: Build Docker image
+      run: docker-compose build
+
+    - name: Deploy to production
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        HEROKU_APP_NAME: rag-enterprise
+      run: |
+        heroku container:login
+        heroku container:push web -a $HEROKU_APP_NAME
+        heroku container:release web -a $HEROKU_APP_NAME
+
+  # Notify on workflow completion
+  notification:
+    needs: [test, security-scan, performance-benchmark, deploy]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send Slack notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+
+# Optional: Code quality gate
+# Ensures code meets defined quality standards before merging
+# Configurable based on specific project requirements
