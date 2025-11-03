@@ -1,0 +1,5 @@
+jina
+docarray
+beautifulsoup4
+requests
+lxml

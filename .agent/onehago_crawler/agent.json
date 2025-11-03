@@ -1,0 +1,60 @@
+{
+  "name": "onehago_crawler",
+  "version": "1.0.0",
+  "description": "Onehago.com 전체 제품 크롤러 - Selenium 기반 안정적인 크롤링",
+  "author": "RAG Enterprise Team",
+  "created": "2025-10-28",
+  "type": "crawler",
+  "capabilities": [
+    "Category auto-discovery",
+    "Product list extraction",
+    "Product detail extraction",
+    "Image downloading",
+    "Progress tracking (resumable)",
+    "Error recovery",
+    "Rate limiting"
+  ],
+  "requirements": {
+    "python": ">=3.11",
+    "packages": [
+      "selenium>=4.0.0",
+      "requests>=2.31.0"
+    ],
+    "system": [
+      "Chrome/Chromium browser",
+      "ChromeDriver"
+    ]
+  },
+  "configuration": {
+    "delay_min": 3.0,
+    "delay_max": 8.0,
+    "headless": true,
+    "output_dir": "data/onehago/crawled"
+  },
+  "usage": {
+    "command": "python3 crawler.py [--details]",
+    "examples": [
+      "python3 crawler.py          # List crawling only",
+      "python3 crawler.py --details  # Full crawling with details"
+    ]
+  },
+  "output": {
+    "format": "JSON",
+    "structure": {
+      "products": "data/onehago/crawled/Category_*/products/*.json",
+      "images": "data/onehago/crawled/images/*.jpg",
+      "progress": "data/onehago/crawled/crawl_progress.json"
+    }
+  },
+  "features": {
+    "resume": true,
+    "parallel": false,
+    "auth_required": false,
+    "rate_limited": true
+  },
+  "stats": {
+    "target_products": "100,000+",
+    "estimated_time": "5-7 days",
+    "success_rate": "95%+"
+  }
+}
