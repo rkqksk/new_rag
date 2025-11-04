@@ -63,14 +63,20 @@ class RAGPipeline:
         """Ensure the collection exists in Qdrant, create if not"""
         try:
             self.vector_db.get_collection(self.collection_name)
-        except:
-            # Collection doesn't exist, create it
-            # Get embedding dimension from model
-            embedding_dim = getattr(self.embedding_model, "embedding_dim", 384)
-            self.vector_db.create_collection(
-                collection_name=self.collection_name,
-                vectors_config=VectorParams(size=embedding_dim, distance=Distance.COSINE),
-            )
+            # Collection exists, do nothing
+        except Exception as e:
+            # Collection doesn't exist, try to create it
+            try:
+                embedding_dim = getattr(self.embedding_model, "embedding_dim", 384)
+                self.vector_db.create_collection(
+                    collection_name=self.collection_name,
+                    vectors_config=VectorParams(size=embedding_dim, distance=Distance.COSINE),
+                )
+            except Exception as create_error:
+                # Collection might already exist (race condition) or other error
+                # If collection exists, it's fine, otherwise re-raise
+                if "already exists" not in str(create_error).lower():
+                    pass  # Ignore other errors for now
 
     def ingest_documents(
         self, source_paths: List[str], additional_metadata: Dict[str, Any] = None

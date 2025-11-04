@@ -41,24 +41,32 @@
 
 ### §rag - RAG Activation Strategy (`docs/RAG_ACTIVATION_STRATEGY.md`)
 
-**Size**: 18KB | **Auto-load**: No | **Reference**: For RAG work
+**Size**: 20KB | **Auto-load**: No | **Status**: **85% complete** ✅
 
 ```
-§rag.status             → Current status (20% complete)
+§rag.status             → Current status (85% complete, updated 2025-11-04)
 §rag.strategy           → Overall strategy
-§rag.phase1             → Phase 1: Analysis
-§rag.phase2             → Phase 2: Core module development
-§rag.phase2.vector      → VectorSearch module specs
-§rag.phase2.processor   → DocumentProcessor module specs
-§rag.phase2.engine      → RAGEngine module specs
-§rag.phase3             → Phase 3: Infrastructure setup
-§rag.phase4             → Phase 4: Skill integration & testing
-§rag.phase5             → Phase 5: Data embedding & deployment
-§rag.resources          → Resource requirements (CPU, RAM, disk)
-§rag.risks              → Risk assessment and mitigation
+
+# 완성된 항목 (Phases 1-5)
+§rag.core               → Completed Core modules (rag_pipeline.py, embedding_service.py)
+§rag.core.pipeline      → RAGPipeline class details (ingest, retrieve, generate)
+§rag.core.embedding     → EmbeddingService details (all-MiniLM-L6-v2)
+§rag.skill              → Skill wrapper implementation (process, search, query)
+§rag.data               → Embedding status (857/857 products)
+§rag.infra              → Infrastructure (Qdrant, Ollama, Colima)
+
+# 계획 단계 (참조용)
+§rag.phase1             → Phase 1: Analysis ✅
+§rag.phase2             → Phase 2: Core module development ✅
+§rag.phase3             → Phase 3: Infrastructure setup ✅
+§rag.phase4             → Phase 4: Skill integration ✅
+§rag.phase5             → Phase 5: Data embedding ✅
+§rag.resources          → Resource requirements
+§rag.risks              → Risk assessment
 ```
 
 **Load when**: RAG development, embedding work, vector search implementation
+**Latest Update**: 2025-11-04 (Core complete, data embedded, API integrated)
 
 ---
 

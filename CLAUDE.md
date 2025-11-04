@@ -145,31 +145,52 @@ ollama list                            # Check models
 ### Quick Access (Expanded)
 
 #### §rag - RAG Activation Strategy
-**Status**: 20% complete (Skill structure + Domain Experts)
-**Next**: Phase 2 - Core module development
+**Status**: ~~20%~~ → **85% complete** ✅ (2025-11-04 업데이트)
+**Next**: Production 배포 최적화 (15%)
 
-**§rag.status**:
-- Current: Phase 1 완료 (분석)
-- Next: Phase 2-5 (7.5-9.5 days)
-- Goal: 857개 제품 벡터 검색
+**§rag.status** - 완성된 항목:
+- ✅ Phase 1: 분석 완료
+- ✅ Phase 2: Core 모듈 개발 완료
+- ✅ Phase 3: 인프라 설정 완료
+- ✅ Phase 4: Skill 통합 완료
+- ✅ Phase 5: 857개 제품 임베딩 완료 (100%)
 
-**§rag.phase2** - Core Modules (3-4 days):
-- `§rag.phase2.vector`: VectorSearch 모듈
-  - File: `src/core/vector_search.py` (신규)
-  - Qdrant 연결, 벡터 검색, 메타데이터 필터링
-  - Main: `VectorSearch(qdrant_url, collection_name)`
+**§rag.core** - 완성된 Core 모듈:
+- ✅ `src/core/rag_pipeline.py` (262 lines)
+  - `RAGPipeline`: 통합 파이프라인 (ingest, retrieve, generate)
+  - `ingest_documents()`: 문서 → 임베딩 → Qdrant
+  - `retrieve()`: 벡터 검색 (metadata filters 지원)
+  - `generate_response()`: Ollama 답변 생성
+  - **Test**: ✅ All passed (Score: 0.7254)
 
-- `§rag.phase2.processor`: DocumentProcessor 모듈
-  - File: `src/core/document_processor.py` (신규)
-  - JSON 파싱, 청킹, 임베딩, Qdrant 업로드
-  - 재사용: `.claude/skills/rag-pipeline/scripts/parsers/`
+- ✅ `src/core/embedding_service.py` (72 lines)
+  - Model: all-MiniLM-L6-v2 (384 dim)
+  - GPU 지원 (CUDA/MPS)
+  - **Test**: ✅ Passed
 
-- `§rag.phase2.engine`: RAGEngine 모듈
-  - File: `src/core/rag_engine.py` (신규)
-  - Query → Retrieval → Generation 파이프라인
-  - Ollama 답변 생성, 신뢰도 계산
+- ✅ `src/api/chat.py` (450 lines)
+  - Feature flag: `USE_VECTOR_RAG=true`
+  - `/chat/query`: 벡터 검색 + RAG 답변
+  - Backward compatibility 유지
+  - **Test**: ✅ Passed (Score: 0.5678)
 
-**Full Details**: docs/RAG_ACTIVATION_STRATEGY.md (18KB)
+**§rag.skill** - Skill 래퍼 완성:
+- ✅ `.claude/skills/rag-pipeline/scripts/skill.py`
+  - `process_document()`: Core RAGPipeline 사용
+  - `vector_search()`: 실제 벡터 검색
+  - `rag_query()`: 검색 + 답변 생성 (타이밍 포함)
+
+**§rag.data** - 임베딩 현황:
+- ✅ 857/857 products (Bottle: 675, Jar: 42, Cap: 118, Pump: 22)
+- ✅ Collection: `products` @ Qdrant
+- ✅ Search test passed (Score: 0.6405)
+
+**§rag.infra** - 인프라:
+- ✅ Colima (4 CPU, 8GB RAM)
+- ✅ Qdrant v1.11.3 (http://localhost:6333)
+- ✅ Ollama (qwen2.5:7b-instruct)
+
+**Full Details**: docs/RAG_ACTIVATION_STRATEGY.md (20KB)
 
 ---
 

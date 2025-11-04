@@ -37,6 +37,12 @@ from src.core.intent_classifier import get_intent_classifier
 from src.core.reference_resolver import get_reference_resolver
 from src.services.contextual_rag import ContextualRAG
 
+# RAG Pipeline imports
+from src.core.rag_pipeline import RAGPipeline
+from src.core.embedding_service import EmbeddingService
+from qdrant_client import QdrantClient
+import os
+
 
 # Pydantic 모델
 class CreateSessionRequest(BaseModel):
@@ -107,6 +113,10 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 # 전역 인스턴스
 _conv_manager: Optional[ConversationManager] = None
 _contextual_rag: Optional[ContextualRAG] = None
+_rag_pipeline: Optional[RAGPipeline] = None
+
+# Feature flag: Vector RAG 사용 여부
+USE_VECTOR_RAG = os.getenv('USE_VECTOR_RAG', 'true').lower() == 'true'
 
 
 def get_conv_manager() -> ConversationManager:
@@ -129,6 +139,35 @@ def get_contextual_rag() -> ContextualRAG:
             reference_resolver=get_reference_resolver()
         )
     return _contextual_rag
+
+
+def get_rag_pipeline() -> RAGPipeline:
+    """RAG Pipeline 싱글톤 (Vector Search)"""
+    global _rag_pipeline
+    if _rag_pipeline is None:
+        # Simple loader/splitter for initialized pipeline
+        class SimpleLoader:
+            def load_documents(self, paths):
+                return []
+
+        class SimpleSplitter:
+            def split_documents(self, documents):
+                return documents
+
+        embedding_service = EmbeddingService(model_name='all-MiniLM-L6-v2')
+        qdrant_client = QdrantClient(url="http://localhost:6333")
+
+        _rag_pipeline = RAGPipeline(
+            loader=SimpleLoader(),
+            text_splitter=SimpleSplitter(),
+            embedding_model=embedding_service,
+            vector_db=qdrant_client,
+            collection_name="products",
+            ollama_url="http://localhost:11434",
+            ollama_model="qwen2.5:7b-instruct"
+        )
+
+    return _rag_pipeline
 
 
 # API 엔드포인트
@@ -166,15 +205,53 @@ async def chat_query(request: ChatQueryRequest):
     Returns:
         쿼리 응답
     """
-    contextual_rag = get_contextual_rag()
-
     try:
-        result = await contextual_rag.query(
-            session_id=request.session_id,
-            user_query=request.query
-        )
+        if USE_VECTOR_RAG:
+            # Vector RAG 사용
+            pipeline = get_rag_pipeline()
 
-        return ChatQueryResponse(**result)
+            # Vector search
+            search_results = pipeline.retrieve(request.query, top_k=10)
+
+            # 제품 정보 포맷팅
+            products = []
+            for result in search_results:
+                metadata = result.get('metadata', {})
+                products.append({
+                    'idx': metadata.get('idx', ''),
+                    'product_name': metadata.get('product_name', ''),
+                    'product_code': metadata.get('product_code', ''),
+                    'material': metadata.get('material', ''),
+                    'specifications': {
+                        'capacity': metadata.get('capacity', ''),
+                        'neck_size': metadata.get('neck_size', ''),
+                    },
+                    'score': result.get('score', 0.0)
+                })
+
+            # RAG 답변 생성
+            answer = pipeline.generate_response(search_results, request.query)
+
+            return ChatQueryResponse(
+                session_id=request.session_id,
+                query=request.query,
+                intent={'type': 'product_search', 'confidence': 1.0},
+                reference_resolved=False,
+                products=products,
+                response=answer,
+                total_count=len(products),
+                matched_profile=None,
+                exact_capacity=None
+            )
+
+        else:
+            # 기존 파일 기반 검색
+            contextual_rag = get_contextual_rag()
+            result = await contextual_rag.query(
+                session_id=request.session_id,
+                user_query=request.query
+            )
+            return ChatQueryResponse(**result)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

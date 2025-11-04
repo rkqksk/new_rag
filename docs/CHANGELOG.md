@@ -1,5 +1,47 @@
 # 변경 이력
 
+## [3.3.0] - 2025-11-04
+
+### 완료됨
+- **RAG System 85% 완성** (§rag)
+  - ✅ Core 모듈 개발 완료
+    - `src/core/rag_pipeline.py` (262 lines) - 통합 RAG 파이프라인
+    - `src/core/embedding_service.py` (72 lines) - all-MiniLM-L6-v2 임베딩
+  - ✅ API 통합 완료
+    - `src/api/chat.py` - Vector RAG 통합 (Feature flag: USE_VECTOR_RAG)
+    - `/chat/query` 엔드포인트 - 벡터 검색 + RAG 답변
+  - ✅ Skill 래핑 완료
+    - `.claude/skills/rag-pipeline/scripts/skill.py` 업데이트
+    - `process_document()`, `vector_search()`, `rag_query()` - Core 모듈 사용
+  - ✅ 데이터 임베딩 완료
+    - 857/857 products embedded to Qdrant (100%)
+    - Collection: `products` @ Qdrant
+    - Script: `scripts/embed_products.py`
+
+### 인프라
+- ✅ Colima: 4 CPU, 8GB RAM
+- ✅ Qdrant: v1.11.3 (http://localhost:6333)
+- ✅ Ollama: qwen2.5:7b-instruct
+- ✅ Python venv: .venv (dependencies installed)
+
+### 테스트 결과
+- ✅ Core RAG Pipeline: Score 0.7254
+- ✅ Embedding Service: Passed
+- ✅ API Integration: Score 0.5678
+- ✅ Search Test: Score 0.6405
+
+### 문서 업데이트 (심볼화 전략 적용)
+- `docs/RAG_ACTIVATION_STRATEGY.md` - 85% 완성 현황 추가
+- `CLAUDE.md` - §rag 섹션 확장 (20% → 85% 반영)
+- `docs/SYMBOL_SYSTEM.md` - §rag.core, §rag.skill, §rag.data, §rag.infra 추가
+- `docs/SYMBOL_DOCUMENTATION_GUIDE.md` - 심볼화 문서 작성 지침
+
+### 다음 단계
+- Production 배포 최적화 (15%)
+- 성능 튜닝 및 모니터링
+
+---
+
 ## [3.2.0] - 2025-11-04
 
 ### 추가됨
