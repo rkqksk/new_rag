@@ -1,5 +1,9 @@
 # Frontend UI/UX Design Policy
 
+> **Symbol Reference**: §ui.*
+> **Quick Access**: See `CLAUDE.md` for current UI specs (v2.0.0).
+> **Full Map**: `docs/SYMBOL_SYSTEM.md`
+
 ## 📋 현재 프로덕션 UI/UX (고정)
 
 ### ✅ 승인된 디자인 시스템

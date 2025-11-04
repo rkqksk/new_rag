@@ -1,5 +1,9 @@
 # 🏗️ RAG Enterprise 시스템 아키텍처
 
+> **Symbol Reference**: §arch.*
+> **Quick Access**: See `CLAUDE.md` for symbolized quick reference.
+> **Full Map**: `docs/SYMBOL_SYSTEM.md`
+
 ## 5계층 아키텍처 상세 설계
 
 ---

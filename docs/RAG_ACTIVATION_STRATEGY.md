@@ -1,5 +1,9 @@
 # RAG Pipeline Skill 활성화 전략
 
+> **Symbol Reference**: §rag.*
+> **Quick Access**: See `CLAUDE.md` for current status and next steps.
+> **Full Map**: `docs/SYMBOL_SYSTEM.md`
+
 ## 📊 Executive Summary
 
 **목표**: RAG Pipeline Skill을 완전히 활성화하여 857개 제품 데이터에 대한 벡터 검색 지원

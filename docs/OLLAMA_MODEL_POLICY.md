@@ -1,5 +1,9 @@
 # Ollama Model Management Policy
 
+> **Symbol Reference**: §ollama.*
+> **Quick Access**: See `CLAUDE.md` for production models.
+> **Full Map**: `docs/SYMBOL_SYSTEM.md`
+
 ## 📋 현재 프로덕션 모델 (고정)
 
 ### ✅ 승인된 모델
