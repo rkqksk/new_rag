@@ -41,7 +41,7 @@ class TestDomainExpert:
         rag_pipeline = RAGPipeline(
             loader=loader,
             text_splitter=text_splitter,
-            embedding_model=embedding_service.embed_query,
+            embedding_model=embedding_service,
             vector_db=qdrant_client
         )
 

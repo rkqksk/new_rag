@@ -1,0 +1,240 @@
+# ============================================================================
+# Frontend UI/UX Design Constants
+# ============================================================================
+# These constants are production-ready and should NOT be changed without
+# thorough testing and approval as documented in FRONTEND_UI_POLICY.md
+#
+# Version: 1.0.0
+# Last Updated: 2025-11-04
+# Status: Production
+# ============================================================================
+
+# =============================================================================
+# COLORS
+# =============================================================================
+colors:
+  # Primary Colors (Purple Gradient)
+  primary:
+    start: "#667eea"      # Primary gradient start (보라색 시작)
+    end: "#764ba2"        # Primary gradient end (보라색 끝)
+    description: "Used for header, buttons, and primary UI elements"
+
+  # Background Colors
+  background:
+    main: "#f5f5f5"       # Main background (메인 배경)
+    card: "#ffffff"       # Card background (카드 배경)
+    image: "#f9fafb"      # Image placeholder background (이미지 배경)
+    description: "Light mode only - no dark mode support"
+
+  # Text Colors
+  text:
+    primary: "#333333"    # Primary text (주요 텍스트)
+    secondary: "#555555"  # Secondary text (보조 텍스트)
+    tertiary: "#666666"   # Tertiary text (3차 텍스트)
+    light: "#999999"      # Light text (연한 텍스트)
+    description: "Text hierarchy from darkest to lightest"
+
+  # Accent Colors
+  accent:
+    red: "#e74c3c"        # Red accent (강조 빨강)
+    description: "Used for 추천제품 위치 and hints"
+
+  # Border Colors
+  border:
+    default: "#d1d5db"    # Default border (기본 테두리)
+    light: "#e5e7eb"      # Light border (연한 테두리)
+    description: "Border colors for inputs and cards"
+
+# =============================================================================
+# TYPOGRAPHY
+# =============================================================================
+typography:
+  # Font Family
+  family:
+    primary: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif"
+    description: "System font stack for optimal performance"
+
+  # Font Sizes
+  sizes:
+    header: "18px"        # Header text (헤더)
+    large: "16px"         # Large text (큰 텍스트)
+    base: "15px"          # Base text (기본 텍스트)
+    medium: "14px"        # Medium text (중간 텍스트)
+    small: "12px"         # Small text (작은 텍스트)
+    tiny: "11px"          # Tiny text (아주 작은 텍스트)
+
+  # Font Weights
+  weights:
+    normal: 400           # Normal weight
+    semibold: 600         # Semibold weight
+    description: "Only two weights used for consistency"
+
+  # Line Heights
+  line_heights:
+    base: 1.6             # Base line height
+    description: "Comfortable reading experience"
+
+# =============================================================================
+# LAYOUT
+# =============================================================================
+layout:
+  # Maximum Widths
+  max_widths:
+    content: "1200px"     # Content max width (콘텐츠 최대 너비)
+    recommendations: "1000px"  # Recommendations area max width
+    description: "Constrain content for better readability"
+
+  # Component Sizes
+  components:
+    slot:
+      width: "280px"      # Recommendation slot width (추천제품 슬롯 너비)
+      height: "320px"     # Recommendation slot height (추천제품 슬롯 높이)
+      description: "Fixed size for recommendation slots"
+
+    card:
+      width: "280px"      # Product card width (제품 카드 너비)
+      image_height:
+        desktop: "220px"  # Product image height (desktop)
+        mobile: "180px"   # Product image height (mobile)
+      description: "Product card dimensions"
+
+    avatar:
+      size: "28px"        # Avatar size (아바타 크기)
+      description: "User and assistant avatar"
+
+  # Z-Index Layers
+  z_index:
+    header: 100           # Header layer
+    input: 200            # Input container layer
+    description: "Layering system for overlapping elements"
+
+# =============================================================================
+# SPACING
+# =============================================================================
+spacing:
+  xs: "8px"               # Extra small (아주 작은 간격)
+  sm: "12px"              # Small (작은 간격)
+  md: "16px"              # Medium (중간 간격)
+  lg: "20px"              # Large (큰 간격)
+  xl: "24px"              # Extra large (아주 큰 간격)
+  "2xl": "40px"           # 2x extra large (2배 큰 간격)
+  "3xl": "60px"           # 3x extra large (3배 큰 간격)
+  description: "Consistent spacing scale"
+
+# =============================================================================
+# BORDER RADIUS
+# =============================================================================
+border_radius:
+  sm: "8px"               # Small radius (작은 반경)
+  md: "12px"              # Medium radius (중간 반경)
+  full: "50%"             # Full radius (완전 원형)
+  description: "Used for inputs, buttons, cards, and avatars"
+
+# =============================================================================
+# SHADOWS
+# =============================================================================
+shadows:
+  sm: "0 2px 12px rgba(0,0,0,0.08)"           # Small shadow (작은 그림자)
+  md: "0 4px 20px rgba(0,0,0,0.12)"           # Medium shadow (중간 그림자)
+  lg: "0 4px 20px rgba(0,0,0,0.15)"           # Large shadow (큰 그림자)
+  input: "0 0 0 3px rgba(102,126,234,0.1)"    # Input focus shadow
+  button: "0 4px 12px rgba(102,126,234,0.4)"  # Button hover shadow
+  top: "0 -2px 12px rgba(0,0,0,0.08)"         # Top shadow (상단 그림자)
+  description: "Elevation system for depth perception"
+
+# =============================================================================
+# TRANSITIONS
+# =============================================================================
+transitions:
+  fast: "0.2s"            # Fast animation (빠른 애니메이션)
+  base: "0.3s"            # Base animation (기본 애니메이션)
+  slow: "1.4s"            # Slow animation (느린 애니메이션)
+  description: "Animation durations for interactions"
+
+# =============================================================================
+# BREAKPOINTS (FIXED - DO NOT ADD MORE)
+# =============================================================================
+breakpoints:
+  mobile: "768px"         # Mobile breakpoint (모바일 브레이크포인트)
+  description: "Single breakpoint for mobile-first responsive design"
+  note: "DO NOT add tablet, desktop, or other breakpoints"
+
+# =============================================================================
+# FIXED CONTENT (DO NOT CHANGE)
+# =============================================================================
+content:
+  header:
+    icon: "🏠"
+    title: "스마트 제품 추천"
+    description: "Fixed header content"
+
+  initial_view:
+    guide_text: |
+      인생제품이 완벽하는 쉬기를 검색해보세요.
+      예: "화장품", "플라스틱 용기", "세럼병"
+    recommendation_slot_text: "추천제품 위치"
+    slot_count: 3
+    description: "Initial view content - DO NOT CHANGE"
+
+  input:
+    placeholder: "여자사를 입력하세요..."
+    button_text: "전송"
+    hint_text: "진술 버스도로 화면으로 이동하기"
+    hint_arrow: "↘"
+    description: "Input area content - DO NOT CHANGE"
+
+  product_card:
+    specs_order:
+      - "재질"
+      - "용량"
+      - "네크"
+    description: "Product card specification order - DO NOT CHANGE"
+
+# =============================================================================
+# DESIGN SYSTEM METADATA
+# =============================================================================
+metadata:
+  version: "1.0.0"
+  status: "production"
+  last_updated: "2025-11-04"
+  design_mode: "light_only"  # No dark mode
+  tested_browsers:
+    - "Chrome (latest 2 versions)"
+    - "Safari (latest 2 versions)"
+    - "Firefox (latest 2 versions)"
+    - "Edge (latest 2 versions)"
+  approval_required: true
+  policy_document: "docs/FRONTEND_UI_POLICY.md"
+  related_files:
+    - "frontend/chat.html"
+    - "config/ui_constants.yaml"
+    - "docs/FRONTEND_UI_POLICY.md"
+    - "docs/ARCHITECTURE.md"
+
+# =============================================================================
+# PERFORMANCE TARGETS
+# =============================================================================
+performance:
+  core_web_vitals:
+    lcp: "< 2.5s"         # Largest Contentful Paint
+    fid: "< 100ms"        # First Input Delay
+    cls: "< 0.1"          # Cumulative Layout Shift
+  page_load:
+    initial: "< 1s"       # Initial load time
+    api_response: "< 500ms"  # API response time
+  bundle_size:
+    html_css: "< 50KB"    # HTML + CSS uncompressed
+    images: "< 100KB"     # Images per file
+
+# =============================================================================
+# ACCESSIBILITY REQUIREMENTS
+# =============================================================================
+accessibility:
+  wcag_level: "AA"        # WCAG 2.1 Level AA
+  color_contrast:
+    text: "4.5:1"         # Text contrast ratio
+    ui: "3:1"             # UI component contrast ratio
+  keyboard_navigation: true
+  screen_reader_support: true
+  focus_indicators: true
+  aria_labels: true

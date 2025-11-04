@@ -13,9 +13,9 @@
       "command": "npx",
       "args": [
         "-y",
-        "@executeautomation/chrome-devtools-mcp"
+        "chrome-devtools-mcp@latest"
       ],
-      "description": "Browser automation via Chrome DevTools Protocol"
+      "description": "Official Google Chrome DevTools MCP server for browser automation and debugging"
     },
     "qdrant": {
       "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",

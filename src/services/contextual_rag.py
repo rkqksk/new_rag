@@ -21,7 +21,7 @@ class ContextualRAG:
         conv_manager: ConversationManager,
         intent_classifier: IntentClassifier,
         reference_resolver: ReferenceResolver,
-        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
+        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled/chungjinkorea/crawled_products_final"
     ):
         """
         Args:

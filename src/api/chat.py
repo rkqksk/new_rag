@@ -1,5 +1,30 @@
 """
 컨텍스트 인식 채팅 API 엔드포인트
+
+Frontend Integration:
+    - Location: frontend/chat.html
+    - Base URL: http://localhost:8001
+    - Endpoints:
+        - POST /chat/create_session  -> CreateSessionRequest/Response
+        - POST /chat/query           -> ChatQueryRequest/Response
+
+Usage Example:
+    # Frontend JavaScript
+    const sessionResp = await fetch('http://localhost:8001/chat/create_session', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({})
+    });
+    const {session_id} = await sessionResp.json();
+
+    const queryResp = await fetch('http://localhost:8001/chat/query', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            session_id: session_id,
+            query: "50ml bottle recommendation"
+        })
+    });
 """
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect

@@ -1,6 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
+import tempfile
+import os
 
 from src.core.rag_pipeline import RAGPipeline
 from src.core.document_loader import FlexibleDocumentLoader
@@ -47,6 +49,46 @@ class RAGRouter:
 
     def _setup_routes(self):
         """Configure API routes"""
+
+        @self.router.post("/upload-file")
+        async def upload_file(file: UploadFile = File(...)):
+            """
+            Upload a file and index it in the RAG system
+
+            Args:
+                file: Uploaded file
+
+            Returns:
+                Ingestion statistics
+            """
+            try:
+                # Save uploaded file to temporary location
+                with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(file.filename)[1]) as temp_file:
+                    content = await file.read()
+                    temp_file.write(content)
+                    temp_path = temp_file.name
+
+                # Ingest the document
+                result = self.rag_pipeline.ingest_documents([temp_path])
+
+                # Clean up temp file
+                os.unlink(temp_path)
+
+                return {
+                    "filename": file.filename,
+                    "total_documents": result["total_documents"],
+                    "total_chunks": result["total_chunks"]
+                }
+
+            except Exception as e:
+                error_info = self.error_handler.log_error(e, {
+                    'filename': file.filename
+                })
+                raise HTTPException(
+                    status_code=500,
+                    detail=f"File upload failed: {error_info['error_message']}"
+                )
+
         @self.router.post("/upload", response_model=Dict[str, int])
         async def upload_documents(request: DocumentUploadRequest):
             """

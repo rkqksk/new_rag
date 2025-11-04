@@ -45,7 +45,7 @@ def create_app() -> FastAPI:
     rag_pipeline = RAGPipeline(
         loader=FlexibleDocumentLoader(),
         text_splitter=text_splitter,
-        embedding_model=embedding_service.embed_query,
+        embedding_model=embedding_service,
         vector_db=qdrant_client
     )
 

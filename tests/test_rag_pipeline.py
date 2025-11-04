@@ -1,13 +1,14 @@
-import pytest
-from pathlib import Path
 import tempfile
+from pathlib import Path
 
-from src.core.rag_pipeline import RAGPipeline
+import pytest
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from qdrant_client import QdrantClient
+
 from src.core.document_loader import FlexibleDocumentLoader
 from src.core.embedding_service import EmbeddingService
+from src.core.rag_pipeline import RAGPipeline
 
-from qdrant_client import QdrantClient
-from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 class TestRAGPipeline:
     @pytest.fixture
@@ -16,7 +17,10 @@ class TestRAGPipeline:
         with tempfile.TemporaryDirectory() as tmpdir:
             documents = [
                 (Path(tmpdir) / "doc1.txt", "This is a test document about machine learning."),
-                (Path(tmpdir) / "doc2.txt", "RAG is an advanced technique in natural language processing.")
+                (
+                    Path(tmpdir) / "doc2.txt",
+                    "RAG is an advanced technique in natural language processing.",
+                ),
             ]
 
             for path, content in documents:
@@ -37,16 +41,16 @@ class TestRAGPipeline:
         return RAGPipeline(
             loader=loader,
             text_splitter=text_splitter,
-            embedding_model=embedding_model.embed_query,
-            vector_db=qdrant_client
+            embedding_model=embedding_model,
+            vector_db=qdrant_client,
         )
 
     def test_document_ingestion(self, rag_pipeline, temp_documents):
         """Test document ingestion process"""
         result = rag_pipeline.ingest_documents(temp_documents)
 
-        assert result['total_documents'] == 2
-        assert result['total_chunks'] > 0
+        assert result["total_documents"] == 2
+        assert result["total_chunks"] > 0
 
     def test_semantic_retrieval(self, rag_pipeline, temp_documents):
         """Test semantic retrieval from ingested documents"""
@@ -58,13 +62,13 @@ class TestRAGPipeline:
         results = rag_pipeline.retrieve(query, top_k=2)
 
         assert len(results) > 0
-        assert all('text' in result for result in results)
-        assert all('score' in result for result in results)
+        assert all("text" in result for result in results)
+        assert all("score" in result for result in results)
 
     def test_loader_supported_extensions(self):
         """Verify supported document extensions"""
         extensions = FlexibleDocumentLoader.get_supported_extensions()
-        expected_extensions = ['.pdf', '.txt', '.csv', '.md']
+        expected_extensions = [".pdf", ".txt", ".csv", ".md"]
 
         assert set(extensions) == set(expected_extensions)
 
@@ -73,5 +77,5 @@ class TestRAGPipeline:
         models = EmbeddingService.list_available_models()
 
         assert len(models) > 0
-        assert 'all-MiniLM-L6-v2' in models
-        assert 'all-mpnet-base-v2' in models
+        assert "all-MiniLM-L6-v2" in models
+        assert "all-mpnet-base-v2" in models

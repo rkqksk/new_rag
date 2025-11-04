@@ -1,21 +1,24 @@
-from typing import List, Dict, Any
 from pathlib import Path
-from langchain.document_loaders import (
+from typing import Any, Dict, List
+
+from langchain_community.document_loaders import (
+    CSVLoader,
     PDFPlumberLoader,
     TextLoader,
-    CSVLoader,
-    UnstructuredMarkdownLoader
+    UnstructuredMarkdownLoader,
 )
+
 
 class FlexibleDocumentLoader:
     """
     Flexible document loader supporting multiple file types
     """
+
     LOADER_MAP = {
-        '.pdf': PDFPlumberLoader,
-        '.txt': TextLoader,
-        '.csv': CSVLoader,
-        '.md': UnstructuredMarkdownLoader
+        ".pdf": PDFPlumberLoader,
+        ".txt": TextLoader,
+        ".csv": CSVLoader,
+        ".md": UnstructuredMarkdownLoader,
     }
 
     @classmethod

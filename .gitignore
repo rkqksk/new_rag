@@ -219,3 +219,6 @@ temp/
 # User-specific
 # ============================================
 !.env.example
+# Backup files
+frontend/*.backup*
+frontend/chat.html.backup_*

@@ -1,0 +1,126 @@
+# Ollama Models Configuration
+# ============================================================================
+# PRODUCTION MODELS - DO NOT MODIFY
+# ============================================================================
+# These models are production-approved and thoroughly tested.
+# Changing models requires full system validation and testing.
+
+production:
+  generation:
+    name: qwen2.5:7b-instruct
+    id: 845dbda0ea48
+    size: 4.7GB
+    purpose: Answer generation, conversation, RAG responses
+    tested_date: 2025-11-03
+    performance:
+      latency: 1-2s per response
+      quality: 85-90% vs Claude Sonnet
+      languages:
+        - Korean
+        - English
+      domains:
+        - Manufacturing (Cpk, OEE, ISO 9001)
+        - Packaging (PET, PETG, PP, HDPE materials)
+        - Regulatory (FDA, EU, Korean food safety)
+
+  embedding:
+    name: nomic-embed-text:latest
+    id: 0a109f422b47
+    size: 274MB
+    purpose: Local embedding generation (alternative to sentence-transformers)
+    tested_date: 2025-11-03
+    performance:
+      latency: 10-30ms
+      dimension: 768
+      quality: Good for local use
+
+# ============================================================================
+# INSTALLATION INSTRUCTIONS
+# ============================================================================
+
+installation:
+  required_models:
+    - name: qwen2.5:7b-instruct
+      command: ollama pull qwen2.5:7b-instruct
+      size: 4.7GB
+      mandatory: true
+
+    - name: nomic-embed-text:latest
+      command: ollama pull nomic-embed-text:latest
+      size: 274MB
+      mandatory: false
+      note: Optional, use if not using sentence-transformers
+
+  cleanup:
+    description: Remove any other models to save disk space
+    commands:
+      - ollama list  # Check current models
+      - ollama rm <model-name>  # Remove unnecessary models
+
+  verification:
+    commands:
+      - ollama list  # Should show only approved models
+      - ollama run qwen2.5:7b-instruct "Test question"
+
+# ============================================================================
+# FORBIDDEN MODELS
+# ============================================================================
+# Do NOT install these models without approval:
+
+forbidden:
+  - qwen2.5:3b  # Too small, lower quality
+  - qwen2.5:7b-instruct-q4_K_M  # Duplicate tag, causes confusion
+  - llama2  # Not optimized for Korean
+  - llama3  # Not optimized for Korean
+
+# ============================================================================
+# MODEL UPGRADE POLICY
+# ============================================================================
+
+upgrade_policy:
+  process:
+    1. Test new model in development environment
+    2. Run full benchmark suite
+    3. Compare performance metrics
+    4. Get approval from team
+    5. Update this configuration file
+    6. Deploy to production
+
+  rollback_procedure:
+    - Keep previous model version
+    - Document rollback steps
+    - Test rollback in staging
+
+# ============================================================================
+# RESOURCE REQUIREMENTS
+# ============================================================================
+
+resources:
+  qwen2.5_7b_instruct:
+    disk: 4.7GB
+    ram_usage: 4-5GB (4-bit quantized)
+    vram: N/A (CPU only)
+    cpu_cores: 4+ recommended
+
+  nomic_embed_text:
+    disk: 274MB
+    ram_usage: 200-300MB
+    vram: N/A (CPU only)
+    cpu_cores: 2+ recommended
+
+# ============================================================================
+# MONITORING
+# ============================================================================
+
+monitoring:
+  metrics:
+    - model_version
+    - inference_latency_ms
+    - tokens_per_second
+    - error_rate
+    - quality_score
+
+  alerts:
+    - Model changed without approval
+    - Unexpected model loaded
+    - Performance degradation

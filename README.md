@@ -1,81 +1,66 @@
-# RAG Enterprise 🚀
+# RAG Enterprise
 
-## 📋 프로젝트 개요
+**Production-grade Retrieval-Augmented Generation system with SKILL-based architecture.**
 
-**RAG Enterprise**는 오픈소스 검색 증강 생성(Retrieval-Augmented Generation) 시스템으로, 지능형 문서 처리 및 쿼리 해결을 위한 혁신적인 솔루션입니다.
+## Features
 
-### 🌟 주요 기능
+- 🔍 Multi-format document processing (PDF, DOCX, XLSX)
+- 💡 Semantic search with vector database
+- 🤖 Multi-model support (Ollama, OpenAI, Claude)
+- 🔌 Domain expert plugins (manufacturing, packaging)
+- 📊 Token-efficient hybrid architecture
 
-- 🔍 다중 포맷 문서 수집
-- 💡 시맨틱 검색
-- 🤖 유연한 모델 통합
-- 🛡️ 강력한 오류 처리
-- 📊 성능 최적화
-
-## 🛠 기술 스택
-
-- **백엔드**: FastAPI
-- **벡터 데이터베이스**: Qdrant
-- **임베딩**: Sentence Transformers
-- **모델**: Ollama, OpenAI, Anthropic
-- **테스트**: Pytest
-
-## 🚀 빠른 시작
-
-### 필수 조건
-- Python 3.11+
-- Poetry 또는 pip
-
-### 설치
+## Quick Start
 
 ```bash
-# 저장소 클론
-git clone https://github.com/your-org/rag-enterprise.git
-cd rag-enterprise
-
-# 의존성 설치
-poetry install
-# 또는
+# Clone and install
+git clone <repo-url> && cd rag-enterprise
 pip install -r requirements.txt
 
-# 애플리케이션 실행
-poetry run python -m src.api.app
-# 또는
-python -m src.api.app
+# Setup environment
+cp .env.example .env  # Add your API keys
+
+# Start services
+docker-compose up -d
+
+# Run server
+python run_chat_server.py
+
+# Start frontend (in another terminal)
+cd frontend && python3 -m http.server 8080
+# Open: http://localhost:8080/chat.html
 ```
 
-## 🧪 테스트 실행
+## Frontend
 
-```bash
-poetry run pytest
-# 또는
-pytest
-```
+**Location**: `frontend/chat.html`
+- 💬 White/minimal design chat interface
+- 📦 Real-time product recommendations
+- 🔍 RAG-powered search
+- 📊 Session management
 
-## 📚 문서
+**API Endpoints**:
+- `POST /chat/create_session` - Create new chat session
+- `POST /chat/query` - Query with RAG context
 
-- [아키텍처](/docs/ARCHITECTURE_FINAL.md)
-- [배포 전략](/docs/DEPLOYMENT_STRATEGY.md)
+## Documentation
 
-## 🤝 기여 방법
+- **Quick Start**: `QUICK_START.md`
+- **Architecture**: `/workflow ARCHITECTURE`
+- **Usage Guide**: `/workflow USAGE_GUIDE`
+- **Development**: `/guide development`
 
-1. 저장소 포크
-2. 기능 브랜치 생성 (`git checkout -b feature/AmazingFeature`)
-3. 변경사항 커밋 (`git commit -m '놀라운 기능 추가'`)
-4. 브랜치 푸시 (`git push origin feature/AmazingFeature`)
-5. 풀 리퀘스트 열기
+## Tech Stack
 
-## 📝 라이선스
+- FastAPI (Python 3.11+)
+- Qdrant vector database
+- Sentence Transformers
+- Docker Compose
 
-MIT 라이선스에 따라 배포됩니다. 자세한 내용은 `LICENSE` 파일을 참조하세요.
+## License
 
-## 🏆 감사의 말
-
-- [FastAPI](https://fastapi.tiangolo.com/)
-- [Qdrant](https://qdrant.tech/)
-- [Sentence Transformers](https://www.sbert.net/)
+MIT License - See `LICENSE` file
 
 ---
 
-**버전**: 1.0.0
-**최종 업데이트**: 2025-11-03
+**v3.1.0** | **2025-11-03**

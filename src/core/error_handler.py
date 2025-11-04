@@ -14,18 +14,23 @@ class ErrorHandler:
 
     def __init__(
         self,
-        log_level: int = logging.INFO,
+        log_level: Optional[int] = None,
         log_file: Optional[str] = "rag_pipeline.log"
     ):
         """
         Initialize error handler with logging configuration
 
         Args:
-            log_level: Logging level (default: INFO)
+            log_level: Logging level (default: INFO, None to disable)
             log_file: Path to log file (optional)
         """
         # Configure logging
         self.logger = logging.getLogger("RAGPipeline")
+
+        # Handle None log_level for testing
+        if log_level is None:
+            log_level = logging.CRITICAL + 1  # Effectively disable logging
+
         self.logger.setLevel(log_level)
 
         # Create formatter
