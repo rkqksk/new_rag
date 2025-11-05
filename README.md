@@ -3,6 +3,8 @@
 **Production-grade Retrieval-Augmented Generation system with SKILL-based architecture.**
 
 > **For Developers**: See `CLAUDE.md` for quick reference and symbol system.
+>
+> **한국어 지원**: Korean language support enabled for chat interface and documentation.
 
 ---
 
