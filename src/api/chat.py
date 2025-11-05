@@ -60,6 +60,8 @@ class ChatQueryRequest(BaseModel):
     """채팅 쿼리 요청"""
     session_id: str = Field(..., description="세션 ID")
     query: str = Field(..., description="사용자 쿼리")
+    collections: Optional[List[str]] = Field(None, description="검색할 컬렉션 ID 목록 (예: ['chungjinkorea', 'onehago'])")
+    materials: Optional[List[str]] = Field(None, description="재질 필터 (예: ['PET', 'PE', '유리'])")
 
 
 class ProductInfo(BaseModel):
@@ -84,6 +86,7 @@ class ChatQueryResponse(BaseModel):
     total_count: int
     matched_profile: Optional[str] = None
     exact_capacity: Optional[float] = None
+    collections_searched: Optional[List[str]] = Field(None, description="검색에 사용된 컬렉션 목록")
 
 
 class SessionInfoResponse(BaseModel):
@@ -207,41 +210,105 @@ async def chat_query(request: ChatQueryRequest):
     """
     try:
         if USE_VECTOR_RAG:
-            # Vector RAG 사용
-            pipeline = get_rag_pipeline()
+            # Multi-collection Vector RAG 사용
+            import sys
+            from pathlib import Path
 
-            # Vector search
-            search_results = pipeline.retrieve(request.query, top_k=10)
+            # Add skill to path
+            skill_path = Path(__file__).parent.parent.parent / '.claude/skills/rag-pipeline/scripts'
+            sys.path.insert(0, str(skill_path))
+
+            from skill import rag_query as skill_rag_query
+
+            # Skill을 통한 multi-collection RAG query
+            skill_result = skill_rag_query({
+                'question': request.query,
+                'top_k': 100,  # Increased for infinite scroll
+                'collections': request.collections,  # Pass collections from request
+                'materials': request.materials  # Pass material filters
+            })
+
+            if skill_result['status'] != 'success':
+                raise HTTPException(status_code=500, detail=skill_result.get('error', 'RAG query failed'))
 
             # 제품 정보 포맷팅
             products = []
-            for result in search_results:
+            for result in skill_result['sources']:
                 metadata = result.get('metadata', {})
+
+                # Capacity 포맷팅 (소수점 제거)
+                capacity_str = ''
+                if metadata.get('capacity_value'):
+                    capacity_unit = metadata.get('capacity_unit', 'ml')
+                    capacity_value = metadata['capacity_value']
+                    # 정수로 변환 가능하면 소수점 제거
+                    if isinstance(capacity_value, (int, float)) and capacity_value == int(capacity_value):
+                        capacity_str = f"{int(capacity_value)}{capacity_unit}"
+                    else:
+                        capacity_str = f"{capacity_value}{capacity_unit}"
+
+                # Material 포맷팅 (리스트 → 문자열)
+                materials = metadata.get('materials', [])
+                material_str = ', '.join(materials) if materials else ''
+
+                # Neck size 포맷팅
+                neck_size_str = ''
+                if metadata.get('neck_size'):
+                    neck_size_str = f"{metadata['neck_size']}mm"
+
+                # Image paths 파싱 (모든 이미지 경로 포함)
+                image_urls = []
+                if metadata.get('image_paths_json'):
+                    try:
+                        image_urls = json.loads(metadata['image_paths_json'])
+                    except:
+                        pass
+
+                # Fallback to main image if no images array
+                if not image_urls and metadata.get('main_image_path'):
+                    image_urls = [metadata['main_image_path']]
+
+                # MOQ 포맷팅
+                moq_str = ''
+                if metadata.get('moq'):
+                    moq_str = f"{metadata['moq']:,}개"
+
                 products.append({
-                    'idx': metadata.get('idx', ''),
+                    'idx': metadata.get('product_id', ''),
                     'product_name': metadata.get('product_name', ''),
                     'product_code': metadata.get('product_code', ''),
-                    'material': metadata.get('material', ''),
+                    'material': material_str,
                     'specifications': {
-                        'capacity': metadata.get('capacity', ''),
-                        'neck_size': metadata.get('neck_size', ''),
+                        'capacity': capacity_str,
+                        'neck_size': neck_size_str,
+                        'moq': moq_str,
+                        'origin': metadata.get('origin', ''),
+                        'size_dimensions': metadata.get('size_dimensions', ''),
                     },
-                    'score': result.get('score', 0.0)
+                    'company': {
+                        'name': metadata.get('company_name', ''),
+                        'email': metadata.get('email', ''),
+                        'phone': metadata.get('phone', ''),
+                        'fax': metadata.get('fax', ''),
+                        'contact_person': metadata.get('contact_person', ''),
+                    },
+                    'image_url': image_urls[0] if image_urls else '',  # 메인 이미지 (backward compatibility)
+                    'image_urls': image_urls,  # 모든 이미지 (갤러리용)
+                    'score': result.get('score', 0.0),
+                    'source_collection': metadata.get('source_collection', 'unknown')
                 })
-
-            # RAG 답변 생성
-            answer = pipeline.generate_response(search_results, request.query)
 
             return ChatQueryResponse(
                 session_id=request.session_id,
                 query=request.query,
-                intent={'type': 'product_search', 'confidence': 1.0},
+                intent={'type': 'product_search', 'confidence': float(skill_result.get('confidence', 0.0))},
                 reference_resolved=False,
                 products=products,
-                response=answer,
+                response=skill_result['answer'],
                 total_count=len(products),
                 matched_profile=None,
-                exact_capacity=None
+                exact_capacity=None,
+                collections_searched=skill_result.get('collections', [])
             )
 
         else:
@@ -419,6 +486,46 @@ async def websocket_chat(websocket: WebSocket, session_id: str):
 
 
 # Health check
+@router.get("/collections")
+async def list_collections(enabled_only: bool = True, embedded_only: bool = True):
+    """
+    사용 가능한 컬렉션 목록 조회
+
+    Args:
+        enabled_only: 활성화된 컬렉션만 조회
+        embedded_only: 임베딩된 컬렉션만 조회
+
+    Returns:
+        컬렉션 목록
+    """
+    try:
+        import sys
+        from pathlib import Path
+
+        # Add skill to path
+        skill_path = Path(__file__).parent.parent.parent / '.claude/skills/rag-pipeline/scripts'
+        sys.path.insert(0, str(skill_path))
+
+        from skill import list_collections as skill_list_collections
+
+        result = skill_list_collections({
+            'enabled_only': enabled_only,
+            'embedded_only': embedded_only
+        })
+
+        if result['status'] != 'success':
+            raise HTTPException(status_code=500, detail=result.get('error', 'Failed to list collections'))
+
+        return {
+            "status": "success",
+            "collections": result['collections'],
+            "total": result['total']
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/health")
 async def health_check():
     """

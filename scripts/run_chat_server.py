@@ -6,6 +6,8 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from pathlib import Path
 
 from src.api.chat import router as chat_router
 
@@ -28,6 +30,14 @@ app.add_middleware(
 
 # Chat 라우터 등록
 app.include_router(chat_router)
+
+# Static files mounting for images
+images_dir = Path(__file__).parent.parent / "data" / "crawled" / "onehago" / "images"
+if images_dir.exists():
+    app.mount("/images", StaticFiles(directory=str(images_dir)), name="images")
+    print(f"✅ Mounted images directory: {images_dir}")
+else:
+    print(f"⚠️  Images directory not found: {images_dir}")
 
 
 @app.get("/")

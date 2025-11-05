@@ -103,12 +103,12 @@ class RAGPipeline:
         # Prepare additional metadata
         extra_metadata = additional_metadata or {}
 
-        # Index in Qdrant
+        # Index in Qdrant (flatten metadata to top level)
         points = [
             PointStruct(
                 id=abs(hash(chunk.page_content)),
                 vector=embedding.tolist() if hasattr(embedding, "tolist") else embedding,
-                payload={"text": chunk.page_content, "metadata": {**chunk.metadata, **extra_metadata}},
+                payload={"text": chunk.page_content, **chunk.metadata, **extra_metadata},
             )
             for chunk, embedding in zip(chunks, embeddings)
         ]
@@ -148,11 +148,16 @@ class RAGPipeline:
         if metadata_filters:
             from qdrant_client.models import Filter, FieldCondition, MatchValue
 
-            conditions = [
-                FieldCondition(key=f"metadata.{key}", match=MatchValue(value=value))
-                for key, value in metadata_filters.items()
-            ]
-            search_params["query_filter"] = Filter(must=conditions)
+            # Check if metadata_filters is already a Filter object
+            if isinstance(metadata_filters, Filter):
+                search_params["query_filter"] = metadata_filters
+            else:
+                # Convert dict to Filter
+                conditions = [
+                    FieldCondition(key=f"metadata.{key}", match=MatchValue(value=value))
+                    for key, value in metadata_filters.items()
+                ]
+                search_params["query_filter"] = Filter(must=conditions)
 
         search_results = self.vector_db.search(**search_params)
 

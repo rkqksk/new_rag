@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>컬렉션 관리 대시보드</title>
+    <style>
+        /* ============================================================================
+           UI/UX DESIGN CONSTANTS (FIXED - DO NOT CHANGE)
+           ============================================================================
+           ChatGPT-style Minimal Design - Gray Tones Only
+           Last Updated: 2025-11-04
+           Version: 2.0.0
+           ============================================================================ */
+
+        :root {
+            /* ===== Colors (Gray Tones Only) ===== */
+            --color-bg-main: #ffffff;
+            --color-bg-secondary: #f7f7f8;
+            --color-bg-input: #ffffff;
+            --color-bg-user: #f4f4f4;
+            --color-bg-assistant: #ffffff;
+            --color-text-primary: #2d333a;
+            --color-text-secondary: #6e6e80;
+            --color-text-placeholder: #8e8ea0;
+            --color-border: #d1d5db;
+            --color-border-focus: #9ca3af;
+            --color-hover: #ececf1;
+
+            /* ===== Typography ===== */
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            --font-size-base: 16px;
+            --font-size-small: 14px;
+            --font-size-tiny: 12px;
+            --font-weight-normal: 400;
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            --line-height-base: 1.5;
+
+            /* ===== Layout ===== */
+            --max-width-content: 1200px;
+
+            /* ===== Spacing ===== */
+            --spacing-xs: 8px;
+            --spacing-sm: 12px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+
+            /* ===== Border Radius ===== */
+            --radius-sm: 6px;
+            --radius-md: 12px;
+            --radius-lg: 24px;
+
+            /* ===== Shadows ===== */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
+
+            /* ===== Transitions ===== */
+            --transition-fast: 0.15s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--color-bg-main);
+            color: var(--color-text-primary);
+            padding: 0;
+            margin: 0;
+            line-height: var(--line-height-base);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: var(--max-width-content);
+            margin: 0 auto;
+            padding: var(--spacing-xl);
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-text-primary);
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: var(--font-weight-semibold);
+            margin-bottom: var(--spacing-md);
+            color: var(--color-text-primary);
+        }
+
+        .section {
+            background: var(--color-bg-main);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .collections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-md);
+        }
+
+        .collection-card {
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            transition: all var(--transition-fast);
+            background: var(--color-bg-main);
+            cursor: pointer;
+        }
+
+        .collection-card:hover {
+            background: var(--color-hover);
+            border-color: var(--color-border-focus);
+        }
+
+        .collection-card.active {
+            border-color: var(--color-text-primary);
+            background: var(--color-bg-user);
+        }
+
+        .collection-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .collection-title {
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-text-primary);
+        }
+
+        .collection-id {
+            font-size: var(--font-size-tiny);
+            color: var(--color-text-secondary);
+            font-family: 'Monaco', 'Courier New', monospace;
+            margin-top: 4px;
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-tiny);
+            font-weight: var(--font-weight-medium);
+            border: 1px solid var(--color-border);
+        }
+
+        .status-badge.active {
+            background: var(--color-text-primary);
+            color: white;
+            border-color: var(--color-text-primary);
+        }
+
+        .status-badge.inactive {
+            background: var(--color-bg-secondary);
+            color: var(--color-text-secondary);
+            border-color: var(--color-border);
+        }
+
+        .collection-stats {
+            margin-top: var(--spacing-sm);
+            padding-top: var(--spacing-sm);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: var(--font-size-small);
+        }
+
+        .stat-label {
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-small);
+        }
+
+        .stat-value {
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-small);
+        }
+
+        .checkbox-wrapper {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            margin-top: var(--spacing-md);
+            padding: var(--spacing-sm);
+            background: var(--color-bg-secondary);
+            border-radius: var(--radius-sm);
+            border: 1px solid transparent;
+            transition: all var(--transition-fast);
+        }
+
+        .checkbox-wrapper:hover {
+            border-color: var(--color-border);
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--color-text-primary);
+        }
+
+        .checkbox-wrapper label {
+            cursor: pointer;
+            font-size: var(--font-size-small);
+            color: var(--color-text-primary);
+        }
+
+        .actions {
+            margin-top: var(--spacing-lg);
+            display: flex;
+            gap: var(--spacing-sm);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            background: var(--color-bg-main);
+            color: var(--color-text-primary);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+        }
+
+        .btn:hover {
+            background: var(--color-hover);
+            border-color: var(--color-border-focus);
+        }
+
+        .btn.primary {
+            background: var(--color-text-primary);
+            color: white;
+            border-color: var(--color-text-primary);
+        }
+
+        .btn.primary:hover {
+            background: #1f2937;
+            border-color: #1f2937;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .loading {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-small);
+        }
+
+        .error {
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-primary);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-small);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--spacing-xl);
+            color: var(--color-text-secondary);
+            font-size: var(--font-size-small);
+        }
+
+        .selected-count {
+            font-size: var(--font-size-small);
+            color: var(--color-text-secondary);
+            margin-top: var(--spacing-sm);
+            font-weight: var(--font-weight-medium);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>컬렉션 관리 대시보드</h1>
+
+        <!-- Error Message -->
+        <div id="error-message" class="error" style="display: none;"></div>
+
+        <!-- Collections Section -->
+        <div class="section">
+            <h2>데이터 소스 선택</h2>
+            <p style="color: var(--color-text-secondary); font-size: var(--font-size-small); margin-bottom: var(--spacing-md);">
+                검색할 데이터 소스를 선택하세요. 여러 개를 선택할 수 있습니다.
+            </p>
+
+            <div id="collections-container">
+                <div class="loading">컬렉션 목록 로딩 중...</div>
+            </div>
+
+            <div class="selected-count" id="selected-count"></div>
+
+            <div class="actions">
+                <button class="btn primary" onclick="saveSelection()">선택 사항 저장</button>
+                <button class="btn primary" onclick="goToChat()">채팅 시작</button>
+                <button class="btn" onclick="resetSelection()">초기화</button>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="section">
+            <h2>전체 통계</h2>
+            <div id="stats-container">
+                <div class="loading">통계 로딩 중...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8001/chat';
+        let collections = [];
+        let selectedCollections = new Set();
+
+        // Load collections from localStorage
+        function loadSavedSelections() {
+            const saved = localStorage.getItem('selected_collections');
+            if (saved) {
+                selectedCollections = new Set(JSON.parse(saved));
+            }
+        }
+
+        // Save collections to localStorage
+        function saveToLocalStorage() {
+            localStorage.setItem('selected_collections', JSON.stringify([...selectedCollections]));
+        }
+
+        // Fetch collections from API
+        async function fetchCollections() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/collections?enabled_only=true&embedded_only=true`);
+                if (!response.ok) throw new Error('Failed to fetch collections');
+
+                const data = await response.json();
+                collections = data.collections || [];
+
+                renderCollections();
+                updateStats();
+            } catch (error) {
+                showError('컬렉션 목록을 불러오는데 실패했습니다: ' + error.message);
+            }
+        }
+
+        // Render collections
+        function renderCollections() {
+            const container = document.getElementById('collections-container');
+
+            if (collections.length === 0) {
+                container.innerHTML = '<div class="empty-state">사용 가능한 컬렉션이 없습니다.</div>';
+                return;
+            }
+
+            const grid = document.createElement('div');
+            grid.className = 'collections-grid';
+
+            collections.forEach(col => {
+                const isSelected = selectedCollections.has(col.id);
+
+                const card = document.createElement('div');
+                card.className = `collection-card ${isSelected ? 'active' : ''}`;
+                card.onclick = () => toggleCollection(col.id);
+
+                card.innerHTML = `
+                    <div class="collection-header">
+                        <div>
+                            <div class="collection-title">${col.name}</div>
+                            <div class="collection-id">${col.id}</div>
+                        </div>
+                        <span class="status-badge ${col.embedded ? 'active' : 'inactive'}">
+                            ${col.embedded ? '활성화' : '비활성'}
+                        </span>
+                    </div>
+                    <div class="collection-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">총 문서</span>
+                            <span class="stat-value">${col.total_documents.toLocaleString()}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">마지막 업데이트</span>
+                            <span class="stat-value">${col.last_updated || 'N/A'}</span>
+                        </div>
+                    </div>
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="cb_${col.id}" ${isSelected ? 'checked' : ''}
+                               onclick="event.stopPropagation(); toggleCollection('${col.id}')">
+                        <label for="cb_${col.id}" onclick="event.stopPropagation()">검색에 포함</label>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+
+            container.innerHTML = '';
+            container.appendChild(grid);
+            updateSelectedCount();
+        }
+
+        // Toggle collection selection
+        function toggleCollection(collectionId) {
+            if (selectedCollections.has(collectionId)) {
+                selectedCollections.delete(collectionId);
+            } else {
+                selectedCollections.add(collectionId);
+            }
+            renderCollections();
+        }
+
+        // Update selected count
+        function updateSelectedCount() {
+            const count = selectedCollections.size;
+            const total = collections.length;
+            const countEl = document.getElementById('selected-count');
+            countEl.textContent = `${count}/${total} 컬렉션 선택됨`;
+        }
+
+        // Update stats
+        function updateStats() {
+            const statsContainer = document.getElementById('stats-container');
+
+            const totalDocs = collections.reduce((sum, col) => sum + col.total_documents, 0);
+            const activeCols = collections.filter(col => col.embedded).length;
+
+            statsContainer.innerHTML = `
+                <div class="stat-row">
+                    <span class="stat-label">전체 컬렉션</span>
+                    <span class="stat-value">${collections.length}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">활성화된 컬렉션</span>
+                    <span class="stat-value">${activeCols}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">총 문서 수</span>
+                    <span class="stat-value">${totalDocs.toLocaleString()}</span>
+                </div>
+            `;
+        }
+
+        // Save selection
+        function saveSelection() {
+            saveToLocalStorage();
+            alert(`${selectedCollections.size}개 컬렉션이 저장되었습니다.`);
+        }
+
+        // Reset selection
+        function resetSelection() {
+            selectedCollections.clear();
+            saveToLocalStorage();
+            renderCollections();
+        }
+
+        // Go to chat
+        function goToChat() {
+            // Save current selection
+            saveToLocalStorage();
+
+            // Redirect to chat.html
+            window.location.href = 'chat.html';
+        }
+
+        // Show error
+        function showError(message) {
+            const errorEl = document.getElementById('error-message');
+            errorEl.textContent = message;
+            errorEl.style.display = 'block';
+        }
+
+        // Initialize
+        loadSavedSelections();
+        fetchCollections();
+    </script>
+</body>
+</html>

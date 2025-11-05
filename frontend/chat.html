@@ -181,6 +181,40 @@
             margin-top: var(--spacing-xs);
         }
 
+        /* ===== Skeleton Loading Animation ===== */
+        .product-image.loading {
+            background: linear-gradient(
+                90deg,
+                var(--color-bg-secondary) 25%,
+                var(--color-hover) 50%,
+                var(--color-bg-secondary) 75%
+            );
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s ease-in-out infinite;
+        }
+
+        @keyframes skeleton-loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .product-image.loaded {
+            animation: fade-in 0.3s ease-in;
+        }
+
+        @keyframes fade-in {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
         /* ===== Input Container (Bottom Fixed) ===== */
         .input-container {
             position: sticky;
@@ -282,6 +316,44 @@
             }
         }
 
+        /* ===== Collection Indicator ===== */
+        .collection-indicator {
+            position: fixed;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            background: var(--color-bg-secondary);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: var(--font-size-tiny);
+            color: var(--color-text-secondary);
+            z-index: 100;
+            display: none; /* Hidden per user request */
+            align-items: center;
+            gap: 6px;
+        }
+
+        .collection-badge {
+            background: var(--color-text-primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: var(--font-size-tiny);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .settings-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: var(--font-size-tiny);
+            margin-left: 8px;
+            transition: color 0.2s;
+        }
+
+        .settings-link:hover {
+            color: var(--color-text-primary);
+        }
+
         /* ===== Responsive ===== */
         @media (max-width: 768px) {
             .messages-container {
@@ -297,9 +369,105 @@
                 height: 160px;
             }
         }
+
+        /* ===== Image Gallery Modal ===== */
+        .gallery-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .gallery-modal.active {
+            display: flex;
+        }
+
+        .gallery-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .gallery-image {
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+            border-radius: var(--radius-md);
+        }
+
+        .gallery-nav {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+            align-items: center;
+        }
+
+        .gallery-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: var(--font-size-small);
+            transition: all var(--transition-fast);
+        }
+
+        .gallery-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .gallery-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .gallery-counter {
+            color: white;
+            font-size: var(--font-size-small);
+            padding: var(--spacing-sm) var(--spacing-md);
+        }
+
+        .gallery-close {
+            position: absolute;
+            top: var(--spacing-lg);
+            right: var(--spacing-lg);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast);
+        }
+
+        .gallery-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
     </style>
 </head>
 <body>
+    <!-- Collection Indicator -->
+    <div class="collection-indicator" id="collectionIndicator">
+        <span>검색 대상:</span>
+        <span class="collection-badge" id="collectionBadge">로딩 중...</span>
+        <a href="dashboard.html" class="settings-link">설정</a>
+    </div>
+
     <!-- Main Container -->
     <div class="main-container" id="mainContainer">
         <!-- Messages Container -->
@@ -321,6 +489,19 @@
         </div>
     </div>
 
+    <!-- Image Gallery Modal -->
+    <div class="gallery-modal" id="galleryModal">
+        <div class="gallery-content">
+            <button class="gallery-close" onclick="closeGallery()">×</button>
+            <img class="gallery-image" id="galleryImage" src="" alt="Product Image">
+            <div class="gallery-nav">
+                <button class="gallery-btn" id="prevBtn" onclick="prevImage()">이전</button>
+                <span class="gallery-counter" id="galleryCounter">1 / 1</span>
+                <button class="gallery-btn" id="nextBtn" onclick="nextImage()">다음</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 전역 변수
         let sessionId = null;
@@ -332,11 +513,36 @@
         const messagesDiv = document.getElementById('messages');
         const chatInput = document.getElementById('chatInput');
         const sendBtn = document.getElementById('sendBtn');
+        const collectionBadge = document.getElementById('collectionBadge');
+
+        // Collection indicator 업데이트
+        function updateCollectionIndicator() {
+            const selectedCollections = localStorage.getItem('selected_collections');
+            let collections = selectedCollections ? JSON.parse(selectedCollections) : null;
+
+            if (!collections || collections.length === 0) {
+                // 기본값: 모든 활성 컬렉션
+                collectionBadge.textContent = '전체 (기본)';
+            } else if (collections.length === 1) {
+                // 단일 컬렉션
+                const collectionNames = {
+                    'chungjinkorea': '청진코리아',
+                    'onehago': '원하고'
+                };
+                collectionBadge.textContent = collectionNames[collections[0]] || collections[0];
+            } else {
+                // 다중 컬렉션
+                collectionBadge.textContent = `${collections.length}개 컬렉션`;
+            }
+        }
 
         // 초기화
         async function init() {
             // 메시지 영역 초기화 (이전 대화 내역 제거)
             messagesDiv.innerHTML = '';
+
+            // Collection indicator 업데이트
+            updateCollectionIndicator();
 
             try {
                 const response = await fetch(`${API_BASE}/chat/create_session`, {
@@ -397,14 +603,21 @@
             const loadingId = showLoading();
 
             try {
+                // localStorage에서 선택된 컬렉션 읽기
+                const selectedCollections = localStorage.getItem('selected_collections');
+                const collections = selectedCollections ? JSON.parse(selectedCollections) : ['onehago_v2'];
+
                 // API 호출
+                const requestBody = {
+                    session_id: sessionId,
+                    query: query,
+                    collections: collections  // Always include collections
+                };
+
                 const response = await fetch(`${API_BASE}/chat/query`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        session_id: sessionId,
-                        query: query
-                    })
+                    body: JSON.stringify(requestBody)
                 });
 
                 const data = await response.json();
@@ -441,15 +654,25 @@
             return messageDiv;
         }
 
-        // 제품 표시
+        // 제품 표시 - 단계적 로딩 (Progressive Loading)
+        // 한 번에 10개씩 로드하여 성능 최적화
+        let currentProducts = []; // 현재 표시할 제품 전체 목록
+        let displayedCount = 0;   // 현재까지 표시된 제품 개수
+        const PRODUCTS_PER_LOAD = 10; // 한 번에 로드할 제품 개수 (고정)
+
         function displayProducts(products) {
             if (products.length === 0) {
                 addMessage('assistant', '검색 결과가 없습니다. 다른 키워드로 검색해보세요.');
                 return;
             }
 
+            // 상태 초기화
+            currentProducts = products;
+            displayedCount = 0;
+
             const messageDiv = document.createElement('div');
             messageDiv.className = 'message assistant';
+            messageDiv.id = 'products-container-' + Date.now();
 
             // 결과 개수 헤더
             const headerHTML = `
@@ -457,38 +680,170 @@
                 <div class="message-content">총 ${products.length}개 제품을 찾았습니다.</div>
             `;
 
-            // 제품 그리드
-            const gridHTML = products.map(product => {
+            messageDiv.innerHTML = headerHTML + `<div class="product-grid" id="product-grid"></div>`;
+            messagesDiv.appendChild(messageDiv);
+
+            // 초기 10개 로드
+            loadMoreProducts();
+        }
+
+        function loadMoreProducts() {
+            const productGrid = document.getElementById('product-grid');
+            if (!productGrid) return;
+
+            // 다음 10개 제품 가져오기
+            const nextProducts = currentProducts.slice(displayedCount, displayedCount + PRODUCTS_PER_LOAD);
+
+            if (nextProducts.length === 0) {
+                // 더 이상 로드할 제품이 없으면 감지 영역 제거
+                const loadMoreTrigger = document.getElementById('load-more-trigger');
+                if (loadMoreTrigger) loadMoreTrigger.remove();
+                return;
+            }
+
+            // 제품 카드 생성
+            const gridHTML = nextProducts.map(product => {
                 const specs = product.specifications || {};
-                const images = product.images || [];
-                const imageUrl = images.length > 0 ? images[0].url : '/placeholder.png';
+
+                // Use image_urls array from enhanced API response
+                const imageUrls = product.image_urls || [];
+                const mainImageUrl = imageUrls.length > 0 ? imageUrls[0] : '/placeholder.png';
 
                 // 기본 이미지 URL 처리
-                const finalImageUrl = imageUrl.startsWith('http')
-                    ? imageUrl
-                    : `${API_BASE}/${imageUrl}`;
+                const finalImageUrl = mainImageUrl.startsWith('http')
+                    ? mainImageUrl
+                    : `${API_BASE}/${mainImageUrl}`;
+
+                // Convert all image URLs to full paths
+                const fullImageUrls = imageUrls.map(url =>
+                    url.startsWith('http') ? url : `${API_BASE}/${url}`
+                );
+
+                const cardId = `card-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+
+                // 디버깅: 이미지 URL 로그
+                console.log(`Product ${product.product_name}: ${finalImageUrl}, Total images: ${fullImageUrls.length}`);
 
                 return `
-                    <div class="product-card" onclick="showProductDetail('${product.idx}')">
+                    <div class="product-card">
                         <img
+                            id="${cardId}"
                             src="${finalImageUrl}"
                             alt="${product.product_name}"
-                            class="product-image"
-                            onerror="this.src='/placeholder.png'"
+                            class="product-image loading"
+                            loading="lazy"
+                            onload="handleImageLoad('${cardId}')"
+                            onerror="handleImageError('${cardId}')"
+                            onclick="openGallery(${JSON.stringify(fullImageUrls).replace(/"/g, '&quot;')})"
+                            style="cursor: ${fullImageUrls.length > 1 ? 'pointer' : 'default'};"
                         >
-                        <div class="product-info">
+                        <div class="product-info" onclick="showProductDetail('${product.idx}')">
                             <div class="product-name">${product.product_name || '이름 없음'}</div>
-                            <div class="product-spec">재질: ${specs['재질(원료)'] || 'N/A'}</div>
+                            <div class="product-spec">재질: ${product.material || 'N/A'}</div>
                             <div class="product-spec">용량: ${specs.capacity || 'N/A'}</div>
                             <div class="product-spec">네크: ${specs.neck_size || 'N/A'}</div>
+                            ${specs.moq ? `<div class="product-spec">MOQ: ${specs.moq}</div>` : ''}
+                            ${product.company && product.company.name ? `<div class="product-spec">제조사: ${product.company.name}</div>` : ''}
+                            ${product.company && product.company.phone ? `<div class="product-spec">연락처: ${product.company.phone}</div>` : ''}
                             <div class="product-code">${product.product_code || ''}</div>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            messageDiv.innerHTML = headerHTML + `<div class="product-grid">${gridHTML}</div>`;
-            messagesDiv.appendChild(messageDiv);
+            // 그리드에 추가
+            productGrid.insertAdjacentHTML('beforeend', gridHTML);
+            displayedCount += nextProducts.length;
+
+            // 각 이미지에 타임아웃 설정 (5초 후 자동 중단)
+            nextProducts.forEach((product, index) => {
+                const cardId = productGrid.children[displayedCount - nextProducts.length + index]?.querySelector('img')?.id;
+                if (cardId) {
+                    setupImageTimeout(cardId);
+                }
+            });
+
+            // 더 로드할 제품이 있으면 감지 영역 추가
+            if (displayedCount < currentProducts.length) {
+                // 기존 감지 영역 제거
+                const existingTrigger = document.getElementById('load-more-trigger');
+                if (existingTrigger) existingTrigger.remove();
+
+                // 새 감지 영역 추가
+                const loadMoreTrigger = document.createElement('div');
+                loadMoreTrigger.id = 'load-more-trigger';
+                loadMoreTrigger.style.height = '10px';
+                loadMoreTrigger.style.marginTop = '20px';
+                loadMoreTrigger.innerHTML = `
+                    <div style="text-align: center; color: var(--color-text-secondary); font-size: var(--font-size-small);">
+                        ${displayedCount} / ${currentProducts.length} 표시 중... 스크롤하여 더 보기
+                    </div>
+                `;
+                productGrid.parentElement.appendChild(loadMoreTrigger);
+
+                // Intersection Observer로 스크롤 감지
+                observeLoadMore(loadMoreTrigger);
+            }
+        }
+
+        // Intersection Observer로 자동 로딩
+        function observeLoadMore(element) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // 감지 영역이 보이면 다음 10개 로드
+                        loadMoreProducts();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                rootMargin: '100px' // 100px 전에 미리 로드
+            });
+
+            observer.observe(element);
+        }
+
+        // 이미지 로드 성공 핸들러
+        function handleImageLoad(cardId) {
+            const img = document.getElementById(cardId);
+            if (img) {
+                img.classList.remove('loading');
+                img.classList.add('loaded');
+            }
+        }
+
+        // 이미지 로드 실패 핸들러
+        function handleImageError(cardId) {
+            const img = document.getElementById(cardId);
+            if (img) {
+                // 애니메이션 즉시 중단
+                img.classList.remove('loading');
+
+                // 회색 배경으로 표시 (이미지 없음 표시)
+                img.style.background = 'var(--color-bg-secondary)';
+                img.style.display = 'flex';
+                img.style.alignItems = 'center';
+                img.style.justifyContent = 'center';
+
+                // "이미지 없음" 텍스트 표시를 위해 alt 속성 유지
+                img.alt = '이미지 없음';
+
+                // src를 빈 값으로 설정하여 더 이상 로드 시도 안함
+                img.src = '';
+
+                console.warn(`이미지 로드 실패: ${cardId}`);
+            }
+        }
+
+        // 타임아웃으로 로딩 애니메이션 강제 중단 (5초 후)
+        function setupImageTimeout(cardId) {
+            setTimeout(() => {
+                const img = document.getElementById(cardId);
+                if (img && img.classList.contains('loading')) {
+                    console.warn(`이미지 로드 타임아웃: ${cardId}`);
+                    handleImageError(cardId);
+                }
+            }, 5000); // 5초 타임아웃
         }
 
         // 제품 상세 (향후 구현)
@@ -524,6 +879,68 @@
                 behavior: 'smooth'
             });
         }
+
+        // ===== Image Gallery Functions =====
+        let galleryImages = [];
+        let currentImageIndex = 0;
+
+        function openGallery(imageUrls) {
+            galleryImages = imageUrls;
+            currentImageIndex = 0;
+            updateGalleryImage();
+            document.getElementById('galleryModal').classList.add('active');
+        }
+
+        function closeGallery() {
+            document.getElementById('galleryModal').classList.remove('active');
+            galleryImages = [];
+            currentImageIndex = 0;
+        }
+
+        function prevImage() {
+            if (currentImageIndex > 0) {
+                currentImageIndex--;
+                updateGalleryImage();
+            }
+        }
+
+        function nextImage() {
+            if (currentImageIndex < galleryImages.length - 1) {
+                currentImageIndex++;
+                updateGalleryImage();
+            }
+        }
+
+        function updateGalleryImage() {
+            const galleryImage = document.getElementById('galleryImage');
+            const galleryCounter = document.getElementById('galleryCounter');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+
+            galleryImage.src = galleryImages[currentImageIndex];
+            galleryCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
+
+            prevBtn.disabled = currentImageIndex === 0;
+            nextBtn.disabled = currentImageIndex === galleryImages.length - 1;
+        }
+
+        // Close gallery on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeGallery();
+            } else if (e.key === 'ArrowLeft') {
+                prevImage();
+            } else if (e.key === 'ArrowRight') {
+                nextImage();
+            }
+        });
+
+        // Close gallery on background click
+        document.getElementById('galleryModal').addEventListener('click', (e) => {
+            if (e.target.id === 'galleryModal') {
+                closeGallery();
+            }
+        });
 
         // 초기화 실행
         init();

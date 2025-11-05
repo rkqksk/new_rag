@@ -1,0 +1,94 @@
+# Multi-Collection Registry
+# Manages data sources for selective routing
+
+collections:
+  chungjinkorea:
+    name: "청진코리아"
+    data_path: "data/crawled/chungjinkorea"
+    description: "청진코리아 용기 제품 (Bottle, Jar, Cap, Pump)"
+    enabled: true
+    embedded: true
+    total_documents: 857
+    categories:
+      - Bottle
+      - Jar
+      - Cap
+      - Pump
+    last_updated: "2025-11-04"
+    collection_name: "products"  # Legacy name, kept for compatibility
+
+  onehago:
+    name: "원하고 (Legacy)"
+    data_path: "data/crawled/onehago/crawled/production"
+    description: "원하고 포장 용기 (packaging only) - Legacy version without enhanced metadata"
+    enabled: false
+    embedded: true
+    total_documents: 22871
+    categories:
+      - packaging
+    last_updated: "2025-11-04"
+    collection_name: "onehago"
+
+  onehago_v2:
+    name: "원하고 (Enhanced)"
+    data_path: "data/crawled/onehago/crawled/production"
+    description: "원하고 포장 용기 - Enhanced with parsed specs (neck_size, capacity, materials) and image metadata"
+    enabled: true
+    embedded: true
+    total_documents: 22871
+    categories:
+      - packaging
+    last_updated: "2025-11-04"
+    collection_name: "onehago_v2"
+
+  freemold:
+    name: "프리몰드"
+    data_path: "data/crawled/freemold"
+    description: "프리몰드 제품"
+    enabled: false  # Not yet embedded
+    embedded: false
+    total_documents: 0
+    categories: []
+    last_updated: null
+    collection_name: "freemold"
+
+  cosmorning:
+    name: "코스모닝"
+    data_path: "data/crawled/cosmorning"
+    description: "코스모닝 제품"
+    enabled: false
+    embedded: false
+    total_documents: 0
+    categories: []
+    last_updated: null
+    collection_name: "cosmorning"
+
+  jangup:
+    name: "장업"
+    data_path: "data/crawled/jangup"
+    description: "장업 제품"
+    enabled: false
+    embedded: false
+    total_documents: 0
+    categories: []
+    last_updated: null
+    collection_name: "jangup"
+
+  plastics_kr:
+    name: "플라스틱넷"
+    data_path: "data/crawled/plastics_kr"
+    description: "플라스틱넷 제품"
+    enabled: false
+    embedded: false
+    total_documents: 0
+    categories: []
+    last_updated: null
+    collection_name: "plastics_kr"
+
+# Default collection for backward compatibility
+default_collection: "products"
+
+# Active collections (for quick filtering)
+active_collections:
+  - chungjinkorea
+  - onehago_v2
