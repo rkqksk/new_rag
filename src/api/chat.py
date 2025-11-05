@@ -158,7 +158,14 @@ def get_rag_pipeline() -> RAGPipeline:
                 return documents
 
         embedding_service = EmbeddingService(model_name='all-MiniLM-L6-v2')
-        qdrant_client = QdrantClient(url="http://localhost:6333")
+
+        # Docker 컨테이너에서 Mac의 Qdrant 접근: host.docker.internal 사용
+        # Mac 로컬에서는 localhost 사용
+        qdrant_host = os.getenv('QDRANT_HOST', 'host.docker.internal')
+        qdrant_port = os.getenv('QDRANT_HTTP_PORT', '6333')
+        qdrant_url = f"http://{qdrant_host}:{qdrant_port}"
+
+        qdrant_client = QdrantClient(url=qdrant_url)
 
         _rag_pipeline = RAGPipeline(
             loader=SimpleLoader(),
