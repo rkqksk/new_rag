@@ -222,3 +222,4 @@ temp/
 # Backup files
 frontend/*.backup*
 frontend/chat.html.backup_*
+SuperClaude_Framework/
