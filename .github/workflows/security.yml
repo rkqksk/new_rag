@@ -80,7 +80,7 @@ jobs:
 
       - name: Run Bandit SAST scan
         run: |
-          bandit -r app/ agents/ \
+          bandit -r src/ app/ agents/ scripts/ \
             -f json -o bandit-report.json \
             --exit-zero \
             --confidence-level medium \
@@ -88,7 +88,7 @@ jobs:
 
       - name: Generate SARIF report
         run: |
-          bandit -r app/ agents/ \
+          bandit -r src/ app/ agents/ scripts/ \
             -f sarif -o bandit.sarif \
             --exit-zero \
             --confidence-level medium \
@@ -362,6 +362,7 @@ jobs:
           echo "| Secrets | ${{ needs.secrets.result }} |" >> $GITHUB_STEP_SUMMARY
 
       - name: Send Slack notification
+        if: env.SLACK_WEBHOOK_URL != ''
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
