@@ -3,6 +3,8 @@
 **Production-grade Retrieval-Augmented Generation system with SKILL-based architecture.**
 
 > **For Developers**: See `CLAUDE.md` for quick reference and symbol system.
+>
+> **한국어 지원**: Korean language support enabled for chat interface and documentation.
 
 ---
 
@@ -38,6 +40,45 @@ cd frontend && python3 -m http.server 8080
 ```
 
 **Detailed Guide**: `docs/QUICK_START.md`
+
+---
+
+## Development with Claude Code
+
+This project is optimized for **Claude Code** (CLI and Web).
+
+### Claude Code CLI
+
+```bash
+# Start in project directory
+cd /path/to/rag-enterprise
+claude-code
+
+# Project configuration is auto-loaded:
+# - .claude/skills/ - Custom skills (rag-pipeline, manufacturing-expert)
+# - .mcp.json - MCP server config (filesystem)
+# - CLAUDE.md - Project guidelines & symbol system
+```
+
+### Claude Code Web
+
+**Repository**: Push to GitHub and open in [Claude Code Web](https://claude.ai/code)
+
+**Synced files**:
+- `.claude/` - Skills and commands
+- `.mcp.json` - MCP server configuration
+- `CLAUDE.md` - Development guidelines
+- `docs/` - Architecture and policies
+
+**Quick commands**:
+```
+/workflow rag-query
+/component skills
+§rag.status
+§arch.overview
+```
+
+**Symbol system**: Use `§{category}.{section}` for efficient documentation access (see `CLAUDE.md`)
 
 ---
 

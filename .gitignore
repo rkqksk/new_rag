@@ -63,10 +63,14 @@ yarn-error.log*
 # ============================================
 # Claude Code & AI Tools
 # ============================================
-.claude/
+# .claude/ and .mcp.json are tracked for Claude Code Web sync
 .checkpoints/
 .mcp.profile.current
-.mcp.json
+
+# Claude Code local cache and temp files
+.claude/cache/
+.claude/.mcp.*
+.claude/*.log
 
 # ============================================
 # Database & Data
@@ -145,8 +149,8 @@ checkpoints/
 *.log
 logs/
 *.out
-*_REPORT.md
-*_DEBUGGING_*.md
+/*_REPORT.md
+/*_DEBUGGING_*.md
 *_results.json
 benchmark_*.json
 
@@ -198,10 +202,11 @@ chromedriver.*
 /chromedriver*
 
 # ============================================
-# Claude Code Generated
+# Claude Code Generated (Temporary)
 # ============================================
 claudedocs/
 claude-code/
+SuperClaude_Framework/
 
 # ============================================
 # Archives
