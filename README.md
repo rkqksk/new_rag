@@ -15,6 +15,7 @@
 - 🤖 Multi-model support (Ollama: qwen2.5:7b-instruct)
 - 🔌 Domain expert plugins (manufacturing, packaging)
 - 📊 Token-efficient symbol architecture
+- 🌏 **NEW**: Korean language support for international users
 
 ---
 
