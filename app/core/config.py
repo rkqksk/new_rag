@@ -28,16 +28,28 @@ class QdrantConfig(BaseSettings):
     port: int = Field(default=6333, env="QDRANT_PORT")
     products_collection: str = Field(default="products_multimodal")
 
+class DebugConfig(BaseSettings):
+    """Debug and observability settings"""
+    enabled: bool = Field(default=False, env="DEBUG_ENABLED")
+    log_requests: bool = Field(default=True, env="DEBUG_LOG_REQUESTS")
+    log_responses: bool = Field(default=False, env="DEBUG_LOG_RESPONSES")  # Can be verbose
+    log_sql: bool = Field(default=True, env="DEBUG_LOG_SQL")
+    log_cache: bool = Field(default=True, env="DEBUG_LOG_CACHE")
+    profile_requests: bool = Field(default=True, env="DEBUG_PROFILE_REQUESTS")
+    slow_request_threshold_ms: int = Field(default=500, env="DEBUG_SLOW_REQUEST_MS")
+    explain_search: bool = Field(default=True, env="DEBUG_EXPLAIN_SEARCH")
+
 class Settings(BaseSettings):
     app_name: str = Field(default="RAG Enterprise API")
     environment: str = Field(default="development")
     debug: bool = Field(default=False)
     api_prefix: str = Field(default="/api/v1")
-    
+
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     redis: RedisConfig = Field(default_factory=RedisConfig)
     qdrant: QdrantConfig = Field(default_factory=QdrantConfig)
-    
+    debug_config: DebugConfig = Field(default_factory=DebugConfig)
+
     class Config:
         env_file = ".env"
 
