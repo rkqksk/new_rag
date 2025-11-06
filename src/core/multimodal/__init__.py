@@ -22,6 +22,14 @@ from .end_to_end_pipeline import (
     PipelineResult
 )
 
+# Phase 6: Image and Shape Matching
+from .image_matching_service import ImageMatchingService, ImageMatch
+from .tri_modal_search_service import (
+    TriModalSearchService,
+    TriModalMatch,
+    SearchQuery
+)
+
 __all__ = [
     # Embedding
     'MultiModalEmbeddingService',
@@ -39,5 +47,11 @@ __all__ = [
     'OCRResult',
     # Pipeline
     'EndToEndPipeline',
-    'PipelineResult'
+    'PipelineResult',
+    # Phase 6: Image and Shape Matching
+    'ImageMatchingService',
+    'ImageMatch',
+    'TriModalSearchService',
+    'TriModalMatch',
+    'SearchQuery',
 ]
