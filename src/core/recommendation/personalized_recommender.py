@@ -27,6 +27,8 @@ class RecommendationConfig:
     material_importance: float = 0.8
     neck_importance: float = 0.9
     category_importance: float = 0.7
+    supplier_importance: float = 0.5  # NEW: For adaptive weights
+    price_importance: float = 0.6     # NEW: For adaptive weights
 
     # Compatibility
     enable_compatibility_boost: bool = True

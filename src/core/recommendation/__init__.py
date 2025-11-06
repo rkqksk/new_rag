@@ -12,11 +12,21 @@ Features:
 from .user_profile import UserProfile, PreferenceExtractor
 from .personalized_recommender import PersonalizedRecommender, RecommendationConfig
 from .integrated_service import PersonalizationService
+from .adaptive_weights import AdaptiveWeightsLearner, UserSearchFocus
+from .global_analytics import GlobalAnalytics
+from .compatibility_filter import CompatibilityFilter, CompatibilityRules
+from .advanced_personalization_service import AdvancedPersonalizationService
 
 __all__ = [
     'UserProfile',
     'PreferenceExtractor',
     'PersonalizedRecommender',
     'RecommendationConfig',
-    'PersonalizationService'
+    'PersonalizationService',
+    'AdaptiveWeightsLearner',
+    'UserSearchFocus',
+    'GlobalAnalytics',
+    'CompatibilityFilter',
+    'CompatibilityRules',
+    'AdvancedPersonalizationService'
 ]
