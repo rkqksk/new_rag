@@ -1,59 +1,122 @@
-# tests/
+# RAG Enterprise Backend Tests
 
-이 폴더는 프로젝트의 모든 테스트 코드를 포함합니다. pytest 프레임워크를 사용하여 단위 테스트, 통합 테스트, E2E 테스트를 관리합니다.
+Comprehensive test suite for the RAG Enterprise backend system.
 
-## 📁 폴더 구조
+## Test Structure
 
 ```
 tests/
-├── unit/              # 단위 테스트
-├── integration/       # 통합 테스트
-├── e2e/              # End-to-End 테스트
-├── fixtures/         # 테스트 픽스처 및 목 데이터
-├── conftest.py       # pytest 설정 및 공통 픽스처
-└── README.md
+├── conftest.py                 # Pytest configuration and fixtures
+├── unit/                       # Unit tests
+│   ├── repositories/          # Repository layer tests
+│   │   ├── test_qdrant_repository.py
+│   │   ├── test_redis_repository.py
+│   │   └── test_postgres_repository.py
+│   └── services/              # Service layer tests
+│       ├── test_search_service.py
+│       ├── test_personalization_service.py
+│       └── test_analytics_service.py
+└── integration/               # Integration tests
+    ├── test_search_api.py
+    ├── test_personalization_api.py
+    ├── test_analytics_api.py
+    └── test_health_endpoints.py
 ```
 
-## 🎯 각 폴더의 역할
+## Running Tests
 
-- **unit/**: 개별 함수/클래스의 독립적인 테스트
-- **integration/**: 여러 모듈 간 상호작용 테스트
-- **e2e/**: 전체 시스템 워크플로우 테스트
-- **fixtures/**: 재사용 가능한 테스트 데이터 및 설정
-- **conftest.py**: 전역 pytest 설정 및 공유 픽스처
-
-## 🚀 빠른 시작
-
+### Run all tests
 ```bash
-# 모든 테스트 실행
-pytest
-
-# 특정 폴더 테스트
-pytest tests/unit
-
-# 커버리지 포함 실행
-pytest --cov=src --cov-report=html
-
-# 상세 출력
-pytest -v
+pytest tests/
 ```
 
-## 📋 커버리지 요구사항
-
-- **최소 커버리지**: 80%
-- **핵심 모듈**: 90% 이상
-- **리포트 생성**: `htmlcov/index.html`
-
-## 📚 상세 문서
-
-- [테스트 가이드](../.claude/testing-guide.md)
-- [픽스처 사용법](../.claude/fixtures-guide.md)
-- [CI/CD 통합](../.claude/ci-cd.md)
-
-## 🔧 주요 명령어
-
+### Run unit tests only
 ```bash
-pytest -k "test_name"     # 특정 테스트 실행
-pytest -m "slow"          # 마커별 실행
-pytest --lf               # 실패한 테스트만 재실행
+pytest tests/unit/ -m unit
 ```
+
+### Run integration tests only
+```bash
+pytest tests/integration/ -m integration
+```
+
+### Run with coverage
+```bash
+pytest tests/ --cov=app --cov-report=html --cov-report=term
+```
+
+### Run specific test file
+```bash
+pytest tests/unit/services/test_search_service.py -v
+```
+
+### Run specific test
+```bash
+pytest tests/unit/services/test_search_service.py::TestSearchService::test_search_with_cache_hit -v
+```
+
+## Test Coverage Target
+
+- **Target**: 95%+ coverage
+- **Current**: Run `pytest --cov=app --cov-report=term` to see current coverage
+
+## Writing Tests
+
+### Unit Test Example
+```python
+@pytest.mark.unit
+class TestMyService:
+    @pytest.fixture
+    def service(self, mock_repo):
+        return MyService(repo=mock_repo)
+    
+    @pytest.mark.asyncio
+    async def test_my_method(self, service):
+        result = await service.my_method()
+        assert result is not None
+```
+
+### Integration Test Example
+```python
+@pytest.mark.integration
+class TestMyAPI:
+    def test_endpoint(self):
+        response = client.post("/api/v1/endpoint", json={...})
+        assert response.status_code == 200
+```
+
+## Fixtures
+
+Available fixtures in `conftest.py`:
+- `sample_product` - Single product data
+- `sample_products` - List of products
+- `sample_search_results` - Qdrant search results
+- `sample_session_id` - Test session ID
+- `sample_user_profile` - User profile data
+- `mock_qdrant_repo` - Mock Qdrant repository
+- `mock_redis_repo` - Mock Redis repository
+- `mock_postgres_repo` - Mock Postgres repository
+- `mock_embedder` - Mock embedding service
+- `mock_reranker` - Mock re-ranker
+- `mock_router` - Mock query router
+- `test_client` - FastAPI test client
+
+## CI/CD Integration
+
+Tests are automatically run in CI/CD pipeline:
+- Pre-commit: Fast unit tests
+- Pre-push: Full test suite
+- GitHub Actions: Full suite + coverage report
+
+## Performance
+
+- Unit tests: ~2-5 seconds total
+- Integration tests: ~5-10 seconds total
+- Full suite: ~10-15 seconds
+
+## Notes
+
+- All database operations are mocked in unit tests
+- Integration tests use TestClient (no real HTTP)
+- Async tests use pytest-asyncio
+- Coverage reports in `htmlcov/` directory

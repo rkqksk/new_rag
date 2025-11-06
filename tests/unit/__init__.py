@@ -1,1 +1,1 @@
-"""Unit tests for RAG Enterprise."""
+"""Unit tests package"""
