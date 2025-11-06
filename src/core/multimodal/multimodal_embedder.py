@@ -101,8 +101,10 @@ class MultiModalEmbeddingService:
 
         # Shape embedder (Phase 6)
         if self.enable_shape:
-            logger.warning("⚠️ Shape embedding not yet implemented (Phase 6)")
+            self._init_shape_embedder()
+        else:
             self.shape_embedder = None
+            self.shape_dim = 0
 
         logger.info("✅ MultiModalEmbeddingService initialized successfully")
         self._log_config()
@@ -152,6 +154,37 @@ class MultiModalEmbeddingService:
             self.image_model = None
             self.image_preprocess = None
 
+    def _init_shape_embedder(self):
+        """Initialize shape embedder"""
+        logger.info("🔶 Loading shape model: ShapeEmbedder")
+
+        try:
+            from ..image_matching.shape_embedder import ShapeEmbedder
+
+            self.shape_embedder = ShapeEmbedder(
+                target_dim=128,
+                use_background_removal=False,  # Can be enabled for better results
+                fourier_coeffs=60
+            )
+
+            if not self.shape_embedder.is_available():
+                logger.warning("⚠️ Shape embedder requires OpenCV")
+                self.enable_shape = False
+                self.shape_embedder = None
+                self.shape_dim = 0
+                return
+
+            # Get embedding dimension
+            self.shape_dim = self.shape_embedder.get_dimension()
+
+            logger.info(f"✅ Shape model loaded: {self.shape_dim}-dim")
+
+        except Exception as e:
+            logger.error(f"❌ Failed to load shape model: {e}")
+            self.enable_shape = False
+            self.shape_embedder = None
+            self.shape_dim = 0
+
     def _log_config(self):
         """Log current configuration"""
         logger.info("=" * 60)
@@ -160,7 +193,8 @@ class MultiModalEmbeddingService:
         logger.info(f"  Text Model: {self.text_model_name} ({self.text_dim}-dim)")
         logger.info(f"  Image Model: {self.image_model_name if self.enable_image else 'Disabled'} "
                    f"({self.image_dim if self.enable_image else 0}-dim)")
-        logger.info(f"  Shape Model: {'Phase 6' if self.enable_shape else 'Disabled'}")
+        logger.info(f"  Shape Model: {'Enabled' if self.enable_shape else 'Disabled'} "
+                   f"({self.shape_dim if self.enable_shape else 0}-dim)")
         logger.info("=" * 60)
 
     # ==================== Text Embedding ====================
@@ -313,6 +347,61 @@ class MultiModalEmbeddingService:
 
         return embeddings
 
+    # ==================== Shape Embedding ====================
+
+    def embed_shape(self, image_path: Union[str, Path]) -> List[float]:
+        """
+        Generate shape embedding from image
+
+        Args:
+            image_path: Path to image file
+
+        Returns:
+            128-dimensional shape embedding vector
+
+        Raises:
+            ValueError: If shape embedding is not enabled
+            FileNotFoundError: If image file not found
+        """
+        if not self.enable_shape:
+            raise ValueError("Shape embedding is not enabled. Requires OpenCV.")
+
+        if not self.shape_embedder:
+            raise RuntimeError("Shape embedder not initialized")
+
+        try:
+            # Generate shape embedding
+            embedding = self.shape_embedder.embed_image(image_path)
+            return embedding
+
+        except Exception as e:
+            logger.error(f"Shape embedding error for {image_path}: {e}")
+            raise
+
+    def embed_shapes_batch(
+        self,
+        image_paths: List[Union[str, Path]],
+        show_progress: bool = True
+    ) -> List[List[float]]:
+        """
+        Batch shape embedding for efficiency
+
+        Args:
+            image_paths: List of image file paths
+            show_progress: Show progress bar
+
+        Returns:
+            List of 128-dimensional shape embeddings
+        """
+        if not self.enable_shape:
+            raise ValueError("Shape embedding is not enabled")
+
+        if not self.shape_embedder:
+            raise RuntimeError("Shape embedder not initialized")
+
+        # Use shape embedder's batch method
+        return self.shape_embedder.embed_batch(image_paths, show_progress=show_progress)
+
     # ==================== Multi-Modal Embedding ====================
 
     def embed(
@@ -355,10 +444,9 @@ class MultiModalEmbeddingService:
         if image and self.enable_image:
             embeddings['image'] = self.embed_image(image)
 
-        # Shape embedding (Phase 6)
+        # Shape embedding
         if shape and self.enable_shape:
-            # embeddings['shape'] = self.embed_shape(shape)
-            logger.warning("Shape embedding not yet implemented (Phase 6)")
+            embeddings['shape'] = self.embed_shape(shape)
 
         if not embeddings:
             raise ValueError("At least one modality (text/image/shape) must be provided")
@@ -444,7 +532,7 @@ class MultiModalEmbeddingService:
             dims["image"] = self.image_dim
 
         if self.enable_shape:
-            dims["shape"] = 128  # Phase 6
+            dims["shape"] = self.shape_dim
 
         return dims
 
