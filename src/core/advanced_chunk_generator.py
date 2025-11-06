@@ -10,7 +10,8 @@ from typing import Dict, List, Optional
 from dataclasses import dataclass, field as dc_field
 
 from src.core.product_classifier import ProductClassifier, ProductCategory as ProdCat, ClassificationResult
-from src.core.chunk_templates import FieldType, FieldExtractor, ChunkTemplate
+from src.core.chunk_templates import FieldType, ChunkTemplate
+from src.core.enhanced_field_extractor import EnhancedFieldExtractor
 from src.core.category_templates import CategoryTemplateRegistry, ProductCategory
 
 
@@ -42,7 +43,7 @@ class AdvancedChunkGenerator:
     def __init__(self):
         """초기화"""
         self.classifier = ProductClassifier()
-        self.field_extractor = FieldExtractor()
+        self.field_extractor = EnhancedFieldExtractor()
         self.template_registry = CategoryTemplateRegistry()
 
     def generate_chunks(self, product: Dict) -> List[AtomicChunk]:

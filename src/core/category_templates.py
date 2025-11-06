@@ -339,6 +339,32 @@ class CategoryTemplateRegistry:
             ),
         ]
 
+        # MOQ (Cap)
+        cap[FieldType.MOQ] = [
+            ChunkTemplate(
+                field_type=FieldType.MOQ,
+                template="최소주문수량 {field}개 (캡)",
+                priority=0.95,
+                search_keywords=["최소주문", "MOQ", "주문량", "수량"]
+            ),
+            ChunkTemplate(
+                field_type=FieldType.MOQ,
+                template="{field}개 이상 주문 가능",
+                priority=0.9,
+                search_keywords=["주문", "수량", "이상"]
+            ),
+        ]
+
+        # PRICE (Cap)
+        cap[FieldType.PRICE] = [
+            ChunkTemplate(
+                field_type=FieldType.PRICE,
+                template="캡 가격 {field}원",
+                priority=0.9,
+                search_keywords=["가격", "단가", "원"]
+            ),
+        ]
+
     # ========== Pump Templates ==========
     def _register_pump_templates(self):
         """Pump 전용 템플릿"""
@@ -419,6 +445,32 @@ class CategoryTemplateRegistry:
                 template="{field} 제조 펌프",
                 priority=0.95,
                 search_keywords=["제조사", "업체", "회사"]
+            ),
+        ]
+
+        # MOQ (Pump)
+        pump[FieldType.MOQ] = [
+            ChunkTemplate(
+                field_type=FieldType.MOQ,
+                template="최소주문수량 {field}개 (펌프)",
+                priority=0.95,
+                search_keywords=["최소주문", "MOQ", "주문량", "수량"]
+            ),
+            ChunkTemplate(
+                field_type=FieldType.MOQ,
+                template="{field}개 이상 주문 가능",
+                priority=0.9,
+                search_keywords=["주문", "수량", "이상"]
+            ),
+        ]
+
+        # PRICE (Pump)
+        pump[FieldType.PRICE] = [
+            ChunkTemplate(
+                field_type=FieldType.PRICE,
+                template="펌프 가격 {field}원",
+                priority=0.9,
+                search_keywords=["가격", "단가", "원"]
             ),
         ]
 
