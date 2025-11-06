@@ -141,10 +141,15 @@ def upload_to_qdrant(
     print("Preparing points...")
     points = []
     for idx, (chunk, embedding) in enumerate(zip(chunks, embeddings)):
+        # Include chunk_text in payload for search results
+        payload = {
+            **chunk['metadata'],
+            'chunk_text': chunk['text']
+        }
         point = PointStruct(
             id=idx,
             vector=embedding.tolist(),
-            payload=chunk['metadata']
+            payload=payload
         )
         points.append(point)
 
