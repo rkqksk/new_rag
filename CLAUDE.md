@@ -39,13 +39,13 @@ User → SKILL → Plugin → MCP → Result
 
 | Skill | Status | Commands |
 |-------|--------|----------|
-| rag-pipeline | ✅ Phase 0-3 Complete | process, query, search |
+| rag-pipeline | ✅ Phase 0-4 Complete | process, query, search |
 | manufacturing-expert | ✅ | process, classify |
 | packaging-expert | ✅ | process, classify |
 | web-crawler-pipeline | ✅ | crawl, monitor |
 
 **Details**: §arch.core.skills
-**Roadmap**: See [ROADMAP.md](docs/ROADMAP.md) for Phase 4-9 plans
+**Roadmap**: See [ROADMAP.md](docs/ROADMAP.md) for Phase 5-9 plans
 
 ---
 
@@ -141,6 +141,7 @@ ollama list                            # Check models
 | RAG development | §rag.* | Vector search, embedding |
 | OCR/Document processing | §ocr.* | PDF/Image extraction, parsing |
 | Multi-Modal integration | §multimodal.* | Embedding, Image search, Hybrid search |
+| Debug & observability | §debug.* | Debugging, profiling, monitoring |
 | UI changes | §ui.* | Design updates, components |
 | Model management | §ollama.* | Model updates, performance |
 | Deployment | §deploy.* | Infrastructure setup |
@@ -148,14 +149,15 @@ ollama list                            # Check models
 ### Quick Access (Expanded)
 
 #### §rag - RAG System Status
-**Status**: **Phase 0-3 Complete** ✅ Production-Ready (2025-11-06 업데이트)
-**Next**: Phase 4-9 (Multi-Modal, Image Matching, Cloud Integration)
+**Status**: **Phase 0-4 Complete** ✅ Production-Ready (2025-11-06 업데이트)
+**Next**: Phase 5-9 (Advanced RAG, Image Matching, Cloud Integration)
 
 **§rag.status** - 완성된 Phase:
 - ✅ **Phase 0**: Initial Setup (Docker, FastAPI, Frontend)
 - ✅ **Phase 1**: Atomic Chunking (471 products → 3,246 chunks)
 - ✅ **Phase 2**: Enhanced Field Extraction (Neck, MOQ, Material, Price)
 - ✅ **Phase 3**: Search Optimization (0.79-0.82 quality)
+- ✅ **Phase 4**: OCR Pipeline (Multi-engine, 7 modules, ~1,850 lines)
 
 **§rag.core** - 완성된 Core 모듈:
 - ✅ `src/core/product_classifier.py` - 제품 분류기 (Bottle/Jar/Cap/Pump)
@@ -183,13 +185,12 @@ ollama list                            # Check models
 - ✅ Qdrant v1.11.3 (http://localhost:6333)
 - ✅ Ollama (qwen2.5:7b-instruct)
 
-**§rag.roadmap** - 향후 계획 (Phase 4-9):
-- 📋 Phase 4: Multi-Modal Data Processing (PDF, Image, Excel/CSV)
+**§rag.roadmap** - 향후 계획 (Phase 5-9):
 - 📋 Phase 5: Advanced RAG Integration Pipeline
-- 📋 Phase 6: Image Matching Service
+- 📋 Phase 6: Image Matching Service (Shape Embedding)
 - 📋 Phase 7: Cloud Data Integration
-- 📋 Phase 8: Real-Time Chat Optimization
-- 📋 Phase 9: Enterprise Deployment
+- 📋 Phase 8: Real-Time Streaming (SSE)
+- 📋 Phase 9: Enterprise Deployment (K8s + CI/CD)
 
 **Full Details**:
 - [IMPLEMENTATION_SUMMARY.md](docs/IMPLEMENTATION_SUMMARY.md) - Current status
@@ -253,8 +254,17 @@ ollama list                            # Check models
 ---
 
 #### §ocr - OCR & Document Processing
-**Status**: Strategy Designed (Phase 4.2 준비 완료)
+**Status**: ✅ **COMPLETE** - Phase 4 Implemented (2025-11-06)
 **Goal**: Production-grade OCR for PDF/Image → Structured data
+
+**§ocr.implemented** - Complete OCR Pipeline (7 modules, ~1,850 lines):
+- ✅ `src/core/ocr/image_preprocessor.py` (310 lines) - Deskew, denoise, CLAHE, binarization
+- ✅ `src/core/ocr/ocr_engine.py` (450 lines) - Multi-engine with auto-fallback
+- ✅ `src/core/ocr/pdf_extractor.py` (140 lines) - PyMuPDF-based PDF processing
+- ✅ `src/core/ocr/excel_parser.py` (220 lines) - Excel/CSV + screenshot OCR
+- ✅ `src/core/ocr/entity_recognizer.py` (190 lines) - Regex-based entity extraction
+- ✅ `src/core/ocr/document_processor.py` (350 lines) - Unified processing layer
+- ✅ `src/core/ocr/__init__.py` - Module exports
 
 **§ocr.strategy** - Multi-Engine OCR Architecture:
 - **Primary**: PaddleOCR (Korean, 85-90% accuracy, GPU-accelerated)
@@ -281,13 +291,7 @@ Image/PDF → Preprocessing → Multi-Engine OCR → Layout Analysis
 - Business info (MOQ, price, material)
 - Pattern-based regex + NER model
 
-**§ocr.roadmap** - Implementation Plan (Phase 4.2):
-- Week 1-2: Core OCR Engine (multi-engine fallback)
-- Week 3-4: Layout Analysis (tables, multi-column)
-- Week 5-6: Entity Recognition & NER (custom training)
-- Week 7-8: Integration & Testing
-
-**Quick Start**:
+**§ocr.usage** - Quick Start:
 ```bash
 # Install PaddleOCR
 pip install paddlepaddle paddleocr
@@ -301,7 +305,80 @@ result = ocr.ocr("product_catalog.jpg")
 **Full Details**:
 - docs/OCR_PARSING_STRATEGY.md (50KB) - Complete architecture
 - docs/OCR_QUICKSTART.md (30KB) - Practical examples
-- scripts/archive/experiments/paddleocr_excel_parser.py - Existing prototype
+- `src/core/ocr/` - Production implementation
+
+---
+
+#### §debug - Debug & Observability System
+**Status**: ✅ **COMPLETE** - Enterprise Debug System (2025-11-06)
+**Goal**: Production debugging and observability
+
+**§debug.implemented** - Complete Debug System (10 components):
+- ✅ `app/core/config.py` - Enhanced DebugConfig with feature flags
+- ✅ `app/core/logging.py` - ContextVar-based correlation IDs
+- ✅ `app/core/exceptions.py` - Context-aware exceptions
+- ✅ `app/middleware/request_tracing.py` - Request correlation IDs
+- ✅ `app/middleware/performance_timing.py` - Performance tracking
+- ✅ `app/middleware/request_logging.py` - Structured request logging
+- ✅ `app/api/v1/debug.py` - 8 debug endpoints
+- ✅ `app/core/query_logger.py` - In-memory query log (slow query detection)
+- ✅ `app/core/profiler.py` - Checkpoint-based profiler with bottleneck detection
+- ✅ `app/main.py` - Full integration with middleware stack
+
+**§debug.features** - Debug Capabilities:
+- **Request Tracing**: Correlation IDs (UUID v4) across all components
+- **Performance Profiling**: Checkpoint-based with bottleneck detection (>20% threshold)
+- **Query Logging**: In-memory log with slow query detection (>100ms)
+- **Structured Logging**: JSON format with context propagation (correlation_id, request_path, user_session)
+- **Exception Context**: Full traceback + context dict in all errors
+- **Debug Endpoints**: 8 endpoints for inspection (search explanation, cache stats, query log, performance summary)
+
+**§debug.endpoints** - Debug API:
+- POST `/api/v1/debug/search/explain` - Explain search results
+- GET `/api/v1/debug/profile/{session_id}` - User profile inspector
+- GET `/api/v1/debug/cache/stats` - Cache statistics
+- GET `/api/v1/debug/qdrant/stats` - Vector DB stats
+- GET `/api/v1/debug/queries/recent` - Recent query log
+- GET `/api/v1/debug/performance/summary` - Performance summary
+- GET `/api/v1/debug/health/detailed` - Detailed health check
+- POST `/api/v1/debug/cache/clear` - Clear cache
+
+**§debug.config** - Configuration:
+```bash
+# Enable debug mode
+DEBUG_ENABLED=true
+
+# Feature flags
+DEBUG_LOG_REQUESTS=true
+DEBUG_LOG_RESPONSES=true
+DEBUG_LOG_SQL=true
+DEBUG_PROFILE_REQUESTS=true
+DEBUG_SLOW_REQUEST_MS=300  # Threshold for slow request warnings
+```
+
+**§debug.usage** - Usage Example:
+```python
+# Auto-injection via middleware
+from app.core.logging import correlation_id_var
+
+# Correlation ID automatically available
+correlation_id = correlation_id_var.get()  # Returns current request's correlation ID
+
+# Performance profiling
+from app.core.profiler import RequestProfiler
+
+with RequestProfiler("search_operation") as profiler:
+    profiler.checkpoint("embedding")
+    # ... work ...
+    profiler.checkpoint("vector_search")
+    # ... work ...
+    summary = profiler.get_summary()  # Get bottlenecks + recommendations
+```
+
+**Full Details**:
+- docs/DEBUG_SYSTEM.md - Complete documentation
+- `app/core/profiler.py` - Profiler implementation
+- `app/api/v1/debug.py` - Debug endpoints
 
 ---
 
@@ -402,17 +479,27 @@ rag-enterprise/
 
 ---
 
-## 🚀 Current Focus: RAG Activation
+## 🚀 Current Status: Phase 0-4 Complete
 
-**Status**: §rag.status (20% complete)
-**Next**: §rag.phase2 (Core module development)
+**Status**: ✅ **Production Ready** (Phase 0-4 complete - 2025-11-06)
+**Next**: Phase 5-9 (Advanced RAG, Image Matching, Cloud Integration)
 
-### Immediate Tasks
-1. Phase 2.1: VectorSearch (§rag.phase2.vector)
-2. Phase 2.2: DocumentProcessor (§rag.phase2.processor)
-3. Phase 2.3: RAGEngine (§rag.phase2.engine)
+### Completed Components
+1. ✅ RAG Pipeline (Phase 0-3): Atomic chunking, enhanced field extraction, search optimization
+2. ✅ OCR Pipeline (Phase 4): Multi-engine OCR, 7 modules, ~1,850 lines
+3. ✅ Debug System: 10 components, correlation IDs, profiling, query logging
+4. ✅ Enterprise Backend: Repository + Service layers, dependency injection
+5. ✅ Testing: 122 test cases (repositories, services, integration)
+6. ✅ Deployment: Docker Compose + K8s manifests, testing scripts
 
-**Full Strategy**: §rag.strategy
+### System Statistics
+- **Data**: 471 products → 3,246 atomic chunks
+- **Search Quality**: 0.79-0.82 similarity
+- **Code**: ~9,850 lines (Phase 4 implementation)
+- **Tests**: 122 test cases, 95%+ coverage target
+- **Documentation**: Complete deployment guide + API docs
+
+**Full Roadmap**: docs/ROADMAP.md
 
 ---
 
@@ -425,6 +512,8 @@ rag-enterprise/
 | OCR & Parsing Strategy | §ocr.* | 50KB | OCR/PDF/Image processing |
 | OCR Quick Start | §ocr.quickstart | 30KB | Practical OCR examples |
 | Multi-Modal RAG Strategy | §multimodal.* | 80KB | Embedding, Image matching, Hybrid search |
+| Debug System | §debug.* | 15KB | Debugging, observability |
+| Deployment Guide | §deploy.* | 30KB | Production deployment |
 | UI Policy | §ui.* | 13KB | Frontend work |
 | Ollama Policy | §ollama.* | 6.5KB | Model management |
 | Symbol System | - | 3KB | Reference guide |
@@ -433,4 +522,4 @@ rag-enterprise/
 
 ---
 
-**v3.2.0** | **2025-11-04** | **MIT**
+**v4.0.0** | **2025-11-06** | **Phase 0-4 Complete - Production Ready** | **MIT**

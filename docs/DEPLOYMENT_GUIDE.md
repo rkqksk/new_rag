@@ -1,352 +1,668 @@
-# Enterprise Deployment Guide
+# RAG Enterprise - Production Deployment Guide
 
-**RAG Enterprise - Production Deployment**
+**Version**: 1.0  
+**Last Updated**: 2025-11-06  
+**Status**: Production-Ready
 
 ---
 
-## 🚀 Quick Start
+## 📋 Table of Contents
 
-### Local Development
+1. [Prerequisites](#prerequisites)
+2. [Quick Start](#quick-start)
+3. [Environment Configuration](#environment-configuration)
+4. [Docker Deployment](#docker-deployment)
+5. [Testing Deployment](#testing-deployment)
+6. [Production Deployment](#production-deployment)
+7. [Monitoring & Maintenance](#monitoring--maintenance)
+8. [Troubleshooting](#troubleshooting)
+
+---
+
+## Prerequisites
+
+### System Requirements
+
+**Minimum** (Development):
+- CPU: 4 cores
+- RAM: 8GB
+- Disk: 20GB
+- OS: Linux (Ubuntu 20.04+), macOS, Windows (WSL2)
+
+**Recommended** (Production):
+- CPU: 8+ cores
+- RAM: 16GB+
+- Disk: 50GB+ SSD
+- GPU: NVIDIA GPU with CUDA (optional, for OCR acceleration)
+
+### Software Requirements
 
 ```bash
-# Start services
+# Docker & Docker Compose
+docker --version  # >= 20.10
+docker-compose --version  # >= 2.0
+
+# Python (for local development)
+python --version  # >= 3.11
+
+# PostgreSQL Client (for migrations)
+psql --version  # >= 15
+
+# Redis CLI (for cache management)
+redis-cli --version  # >= 7.0
+```
+
+### Installation
+
+**Ubuntu/Debian**:
+```bash
+# Docker
+curl -fsSL https://get.docker.com | sh
+sudo usermod -aG docker $USER
+
+# Docker Compose
+sudo apt-get install docker-compose-plugin
+
+# PostgreSQL Client
+sudo apt-get install postgresql-client
+
+# Redis CLI
+sudo apt-get install redis-tools
+```
+
+**macOS**:
+```bash
+# Docker Desktop
+brew install --cask docker
+
+# PostgreSQL Client
+brew install postgresql@15
+
+# Redis CLI
+brew install redis
+```
+
+---
+
+## Quick Start
+
+### 1. Clone Repository
+
+```bash
+git clone https://github.com/your-org/rag-enterprise.git
+cd rag-enterprise
+```
+
+### 2. Configure Environment
+
+```bash
+# Copy environment template
+cp .env.example .env
+
+# Edit configuration
+nano .env  # or vim, code, etc.
+```
+
+**Minimal `.env` for development**:
+```bash
+ENVIRONMENT=development
+DEBUG_ENABLED=true
+
+DB_HOST=postgres
+DB_PASSWORD=your_secure_password
+
+REDIS_HOST=redis
+
+QDRANT_HOST=qdrant
+```
+
+### 3. Start Services
+
+```bash
+# Option A: Quick start (automated)
+./deploy.sh development
+
+# Option B: Manual start
 docker-compose up -d
-
-# Run API server
-python run_chat_server.py
-
-# Open frontend
-open http://localhost:8080/chat.html
 ```
 
-### Production Deployment
+### 4. Verify Deployment
 
 ```bash
-# Build production image
-docker build -f Dockerfile.prod -t rag-enterprise:latest .
+#Run test suite
+./test_system.sh
+```
 
-# Deploy to Kubernetes
-kubectl apply -f k8s/
+**Expected Output**:
+```
+✓ Qdrant is running
+✓ Redis is running
+✓ PostgreSQL is running
+✓ Backend is running
+✓ All tests passed!
+```
 
-# Check status
-kubectl get pods -l app=rag-enterprise
+### 5. Access Services
+
+```
+Frontend:  http://localhost:8080
+API:       http://localhost:8001
+API Docs:  http://localhost:8001/api/v1/docs
+Qdrant UI: http://localhost:6333/dashboard
 ```
 
 ---
 
-## 🏗️ Architecture
+## Environment Configuration
 
-```
-┌─────────────────────────────────────────┐
-│         Load Balancer (Nginx)           │
-└──────────────┬──────────────────────────┘
-               │
-      ┌────────┴────────┐
-      │   API Pods      │  (Auto-scaling 2-10)
-      │  (Python/FastAPI)│
-      └────────┬────────┘
-               │
-    ┌──────────┼──────────┐
-    │          │          │
-┌───▼───┐ ┌───▼───┐ ┌───▼────┐
-│Qdrant │ │ Redis │ │ Ollama │
-│ (VDB) │ │(Cache)│ │  (LLM) │
-└───────┘ └───────┘ └────────┘
-```
+### Development Environment
 
----
-
-## 📦 Components
-
-### 1. API Service
-- **Replicas**: 2-10 (auto-scaling)
-- **Resources**: 2Gi RAM, 1 CPU (request)
-- **Port**: 8001
-- **Health**: /health, /ready
-
-### 2. Qdrant (Vector Database)
-- **Type**: StatefulSet
-- **Storage**: 50Gi PVC
-- **Resources**: 4Gi RAM, 2 CPU
-- **Ports**: 6333 (HTTP), 6334 (gRPC)
-
-### 3. Redis (Cache)
-- **Type**: Deployment
-- **Resources**: 1Gi RAM, 500m CPU
-- **Port**: 6379
-
-### 4. Ollama (LLM)
-- **Type**: Deployment (GPU)
-- **Model**: qwen2.5:7b-instruct
-- **Resources**: 8Gi RAM, 4 CPU, 1 GPU
-
----
-
-## 🔧 Configuration
-
-### Environment Variables
-
+**`.env` for development**:
 ```bash
-# Qdrant
-QDRANT_HOST=qdrant-service
-QDRANT_PORT=6333
+# Application
+ENVIRONMENT=development
+DEBUG_ENABLED=true
+
+# Debug Configuration
+DEBUG_LOG_REQUESTS=true
+DEBUG_LOG_RESPONSES=true
+DEBUG_LOG_SQL=true
+DEBUG_PROFILE_REQUESTS=true
+DEBUG_SLOW_REQUEST_MS=300
+
+# Database
+DB_HOST=postgres
+DB_PORT=5432
+DB_NAME=rag_enterprise
+DB_USER=postgres
+DB_PASSWORD=dev_password_change_me
+DB_POOL_SIZE=20
 
 # Redis
-REDIS_HOST=redis-service
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_DB=0
+
+# Qdrant
+QDRANT_HOST=qdrant
+QDRANT_PORT=6333
+QDRANT_PRODUCTS_COLLECTION=products_multimodal
+```
+
+### Staging Environment
+
+**`.env` for staging**:
+```bash
+# Application
+ENVIRONMENT=staging
+DEBUG_ENABLED=true  # Enable for troubleshooting
+
+# Debug Configuration (moderate)
+DEBUG_LOG_REQUESTS=true
+DEBUG_LOG_RESPONSES=false  # Too verbose
+DEBUG_LOG_SQL=true
+DEBUG_PROFILE_REQUESTS=true
+DEBUG_SLOW_REQUEST_MS=500
+
+# Database (use staging database)
+DB_HOST=staging-db.your-company.com
+DB_PORT=5432
+DB_NAME=rag_enterprise_staging
+DB_USER=rag_staging_user
+DB_PASSWORD=<from_secrets_manager>
+DB_POOL_SIZE=20
+
+# Redis (use staging Redis)
+REDIS_HOST=staging-redis.your-company.com
 REDIS_PORT=6379
 
-# Ollama
-OLLAMA_HOST=ollama-service
-OLLAMA_PORT=11434
-
-# API
-API_HOST=0.0.0.0
-API_PORT=8001
+# Qdrant (use staging Qdrant)
+QDRANT_HOST=staging-qdrant.your-company.com
+QDRANT_PORT=6333
 ```
 
-### Kubernetes Secrets
+### Production Environment
 
+**`.env` for production**:
 ```bash
-# Create secrets
-kubectl create secret generic rag-secrets \
-  --from-literal=api-key=your-api-key \
-  --from-literal=db-password=your-db-password
+# Application
+ENVIRONMENT=production
+DEBUG_ENABLED=false  # ⚠️ MUST be false in production
+
+# Database (use production database)
+DB_HOST=prod-db.your-company.com
+DB_PORT=5432
+DB_NAME=rag_enterprise
+DB_USER=rag_prod_user
+DB_PASSWORD=<from_secrets_manager>
+DB_POOL_SIZE=50  # Increase for production
+
+# Redis (use production Redis cluster)
+REDIS_HOST=prod-redis.your-company.com
+REDIS_PORT=6379
+REDIS_PASSWORD=<from_secrets_manager>
+
+# Qdrant (use production Qdrant cluster)
+QDRANT_HOST=prod-qdrant.your-company.com
+QDRANT_PORT=6333
 ```
 
 ---
 
-## 📊 Monitoring
+## Docker Deployment
 
-### Prometheus Metrics
+### Development Deployment
+
+```bash
+# Start all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Stop and remove volumes (⚠️ deletes data)
+docker-compose down -v
+```
+
+### Production Docker Compose
+
+Create `docker-compose.prod.yml`:
 
 ```yaml
-# Exposed at /metrics
-- http_requests_total
-- http_request_duration_seconds
-- rag_query_duration_seconds
-- vector_search_duration_seconds
-- cache_hit_rate
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+
+  qdrant:
+    image: qdrant/qdrant:v1.7.0
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      QDRANT_HOST: ${QDRANT_HOST}
+      ENVIRONMENT: production
+      DEBUG_ENABLED: false
+    depends_on:
+      - postgres
+      - redis
+      - qdrant
+    restart: unless-stopped
+    deploy:
+      replicas: 2  # Run 2 instances for HA
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+
+volumes:
+  postgres_data:
+  redis_data:
+  qdrant_data:
 ```
 
-### Grafana Dashboard
-
+**Deploy production**:
 ```bash
-# Import dashboard
-kubectl apply -f k8s/grafana-dashboard.yaml
+docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ---
 
-## 🔒 Security
+## Testing Deployment
 
-### 1. Network Policies
-
-```bash
-# Apply network policies
-kubectl apply -f k8s/network-policy.yaml
-```
-
-### 2. RBAC
+### Automated Testing
 
 ```bash
-# Create service account
-kubectl apply -f k8s/rbac.yaml
+# Full test suite
+./test_system.sh
+
+# API tests only
+curl http://localhost:8001/health/live
+curl http://localhost:8001/api/v1/search/ -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"query": "50ml PET 용기", "top_k": 10}'
+
+# Python test suite
+pytest tests/ -v
 ```
 
-### 3. TLS/HTTPS
+### Manual Testing Checklist
 
-```bash
-# Install cert-manager
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
-
-# Create certificate
-kubectl apply -f k8s/certificate.yaml
-```
+- [ ] Health checks pass (`/health/live`, `/health/ready`)
+- [ ] API documentation accessible (`/api/v1/docs`)
+- [ ] Search endpoint works
+- [ ] Personalization tracking works
+- [ ] Analytics endpoints work
+- [ ] Debug endpoints work (if enabled)
+- [ ] OCR pipeline processes files
+- [ ] Frontend connects to backend
+- [ ] Database connections stable
+- [ ] Redis caching works
+- [ ] Qdrant vector search works
 
 ---
 
-## 📈 Scaling
+## Production Deployment
 
-### Horizontal Pod Autoscaling
+### Cloud Deployment Options
+
+#### AWS Deployment
+
+**Architecture**:
+```
+ELB (Load Balancer)
+  ├─ ECS/Fargate (API containers)
+  ├─ RDS PostgreSQL
+  ├─ ElastiCache Redis
+  └─ EC2 (Qdrant on dedicated instance)
+```
+
+**Steps**:
+1. Create VPC and subnets
+2. Deploy RDS PostgreSQL
+3. Deploy ElastiCache Redis
+4. Deploy Qdrant on EC2 (with EBS volume)
+5. Create ECS cluster
+6. Deploy API containers via ECS/Fargate
+7. Configure ALB (Application Load Balancer)
+8. Set up Route53 for DNS
+
+#### Google Cloud Deployment
+
+**Architecture**:
+```
+Cloud Load Balancer
+  ├─ GKE (Kubernetes cluster)
+  ├─ Cloud SQL (PostgreSQL)
+  ├─ Memorystore (Redis)
+  └─ GCE (Qdrant on VM)
+```
+
+#### On-Premises Deployment
+
+**Architecture**:
+```
+Nginx/HAProxy (Load Balancer)
+  ├─ Docker Swarm / Kubernetes
+  ├─ PostgreSQL (Primary + Replica)
+  ├─ Redis (Cluster mode)
+  └─ Qdrant (Cluster mode)
+```
+
+### Kubernetes Deployment
+
+Create `k8s/deployment.yaml`:
 
 ```yaml
-# Already configured in deployment.yaml
-minReplicas: 2
-maxReplicas: 10
-
-metrics:
-  - CPU: 70%
-  - Memory: 80%
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rag-enterprise-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rag-api
+  template:
+    metadata:
+      labels:
+        app: rag-api
+    spec:
+      containers:
+      - name: api
+        image: your-registry/rag-enterprise:latest
+        ports:
+        - containerPort: 8001
+        env:
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: rag-config
+              key: db_host
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: rag-secrets
+              key: db_password
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1"
+          limits:
+            memory: "4Gi"
+            cpu: "2"
 ```
 
-### Vertical Pod Autoscaling
-
+**Deploy**:
 ```bash
-# Install VPA
-kubectl apply -f https://github.com/kubernetes/autoscaler/releases/download/vertical-pod-autoscaler-0.13.0/vpa-v0.13.0.yaml
-
-# Apply VPA
-kubectl apply -f k8s/vpa.yaml
+kubectl apply -f k8s/
 ```
 
 ---
 
-## 🚨 Troubleshooting
+## Monitoring & Maintenance
 
-### Check Logs
+### Health Monitoring
 
-```bash
-# API logs
-kubectl logs -l app=rag-enterprise -f
+**Endpoint**: `GET /health/ready`
 
-# Qdrant logs
-kubectl logs -l app=qdrant -f
-
-# Redis logs
-kubectl logs -l app=redis -f
+**Response**:
+```json
+{
+  "status": "ready",
+  "debug_enabled": false,
+  "components": {
+    "database": "healthy",
+    "redis": "healthy",
+    "qdrant": "healthy"
+  }
+}
 ```
 
-### Debug Pod
+### Performance Metrics
 
-```bash
-# Shell into API pod
-kubectl exec -it <pod-name> -- /bin/bash
+**Prometheus metrics** exposed at `/metrics`:
+- `http_requests_total` - Total HTTP requests
+- `http_request_duration_seconds` - Request duration
+- `cache_hits_total` - Cache hit count
+- `cache_misses_total` - Cache miss count
+- `vector_search_duration_seconds` - Vector search time
 
-# Check connectivity
-curl http://qdrant-service:6333/collections
-curl http://redis-service:6379
+### Log Monitoring
+
+**Structured JSON logs**:
+```json
+{
+  "timestamp": "2025-11-06T12:34:56Z",
+  "level": "INFO",
+  "correlation_id": "550e8400-e29b-41d4-a716-446655440000",
+  "request_path": "POST /api/v1/search/",
+  "duration_ms": 145.32,
+  "message": "Request completed"
+}
 ```
 
-### Performance Issues
-
+**Aggregate logs**:
 ```bash
-# Check resource usage
-kubectl top pods
+# View all logs
+docker-compose logs -f
 
-# Check HPA status
-kubectl get hpa
+# View API logs only
+docker-compose logs -f api
 
-# Check events
-kubectl get events --sort-by='.lastTimestamp'
-```
+# Search for errors
+docker-compose logs api | grep ERROR
 
----
-
-## 🔄 CI/CD Pipeline
-
-### GitHub Actions
-
-```yaml
-# Trigger: Push to main
-1. Run tests (pytest)
-2. Build Docker image
-3. Push to registry
-4. Deploy to K8s
-5. Run smoke tests
-```
-
-### Manual Deployment
-
-```bash
-# Build
-docker build -f Dockerfile.prod -t rag-enterprise:v1.0.0 .
-
-# Tag
-docker tag rag-enterprise:v1.0.0 your-registry/rag-enterprise:v1.0.0
-
-# Push
-docker push your-registry/rag-enterprise:v1.0.0
-
-# Update K8s
-kubectl set image deployment/rag-enterprise-api \
-  api=your-registry/rag-enterprise:v1.0.0
-
-# Rollout
-kubectl rollout status deployment/rag-enterprise-api
-```
-
----
-
-## 💾 Backup & Restore
-
-### Qdrant Backup
-
-```bash
-# Create snapshot
-kubectl exec -it qdrant-0 -- /bin/bash -c \
-  "curl -X POST http://localhost:6333/collections/products_multimodal/snapshots"
-
-# Download snapshot
-kubectl cp qdrant-0:/qdrant/storage/collections/products_multimodal/snapshots/<snapshot-name> \
-  ./backup/qdrant-snapshot.tar
-```
-
-### Redis Backup
-
-```bash
-# Create RDB dump
-kubectl exec -it redis-0 -- redis-cli SAVE
-
-# Copy dump
-kubectl cp redis-0:/data/dump.rdb ./backup/redis-dump.rdb
-```
-
----
-
-## 📋 Maintenance
-
-### Update Dependencies
-
-```bash
-# Update Python packages
-pip-compile requirements.in
-pip install -r requirements.txt
-
-# Rebuild image
-docker build -f Dockerfile.prod -t rag-enterprise:latest .
+# Follow slow requests
+docker-compose logs api | grep "SLOW REQUEST"
 ```
 
 ### Database Maintenance
 
+**Backups**:
 ```bash
-# Optimize Qdrant indices
-curl -X POST http://qdrant-service:6333/collections/products_multimodal/optimize
+# Backup PostgreSQL
+docker-compose exec postgres pg_dump -U postgres rag_enterprise > backup.sql
 
-# Clear Redis cache
-kubectl exec -it redis-0 -- redis-cli FLUSHALL
+# Restore
+docker-compose exec -T postgres psql -U postgres rag_enterprise < backup.sql
+
+# Backup Qdrant
+curl -X POST http://localhost:6333/collections/products_multimodal/snapshots
+
+# Backup Redis
+docker-compose exec redis redis-cli SAVE
 ```
 
 ---
 
-## 🎯 Performance Tuning
+## Troubleshooting
 
-### API Optimization
-- Enable Redis caching (✅ Implemented)
-- Use connection pooling
-- Optimize batch sizes
-- Enable HTTP/2
+### Common Issues
 
-### Qdrant Optimization
-- Tune HNSW parameters
-- Use quantization
-- Enable disk-based storage
-- Optimize shard count
+**Problem**: Services won't start
 
-### Ollama Optimization
-- Use GPU acceleration
-- Optimize batch size
-- Enable model caching
-- Use smaller quantized models
+**Solution**:
+```bash
+# Check Docker daemon
+systemctl status docker
+
+# Check logs
+docker-compose logs
+
+# Restart services
+docker-compose restart
+```
+
+**Problem**: Connection refused errors
+
+**Solution**:
+```bash
+# Verify services are running
+docker-compose ps
+
+# Check ports
+netstat -tulpn | grep -E '(6333|6379|5432|8001)'
+
+# Check firewall
+sudo ufw status
+```
+
+**Problem**: Slow API responses
+
+**Solution**:
+```bash
+# Enable debug mode
+DEBUG_ENABLED=true
+DEBUG_PROFILE_REQUESTS=true
+
+# Check performance summary
+curl http://localhost:8001/api/v1/debug/performance/summary
+
+# Check slow queries
+curl http://localhost:8001/api/v1/debug/queries/recent?slow_only=true
+```
+
+**Problem**: Out of memory
+
+**Solution**:
+```bash
+# Check memory usage
+docker stats
+
+# Increase Docker memory limit
+# Edit Docker Desktop settings or /etc/docker/daemon.json
+
+# Reduce pool sizes in .env
+DB_POOL_SIZE=10
+REDIS_MAX_CONNECTIONS=20
+```
 
 ---
 
-## 📚 Additional Resources
+## Security Checklist
 
-- [Kubernetes Best Practices](https://kubernetes.io/docs/concepts/configuration/overview/)
-- [Qdrant Deployment Guide](https://qdrant.tech/documentation/cloud/)
-- [FastAPI Production Guide](https://fastapi.tiangolo.com/deployment/)
+Production deployment security:
+
+- [ ] Change all default passwords
+- [ ] Use secrets manager (AWS Secrets Manager, HashiCorp Vault)
+- [ ] Enable HTTPS (TLS/SSL certificates)
+- [ ] Configure firewall rules
+- [ ] Enable rate limiting
+- [ ] Disable debug mode (`DEBUG_ENABLED=false`)
+- [ ] Review CORS settings
+- [ ] Enable authentication/authorization
+- [ ] Regular security updates
+- [ ] Monitor access logs
+- [ ] Set up intrusion detection
 
 ---
 
-**Version**: 1.0.0
-**Last Updated**: 2025-11-06
+## Support
+
+**Documentation**:
+- [API Documentation](./API_DOCUMENTATION.md)
+- [Debug System](./DEBUG_SYSTEM.md)
+- [OCR Strategy](./OCR_PARSING_STRATEGY.md)
+- [Roadmap](./ROADMAP.md)
+
+**Issues**: Report at GitHub Issues
+
+---
+
+**Last Updated**: 2025-11-06  
+**Version**: 1.0  
+**Status**: Production-Ready ✅

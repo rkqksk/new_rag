@@ -11,11 +11,13 @@
 ## Features
 
 - 🔍 Multi-format document processing (PDF, DOCX, XLSX)
+- 📄 **Production OCR Pipeline** - PaddleOCR + EasyOCR + Tesseract multi-engine fallback
 - 💡 Semantic search with vector database (§rag.*)
 - 🤖 Multi-model support (Ollama: qwen2.5:7b-instruct)
 - 🔌 Domain expert plugins (manufacturing, packaging)
 - 📊 Token-efficient symbol architecture
-- 🌏 **NEW**: Korean language support for international users
+- 🐛 **Enterprise Debug System** - Correlation IDs, performance profiling, query logging
+- 🌏 Korean language support for international users
 
 ---
 
@@ -130,10 +132,12 @@ claude-code
 - `docs/ARCHITECTURE.md` - System architecture (§arch.*)
 - `docs/RAG_ACTIVATION_STRATEGY.md` - RAG development plan (§rag.*)
 
-### Policies
+### Policies & Guides
 - `docs/OLLAMA_MODEL_POLICY.md` - Model management (§ollama.*)
 - `docs/FRONTEND_UI_POLICY.md` - UI/UX guidelines (§ui.*)
-- `docs/DEPLOYMENT_STRATEGY.md` - Deployment guide (§deploy.*)
+- `docs/DEPLOYMENT_GUIDE.md` - Production deployment (§deploy.*)
+- `docs/DEBUG_SYSTEM.md` - Debug & observability (§debug.*)
+- `docs/OCR_PARSING_STRATEGY.md` - OCR architecture (§ocr.*)
 
 **Symbol Map**: See `docs/SYMBOL_SYSTEM.md` for complete reference system.
 
@@ -141,12 +145,25 @@ claude-code
 
 ## Current Status
 
-- **Frontend**: ✅ v2.0.0 (ChatGPT-style UI complete)
-- **Backend**: ✅ File-based search operational
-- **RAG System**: 🚧 20% (§rag.status - Vector search in development)
-- **Documentation**: ✅ Symbolized for token efficiency
+**Phase 0-4 Complete** ✅ (2025-11-06)
 
-**Next**: Phase 2 - Core RAG modules (§rag.phase2)
+- **Frontend**: ✅ v2.0.0 (ChatGPT-style UI complete)
+- **Backend**: ✅ Enterprise architecture (Repository + Service layers)
+- **RAG System**: ✅ Phase 0-4 complete (Atomic chunking, search optimization)
+- **OCR Pipeline**: ✅ Multi-engine OCR (PaddleOCR → EasyOCR → Tesseract)
+- **Debug System**: ✅ Production debugging (correlation IDs, profiling, query logs)
+- **Testing**: ✅ 122 test cases (repositories, services, integration)
+- **Documentation**: ✅ Symbolized + deployment guides
+- **Deployment**: ✅ Production-ready (Docker Compose + K8s manifests)
+
+**System Statistics:**
+- 471 products → 3,246 atomic chunks
+- Search quality: 0.79-0.82 similarity
+- 7 OCR modules (~1,850 lines)
+- 10 debug components
+- 122 comprehensive tests
+
+**Next**: Phase 5-9 (Advanced RAG, Image Matching, Cloud Integration)
 
 ---
 
@@ -166,4 +183,4 @@ MIT License - See `LICENSE` file
 
 ---
 
-**v3.2.0** | **2025-11-04** | **Symbol System Enabled**
+**v4.0.0** | **2025-11-06** | **Phase 0-4 Complete - Production Ready**
