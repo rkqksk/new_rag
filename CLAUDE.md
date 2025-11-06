@@ -139,6 +139,7 @@ ollama list                            # Check models
 |------|--------|-----------|
 | Architecture work | §arch.* | System design, integration |
 | RAG development | §rag.* | Vector search, embedding |
+| OCR/Document processing | §ocr.* | PDF/Image extraction, parsing |
 | UI changes | §ui.* | Design updates, components |
 | Model management | §ollama.* | Model updates, performance |
 | Deployment | §deploy.* | Infrastructure setup |
@@ -250,6 +251,59 @@ ollama list                            # Check models
 
 ---
 
+#### §ocr - OCR & Document Processing
+**Status**: Strategy Designed (Phase 4.2 준비 완료)
+**Goal**: Production-grade OCR for PDF/Image → Structured data
+
+**§ocr.strategy** - Multi-Engine OCR Architecture:
+- **Primary**: PaddleOCR (Korean, 85-90% accuracy, GPU-accelerated)
+- **Fallback**: EasyOCR (complex fonts), Tesseract (last resort)
+- **Table**: PP-Structure (table detection & extraction)
+- **Layout**: LayoutLMv3 (document structure analysis)
+- **Entity**: Pattern-based + NER (KoELECTRA fine-tuned)
+
+**§ocr.pipeline** - Complete Processing Flow:
+```
+Image/PDF → Preprocessing → Multi-Engine OCR → Layout Analysis
+  → Table Extraction → Entity Recognition → Validation → Chunks
+```
+
+**§ocr.engines** - Engine Selection Guide:
+- Korean product catalogs → PaddleOCR ⭐ (fastest, most accurate)
+- Artistic fonts/logos → EasyOCR (handles unusual fonts)
+- Handwritten notes → TrOCR (transformer-based)
+- Tables → PP-Structure (preserves structure)
+
+**§ocr.entities** - Extracted Fields:
+- Product code, Name, Category
+- Specifications (capacity, neck, dimensions)
+- Business info (MOQ, price, material)
+- Pattern-based regex + NER model
+
+**§ocr.roadmap** - Implementation Plan (Phase 4.2):
+- Week 1-2: Core OCR Engine (multi-engine fallback)
+- Week 3-4: Layout Analysis (tables, multi-column)
+- Week 5-6: Entity Recognition & NER (custom training)
+- Week 7-8: Integration & Testing
+
+**Quick Start**:
+```bash
+# Install PaddleOCR
+pip install paddlepaddle paddleocr
+
+# Basic usage
+from paddleocr import PaddleOCR
+ocr = PaddleOCR(lang='korean', use_gpu=True)
+result = ocr.ocr("product_catalog.jpg")
+```
+
+**Full Details**:
+- docs/OCR_PARSING_STRATEGY.md (50KB) - Complete architecture
+- docs/OCR_QUICKSTART.md (30KB) - Practical examples
+- scripts/archive/experiments/paddleocr_excel_parser.py - Existing prototype
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -287,6 +341,8 @@ rag-enterprise/
 |----------|--------|------|-----------|
 | Architecture | §arch.* | 31KB | Design, integration |
 | RAG Strategy | §rag.* | 18KB | RAG development |
+| OCR & Parsing Strategy | §ocr.* | 50KB | OCR/PDF/Image processing |
+| OCR Quick Start | §ocr.quickstart | 30KB | Practical OCR examples |
 | UI Policy | §ui.* | 13KB | Frontend work |
 | Ollama Policy | §ollama.* | 6.5KB | Model management |
 | Symbol System | - | 3KB | Reference guide |
