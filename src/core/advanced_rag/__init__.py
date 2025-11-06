@@ -10,6 +10,9 @@ from .multi_source_search_service import (
     SearchResult,
     ScoreNormalizer
 )
+from .query_router import AdvancedQueryRouter, QueryIntent, QueryType
+from .score_fusion import ScoreFusion, FusionStrategy, FusionResult
+from .integrated_rag_pipeline import IntegratedRAGPipeline, RAGResponse
 
 __all__ = [
     # Vector Store
@@ -21,4 +24,18 @@ __all__ = [
     "SearchSource",
     "SearchResult",
     "ScoreNormalizer",
+
+    # Query Routing
+    "AdvancedQueryRouter",
+    "QueryIntent",
+    "QueryType",
+
+    # Score Fusion
+    "ScoreFusion",
+    "FusionStrategy",
+    "FusionResult",
+
+    # Integrated Pipeline
+    "IntegratedRAGPipeline",
+    "RAGResponse",
 ]
