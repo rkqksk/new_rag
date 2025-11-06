@@ -1,7 +1,7 @@
 # Multi-Modal RAG Components
 
 **Phase 4.4 - Multi-Modal Integration**
-**Status**: Week 2 Complete ✅
+**Status**: Week 3 Complete ✅
 
 ---
 
@@ -302,6 +302,162 @@ python scripts/migrate_to_multimodal.py --dry-run
 # Full integration demo (embeddings + upload + search)
 python scripts/demo_week2_integration.py
 ```
+
+### With HybridSearchEngine (Week 3) ✅
+
+#### Basic Hybrid Search
+
+```python
+from qdrant_client import QdrantClient
+from src.core.multimodal import MultiModalEmbeddingService, HybridSearchEngine
+
+# Initialize
+embedder = MultiModalEmbeddingService()
+client = QdrantClient(host="localhost", port=6333)
+
+# Create hybrid search engine
+engine = HybridSearchEngine(
+    client,
+    collection_name="products_multimodal",
+    fusion_strategy="rrf"  # or "weighted", "learned"
+)
+
+# Generate embeddings
+text_emb = embedder.embed_text("100ml PET Bottle")
+image_emb = embedder.embed_image("bottle.jpg")
+
+# Hybrid search
+results = engine.search_hybrid(
+    embeddings={"text": text_emb, "image": image_emb},
+    limit=10
+)
+
+# Print results
+for result in results:
+    print(f"{result.rank}. {result.product_id}")
+    print(f"   Score: {result.score:.4f}")
+    print(f"   Text score: {result.modality_scores['text']:.4f}")
+    print(f"   Image score: {result.modality_scores['image']:.4f}")
+```
+
+#### Fusion Strategies
+
+**1. RRF (Reciprocal Rank Fusion)** ⭐ Recommended
+
+```python
+# Robust, no tuning required
+engine = HybridSearchEngine(
+    client,
+    "products_multimodal",
+    fusion_strategy="rrf",
+    rrf_k=60
+)
+
+results = engine.search_hybrid(
+    embeddings={"text": text_emb, "image": image_emb},
+    limit=10
+)
+```
+
+**Benefits:**
+- No score normalization needed
+- Robust to score scale differences
+- No hyperparameter tuning required
+- Works well in most scenarios
+
+**2. Weighted Fusion**
+
+```python
+# Custom weights for each modality
+engine = HybridSearchEngine(
+    client,
+    "products_multimodal",
+    fusion_strategy="weighted"
+)
+
+# Text-heavy search
+results = engine.search_hybrid(
+    embeddings={"text": text_emb, "image": image_emb},
+    weights={"text": 0.7, "image": 0.3},
+    limit=10
+)
+
+# Image-heavy search
+results = engine.search_hybrid(
+    embeddings={"text": text_emb, "image": image_emb},
+    weights={"text": 0.3, "image": 0.7},
+    limit=10
+)
+```
+
+**Benefits:**
+- Simple and interpretable
+- Fine control over modality importance
+- Good for domain-specific tuning
+
+**3. Learned Fusion**
+
+```python
+# ML-based fusion (requires trained model)
+engine = HybridSearchEngine(
+    client,
+    "products_multimodal",
+    fusion_strategy="learned"
+)
+
+results = engine.search_hybrid(
+    embeddings={"text": text_emb, "image": image_emb},
+    limit=10
+)
+```
+
+**Benefits:**
+- Optimal fusion learned from data
+- Adapts to user behavior
+- Best accuracy (when trained properly)
+
+**Note:** Currently falls back to weighted fusion. Training requires relevance labels.
+
+#### Single Modality Search
+
+```python
+# Text-only search
+results = engine.search_text(text_emb, limit=10)
+
+# Image-only search
+results = engine.search_image(image_emb, limit=10)
+
+# Shape-only search (Phase 6)
+results = engine.search_shape(shape_emb, limit=10)
+```
+
+#### Result Explanation
+
+```python
+# Search
+results = engine.search_hybrid(
+    embeddings={"text": text_emb, "image": image_emb},
+    limit=10
+)
+
+# Explain top results
+explanation = engine.explain_results(results, top_k=3)
+
+print(f"Fusion strategy: {explanation['fusion_strategy']}")
+for result_info in explanation['results']:
+    print(f"\nRank {result_info['rank']}: {result_info['product_id']}")
+    print(f"Final score: {result_info['final_score']:.4f}")
+
+    # Modality contributions
+    for modality, contrib in result_info['modality_contributions'].items():
+        print(f"  {modality}: {contrib['contribution_pct']:.1f}%")
+```
+
+#### Demo Script
+
+```bash
+# Interactive demo with 7 scenarios
+python scripts/demo_week3_hybrid_search.py
 ```
 
 ### With OCR Pipeline (Week 4)
@@ -365,11 +521,15 @@ embeddings = embedder.embed(
 - [x] Batch upload optimization
 - [x] Collection management tools
 
-### 📋 Week 3 (Next)
-- [ ] HybridSearchEngine
-- [ ] Fusion strategies (Weighted, RRF, Learned)
-- [ ] Cross-encoder re-ranker
-- [ ] Performance benchmarks
+### ✅ Week 3 (Complete)
+- [x] HybridSearchEngine class
+- [x] Fusion strategies (Weighted, RRF, Learned)
+- [x] Single modality search methods
+- [x] Result explanation with modality contributions
+- [x] Performance benchmarking
+- [x] Integration tests (20+ test cases)
+- [x] Demo script with 7 scenarios
+- [x] Cross-encoder re-ranker (placeholder for production)
 
 ### 📋 Week 4
 - [ ] OCR pipeline integration
@@ -435,6 +595,84 @@ class MultiModalEmbeddingService:
     def is_available(self, modality: str) -> bool
 ```
 
+### HybridSearchEngine
+
+```python
+class HybridSearchEngine:
+    """Hybrid search engine with fusion strategies"""
+
+    def __init__(
+        self,
+        qdrant_client: QdrantClient,
+        collection_name: str = "products_multimodal",
+        fusion_strategy: Literal["weighted", "rrf", "learned"] = "rrf",
+        rrf_k: int = 60
+    )
+
+    # Single modality search
+    def search_text(
+        self,
+        query_embedding: List[float],
+        limit: int = 10,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[ScoredPoint]
+
+    def search_image(
+        self,
+        query_embedding: List[float],
+        limit: int = 10,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[ScoredPoint]
+
+    def search_shape(
+        self,
+        query_embedding: List[float],
+        limit: int = 10,
+        filters: Optional[Dict[str, Any]] = None
+    ) -> List[ScoredPoint]
+
+    # Hybrid search
+    def search_hybrid(
+        self,
+        embeddings: Dict[str, List[float]],
+        weights: Optional[Dict[str, float]] = None,
+        limit: int = 10,
+        filters: Optional[Dict[str, Any]] = None,
+        retrieve_limit: int = None
+    ) -> List[SearchResult]
+
+    # Hybrid search with re-ranking
+    def search_hybrid_with_rerank(
+        self,
+        embeddings: Dict[str, List[float]],
+        query_text: str,
+        weights: Optional[Dict[str, float]] = None,
+        limit: int = 10,
+        filters: Optional[Dict[str, Any]] = None,
+        rerank_top_k: int = 50
+    ) -> List[SearchResult]
+
+    # Result explanation
+    def explain_results(
+        self,
+        results: List[SearchResult],
+        top_k: int = 5
+    ) -> Dict[str, Any]
+```
+
+### SearchResult
+
+```python
+@dataclass
+class SearchResult:
+    """Search result with multi-modal scores"""
+    product_id: str
+    score: float
+    payload: Dict[str, Any]
+    modality_scores: Dict[str, float]  # Individual scores per modality
+    rank: int
+```
+
 ---
 
 ## Troubleshooting
@@ -477,12 +715,16 @@ embedder = MultiModalEmbeddingService(device='cpu')
 ## Examples
 
 See:
-- `scripts/demo_multimodal.py` - Interactive demo
-- `tests/test_multimodal_embedder.py` - Unit tests
+- `scripts/demo_multimodal.py` - Week 1: Embedding demo
+- `scripts/demo_week2_integration.py` - Week 2: Qdrant integration
+- `scripts/demo_week3_hybrid_search.py` - Week 3: Hybrid search ⭐
+- `tests/test_multimodal_embedder.py` - Unit tests (embeddings)
+- `tests/test_qdrant_uploader.py` - Integration tests (Qdrant)
+- `tests/test_hybrid_search.py` - Integration tests (hybrid search)
 - `docs/MULTIMODAL_RAG_STRATEGY.md` - Complete strategy
 
 ---
 
-**Version**: 1.0.0 (Phase 4.4 Week 1)
-**Status**: Production Ready ✅
-**Next**: Week 2 - Qdrant Integration
+**Version**: 1.3.0 (Phase 4.4 Week 3)
+**Status**: Hybrid Search Ready ✅
+**Next**: Week 4 - OCR Integration
