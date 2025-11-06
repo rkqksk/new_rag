@@ -1,7 +1,7 @@
 # Multi-Modal RAG Components
 
 **Phase 4.4 - Multi-Modal Integration**
-**Status**: Week 3 Complete ✅
+**Status**: Week 4 Complete ✅ - Production Ready
 
 ---
 
@@ -460,11 +460,188 @@ for result_info in explanation['results']:
 python scripts/demo_week3_hybrid_search.py
 ```
 
-### With OCR Pipeline (Week 4)
+### With OCR Pipeline (Week 4) ✅
+
+#### Basic OCR Processing
 
 ```python
-from src.core.ocr_processors.ocr_pipeline import OCRPipeline
-from src.core.multimodal import MultiModalEmbeddingService
+from src.core.multimodal import (
+    OCRProcessor,
+    OCRMultiModalIntegration,
+    MultiModalEmbeddingService
+)
+
+# Initialize OCR processor
+ocr_processor = OCRProcessor(
+    lang='korean',
+    use_gpu=True,
+    enable_layout_analysis=False
+)
+
+# Initialize embedder
+embedder = MultiModalEmbeddingService()
+
+# Create OCR integration
+ocr_integration = OCRMultiModalIntegration(
+    ocr_processor=ocr_processor,
+    embedding_service=embedder,
+    cache_embeddings=True
+)
+
+# Process document (PDF or image)
+result = ocr_integration.process_document(
+    file_path="product_catalog.pdf",
+    product_id="catalog-page-1",
+    extract_metadata=True
+)
+
+# Access results
+print(f"OCR Text: {result['ocr_text']}")
+print(f"Confidence: {result['ocr_confidence']}")
+print(f"Embeddings: {result['embeddings'].keys()}")
+print(f"Metadata: {result['metadata']}")
+```
+
+#### Batch OCR Processing
+
+```python
+# Process multiple files
+file_paths = [
+    "product1.pdf",
+    "product2.jpg",
+    "catalog.pdf"
+]
+
+results = ocr_integration.process_batch(
+    file_paths=file_paths,
+    product_ids=["prod-1", "prod-2", "prod-3"],
+    show_progress=True
+)
+
+for result in results:
+    print(f"Product: {result['product_id']}")
+    print(f"Text length: {len(result['ocr_text'])}")
+    print(f"Has embeddings: {list(result['embeddings'].keys())}")
+```
+
+### End-to-End Pipeline (Week 4) ✅
+
+#### Complete Workflow: OCR → Embed → Upload → Search
+
+```python
+from qdrant_client import QdrantClient
+from src.core.multimodal import (
+    OCRProcessor,
+    OCRMultiModalIntegration,
+    MultiModalEmbeddingService,
+    MultiModalQdrantUploader,
+    HybridSearchEngine,
+    EndToEndPipeline
+)
+
+# Initialize all components
+ocr_processor = OCRProcessor(lang='korean', use_gpu=True)
+embedder = MultiModalEmbeddingService()
+ocr_integration = OCRMultiModalIntegration(ocr_processor, embedder)
+
+client = QdrantClient(host="localhost", port=6333)
+uploader = MultiModalQdrantUploader(client, "products_multimodal")
+search_engine = HybridSearchEngine(client, "products_multimodal")
+
+# Create end-to-end pipeline
+pipeline = EndToEndPipeline(
+    ocr_integration=ocr_integration,
+    qdrant_uploader=uploader,
+    search_engine=search_engine
+)
+
+# Process and upload documents
+file_paths = ["product1.pdf", "product2.jpg"]
+results = pipeline.process_and_upload(
+    file_paths,
+    product_ids=["prod-1", "prod-2"],
+    show_progress=True
+)
+
+# Check results
+for result in results:
+    if result.success:
+        print(f"✅ {result.product_id}: {len(result.ocr_text)} chars")
+    else:
+        print(f"❌ {result.product_id}: {result.error}")
+
+# Search with text query
+search_results = pipeline.search(
+    query="100ml PET bottle",
+    limit=10
+)
+
+for result in search_results:
+    print(f"{result.rank}. {result.product_id} (score: {result.score:.4f})")
+
+# Search by document similarity
+similar = pipeline.search_by_document(
+    file_path="reference_product.jpg",
+    limit=5,
+    exclude_self=True
+)
+```
+
+#### Pipeline Validation
+
+```python
+# Validate all components
+validation = pipeline.validate_pipeline()
+
+print(f"OCR Available: {validation['ocr_available']}")
+print(f"Embedder Ready: {validation['text_embedder_available']}")
+print(f"Qdrant Connected: {validation['qdrant_connected']}")
+print(f"Pipeline Ready: {validation['pipeline_ready']}")
+
+# Get statistics
+stats = pipeline.get_statistics()
+print(f"OCR Language: {stats['ocr']['language']}")
+print(f"Embedding Dims: {stats['embeddings']['dimensions']}")
+print(f"Collection Points: {stats['qdrant']['stats']['points_count']}")
+print(f"Fusion Strategy: {stats['search']['fusion_strategy']}")
+```
+
+#### Metadata Extraction
+
+The OCR integration automatically extracts product metadata:
+
+```python
+# Extracted metadata from OCR text
+metadata = {
+    'product_code': 'PET-100',      # Pattern: [A-Z]{2,}-\d{2,}
+    'capacity': '100ml',             # Pattern: \d+\s*(ml|cc|L)
+    'material': 'PET',               # Detected: PET, HDPE, PP, PE, Glass
+    'moq': 5000,                     # Pattern: MOQ.*\d+
+    'price': '120',                  # Pattern: ₩\d+
+}
+
+# Access in result
+result = ocr_integration.process_document("product.pdf", extract_metadata=True)
+print(result['metadata']['capacity'])  # "100ml"
+print(result['metadata']['moq'])       # 5000
+```
+
+#### Demo Script
+
+```bash
+# Complete end-to-end demo
+python scripts/demo_week4_ocr_pipeline.py
+```
+
+**Features Demonstrated:**
+- OCR processing (PaddleOCR)
+- Text embedding generation
+- Qdrant upload with metadata
+- Hybrid search
+- Performance benchmarking
+- Pipeline validation
+
+### With OCR Pipeline (Legacy)
 
 ocr = OCRPipeline()
 embedder = MultiModalEmbeddingService()
@@ -531,9 +708,17 @@ embeddings = embedder.embed(
 - [x] Demo script with 7 scenarios
 - [x] Cross-encoder re-ranker (placeholder for production)
 
-### 📋 Week 4
-- [ ] OCR pipeline integration
-- [ ] End-to-end testing
+### ✅ Week 4 (Complete) - Production Ready
+- [x] OCR processor (PaddleOCR integration)
+- [x] OCR multi-modal integration
+- [x] Embedding cache layer
+- [x] End-to-end pipeline (OCR → Embed → Upload → Search)
+- [x] Metadata extraction from OCR text
+- [x] Batch processing support
+- [x] Pipeline validation and statistics
+- [x] Integration tests (30+ test cases)
+- [x] Demo script with 7 scenarios
+- [x] Production-ready error handling
 - [ ] Caching layer integration
 - [ ] Production deployment
 
@@ -673,6 +858,132 @@ class SearchResult:
     rank: int
 ```
 
+### OCRProcessor
+
+```python
+class OCRProcessor:
+    """OCR processor using PaddleOCR"""
+
+    def __init__(
+        self,
+        lang: str = 'korean',
+        use_gpu: bool = True,
+        enable_layout_analysis: bool = False
+    )
+
+    # Check availability
+    def is_available(self) -> bool
+
+    # Single image processing
+    def process_image(
+        self,
+        image_path: Union[str, Path],
+        min_confidence: float = 0.5
+    ) -> OCRResult
+
+    # PDF processing
+    def process_pdf(
+        self,
+        pdf_path: Union[str, Path],
+        min_confidence: float = 0.5,
+        max_pages: Optional[int] = None
+    ) -> List[OCRResult]
+
+    # Batch processing
+    def batch_process(
+        self,
+        file_paths: List[Union[str, Path]],
+        min_confidence: float = 0.5
+    ) -> List[OCRResult]
+```
+
+### OCRMultiModalIntegration
+
+```python
+class OCRMultiModalIntegration:
+    """Integration layer: OCR → Embeddings"""
+
+    def __init__(
+        self,
+        ocr_processor: OCRProcessor,
+        embedding_service: MultiModalEmbeddingService,
+        cache_embeddings: bool = True
+    )
+
+    # Process single document
+    def process_document(
+        self,
+        file_path: Union[str, Path],
+        product_id: Optional[str] = None,
+        extract_metadata: bool = True
+    ) -> Dict[str, Any]
+
+    # Batch processing
+    def process_batch(
+        self,
+        file_paths: List[Union[str, Path]],
+        product_ids: Optional[List[str]] = None,
+        show_progress: bool = True
+    ) -> List[Dict[str, Any]]
+
+    # Cache management
+    def clear_cache(self)
+    def get_cache_stats(self) -> Dict[str, int]
+```
+
+### EndToEndPipeline
+
+```python
+class EndToEndPipeline:
+    """Complete multi-modal RAG pipeline"""
+
+    def __init__(
+        self,
+        ocr_integration: OCRMultiModalIntegration,
+        qdrant_uploader: MultiModalQdrantUploader,
+        search_engine: Optional[HybridSearchEngine] = None,
+        auto_commit: bool = True
+    )
+
+    # Single document processing
+    def process_document(
+        self,
+        file_path: Union[str, Path],
+        product_id: Optional[str] = None,
+        upload: bool = True
+    ) -> PipelineResult
+
+    # Batch processing
+    def process_and_upload(
+        self,
+        file_paths: List[Union[str, Path]],
+        product_ids: Optional[List[str]] = None,
+        batch_size: int = 10,
+        show_progress: bool = True
+    ) -> List[PipelineResult]
+
+    # Search operations
+    def search(
+        self,
+        query: str,
+        query_image: Optional[Union[str, Path]] = None,
+        fusion_strategy: str = "rrf",
+        weights: Optional[Dict[str, float]] = None,
+        limit: int = 10
+    ) -> List[SearchResult]
+
+    def search_by_document(
+        self,
+        file_path: Union[str, Path],
+        limit: int = 10,
+        exclude_self: bool = True
+    ) -> List[SearchResult]
+
+    # Utilities
+    def get_statistics(self) -> Dict[str, Any]
+    def validate_pipeline(self) -> Dict[str, bool]
+```
+
 ---
 
 ## Troubleshooting
@@ -717,14 +1028,18 @@ embedder = MultiModalEmbeddingService(device='cpu')
 See:
 - `scripts/demo_multimodal.py` - Week 1: Embedding demo
 - `scripts/demo_week2_integration.py` - Week 2: Qdrant integration
-- `scripts/demo_week3_hybrid_search.py` - Week 3: Hybrid search ⭐
+- `scripts/demo_week3_hybrid_search.py` - Week 3: Hybrid search
+- `scripts/demo_week4_ocr_pipeline.py` - Week 4: End-to-end pipeline ⭐
 - `tests/test_multimodal_embedder.py` - Unit tests (embeddings)
 - `tests/test_qdrant_uploader.py` - Integration tests (Qdrant)
 - `tests/test_hybrid_search.py` - Integration tests (hybrid search)
+- `tests/test_ocr_integration.py` - Integration tests (OCR)
+- `tests/test_end_to_end_pipeline.py` - Integration tests (pipeline)
 - `docs/MULTIMODAL_RAG_STRATEGY.md` - Complete strategy
+- `docs/OCR_PARSING_STRATEGY.md` - OCR architecture
 
 ---
 
-**Version**: 1.3.0 (Phase 4.4 Week 3)
-**Status**: Hybrid Search Ready ✅
-**Next**: Week 4 - OCR Integration
+**Version**: 2.0.0 (Phase 4.4 Week 4)
+**Status**: Production Ready ✅
+**Next**: Phase 6 - Shape Embedding & Image Matching

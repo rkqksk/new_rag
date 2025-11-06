@@ -1,6 +1,6 @@
 """
 Multi-Modal RAG Components
-Integrates text, image, and shape embeddings
+Integrates text, image, and shape embeddings with OCR processing
 """
 
 from .multimodal_embedder import MultiModalEmbeddingService
@@ -12,13 +12,32 @@ from .hybrid_search import (
     ReciprocalRankFusion,
     LearnedFusion
 )
+from .ocr_integration import (
+    OCRProcessor,
+    OCRMultiModalIntegration,
+    OCRResult
+)
+from .end_to_end_pipeline import (
+    EndToEndPipeline,
+    PipelineResult
+)
 
 __all__ = [
+    # Embedding
     'MultiModalEmbeddingService',
+    # Qdrant
     'MultiModalQdrantUploader',
+    # Search
     'HybridSearchEngine',
     'SearchResult',
     'WeightedFusion',
     'ReciprocalRankFusion',
-    'LearnedFusion'
+    'LearnedFusion',
+    # OCR
+    'OCRProcessor',
+    'OCRMultiModalIntegration',
+    'OCRResult',
+    # Pipeline
+    'EndToEndPipeline',
+    'PipelineResult'
 ]
