@@ -39,12 +39,13 @@ User → SKILL → Plugin → MCP → Result
 
 | Skill | Status | Commands |
 |-------|--------|----------|
-| rag-pipeline | 20% | process, query, search |
+| rag-pipeline | ✅ Phase 0-3 Complete | process, query, search |
 | manufacturing-expert | ✅ | process, classify |
 | packaging-expert | ✅ | process, classify |
 | web-crawler-pipeline | ✅ | crawl, monitor |
 
 **Details**: §arch.core.skills
+**Roadmap**: See [ROADMAP.md](docs/ROADMAP.md) for Phase 4-9 plans
 
 ---
 
@@ -144,53 +145,54 @@ ollama list                            # Check models
 
 ### Quick Access (Expanded)
 
-#### §rag - RAG Activation Strategy
-**Status**: ~~20%~~ → **85% complete** ✅ (2025-11-04 업데이트)
-**Next**: Production 배포 최적화 (15%)
+#### §rag - RAG System Status
+**Status**: **Phase 0-3 Complete** ✅ Production-Ready (2025-11-06 업데이트)
+**Next**: Phase 4-9 (Multi-Modal, Image Matching, Cloud Integration)
 
-**§rag.status** - 완성된 항목:
-- ✅ Phase 1: 분석 완료
-- ✅ Phase 2: Core 모듈 개발 완료
-- ✅ Phase 3: 인프라 설정 완료
-- ✅ Phase 4: Skill 통합 완료
-- ✅ Phase 5: 857개 제품 임베딩 완료 (100%)
+**§rag.status** - 완성된 Phase:
+- ✅ **Phase 0**: Initial Setup (Docker, FastAPI, Frontend)
+- ✅ **Phase 1**: Atomic Chunking (471 products → 3,246 chunks)
+- ✅ **Phase 2**: Enhanced Field Extraction (Neck, MOQ, Material, Price)
+- ✅ **Phase 3**: Search Optimization (0.79-0.82 quality)
 
 **§rag.core** - 완성된 Core 모듈:
-- ✅ `src/core/rag_pipeline.py` (262 lines)
-  - `RAGPipeline`: 통합 파이프라인 (ingest, retrieve, generate)
-  - `ingest_documents()`: 문서 → 임베딩 → Qdrant
-  - `retrieve()`: 벡터 검색 (metadata filters 지원)
-  - `generate_response()`: Ollama 답변 생성
-  - **Test**: ✅ All passed (Score: 0.7254)
+- ✅ `src/core/product_classifier.py` - 제품 분류기 (Bottle/Jar/Cap/Pump)
+- ✅ `src/core/chunk_templates.py` - 20+ 필드 타입 템플릿
+- ✅ `src/core/category_templates.py` - 카테고리별 특화 템플릿
+- ✅ `src/core/advanced_chunk_generator.py` - 통합 청킹 파이프라인
+- ✅ `src/core/enhanced_field_extractor.py` ⭐ **NEW** - 강화된 필드 추출기
+  - Bottle/Jar: `enriched_info` 기반 자동 추출
+  - Cap/Pump: spec/detail/description 파싱
+  - Neck, MOQ, Material, Price 추출
+  - Composite fields (SPEC_COMPOSITE, BUSINESS_COMPOSITE)
+- ✅ `src/core/query_parser.py` - 자연어 엔티티 추출기
+- ✅ `src/core/search_engine.py` - 하이브리드 검색 엔진
+- ✅ `src/core/natural_language_response.py` - 자연어 답변 생성기
 
-- ✅ `src/core/embedding_service.py` (72 lines)
-  - Model: all-MiniLM-L6-v2 (384 dim)
-  - GPU 지원 (CUDA/MPS)
-  - **Test**: ✅ Passed
-
-- ✅ `src/api/chat.py` (450 lines)
-  - Feature flag: `USE_VECTOR_RAG=true`
-  - `/chat/query`: 벡터 검색 + RAG 답변
-  - Backward compatibility 유지
-  - **Test**: ✅ Passed (Score: 0.5678)
-
-**§rag.skill** - Skill 래퍼 완성:
-- ✅ `.claude/skills/rag-pipeline/scripts/skill.py`
-  - `process_document()`: Core RAGPipeline 사용
-  - `vector_search()`: 실제 벡터 검색
-  - `rag_query()`: 검색 + 답변 생성 (타이밍 포함)
-
-**§rag.data** - 임베딩 현황:
-- ✅ 857/857 products (Bottle: 675, Jar: 42, Cap: 118, Pump: 22)
-- ✅ Collection: `products` @ Qdrant
-- ✅ Search test passed (Score: 0.6405)
+**§rag.data** - 데이터 현황:
+- ✅ **471 products** → **3,246 atomic chunks** (+56% from 2,073)
+- ✅ Avg 6.9 chunks/product (enhanced field extraction)
+- ✅ Collection: `products_atomic` @ Qdrant
+- ✅ Search quality: **0.79-0.82 similarity** ⭐
+- ✅ Model: sentence-transformers/all-MiniLM-L6-v2 (384 dim)
 
 **§rag.infra** - 인프라:
 - ✅ Colima (4 CPU, 8GB RAM)
 - ✅ Qdrant v1.11.3 (http://localhost:6333)
 - ✅ Ollama (qwen2.5:7b-instruct)
 
-**Full Details**: docs/RAG_ACTIVATION_STRATEGY.md (20KB)
+**§rag.roadmap** - 향후 계획 (Phase 4-9):
+- 📋 Phase 4: Multi-Modal Data Processing (PDF, Image, Excel/CSV)
+- 📋 Phase 5: Advanced RAG Integration Pipeline
+- 📋 Phase 6: Image Matching Service
+- 📋 Phase 7: Cloud Data Integration
+- 📋 Phase 8: Real-Time Chat Optimization
+- 📋 Phase 9: Enterprise Deployment
+
+**Full Details**:
+- [IMPLEMENTATION_SUMMARY.md](docs/IMPLEMENTATION_SUMMARY.md) - Current status
+- [ROADMAP.md](docs/ROADMAP.md) - Phase 4-9 detailed plans (26KB)
+- [MAIN_INTEGRATION_REPORT.md](docs/MAIN_INTEGRATION_REPORT.md) - Integration report
 
 ---
 
