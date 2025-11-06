@@ -1,18 +1,24 @@
 # Multi-Modal RAG Components
 
 **Phase 4.4 - Multi-Modal Integration**
-**Status**: Week 1 Complete ✅
+**Status**: Week 2 Complete ✅
 
 ---
 
 ## Overview
 
-Unified multi-modal embedding service for text, image, and shape embeddings.
+Unified multi-modal embedding service with Qdrant integration for text, image, and shape embeddings.
 
 **Supported Modalities**:
 - ✅ **Text**: Sentence Transformers (384-dim) - Production Ready
 - ✅ **Image**: OpenCLIP ViT-H-14 (1024-dim) - Production Ready
 - 📋 **Shape**: Custom descriptors (128-dim) - Phase 6
+
+**Qdrant Integration**: ✅
+- Named vectors (text/image/shape)
+- Multi-vector upload and search
+- Batch processing
+- Data migration tools
 
 ---
 
@@ -22,13 +28,16 @@ Unified multi-modal embedding service for text, image, and shape embeddings.
 
 ```bash
 # Core dependencies
-pip install torch sentence-transformers
+pip install torch sentence-transformers qdrant-client
 
 # Image support (optional)
 pip install open_clip_torch
 
 # Shape support (Phase 6)
 pip install opencv-python rembg
+
+# Progress bar for batch operations
+pip install tqdm
 ```
 
 ### Basic Usage
@@ -199,31 +208,100 @@ python scripts/demo_multimodal.py
 
 ## Integration
 
-### With Qdrant (Week 2)
+### With Qdrant (Week 2) ✅
+
+#### Setup Collection
+
+```bash
+# Create multi-modal collection with named vectors
+python scripts/create_multimodal_collection.py
+
+# Options
+python scripts/create_multimodal_collection.py \
+  --host localhost \
+  --port 6333 \
+  --collection products_multimodal \
+  --recreate  # Delete if exists
+```
+
+#### Upload with MultiModalQdrantUploader
 
 ```python
 from qdrant_client import QdrantClient
-from src.core.multimodal import MultiModalEmbeddingService
+from src.core.multimodal import MultiModalEmbeddingService, MultiModalQdrantUploader
 
+# Initialize
 embedder = MultiModalEmbeddingService()
 client = QdrantClient(host="localhost", port=6333)
+uploader = MultiModalQdrantUploader(client, "products_multimodal")
 
 # Generate embeddings
-text_emb = embedder.embed_text("Product description")
-image_emb = embedder.embed_image("product.jpg")
+text_emb = embedder.embed_text("100ml PET Bottle")
+image_emb = embedder.embed_image("bottle.jpg")
 
-# Upload to Qdrant (Week 2 implementation)
-client.upsert(
-    collection_name="products_multimodal",
-    points=[{
-        "id": "product-001",
-        "vector": {
-            "text": text_emb,
-            "image": image_emb
-        },
-        "payload": {"name": "Product 1"}
-    }]
+# Upload single product
+uploader.upload_product(
+    product_id="BOTTLE-001",
+    text_embedding=text_emb,
+    image_embedding=image_emb,
+    payload={
+        "product_name": "100ml PET Bottle",
+        "category": "Bottle",
+        "specifications": {"capacity": "100ml"}
+    }
 )
+
+# Batch upload
+products = [
+    {
+        "product_id": "BOTTLE-002",
+        "text_embedding": embedder.embed_text("200ml PET Bottle"),
+        "payload": {"name": "200ml Bottle"}
+    },
+    # ... more products
+]
+stats = uploader.upload_batch(products)
+print(f"Uploaded {stats['success']}/{stats['total']}")
+```
+
+#### Search with Named Vectors
+
+```python
+# Text-only search
+results = client.search(
+    collection_name="products_multimodal",
+    query_vector=("text", text_query_emb),  # Named vector
+    limit=10
+)
+
+# Image-only search
+results = client.search(
+    collection_name="products_multimodal",
+    query_vector=("image", image_query_emb),  # Named vector
+    limit=10
+)
+```
+
+#### Migrate Existing Data
+
+```bash
+# Migrate from single-vector to multi-vector collection
+python scripts/migrate_to_multimodal.py \
+  --source products_atomic \
+  --target products_multimodal \
+  --vector-name text \
+  --batch-size 100
+
+# Dry run (preview only)
+python scripts/migrate_to_multimodal.py --dry-run
+```
+
+#### End-to-End Demo
+
+```bash
+# Full integration demo (embeddings + upload + search)
+python scripts/demo_week2_integration.py
+```
 ```
 
 ### With OCR Pipeline (Week 4)
@@ -278,13 +356,16 @@ embeddings = embedder.embed(
 - [x] Unit tests
 - [x] Demo script
 
-### 📋 Week 2 (Next)
-- [ ] Qdrant multi-vector collection setup
-- [ ] MultiModalQdrantUploader
-- [ ] Data migration script
-- [ ] Integration tests
+### ✅ Week 2 (Complete)
+- [x] Qdrant multi-vector collection setup
+- [x] MultiModalQdrantUploader
+- [x] Data migration script
+- [x] Integration tests
+- [x] Named vector search support
+- [x] Batch upload optimization
+- [x] Collection management tools
 
-### 📋 Week 3
+### 📋 Week 3 (Next)
 - [ ] HybridSearchEngine
 - [ ] Fusion strategies (Weighted, RRF, Learned)
 - [ ] Cross-encoder re-ranker
@@ -304,6 +385,10 @@ embeddings = embedder.embed(
 # Core (required)
 torch>=2.0.0
 sentence-transformers>=2.2.0
+qdrant-client>=1.7.0
+
+# Progress bar (batch operations)
+tqdm>=4.65.0
 
 # Image support (optional)
 open_clip_torch>=2.20.0
