@@ -21,26 +21,42 @@
 
 ## Quick Start
 
+### Prerequisites
+
+- Python 3.11.14 (required)
+- Docker Desktop or Colima
+- 10GB free disk space
+
+### Installation
+
 ```bash
-# 1. Install
+# 1. Clone
 git clone <repo-url> && cd rag-enterprise
-pip install -r requirements.txt
 
-# 2. Environment
-cp .env.example .env
+# 2. Automated Setup
+./scripts/setup_dev_environment.sh
 
-# 3. Start services
-docker-compose up -d
+# 3. Verify
+./scripts/verify_environment.sh
 
-# 4. Run backend
-python run_chat_server.py
+# 4. Prepare Data (choose one)
+./scripts/prepare_data.sh --snapshot    # Fast (5 min, production data)
+./scripts/prepare_data.sh --sample      # Quick (1 min, test data)
 
-# 5. Run frontend (new terminal)
+# 5. Run Backend
+python scripts/run_chat_server.py
+
+# 6. Run Frontend (new terminal)
 cd frontend && python3 -m http.server 8080
 # Open: http://localhost:8080/chat.html
 ```
 
-**Detailed Guide**: `docs/QUICK_START.md`
+### Manual Setup (if automated fails)
+
+See detailed guides:
+- `docs/LOCAL_SETUP.md` - Local environment setup
+- `docs/DATA_PREPARATION.md` - Data preparation options
+- `docs/ENVIRONMENT_PARITY.md` - Environment consistency guide
 
 ---
 
