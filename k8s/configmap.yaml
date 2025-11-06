@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rag-config
+  namespace: rag-enterprise
+data:
+  # API Configuration
+  API_HOST: "0.0.0.0"
+  API_PORT: "8001"
+  API_WORKERS: "4"
+
+  # Qdrant Configuration
+  QDRANT_HOST: "qdrant-service"
+  QDRANT_PORT: "6333"
+  COLLECTION_NAME: "products_multimodal"
+
+  # Redis Configuration
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_DB: "0"
+
+  # PostgreSQL Configuration
+  POSTGRES_HOST: "postgres-service"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "rag_enterprise"
+  POSTGRES_USER: "rag_user"
+
+  # Embedding Configuration
+  EMBEDDING_MODEL: "all-MiniLM-L6-v2"
+  EMBEDDING_DIM: "384"
+  IMAGE_EMBEDDING_DIM: "1024"
+  SHAPE_EMBEDDING_DIM: "128"
+
+  # Debug Configuration
+  DEBUG_ENABLED: "false"
+  DEBUG_PROFILE_REQUESTS: "false"
+  DEBUG_LOG_QUERIES: "true"
+
+  # Streaming Configuration
+  SSE_KEEPALIVE_INTERVAL: "30"
+  ANALYTICS_UPDATE_INTERVAL: "5"
+
+  # Pipeline Configuration
+  PIPELINE_BATCH_SIZE: "100"
+  PIPELINE_MAX_WORKERS: "4"
