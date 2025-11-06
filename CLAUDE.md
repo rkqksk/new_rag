@@ -140,6 +140,7 @@ ollama list                            # Check models
 | Architecture work | §arch.* | System design, integration |
 | RAG development | §rag.* | Vector search, embedding |
 | OCR/Document processing | §ocr.* | PDF/Image extraction, parsing |
+| Multi-Modal integration | §multimodal.* | Embedding, Image search, Hybrid search |
 | UI changes | §ui.* | Design updates, components |
 | Model management | §ollama.* | Model updates, performance |
 | Deployment | §deploy.* | Infrastructure setup |
@@ -304,6 +305,86 @@ result = ocr.ocr("product_catalog.jpg")
 
 ---
 
+#### §multimodal - Multi-Modal RAG System
+**Status**: Strategy Designed (Phase 4.4 + 6 준비 완료)
+**Goal**: OCR + Text Embedding + Image Embedding 통합 검색
+
+**§multimodal.architecture** - Three-Modal Pipeline:
+- **Text Embedding**: Sentence Transformers (all-MiniLM-L6-v2, 384-dim)
+- **Image Embedding**: OpenCLIP ViT-H-14 (1024-dim)
+- **Shape Embedding**: Hu Moments + Fourier Descriptors (128-dim)
+- **Vector DB**: Qdrant Named Vectors (text, image, shape)
+- **Search**: Hybrid fusion (weighted, RRF, learned)
+
+**§multimodal.pipeline** - Complete Flow:
+```
+Input (PDF/Image/Text/Excel)
+  ↓
+Multi-Modal Processing:
+  ├── Text → Sentence Transformers (384-dim)
+  ├── Image → OpenCLIP (1024-dim)
+  └── Shape → Contour Descriptors (128-dim)
+  ↓
+Qdrant Multi-Vector Storage
+  ↓
+Hybrid Search (Text + Image + Shape)
+  ↓
+Re-ranking + Filtering → Results
+```
+
+**§multimodal.models** - Embedding Models:
+- Text (Current): all-MiniLM-L6-v2 ⭐ Production
+- Text (Upgrade): multilingual-e5-large (better Korean)
+- Image (Current): OpenCLIP ViT-H-14 ⭐ Production
+- Image (Alternative): Fine-tuned ResNet50 (packaging domain)
+- Shape (New): Custom descriptors (geometric similarity)
+
+**§multimodal.search** - Search Strategies:
+- **Text-only**: Semantic search (current)
+- **Image-only**: Visual similarity (implemented)
+- **Hybrid**: Text + Image fusion (85% + 90% → **95%** accuracy)
+- **Tri-modal**: Text + Image + Shape (best accuracy)
+
+**§multimodal.fusion** - Fusion Techniques:
+- Weighted Linear: Simple, interpretable
+- RRF (Reciprocal Rank Fusion): Robust, no tuning
+- Learned Fusion: ML-based, optimal (requires training data)
+
+**§multimodal.performance** - Target Metrics:
+- Text search accuracy: >85% @ Top-10
+- Image search accuracy: >80% @ Top-10
+- Hybrid search accuracy: >90% @ Top-10
+- Search latency (cached): <50ms
+- Search latency (uncached): <500ms
+- OCR → Embedding: <5s per page
+
+**§multimodal.roadmap** - Implementation (Phase 4.4):
+- Week 1: Unified Embedding Pipeline
+- Week 2: Qdrant Multi-Vector Setup
+- Week 3: Hybrid Search Engine
+- Week 4: OCR Integration + Testing
+
+**Quick Start**:
+```python
+# Multi-modal search
+from src.core.multimodal.hybrid_search import HybridSearchEngine
+
+engine = HybridSearchEngine()
+results = engine.search_hybrid(
+    text_query="20파이 캡 5000개",
+    image_query="product_photo.jpg",
+    text_weight=0.6,
+    image_weight=0.4
+)
+```
+
+**Full Details**:
+- docs/MULTIMODAL_RAG_STRATEGY.md (80KB) - Complete architecture
+- app/services/image_search_service.py - Current image search
+- src/core/embedding_service.py - Current text embedding
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -343,6 +424,7 @@ rag-enterprise/
 | RAG Strategy | §rag.* | 18KB | RAG development |
 | OCR & Parsing Strategy | §ocr.* | 50KB | OCR/PDF/Image processing |
 | OCR Quick Start | §ocr.quickstart | 30KB | Practical OCR examples |
+| Multi-Modal RAG Strategy | §multimodal.* | 80KB | Embedding, Image matching, Hybrid search |
 | UI Policy | §ui.* | 13KB | Frontend work |
 | Ollama Policy | §ollama.* | 6.5KB | Model management |
 | Symbol System | - | 3KB | Reference guide |

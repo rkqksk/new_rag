@@ -279,49 +279,81 @@ src/core/structured_processors/
 - ✅ 데이터 검증 정확도 >95%
 - ✅ 처리 속도: 10,000 rows < 10초
 
-### 4.4: Multi-Modal Integration
+### 4.4: Multi-Modal Integration ⭐
 
-**Goal**: 모든 데이터 소스 통합 처리
+**Goal**: OCR + Text Embedding + Image Embedding 통합 시스템
+**Related**: `docs/MULTIMODAL_RAG_STRATEGY.md` (Complete strategy document)
 
 **Technical Design**:
 ```python
-# Unified Pipeline
-Any Input (PDF/Image/Excel/CSV)
+# Three-Modal Processing Pipeline
+Input (PDF/Image/Excel/CSV)
   → Format Detector
   → Appropriate Processor (4.1/4.2/4.3)
-  → Standardized Output (JSON)
-  → Enhanced Field Extractor
-  → Vector Embedding
-  → Qdrant Storage
+  → Multi-Modal Embedding:
+      ├── Text Embedding (384-dim, Sentence Transformers)
+      ├── Image Embedding (1024-dim, OpenCLIP ViT-H-14)
+      └── Shape Embedding (128-dim, Hu Moments + Fourier)
+  → Qdrant Multi-Vector Storage (Named Vectors)
+  → Hybrid Search Engine
 
 # Key Components
 src/core/multimodal/
-├── format_detector.py       # 파일 포맷 자동 인식
-├── processor_router.py      # 적절한 프로세서 라우팅
-├── output_normalizer.py     # 표준 JSON 변환
-└── quality_assurance.py     # 품질 검증
+├── format_detector.py           # 파일 포맷 자동 인식
+├── multimodal_embedder.py      # 통합 임베딩 서비스 ⭐ NEW
+├── ocr_to_embedding.py         # OCR → Embedding 파이프라인 ⭐ NEW
+├── hybrid_search.py            # Text+Image+Shape 하이브리드 검색 ⭐ NEW
+├── qdrant_uploader.py          # Multi-vector Qdrant 업로드 ⭐ NEW
+└── reranker.py                 # Cross-encoder 재순위화 ⭐ NEW
+
+src/core/shape_processors/      # Shape embedding pipeline ⭐ NEW
+├── shape_embedder.py           # Hu Moments, Fourier, Zernike
+└── background_remover.py       # U2-Net background removal
 ```
 
 **Implementation Steps**:
-1. **Week 1**: Format Detection
-   - MIME type detection
-   - File signature analysis
-   - Extension validation
+1. **Week 1**: Unified Embedding Pipeline
+   - `MultiModalEmbeddingService` 구현
+   - Text + Image + Shape embedder 통합
+   - Batch processing 지원
+   - Unit tests for each modality
 
-2. **Week 2**: Processor Router
-   - Dynamic processor selection
-   - Fallback handling
-   - Error recovery
+2. **Week 2**: Qdrant Multi-Vector Setup
+   - `products_multimodal` collection 생성
+   - Named vectors 설정 (text:384, image:1024, shape:128)
+   - `MultiModalQdrantUploader` 구현
+   - 기존 데이터 마이그레이션
 
-3. **Week 3**: Output Normalization
-   - Unified JSON schema
-   - Field mapping to FieldType
-   - Metadata enrichment
+3. **Week 3**: Hybrid Search Engine
+   - `HybridSearchEngine` 구현
+   - Fusion strategies (Weighted, RRF, Learned)
+   - Cross-encoder re-ranking
+   - Performance benchmarks
+
+4. **Week 4**: OCR Integration
+   - `OCRPipeline` → `MultiModalEmbedding` 연결
+   - End-to-end: PDF → OCR → Embeddings → Qdrant
+   - Caching layer 통합 (Phase 8.2)
+   - Testing with 100+ documents
+
+**Embedding Models**:
+- **Text**: sentence-transformers/all-MiniLM-L6-v2 (384-dim) - Current
+- **Image**: OpenCLIP ViT-H-14 (1024-dim) - Implemented
+- **Shape**: Custom descriptors (128-dim) - New
 
 **Success Metrics**:
-- ✅ Format detection 100%
-- ✅ End-to-end processing success rate >90%
-- ✅ Output consistency 100%
+- ✅ Text search accuracy: >85% @ Top-10
+- ✅ Image search accuracy: >80% @ Top-10
+- ✅ Hybrid search accuracy: >90% @ Top-10
+- ✅ OCR → Embedding latency: <5s per page
+- ✅ Search latency (cached): <50ms
+- ✅ Search latency (uncached): <500ms
+
+**Integration Points**:
+- Phase 4.2 (OCR): Document → Text extraction
+- Phase 4.3 (Excel): Structured data + embedded images
+- Phase 6 (Image Matching): Shape-based similarity
+- Phase 8.2 (Caching): Embedding cache layer
 
 ---
 
