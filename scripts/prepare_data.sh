@@ -63,14 +63,96 @@ prepare_snapshot() {
 
     check_prerequisites
 
-    echo -e "${YELLOW}⚠️  Snapshot 기능은 아직 구현되지 않았습니다${NC}"
+    # Snapshot 파일 경로
+    SNAPSHOT_FILE="${1:-}"
+    if [ -z "$SNAPSHOT_FILE" ]; then
+        echo -e "${YELLOW}사용법: $0 --snapshot <snapshot-file-path>${NC}"
+        echo ""
+        echo "사용 가능한 Snapshot 파일:"
+        if [ -d "data/snapshots" ]; then
+            ls -lh data/snapshots/*.snapshot 2>/dev/null || echo "  (없음)"
+        else
+            echo "  data/snapshots/ 디렉토리가 없습니다"
+        fi
+        echo ""
+        echo "Snapshot 생성 방법:"
+        echo "  ./scripts/create_snapshot.sh onehago_v2"
+        exit 1
+    fi
+
+    # 파일 존재 확인
+    if [ ! -f "$SNAPSHOT_FILE" ]; then
+        echo -e "${RED}❌ Snapshot 파일을 찾을 수 없습니다: $SNAPSHOT_FILE${NC}"
+        exit 1
+    fi
+
+    FILE_SIZE=$(ls -lh "$SNAPSHOT_FILE" | awk '{print $5}')
+    echo "✅ Snapshot 파일: $SNAPSHOT_FILE ($FILE_SIZE)"
     echo ""
-    echo "수동으로 진행하려면:"
-    echo "1. Snapshot 파일 다운로드 (Google Drive 또는 공유 위치)"
-    echo "2. Qdrant snapshot 디렉토리에 복사"
-    echo "3. Qdrant 재시작"
+
+    # Collection 이름 (파일명에서 추출)
+    COLLECTION_NAME=$(basename "$SNAPSHOT_FILE" | sed 's/_[0-9]*\.snapshot$//')
+    echo "📌 Collection: $COLLECTION_NAME"
     echo ""
-    echo "자세한 내용은 docs/DATA_PREPARATION.md를 참조하세요"
+
+    # 기존 Collection 삭제 확인
+    echo "⚠️  기존 Collection을 삭제하고 복원합니다"
+    read -p "계속하시겠습니까? (y/N): " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "취소되었습니다"
+        exit 0
+    fi
+
+    # Collection 삭제
+    echo "🗑️  기존 Collection 삭제 중..."
+    curl -s -X DELETE "http://$QDRANT_HOST:$QDRANT_PORT/collections/$COLLECTION_NAME" >/dev/null 2>&1 || true
+    sleep 2
+    echo "✅ 삭제 완료"
+    echo ""
+
+    # Snapshot 업로드
+    echo "📤 Snapshot 업로드 중..."
+    UPLOAD_RESPONSE=$(curl -s -X POST \
+        "http://$QDRANT_HOST:$QDRANT_PORT/collections/$COLLECTION_NAME/snapshots/upload" \
+        -H "Content-Type: multipart/form-data" \
+        -F "snapshot=@$SNAPSHOT_FILE")
+
+    if echo "$UPLOAD_RESPONSE" | grep -q '"status":"ok"'; then
+        echo -e "${GREEN}✅ 업로드 완료${NC}"
+    else
+        echo -e "${RED}❌ 업로드 실패${NC}"
+        echo "$UPLOAD_RESPONSE"
+        exit 1
+    fi
+    echo ""
+
+    # 복원 대기
+    echo "⏳ Collection 복원 중..."
+    sleep 5
+
+    # 검증
+    echo "🔍 복원 검증 중..."
+    COLLECTION_INFO=$(curl -s "http://$QDRANT_HOST:$QDRANT_PORT/collections/$COLLECTION_NAME")
+
+    if echo "$COLLECTION_INFO" | grep -q '"status":"ok"'; then
+        VECTOR_COUNT=$(echo "$COLLECTION_INFO" | grep -o '"points_count":[0-9]*' | cut -d':' -f2)
+        echo -e "${GREEN}✅ 복원 성공!${NC}"
+        echo "   Collection: $COLLECTION_NAME"
+        echo "   Vectors: $VECTOR_COUNT"
+    else
+        echo -e "${RED}❌ 복원 실패${NC}"
+        echo "$COLLECTION_INFO"
+        exit 1
+    fi
+    echo ""
+
+    echo -e "${GREEN}================================${NC}"
+    echo -e "${GREEN}✅ Snapshot 복원 완료!${NC}"
+    echo -e "${GREEN}================================${NC}"
+    echo ""
+    echo "다음 단계:"
+    echo "  ./scripts/verify_data.sh"
 }
 
 prepare_embedding() {
@@ -232,7 +314,7 @@ PYEOF
 # 메인 로직
 case "${1:-}" in
     --snapshot)
-        prepare_snapshot
+        prepare_snapshot "$2"
         ;;
     --embedding)
         prepare_embedding
