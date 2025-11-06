@@ -1,33 +1,49 @@
-# Core Framework
-langchain==0.1.0
+# FastAPI & ASGI
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
+python-multipart==0.0.6
+
+# Pydantic
+pydantic==2.5.0
+pydantic-settings==2.1.0
+
+# Database
+psycopg2-binary==2.9.9
+sqlalchemy==2.0.23
+asyncpg==0.29.0
+
+# Redis
+redis==5.0.1
+hiredis==2.2.3
 
 # Vector Database
 qdrant-client==1.7.0
-psycopg[binary]==3.1.15
-pgvector==0.2.0
 
-# Embedding and NLP
-transformers==4.36.0
-sentence-transformers==2.5.0
-torch==2.2.0
-redis==5.0.0
+# ML & Embeddings
+sentence-transformers==2.2.2
+torch==2.1.1
+transformers==4.35.2
 
-# Data Processing
-pandas==2.1.4
-numpy==1.24.3
-scikit-learn==1.3.2
+# OCR & Image
+paddleocr==2.7.0.3
+paddlepaddle==2.5.2
+opencv-python==4.8.1.78
+pillow==10.1.0
+
+# Monitoring & Logging
+prometheus-client==0.19.0
+python-json-logger==2.0.7
+
+# HTTP & Async
+httpx==0.25.2
+aiohttp==3.9.1
 
 # Testing
 pytest==7.4.3
 pytest-asyncio==0.21.1
+pytest-cov==4.1.0
 
-# Utility
-pydantic==2.5.0
-python-dotenv==1.0.0
-prometheus-client==0.19.0
-
-# Optional (as needed)
-# Add any specific libraries your project requires
-PyYAML==6.0.1
+# Development
+black==23.11.0
+ruff==0.1.6
+mypy==1.7.1
