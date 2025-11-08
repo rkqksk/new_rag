@@ -24,6 +24,7 @@ const navItems: NavItem[] = [
 
   // Admin + Manager
   { title: "관리 대시보드", href: "/admin", icon: "📊", roles: ["super-user", "admin", "manager"] },
+  { title: "웹 크롤링", href: "/admin/crawling", icon: "🌐", roles: ["super-user", "admin", "manager"] },
   { title: "데이터 분석", href: "/admin/analytics", icon: "📈", roles: ["super-user", "admin", "manager"] },
   { title: "결제 관리", href: "/admin/billing", icon: "💰", roles: ["super-user", "admin", "manager"] },
   { title: "API 키 관리", href: "/admin/api-keys", icon: "🔑", roles: ["super-user", "admin"] },
