@@ -1,0 +1,44 @@
+{
+  "name": "code-review-agent",
+  "version": "1.0.0",
+  "description": "GitHub integration and code review agent with automated PR analysis",
+  "capabilities": [
+    "github-integration",
+    "pull-request-review",
+    "code-analysis",
+    "issue-management",
+    "repository-management"
+  ],
+  "mcpServers": {
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "description": "GitHub API integration (free for public repos, token needed for private)",
+      "enabled": false,
+      "priority": "high",
+      "note": "Optional - Get free token at https://github.com/settings/tokens (no cost, unlimited for public repos)"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "description": "File operations for code analysis",
+      "enabled": true,
+      "priority": "high"
+    }
+  },
+  "config": {
+    "auto_review": false,
+    "review_depth": "standard",
+    "check_tests": true,
+    "check_coverage": true
+  },
+  "metadata": {
+    "created": "2025-11-08",
+    "updated": "2025-11-08",
+    "status": "production-ready",
+    "cost": "$0/month (GitHub API is free)"
+  }
+}

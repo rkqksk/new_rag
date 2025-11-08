@@ -44,10 +44,10 @@
       "env": {
         "TAVILY_API_KEY": "${TAVILY_API_KEY}"
       },
-      "description": "AI-optimized web search and content extraction",
+      "description": "AI-optimized web search and content extraction (1000 requests/month free)",
       "enabled": false,
-      "priority": "low",
-      "note": "Requires API key"
+      "priority": "medium",
+      "note": "Optional - Free tier available at https://tavily.com (recommended for AI-optimized search)"
     },
     "filesystem": {
       "command": "npx",

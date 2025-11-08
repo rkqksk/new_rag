@@ -1,0 +1,40 @@
+{
+  "name": "deployment-agent",
+  "version": "1.0.0",
+  "description": "Deployment and DevOps agent - Docker, Kubernetes, CI/CD automation",
+  "capabilities": [
+    "docker-deployment",
+    "kubernetes-orchestration",
+    "ci-cd-automation",
+    "infrastructure-as-code",
+    "deployment-rollback"
+  ],
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "description": "File operations for deployment configs",
+      "enabled": true,
+      "priority": "high"
+    }
+  },
+  "tools": [
+    "docker",
+    "docker-compose",
+    "kubectl",
+    "helm"
+  ],
+  "config": {
+    "default_environment": "development",
+    "container_registry": "local",
+    "orchestration": "docker-compose",
+    "auto_rollback": true
+  },
+  "metadata": {
+    "created": "2025-11-08",
+    "updated": "2025-11-08",
+    "status": "production-ready",
+    "cost": "$0/month (software only) + infrastructure costs",
+    "supported_platforms": ["Docker", "Kubernetes", "VPS", "AWS", "GCP", "Azure"]
+  }
+}

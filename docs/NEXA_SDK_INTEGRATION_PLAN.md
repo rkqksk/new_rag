@@ -127,13 +127,14 @@ else:
 # - 기존 CLIP 임베딩 재생성
 ```
 
-### Option 2: Marqo-Ecommerce Models ⭐ **대안**
-**출처**: Marqo (E-commerce 특화)
+### Option 2: Marqo-Ecommerce Models (OpenCLIP 로컬)
+**출처**: Marqo (E-commerce 특화, 오픈소스)
 
 **장점**:
 - ✅ **E-commerce 전용** - 제품 이미지에 최적화
-- ✅ **SOTA 성능** - Amazon Titan 대비 88% 개선, OpenCLIP 대비 31% 개선
+- ✅ **SOTA 성능** - Amazon Titan 대비 88% 개선, 기본 OpenCLIP 대비 31% 개선
 - ✅ **2가지 모델**: Base (빠름) / Large (정확)
+- ✅ **완전 오픈소스** - 로컬 실행, API 비용 없음
 
 **벤치마크 결과** (Marqo 공식):
 ```
@@ -144,41 +145,59 @@ NDCG@10:
 - OpenCLIP ViT-L: 0.449 (31% worse)
 ```
 
-**구현**:
+**구현 (로컬 전용)**:
 ```python
-# Option A: Marqo 클라우드 API 사용
-import marqo
+# OpenCLIP with Marqo weights (self-hosted)
+from open_clip import create_model_and_transforms
+import torch
 
-mq = marqo.Client(url='https://api.marqo.ai', api_key='your-key')
-
-# 제품 이미지 인덱싱
-mq.index("products").add_documents([
-    {
-        "title": "50ml PET 용기",
-        "image_url": "https://example.com/product.jpg",
-        "description": "투명 PET 소재, 50ml 용량"
-    }
-])
-
-# 이미지 검색
-results = mq.index("products").search(
-    q="투명한 작은 용기",
-    searchable_attributes=["title", "description", "image_url"]
-)
-
-# Option B: OpenCLIP 로컬 사용 (Marqo 오픈소스)
-from open_clip import create_model_and_transforms, tokenizer
-
+# Load Marqo-trained model locally
 model, preprocess_train, preprocess_val = create_model_and_transforms(
     'ViT-L-14',
-    pretrained='marqo-ecommerce-L'  # Marqo 가중치
+    pretrained='marqo-ecommerce-L'  # Download once, use forever
 )
+
+# Move to GPU if available
+device = "cuda" if torch.cuda.is_available() else "cpu"
+model = model.to(device)
+
+# Generate image embeddings
+def embed_product_image(image_path: str) -> np.ndarray:
+    """Generate embedding for product image"""
+    from PIL import Image
+
+    image = Image.open(image_path)
+    image_tensor = preprocess_val(image).unsqueeze(0).to(device)
+
+    with torch.no_grad():
+        embedding = model.encode_image(image_tensor)
+
+    return embedding.cpu().numpy()[0]
+
+# Index to Qdrant
+from qdrant_client import QdrantClient
+
+qdrant = QdrantClient(host="localhost", port=6333)
+
+# Add product images
+for product in products:
+    embedding = embed_product_image(product['image_path'])
+
+    qdrant.upsert(
+        collection_name="product_images",
+        points=[{
+            "id": product['id'],
+            "vector": embedding.tolist(),
+            "payload": product
+        }]
+    )
 ```
 
-**비용 고려**:
-- 클라우드 API: 월 사용량에 따라 과금
-- 로컬 모델: GPU 필요 (ViT-L-14는 큼)
-- **추천**: 초기 프로토타입은 API, 프로덕션은 로컬
+**리소스 요구사항**:
+- GPU: 4-8 GB VRAM (RTX 3060 이상 권장)
+- CPU: 가능하지만 느림 (~10x slower)
+- 저장 공간: ~2 GB (모델 가중치)
+- 비용: **$0/month** (오픈소스)
 
 ### Option 3: CLIP Fine-tuning (현재 시스템 개선)
 **장점**: 기존 인프라 활용, 점진적 개선
@@ -221,16 +240,18 @@ model.save_pretrained("models/clip-products-finetuned")
 
 ### 권장 사항 (이미지 임베딩)
 
-**단계별 접근**:
-1. **즉시 (1주)**: SigLIP 2 프로토타입 (NexaAI SDK 사용)
-2. **단기 (1개월)**: A/B 테스트 (CLIP vs SigLIP)
-3. **중기 (2-3개월)**: Marqo-Ecommerce 평가 (예산 있으면)
-4. **장기**: 자체 데이터로 Fine-tuning
+**단계별 접근 (100% 오픈소스)**:
+1. **즉시 (1주)**: SigLIP 2 프로토타입 (NexaAI SDK 또는 HuggingFace)
+2. **단기 (1개월)**: A/B 테스트 (CLIP vs SigLIP vs Marqo-OpenCLIP)
+3. **중기 (2-3개월)**: 최고 성능 모델로 전환 + 기존 임베딩 재생성
+4. **장기**: 자체 데이터로 Fine-tuning (데이터 1000개+ 수집 후)
 
 **이유**:
-- SigLIP 2가 최신이고 NexaAI SDK에서 바로 사용 가능
-- Marqo는 좋지만 비용 및 의존성 고려 필요
-- Fine-tuning은 데이터 충분할 때 (현재 471개는 적음)
+- ✅ **모든 옵션이 오픈소스** - API 비용 $0
+- ✅ **SigLIP 2** - 최신 SOTA, NexaAI/HuggingFace에서 무료
+- ✅ **Marqo-OpenCLIP** - E-commerce 특화, 로컬 실행
+- ✅ **CLIP Fine-tuning** - 자체 데이터 활용, 완전 통제
+- ✅ **Self-hosted** - GPU 서버 비용만 (월 $50-100)
 
 ---
 

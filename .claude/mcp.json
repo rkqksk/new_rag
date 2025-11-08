@@ -4,144 +4,102 @@
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
       "description": "Secure file operations for RAG Enterprise codebase",
-      "skills": ["all"],
-      "enabled": true
-    },
-    "puppeteer": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
-      "description": "Browser automation for web scraping with Puppeteer",
-      "skills": ["web-scraping-expert", "web-crawler-pipeline", "data-collector"],
-      "enabled": true
+      "enabled": true,
+      "priority": 1,
+      "note": "Core MCP - always enabled for token efficiency"
     },
     "git": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "/home/user/rag-enterprise"],
       "description": "Git repository operations and code search",
-      "skills": ["all"],
-      "enabled": true
-    },
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your_github_token>"
-      },
-      "description": "GitHub repository management and code review",
-      "skills": ["all"],
-      "enabled": false,
-      "note": "Requires GITHUB_PERSONAL_ACCESS_TOKEN to be set"
-    },
-    "postgres": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:password@localhost:5432/rag_enterprise"],
-      "description": "PostgreSQL database access for SaaS platform",
-      "skills": ["saas-platform", "data-collector"],
-      "enabled": false,
-      "note": "Configure connection string in production"
-    },
-    "brave-search": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
-      "env": {
-        "BRAVE_API_KEY": "<your_brave_api_key>"
-      },
-      "description": "Privacy-focused web search for research and data collection",
-      "skills": ["web-scraping-expert", "data-collector", "marketing-expert"],
-      "enabled": false,
-      "note": "Requires BRAVE_API_KEY to be set"
-    },
-    "tavily": {
-      "command": "npx",
-      "args": ["-y", "@tavily/mcp-server"],
-      "env": {
-        "TAVILY_API_KEY": "<your_tavily_api_key>"
-      },
-      "description": "AI-optimized search API with real-time web search, content extraction, and structured data",
-      "skills": ["web-scraping-expert", "data-collector", "marketing-expert", "business-expert"],
-      "enabled": false,
-      "note": "Requires TAVILY_API_KEY (get free key at tavily.com) - Recommended over Brave Search for AI tasks"
-    },
-    "fetch": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
-      "description": "Web content fetching and conversion for LLM usage",
-      "skills": ["web-scraping-expert", "data-collector"],
-      "enabled": true
-    },
-    "sqlite": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "/home/user/rag-enterprise/data/cache.db"],
-      "description": "SQLite database for caching and local data",
-      "skills": ["data-collector"],
-      "enabled": false,
-      "note": "Create database file first"
-    },
-    "google-drive": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-google-drive"],
-      "env": {
-        "GOOGLE_DRIVE_CREDENTIALS": "<path_to_credentials.json>"
-      },
-      "description": "Google Drive integration for document management",
-      "skills": ["business-expert", "sales-expert"],
-      "enabled": false,
-      "note": "Requires Google OAuth credentials"
-    },
-    "shadcn-ui": {
-      "command": "npx",
-      "args": ["-y", "@ymadd/shadcn-ui-mcp-server"],
-      "description": "shadcn/ui component library (React, Tailwind) - components, blocks, examples",
-      "skills": ["frontend-platform"],
       "enabled": true,
-      "note": "Provides access to 50+ shadcn/ui components with documentation and examples"
+      "priority": 1,
+      "note": "Core MCP - always enabled for token efficiency"
+    }
+  },
+  "subAgents": {
+    "note": "Specialized MCP servers moved to sub-agents for token efficiency and parallel processing",
+    "crawling-agent": {
+      "path": ".claude/agents/crawling-agent",
+      "mcpServers": ["puppeteer", "fetch", "chrome-devtools", "tavily"],
+      "description": "Web crawling, scraping, and data acquisition",
+      "skills": ["web-scraping-expert", "web-crawler-pipeline", "advanced-data-acquisition"]
     },
-    "chrome-devtools": {
-      "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
-      "description": "Chrome DevTools for AI debugging - control & inspect live Chrome browser (DOM, CSS, Console, Performance, Network)",
-      "skills": ["debugging-expert", "frontend-platform", "web-scraping-expert"],
-      "enabled": true,
-      "note": "Requires Node.js ≥22 and Chrome browser - AI can debug, test, and fix code in real browser"
+    "frontend-agent": {
+      "path": ".claude/agents/frontend-agent",
+      "mcpServers": ["shadcn-ui", "chrome-devtools"],
+      "description": "Frontend development with React, Tailwind, and debugging",
+      "skills": ["frontend-platform", "debugging-expert"]
+    },
+    "data-agent": {
+      "path": ".claude/agents/data-agent",
+      "mcpServers": ["postgres", "sqlite"],
+      "description": "Database operations and data management",
+      "skills": ["saas-platform", "data-collector"]
+    },
+    "code-review-agent": {
+      "path": ".claude/agents/code-review-agent",
+      "mcpServers": ["github"],
+      "description": "GitHub integration and code review",
+      "skills": ["pcb-expert", "mold-expert"]
+    },
+    "rag-agent": {
+      "path": ".claude/agents/rag-agent",
+      "mcpServers": [],
+      "description": "RAG system optimization - embeddings, chunking, search",
+      "skills": ["rag-pipeline", "embedding-expert", "chunking-expert", "nexa-rag-optimizer", "multimodal-processor"]
+    },
+    "testing-agent": {
+      "path": ".claude/agents/testing-agent",
+      "mcpServers": [],
+      "description": "Automated testing - unit tests, integration tests, coverage",
+      "skills": []
+    },
+    "deployment-agent": {
+      "path": ".claude/agents/deployment-agent",
+      "mcpServers": [],
+      "description": "Deployment and DevOps - Docker, Kubernetes, CI/CD",
+      "skills": []
+    },
+    "monitoring-agent": {
+      "path": ".claude/agents/monitoring-agent",
+      "mcpServers": [],
+      "description": "Performance monitoring - metrics, logs, alerts, profiling",
+      "skills": []
+    }
+  },
+  "mcpPriorities": {
+    "priority_1_no_api_key": {
+      "servers": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools"],
+      "description": "No API key required - use freely",
+      "cost": "$0/month",
+      "location": "Sub-agents (except filesystem, git)"
+    },
+    "priority_2_free_tier": {
+      "servers": ["tavily", "github"],
+      "description": "Free tier available - optional for enhanced features",
+      "cost": "$0/month (with limits)",
+      "location": "Sub-agents",
+      "setup": {
+        "tavily": "Get free API key at https://tavily.com (1000 requests/month free)",
+        "github": "Use GITHUB_PERSONAL_ACCESS_TOKEN for private repos"
+      }
+    },
+    "priority_3_removed": {
+      "servers": ["brave-search", "google-drive"],
+      "description": "Removed - paid or complex OAuth",
+      "reason": {
+        "brave-search": "Paid API ($5/month minimum) - use self-crawling instead",
+        "google-drive": "Complex OAuth setup - use local filesystem instead"
+      }
     }
   },
   "metadata": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "updated": "2025-11-08",
-    "description": "MCP server configuration for RAG Enterprise Platform",
+    "description": "Token-optimized MCP configuration - main project uses only filesystem + git, specialized MCPs in sub-agents",
+    "architecture": "Main project (2 MCPs) + Sub-agents (specialized MCPs) for parallel processing",
+    "token_strategy": "Keep main context minimal, delegate specialized tasks to sub-agents",
     "documentation": "https://github.com/modelcontextprotocol/servers"
-  },
-  "skillMappings": {
-    "advanced-data-acquisition": ["puppeteer", "fetch", "filesystem", "chrome-devtools"],
-    "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "tavily", "brave-search", "chrome-devtools"],
-    "web-crawler-pipeline": ["puppeteer", "fetch", "filesystem"],
-    "data-collector": ["puppeteer", "fetch", "postgres", "sqlite", "filesystem", "tavily", "brave-search"],
-    "embedding-expert": ["filesystem"],
-    "chunking-expert": ["filesystem"],
-    "saas-platform": ["postgres", "filesystem"],
-    "frontend-platform": ["shadcn-ui", "filesystem", "git", "chrome-devtools"],
-    "debugging-expert": ["chrome-devtools", "filesystem", "git"],
-    "manufacturing-expert": ["filesystem"],
-    "packaging-expert": ["filesystem"],
-    "rag-pipeline": ["filesystem", "postgres"],
-    "nexa-rag-optimizer": ["filesystem"],
-    "multimodal-processor": ["filesystem"],
-    "marketing-expert": ["tavily", "brave-search", "google-drive", "filesystem"],
-    "sales-expert": ["google-drive", "filesystem"],
-    "business-expert": ["tavily", "google-drive", "filesystem"],
-    "pcb-expert": ["filesystem", "github"],
-    "mold-expert": ["filesystem", "github"],
-    "production-expert": ["filesystem", "postgres"]
-  },
-  "notes": {
-    "installation": "MCP servers are auto-installed via npx when needed",
-    "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools"],
-    "requires_api_keys": ["github", "brave-search", "tavily", "google-drive"],
-    "requires_configuration": ["postgres", "sqlite"],
-    "documentation": {
-      "official": "https://modelcontextprotocol.io/",
-      "awesome_list": "https://github.com/wong2/awesome-mcp-servers",
-      "examples": "https://github.com/modelcontextprotocol/servers"
-    }
   }
 }

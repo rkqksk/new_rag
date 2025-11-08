@@ -212,78 +212,167 @@ git status && git branch
 ## 🔌 MCP Server Integration
 
 > **Model Context Protocol (MCP)**: Standardized integration between Claude and external tools/data sources
+>
+> **Architecture**: Token-optimized with main project (filesystem + git only) + specialized sub-agents
 
-### Active MCP Servers
+### Main Project MCPs (Token-Optimized)
 
-| MCP Server | Status | Purpose | Used By Skills |
-|------------|--------|---------|----------------|
-| **filesystem** | ✅ | Secure file operations | All skills |
-| **git** | ✅ | Git repository operations | All skills |
-| **puppeteer** | ✅ | Browser automation (headless Chrome) | web-scraping-expert, data-collector |
-| **fetch** | ✅ | Web content fetching | web-scraping-expert, data-collector |
-| **shadcn-ui** | ✅ | shadcn/ui component library (React, Tailwind) | frontend-platform |
-| **chrome-devtools** | ✅ | Live Chrome debugging (DOM, Console, Network, Performance) | debugging-expert, frontend-platform, web-scraping |
-| postgres | 🔧 | PostgreSQL database access | saas-platform, data-collector |
-| github | 🔧 | GitHub API integration | pcb-expert, mold-expert |
-| **tavily** | 🔧 ⭐ | AI-optimized search (real-time, content extraction) | marketing-expert, business-expert, web-scraping |
-| brave-search | 🔧 | Privacy-focused web search | marketing-expert, data-collector |
-| google-drive | 🔧 | Google Drive integration | business-expert, sales-expert |
-| sqlite | 🔧 | SQLite database | data-collector |
+**Only 2 MCPs enabled** for maximum token efficiency:
 
-**Legend**: ✅ Enabled by default | 🔧 Requires configuration (API keys, credentials)
+| MCP Server | Status | Purpose | Cost |
+|------------|--------|---------|------|
+| **filesystem** | ✅ | Secure file operations | $0/month |
+| **git** | ✅ | Git repository operations | $0/month |
 
-### MCP Configuration
+**Why Only 2?** Token efficiency + delegation to sub-agents for specialized tasks.
 
-**Location**: `.claude/mcp.json`
+### Sub-Agent Architecture
 
-**Auto-enabled MCPs** (no setup required):
-- `filesystem` - Local file access
-- `git` - Git repository operations
-- `puppeteer` - Web scraping automation
-- `fetch` - Web content fetching
-- `shadcn-ui` - React component library (50+ components)
-- `chrome-devtools` - Live browser debugging (requires Node.js ≥22)
+**8 specialized sub-agents** for parallel processing and token efficiency:
 
-**Requires API Keys/Setup**:
+#### 1. Crawling Agent (`.claude/agents/crawling-agent`)
+
+| MCP Server | Purpose | Cost |
+|------------|---------|------|
+| **puppeteer** | Browser automation | $0/month |
+| **fetch** | Web content fetching | $0/month |
+| **chrome-devtools** | Live debugging | $0/month |
+| **tavily** | AI search (optional) | $0/month (1000 req/month free) |
+
+**Skills**: web-scraping-expert, web-crawler-pipeline, advanced-data-acquisition
+**Use for**: Web scraping, data acquisition, anti-bot evasion
+
+#### 2. Frontend Agent (`.claude/agents/frontend-agent`)
+
+| MCP Server | Purpose | Cost |
+|------------|---------|------|
+| **shadcn-ui** | React component library | $0/month |
+| **chrome-devtools** | Live browser debugging | $0/month |
+
+**Skills**: frontend-platform, debugging-expert
+**Use for**: React/Tailwind development, UI components, responsive design
+
+#### 3. Data Agent (`.claude/agents/data-agent`)
+
+| MCP Server | Purpose | Cost |
+|------------|---------|------|
+| **postgres** | Production database | $0/month (software only) |
+| **sqlite** | Local cache | $0/month |
+
+**Skills**: saas-platform, data-collector
+**Use for**: Database operations, SQL queries, data analysis
+
+#### 4. Code Review Agent (`.claude/agents/code-review-agent`)
+
+| MCP Server | Purpose | Cost |
+|------------|---------|------|
+| **github** | GitHub API | $0/month (unlimited for public repos) |
+
+**Skills**: pcb-expert, mold-expert
+**Use for**: PR reviews, issue management, repository operations
+
+#### 5. RAG Agent (`.claude/agents/rag-agent`)
+
+**MCPs**: None (pure Python tools)
+
+**Skills**: rag-pipeline, embedding-expert, chunking-expert, nexa-rag-optimizer, multimodal-processor
+**Use for**: RAG optimization, embeddings, chunking, vector search
+
+#### 6. Testing Agent (`.claude/agents/testing-agent`)
+
+**MCPs**: None (uses pytest framework)
+
+**Use for**: Unit tests, integration tests, coverage analysis
+
+#### 7. Deployment Agent (`.claude/agents/deployment-agent`)
+
+**MCPs**: None (uses Docker/K8s CLI)
+
+**Use for**: Docker deployment, Kubernetes orchestration, CI/CD
+
+#### 8. Monitoring Agent (`.claude/agents/monitoring-agent`)
+
+**MCPs**: None (uses Prometheus/Grafana)
+
+**Use for**: Performance monitoring, metrics, logs, profiling
+
+### MCP Priority Levels
+
+**Priority 1: No API Key Required** ($0/month)
+- `filesystem`, `git`, `fetch`, `puppeteer`, `shadcn-ui`, `chrome-devtools`
+- **Use freely** - no setup required
+
+**Priority 2: Free Tier Available** ($0/month with limits)
+- `tavily` - 1000 requests/month free ([get key](https://tavily.com))
+- `github` - Unlimited for public repos ([get token](https://github.com/settings/tokens))
+
+**Priority 3: Removed** (paid or complex)
+- ~~`brave-search`~~ - Paid ($5/month minimum) → use self-crawling
+- ~~`google-drive`~~ - Complex OAuth → use local filesystem
+
+### Configuration
+
+**Location**: `.claude/mcp.json` (main project), `.claude/agents/*/agent.json` (sub-agents)
+
+**Main Project** (no setup):
 ```bash
-# GitHub MCP (optional)
-export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_..."
-
-# Tavily Search MCP (recommended for AI tasks) ⭐
-# Get free API key at https://tavily.com
-export TAVILY_API_KEY="tvly-..."
-
-# Brave Search MCP (optional, privacy-focused)
-export BRAVE_API_KEY="BSA..."
-
-# Google Drive MCP (optional)
-# Create OAuth credentials at console.cloud.google.com
-export GOOGLE_DRIVE_CREDENTIALS="/path/to/credentials.json"
-
-# PostgreSQL MCP (production)
-# Configure in .claude/mcp.json
-# Connection string: postgresql://user:password@localhost:5432/rag_enterprise
+# Already enabled: filesystem + git
+# No configuration needed
 ```
 
-### Skill-to-MCP Mappings
+**Sub-Agents** (optional setup):
+```bash
+# Tavily (optional - 1000 free requests/month)
+export TAVILY_API_KEY="tvly-..."  # Get at https://tavily.com
 
-**Web Scraping & Data Collection**:
-- `web-scraping-expert` → puppeteer, fetch, tavily, brave-search, chrome-devtools, filesystem
-- `web-crawler-pipeline` → puppeteer, fetch, filesystem
-- `data-collector` → puppeteer, fetch, tavily, brave-search, postgres, sqlite, filesystem
+# GitHub (optional - for private repos only)
+export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_..."  # Get at https://github.com/settings/tokens
 
-**Platform & Infrastructure**:
-- `saas-platform` → postgres, filesystem
-- `frontend-platform` → shadcn-ui, chrome-devtools, filesystem, git
-- `debugging-expert` → chrome-devtools, filesystem, git
+# PostgreSQL (production)
+export POSTGRES_URL="postgresql://user:password@localhost:5432/rag_enterprise"
 
-**Domain Experts**:
-- `marketing-expert` → tavily, brave-search, google-drive, filesystem
-- `sales-expert` → google-drive, filesystem
-- `business-expert` → tavily, google-drive, filesystem
-- `pcb-expert` → filesystem, github
-- `mold-expert` → filesystem, github
-- `production-expert` → filesystem, postgres
+# SQLite (create database)
+mkdir -p data && touch data/cache.db
+```
+
+### Using Sub-Agents
+
+Launch sub-agents via Task tool for **parallel processing** and specialized work:
+
+```python
+# 1. Web scraping and data acquisition
+Task(subagent_type="crawling-agent", prompt="Scrape product data from example.com")
+
+# 2. Frontend development
+Task(subagent_type="frontend-agent", prompt="Create dashboard with shadcn/ui components")
+
+# 3. Database operations
+Task(subagent_type="data-agent", prompt="Analyze user activity patterns from PostgreSQL")
+
+# 4. Code review and GitHub integration
+Task(subagent_type="code-review-agent", prompt="Review PR #123 and suggest improvements")
+
+# 5. RAG system optimization
+Task(subagent_type="rag-agent", prompt="Optimize embedding model for Korean text")
+
+# 6. Automated testing
+Task(subagent_type="testing-agent", prompt="Run all tests and generate coverage report")
+
+# 7. Deployment automation
+Task(subagent_type="deployment-agent", prompt="Deploy to production with zero downtime")
+
+# 8. Performance monitoring
+Task(subagent_type="monitoring-agent", prompt="Analyze system performance and identify bottlenecks")
+```
+
+**Parallel Execution Example**:
+```python
+# Run multiple agents in parallel for maximum efficiency
+Task(subagent_type="testing-agent", prompt="Run tests")
+Task(subagent_type="monitoring-agent", prompt="Check performance")
+Task(subagent_type="deployment-agent", prompt="Prepare deployment")
+# All 3 tasks execute in parallel!
+```
 
 ### MCP Installation
 
@@ -319,6 +408,7 @@ npm install -g @modelcontextprotocol/server-github
 - **Deployment Guide**: `docs/DEPLOYMENT_GUIDE.md`
 
 ### Platform Documentation (NEW v5.0.0)
+- **Open Source Architecture**: `docs/OPEN_SOURCE_ARCHITECTURE.md` ⭐ 100% open-source, $0 software costs
 - **SaaS Architecture**: `docs/SAAS_ARCHITECTURE.md` (§saas.*)
 - **Data Collector**: `docs/DATA_COLLECTOR_ARCHITECTURE.md` (§collector.*)
 - **Manufacturing Automation**: `docs/MANUFACTURING_AUTOMATION.md` (§manufacturing.*)
