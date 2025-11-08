@@ -176,19 +176,126 @@ git status && git branch
 
 ## 🎨 Active SKILLs
 
+### Core RAG & Data Processing
+
 | Skill | Status | Commands | Purpose |
 |-------|--------|----------|---------|
 | rag-pipeline | ✅ | process, query, search | RAG orchestration & search |
+| **chunking-expert** | ✅ **NEW** | analyze, apply, compare, optimize | Advanced chunking strategies (atomic/semantic/hierarchical) |
+| **embedding-expert** | ✅ **NEW** | generate, optimize, finetune, metrics | Embedding & vectorization optimization |
+| **web-scraping-expert** | ✅ **NEW** | scrape, extract, evade, parallel | Advanced web scraping (BeautifulSoup/Playwright/Selenium) |
 | nexa-rag-optimizer | ✅ | analyze, optimize-search, tune-routing | Query optimization & routing |
 | multimodal-processor | ✅ | analyze-image, ocr-document, visual-search | Multi-modal processing |
-| **data-collector** | ✅ **NEW** | collect, process, schedule, monitor | Universal data collection |
-| **saas-platform** | ✅ **NEW** | auth, billing, usage, tenants | SaaS management |
+| web-crawler-pipeline | ✅ | crawl, monitor | Web scraping automation |
+
+### Platform & Infrastructure
+
+| Skill | Status | Commands | Purpose |
+|-------|--------|----------|---------|
+| **data-collector** | ✅ | collect, process, schedule, monitor | Universal data collection |
+| **saas-platform** | ✅ | auth, billing, usage, tenants | SaaS management |
+| **frontend-platform** | ✅ | design-system, create-page, component | Monochrome UI design system |
+
+### Domain Experts
+
+| Skill | Status | Commands | Purpose |
+|-------|--------|----------|---------|
 | manufacturing-expert | ✅ | process, classify, inspect | Manufacturing docs processing |
 | packaging-expert | ✅ | process, classify | Packaging docs processing |
-| web-crawler-pipeline | ✅ | crawl, monitor | Web scraping automation |
 
 **Location**: `.claude/skills/`
 **Note**: Skills use progressive disclosure (references/ folder) for token efficiency
+
+---
+
+## 🔌 MCP Server Integration
+
+> **Model Context Protocol (MCP)**: Standardized integration between Claude and external tools/data sources
+
+### Active MCP Servers
+
+| MCP Server | Status | Purpose | Used By Skills |
+|------------|--------|---------|----------------|
+| **filesystem** | ✅ | Secure file operations | All skills |
+| **git** | ✅ | Git repository operations | All skills |
+| **puppeteer** | ✅ | Browser automation (headless Chrome) | web-scraping-expert, data-collector |
+| **fetch** | ✅ | Web content fetching | web-scraping-expert, data-collector |
+| postgres | 🔧 | PostgreSQL database access | saas-platform, data-collector |
+| github | 🔧 | GitHub API integration | pcb-expert, mold-expert |
+| brave-search | 🔧 | Privacy-focused web search | marketing-expert, data-collector |
+| google-drive | 🔧 | Google Drive integration | business-expert, sales-expert |
+| sqlite | 🔧 | SQLite database | data-collector |
+
+**Legend**: ✅ Enabled by default | 🔧 Requires configuration (API keys, credentials)
+
+### MCP Configuration
+
+**Location**: `.claude/mcp.json`
+
+**Auto-enabled MCPs** (no setup required):
+- `filesystem` - Local file access
+- `git` - Git repository operations
+- `puppeteer` - Web scraping automation
+- `fetch` - Web content fetching
+
+**Requires API Keys/Setup**:
+```bash
+# GitHub MCP (optional)
+export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_..."
+
+# Brave Search MCP (optional)
+export BRAVE_API_KEY="BSA..."
+
+# Google Drive MCP (optional)
+# Create OAuth credentials at console.cloud.google.com
+export GOOGLE_DRIVE_CREDENTIALS="/path/to/credentials.json"
+
+# PostgreSQL MCP (production)
+# Configure in .claude/mcp.json
+# Connection string: postgresql://user:password@localhost:5432/rag_enterprise
+```
+
+### Skill-to-MCP Mappings
+
+**Web Scraping & Data Collection**:
+- `web-scraping-expert` → puppeteer, fetch, filesystem, brave-search
+- `web-crawler-pipeline` → puppeteer, fetch, filesystem
+- `data-collector` → puppeteer, fetch, postgres, sqlite, brave-search
+
+**Platform & Infrastructure**:
+- `saas-platform` → postgres, filesystem
+- `frontend-platform` → filesystem, git
+
+**Domain Experts**:
+- `marketing-expert` → brave-search, google-drive, filesystem
+- `sales-expert` → google-drive, filesystem
+- `business-expert` → google-drive, filesystem
+- `pcb-expert` → filesystem, github
+- `mold-expert` → filesystem, github
+- `production-expert` → filesystem, postgres
+
+### MCP Installation
+
+**Automatic** (via npx):
+```bash
+# MCPs are auto-installed when first used
+# No manual installation required
+```
+
+**Manual** (for development):
+```bash
+# Install specific MCP server globally
+npm install -g @modelcontextprotocol/server-puppeteer
+npm install -g @modelcontextprotocol/server-postgres
+npm install -g @modelcontextprotocol/server-github
+```
+
+### MCP Resources
+
+- **Official Docs**: https://modelcontextprotocol.io/
+- **Server List**: https://github.com/modelcontextprotocol/servers
+- **Awesome MCPs**: https://github.com/wong2/awesome-mcp-servers
+- **Examples**: https://modelcontextprotocol.io/examples
 
 ---
 
@@ -414,19 +521,152 @@ DEBUG_PROFILE_REQUESTS=true
 
 ## 🆘 Troubleshooting
 
-### Quick Fixes
+### Automated Troubleshooting
+
+**One-Command Fix** (Recommended):
 ```bash
-# Reset everything
+# Restart everything (kills all processes, resets services)
+./scripts/restart-all.sh
+```
+
+This script automatically:
+1. Kills all running services (Docker, Ollama, NexaAI, Python servers)
+2. Cleans up Docker resources (containers, volumes, networks)
+3. Restarts all services in correct order
+4. Waits for health checks
+5. Displays service status
+
+### Manual Quick Fixes
+
+```bash
+# Full reset (Docker + volumes)
 docker-compose down -v && docker-compose up -d
+
+# Restart without losing data
+docker-compose restart
+
+# Kill specific service
+docker-compose restart api        # Restart API only
+docker-compose restart qdrant     # Restart vector DB
 
 # Check health
 curl http://localhost:8001/health/ready
 
-# View logs
+# View logs (all services)
 docker-compose logs -f
+
+# View logs (specific service)
+docker-compose logs -f api
+docker-compose logs -f qdrant
 
 # Debug performance
 curl http://localhost:8001/api/v1/debug/performance/summary
+```
+
+### Common Issues
+
+**1. Port Already in Use**
+```bash
+# Find process using port 8001
+lsof -i :8001
+
+# Kill process
+kill -9 <PID>
+
+# Or use restart-all.sh (kills all automatically)
+./scripts/restart-all.sh
+```
+
+**2. Docker Services Won't Start**
+```bash
+# Clean everything and restart
+docker-compose down -v
+docker system prune -af
+./scripts/deploy-optimized.sh development
+```
+
+**3. Ollama Not Responding**
+```bash
+# Restart Ollama
+docker-compose restart ollama
+
+# Check Ollama health
+curl http://localhost:11434/api/tags
+
+# Pull model again if needed
+docker exec -it ollama ollama pull qwen2.5:7b
+```
+
+**4. Qdrant Connection Errors**
+```bash
+# Restart Qdrant
+docker-compose restart qdrant
+
+# Check Qdrant health
+curl http://localhost:6333/health
+
+# View Qdrant dashboard
+open http://localhost:6333/dashboard
+```
+
+**5. API Server Crashes**
+```bash
+# View error logs
+docker-compose logs --tail=100 api
+
+# Restart API
+docker-compose restart api
+
+# Full reset if needed
+./scripts/restart-all.sh
+```
+
+**6. Out of Memory**
+```bash
+# Check Docker resource usage
+docker stats
+
+# Increase Docker memory limit (Docker Desktop)
+# Settings → Resources → Memory → Increase to 8GB+
+
+# Or reduce batch sizes in .env
+EMBEDDING_BATCH_SIZE=16  # Default: 32
+```
+
+**7. Frontend Not Loading**
+```bash
+# Check if frontend server is running
+lsof -i :8080
+
+# Restart frontend
+cd frontend && python3 -m http.server 8080
+
+# Or use background server
+cd frontend && python3 -m http.server 8080 &
+```
+
+### Service Ports Reference
+
+| Service | Port | Check Command |
+|---------|------|---------------|
+| API | 8001 | `curl http://localhost:8001/health` |
+| Frontend | 8080 | `curl http://localhost:8080` |
+| Qdrant | 6333 | `curl http://localhost:6333/health` |
+| Redis | 6379 | `docker exec redis redis-cli ping` |
+| PostgreSQL | 5432 | `docker exec postgres pg_isready` |
+| Ollama | 11434 | `curl http://localhost:11434/api/tags` |
+| NexaAI | 8080 | `curl http://localhost:8080/v1/models` |
+
+### Health Check Script
+
+```bash
+# Check all services
+./scripts/health-check.sh
+
+# Manual health check
+curl http://localhost:8001/health/ready && echo "✅ API OK" || echo "❌ API FAIL"
+curl http://localhost:6333/health && echo "✅ Qdrant OK" || echo "❌ Qdrant FAIL"
+docker exec redis redis-cli ping && echo "✅ Redis OK" || echo "❌ Redis FAIL"
 ```
 
 **Full Guide**: `docs/DEPLOYMENT_GUIDE.md` → Troubleshooting section

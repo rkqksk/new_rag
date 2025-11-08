@@ -1,0 +1,118 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "description": "Secure file operations for RAG Enterprise codebase",
+      "skills": ["all"],
+      "enabled": true
+    },
+    "puppeteer": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "description": "Browser automation for web scraping with Puppeteer",
+      "skills": ["web-scraping-expert", "web-crawler-pipeline", "data-collector"],
+      "enabled": true
+    },
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "/home/user/rag-enterprise"],
+      "description": "Git repository operations and code search",
+      "skills": ["all"],
+      "enabled": true
+    },
+    "github": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your_github_token>"
+      },
+      "description": "GitHub repository management and code review",
+      "skills": ["all"],
+      "enabled": false,
+      "note": "Requires GITHUB_PERSONAL_ACCESS_TOKEN to be set"
+    },
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:password@localhost:5432/rag_enterprise"],
+      "description": "PostgreSQL database access for SaaS platform",
+      "skills": ["saas-platform", "data-collector"],
+      "enabled": false,
+      "note": "Configure connection string in production"
+    },
+    "brave-search": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+      "env": {
+        "BRAVE_API_KEY": "<your_brave_api_key>"
+      },
+      "description": "Privacy-focused web search for research and data collection",
+      "skills": ["web-scraping-expert", "data-collector", "marketing-expert"],
+      "enabled": false,
+      "note": "Requires BRAVE_API_KEY to be set"
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "description": "Web content fetching and conversion for LLM usage",
+      "skills": ["web-scraping-expert", "data-collector"],
+      "enabled": true
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "/home/user/rag-enterprise/data/cache.db"],
+      "description": "SQLite database for caching and local data",
+      "skills": ["data-collector"],
+      "enabled": false,
+      "note": "Create database file first"
+    },
+    "google-drive": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-google-drive"],
+      "env": {
+        "GOOGLE_DRIVE_CREDENTIALS": "<path_to_credentials.json>"
+      },
+      "description": "Google Drive integration for document management",
+      "skills": ["business-expert", "sales-expert"],
+      "enabled": false,
+      "note": "Requires Google OAuth credentials"
+    }
+  },
+  "metadata": {
+    "version": "1.0.0",
+    "updated": "2025-11-08",
+    "description": "MCP server configuration for RAG Enterprise Platform",
+    "documentation": "https://github.com/modelcontextprotocol/servers"
+  },
+  "skillMappings": {
+    "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "brave-search"],
+    "web-crawler-pipeline": ["puppeteer", "fetch", "filesystem"],
+    "data-collector": ["puppeteer", "fetch", "postgres", "sqlite", "filesystem", "brave-search"],
+    "embedding-expert": ["filesystem"],
+    "chunking-expert": ["filesystem"],
+    "saas-platform": ["postgres", "filesystem"],
+    "frontend-platform": ["filesystem", "git"],
+    "manufacturing-expert": ["filesystem"],
+    "packaging-expert": ["filesystem"],
+    "rag-pipeline": ["filesystem", "postgres"],
+    "nexa-rag-optimizer": ["filesystem"],
+    "multimodal-processor": ["filesystem"],
+    "marketing-expert": ["brave-search", "google-drive", "filesystem"],
+    "sales-expert": ["google-drive", "filesystem"],
+    "business-expert": ["google-drive", "filesystem"],
+    "pcb-expert": ["filesystem", "github"],
+    "mold-expert": ["filesystem", "github"],
+    "production-expert": ["filesystem", "postgres"]
+  },
+  "notes": {
+    "installation": "MCP servers are auto-installed via npx when needed",
+    "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer"],
+    "requires_api_keys": ["github", "brave-search", "google-drive"],
+    "requires_configuration": ["postgres", "sqlite"],
+    "documentation": {
+      "official": "https://modelcontextprotocol.io/",
+      "awesome_list": "https://github.com/wong2/awesome-mcp-servers",
+      "examples": "https://github.com/modelcontextprotocol/servers"
+    }
+  }
+}
