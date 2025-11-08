@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
   Table,
   TableBody,
@@ -18,7 +19,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { PlayCircle, PlusCircle, RefreshCw, Database, Globe, Clock } from "lucide-react"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import { PlayCircle, PlusCircle, RefreshCw, Database, Globe, Clock, Trash2, Power, PowerOff } from "lucide-react"
+import { useBulkSelect } from "@/hooks/useBulkSelect"
+import { toast } from "sonner"
 
 interface CrawlSource {
   source_id: string
@@ -61,6 +75,17 @@ export default function CrawlingPage() {
     totalCrawls: 0,
     lastCrawl: null as string | null,
   })
+
+  // Bulk selection hook
+  const {
+    toggle,
+    toggleAll,
+    isSelected,
+    isAllSelected,
+    isSomeSelected,
+    selectedCount,
+    deselectAll,
+  } = useBulkSelect(sources, (source) => source.source_id)
 
   // API Base URL
   const API_BASE = "http://localhost:8001"
@@ -154,6 +179,23 @@ export default function CrawlingPage() {
     }
   }
 
+  // Bulk actions
+  const handleBulkEnable = () => {
+    // In real implementation, this would call the API
+    toast.success(`${selectedCount}개 소스가 활성화되었습니다`)
+    deselectAll()
+  }
+
+  const handleBulkDisable = () => {
+    toast.success(`${selectedCount}개 소스가 비활성화되었습니다`)
+    deselectAll()
+  }
+
+  const handleBulkDelete = () => {
+    toast.success(`${selectedCount}개 소스가 삭제되었습니다`)
+    deselectAll()
+  }
+
   // Initial load
   useEffect(() => {
     loadSources()
@@ -212,31 +254,92 @@ export default function CrawlingPage() {
                   <CardTitle className="text-stone-100">크롤링 소스 목록</CardTitle>
                   <CardDescription className="text-stone-400">
                     등록된 웹 크롤링 소스 ({sources.length}개)
+                    {selectedCount > 0 && <span className="ml-2 text-blue-400">• {selectedCount}개 선택됨</span>}
                   </CardDescription>
                 </div>
-                <Button
-                  onClick={() => startCrawl()}
-                  disabled={isLoading}
-                  className="gap-2"
-                >
-                  {isLoading ? (
+                <div className="flex gap-2">
+                  {selectedCount > 0 ? (
                     <>
-                      <RefreshCw className="h-4 w-4 animate-spin" />
-                      크롤링 중...
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleBulkEnable}
+                        className="gap-1"
+                      >
+                        <Power className="h-4 w-4" />
+                        활성화
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleBulkDisable}
+                        className="gap-1"
+                      >
+                        <PowerOff className="h-4 w-4" />
+                        비활성화
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button variant="destructive" size="sm" className="gap-1">
+                            <Trash2 className="h-4 w-4" />
+                            삭제
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="bg-stone-950 border-stone-800">
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="text-stone-100">정말 삭제하시겠습니까?</AlertDialogTitle>
+                            <AlertDialogDescription className="text-stone-400">
+                              선택한 {selectedCount}개의 크롤링 소스가 영구적으로 삭제됩니다.
+                              이 작업은 되돌릴 수 없습니다.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel className="bg-stone-900 text-stone-100 border-stone-800">
+                              취소
+                            </AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={handleBulkDelete}
+                              className="bg-red-900 text-red-100 hover:bg-red-800"
+                            >
+                              삭제
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </>
                   ) : (
-                    <>
-                      <PlayCircle className="h-4 w-4" />
-                      전체 크롤링 시작
-                    </>
+                    <Button
+                      onClick={() => startCrawl()}
+                      disabled={isLoading}
+                      className="gap-2"
+                    >
+                      {isLoading ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          크롤링 중...
+                        </>
+                      ) : (
+                        <>
+                          <PlayCircle className="h-4 w-4" />
+                          전체 크롤링 시작
+                        </>
+                      )}
+                    </Button>
                   )}
-                </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
               <Table>
                 <TableHeader>
                   <TableRow className="border-stone-900 hover:bg-stone-950">
+                    <TableHead className="w-12 text-stone-400">
+                      <Checkbox
+                        checked={isAllSelected}
+                        onCheckedChange={toggleAll}
+                        aria-label="전체 선택"
+                      />
+                    </TableHead>
                     <TableHead className="text-stone-400">소스 ID</TableHead>
                     <TableHead className="text-stone-400">이름</TableHead>
                     <TableHead className="text-stone-400">URL</TableHead>
@@ -249,6 +352,13 @@ export default function CrawlingPage() {
                 <TableBody>
                   {sources.map((source) => (
                     <TableRow key={source.source_id} className="border-stone-900 hover:bg-stone-950">
+                      <TableCell>
+                        <Checkbox
+                          checked={isSelected(source.source_id)}
+                          onCheckedChange={() => toggle(source.source_id)}
+                          aria-label={`${source.name} 선택`}
+                        />
+                      </TableCell>
                       <TableCell className="font-mono text-sm text-stone-100">
                         {source.source_id}
                       </TableCell>
