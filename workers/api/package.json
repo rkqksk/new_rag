@@ -1,0 +1,18 @@
+{
+  "name": "rag-enterprise-api-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail"
+  },
+  "dependencies": {
+    "hono": "^3.11.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20231218.0",
+    "wrangler": "^3.22.0",
+    "typescript": "^5.3.0"
+  }
+}
