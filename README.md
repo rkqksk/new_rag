@@ -1,14 +1,43 @@
 # RAG Enterprise - Complete Platform
 
-**Version**: v5.0.0 | **Status**: Production-Ready ✅ | **License**: MIT
+**Version**: v5.8.0 | **Status**: Production-Ready ✅ | **License**: MIT | **Cost**: $0/month (100% Open-Source)
 
 > **All-in-One Enterprise Platform**: RAG + SaaS + Manufacturing Automation + Data Collection
 >
-> **Quick Start**: See `QUICK_START.md` | **Developers**: See `CLAUDE.md` for symbol navigation
+> **100% Open-Source**: Zero SaaS costs, only infrastructure costs
+>
+> **Quick Start**: See `docs/guides/LOCAL_SETUP.md` | **Developers**: See `CLAUDE.md` for symbol navigation
 
 ---
 
-## 🚀 What's New in v5.0.0
+## 🎉 What's New in v5.8.0
+
+### 🆕 Latest Features (v5.7-5.8)
+
+#### Image Processing & Watermark Removal
+- **Auto Watermark Removal**: PaddleOCR text detection + OpenCV inpainting
+- **3 Inpainting Algorithms**: TELEA (fast), Navier-Stokes (quality), LaMa (best)
+- **Color-based Removal**: Remove specific color watermarks (white, semi-transparent)
+- **OCR Enhancement**: Integrated watermark removal in preprocessing pipeline
+- **API Endpoints**: 3 new REST APIs for image processing
+
+#### 8 Specialized Sub-Agents
+- **crawling-agent**: Web scraping with Puppeteer/Playwright
+- **frontend-agent**: React/Tailwind with shadcn/ui
+- **data-agent**: PostgreSQL + SQLite operations
+- **code-review-agent**: GitHub integration
+- **rag-agent**: RAG optimization
+- **testing-agent**: Automated testing
+- **deployment-agent**: Docker/K8s automation
+- **monitoring-agent**: Performance monitoring
+
+#### 100% Open-Source Architecture
+- **Zero SaaS Costs**: All dependencies are open-source
+- **Cost Savings**: $5,050/mo (SaaS) → $400/mo (self-hosted) = 92% savings
+- **No API Subscriptions**: No OpenAI, Anthropic, Tavily, etc.
+- **Self-Hosted**: Complete control and data privacy
+
+### 🌟 Core Features (v5.0.0)
 
 ### ✨ Enterprise SaaS Platform
 - **Multi-Tenancy**: Row-Level Security (RLS) for data isolation
@@ -156,28 +185,31 @@ ollama pull qwen2.5:7b-instruct
 
 ## 📖 Documentation
 
-### Quick References
-- **Quick Start**: `QUICK_START.md` - Get running in 5 minutes
+### 🚀 Getting Started
+- **Local Setup**: `docs/guides/LOCAL_SETUP.md` ⭐ Complete local installation guide
+- **Quick Start**: `docs/guides/QUICK_START.md` - Get running in 5 minutes
 - **Claude Code Guide**: `CLAUDE.md` - Symbol navigation (§rag.*, §saas.*, etc.)
-- **Technology Stack**: `TECH_STACK.md` - Complete tech overview
 
-### Platform Guides
+### 🏗️ Architecture & Design
+- **Open Source Architecture**: `docs/OPEN_SOURCE_ARCHITECTURE.md` ⭐ 100% open-source guide
+- **Skills & Agents Reference**: `docs/SKILLS_AND_AGENTS_REFERENCE.md` ⭐ 8 sub-agents + 22 skills
 - **SaaS Architecture**: `docs/SAAS_ARCHITECTURE.md` - Multi-tenancy, billing, auth
 - **Manufacturing Automation**: `docs/MANUFACTURING_AUTOMATION.md` - YOLO vision inspection
 - **Data Collector**: `docs/DATA_COLLECTOR_ARCHITECTURE.md` - Universal data collection
-- **System Integration**: `docs/SYSTEM_INTEGRATION_GUIDE.md` - Complete integration guide
+
+### 🎨 New Features
+- **Image Processing**: `docs/IMAGE_PROCESSING.md` ⭐ Watermark removal & OCR preprocessing
+- **Admin Guide**: `docs/ADMIN.md` ⭐ Superuser management (rkqksk@gmail.com)
+
+### 🔧 Deployment & Operations
+- **Deployment Guide**: `docs/DEPLOYMENT_GUIDE.md` - Production deployment
 - **Deployment Options**: `docs/DEPLOYMENT_OPTIONS.md` - Free → Enterprise deployment
+- **System Integration**: `docs/SYSTEM_INTEGRATION_GUIDE.md` - Complete integration guide
+- **Technology Stack**: `docs/TECH_STACK.md` - Complete tech overview
 
-### Technology Deep Dives
-- **Backend**: `docs/technologies/backend.md` - FastAPI, Uvicorn, Pydantic
-- **LLM Engines**: `docs/technologies/llm-engines.md` - NexaAI + Ollama dual-engine
-- **Vector Database**: `docs/technologies/vector-database.md` - Qdrant production guide
-- **OCR Pipeline**: `docs/technologies/ocr-pipeline.md` - Multi-engine OCR
-- **MCP Servers**: `docs/technologies/mcp-servers.md` - Model Context Protocol
-
-### External Integrations
-- **Data Collector**: `docs/EXTERNAL_PROJECTS_INTEGRATION.md` - Integration patterns
-- **OCR Setup**: `docs/OCR_SETUP_GUIDE.md` - PaddleOCR v2.7.0.3 configuration
+### 📚 API Reference
+- **API Documentation**: `docs/API_DOCUMENTATION.md` - Complete API reference
+- **Swagger UI**: http://localhost:8001/api/v1/docs - Interactive API docs
 
 ---
 
