@@ -1,10 +1,20 @@
+---
+name: nexa-rag-optimizer
+description: Optimize RAG queries and improve search relevance using NexaAI SDK
+license: MIT
+metadata:
+  version: "1.0.0"
+  domain: "rag"
+  triggers:
+    - "optimize query"
+    - "analyze search"
+    - "tune routing"
+    - "benchmark model"
+---
+
 # NexaAI RAG Optimizer Skill
 
 **Purpose**: Optimize RAG queries and improve search relevance using NexaAI SDK
-
-**Version**: 1.0.0
-
----
 
 ## 🎯 What This Skill Does
 
@@ -15,8 +25,6 @@ This skill helps optimize RAG (Retrieval-Augmented Generation) queries by:
 3. **Result Enhancement**: Improve result ranking and relevance
 4. **Performance Tuning**: Optimize model routing and caching
 
----
-
 ## 📋 When to Use This Skill
 
 Use this skill when:
@@ -26,8 +34,6 @@ Use this skill when:
 - Want to analyze query patterns
 - Need to tune model routing thresholds
 
----
-
 ## 🔧 Available Commands
 
 ### `analyze <query>`
@@ -36,7 +42,7 @@ Analyze a query and suggest optimizations.
 
 **Example**:
 ```
-/skill nexa-rag-optimizer analyze "50ml PET 용기"
+analyze "50ml PET 용기"
 ```
 
 **Output**:
@@ -53,7 +59,7 @@ Run an optimized search with enhanced parameters.
 
 **Example**:
 ```
-/skill nexa-rag-optimizer optimize-search "투명 용기"
+optimize-search "투명 용기"
 ```
 
 **Actions**:
@@ -71,7 +77,7 @@ Analyze recent queries and suggest router threshold adjustments.
 
 **Example**:
 ```
-/skill nexa-rag-optimizer tune-routing
+tune-routing
 ```
 
 **Actions**:
@@ -88,7 +94,7 @@ Benchmark query performance across both engines.
 
 **Example**:
 ```
-/skill nexa-rag-optimizer benchmark "100ml PP 용기"
+benchmark "100ml PP 용기"
 ```
 
 **Output**:
@@ -202,7 +208,7 @@ Top Results:
 
 **Input**:
 ```
-/skill nexa-rag-optimizer tune-routing
+tune-routing
 ```
 
 **Skill Action**:
@@ -346,5 +352,5 @@ The skill learns from:
 ---
 
 **Skill Owner**: RAG Enterprise Team
-**Last Updated**: 2025-11-07
+**Last Updated**: 2025-11-08
 **Version**: 1.0.0

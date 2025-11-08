@@ -5,7 +5,7 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/Users/oypnus/Project/rag-enterprise"
+        "${PWD}"
       ],
       "description": "File system access for reading/writing project files"
     },
@@ -18,12 +18,53 @@
       "description": "Official Google Chrome DevTools MCP server for browser automation and debugging"
     },
     "qdrant": {
-      "command": "/Users/oypnus/Project/rag-enterprise/.direnv/python-3.11/bin/python3",
+      "command": "python3",
       "args": [
         "-m",
         "mcp_servers.qdrant_server"
       ],
-      "description": "Qdrant vector database operations"
+      "env": {
+        "PYTHONPATH": "${PWD}"
+      },
+      "description": "Qdrant vector database operations for RAG system"
+    },
+    "ollama": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "mcp_servers.ollama_server"
+      ],
+      "env": {
+        "PYTHONPATH": "${PWD}",
+        "OLLAMA_HOST": "${OLLAMA_HOST:-localhost}",
+        "OLLAMA_PORT": "${OLLAMA_PORT:-11434}",
+        "OLLAMA_DEFAULT_MODEL": "qwen2.5:7b-instruct"
+      },
+      "description": "Ollama local LLM server for high-quality inference"
+    },
+    "rag-orchestrator": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "mcp_servers.rag_orchestrator"
+      ],
+      "env": {
+        "PYTHONPATH": "${PWD}"
+      },
+      "description": "RAG pipeline orchestrator for document processing and search"
+    },
+    "query-router": {
+      "command": "python3",
+      "args": [
+        "-m",
+        "mcp_servers.query_router"
+      ],
+      "env": {
+        "PYTHONPATH": "${PWD}",
+        "MODEL_ROUTER_SIMPLE_THRESHOLD": "${MODEL_ROUTER_SIMPLE_THRESHOLD:-0.3}",
+        "MODEL_ROUTER_COMPLEX_THRESHOLD": "${MODEL_ROUTER_COMPLEX_THRESHOLD:-0.7}"
+      },
+      "description": "Intelligent query router for NexaAI/Ollama model selection"
     }
   }
 }

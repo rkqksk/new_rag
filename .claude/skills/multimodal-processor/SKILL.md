@@ -1,10 +1,20 @@
+---
+name: multimodal-processor
+description: Process and analyze multi-modal data (text + images + documents) using NexaAI Vision-Language models
+license: MIT
+metadata:
+  version: "1.0.0"
+  domain: "multimodal"
+  triggers:
+    - "analyze image"
+    - "visual search"
+    - "ocr document"
+    - "hybrid search"
+---
+
 # Multi-Modal Processor Skill
 
 **Purpose**: Process and analyze multi-modal data (text + images + documents) using NexaAI Vision-Language models
-
-**Version**: 1.0.0
-
----
 
 ## 🎯 What This Skill Does
 
@@ -15,8 +25,6 @@ This skill handles multi-modal processing:
 3. **Visual Search**: Find products by image similarity
 4. **Combined Search**: Text + Image hybrid search
 
----
-
 ## 📋 When to Use This Skill
 
 Use this skill when:
@@ -26,8 +34,6 @@ Use this skill when:
 - Visual similarity search required
 - Multi-modal data ingestion
 
----
-
 ## 🔧 Available Commands
 
 ### `analyze-image <path>`
@@ -36,7 +42,7 @@ Analyze a product image and extract information.
 
 **Example**:
 ```
-/skill multimodal-processor analyze-image "./product.jpg"
+analyze-image "./product.jpg"
 ```
 
 **Output**:
@@ -53,7 +59,7 @@ Extract text from PDF or image document.
 
 **Example**:
 ```
-/skill multimodal-processor ocr-document "./catalog.pdf"
+ocr-document "./catalog.pdf"
 ```
 
 **Actions**:
@@ -71,7 +77,7 @@ Find similar products by image.
 
 **Example**:
 ```
-/skill multimodal-processor visual-search "./bottle.jpg"
+visual-search "./bottle.jpg"
 ```
 
 **Actions**:
@@ -89,7 +95,7 @@ Combined text + image search.
 
 **Example**:
 ```
-/skill multimodal-processor hybrid-search "투명 용기" "./transparent-bottle.jpg"
+hybrid-search "투명 용기" "./transparent-bottle.jpg"
 ```
 
 **Actions**:
@@ -144,7 +150,7 @@ Input Image
 **Input**:
 ```
 Image: bottle.jpg (50ml PET bottle)
-Command: /skill multimodal-processor analyze-image "bottle.jpg"
+Command: analyze-image "bottle.jpg"
 ```
 
 **Skill Action**:
@@ -196,7 +202,7 @@ Similar Products Found:
 **Input**:
 ```
 File: product_catalog.pdf (50 pages)
-Command: /skill multimodal-processor ocr-document "product_catalog.pdf"
+Command: ocr-document "product_catalog.pdf"
 ```
 
 **Skill Action**:
@@ -259,7 +265,7 @@ Sample Products:
 **Input**:
 ```
 Image: user_photo.jpg (similar bottle needed)
-Command: /skill multimodal-processor visual-search "user_photo.jpg"
+Command: visual-search "user_photo.jpg"
 ```
 
 **Skill Action**:
@@ -332,7 +338,7 @@ Search Results (Top 5):
 ```
 Query: "투명 용기"
 Image: transparent_bottle.jpg
-Command: /skill multimodal-processor hybrid-search "투명 용기" "transparent_bottle.jpg"
+Command: hybrid-search "투명 용기" "transparent_bottle.jpg"
 ```
 
 **Skill Action**:
@@ -439,5 +445,5 @@ class MultiModalProcessor:
 ---
 
 **Skill Owner**: RAG Enterprise Team
-**Last Updated**: 2025-11-07
+**Last Updated**: 2025-11-08
 **Version**: 1.0.0
