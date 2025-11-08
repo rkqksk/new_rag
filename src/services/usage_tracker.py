@@ -4,13 +4,13 @@ Usage Tracker Service
 Track API usage, enforce quotas, and manage rate limiting for SaaS platform.
 """
 
-import redis
+import logging
 from datetime import datetime, timedelta
 from typing import Dict, Optional
-import logging
 
-from src.models.saas_models import Tenant, PlanTier, PLAN_LIMITS, UsageLog, QuotaUsage
+import redis
 
+from src.models.saas_models import PLAN_LIMITS, PlanTier, QuotaUsage, Tenant, UsageLog
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ class UsageTracker:
         status_code: int = 200,
         response_time_ms: float = 0,
         user_id: Optional[str] = None,
-        api_key_id: Optional[str] = None
+        api_key_id: Optional[str] = None,
     ):
         """
         Track API call
@@ -91,7 +91,7 @@ class UsageTracker:
                 response_time_ms=response_time_ms,
                 user_id=user_id,
                 api_key_id=api_key_id,
-                timestamp=datetime.utcnow()
+                timestamp=datetime.utcnow(),
             )
             db.add(usage_log)
             db.commit()
@@ -133,7 +133,7 @@ class UsageTracker:
                     "within_quota": True,
                     "current_usage": 0,
                     "quota_limit": -1,
-                    "usage_percentage": 0
+                    "usage_percentage": 0,
                 }
 
             # Get current usage
@@ -149,7 +149,7 @@ class UsageTracker:
                 "current_usage": current_usage,
                 "quota_limit": max_calls,
                 "usage_percentage": (current_usage / max_calls * 100) if max_calls > 0 else 0,
-                "remaining": max_calls - current_usage
+                "remaining": max_calls - current_usage,
             }
 
         finally:
@@ -181,6 +181,7 @@ class UsageTracker:
 
             # Sliding window rate limiting
             import time
+
             now = int(time.time())
             window = 60  # 1 minute
 
@@ -199,7 +200,7 @@ class UsageTracker:
                 "current_count": count,
                 "limit": max_per_minute,
                 "remaining": max(0, max_per_minute - count),
-                "reset_at": (now // window + 1) * window  # Unix timestamp
+                "reset_at": (now // window + 1) * window,  # Unix timestamp
             }
 
         finally:
@@ -209,7 +210,7 @@ class UsageTracker:
         self,
         tenant_id: str,
         start_date: Optional[datetime] = None,
-        end_date: Optional[datetime] = None
+        end_date: Optional[datetime] = None,
     ) -> Dict:
         """
         Get usage statistics for tenant
@@ -232,18 +233,24 @@ class UsageTracker:
         db = SessionLocal()
         try:
             # Get usage logs from PostgreSQL
-            logs = db.query(UsageLog).filter(
-                UsageLog.tenant_id == tenant_id,
-                UsageLog.timestamp >= start_date,
-                UsageLog.timestamp <= end_date
-            ).all()
+            logs = (
+                db.query(UsageLog)
+                .filter(
+                    UsageLog.tenant_id == tenant_id,
+                    UsageLog.timestamp >= start_date,
+                    UsageLog.timestamp <= end_date,
+                )
+                .all()
+            )
 
             # Calculate statistics
             total_calls = len(logs)
             successful_calls = len([l for l in logs if l.status_code < 400])
             failed_calls = total_calls - successful_calls
 
-            avg_response_time = sum(l.response_time_ms for l in logs) / total_calls if total_calls > 0 else 0
+            avg_response_time = (
+                sum(l.response_time_ms for l in logs) / total_calls if total_calls > 0 else 0
+            )
 
             # Endpoint breakdown
             endpoint_counts = {}
@@ -264,10 +271,7 @@ class UsageTracker:
                 "avg_response_time_ms": avg_response_time,
                 "endpoint_breakdown": endpoint_counts,
                 "daily_breakdown": daily_counts,
-                "period": {
-                    "start": start_date.isoformat(),
-                    "end": end_date.isoformat()
-                }
+                "period": {"start": start_date.isoformat(), "end": end_date.isoformat()},
             }
 
         finally:
@@ -285,12 +289,16 @@ class UsageTracker:
             day = today.day
 
             # Get or create quota record
-            quota = db.query(QuotaUsage).filter(
-                QuotaUsage.tenant_id == tenant_id,
-                QuotaUsage.year == year,
-                QuotaUsage.month == month,
-                QuotaUsage.day == day
-            ).first()
+            quota = (
+                db.query(QuotaUsage)
+                .filter(
+                    QuotaUsage.tenant_id == tenant_id,
+                    QuotaUsage.year == year,
+                    QuotaUsage.month == month,
+                    QuotaUsage.day == day,
+                )
+                .first()
+            )
 
             if not quota:
                 quota = QuotaUsage(
@@ -300,7 +308,7 @@ class UsageTracker:
                     day=day,
                     api_calls=0,
                     storage_bytes=0,
-                    vector_count=0
+                    vector_count=0,
                 )
                 db.add(quota)
 

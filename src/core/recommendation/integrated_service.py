@@ -4,12 +4,12 @@ Integrated Personalization Service
 Combines ConversationMemory with PersonalizedRecommender
 """
 
-import logging
-from typing import Dict, Any, List, Optional
 import json
+import logging
+from typing import Any, Dict, List, Optional
 
-from .user_profile import UserProfile, PreferenceExtractor
 from .personalized_recommender import PersonalizedRecommender, RecommendationConfig
+from .user_profile import PreferenceExtractor, UserProfile
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ class PersonalizationService:
         self,
         redis_client: Optional[Any] = None,
         recommendation_config: Optional[RecommendationConfig] = None,
-        profile_ttl: int = 86400 * 30  # 30 days
+        profile_ttl: int = 86400 * 30,  # 30 days
     ):
         """
         Initialize personalization service
@@ -50,8 +50,7 @@ class PersonalizationService:
         # Components
         self.extractor = PreferenceExtractor()
         self.recommender = PersonalizedRecommender(
-            config=recommendation_config,
-            preference_extractor=self.extractor
+            config=recommendation_config, preference_extractor=self.extractor
         )
 
         logger.info("✅ PersonalizationService initialized")
@@ -85,11 +84,7 @@ class PersonalizationService:
 
         return profile
 
-    def track_search(
-        self,
-        session_id: str,
-        query: str
-    ):
+    def track_search(self, session_id: str, query: str):
         """
         Track search query
 
@@ -106,12 +101,7 @@ class PersonalizationService:
 
         logger.debug(f"Tracked search: {session_id} -> {query}")
 
-    def track_view(
-        self,
-        session_id: str,
-        product_id: str,
-        product: Dict[str, Any]
-    ):
+    def track_view(self, session_id: str, product_id: str, product: Dict[str, Any]):
         """
         Track product view
 
@@ -129,12 +119,7 @@ class PersonalizationService:
 
         logger.debug(f"Tracked view: {session_id} -> {product_id}")
 
-    def track_click(
-        self,
-        session_id: str,
-        product_id: str,
-        product: Dict[str, Any]
-    ):
+    def track_click(self, session_id: str, product_id: str, product: Dict[str, Any]):
         """
         Track product click
 
@@ -152,12 +137,7 @@ class PersonalizationService:
 
         logger.debug(f"Tracked click: {session_id} -> {product_id}")
 
-    def track_bookmark(
-        self,
-        session_id: str,
-        product_id: str,
-        product: Dict[str, Any]
-    ):
+    def track_bookmark(self, session_id: str, product_id: str, product: Dict[str, Any]):
         """
         Track product bookmark
 
@@ -180,7 +160,7 @@ class PersonalizationService:
         session_id: str,
         results: List[Dict[str, Any]],
         query: Optional[str] = None,
-        top_k: Optional[int] = None
+        top_k: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
         Personalize search results
@@ -198,10 +178,7 @@ class PersonalizationService:
 
         # Re-rank with personalization
         personalized = self.recommender.rerank(
-            results=results,
-            profile=profile,
-            query=query,
-            top_k=top_k
+            results=results, profile=profile, query=query, top_k=top_k
         )
 
         return personalized
@@ -211,7 +188,7 @@ class PersonalizationService:
         session_id: str,
         all_products: List[Dict[str, Any]],
         top_k: int = 10,
-        category_filter: Optional[str] = None
+        category_filter: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Get personalized recommendations
@@ -228,19 +205,12 @@ class PersonalizationService:
         profile = self.get_or_create_profile(session_id)
 
         recommendations = self.recommender.get_recommendations(
-            profile=profile,
-            all_products=all_products,
-            top_k=top_k,
-            category_filter=category_filter
+            profile=profile, all_products=all_products, top_k=top_k, category_filter=category_filter
         )
 
         return recommendations
 
-    def explain_recommendation(
-        self,
-        session_id: str,
-        result: Dict[str, Any]
-    ) -> str:
+    def explain_recommendation(self, session_id: str, result: Dict[str, Any]) -> str:
         """
         Explain why a product was recommended
 

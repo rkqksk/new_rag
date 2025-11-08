@@ -1,7 +1,7 @@
-from typing import Any, Dict, List, Protocol, runtime_checkable, Optional
-import httpx
 import asyncio
+from typing import Any, Dict, List, Optional, Protocol, runtime_checkable
 
+import httpx
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
 
@@ -146,7 +146,7 @@ class RAGPipeline:
 
         # Add metadata filters if provided
         if metadata_filters:
-            from qdrant_client.models import Filter, FieldCondition, MatchValue
+            from qdrant_client.models import FieldCondition, Filter, MatchValue
 
             # Check if metadata_filters is already a Filter object
             if isinstance(metadata_filters, Filter):
@@ -174,6 +174,7 @@ class RAGPipeline:
         """Call Ollama API synchronously"""
         try:
             import requests
+
             response = requests.post(
                 f"{self.ollama_url}/api/generate",
                 json={
@@ -185,7 +186,7 @@ class RAGPipeline:
                         "num_predict": 2000,
                     },
                 },
-                timeout=120.0
+                timeout=120.0,
             )
             response.raise_for_status()
             result = response.json()
@@ -214,10 +215,9 @@ Question: {query}
 Provide a clear, concise answer. If you don't know, say so honestly."""
         else:
             # Build context from chunks
-            context_text = "\n\n".join([
-                f"[Source {i+1}]: {chunk['text']}"
-                for i, chunk in enumerate(context_chunks)
-            ])
+            context_text = "\n\n".join(
+                [f"[Source {i+1}]: {chunk['text']}" for i, chunk in enumerate(context_chunks)]
+            )
 
             prompt = f"""You are an expert assistant. Answer the question based ONLY on the provided context.
 
@@ -255,12 +255,9 @@ Answer:"""
             {
                 "source": chunk.get("metadata", {}).get("source", "Unknown"),
                 "score": chunk.get("score", 0.0),
-                "text_preview": chunk.get("text", "")[:100] + "..."
+                "text_preview": chunk.get("text", "")[:100] + "...",
             }
             for chunk in context_chunks
         ]
 
-        return {
-            "citations": citations,
-            "citation_count": len(citations)
-        }
+        return {"citations": citations, "citation_count": len(citations)}

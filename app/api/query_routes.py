@@ -3,25 +3,24 @@ Query Router API Routes
 질문 난이도에 따라 Ollama LLM 모델 자동 라우팅 (qwen2.5:3b / qwen2.5:7b)
 """
 
+import logging
+import re
+from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, Optional
+
+import httpx
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Optional, Dict, Any
-import logging
-import httpx
-import re
-from enum import Enum
-from datetime import datetime
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(
-    prefix="/api/v1/query",
-    tags=["query_router"]
-)
+router = APIRouter(prefix="/api/v1/query", tags=["query_router"])
 
 
 class QueryComplexity(str, Enum):
     """질문 난이도"""
+
     SIMPLE = "simple"
     MODERATE = "moderate"
     COMPLEX = "complex"
@@ -50,12 +49,25 @@ class QueryAnalyzer:
 
         # 2. 기술적 키워드 검사
         complex_keywords = [
-            'architecture', 'microservice', 'distributed', 'scalable',
-            '아키텍처', '마이크로서비스', '분산', '확장', '설계'
+            "architecture",
+            "microservice",
+            "distributed",
+            "scalable",
+            "아키텍처",
+            "마이크로서비스",
+            "분산",
+            "확장",
+            "설계",
         ]
         moderate_keywords = [
-            'implement', 'optimize', 'refactor', 'design',
-            '구현', '최적화', '리팩토링', '디자인'
+            "implement",
+            "optimize",
+            "refactor",
+            "design",
+            "구현",
+            "최적화",
+            "리팩토링",
+            "디자인",
         ]
 
         for keyword in complex_keywords:
@@ -67,10 +79,10 @@ class QueryAnalyzer:
                 score += 0.15
 
         # 3. 질문 유형 검사
-        if any(word in query.lower() for word in ['why', 'explain', '왜', '설명']):
+        if any(word in query.lower() for word in ["why", "explain", "왜", "설명"]):
             score += 0.1
 
-        if any(word in query.lower() for word in ['how', 'what', '어떻게', '무엇']):
+        if any(word in query.lower() for word in ["how", "what", "어떻게", "무엇"]):
             score += 0.05
 
         # 4. 난이도 판정
@@ -97,25 +109,20 @@ class OllamaRouter:
             "qwen3b_calls": 0,
             "qwen7b_calls": 0,
             "qwen3b_tokens": 0,
-            "qwen7b_tokens": 0
+            "qwen7b_tokens": 0,
         }
 
-    async def generate(self, model: str, prompt: str, system_prompt: Optional[str] = None) -> Dict[str, Any]:
+    async def generate(
+        self, model: str, prompt: str, system_prompt: Optional[str] = None
+    ) -> Dict[str, Any]:
         """Ollama 모델 호출"""
         async with httpx.AsyncClient(timeout=120.0) as client:
-            payload = {
-                "model": model,
-                "prompt": prompt,
-                "stream": False
-            }
+            payload = {"model": model, "prompt": prompt, "stream": False}
 
             if system_prompt:
                 payload["system"] = system_prompt
 
-            response = await client.post(
-                f"{self.ollama_url}/api/generate",
-                json=payload
-            )
+            response = await client.post(f"{self.ollama_url}/api/generate", json=payload)
 
             if response.status_code != 200:
                 raise HTTPException(status_code=500, detail=f"Ollama error: {response.text}")
@@ -123,10 +130,7 @@ class OllamaRouter:
             return response.json()
 
     async def route_and_process(
-        self,
-        query: str,
-        system_prompt: Optional[str] = None,
-        max_tokens: int = 4096
+        self, query: str, system_prompt: Optional[str] = None, max_tokens: int = 4096
     ) -> Dict[str, Any]:
         """난이도에 따라 적절한 모델로 라우팅"""
 
@@ -136,13 +140,22 @@ class OllamaRouter:
         # 2. 모델 선택
         if complexity == QueryComplexity.SIMPLE:
             model = "qwen2.5:3b"
-            thinking = [f"Query analysis: {complexity.value} (confidence: {confidence:.2f})", "Route: qwen2.5:3b (fast)"]
+            thinking = [
+                f"Query analysis: {complexity.value} (confidence: {confidence:.2f})",
+                "Route: qwen2.5:3b (fast)",
+            ]
         elif complexity == QueryComplexity.MODERATE:
             model = "qwen2.5:3b"
-            thinking = [f"Query analysis: {complexity.value} (confidence: {confidence:.2f})", "Route: qwen2.5:3b → may verify with 7b"]
+            thinking = [
+                f"Query analysis: {complexity.value} (confidence: {confidence:.2f})",
+                "Route: qwen2.5:3b → may verify with 7b",
+            ]
         else:  # COMPLEX
             model = "qwen2.5:7b"
-            thinking = [f"Query analysis: {complexity.value} (confidence: {confidence:.2f})", "Route: qwen2.5:7b (high quality)"]
+            thinking = [
+                f"Query analysis: {complexity.value} (confidence: {confidence:.2f})",
+                "Route: qwen2.5:7b (high quality)",
+            ]
 
         # 3. 모델 호출
         result = await self.generate(model, query, system_prompt)
@@ -164,11 +177,11 @@ class OllamaRouter:
             "tokens": {
                 "input": result.get("prompt_eval_count", 0),
                 "output": result.get("eval_count", 0),
-                "total": result.get("prompt_eval_count", 0) + result.get("eval_count", 0)
+                "total": result.get("prompt_eval_count", 0) + result.get("eval_count", 0),
             },
             "review_passed": True,
             "thinking": thinking,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
     def get_stats(self) -> Dict[str, Any]:
@@ -176,12 +189,9 @@ class OllamaRouter:
         total = self.stats["total_calls"]
         if total == 0:
             return {
-                "summary": {
-                    "total_calls": 0,
-                    "efficiency": "No calls yet"
-                },
+                "summary": {"total_calls": 0, "efficiency": "No calls yet"},
                 "qwen3b": {"calls": 0, "tokens": 0, "percentage": 0},
-                "qwen7b": {"calls": 0, "tokens": 0, "percentage": 0}
+                "qwen7b": {"calls": 0, "tokens": 0, "percentage": 0},
             }
 
         qwen3b_pct = (self.stats["qwen3b_calls"] / total) * 100
@@ -190,18 +200,18 @@ class OllamaRouter:
         return {
             "summary": {
                 "total_calls": total,
-                "efficiency": f"{qwen3b_pct:.1f}% qwen2.5:3b / {qwen7b_pct:.1f}% qwen2.5:7b"
+                "efficiency": f"{qwen3b_pct:.1f}% qwen2.5:3b / {qwen7b_pct:.1f}% qwen2.5:7b",
             },
             "qwen3b": {
                 "calls": self.stats["qwen3b_calls"],
                 "tokens": self.stats["qwen3b_tokens"],
-                "percentage": round(qwen3b_pct, 1)
+                "percentage": round(qwen3b_pct, 1),
             },
             "qwen7b": {
                 "calls": self.stats["qwen7b_calls"],
                 "tokens": self.stats["qwen7b_tokens"],
-                "percentage": round(qwen7b_pct, 1)
-            }
+                "percentage": round(qwen7b_pct, 1),
+            },
         }
 
 
@@ -211,6 +221,7 @@ ollama_router = OllamaRouter()
 
 class QueryRequest(BaseModel):
     """질문 요청"""
+
     query: str
     system_prompt: Optional[str] = None
     max_tokens: int = 4096
@@ -219,6 +230,7 @@ class QueryRequest(BaseModel):
 
 class QueryResponse(BaseModel):
     """질문 응답"""
+
     query: str
     complexity: str
     response: Optional[str]
@@ -264,14 +276,12 @@ async def route_query(request: QueryRequest):
                 tokens={"analysis_only": True},
                 review_passed=True,
                 thinking=[f"Query analysis: {complexity.value} (confidence: {confidence:.2f})"],
-                timestamp=datetime.now().isoformat()
+                timestamp=datetime.now().isoformat(),
             )
 
         # 전체 라우팅 및 처리
         result = await ollama_router.route_and_process(
-            query=request.query,
-            system_prompt=request.system_prompt,
-            max_tokens=request.max_tokens
+            query=request.query, system_prompt=request.system_prompt, max_tokens=request.max_tokens
         )
 
         logger.info(f"✓ Query processed: {result.get('model_used')}")
@@ -284,7 +294,7 @@ async def route_query(request: QueryRequest):
             tokens=result.get("tokens", {}),
             review_passed=result.get("review_passed", True),
             thinking=result.get("thinking"),
-            timestamp=result.get("timestamp")
+            timestamp=result.get("timestamp"),
         )
 
     except Exception as e:
@@ -313,14 +323,14 @@ async def analyze_query(request: QueryRequest):
         model_recommendation = {
             QueryComplexity.SIMPLE: "qwen2.5:3b",
             QueryComplexity.MODERATE: "qwen2.5:3b (with optional 7b review)",
-            QueryComplexity.COMPLEX: "qwen2.5:7b"
+            QueryComplexity.COMPLEX: "qwen2.5:7b",
         }
 
         return {
             "query": request.query,
             "complexity": complexity.value,
             "confidence": round(confidence, 2),
-            "recommendation": f"Will use {model_recommendation[complexity]} for best results"
+            "recommendation": f"Will use {model_recommendation[complexity]} for best results",
         }
 
     except Exception as e:
@@ -385,35 +395,32 @@ async def batch_route_queries(requests: list[QueryRequest]):
         for i, req in enumerate(requests):
             try:
                 result = await ollama_router.route_and_process(
-                    query=req.query,
-                    system_prompt=req.system_prompt,
-                    max_tokens=req.max_tokens
+                    query=req.query, system_prompt=req.system_prompt, max_tokens=req.max_tokens
                 )
 
-                results.append({
-                    "index": i,
-                    "query": req.query,
-                    "status": "success",
-                    "complexity": result.get("complexity"),
-                    "model_used": result.get("model_used"),
-                    "tokens": result.get("tokens", {}).get("total", 0)
-                })
+                results.append(
+                    {
+                        "index": i,
+                        "query": req.query,
+                        "status": "success",
+                        "complexity": result.get("complexity"),
+                        "model_used": result.get("model_used"),
+                        "tokens": result.get("tokens", {}).get("total", 0),
+                    }
+                )
 
             except Exception as e:
                 logger.warning(f"✗ Batch item {i} failed: {e}")
-                results.append({
-                    "index": i,
-                    "query": req.query,
-                    "status": "error",
-                    "error": str(e)
-                })
+                results.append({"index": i, "query": req.query, "status": "error", "error": str(e)})
 
-        logger.info(f"✓ Batch processing completed: {len([r for r in results if r['status'] == 'success'])}/{len(results)} success")
+        logger.info(
+            f"✓ Batch processing completed: {len([r for r in results if r['status'] == 'success'])}/{len(results)} success"
+        )
         return {
             "batch_size": len(requests),
             "successful": len([r for r in results if r["status"] == "success"]),
             "failed": len([r for r in results if r["status"] == "error"]),
-            "results": results
+            "results": results,
         }
 
     except Exception as e:
@@ -429,16 +436,10 @@ async def query_router_health():
         return {
             "status": "healthy",
             "ollama_url": ollama_router.ollama_url,
-            "models": {
-                "small": "qwen2.5:3b",
-                "large": "qwen2.5:7b"
-            },
-            "stats": stats
+            "models": {"small": "qwen2.5:3b", "large": "qwen2.5:7b"},
+            "stats": stats,
         }
 
     except Exception as e:
         logger.error(f"✗ Health check failed: {e}")
-        return {
-            "status": "unhealthy",
-            "error": str(e)
-        }
+        return {"status": "unhealthy", "error": str(e)}

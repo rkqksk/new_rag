@@ -12,7 +12,7 @@ import tempfile
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, UploadFile, File, HTTPException, BackgroundTasks, Query
+from fastapi import APIRouter, BackgroundTasks, File, HTTPException, Query, UploadFile
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -27,6 +27,7 @@ web_crawler_service = None
 
 class DocumentUploadResponse(BaseModel):
     """문서 업로드 응답"""
+
     status: str
     doc_id: str
     doc_type: str
@@ -39,6 +40,7 @@ class DocumentUploadResponse(BaseModel):
 
 class CrawlerSourceRequest(BaseModel):
     """크롤러 소스 추가 요청"""
+
     source_id: str
     url: str
     name: str
@@ -48,18 +50,21 @@ class CrawlerSourceRequest(BaseModel):
 
 class CrawlerStartRequest(BaseModel):
     """크롤러 시작 요청"""
+
     source_id: Optional[str] = None  # None이면 모든 소스
     use_selenium: bool = False
 
 
 class SearchRequest(BaseModel):
     """문서 검색 요청"""
+
     query: str
     top_k: int = 5
 
 
 class SearchResponse(BaseModel):
     """문서 검색 응답"""
+
     query: str
     results_count: int
     results: list
@@ -70,7 +75,7 @@ class SearchResponse(BaseModel):
 async def upload_document(
     file: UploadFile = File(...),
     doc_type: Optional[str] = Query(None),
-    custom_metadata: Optional[str] = Query(None)
+    custom_metadata: Optional[str] = Query(None),
 ):
     """
     문서 파일 업로드 및 처리
@@ -93,10 +98,7 @@ async def upload_document(
     - vectors_stored: 저장된 벡터 개수
     """
     if not document_ingestion_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Document ingestion service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Document ingestion service not initialized")
 
     try:
         # 임시 파일 저장
@@ -112,6 +114,7 @@ async def upload_document(
             metadata = {}
             if custom_metadata:
                 import json
+
                 try:
                     metadata = json.loads(custom_metadata)
                 except json.JSONDecodeError:
@@ -119,9 +122,7 @@ async def upload_document(
 
             # 문서 처리
             result = await document_ingestion_service.ingest_file(
-                file_path=temp_file_path,
-                doc_type=doc_type,
-                metadata=metadata
+                file_path=temp_file_path, doc_type=doc_type, metadata=metadata
             )
 
             return DocumentUploadResponse(
@@ -132,7 +133,7 @@ async def upload_document(
                 chunks_count=result["chunks_count"],
                 vectors_stored=result["vectors_stored"],
                 message=f"Document processed successfully: {result['chunks_count']} chunks",
-                processed_at=result["processed_at"]
+                processed_at=result["processed_at"],
             )
 
         finally:
@@ -142,10 +143,7 @@ async def upload_document(
 
     except Exception as e:
         logger.error(f"Error uploading document: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error processing document: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error processing document: {str(e)}")
 
 
 @router.post("/crawler/source/add")
@@ -161,10 +159,7 @@ async def add_crawler_source(request: CrawlerSourceRequest):
     - selectors: CSS 선택자 매핑 (예: {"title": ".product-title"})
     """
     if not web_crawler_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Web crawler service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Web crawler service not initialized")
 
     try:
         from app.services.web_crawler_service import WebSource
@@ -173,7 +168,7 @@ async def add_crawler_source(request: CrawlerSourceRequest):
             url=request.url,
             selectors=request.selectors,
             name=request.name,
-            category=request.category
+            category=request.category,
         )
 
         web_crawler_service.add_source(request.source_id, source)
@@ -181,15 +176,12 @@ async def add_crawler_source(request: CrawlerSourceRequest):
         return {
             "status": "success",
             "source_id": request.source_id,
-            "message": f"Source added: {request.name}"
+            "message": f"Source added: {request.name}",
         }
 
     except Exception as e:
         logger.error(f"Error adding crawler source: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error adding source: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error adding source: {str(e)}")
 
 
 @router.post("/crawler/start")
@@ -206,10 +198,7 @@ async def start_crawler(request: CrawlerStartRequest, background_tasks: Backgrou
     - status: 작업 상태
     """
     if not web_crawler_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Web crawler service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Web crawler service not initialized")
 
     try:
         task_id = f"crawl_{datetime.utcnow().timestamp()}"
@@ -217,29 +206,22 @@ async def start_crawler(request: CrawlerStartRequest, background_tasks: Backgrou
         if request.source_id:
             # 특정 소스 크롤링
             background_tasks.add_task(
-                web_crawler_service.crawl_source,
-                request.source_id,
-                request.use_selenium
+                web_crawler_service.crawl_source, request.source_id, request.use_selenium
             )
         else:
             # 모든 소스 크롤링
-            background_tasks.add_task(
-                web_crawler_service.crawl_all_sources
-            )
+            background_tasks.add_task(web_crawler_service.crawl_all_sources)
 
         return {
             "status": "started",
             "task_id": task_id,
             "source_id": request.source_id,
-            "message": f"Crawler started (task_id: {task_id})"
+            "message": f"Crawler started (task_id: {task_id})",
         }
 
     except Exception as e:
         logger.error(f"Error starting crawler: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error starting crawler: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error starting crawler: {str(e)}")
 
 
 @router.get("/crawler/sources")
@@ -251,10 +233,7 @@ async def get_crawler_sources():
     - sources: 소스 목록
     """
     if not web_crawler_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Web crawler service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Web crawler service not initialized")
 
     try:
         sources = web_crawler_service.get_sources_status()
@@ -263,15 +242,12 @@ async def get_crawler_sources():
             "status": "success",
             "sources_count": len(sources),
             "sources": sources,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
     except Exception as e:
         logger.error(f"Error getting crawler sources: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error retrieving sources: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error retrieving sources: {str(e)}")
 
 
 @router.get("/crawler/history")
@@ -286,10 +262,7 @@ async def get_crawler_history(source_id: Optional[str] = Query(None)):
     - history: 크롤링 히스토리
     """
     if not web_crawler_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Web crawler service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Web crawler service not initialized")
 
     try:
         history = web_crawler_service.get_crawl_history(source_id)
@@ -298,15 +271,12 @@ async def get_crawler_history(source_id: Optional[str] = Query(None)):
             "status": "success",
             "records_count": len(history),
             "history": history,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
     except Exception as e:
         logger.error(f"Error getting crawler history: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error retrieving history: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error retrieving history: {str(e)}")
 
 
 @router.post("/search", response_model=SearchResponse)
@@ -322,30 +292,23 @@ async def search_documents(request: SearchRequest):
     - results: 유사도 점수와 함께 검색 결과
     """
     if not document_ingestion_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Document ingestion service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Document ingestion service not initialized")
 
     try:
         results = await document_ingestion_service.search_documents(
-            query=request.query,
-            top_k=request.top_k
+            query=request.query, top_k=request.top_k
         )
 
         return SearchResponse(
             query=request.query,
             results_count=len(results),
             results=results,
-            timestamp=datetime.utcnow().isoformat()
+            timestamp=datetime.utcnow().isoformat(),
         )
 
     except Exception as e:
         logger.error(f"Error searching documents: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error searching documents: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error searching documents: {str(e)}")
 
 
 @router.get("/stats")
@@ -358,29 +321,29 @@ async def get_ingestion_stats():
     - crawler_stats: 크롤러 통계
     """
     if not document_ingestion_service:
-        raise HTTPException(
-            status_code=500,
-            detail="Document ingestion service not initialized"
-        )
+        raise HTTPException(status_code=500, detail="Document ingestion service not initialized")
 
     try:
         doc_stats = document_ingestion_service.get_collection_stats()
         crawler_stats = {
             "total_sources": len(web_crawler_service.sources) if web_crawler_service else 0,
-            "crawl_history_count": len(web_crawler_service.crawl_history) if web_crawler_service else 0,
-            "last_crawl": web_crawler_service.crawl_history[-1]["crawled_at"] if web_crawler_service and web_crawler_service.crawl_history else None
+            "crawl_history_count": (
+                len(web_crawler_service.crawl_history) if web_crawler_service else 0
+            ),
+            "last_crawl": (
+                web_crawler_service.crawl_history[-1]["crawled_at"]
+                if web_crawler_service and web_crawler_service.crawl_history
+                else None
+            ),
         }
 
         return {
             "status": "success",
             "document_stats": doc_stats,
             "crawler_stats": crawler_stats,
-            "timestamp": datetime.utcnow().isoformat()
+            "timestamp": datetime.utcnow().isoformat(),
         }
 
     except Exception as e:
         logger.error(f"Error getting ingestion stats: {e}")
-        raise HTTPException(
-            status_code=400,
-            detail=f"Error retrieving stats: {str(e)}"
-        )
+        raise HTTPException(status_code=400, detail=f"Error retrieving stats: {str(e)}")

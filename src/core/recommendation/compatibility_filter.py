@@ -9,8 +9,8 @@ Hard filter for compatibility:
 
 import logging
 import re
-from typing import List, Dict, Any, Optional, Set
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +29,7 @@ class CompatibilityRules:
     enable_cross_category: bool = True
 
     # Fallback behavior when no user context
-    fallback_mode: str = 'permissive'  # 'permissive' or 'strict'
+    fallback_mode: str = "permissive"  # 'permissive' or 'strict'
 
 
 class CompatibilityFilter:
@@ -72,27 +72,27 @@ class CompatibilityFilter:
         # Special cases (if any)
         # e.g., 20파이 and 20mm are compatible
         self.neck_aliases = {
-            '20파이': ['20mm', '20파이'],
-            '24파이': ['24mm', '24파이'],
-            '28파이': ['28mm', '28파이'],
-            '32파이': ['32mm', '32파이']
+            "20파이": ["20mm", "20파이"],
+            "24파이": ["24mm", "24파이"],
+            "28파이": ["28mm", "28파이"],
+            "32파이": ["32mm", "32파이"],
         }
 
     def _init_category_compatibility(self):
         """Initialize category compatibility matrix"""
 
         self.category_compatibility = {
-            'Bottle': ['Cap', 'Pump'],      # Bottles need caps/pumps
-            'Jar': ['Cap', 'Pump'],         # Jars need caps/pumps
-            'Cap': ['Bottle', 'Jar'],       # Caps fit bottles/jars
-            'Pump': ['Bottle', 'Jar']       # Pumps fit bottles/jars
+            "Bottle": ["Cap", "Pump"],  # Bottles need caps/pumps
+            "Jar": ["Cap", "Pump"],  # Jars need caps/pumps
+            "Cap": ["Bottle", "Jar"],  # Caps fit bottles/jars
+            "Pump": ["Bottle", "Jar"],  # Pumps fit bottles/jars
         }
 
     def filter_by_compatibility(
         self,
         results: List[Dict[str, Any]],
         user_context: Optional[Dict[str, Any]] = None,
-        query: Optional[str] = None
+        query: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Filter results by strict compatibility
@@ -108,7 +108,7 @@ class CompatibilityFilter:
         """
         if not user_context:
             # No context: return all (permissive mode)
-            if self.rules.fallback_mode == 'permissive':
+            if self.rules.fallback_mode == "permissive":
                 return results
             else:
                 return results  # Still return all, but could be stricter
@@ -126,10 +126,7 @@ class CompatibilityFilter:
         return filtered
 
     def _is_compatible(
-        self,
-        product: Dict[str, Any],
-        user_context: Dict[str, Any],
-        query: Optional[str]
+        self, product: Dict[str, Any], user_context: Dict[str, Any], query: Optional[str]
     ) -> bool:
         """
         Check if product is compatible with user context
@@ -143,14 +140,14 @@ class CompatibilityFilter:
             True if compatible, False otherwise
         """
         # Extract product attributes
-        product_neck = product.get('neck')
-        product_capacity = product.get('capacity')
-        product_category = product.get('category')
+        product_neck = product.get("neck")
+        product_capacity = product.get("capacity")
+        product_category = product.get("category")
 
         # Extract user context
-        user_necks = user_context.get('recent_necks', [])
-        user_capacities = user_context.get('recent_capacities', [])
-        user_categories = user_context.get('recent_categories', [])
+        user_necks = user_context.get("recent_necks", [])
+        user_capacities = user_context.get("recent_capacities", [])
+        user_categories = user_context.get("recent_categories", [])
 
         # If no strong context, allow product
         if not user_necks and not user_capacities and not user_categories:
@@ -160,7 +157,9 @@ class CompatibilityFilter:
         if user_categories and product_category:
             if not self._check_category_compatibility(product_category, user_categories):
                 # Incompatible category
-                logger.debug(f"Incompatible category: {product_category} not compatible with {user_categories}")
+                logger.debug(
+                    f"Incompatible category: {product_category} not compatible with {user_categories}"
+                )
                 return False
 
         # Check neck compatibility (STRICT)
@@ -171,7 +170,9 @@ class CompatibilityFilter:
 
         # Check capacity compatibility
         if user_capacities and product_capacity:
-            if not self._check_capacity_compatibility(product_capacity, user_capacities, product_category):
+            if not self._check_capacity_compatibility(
+                product_capacity, user_capacities, product_category
+            ):
                 logger.debug(f"Incompatible capacity: {product_capacity} vs {user_capacities}")
                 return False
 
@@ -179,9 +180,7 @@ class CompatibilityFilter:
         return True
 
     def _check_category_compatibility(
-        self,
-        product_category: str,
-        user_categories: List[str]
+        self, product_category: str, user_categories: List[str]
     ) -> bool:
         """
         Check if product category is compatible with user's categories
@@ -206,11 +205,7 @@ class CompatibilityFilter:
 
         return False
 
-    def _check_neck_compatibility(
-        self,
-        product_neck: str,
-        user_necks: List[str]
-    ) -> bool:
+    def _check_neck_compatibility(self, product_neck: str, user_necks: List[str]) -> bool:
         """
         Check if product neck is compatible with user's necks
 
@@ -241,10 +236,7 @@ class CompatibilityFilter:
         return False
 
     def _check_capacity_compatibility(
-        self,
-        product_capacity: str,
-        user_capacities: List[str],
-        product_category: Optional[str]
+        self, product_capacity: str, user_capacities: List[str], product_category: Optional[str]
     ) -> bool:
         """
         Check if product capacity is compatible with user's capacities
@@ -276,7 +268,7 @@ class CompatibilityFilter:
                 return True
 
             # Check compatibility based on category
-            if product_category in ['Cap', 'Pump']:
+            if product_category in ["Cap", "Pump"]:
                 # Cap/Pump should fit user's container capacity
                 # Allow same size or slightly smaller
                 for user_ml in user_ml_values:
@@ -318,17 +310,17 @@ class CompatibilityFilter:
 
         try:
             # Parse ml
-            match = re.match(r'(\d+(?:\.\d+)?)\s*(ml|ML|미리|밀리)', capacity, re.IGNORECASE)
+            match = re.match(r"(\d+(?:\.\d+)?)\s*(ml|ML|미리|밀리)", capacity, re.IGNORECASE)
             if match:
                 return float(match.group(1))
 
             # Parse liters
-            match = re.match(r'(\d+(?:\.\d+)?)\s*(l|L|리터)', capacity, re.IGNORECASE)
+            match = re.match(r"(\d+(?:\.\d+)?)\s*(l|L|리터)", capacity, re.IGNORECASE)
             if match:
                 return float(match.group(1)) * 1000
 
             # Parse cc
-            match = re.match(r'(\d+(?:\.\d+)?)\s*(cc|CC)', capacity, re.IGNORECASE)
+            match = re.match(r"(\d+(?:\.\d+)?)\s*(cc|CC)", capacity, re.IGNORECASE)
             if match:
                 return float(match.group(1))
 
@@ -338,10 +330,7 @@ class CompatibilityFilter:
             logger.error(f"Error parsing capacity '{capacity}': {e}")
             return None
 
-    def extract_compatibility_context(
-        self,
-        profile
-    ) -> Dict[str, Any]:
+    def extract_compatibility_context(self, profile) -> Dict[str, Any]:
         """
         Extract compatibility context from user profile
 
@@ -351,22 +340,18 @@ class CompatibilityFilter:
         Returns:
             Compatibility context dict
         """
-        context = {
-            'recent_necks': [],
-            'recent_capacities': [],
-            'recent_categories': []
-        }
+        context = {"recent_necks": [], "recent_capacities": [], "recent_categories": []}
 
         # Get top neck preferences
-        if hasattr(profile, 'get_top_preferences'):
-            top_necks = profile.get_top_preferences('neck', top_k=3)
-            context['recent_necks'] = [neck for neck, weight in top_necks if weight > 0.3]
+        if hasattr(profile, "get_top_preferences"):
+            top_necks = profile.get_top_preferences("neck", top_k=3)
+            context["recent_necks"] = [neck for neck, weight in top_necks if weight > 0.3]
 
-            top_capacities = profile.get_top_preferences('capacity', top_k=3)
-            context['recent_capacities'] = [cap for cap, weight in top_capacities if weight > 0.3]
+            top_capacities = profile.get_top_preferences("capacity", top_k=3)
+            context["recent_capacities"] = [cap for cap, weight in top_capacities if weight > 0.3]
 
-            top_categories = profile.get_top_preferences('category', top_k=3)
-            context['recent_categories'] = [cat for cat, weight in top_categories if weight > 0.3]
+            top_categories = profile.get_top_preferences("category", top_k=3)
+            context["recent_categories"] = [cat for cat, weight in top_categories if weight > 0.3]
 
         return context
 
@@ -383,7 +368,7 @@ class CompatibilityFilter:
             "   ✅ 20파이 bottle → 20파이 cap (ALLOWED)",
             "   ❌ 20파이 bottle → 24파이 cap (BLOCKED)",
             "   ✅ 50ml bottle → 50ml cap (ALLOWED)",
-            "   ❌ 50ml bottle → 100ml cap (BLOCKED)"
+            "   ❌ 50ml bottle → 100ml cap (BLOCKED)",
         ]
 
         return "\n".join(lines)

@@ -7,15 +7,16 @@ Search Engine with Filter Builder
 """
 
 import re
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
 
-from src.core.query_parser import QueryParser, ParsedQuery, EntityType, ExtractedEntity
+from src.core.query_parser import EntityType, ExtractedEntity, ParsedQuery, QueryParser
 
 
 @dataclass
 class SearchResult:
     """검색 결과"""
+
     product_id: str
     product_name: str
     score: float
@@ -46,32 +47,20 @@ class FilterBuilder:
         for entity in parsed_query.entities:
             if entity.entity_type == EntityType.CATEGORY:
                 # Category: exact match (must)
-                must_conditions.append({
-                    "key": "category",
-                    "match": {"value": entity.value}
-                })
+                must_conditions.append({"key": "category", "match": {"value": entity.value}})
 
             elif entity.entity_type == EntityType.NECK:
                 # Neck: exact match (must)
                 neck_value = self._normalize_neck(entity.value)
-                must_conditions.append({
-                    "key": "neck",
-                    "match": {"value": neck_value}
-                })
+                must_conditions.append({"key": "neck", "match": {"value": neck_value}})
 
             elif entity.entity_type == EntityType.MATERIAL:
                 # Material: exact match (should - not critical)
-                should_conditions.append({
-                    "key": "material",
-                    "match": {"value": entity.value}
-                })
+                should_conditions.append({"key": "material", "match": {"value": entity.value}})
 
             elif entity.entity_type == EntityType.ORIGIN:
                 # Origin: exact match (should)
-                should_conditions.append({
-                    "key": "origin",
-                    "match": {"value": entity.value}
-                })
+                should_conditions.append({"key": "origin", "match": {"value": entity.value}})
 
             elif entity.entity_type == EntityType.CAPACITY:
                 # Capacity: range match (±20%)
@@ -79,42 +68,36 @@ class FilterBuilder:
                 if capacity_ml:
                     range_min = int(capacity_ml * 0.8)
                     range_max = int(capacity_ml * 1.2)
-                    should_conditions.append({
-                        "key": "capacity_ml",
-                        "range": {"gte": range_min, "lte": range_max}
-                    })
+                    should_conditions.append(
+                        {"key": "capacity_ml", "range": {"gte": range_min, "lte": range_max}}
+                    )
 
             elif entity.entity_type == EntityType.MOQ:
                 # MOQ: less than or equal (must)
-                must_conditions.append({
-                    "key": "moq",
-                    "range": {"lte": entity.value}
-                })
+                must_conditions.append({"key": "moq", "range": {"lte": entity.value}})
 
             elif entity.entity_type == EntityType.PRICE:
                 # Price: range match (±20%)
                 range_min = int(entity.value * 0.8)
                 range_max = int(entity.value * 1.2)
-                should_conditions.append({
-                    "key": "price",
-                    "range": {"gte": range_min, "lte": range_max}
-                })
+                should_conditions.append(
+                    {"key": "price", "range": {"gte": range_min, "lte": range_max}}
+                )
 
             elif entity.entity_type == EntityType.USE_CASE:
                 # Use case: match any
-                should_conditions.append({
-                    "key": "use_cases",
-                    "match": {"any": [entity.value]}
-                })
+                should_conditions.append({"key": "use_cases", "match": {"any": [entity.value]}})
 
             elif entity.entity_type == EntityType.DIAMETER:
                 # Diameter: range match (±2mm)
                 diameter_mm = self._parse_diameter(entity.value)
                 if diameter_mm:
-                    should_conditions.append({
-                        "key": "diameter_mm",
-                        "range": {"gte": diameter_mm - 2, "lte": diameter_mm + 2}
-                    })
+                    should_conditions.append(
+                        {
+                            "key": "diameter_mm",
+                            "range": {"gte": diameter_mm - 2, "lte": diameter_mm + 2},
+                        }
+                    )
 
         # Build final filter
         filter_dict = {}
@@ -151,10 +134,7 @@ class SearchEngine:
     """하이브리드 검색 엔진"""
 
     def __init__(
-        self,
-        qdrant_client=None,
-        embedding_model=None,
-        collection_name: str = "products_atomic"
+        self, qdrant_client=None, embedding_model=None, collection_name: str = "products_atomic"
     ):
         """
         초기화
@@ -172,10 +152,7 @@ class SearchEngine:
         self.filter_builder = FilterBuilder()
 
     def search(
-        self,
-        query: str,
-        top_k: int = 10,
-        enable_reranking: bool = True
+        self, query: str, top_k: int = 10, enable_reranking: bool = True
     ) -> List[SearchResult]:
         """
         자연어 쿼리로 제품 검색
@@ -199,9 +176,7 @@ class SearchEngine:
 
         # Step 4: Qdrant 검색 (현재는 Mock)
         results = self._search_qdrant(
-            search_query=search_query,
-            filters=filters,
-            top_k=top_k * 2  # Over-fetch for re-ranking
+            search_query=search_query, filters=filters, top_k=top_k * 2  # Over-fetch for re-ranking
         )
 
         # Step 5: Re-ranking (옵션)
@@ -241,12 +216,7 @@ class SearchEngine:
 
         return " ".join(parts) if parts else parsed_query.original_query
 
-    def _search_qdrant(
-        self,
-        search_query: str,
-        filters: Optional[Dict],
-        top_k: int
-    ) -> List[Dict]:
+    def _search_qdrant(self, search_query: str, filters: Optional[Dict], top_k: int) -> List[Dict]:
         """
         Qdrant 벡터 검색 수행
 
@@ -275,8 +245,8 @@ class SearchEngine:
                     "moq": 5000,
                     "material": "PP",
                     "chunk_text": "Neck Ø20 호환 캡",
-                    "field_type": "neck"
-                }
+                    "field_type": "neck",
+                },
             },
             {
                 "id": "GY-20_moq",
@@ -289,8 +259,8 @@ class SearchEngine:
                     "moq": 5000,
                     "material": "PP",
                     "chunk_text": "최소주문수량 5,000개 (캡)",
-                    "field_type": "moq"
-                }
+                    "field_type": "moq",
+                },
             },
             {
                 "id": "GY-20_product_name",
@@ -303,8 +273,8 @@ class SearchEngine:
                     "moq": 5000,
                     "material": "PP",
                     "chunk_text": "GY-20-뾰족캡B 캡",
-                    "field_type": "product_name"
-                }
+                    "field_type": "product_name",
+                },
             },
         ]
 
@@ -315,11 +285,7 @@ class SearchEngine:
 
         return mock_results
 
-    def _rerank_results(
-        self,
-        results: List[Dict],
-        parsed_query: ParsedQuery
-    ) -> List[Dict]:
+    def _rerank_results(self, results: List[Dict], parsed_query: ParsedQuery) -> List[Dict]:
         """
         결과 재정렬 (Re-ranking)
 
@@ -352,15 +318,15 @@ class SearchEngine:
                 if entity_value in chunk_text or entity.original_text.lower() in chunk_text:
                     entity_matches += 1
 
-            entity_match_score = min(entity_matches / len(parsed_query.entities), 1.0) if parsed_query.entities else 0
+            entity_match_score = (
+                min(entity_matches / len(parsed_query.entities), 1.0)
+                if parsed_query.entities
+                else 0
+            )
 
             # Final score
             semantic_score = result["score"]
-            final_score = (
-                semantic_score * 0.5 +
-                field_priority * 0.3 +
-                entity_match_score * 0.2
-            )
+            final_score = semantic_score * 0.5 + field_priority * 0.3 + entity_match_score * 0.2
 
             result["reranked_score"] = final_score
 
@@ -369,11 +335,7 @@ class SearchEngine:
 
         return results
 
-    def _deduplicate_by_product(
-        self,
-        results: List[Dict],
-        top_k: int
-    ) -> List[SearchResult]:
+    def _deduplicate_by_product(self, results: List[Dict], top_k: int) -> List[SearchResult]:
         """
         제품별로 그룹화하고 중복 제거
 
@@ -393,7 +355,9 @@ class SearchEngine:
                     "product_name": payload.get("product_name", ""),
                     "best_score": current_score,
                     "matched_chunks": [payload],
-                    "metadata": {k: v for k, v in payload.items() if k not in ["chunk_text", "field_type"]}
+                    "metadata": {
+                        k: v for k, v in payload.items() if k not in ["chunk_text", "field_type"]
+                    },
                 }
             else:
                 # Update best score if higher
@@ -410,7 +374,7 @@ class SearchEngine:
                 product_name=data["product_name"],
                 score=data["best_score"],
                 matched_chunks=data["matched_chunks"],
-                metadata=data["metadata"]
+                metadata=data["metadata"],
             )
             for data in product_map.values()
         ]
@@ -422,9 +386,9 @@ class SearchEngine:
 
 if __name__ == "__main__":
     # Test search engine
-    print("="*80)
+    print("=" * 80)
     print("SEARCH ENGINE TEST")
-    print("="*80)
+    print("=" * 80)
 
     # Initialize search engine (without actual Qdrant/Embedding)
     engine = SearchEngine()
@@ -448,4 +412,6 @@ if __name__ == "__main__":
             print(f"   Product ID: {result.product_id}")
             print(f"   Matched Chunks: {len(result.matched_chunks)}")
             for chunk in result.matched_chunks[:3]:  # Show top 3 chunks
-                print(f"     • [{chunk.get('field_type', 'unknown').upper()}] {chunk.get('chunk_text', '')}")
+                print(
+                    f"     • [{chunk.get('field_type', 'unknown').upper()}] {chunk.get('chunk_text', '')}"
+                )

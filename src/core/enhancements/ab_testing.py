@@ -3,14 +3,15 @@ A/B Testing Framework for Fusion Strategies
 Tests different search fusion methods and strategies
 """
 
-import logging
 import hashlib
 import json
+import logging
 import time
-from typing import List, Dict, Any, Optional, Tuple
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 class ExperimentStatus(Enum):
     """Experiment lifecycle status"""
+
     DRAFT = "draft"
     RUNNING = "running"
     PAUSED = "paused"
@@ -27,6 +29,7 @@ class ExperimentStatus(Enum):
 
 class FusionStrategy(Enum):
     """Fusion strategy variants"""
+
     RRF = "rrf"  # Reciprocal Rank Fusion
     WEIGHTED = "weighted"  # Weighted linear combination
     LEARNED = "learned"  # ML-based learned fusion
@@ -39,6 +42,7 @@ class Variant:
 
     Represents a specific fusion strategy configuration
     """
+
     id: str
     name: str
     strategy: FusionStrategy
@@ -48,13 +52,13 @@ class Variant:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
         data = asdict(self)
-        data['strategy'] = self.strategy.value
+        data["strategy"] = self.strategy.value
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Variant':
+    def from_dict(cls, data: Dict[str, Any]) -> "Variant":
         """Create from dictionary"""
-        data['strategy'] = FusionStrategy(data['strategy'])
+        data["strategy"] = FusionStrategy(data["strategy"])
         return cls(**data)
 
 
@@ -63,6 +67,7 @@ class Metric:
     """
     Metrics tracked per variant
     """
+
     clicks: int = 0
     impressions: int = 0
     relevance_scores: List[float] = field(default_factory=list)
@@ -86,18 +91,18 @@ class Metric:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
         return {
-            'clicks': self.clicks,
-            'impressions': self.impressions,
-            'ctr': self.get_ctr(),
-            'query_count': self.query_count,
-            'avg_relevance': self.get_avg_relevance(),
-            'avg_satisfaction': self.get_avg_satisfaction(),
-            'avg_latency_ms': self.avg_latency_ms,
-            'error_count': self.error_count,
-            'sample_sizes': {
-                'relevance': len(self.relevance_scores),
-                'satisfaction': len(self.user_satisfaction)
-            }
+            "clicks": self.clicks,
+            "impressions": self.impressions,
+            "ctr": self.get_ctr(),
+            "query_count": self.query_count,
+            "avg_relevance": self.get_avg_relevance(),
+            "avg_satisfaction": self.get_avg_satisfaction(),
+            "avg_latency_ms": self.avg_latency_ms,
+            "error_count": self.error_count,
+            "sample_sizes": {
+                "relevance": len(self.relevance_scores),
+                "satisfaction": len(self.user_satisfaction),
+            },
         }
 
 
@@ -108,6 +113,7 @@ class Experiment:
 
     Represents a complete A/B test comparing different fusion strategies
     """
+
     id: str
     name: str
     description: str
@@ -127,31 +133,31 @@ class Experiment:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'variants': [v.to_dict() for v in self.variants],
-            'status': self.status.value,
-            'created_at': self.created_at.isoformat(),
-            'started_at': self.started_at.isoformat() if self.started_at else None,
-            'ended_at': self.ended_at.isoformat() if self.ended_at else None,
-            'metrics': {k: v.to_dict() for k, v in self.metrics.items()},
-            'metadata': self.metadata
+            "id": self.id,
+            "name": self.name,
+            "description": self.description,
+            "variants": [v.to_dict() for v in self.variants],
+            "status": self.status.value,
+            "created_at": self.created_at.isoformat(),
+            "started_at": self.started_at.isoformat() if self.started_at else None,
+            "ended_at": self.ended_at.isoformat() if self.ended_at else None,
+            "metrics": {k: v.to_dict() for k, v in self.metrics.items()},
+            "metadata": self.metadata,
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Experiment':
+    def from_dict(cls, data: Dict[str, Any]) -> "Experiment":
         """Create from dictionary"""
-        data['variants'] = [Variant.from_dict(v) for v in data['variants']]
-        data['status'] = ExperimentStatus(data['status'])
-        data['created_at'] = datetime.fromisoformat(data['created_at'])
-        if data.get('started_at'):
-            data['started_at'] = datetime.fromisoformat(data['started_at'])
-        if data.get('ended_at'):
-            data['ended_at'] = datetime.fromisoformat(data['ended_at'])
+        data["variants"] = [Variant.from_dict(v) for v in data["variants"]]
+        data["status"] = ExperimentStatus(data["status"])
+        data["created_at"] = datetime.fromisoformat(data["created_at"])
+        if data.get("started_at"):
+            data["started_at"] = datetime.fromisoformat(data["started_at"])
+        if data.get("ended_at"):
+            data["ended_at"] = datetime.fromisoformat(data["ended_at"])
 
         # Reconstruct metrics
-        metrics_data = data.pop('metrics', {})
+        metrics_data = data.pop("metrics", {})
         experiment = cls(**data)
         for variant_id, metric_dict in metrics_data.items():
             experiment.metrics[variant_id] = Metric(**metric_dict)
@@ -188,7 +194,7 @@ class ABTestingFramework:
         name: str,
         description: str,
         variants: List[Dict[str, Any]],
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> Experiment:
         """
         Create a new A/B test experiment
@@ -229,10 +235,10 @@ class ABTestingFramework:
             variant_id = f"{experiment_id}_variant_{i}"
             variant = Variant(
                 id=variant_id,
-                name=variant_config['name'],
-                strategy=FusionStrategy(variant_config['strategy']),
-                config=variant_config['config'],
-                traffic_allocation=variant_config.get('traffic_allocation', 1.0 / len(variants))
+                name=variant_config["name"],
+                strategy=FusionStrategy(variant_config["strategy"]),
+                config=variant_config["config"],
+                traffic_allocation=variant_config.get("traffic_allocation", 1.0 / len(variants)),
             )
             variant_objects.append(variant)
 
@@ -242,7 +248,7 @@ class ABTestingFramework:
             name=name,
             description=description,
             variants=variant_objects,
-            metadata=metadata or {}
+            metadata=metadata or {},
         )
 
         self.experiments[experiment_id] = experiment
@@ -251,7 +257,9 @@ class ABTestingFramework:
         if self.redis_client:
             self._persist_experiment(experiment)
 
-        logger.info(f"✅ Created experiment '{name}' ({experiment_id}) with {len(variants)} variants")
+        logger.info(
+            f"✅ Created experiment '{name}' ({experiment_id}) with {len(variants)} variants"
+        )
 
         return experiment
 
@@ -311,7 +319,7 @@ class ABTestingFramework:
             return experiment.variants[0]
 
         # Hash-based assignment for consistency
-        hash_input = f"{experiment_id}:{user_id}".encode('utf-8')
+        hash_input = f"{experiment_id}:{user_id}".encode("utf-8")
         hash_value = int(hashlib.md5(hash_input).hexdigest(), 16)
         assignment_value = (hash_value % 100) / 100.0  # 0.0-1.0
 
@@ -350,7 +358,7 @@ class ABTestingFramework:
         experiment_id: str,
         variant_id: str,
         relevance_score: Optional[float] = None,
-        latency_ms: Optional[float] = None
+        latency_ms: Optional[float] = None,
     ):
         """Track query execution"""
         experiment = self.experiments.get(experiment_id)
@@ -369,15 +377,10 @@ class ABTestingFramework:
                 # Update running average
                 total_queries = metric.query_count
                 metric.avg_latency_ms = (
-                    (metric.avg_latency_ms * (total_queries - 1) + latency_ms) / total_queries
-                )
+                    metric.avg_latency_ms * (total_queries - 1) + latency_ms
+                ) / total_queries
 
-    def track_satisfaction(
-        self,
-        experiment_id: str,
-        variant_id: str,
-        rating: int
-    ):
+    def track_satisfaction(self, experiment_id: str, variant_id: str, rating: int):
         """
         Track user satisfaction rating
 
@@ -420,15 +423,15 @@ class ABTestingFramework:
             raise ValueError(f"Experiment not found: {experiment_id}")
 
         results = {
-            'experiment': {
-                'id': experiment.id,
-                'name': experiment.name,
-                'status': experiment.status.value,
-                'duration_hours': self._get_duration_hours(experiment)
+            "experiment": {
+                "id": experiment.id,
+                "name": experiment.name,
+                "status": experiment.status.value,
+                "duration_hours": self._get_duration_hours(experiment),
             },
-            'variants': [],
-            'winner': None,
-            'statistical_analysis': None
+            "variants": [],
+            "winner": None,
+            "statistical_analysis": None,
         }
 
         # Collect variant results
@@ -436,19 +439,19 @@ class ABTestingFramework:
             metric = experiment.metrics[variant.id]
 
             variant_result = {
-                'id': variant.id,
-                'name': variant.name,
-                'strategy': variant.strategy.value,
-                'config': variant.config,
-                'metrics': metric.to_dict()
+                "id": variant.id,
+                "name": variant.name,
+                "strategy": variant.strategy.value,
+                "config": variant.config,
+                "metrics": metric.to_dict(),
             }
 
-            results['variants'].append(variant_result)
+            results["variants"].append(variant_result)
 
         # Determine winner
         if len(experiment.variants) == 2:
-            results['winner'] = self._determine_winner(experiment)
-            results['statistical_analysis'] = self._statistical_analysis(experiment)
+            results["winner"] = self._determine_winner(experiment)
+            results["statistical_analysis"] = self._statistical_analysis(experiment)
 
         return results
 
@@ -471,15 +474,14 @@ class ABTestingFramework:
 
         # Check if difference is statistically significant
         is_significant, p_value = self._chi_square_test(
-            metric_a.clicks, metric_a.impressions,
-            metric_b.clicks, metric_b.impressions
+            metric_a.clicks, metric_a.impressions, metric_b.clicks, metric_b.impressions
         )
 
         if not is_significant:
             return {
-                'status': 'inconclusive',
-                'message': 'No statistically significant difference',
-                'p_value': p_value
+                "status": "inconclusive",
+                "message": "No statistically significant difference",
+                "p_value": p_value,
             }
 
         winner = variant_a if ctr_a > ctr_b else variant_b
@@ -488,13 +490,13 @@ class ABTestingFramework:
         improvement = abs(ctr_a - ctr_b) / min(ctr_a, ctr_b) * 100 if min(ctr_a, ctr_b) > 0 else 0
 
         return {
-            'status': 'significant',
-            'winner_id': winner.id,
-            'winner_name': winner.name,
-            'winner_ctr': metric_a.get_ctr() if winner == variant_a else metric_b.get_ctr(),
-            'loser_ctr': metric_b.get_ctr() if winner == variant_a else metric_a.get_ctr(),
-            'improvement_percent': improvement,
-            'p_value': p_value
+            "status": "significant",
+            "winner_id": winner.id,
+            "winner_name": winner.name,
+            "winner_ctr": metric_a.get_ctr() if winner == variant_a else metric_b.get_ctr(),
+            "loser_ctr": metric_b.get_ctr() if winner == variant_a else metric_a.get_ctr(),
+            "improvement_percent": improvement,
+            "p_value": p_value,
         }
 
     def _statistical_analysis(self, experiment: Experiment) -> Dict[str, Any]:
@@ -505,7 +507,7 @@ class ABTestingFramework:
             Analysis results
         """
         if len(experiment.variants) != 2:
-            return {'error': 'Statistical analysis only supported for 2 variants'}
+            return {"error": "Statistical analysis only supported for 2 variants"}
 
         variant_a, variant_b = experiment.variants
         metric_a = experiment.metrics[variant_a.id]
@@ -515,43 +517,40 @@ class ABTestingFramework:
 
         # CTR analysis (chi-square test)
         is_sig_ctr, p_value_ctr = self._chi_square_test(
-            metric_a.clicks, metric_a.impressions,
-            metric_b.clicks, metric_b.impressions
+            metric_a.clicks, metric_a.impressions, metric_b.clicks, metric_b.impressions
         )
 
-        analysis['ctr'] = {
-            'is_significant': is_sig_ctr,
-            'p_value': p_value_ctr,
-            'alpha': 0.05,
-            'test': 'chi_square'
+        analysis["ctr"] = {
+            "is_significant": is_sig_ctr,
+            "p_value": p_value_ctr,
+            "alpha": 0.05,
+            "test": "chi_square",
         }
 
         # Relevance score analysis (t-test)
         if metric_a.relevance_scores and metric_b.relevance_scores:
             is_sig_rel, p_value_rel = self._t_test(
-                metric_a.relevance_scores,
-                metric_b.relevance_scores
+                metric_a.relevance_scores, metric_b.relevance_scores
             )
 
-            analysis['relevance'] = {
-                'is_significant': is_sig_rel,
-                'p_value': p_value_rel,
-                'alpha': 0.05,
-                'test': 't_test'
+            analysis["relevance"] = {
+                "is_significant": is_sig_rel,
+                "p_value": p_value_rel,
+                "alpha": 0.05,
+                "test": "t_test",
             }
 
         # Satisfaction analysis (t-test)
         if metric_a.user_satisfaction and metric_b.user_satisfaction:
             is_sig_sat, p_value_sat = self._t_test(
-                metric_a.user_satisfaction,
-                metric_b.user_satisfaction
+                metric_a.user_satisfaction, metric_b.user_satisfaction
             )
 
-            analysis['satisfaction'] = {
-                'is_significant': is_sig_sat,
-                'p_value': p_value_sat,
-                'alpha': 0.05,
-                'test': 't_test'
+            analysis["satisfaction"] = {
+                "is_significant": is_sig_sat,
+                "p_value": p_value_sat,
+                "alpha": 0.05,
+                "test": "t_test",
             }
 
         return analysis
@@ -562,7 +561,7 @@ class ABTestingFramework:
         impressions_a: int,
         clicks_b: int,
         impressions_b: int,
-        alpha: float = 0.05
+        alpha: float = 0.05,
     ) -> Tuple[bool, float]:
         """
         Chi-square test for CTR comparison
@@ -573,10 +572,9 @@ class ABTestingFramework:
         from scipy import stats
 
         # Observed frequencies
-        observed = np.array([
-            [clicks_a, impressions_a - clicks_a],
-            [clicks_b, impressions_b - clicks_b]
-        ])
+        observed = np.array(
+            [[clicks_a, impressions_a - clicks_a], [clicks_b, impressions_b - clicks_b]]
+        )
 
         # Chi-square test
         chi2, p_value, dof, expected = stats.chi2_contingency(observed)
@@ -586,10 +584,7 @@ class ABTestingFramework:
         return is_significant, float(p_value)
 
     def _t_test(
-        self,
-        sample_a: List[float],
-        sample_b: List[float],
-        alpha: float = 0.05
+        self, sample_a: List[float], sample_b: List[float], alpha: float = 0.05
     ) -> Tuple[bool, float]:
         """
         Independent t-test for comparing means
@@ -635,14 +630,16 @@ class ABTestingFramework:
             if status and exp.status != status:
                 continue
 
-            experiments.append({
-                'id': exp.id,
-                'name': exp.name,
-                'status': exp.status.value,
-                'variants_count': len(exp.variants),
-                'created_at': exp.created_at.isoformat(),
-                'duration_hours': self._get_duration_hours(exp)
-            })
+            experiments.append(
+                {
+                    "id": exp.id,
+                    "name": exp.name,
+                    "status": exp.status.value,
+                    "variants_count": len(exp.variants),
+                    "created_at": exp.created_at.isoformat(),
+                    "duration_hours": self._get_duration_hours(exp),
+                }
+            )
 
         return experiments
 
@@ -689,7 +686,9 @@ class ABTestingFramework:
         return None
 
     def __repr__(self):
-        running = len([e for e in self.experiments.values() if e.status == ExperimentStatus.RUNNING])
+        running = len(
+            [e for e in self.experiments.values() if e.status == ExperimentStatus.RUNNING]
+        )
         total = len(self.experiments)
 
         return f"ABTestingFramework(experiments={total}, running={running})"

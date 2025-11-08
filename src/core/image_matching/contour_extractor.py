@@ -4,8 +4,9 @@ Extract product contours using OpenCV
 """
 
 import logging
-from typing import List, Tuple, Optional, Union
 from pathlib import Path
+from typing import List, Optional, Tuple, Union
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,7 @@ class ContourExtractor:
         canny_low: int = 50,
         canny_high: int = 150,
         min_contour_area: int = 100,
-        approx_epsilon: float = 0.01
+        approx_epsilon: float = 0.01,
     ):
         """
         Initialize contour extractor
@@ -46,6 +47,7 @@ class ContourExtractor:
         # Check OpenCV availability
         try:
             import cv2
+
             self.cv2 = cv2
             self.available = True
             logger.info("✅ OpenCV initialized for contour extraction")
@@ -58,11 +60,7 @@ class ContourExtractor:
         """Check if contour extraction is available"""
         return self.available
 
-    def detect_edges(
-        self,
-        image: np.ndarray,
-        method: str = 'canny'
-    ) -> np.ndarray:
+    def detect_edges(self, image: np.ndarray, method: str = "canny") -> np.ndarray:
         """
         Detect edges in image
 
@@ -85,10 +83,10 @@ class ContourExtractor:
         # Apply Gaussian blur to reduce noise
         blurred = self.cv2.GaussianBlur(gray, (5, 5), 0)
 
-        if method == 'canny':
+        if method == "canny":
             edges = self.cv2.Canny(blurred, self.canny_low, self.canny_high)
 
-        elif method == 'sobel':
+        elif method == "sobel":
             # Sobel edge detection
             sobelx = self.cv2.Sobel(blurred, self.cv2.CV_64F, 1, 0, ksize=3)
             sobely = self.cv2.Sobel(blurred, self.cv2.CV_64F, 0, 1, ksize=3)
@@ -100,11 +98,7 @@ class ContourExtractor:
 
         return edges
 
-    def extract_contours(
-        self,
-        image: np.ndarray,
-        mode: str = 'external'
-    ) -> List[np.ndarray]:
+    def extract_contours(self, image: np.ndarray, mode: str = "external") -> List[np.ndarray]:
         """
         Extract contours from image
 
@@ -125,21 +119,17 @@ class ContourExtractor:
             edges = image
 
         # Contour retrieval mode
-        if mode == 'external':
+        if mode == "external":
             retr_mode = self.cv2.RETR_EXTERNAL
-        elif mode == 'tree':
+        elif mode == "tree":
             retr_mode = self.cv2.RETR_TREE
-        elif mode == 'list':
+        elif mode == "list":
             retr_mode = self.cv2.RETR_LIST
         else:
             raise ValueError(f"Unknown mode: {mode}")
 
         # Find contours
-        contours, hierarchy = self.cv2.findContours(
-            edges,
-            retr_mode,
-            self.cv2.CHAIN_APPROX_SIMPLE
-        )
+        contours, hierarchy = self.cv2.findContours(edges, retr_mode, self.cv2.CHAIN_APPROX_SIMPLE)
 
         return list(contours)
 
@@ -148,7 +138,7 @@ class ContourExtractor:
         contours: List[np.ndarray],
         min_area: Optional[int] = None,
         max_area: Optional[int] = None,
-        min_perimeter: Optional[int] = None
+        min_perimeter: Optional[int] = None,
     ) -> List[np.ndarray]:
         """
         Filter contours by criteria
@@ -186,9 +176,7 @@ class ContourExtractor:
         return filtered
 
     def approximate_contour(
-        self,
-        contour: np.ndarray,
-        epsilon: Optional[float] = None
+        self, contour: np.ndarray, epsilon: Optional[float] = None
     ) -> np.ndarray:
         """
         Approximate contour to reduce points
@@ -205,18 +193,11 @@ class ContourExtractor:
 
         epsilon = epsilon or self.approx_epsilon
         perimeter = self.cv2.arcLength(contour, True)
-        approx = self.cv2.approxPolyDP(
-            contour,
-            epsilon * perimeter,
-            True
-        )
+        approx = self.cv2.approxPolyDP(contour, epsilon * perimeter, True)
 
         return approx
 
-    def get_largest_contour(
-        self,
-        contours: List[np.ndarray]
-    ) -> Optional[np.ndarray]:
+    def get_largest_contour(self, contours: List[np.ndarray]) -> Optional[np.ndarray]:
         """
         Get largest contour by area
 
@@ -235,10 +216,7 @@ class ContourExtractor:
         largest = max(contours, key=lambda c: self.cv2.contourArea(c))
         return largest
 
-    def get_contour_properties(
-        self,
-        contour: np.ndarray
-    ) -> dict:
+    def get_contour_properties(self, contour: np.ndarray) -> dict:
         """
         Calculate contour properties
 
@@ -262,9 +240,9 @@ class ContourExtractor:
         M = self.cv2.moments(contour)
 
         # Centroid
-        if M['m00'] != 0:
-            cx = int(M['m10'] / M['m00'])
-            cy = int(M['m01'] / M['m00'])
+        if M["m00"] != 0:
+            cx = int(M["m10"] / M["m00"])
+            cy = int(M["m01"] / M["m00"])
         else:
             cx, cy = 0, 0
 
@@ -281,14 +259,14 @@ class ContourExtractor:
         solidity = float(area) / hull_area if hull_area != 0 else 0
 
         return {
-            'area': float(area),
-            'perimeter': float(perimeter),
-            'centroid': (int(cx), int(cy)),
-            'bounding_box': (int(x), int(y), int(w), int(h)),
-            'aspect_ratio': float(aspect_ratio),
-            'extent': float(extent),
-            'solidity': float(solidity),
-            'num_points': len(contour)
+            "area": float(area),
+            "perimeter": float(perimeter),
+            "centroid": (int(cx), int(cy)),
+            "bounding_box": (int(x), int(y), int(w), int(h)),
+            "aspect_ratio": float(aspect_ratio),
+            "extent": float(extent),
+            "solidity": float(solidity),
+            "num_points": len(contour),
         }
 
     def draw_contours(
@@ -297,7 +275,7 @@ class ContourExtractor:
         contours: List[np.ndarray],
         color: Tuple[int, int, int] = (0, 255, 0),
         thickness: int = 2,
-        draw_all: bool = True
+        draw_all: bool = True,
     ) -> np.ndarray:
         """
         Draw contours on image
@@ -334,10 +312,7 @@ class ContourExtractor:
         return output
 
     def extract_from_image(
-        self,
-        image_path: Union[str, Path],
-        filter_size: bool = True,
-        approximate: bool = True
+        self, image_path: Union[str, Path], filter_size: bool = True, approximate: bool = True
     ) -> Tuple[List[np.ndarray], dict]:
         """
         Complete contour extraction workflow
@@ -379,10 +354,10 @@ class ContourExtractor:
         properties = self.get_contour_properties(largest) if largest is not None else {}
 
         metadata = {
-            'num_contours': len(contours),
-            'largest_contour_properties': properties,
-            'image_shape': image.shape,
-            'source_file': str(image_path)
+            "num_contours": len(contours),
+            "largest_contour_properties": properties,
+            "image_shape": image.shape,
+            "source_file": str(image_path),
         }
 
         return contours, metadata

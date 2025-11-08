@@ -11,17 +11,18 @@ Available MCP Servers:
     - ollama: 로컬 LLM (qwen2.5:7b)
 """
 
-import re
 import logging
-from typing import Dict, List, Optional, Tuple
+import re
 from dataclasses import dataclass
 from enum import Enum
+from typing import Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
 
 class Intent(Enum):
     """사용자 질의 의도 분류"""
+
     FILE_OPERATION = "file_operation"
     VECTOR_SEARCH = "vector_search"
     SIMPLE_QUERY = "simple_query"
@@ -32,6 +33,7 @@ class Intent(Enum):
 @dataclass
 class IntentResult:
     """의도 분석 결과"""
+
     intent: Intent
     confidence: float
     mcp_tool: Optional[str]
@@ -47,56 +49,78 @@ class IntentDetector:
         self.patterns = {
             Intent.FILE_OPERATION: {
                 "keywords": [
-                    "파일", "file", "폴더", "folder", "directory",
-                    "보여줘", "show", "list", "읽어", "read", "찾아", "find"
+                    "파일",
+                    "file",
+                    "폴더",
+                    "folder",
+                    "directory",
+                    "보여줘",
+                    "show",
+                    "list",
+                    "읽어",
+                    "read",
+                    "찾아",
+                    "find",
                 ],
                 "patterns": [
                     r"(.+)\s+(폴더|디렉토리|directory).+(있|보여|list)",
                     r"(파일|file).+(읽|read|show|open)",
-                    r"(찾|find|search).+(파일|file)"
+                    r"(찾|find|search).+(파일|file)",
                 ],
                 "mcp_tool": "filesystem",
-                "confidence_boost": 0.2
+                "confidence_boost": 0.2,
             },
             Intent.VECTOR_SEARCH: {
                 "keywords": [
-                    "검색", "search", "찾아줘", "유사한", "similar",
-                    "문서", "document", "관련", "related"
+                    "검색",
+                    "search",
+                    "찾아줘",
+                    "유사한",
+                    "similar",
+                    "문서",
+                    "document",
+                    "관련",
+                    "related",
                 ],
                 "patterns": [
                     r"(.+)\s+(검색|search|찾아)",
                     r"(유사한|similar).+(문서|document)",
-                    r"(.+)\s+관련.+(정보|문서)"
+                    r"(.+)\s+관련.+(정보|문서)",
                 ],
                 "mcp_tool": "qdrant",
-                "confidence_boost": 0.15
+                "confidence_boost": 0.15,
             },
             Intent.SIMPLE_QUERY: {
-                "keywords": [
-                    "뭐야", "what", "간단히", "짧게", "요약",
-                    "설명", "explain", "의미"
-                ],
+                "keywords": ["뭐야", "what", "간단히", "짧게", "요약", "설명", "explain", "의미"],
                 "patterns": [
                     r"^\w+\s+(뭐야|이란|is|means)",
                     r"^(간단히|짧게|요약).+",
-                    r"(.+)\s+(설명|explain)"
+                    r"(.+)\s+(설명|explain)",
                 ],
                 "mcp_tool": "ollama",  # 로컬 LLM
-                "confidence_boost": 0.1
+                "confidence_boost": 0.1,
             },
             Intent.COMPLEX_ANALYSIS: {
                 "keywords": [
-                    "분석", "analyze", "왜", "why", "설계", "design",
-                    "아키텍처", "architecture", "최적화", "optimize"
+                    "분석",
+                    "analyze",
+                    "왜",
+                    "why",
+                    "설계",
+                    "design",
+                    "아키텍처",
+                    "architecture",
+                    "최적화",
+                    "optimize",
                 ],
                 "patterns": [
                     r"(왜|why).+",
                     r"(분석|analyze).+",
-                    r"(설계|design|아키텍처|architecture)"
+                    r"(설계|design|아키텍처|architecture)",
                 ],
                 "mcp_tool": "claude_haiku",
-                "confidence_boost": 0.25
-            }
+                "confidence_boost": 0.25,
+            },
         }
 
     def detect(self, query: str) -> IntentResult:
@@ -139,7 +163,7 @@ class IntentDetector:
             confidence=confidence,
             mcp_tool=mcp_tool,
             fallback_tools=fallback_tools,
-            params=self._extract_params(query, best_intent)
+            params=self._extract_params(query, best_intent),
         )
 
     def _calculate_score(self, query: str, config: Dict) -> float:
@@ -185,7 +209,7 @@ class IntentDetector:
             Intent.FILE_OPERATION: ["ollama"],
             Intent.VECTOR_SEARCH: ["filesystem", "ollama"],
             Intent.SIMPLE_QUERY: ["claude_haiku"],
-            Intent.COMPLEX_ANALYSIS: ["ollama"]
+            Intent.COMPLEX_ANALYSIS: ["ollama"],
         }
         return fallback_map.get(intent, ["ollama"])
 
@@ -204,18 +228,18 @@ class IntentDetector:
 
         # FILE_OPERATION: 경로 추출
         if intent == Intent.FILE_OPERATION:
-            path_match = re.search(r'([/\w]+/[\w/]+)', query)
+            path_match = re.search(r"([/\w]+/[\w/]+)", query)
             if path_match:
                 params["path"] = path_match.group(1)
             else:
                 # 폴더명 추출
-                folder_match = re.search(r'([\w_-]+)\s+(폴더|folder|디렉토리|directory)', query)
+                folder_match = re.search(r"([\w_-]+)\s+(폴더|folder|디렉토리|directory)", query)
                 if folder_match:
                     params["folder"] = folder_match.group(1)
 
         # VECTOR_SEARCH: 검색어 추출
         elif intent == Intent.VECTOR_SEARCH:
-            search_match = re.search(r'(.+)\s+(검색|찾아|search)', query)
+            search_match = re.search(r"(.+)\s+(검색|찾아|search)", query)
             if search_match:
                 params["search_term"] = search_match.group(1).strip()
 
@@ -231,7 +255,7 @@ class MCPRouter:
             "filesystem": True,
             "qdrant": True,
             "ollama": True,
-            "claude_haiku": True
+            "claude_haiku": True,
         }
 
     def route(self, query: str) -> Tuple[str, IntentResult]:
@@ -284,7 +308,7 @@ if __name__ == "__main__":
         "vault 폴더에 있는 파일들 개수는?",
         "RAG 시스템 설계 문서 검색해줘",
         "Python 리스트 컴프리헨션 뭐야?",
-        "전체 시스템 성능 분석해줘"
+        "전체 시스템 성능 분석해줘",
     ]
 
     router = MCPRouter()

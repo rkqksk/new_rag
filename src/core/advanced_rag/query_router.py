@@ -5,26 +5,28 @@ Intelligent query routing to appropriate collections based on query type
 
 import logging
 import re
-from typing import List, Dict, Any, Optional, Set
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
 
 class QueryType(Enum):
     """Query type classification"""
-    PRODUCT_SEARCH = "product_search"          # "50ml PET 병 찾아줘"
-    DOCUMENT_LOOKUP = "document_lookup"        # "사용 설명서", "매뉴얼"
-    IMAGE_SEARCH = "image_search"              # "이 제품과 비슷한 이미지"
-    TABLE_DATA = "table_data"                  # "가격표", "스펙표"
-    MULTI_SOURCE = "multi_source"              # "제품과 관련 문서 모두"
+
+    PRODUCT_SEARCH = "product_search"  # "50ml PET 병 찾아줘"
+    DOCUMENT_LOOKUP = "document_lookup"  # "사용 설명서", "매뉴얼"
+    IMAGE_SEARCH = "image_search"  # "이 제품과 비슷한 이미지"
+    TABLE_DATA = "table_data"  # "가격표", "스펙표"
+    MULTI_SOURCE = "multi_source"  # "제품과 관련 문서 모두"
     UNKNOWN = "unknown"
 
 
 @dataclass
 class QueryIntent:
     """Query intent analysis result"""
+
     query_type: QueryType
     target_collections: List[str]
     confidence: float
@@ -55,35 +57,84 @@ class AdvancedQueryRouter:
         """Initialize Advanced Query Router"""
         # Product-related keywords
         self.product_keywords = {
-            '제품', '병', '용기', '캡', '펌프', '자', '보틀', 'bottle', 'cap', 'jar',
-            'pump', '마개', '뚜껑', 'container', 'product', '포장', 'package'
+            "제품",
+            "병",
+            "용기",
+            "캡",
+            "펌프",
+            "자",
+            "보틀",
+            "bottle",
+            "cap",
+            "jar",
+            "pump",
+            "마개",
+            "뚜껑",
+            "container",
+            "product",
+            "포장",
+            "package",
         }
 
         # Document-related keywords
         self.document_keywords = {
-            '설명서', '매뉴얼', '가이드', '문서', 'manual', 'guide', 'document',
-            'instruction', '사용법', '안내서', 'pdf', '카탈로그', 'catalog'
+            "설명서",
+            "매뉴얼",
+            "가이드",
+            "문서",
+            "manual",
+            "guide",
+            "document",
+            "instruction",
+            "사용법",
+            "안내서",
+            "pdf",
+            "카탈로그",
+            "catalog",
         }
 
         # Image-related keywords
         self.image_keywords = {
-            '이미지', '사진', '그림', '비슷한', '같은', 'image', 'photo', 'picture',
-            'similar', 'look like', '모양', 'shape', '외관', 'appearance'
+            "이미지",
+            "사진",
+            "그림",
+            "비슷한",
+            "같은",
+            "image",
+            "photo",
+            "picture",
+            "similar",
+            "look like",
+            "모양",
+            "shape",
+            "외관",
+            "appearance",
         }
 
         # Table-related keywords
         self.table_keywords = {
-            '가격표', '스펙표', '표', 'table', '목록', 'list', '리스트',
-            '데이터', 'data', '통계', 'statistics', 'excel', 'csv'
+            "가격표",
+            "스펙표",
+            "표",
+            "table",
+            "목록",
+            "list",
+            "리스트",
+            "데이터",
+            "data",
+            "통계",
+            "statistics",
+            "excel",
+            "csv",
         }
 
         # Entity extraction patterns
         self.entity_patterns = {
-            'capacity': r'(\d+(?:\.\d+)?)\s*(ml|ML|l|L|ℓ|cc)',
-            'neck': r'(\d+)\s*파이|Ø\s*(\d+)|내경\s*(\d+)',
-            'material': r'(PP|PE|PET|PETG|HDPE|LDPE|PS|PVC|ABS)',
-            'moq': r'(\d+(?:,\d{3})*)\s*개|최소\s*(\d+)',
-            'quantity': r'(\d+(?:,\d{3})*)\s*(개|ea|pcs|pieces)',
+            "capacity": r"(\d+(?:\.\d+)?)\s*(ml|ML|l|L|ℓ|cc)",
+            "neck": r"(\d+)\s*파이|Ø\s*(\d+)|내경\s*(\d+)",
+            "material": r"(PP|PE|PET|PETG|HDPE|LDPE|PS|PVC|ABS)",
+            "moq": r"(\d+(?:,\d{3})*)\s*개|최소\s*(\d+)",
+            "quantity": r"(\d+(?:,\d{3})*)\s*(개|ea|pcs|pieces)",
         }
 
         logger.info("✅ AdvancedQueryRouter initialized")
@@ -118,10 +169,10 @@ class AdvancedQueryRouter:
 
         # Classify query type
         scores = {
-            'product': product_score,
-            'document': document_score,
-            'image': image_score,
-            'table': table_score
+            "product": product_score,
+            "document": document_score,
+            "image": image_score,
+            "table": table_score,
         }
 
         max_score = max(scores.values())
@@ -142,7 +193,7 @@ class AdvancedQueryRouter:
         else:
             # Default to product search
             query_type = QueryType.PRODUCT_SEARCH
-            target_collections = ['products_multimodal']
+            target_collections = ["products_multimodal"]
             search_strategy = "single"
             confidence = 0.5
 
@@ -151,10 +202,12 @@ class AdvancedQueryRouter:
             target_collections=target_collections,
             confidence=confidence,
             extracted_entities=entities,
-            search_strategy=search_strategy
+            search_strategy=search_strategy,
         )
 
-        logger.debug(f"Query analysis: {query_type.value} → {target_collections} (confidence: {confidence:.2f})")
+        logger.debug(
+            f"Query analysis: {query_type.value} → {target_collections} (confidence: {confidence:.2f})"
+        )
 
         return intent
 
@@ -186,56 +239,34 @@ class AdvancedQueryRouter:
         return entities
 
     def _classify_single_type(
-        self,
-        type_key: str,
-        entities: Dict[str, Any]
+        self, type_key: str, entities: Dict[str, Any]
     ) -> tuple[QueryType, List[str], str]:
         """Classify single type query"""
-        if type_key == 'product':
-            return (
-                QueryType.PRODUCT_SEARCH,
-                ['products_multimodal'],
-                "single"
-            )
-        elif type_key == 'document':
-            return (
-                QueryType.DOCUMENT_LOOKUP,
-                ['documents_semantic'],
-                "single"
-            )
-        elif type_key == 'image':
-            return (
-                QueryType.IMAGE_SEARCH,
-                ['images_visual', 'products_multimodal'],
-                "parallel"
-            )
-        elif type_key == 'table':
-            return (
-                QueryType.TABLE_DATA,
-                ['tables_structured'],
-                "single"
-            )
+        if type_key == "product":
+            return (QueryType.PRODUCT_SEARCH, ["products_multimodal"], "single")
+        elif type_key == "document":
+            return (QueryType.DOCUMENT_LOOKUP, ["documents_semantic"], "single")
+        elif type_key == "image":
+            return (QueryType.IMAGE_SEARCH, ["images_visual", "products_multimodal"], "parallel")
+        elif type_key == "table":
+            return (QueryType.TABLE_DATA, ["tables_structured"], "single")
         else:
-            return (
-                QueryType.UNKNOWN,
-                ['products_multimodal'],
-                "single"
-            )
+            return (QueryType.UNKNOWN, ["products_multimodal"], "single")
 
     def _get_collections_for_types(self, types: List[str]) -> List[str]:
         """Get collections for multiple types"""
         collections = set()
 
         for type_key in types:
-            if type_key == 'product':
-                collections.add('products_multimodal')
-            elif type_key == 'document':
-                collections.add('documents_semantic')
-            elif type_key == 'image':
-                collections.add('images_visual')
-                collections.add('products_multimodal')
-            elif type_key == 'table':
-                collections.add('tables_structured')
+            if type_key == "product":
+                collections.add("products_multimodal")
+            elif type_key == "document":
+                collections.add("documents_semantic")
+            elif type_key == "image":
+                collections.add("images_visual")
+                collections.add("products_multimodal")
+            elif type_key == "table":
+                collections.add("tables_structured")
 
         return list(collections)
 
@@ -256,17 +287,17 @@ class AdvancedQueryRouter:
         weights = {}
 
         if intent.query_type == QueryType.PRODUCT_SEARCH:
-            weights['products_multimodal'] = 1.0
+            weights["products_multimodal"] = 1.0
 
         elif intent.query_type == QueryType.DOCUMENT_LOOKUP:
-            weights['documents_semantic'] = 1.0
+            weights["documents_semantic"] = 1.0
 
         elif intent.query_type == QueryType.IMAGE_SEARCH:
-            weights['images_visual'] = 0.6
-            weights['products_multimodal'] = 0.4
+            weights["images_visual"] = 0.6
+            weights["products_multimodal"] = 0.4
 
         elif intent.query_type == QueryType.TABLE_DATA:
-            weights['tables_structured'] = 1.0
+            weights["tables_structured"] = 1.0
 
         elif intent.query_type == QueryType.MULTI_SOURCE:
             # Equal weights for all target collections
@@ -276,7 +307,7 @@ class AdvancedQueryRouter:
 
         else:
             # Default: product search
-            weights['products_multimodal'] = 1.0
+            weights["products_multimodal"] = 1.0
 
         return weights
 
@@ -302,50 +333,37 @@ class AdvancedQueryRouter:
         entities = intent.extracted_entities
 
         # Capacity filter
-        if 'capacity' in entities:
-            capacity_str = entities['capacity']
+        if "capacity" in entities:
+            capacity_str = entities["capacity"]
             # Extract number
-            capacity_num = float(re.findall(r'\d+(?:\.\d+)?', capacity_str)[0])
+            capacity_num = float(re.findall(r"\d+(?:\.\d+)?", capacity_str)[0])
 
             # Range: ±20%
             min_capacity = capacity_num * 0.8
             max_capacity = capacity_num * 1.2
 
-            filters["must"].append({
-                "key": "capacity_ml",
-                "range": {
-                    "gte": min_capacity,
-                    "lte": max_capacity
-                }
-            })
+            filters["must"].append(
+                {"key": "capacity_ml", "range": {"gte": min_capacity, "lte": max_capacity}}
+            )
 
         # Material filter
-        if 'material' in entities:
-            material = entities['material'].upper()
-            filters["must"].append({
-                "key": "material",
-                "match": {"value": material}
-            })
+        if "material" in entities:
+            material = entities["material"].upper()
+            filters["must"].append({"key": "material", "match": {"value": material}})
 
         # Neck filter
-        if 'neck' in entities:
-            neck_str = entities['neck']
-            neck_num = int(re.findall(r'\d+', neck_str)[0])
+        if "neck" in entities:
+            neck_str = entities["neck"]
+            neck_num = int(re.findall(r"\d+", neck_str)[0])
 
-            filters["must"].append({
-                "key": "neck_size",
-                "match": {"value": f"{neck_num}파이"}
-            })
+            filters["must"].append({"key": "neck_size", "match": {"value": f"{neck_num}파이"}})
 
         # MOQ filter
-        if 'moq' in entities:
-            moq_str = entities['moq'].replace(',', '')
-            moq_num = int(re.findall(r'\d+', moq_str)[0])
+        if "moq" in entities:
+            moq_str = entities["moq"].replace(",", "")
+            moq_num = int(re.findall(r"\d+", moq_str)[0])
 
-            filters["must"].append({
-                "key": "moq",
-                "range": {"lte": moq_num}
-            })
+            filters["must"].append({"key": "moq", "range": {"lte": moq_num}})
 
         return filters if filters["must"] else {}
 

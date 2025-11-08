@@ -4,10 +4,11 @@ Unified service for text, image, and shape embeddings
 """
 
 import logging
-from typing import Optional, List, Dict, Any, Union
 from pathlib import Path
-import torch
+from typing import Any, Dict, List, Optional, Union
+
 import numpy as np
+import torch
 from PIL import Image
 
 # Text embedding
@@ -16,6 +17,7 @@ from sentence_transformers import SentenceTransformer
 # Image embedding
 try:
     import open_clip
+
     OPENCLIP_AVAILABLE = True
 except ImportError:
     OPENCLIP_AVAILABLE = False
@@ -52,11 +54,11 @@ class MultiModalEmbeddingService:
 
     def __init__(
         self,
-        text_model: str = 'all-MiniLM-L6-v2',
-        image_model: str = 'ViT-H-14',
-        device: str = 'auto',
+        text_model: str = "all-MiniLM-L6-v2",
+        image_model: str = "ViT-H-14",
+        device: str = "auto",
         enable_image: bool = True,
-        enable_shape: bool = False
+        enable_shape: bool = False,
     ):
         """
         Initialize Multi-Modal Embedding Service
@@ -69,13 +71,13 @@ class MultiModalEmbeddingService:
             enable_shape: Enable shape embedding (Phase 6)
         """
         # Auto-detect device
-        if device == 'auto':
+        if device == "auto":
             if torch.backends.mps.is_available():
-                self.device = 'mps'
+                self.device = "mps"
             elif torch.cuda.is_available():
-                self.device = 'cuda'
+                self.device = "cuda"
             else:
-                self.device = 'cpu'
+                self.device = "cpu"
         else:
             self.device = device
 
@@ -114,12 +116,10 @@ class MultiModalEmbeddingService:
         logger.info(f"📝 Loading text model: {self.text_model_name}")
 
         try:
-            self.text_model = SentenceTransformer(
-                f'sentence-transformers/{self.text_model_name}'
-            )
+            self.text_model = SentenceTransformer(f"sentence-transformers/{self.text_model_name}")
 
             # Move to device
-            if self.device in ['cuda', 'mps']:
+            if self.device in ["cuda", "mps"]:
                 self.text_model = self.text_model.to(self.device)
 
             # Get embedding dimension
@@ -137,9 +137,7 @@ class MultiModalEmbeddingService:
 
         try:
             self.image_model, self.image_preprocess, _ = open_clip.create_model_and_transforms(
-                model_name=self.image_model_name,
-                pretrained='laion2b-s32b-b79k',
-                device=self.device
+                model_name=self.image_model_name, pretrained="laion2b-s32b-b79k", device=self.device
             )
             self.image_model.eval()  # Inference mode
 
@@ -164,7 +162,7 @@ class MultiModalEmbeddingService:
             self.shape_embedder = ShapeEmbedder(
                 target_dim=128,
                 use_background_removal=False,  # Can be enabled for better results
-                fourier_coeffs=60
+                fourier_coeffs=60,
             )
 
             if not self.shape_embedder.is_available():
@@ -191,10 +189,14 @@ class MultiModalEmbeddingService:
         logger.info("Multi-Modal Configuration:")
         logger.info(f"  Device: {self.device}")
         logger.info(f"  Text Model: {self.text_model_name} ({self.text_dim}-dim)")
-        logger.info(f"  Image Model: {self.image_model_name if self.enable_image else 'Disabled'} "
-                   f"({self.image_dim if self.enable_image else 0}-dim)")
-        logger.info(f"  Shape Model: {'Enabled' if self.enable_shape else 'Disabled'} "
-                   f"({self.shape_dim if self.enable_shape else 0}-dim)")
+        logger.info(
+            f"  Image Model: {self.image_model_name if self.enable_image else 'Disabled'} "
+            f"({self.image_dim if self.enable_image else 0}-dim)"
+        )
+        logger.info(
+            f"  Shape Model: {'Enabled' if self.enable_shape else 'Disabled'} "
+            f"({self.shape_dim if self.enable_shape else 0}-dim)"
+        )
         logger.info("=" * 60)
 
     # ==================== Text Embedding ====================
@@ -212,19 +214,12 @@ class MultiModalEmbeddingService:
         if not text or not isinstance(text, str):
             raise ValueError("Text must be a non-empty string")
 
-        embedding = self.text_model.encode(
-            text,
-            convert_to_numpy=True,
-            show_progress_bar=False
-        )
+        embedding = self.text_model.encode(text, convert_to_numpy=True, show_progress_bar=False)
 
         return embedding.tolist()
 
     def embed_texts_batch(
-        self,
-        texts: List[str],
-        batch_size: int = 32,
-        show_progress: bool = True
+        self, texts: List[str], batch_size: int = 32, show_progress: bool = True
     ) -> List[List[float]]:
         """
         Batch text embedding for efficiency
@@ -241,10 +236,7 @@ class MultiModalEmbeddingService:
             return []
 
         embeddings = self.text_model.encode(
-            texts,
-            batch_size=batch_size,
-            convert_to_numpy=True,
-            show_progress_bar=show_progress
+            texts, batch_size=batch_size, convert_to_numpy=True, show_progress_bar=show_progress
         )
 
         return embeddings.tolist()
@@ -289,10 +281,7 @@ class MultiModalEmbeddingService:
             raise
 
     def embed_images_batch(
-        self,
-        image_paths: List[Union[str, Path]],
-        batch_size: int = 8,
-        show_progress: bool = True
+        self, image_paths: List[Union[str, Path]], batch_size: int = 8, show_progress: bool = True
     ) -> List[List[float]]:
         """
         Batch image embedding for efficiency
@@ -315,7 +304,7 @@ class MultiModalEmbeddingService:
 
         # Process in batches
         for i in range(0, len(image_paths), batch_size):
-            batch_paths = image_paths[i:i+batch_size]
+            batch_paths = image_paths[i : i + batch_size]
 
             # Load and preprocess batch
             batch_images = []
@@ -331,9 +320,9 @@ class MultiModalEmbeddingService:
                 continue
 
             # Stack tensors
-            batch_tensors = torch.stack([
-                self.image_preprocess(img) for img in batch_images
-            ]).to(self.device)
+            batch_tensors = torch.stack([self.image_preprocess(img) for img in batch_images]).to(
+                self.device
+            )
 
             # Generate embeddings
             with torch.no_grad():
@@ -343,7 +332,9 @@ class MultiModalEmbeddingService:
             embeddings.extend(batch_embeddings.cpu().numpy().tolist())
 
             if show_progress:
-                logger.info(f"Processed {min(i+batch_size, len(image_paths))}/{len(image_paths)} images")
+                logger.info(
+                    f"Processed {min(i+batch_size, len(image_paths))}/{len(image_paths)} images"
+                )
 
         return embeddings
 
@@ -379,9 +370,7 @@ class MultiModalEmbeddingService:
             raise
 
     def embed_shapes_batch(
-        self,
-        image_paths: List[Union[str, Path]],
-        show_progress: bool = True
+        self, image_paths: List[Union[str, Path]], show_progress: bool = True
     ) -> List[List[float]]:
         """
         Batch shape embedding for efficiency
@@ -408,7 +397,7 @@ class MultiModalEmbeddingService:
         self,
         text: Optional[str] = None,
         image: Optional[Union[str, Path]] = None,
-        shape: Optional[Union[str, Path]] = None
+        shape: Optional[Union[str, Path]] = None,
     ) -> Dict[str, List[float]]:
         """
         Generate multi-modal embeddings
@@ -438,15 +427,15 @@ class MultiModalEmbeddingService:
 
         # Text embedding
         if text:
-            embeddings['text'] = self.embed_text(text)
+            embeddings["text"] = self.embed_text(text)
 
         # Image embedding
         if image and self.enable_image:
-            embeddings['image'] = self.embed_image(image)
+            embeddings["image"] = self.embed_image(image)
 
         # Shape embedding
         if shape and self.enable_shape:
-            embeddings['shape'] = self.embed_shape(shape)
+            embeddings["shape"] = self.embed_shape(shape)
 
         if not embeddings:
             raise ValueError("At least one modality (text/image/shape) must be provided")
@@ -454,10 +443,7 @@ class MultiModalEmbeddingService:
         return embeddings
 
     def embed_batch(
-        self,
-        items: List[Dict[str, Any]],
-        batch_size: int = 32,
-        show_progress: bool = True
+        self, items: List[Dict[str, Any]], batch_size: int = 32, show_progress: bool = True
     ) -> List[Dict[str, List[float]]]:
         """
         Batch multi-modal embedding
@@ -483,16 +469,18 @@ class MultiModalEmbeddingService:
         results = []
 
         # Extract texts and images
-        texts = [item.get('text', '') for item in items if item.get('text')]
-        images = [item.get('image') for item in items if item.get('image')]
+        texts = [item.get("text", "") for item in items if item.get("text")]
+        images = [item.get("image") for item in items if item.get("image")]
 
         # Batch embed texts
         text_embeddings = {}
         if texts:
-            text_vecs = self.embed_texts_batch(texts, batch_size=batch_size, show_progress=show_progress)
+            text_vecs = self.embed_texts_batch(
+                texts, batch_size=batch_size, show_progress=show_progress
+            )
             text_idx = 0
             for i, item in enumerate(items):
-                if item.get('text'):
+                if item.get("text"):
                     text_embeddings[i] = text_vecs[text_idx]
                     text_idx += 1
 
@@ -502,7 +490,7 @@ class MultiModalEmbeddingService:
             image_vecs = self.embed_images_batch(images, batch_size=8, show_progress=show_progress)
             image_idx = 0
             for i, item in enumerate(items):
-                if item.get('image'):
+                if item.get("image"):
                     image_embeddings[i] = image_vecs[image_idx]
                     image_idx += 1
 
@@ -510,9 +498,9 @@ class MultiModalEmbeddingService:
         for i, item in enumerate(items):
             emb = {}
             if i in text_embeddings:
-                emb['text'] = text_embeddings[i]
+                emb["text"] = text_embeddings[i]
             if i in image_embeddings:
-                emb['image'] = image_embeddings[i]
+                emb["image"] = image_embeddings[i]
             results.append(emb)
 
         return results
@@ -546,11 +534,11 @@ class MultiModalEmbeddingService:
         Returns:
             True if modality is available
         """
-        if modality == 'text':
+        if modality == "text":
             return True
-        elif modality == 'image':
+        elif modality == "image":
             return self.enable_image
-        elif modality == 'shape':
+        elif modality == "shape":
             return self.enable_shape
         else:
             return False
@@ -566,10 +554,8 @@ class MultiModalEmbeddingService:
 
 # ==================== Convenience Functions ====================
 
-def create_embedder(
-    device: str = 'auto',
-    enable_image: bool = True
-) -> MultiModalEmbeddingService:
+
+def create_embedder(device: str = "auto", enable_image: bool = True) -> MultiModalEmbeddingService:
     """
     Create a default MultiModalEmbeddingService
 

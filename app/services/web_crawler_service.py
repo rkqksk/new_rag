@@ -9,7 +9,7 @@ import asyncio
 import json
 import logging
 from datetime import datetime
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import urljoin, urlparse
 from uuid import uuid4
 
@@ -17,18 +17,25 @@ import aiohttp
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 logger = logging.getLogger(__name__)
 
 
 class WebSource:
     """웹 소스 설정"""
-    def __init__(self, url: str, selectors: Dict[str, str], name: str,
-                 category: str = "general", depth: int = 1):
+
+    def __init__(
+        self,
+        url: str,
+        selectors: Dict[str, str],
+        name: str,
+        category: str = "general",
+        depth: int = 1,
+    ):
         self.url = url
         self.selectors = selectors  # CSS 선택자 매핑
         self.name = name
@@ -61,23 +68,20 @@ class WebCrawlerService:
                 "product_name": ".product-title",
                 "description": ".product-description",
                 "price": ".product-price",
-                "specs": ".product-specs"
+                "specs": ".product-specs",
             },
             name="Product Catalog",
             category="product",
-            depth=2
+            depth=2,
         )
 
         # 예시 2: MSDS 데이터베이스
         self.sources["msds_db"] = WebSource(
             url="https://pubchem.ncbi.nlm.nih.gov",
-            selectors={
-                "chemical_name": ".compound-title",
-                "properties": ".section-content"
-            },
+            selectors={"chemical_name": ".compound-title", "properties": ".section-content"},
             name="PubChem MSDS",
             category="msds",
-            depth=1
+            depth=1,
         )
 
         # 예시 3: 공급업체 정보
@@ -86,11 +90,11 @@ class WebCrawlerService:
             selectors={
                 "company_name": ".company-name",
                 "contact": ".contact-info",
-                "products": ".product-list"
+                "products": ".product-list",
             },
             name="Supplier Directory",
             category="supplier",
-            depth=1
+            depth=1,
         )
 
     def add_source(self, source_id: str, web_source: WebSource):
@@ -128,7 +132,7 @@ class WebCrawlerService:
                 "source_name": source.name,
                 "crawled_at": datetime.utcnow().isoformat(),
                 "items_count": len(data.get("items", [])),
-                "status": "success"
+                "status": "success",
             }
             self.crawl_history.append(crawl_record)
             source.last_crawled = datetime.utcnow()
@@ -141,7 +145,7 @@ class WebCrawlerService:
                 "items_count": len(data.get("items", [])),
                 "items": data.get("items", []),
                 "crawled_at": datetime.utcnow().isoformat(),
-                "status": "success"
+                "status": "success",
             }
 
         except Exception as e:
@@ -151,7 +155,7 @@ class WebCrawlerService:
                 "source_name": source.name,
                 "crawled_at": datetime.utcnow().isoformat(),
                 "status": "failed",
-                "error": str(e)
+                "error": str(e),
             }
             self.crawl_history.append(crawl_record)
             raise
@@ -167,7 +171,7 @@ class WebCrawlerService:
                     timeout=aiohttp.ClientTimeout(total=30),
                     headers={
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-                    }
+                    },
                 ) as resp:
                     if resp.status == 200:
                         html = await resp.text()
@@ -266,7 +270,7 @@ class WebCrawlerService:
                     "description": None,
                     "price": None,
                     "url": None,
-                    "metadata": {}
+                    "metadata": {},
                 }
 
                 # 커스텀 선택자 적용
@@ -314,7 +318,7 @@ class WebCrawlerService:
                     "chemical_name": None,
                     "properties": {},
                     "url": None,
-                    "metadata": {}
+                    "metadata": {},
                 }
 
                 # 화학물질명 추출
@@ -357,7 +361,7 @@ class WebCrawlerService:
                     "contact": {},
                     "products": [],
                     "url": None,
-                    "metadata": {}
+                    "metadata": {},
                 }
 
                 # 회사명 추출
@@ -400,7 +404,7 @@ class WebCrawlerService:
                         "category": "generic",
                         "content": elem.get_text(strip=True)[:500],  # 처음 500자
                         "selector": selector_name,
-                        "metadata": {}
+                        "metadata": {},
                     }
                     items.append(item)
 
@@ -442,14 +446,18 @@ class WebCrawlerService:
         status = []
 
         for source_id, source in self.sources.items():
-            status.append({
-                "source_id": source_id,
-                "name": source.name,
-                "url": source.url,
-                "category": source.category,
-                "enabled": source.enabled,
-                "last_crawled": source.last_crawled.isoformat() if source.last_crawled else None,
-                "depth": source.depth
-            })
+            status.append(
+                {
+                    "source_id": source_id,
+                    "name": source.name,
+                    "url": source.url,
+                    "category": source.category,
+                    "enabled": source.enabled,
+                    "last_crawled": (
+                        source.last_crawled.isoformat() if source.last_crawled else None
+                    ),
+                    "depth": source.depth,
+                }
+            )
 
         return status

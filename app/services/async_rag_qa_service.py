@@ -3,24 +3,24 @@ Async RAG Q&A Service
 Asynchronous version of RAG Q&A service for better performance
 """
 
+import asyncio
 import logging
 import re
-import asyncio
-from typing import List, Dict, Any, Optional
+from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from datetime import datetime
-from contextlib import asynccontextmanager
+from typing import Any, Dict, List, Optional
 
-from qdrant_client import QdrantClient
-from qdrant_client.models import Filter, FieldCondition, MatchValue
-from sentence_transformers import SentenceTransformer
 import httpx
+from qdrant_client import QdrantClient
+from qdrant_client.models import FieldCondition, Filter, MatchValue
+from sentence_transformers import SentenceTransformer
 
 from app.utils.product_utils import (
-    generate_image_urls,
-    validate_product_integrity,
     batch_validate_products,
     enrich_product_with_metadata,
+    generate_image_urls,
+    validate_product_integrity,
 )
 
 logger = logging.getLogger(__name__)
@@ -36,7 +36,7 @@ class AsyncRAGQAService:
         ollama_url: str = "http://localhost:11434",
         model_name: str = "qwen2.5:3b",
         timeout: int = 30,
-        max_retries: int = 3
+        max_retries: int = 3,
     ):
         """
         Initialize async RAG Q&A service
@@ -57,10 +57,10 @@ class AsyncRAGQAService:
         self.max_retries = max_retries
 
         # Compile regex patterns once for performance
-        self._capacity_ml_pattern = re.compile(r'(\d+)\s*(ml|미리)')
-        self._capacity_g_pattern = re.compile(r'(\d+)\s*g\b')
-        self._product_ml_pattern = re.compile(r'(\d+)\s*ml')
-        self._product_g_pattern = re.compile(r'(\d+)\s*g\b')
+        self._capacity_ml_pattern = re.compile(r"(\d+)\s*(ml|미리)")
+        self._capacity_g_pattern = re.compile(r"(\d+)\s*g\b")
+        self._product_ml_pattern = re.compile(r"(\d+)\s*ml")
+        self._product_g_pattern = re.compile(r"(\d+)\s*g\b")
 
         # Connection pool for HTTP client
         self._http_client: Optional[httpx.AsyncClient] = None
@@ -73,7 +73,7 @@ class AsyncRAGQAService:
         if self._http_client is None:
             self._http_client = httpx.AsyncClient(
                 timeout=httpx.Timeout(self.timeout),
-                limits=httpx.Limits(max_connections=10, max_keepalive_connections=5)
+                limits=httpx.Limits(max_connections=10, max_keepalive_connections=5),
             )
         try:
             yield self._http_client
@@ -93,11 +93,7 @@ class AsyncRAGQAService:
         """
         loop = asyncio.get_event_loop()
         # Run CPU-intensive embedding generation in thread pool
-        embedding = await loop.run_in_executor(
-            None,
-            self.embedder.encode,
-            text
-        )
+        embedding = await loop.run_in_executor(None, self.embedder.encode, text)
         return embedding.tolist()
 
     async def _search_similar_async(
@@ -105,7 +101,7 @@ class AsyncRAGQAService:
         query_embedding: List[float],
         collection_name: str,
         limit: int = 3,
-        capacity_filter: Optional[str] = None
+        capacity_filter: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Search similar products asynchronously
@@ -125,12 +121,7 @@ class AsyncRAGQAService:
         filter_obj = None
         if capacity_filter:
             filter_obj = Filter(
-                must=[
-                    FieldCondition(
-                        key="capacity",
-                        match=MatchValue(value=capacity_filter)
-                    )
-                ]
+                must=[FieldCondition(key="capacity", match=MatchValue(value=capacity_filter))]
             )
 
         # Run search in thread pool to avoid blocking
@@ -141,25 +132,15 @@ class AsyncRAGQAService:
                 query_vector=("text", query_embedding),  # Use named "text" vector
                 query_filter=filter_obj,
                 limit=limit,
-                score_threshold=0.3
+                score_threshold=0.3,
             )
 
         results = await loop.run_in_executor(None, _search_with_kwargs)
 
-        return [
-            {
-                "id": hit.id,
-                "score": hit.score,
-                "payload": hit.payload
-            }
-            for hit in results
-        ]
+        return [{"id": hit.id, "score": hit.score, "payload": hit.payload} for hit in results]
 
     async def _generate_llm_response_async(
-        self,
-        question: str,
-        context: str,
-        retry_count: int = 0
+        self, question: str, context: str, retry_count: int = 0
     ) -> str:
         """
         Generate LLM response with retry logic
@@ -188,26 +169,23 @@ Please provide a helpful and concise answer in Korean."""
             "prompt": prompt,
             "stream": False,
             "temperature": 0.7,
-            "max_tokens": 500
+            "max_tokens": 500,
         }
 
         try:
             async with self._get_http_client() as client:
-                response = await client.post(
-                    f"{self.ollama_url}/api/generate",
-                    json=payload
-                )
+                response = await client.post(f"{self.ollama_url}/api/generate", json=payload)
                 response.raise_for_status()
                 result = response.json()
                 return result.get("response", "죄송합니다. 답변을 생성할 수 없습니다.")
 
         except (httpx.HTTPError, httpx.TimeoutException) as e:
             if retry_count < self.max_retries:
-                logger.warning(f"LLM generation failed, retrying... ({retry_count + 1}/{self.max_retries})")
-                await asyncio.sleep(2 ** retry_count)  # Exponential backoff
-                return await self._generate_llm_response_async(
-                    question, context, retry_count + 1
+                logger.warning(
+                    f"LLM generation failed, retrying... ({retry_count + 1}/{self.max_retries})"
                 )
+                await asyncio.sleep(2**retry_count)  # Exponential backoff
+                return await self._generate_llm_response_async(question, context, retry_count + 1)
             logger.error(f"LLM generation failed after {self.max_retries} retries: {e}")
             return "죄송합니다. 시스템 오류로 답변을 생성할 수 없습니다."
 
@@ -217,7 +195,7 @@ Please provide a helpful and concise answer in Korean."""
         collection_name: str = "products_all",
         top_k: int = 3,
         return_all: bool = False,
-        min_integrity_score: float = 0.0
+        min_integrity_score: float = 0.0,
     ) -> Dict[str, Any]:
         """
         Answer question using RAG approach asynchronously
@@ -245,10 +223,7 @@ Please provide a helpful and concise answer in Korean."""
             # Search for similar products (use large limit if return_all=True)
             search_limit = 200 if return_all else top_k
             similar_products = await self._search_similar_async(
-                query_embedding,
-                collection_name,
-                search_limit,
-                capacity_filter
+                query_embedding, collection_name, search_limit, capacity_filter
             )
 
             # Convert to standard format and apply integrity validation
@@ -270,7 +245,7 @@ Please provide a helpful and concise answer in Korean."""
                 formatted_products,
                 require_images=False,
                 require_specs=False,
-                min_integrity_score=min_integrity_score
+                min_integrity_score=min_integrity_score,
             )
 
             enriched_products = [
@@ -308,7 +283,7 @@ Please provide a helpful and concise answer in Korean."""
                 "return_all": return_all,
                 "min_integrity_score": min_integrity_score,
                 "qa_id": f"qa_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
         except Exception as e:
@@ -320,12 +295,12 @@ Please provide a helpful and concise answer in Korean."""
         # ml first (50ml, 50미리)
         match = self._capacity_ml_pattern.search(query.lower())
         if match:
-            return match.group(1) + 'ml'
+            return match.group(1) + "ml"
 
         # g search (50g)
         match = self._capacity_g_pattern.search(query.lower())
         if match:
-            return match.group(1) + 'g'
+            return match.group(1) + "g"
 
         return None
 
@@ -344,7 +319,7 @@ Please provide a helpful and concise answer in Korean."""
         collection_name: str = "products_all",
         top_k: int = 3,
         return_all: bool = False,
-        min_integrity_score: float = 0.0
+        min_integrity_score: float = 0.0,
     ) -> List[Dict[str, Any]]:
         """
         Answer multiple questions in batch for efficiency
@@ -371,11 +346,13 @@ Please provide a helpful and concise answer in Korean."""
         for i, result in enumerate(results):
             if isinstance(result, Exception):
                 logger.error(f"Error processing question {i}: {result}")
-                processed_results.append({
-                    "question": questions[i],
-                    "answer": "처리 중 오류가 발생했습니다.",
-                    "error": str(result)
-                })
+                processed_results.append(
+                    {
+                        "question": questions[i],
+                        "answer": "처리 중 오류가 발생했습니다.",
+                        "error": str(result),
+                    }
+                )
             else:
                 processed_results.append(result)
 

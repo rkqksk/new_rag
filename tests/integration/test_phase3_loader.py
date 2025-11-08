@@ -10,12 +10,12 @@ Phase 3 동적 문서 로더 통합 테스트
 - 성능 테스트
 """
 
-import pytest
 import time
-from unittest.mock import Mock, patch, MagicMock
-from typing import List, Dict, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List
+from unittest.mock import MagicMock, Mock, patch
 
+import pytest
 
 # ============================================================================
 # Fixtures

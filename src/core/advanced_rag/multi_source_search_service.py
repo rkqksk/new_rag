@@ -3,13 +3,14 @@ Multi-Source Search Service for Phase 5
 Unified search across multiple Qdrant collections with score normalization
 """
 
+import asyncio
 import logging
-from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
-import asyncio
+from typing import Any, Dict, List, Optional, Tuple
 
 from qdrant_client import QdrantClient
+
 from .unified_vector_store import UnifiedVectorStore
 
 logger = logging.getLogger(__name__)
@@ -17,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class SearchSource(Enum):
     """Search source types"""
+
     PRODUCTS = "products_multimodal"
     DOCUMENTS = "documents_semantic"
     IMAGES = "images_visual"
@@ -26,6 +28,7 @@ class SearchSource(Enum):
 @dataclass
 class SearchResult:
     """Unified search result"""
+
     id: str
     source: SearchSource
     score: float
@@ -74,7 +77,7 @@ class ScoreNormalizer:
 
         mean = sum(scores) / len(scores)
         variance = sum((x - mean) ** 2 for x in scores) / len(scores)
-        std = variance ** 0.5
+        std = variance**0.5
 
         if std == 0:
             return [0.0] * len(scores)
@@ -121,11 +124,7 @@ class MultiSourceSearchService:
     - Filtering and pagination
     """
 
-    def __init__(
-        self,
-        vector_store: UnifiedVectorStore,
-        normalization_method: str = "min_max"
-    ):
+    def __init__(self, vector_store: UnifiedVectorStore, normalization_method: str = "min_max"):
         """
         Initialize Multi-Source Search Service
 
@@ -144,7 +143,7 @@ class MultiSourceSearchService:
         query_embeddings: Dict[str, List[float]],
         sources: Optional[List[SearchSource]] = None,
         limit_per_source: int = 20,
-        filters: Optional[Dict[SearchSource, Dict]] = None
+        filters: Optional[Dict[SearchSource, Dict]] = None,
     ) -> List[SearchResult]:
         """
         Search across multiple sources in parallel
@@ -213,7 +212,7 @@ class MultiSourceSearchService:
                     score=point.score,
                     normalized_score=0.0,  # Will be computed
                     payload=point.payload,
-                    vector_type=None  # Can be extracted from payload if needed
+                    vector_type=None,  # Can be extracted from payload if needed
                 )
                 source_results.append(result)
                 all_results.append(result)
@@ -252,7 +251,9 @@ class MultiSourceSearchService:
             elif self.normalization_method == "rrf":
                 normalized = self.normalizer.reciprocal_rank_normalize(scores)
             else:
-                logger.warning(f"Unknown normalization method: {self.normalization_method}, using min_max")
+                logger.warning(
+                    f"Unknown normalization method: {self.normalization_method}, using min_max"
+                )
                 normalized = self.normalizer.min_max_normalize(scores)
 
             # Update normalized scores
@@ -264,7 +265,7 @@ class MultiSourceSearchService:
         text_embedding: List[float],
         image_embedding: Optional[List[float]] = None,
         shape_embedding: Optional[List[float]] = None,
-        limit: int = 20
+        limit: int = 20,
     ) -> List[SearchResult]:
         """
         Convenience method: Search products only
@@ -289,9 +290,7 @@ class MultiSourceSearchService:
 
         # Search using underlying store
         results = self.store.client.search(
-            collection_name=SearchSource.PRODUCTS.value,
-            query_vector=vectors,
-            limit=limit
+            collection_name=SearchSource.PRODUCTS.value, query_vector=vectors, limit=limit
         )
 
         # Convert to SearchResult
@@ -301,7 +300,7 @@ class MultiSourceSearchService:
                 source=SearchSource.PRODUCTS,
                 score=point.score,
                 normalized_score=point.score,  # Already normalized by Qdrant
-                payload=point.payload
+                payload=point.payload,
             )
             for point in results
         ]
@@ -312,9 +311,9 @@ class MultiSourceSearchService:
 
         return {
             "sources": len(stats),
-            "total_points": sum(s.get('points_count', 0) for s in stats.values()),
+            "total_points": sum(s.get("points_count", 0) for s in stats.values()),
             "collections": stats,
-            "normalization_method": self.normalization_method
+            "normalization_method": self.normalization_method,
         }
 
     def __repr__(self):

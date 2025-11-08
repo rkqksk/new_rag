@@ -2,10 +2,12 @@
 Tests for Unified LLM Service
 """
 
+from unittest.mock import AsyncMock, Mock, patch
+
 import pytest
-from unittest.mock import Mock, AsyncMock, patch
-from src.services.unified_llm_service import UnifiedLLMService, NexaConfig, OllamaConfig
+
 from src.core.model_router import ModelEngine
+from src.services.unified_llm_service import NexaConfig, OllamaConfig, UnifiedLLMService
 
 
 class TestUnifiedLLMService:
@@ -14,8 +16,8 @@ class TestUnifiedLLMService:
     @pytest.fixture
     def unified_llm(self):
         """Unified LLM service instance"""
-        with patch('src.services.unified_llm_service.NexaService'):
-            with patch('src.services.unified_llm_service.OllamaService'):
+        with patch("src.services.unified_llm_service.NexaService"):
+            with patch("src.services.unified_llm_service.OllamaService"):
                 service = UnifiedLLMService()
                 service.nexa_available = True
                 service.ollama_available = True
@@ -51,10 +53,7 @@ class TestUnifiedLLMService:
         """Test forced engine selection"""
         unified_llm.ollama.generate = AsyncMock(return_value="Forced Ollama")
 
-        result = await unified_llm.generate(
-            "간단한 검색",
-            force_engine=ModelEngine.OLLAMA
-        )
+        result = await unified_llm.generate("간단한 검색", force_engine=ModelEngine.OLLAMA)
 
         assert result == "Forced Ollama"
         unified_llm.ollama.generate.assert_called_once()
@@ -62,9 +61,7 @@ class TestUnifiedLLMService:
     @pytest.mark.asyncio
     async def test_embed_with_nexa(self, unified_llm):
         """Test embedding generation with NexaAI"""
-        unified_llm.nexa.generate_embeddings = AsyncMock(
-            return_value=[[0.1, 0.2], [0.3, 0.4]]
-        )
+        unified_llm.nexa.generate_embeddings = AsyncMock(return_value=[[0.1, 0.2], [0.3, 0.4]])
 
         result = await unified_llm.embed(["text1", "text2"])
 
@@ -75,9 +72,7 @@ class TestUnifiedLLMService:
     @pytest.mark.asyncio
     async def test_embed_with_ollama(self, unified_llm):
         """Test embedding generation with Ollama"""
-        unified_llm.ollama.embed = AsyncMock(
-            return_value=[[0.5, 0.6], [0.7, 0.8]]
-        )
+        unified_llm.ollama.embed = AsyncMock(return_value=[[0.5, 0.6], [0.7, 0.8]])
 
         result = await unified_llm.embed(["text1", "text2"], engine=ModelEngine.OLLAMA)
 
@@ -88,14 +83,9 @@ class TestUnifiedLLMService:
     @pytest.mark.asyncio
     async def test_analyze_image(self, unified_llm):
         """Test image analysis"""
-        unified_llm.nexa.analyze_image = AsyncMock(
-            return_value="Image analysis result"
-        )
+        unified_llm.nexa.analyze_image = AsyncMock(return_value="Image analysis result")
 
-        result = await unified_llm.analyze_image(
-            image_path="test.jpg",
-            prompt="Describe this"
-        )
+        result = await unified_llm.analyze_image(image_path="test.jpg", prompt="Describe this")
 
         assert result == "Image analysis result"
         unified_llm.nexa.analyze_image.assert_called_once()
@@ -128,11 +118,7 @@ class TestUnifiedLLMService:
 
     def test_get_stats(self, unified_llm):
         """Test statistics retrieval"""
-        unified_llm.stats = {
-            "nexa_requests": 42,
-            "ollama_requests": 15,
-            "errors": 2
-        }
+        unified_llm.stats = {"nexa_requests": 42, "ollama_requests": 15, "errors": 2}
 
         stats = unified_llm.get_stats()
 
@@ -155,8 +141,10 @@ class TestUnifiedLLMService:
     @pytest.mark.asyncio
     async def test_nexa_unavailable_fallback(self):
         """Test behavior when NexaAI unavailable"""
-        with patch('src.services.unified_llm_service.NexaService', side_effect=Exception("Not available")):
-            with patch('src.services.unified_llm_service.OllamaService'):
+        with patch(
+            "src.services.unified_llm_service.NexaService", side_effect=Exception("Not available")
+        ):
+            with patch("src.services.unified_llm_service.OllamaService"):
                 service = UnifiedLLMService()
 
                 assert service.nexa_available is False

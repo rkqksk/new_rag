@@ -1,24 +1,26 @@
-from sentence_transformers import SentenceTransformer
 import torch
+from sentence_transformers import SentenceTransformer
+
 
 class EmbeddingService:
     """
     Centralized embedding service with multiple model support
     """
+
     AVAILABLE_MODELS = {
-        'all-MiniLM-L6-v2': {
-            'model_name': 'sentence-transformers/all-MiniLM-L6-v2',
-            'dim': 384,
-            'description': 'Lightweight, fast model for general-purpose embeddings'
+        "all-MiniLM-L6-v2": {
+            "model_name": "sentence-transformers/all-MiniLM-L6-v2",
+            "dim": 384,
+            "description": "Lightweight, fast model for general-purpose embeddings",
         },
-        'all-mpnet-base-v2': {
-            'model_name': 'sentence-transformers/all-mpnet-base-v2',
-            'dim': 768,
-            'description': 'High-performance model with good semantic understanding'
-        }
+        "all-mpnet-base-v2": {
+            "model_name": "sentence-transformers/all-mpnet-base-v2",
+            "dim": 768,
+            "description": "High-performance model with good semantic understanding",
+        },
     }
 
-    def __init__(self, model_name: str = 'all-MiniLM-L6-v2'):
+    def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
         """
         Initialize embedding model
 
@@ -29,13 +31,13 @@ class EmbeddingService:
             raise ValueError(f"Unsupported model: {model_name}")
 
         model_info = self.AVAILABLE_MODELS[model_name]
-        self.model = SentenceTransformer(model_info['model_name'])
+        self.model = SentenceTransformer(model_info["model_name"])
         self.model_name = model_name
-        self.embedding_dim = model_info['dim']
+        self.embedding_dim = model_info["dim"]
 
         # Move to GPU if available
         if torch.cuda.is_available():
-            self.model = self.model.to('cuda')
+            self.model = self.model.to("cuda")
 
     def embed_documents(self, documents: list) -> torch.Tensor:
         """

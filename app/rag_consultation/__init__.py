@@ -23,11 +23,11 @@ __version__ = "1.0.0"
 __author__ = "RAG Enterprise Team"
 
 from app.rag_consultation.models import (
-    QueryAnalysis,
-    IntentDetection,
-    ToneAnalysis,
     ConversationContext,
+    IntentDetection,
+    QueryAnalysis,
     RetrievalStrategy,
+    ToneAnalysis,
 )
 
 __all__ = [

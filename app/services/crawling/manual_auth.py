@@ -18,9 +18,9 @@ import asyncio
 import logging
 import pickle
 from pathlib import Path
-from typing import Optional, Dict, Any
+from typing import Any, Dict, Optional
 
-from playwright.async_api import async_playwright, Browser, BrowserContext, Page
+from playwright.async_api import Browser, BrowserContext, Page, async_playwright
 
 logger = logging.getLogger(__name__)
 
@@ -56,7 +56,7 @@ class ManualAuthHandler:
         if storage_dir:
             self.storage_dir = Path(storage_dir)
         else:
-            self.storage_dir = Path.home() / '.rag-enterprise' / 'manual-auth'
+            self.storage_dir = Path.home() / ".rag-enterprise" / "manual-auth"
 
         self.storage_dir.mkdir(parents=True, exist_ok=True)
         logger.info(f"Manual auth handler initialized (storage: {self.storage_dir})")
@@ -67,7 +67,7 @@ class ManualAuthHandler:
         success_url: Optional[str] = None,
         wait_message: str = "로그인을 완료한 후 아무 키나 누르세요...",
         timeout: int = 300,  # 5분
-        headless: bool = False
+        headless: bool = False,
     ) -> Dict[str, Any]:
         """
         브라우저를 띄워서 수동 로그인
@@ -85,14 +85,11 @@ class ManualAuthHandler:
         logger.info(f"Manual login started: {url}")
 
         async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=headless,
-                args=['--start-maximized']
-            )
+            browser = await p.chromium.launch(headless=headless, args=["--start-maximized"])
 
             context = await browser.new_context(
-                viewport={'width': 1920, 'height': 1080},
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                viewport={"width": 1920, "height": 1080},
+                user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
             )
 
             page = await context.new_page()
@@ -115,10 +112,7 @@ class ManualAuthHandler:
                 # 방법 1: 성공 URL로 이동 감지
                 if success_url:
                     try:
-                        await page.wait_for_url(
-                            success_url,
-                            timeout=timeout * 1000
-                        )
+                        await page.wait_for_url(success_url, timeout=timeout * 1000)
                         logger.info(f"✅ 로그인 성공 감지: {success_url}")
                     except:
                         logger.warning("Success URL로 자동 감지 실패. Enter 키를 눌러 계속하세요.")
@@ -126,8 +120,7 @@ class ManualAuthHandler:
                 else:
                     # 방법 2: 사용자가 Enter 누를 때까지 대기
                     await asyncio.get_event_loop().run_in_executor(
-                        None,
-                        lambda: input(wait_message)
+                        None, lambda: input(wait_message)
                     )
 
                 # 쿠키 추출
@@ -136,9 +129,9 @@ class ManualAuthHandler:
                 logger.info(f"✅ 쿠키 추출 완료: {len(cookies)}개")
 
                 return {
-                    'cookies': cookies,
-                    'url': page.url,
-                    'storage_state': await context.storage_state()
+                    "cookies": cookies,
+                    "url": page.url,
+                    "storage_state": await context.storage_state(),
                 }
 
             finally:
@@ -154,7 +147,7 @@ class ManualAuthHandler:
         """
         cookie_path = self.storage_dir / f"{name}.pkl"
 
-        with open(cookie_path, 'wb') as f:
+        with open(cookie_path, "wb") as f:
             pickle.dump(auth_data, f)
 
         logger.info(f"✅ 쿠키 저장 완료: {name}")
@@ -175,17 +168,14 @@ class ManualAuthHandler:
             logger.warning(f"쿠키 파일 없음: {name}")
             return None
 
-        with open(cookie_path, 'rb') as f:
+        with open(cookie_path, "rb") as f:
             auth_data = pickle.load(f)
 
         logger.info(f"✅ 쿠키 로드 완료: {name}")
         return auth_data
 
     async def login_with_saved_cookies(
-        self,
-        url: str,
-        name: str,
-        verify_url: Optional[str] = None
+        self, url: str, name: str, verify_url: Optional[str] = None
     ) -> bool:
         """
         저장된 쿠키로 로그인 시도
@@ -208,9 +198,7 @@ class ManualAuthHandler:
             browser = await p.chromium.launch(headless=True)
 
             # storage_state로 컨텍스트 생성 (쿠키 포함)
-            context = await browser.new_context(
-                storage_state=auth_data['storage_state']
-            )
+            context = await browser.new_context(storage_state=auth_data["storage_state"])
 
             page = await context.new_page()
 
@@ -220,7 +208,7 @@ class ManualAuthHandler:
                 # 로그인 페이지로 리다이렉트되는지 확인
                 if verify_url:
                     current_url = page.url
-                    if 'login' in current_url.lower():
+                    if "login" in current_url.lower():
                         logger.warning(f"❌ 로그인 페이지로 리다이렉트됨. 쿠키 만료 가능성 있음.")
                         return False
 
@@ -259,10 +247,9 @@ class ManualAuthHandler:
 
 # Convenience functions
 
+
 async def manual_login_once(
-    url: str,
-    session_name: str,
-    success_url: Optional[str] = None
+    url: str, session_name: str, success_url: Optional[str] = None
 ) -> Dict[str, Any]:
     """
     수동 로그인 후 쿠키 저장 (편의 함수)
@@ -281,10 +268,7 @@ async def manual_login_once(
     """
     handler = ManualAuthHandler()
 
-    auth_data = await handler.manual_login(
-        url=url,
-        success_url=success_url
-    )
+    auth_data = await handler.manual_login(url=url, success_url=success_url)
 
     handler.save_cookies(session_name, auth_data)
 
@@ -292,10 +276,7 @@ async def manual_login_once(
 
 
 async def auto_or_manual_login(
-    url: str,
-    session_name: str,
-    verify_url: Optional[str] = None,
-    force_manual: bool = False
+    url: str, session_name: str, verify_url: Optional[str] = None, force_manual: bool = False
 ) -> Dict[str, Any]:
     """
     자동 또는 수동 로그인
@@ -328,10 +309,7 @@ async def auto_or_manual_login(
 
         # 쿠키 유효성 확인
         if verify_url:
-            valid = await handler.login_with_saved_cookies(
-                url=verify_url,
-                name=session_name
-            )
+            valid = await handler.login_with_saved_cookies(url=verify_url, name=session_name)
 
             if valid:
                 logger.info("✅ 저장된 쿠키 사용")

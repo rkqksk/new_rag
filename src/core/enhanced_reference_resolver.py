@@ -4,8 +4,9 @@
 """
 
 import re
-from typing import Dict, List, Optional, Tuple, Any
-from src.core.conversation_state import DialogueContext, ConversationState
+from typing import Any, Dict, List, Optional, Tuple
+
+from src.core.conversation_state import ConversationState, DialogueContext
 
 
 class EnhancedReferenceResolver:
@@ -23,63 +24,69 @@ class EnhancedReferenceResolver:
     def __init__(self):
         # 숫자 패턴 (1번, 2번째, 첫 번째, etc.)
         self.number_patterns = [
-            (r'(\d+)\s*번(?:째)?', 'direct_number'),      # "3번", "3번째"
-            (r'([일이삼사오육칠팔구십])\s*번(?:째)?', 'korean_number'),  # "삼번째"
-            (r'첫\s*번째|첫번째|처음', 'ordinal_first'),
-            (r'두\s*번째|두번째', 'ordinal_second'),
-            (r'세\s*번째|세번째', 'ordinal_third'),
-            (r'네\s*번째|네번째', 'ordinal_fourth'),
-            (r'다섯\s*번째|다섯번째', 'ordinal_fifth'),
-            (r'마지막', 'ordinal_last')
+            (r"(\d+)\s*번(?:째)?", "direct_number"),  # "3번", "3번째"
+            (r"([일이삼사오육칠팔구십])\s*번(?:째)?", "korean_number"),  # "삼번째"
+            (r"첫\s*번째|첫번째|처음", "ordinal_first"),
+            (r"두\s*번째|두번째", "ordinal_second"),
+            (r"세\s*번째|세번째", "ordinal_third"),
+            (r"네\s*번째|네번째", "ordinal_fourth"),
+            (r"다섯\s*번째|다섯번째", "ordinal_fifth"),
+            (r"마지막", "ordinal_last"),
         ]
 
         # 한글 숫자 매핑
         self.korean_number_map = {
-            '일': 1, '이': 2, '삼': 3, '사': 4, '오': 5,
-            '육': 6, '칠': 7, '팔': 8, '구': 9, '십': 10
+            "일": 1,
+            "이": 2,
+            "삼": 3,
+            "사": 4,
+            "오": 5,
+            "육": 6,
+            "칠": 7,
+            "팔": 8,
+            "구": 9,
+            "십": 10,
         }
 
         # 순서 매핑
         self.ordinal_map = {
-            'ordinal_first': 1,
-            'ordinal_second': 2,
-            'ordinal_third': 3,
-            'ordinal_fourth': 4,
-            'ordinal_fifth': 5,
-            'ordinal_last': -1
+            "ordinal_first": 1,
+            "ordinal_second": 2,
+            "ordinal_third": 3,
+            "ordinal_fourth": 4,
+            "ordinal_fifth": 5,
+            "ordinal_last": -1,
         }
 
         # 대명사 패턴
         self.demonstrative_patterns = [
-            r'그\s*거',
-            r'이\s*거',
-            r'저\s*거',
-            r'그\s*제품',
-            r'이\s*제품',
-            r'저\s*제품',
-            r'위\s*에\s*거',
-            r'아래\s*거'
+            r"그\s*거",
+            r"이\s*거",
+            r"저\s*거",
+            r"그\s*제품",
+            r"이\s*제품",
+            r"저\s*제품",
+            r"위\s*에\s*거",
+            r"아래\s*거",
         ]
 
         # 문서 타입 키워드
         self.document_keywords = {
-            '원산지': 'certificate_of_origin',
-            '원산지증명서': 'certificate_of_origin',
-            '증명서': 'certificate',
-            '스펙': 'specification',
-            '스펙시트': 'specification',
-            '사양서': 'specification',
-            '카탈로그': 'catalog',
-            '자료': 'document',
-            '문서': 'document',
-            '도면': 'drawing',
-            '설계도': 'drawing'
+            "원산지": "certificate_of_origin",
+            "원산지증명서": "certificate_of_origin",
+            "증명서": "certificate",
+            "스펙": "specification",
+            "스펙시트": "specification",
+            "사양서": "specification",
+            "카탈로그": "catalog",
+            "자료": "document",
+            "문서": "document",
+            "도면": "drawing",
+            "설계도": "drawing",
         }
 
     def resolve(
-        self,
-        query: str,
-        context: DialogueContext
+        self, query: str, context: DialogueContext
     ) -> Tuple[bool, Optional[str], Optional[str], Optional[str]]:
         """
         참조 해결
@@ -95,30 +102,28 @@ class EnhancedReferenceResolver:
         # 1. 숫자 참조 체크
         number_result = self._resolve_number_reference(query, context)
         if number_result[0]:
-            return number_result + ('number', None)
+            return number_result + ("number", None)
 
         # 2. 문서 참조 체크
         document_result = self._resolve_document_reference(query, context)
         if document_result[0]:
             doc_type = document_result[2]
-            return (True, document_result[1], 'document', doc_type)
+            return (True, document_result[1], "document", doc_type)
 
         # 3. 대명사 참조 체크
         demonstrative_result = self._resolve_demonstrative(query, context)
         if demonstrative_result[0]:
-            return demonstrative_result + ('demonstrative', None)
+            return demonstrative_result + ("demonstrative", None)
 
         # 4. 암묵적 참조 체크
         implicit_result = self._resolve_implicit(query, context)
         if implicit_result[0]:
-            return implicit_result + ('implicit', None)
+            return implicit_result + ("implicit", None)
 
         return False, None, None, None
 
     def _resolve_number_reference(
-        self,
-        query: str,
-        context: DialogueContext
+        self, query: str, context: DialogueContext
     ) -> Tuple[bool, Optional[str]]:
         """숫자 참조 해결"""
 
@@ -129,13 +134,13 @@ class EnhancedReferenceResolver:
             match = re.search(pattern, query)
             if match:
                 # 직접 숫자 ("3번")
-                if pattern_type == 'direct_number':
+                if pattern_type == "direct_number":
                     num = int(match.group(1))
                     if num in context.display_indices:
                         return True, context.display_indices[num]
 
                 # 한글 숫자 ("삼번")
-                elif pattern_type == 'korean_number':
+                elif pattern_type == "korean_number":
                     korean_num = match.group(1)
                     num = self.korean_number_map.get(korean_num)
                     if num and num in context.display_indices:
@@ -155,9 +160,7 @@ class EnhancedReferenceResolver:
         return False, None
 
     def _resolve_document_reference(
-        self,
-        query: str,
-        context: DialogueContext
+        self, query: str, context: DialogueContext
     ) -> Tuple[bool, Optional[str], Optional[str]]:
         """
         문서 참조 해결
@@ -193,9 +196,7 @@ class EnhancedReferenceResolver:
         return False, None, None
 
     def _resolve_demonstrative(
-        self,
-        query: str,
-        context: DialogueContext
+        self, query: str, context: DialogueContext
     ) -> Tuple[bool, Optional[str]]:
         """대명사 참조 해결 ("그거", "이거")"""
 
@@ -213,11 +214,7 @@ class EnhancedReferenceResolver:
 
         return False, None
 
-    def _resolve_implicit(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> Tuple[bool, Optional[str]]:
+    def _resolve_implicit(self, query: str, context: DialogueContext) -> Tuple[bool, Optional[str]]:
         """
         암묵적 참조 해결
 
@@ -230,21 +227,20 @@ class EnhancedReferenceResolver:
         """
 
         # 호환성/추가정보 키워드
-        implicit_keywords = ['펌프', '캡', '뚜껑', '호환', '맞는', '색상', '가격']
+        implicit_keywords = ["펌프", "캡", "뚜껑", "호환", "맞는", "색상", "가격"]
 
         # 짧은 쿼리 & 키워드 포함 & 포커스 있음
-        if (len(query) < 15 and
-            any(kw in query for kw in implicit_keywords) and
-            context.focused_product):
+        if (
+            len(query) < 15
+            and any(kw in query for kw in implicit_keywords)
+            and context.focused_product
+        ):
             return True, context.focused_product
 
         return False, None
 
     def expand_query_with_context(
-        self,
-        query: str,
-        product_idx: str,
-        product_data: Dict[str, Any]
+        self, query: str, product_idx: str, product_data: Dict[str, Any]
     ) -> str:
         """
         참조된 제품 정보로 쿼리 확장
@@ -277,11 +273,7 @@ class EnhancedReferenceResolver:
 
         return expanded
 
-    def get_clarification_question(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> Optional[str]:
+    def get_clarification_question(self, query: str, context: DialogueContext) -> Optional[str]:
         """
         명확화 질문 생성
 

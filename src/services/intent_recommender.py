@@ -3,16 +3,18 @@
 제품 사용 목적을 분석하여 최적의 용기 추천
 """
 
-from typing import Dict, List, Optional, Tuple
-from pathlib import Path
 import json
 from collections import defaultdict
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 
 class IntentBasedRecommender:
     """사용 목적 기반 추천 시스템"""
 
-    def __init__(self, data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"):
+    def __init__(
+        self, data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
+    ):
         self.data_root = Path(data_root)
 
         # 화장품 제품군별 최적 스펙 프로필
@@ -26,7 +28,7 @@ class IntentBasedRecommender:
                 "viscosity": "high",
                 "ph_range": (5.5, 7.0),
                 "oil_content": "high",
-                "description": "고점도 오일 기반 제형에 적합"
+                "description": "고점도 오일 기반 제형에 적합",
             },
             "토너": {
                 "keywords": ["토너", "스킨", "화장수", "미스트토너"],
@@ -37,7 +39,7 @@ class IntentBasedRecommender:
                 "viscosity": "low",
                 "ph_range": (5.0, 7.0),
                 "oil_content": "none",
-                "description": "수분 기반 저점도 제형"
+                "description": "수분 기반 저점도 제형",
             },
             "세럼": {
                 "keywords": ["세럼", "에센스", "앰플", "부스터"],
@@ -48,7 +50,7 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (5.0, 7.0),
                 "oil_content": "low",
-                "description": "프리미엄 에센스류, 투명 용기 선호"
+                "description": "프리미엄 에센스류, 투명 용기 선호",
             },
             "로션": {
                 "keywords": ["로션", "에멀젼", "밀크"],
@@ -59,7 +61,7 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (5.5, 7.5),
                 "oil_content": "medium",
-                "description": "유수분 균형 제형"
+                "description": "유수분 균형 제형",
             },
             "크림": {
                 "keywords": ["크림", "수분크림", "영양크림"],
@@ -70,7 +72,7 @@ class IntentBasedRecommender:
                 "viscosity": "high",
                 "ph_range": (5.5, 7.5),
                 "oil_content": "high",
-                "description": "고점도 유분 함유 제형"
+                "description": "고점도 유분 함유 제형",
             },
             "바디워시": {
                 "keywords": ["바디워시", "샤워젤", "바디클렌저"],
@@ -81,7 +83,7 @@ class IntentBasedRecommender:
                 "viscosity": "high",
                 "ph_range": (5.0, 7.0),
                 "oil_content": "low",
-                "description": "대용량 클렌징 제형"
+                "description": "대용량 클렌징 제형",
             },
             "샴푸": {
                 "keywords": ["샴푸", "트리트먼트", "헤어팩"],
@@ -92,7 +94,7 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (5.0, 6.5),
                 "oil_content": "low",
-                "description": "대용량 헤어케어 제형"
+                "description": "대용량 헤어케어 제형",
             },
             "선크림": {
                 "keywords": ["선크림", "자외선차단제", "선블록"],
@@ -103,7 +105,7 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (6.0, 7.5),
                 "oil_content": "medium",
-                "description": "UV 필터 함유, UV 차단 코팅 권장"
+                "description": "UV 필터 함유, UV 차단 코팅 권장",
             },
             "핸드크림": {
                 "keywords": ["핸드크림", "핸드로션"],
@@ -114,7 +116,7 @@ class IntentBasedRecommender:
                 "viscosity": "high",
                 "ph_range": (5.5, 7.5),
                 "oil_content": "high",
-                "description": "고보습 크림 제형"
+                "description": "고보습 크림 제형",
             },
             "아이크림": {
                 "keywords": ["아이크림", "아이세럼"],
@@ -125,7 +127,7 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (5.5, 7.0),
                 "oil_content": "medium",
-                "description": "소용량 프리미엄 제형"
+                "description": "소용량 프리미엄 제형",
             },
             "페이스오일": {
                 "keywords": ["페이스오일", "페이셜오일", "뷰티오일"],
@@ -136,7 +138,7 @@ class IntentBasedRecommender:
                 "viscosity": "low",
                 "ph_range": (5.0, 7.0),
                 "oil_content": "very_high",
-                "description": "순수 오일 제형, 드롭퍼 권장"
+                "description": "순수 오일 제형, 드롭퍼 권장",
             },
             "미스트": {
                 "keywords": ["미스트", "스프레이", "페이스미스트"],
@@ -147,7 +149,7 @@ class IntentBasedRecommender:
                 "viscosity": "very_low",
                 "ph_range": (5.0, 7.5),
                 "oil_content": "none",
-                "description": "미세 분사 가능한 미스트 전용"
+                "description": "미세 분사 가능한 미스트 전용",
             },
             "젤": {
                 "keywords": ["수딩젤", "알로에젤", "진정젤"],
@@ -158,7 +160,7 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (5.0, 7.0),
                 "oil_content": "none",
-                "description": "투명 젤 제형"
+                "description": "투명 젤 제형",
             },
             "폼클렌저": {
                 "keywords": ["폼클렌저", "거품클렌저", "페이셜폼"],
@@ -169,7 +171,7 @@ class IntentBasedRecommender:
                 "viscosity": "low",
                 "ph_range": (5.0, 7.0),
                 "oil_content": "low",
-                "description": "거품펌프 전용"
+                "description": "거품펌프 전용",
             },
             "바디로션": {
                 "keywords": ["바디로션", "바디밀크", "보디로션"],
@@ -180,8 +182,8 @@ class IntentBasedRecommender:
                 "viscosity": "medium",
                 "ph_range": (5.5, 7.5),
                 "oil_content": "medium",
-                "description": "대용량 보습 제형"
-            }
+                "description": "대용량 보습 제형",
+            },
         }
 
     def detect_product_type(self, query: str) -> Optional[str]:
@@ -204,8 +206,9 @@ class IntentBasedRecommender:
 
         # 2. 용량 기반 감지 (키워드가 없을 때)
         import re
+
         # "미리", "ml", "mL" 모두 처리
-        capacity_match = re.search(r'(\d+)\s*(?:미리|ml|mL)', query_lower)
+        capacity_match = re.search(r"(\d+)\s*(?:미리|ml|mL)", query_lower)
         if capacity_match:
             capacity = int(capacity_match.group(1))
 
@@ -240,12 +243,7 @@ class IntentBasedRecommender:
 
         return None
 
-    def recommend(
-        self,
-        query: str,
-        products: List[Dict],
-        limit: int = 10
-    ) -> List[Dict]:
+    def recommend(self, query: str, products: List[Dict], limit: int = 10) -> List[Dict]:
         """
         의도 기반 제품 추천
 
@@ -272,13 +270,15 @@ class IntentBasedRecommender:
             score = self._calculate_confidence(product, profile)
             reason = self._generate_reason(product, profile, product_type)
 
-            scored_products.append({
-                **product,
-                "recommendation_score": score,
-                "recommendation_reason": reason,
-                "matched_profile": product_type,
-                "profile_description": profile["description"]
-            })
+            scored_products.append(
+                {
+                    **product,
+                    "recommendation_score": score,
+                    "recommendation_reason": reason,
+                    "matched_profile": product_type,
+                    "profile_description": profile["description"],
+                }
+            )
 
         # 신뢰도 순 정렬
         scored_products.sort(key=lambda x: x["recommendation_score"], reverse=True)
@@ -304,9 +304,8 @@ class IntentBasedRecommender:
         if material in [m.upper() for m in profile["material_priority"]]:
             # 우선순위에 따라 차등 점수
             priority_index = next(
-                (i for i, m in enumerate(profile["material_priority"])
-                 if m.upper() == material),
-                len(profile["material_priority"])
+                (i for i, m in enumerate(profile["material_priority"]) if m.upper() == material),
+                len(profile["material_priority"]),
             )
             score += 0.4 * (1 - priority_index / len(profile["material_priority"]))
 
@@ -318,7 +317,8 @@ class IntentBasedRecommender:
         capacity_str = specs.get("capacity", "")
         if capacity_str:
             import re
-            match = re.search(r'(\d+)', capacity_str)
+
+            match = re.search(r"(\d+)", capacity_str)
             if match:
                 capacity = float(match.group(1))
                 cap_min, cap_max = profile["capacity_range"]
@@ -342,12 +342,7 @@ class IntentBasedRecommender:
         # 점수 범위 제한 (0.0 ~ 1.0)
         return max(0.0, min(1.0, score))
 
-    def _generate_reason(
-        self,
-        product: Dict,
-        profile: Dict,
-        product_type: str
-    ) -> str:
+    def _generate_reason(self, product: Dict, profile: Dict, product_type: str) -> str:
         """
         추천 이유 생성
 

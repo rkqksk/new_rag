@@ -17,7 +17,7 @@ import random
 import time
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional, Dict, Any, List
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 class EvasionStrategy(Enum):
     """Anti-detection strategies"""
+
     USER_AGENT_ROTATION = "user_agent"
     PROXY_ROTATION = "proxy"
     HEADER_RANDOMIZATION = "headers"
@@ -91,31 +92,28 @@ class AntiDetectionManager:
     # Common user agents (desktop browsers)
     DEFAULT_USER_AGENTS = [
         # Chrome
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         # Firefox
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0',
-
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:120.0) Gecko/20100101 Firefox/120.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0",
         # Safari
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15',
-
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Safari/605.1.15",
         # Edge
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0',
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 Edg/120.0.0.0",
     ]
 
     # Common referrers
     DEFAULT_REFERRERS = [
-        'https://www.google.com/',
-        'https://www.bing.com/',
-        'https://www.yahoo.com/',
-        'https://duckduckgo.com/',
-        'https://www.reddit.com/',
-        'https://twitter.com/',
+        "https://www.google.com/",
+        "https://www.bing.com/",
+        "https://www.yahoo.com/",
+        "https://duckduckgo.com/",
+        "https://www.reddit.com/",
+        "https://twitter.com/",
     ]
 
     def __init__(self, config: Optional[EvasionConfig] = None):
@@ -138,7 +136,9 @@ class AntiDetectionManager:
         else:
             self.referrers = self.DEFAULT_REFERRERS
 
-        logger.info(f"Anti-detection manager initialized (strategies: {self._get_active_strategies()})")
+        logger.info(
+            f"Anti-detection manager initialized (strategies: {self._get_active_strategies()})"
+        )
 
     def _get_active_strategies(self) -> List[str]:
         """Get list of active evasion strategies"""
@@ -166,9 +166,7 @@ class AntiDetectionManager:
         return random.choice(self.user_agents)
 
     def get_headers(
-        self,
-        url: Optional[str] = None,
-        extra_headers: Optional[Dict[str, str]] = None
+        self, url: Optional[str] = None, extra_headers: Optional[Dict[str, str]] = None
     ) -> Dict[str, str]:
         """
         Get request headers with anti-detection
@@ -184,38 +182,46 @@ class AntiDetectionManager:
 
         # User-Agent
         if self.config.rotate_user_agent:
-            headers['User-Agent'] = self.get_random_user_agent()
+            headers["User-Agent"] = self.get_random_user_agent()
         else:
-            headers['User-Agent'] = self.DEFAULT_USER_AGENTS[0]
+            headers["User-Agent"] = self.DEFAULT_USER_AGENTS[0]
 
         # Common headers to appear human
         if self.config.randomize_headers:
-            headers.update({
-                'Accept': random.choice([
-                    'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                    'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                ]),
-                'Accept-Language': random.choice([
-                    'en-US,en;q=0.9',
-                    'en-US,en;q=0.5',
-                    'en-GB,en;q=0.9',
-                    'en-US,en;q=0.9,ko;q=0.8',
-                ]),
-                'Accept-Encoding': 'gzip, deflate, br',
-                'DNT': str(random.choice([1, 1, 1, 0])),  # Do Not Track (mostly 1)
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-            })
+            headers.update(
+                {
+                    "Accept": random.choice(
+                        [
+                            "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                            "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                            "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                        ]
+                    ),
+                    "Accept-Language": random.choice(
+                        [
+                            "en-US,en;q=0.9",
+                            "en-US,en;q=0.5",
+                            "en-GB,en;q=0.9",
+                            "en-US,en;q=0.9,ko;q=0.8",
+                        ]
+                    ),
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "DNT": str(random.choice([1, 1, 1, 0])),  # Do Not Track (mostly 1)
+                    "Connection": "keep-alive",
+                    "Upgrade-Insecure-Requests": "1",
+                }
+            )
         else:
-            headers.update({
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-                'Accept-Language': 'en-US,en;q=0.9',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'DNT': '1',
-                'Connection': 'keep-alive',
-                'Upgrade-Insecure-Requests': '1',
-            })
+            headers.update(
+                {
+                    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                    "Accept-Language": "en-US,en;q=0.9",
+                    "Accept-Encoding": "gzip, deflate, br",
+                    "DNT": "1",
+                    "Connection": "keep-alive",
+                    "Upgrade-Insecure-Requests": "1",
+                }
+            )
 
         # Referrer
         if self.config.spoof_referrer:
@@ -223,11 +229,11 @@ class AntiDetectionManager:
                 # Use same domain as referrer sometimes
                 parsed = urlparse(url)
                 if random.random() < 0.3:  # 30% chance to use same domain
-                    headers['Referer'] = f"{parsed.scheme}://{parsed.netloc}/"
+                    headers["Referer"] = f"{parsed.scheme}://{parsed.netloc}/"
                 else:
-                    headers['Referer'] = random.choice(self.referrers)
+                    headers["Referer"] = random.choice(self.referrers)
             else:
-                headers['Referer'] = random.choice(self.referrers)
+                headers["Referer"] = random.choice(self.referrers)
 
         # Extra headers
         if extra_headers:
@@ -315,19 +321,19 @@ class AntiDetectionManager:
             Statistics dictionary
         """
         return {
-            'request_count': self._request_count,
-            'user_agents_count': len(self.user_agents),
-            'proxies_count': len(self.proxies),
-            'current_proxy_index': self._proxy_index if self.proxies else None,
-            'active_strategies': self._get_active_strategies(),
-            'config': {
-                'rotate_user_agent': self.config.rotate_user_agent,
-                'use_proxies': self.config.use_proxies,
-                'min_delay': self.config.min_delay,
-                'max_delay': self.config.max_delay,
-                'randomize_delay': self.config.randomize_delay,
-                'spoof_referrer': self.config.spoof_referrer,
-            }
+            "request_count": self._request_count,
+            "user_agents_count": len(self.user_agents),
+            "proxies_count": len(self.proxies),
+            "current_proxy_index": self._proxy_index if self.proxies else None,
+            "active_strategies": self._get_active_strategies(),
+            "config": {
+                "rotate_user_agent": self.config.rotate_user_agent,
+                "use_proxies": self.config.use_proxies,
+                "min_delay": self.config.min_delay,
+                "max_delay": self.config.max_delay,
+                "randomize_delay": self.config.randomize_delay,
+                "spoof_referrer": self.config.spoof_referrer,
+            },
         }
 
 
@@ -392,19 +398,14 @@ def get_random_headers(url: Optional[str] = None) -> Dict[str, str]:
         >>> headers = get_random_headers()
         >>> response = requests.get(url, headers=headers)
     """
-    manager = AntiDetectionManager(EvasionConfig(
-        rotate_user_agent=True,
-        randomize_headers=True,
-        spoof_referrer=True
-    ))
+    manager = AntiDetectionManager(
+        EvasionConfig(rotate_user_agent=True, randomize_headers=True, spoof_referrer=True)
+    )
 
     return manager.get_headers(url=url)
 
 
-async def with_rate_limit(
-    max_requests: int = 10,
-    time_window: float = 60.0
-):
+async def with_rate_limit(max_requests: int = 10, time_window: float = 60.0):
     """
     Decorator for rate limiting
 

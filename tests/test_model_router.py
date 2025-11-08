@@ -3,7 +3,8 @@ Tests for Model Router
 """
 
 import pytest
-from src.core.model_router import ModelRouter, ModelEngine, QueryComplexity
+
+from src.core.model_router import ModelEngine, ModelRouter, QueryComplexity
 
 
 class TestModelRouter:
@@ -13,10 +14,7 @@ class TestModelRouter:
     def router(self):
         """Model router instance"""
         return ModelRouter(
-            simple_threshold=0.3,
-            complex_threshold=0.7,
-            enable_nexa=True,
-            enable_ollama=True
+            simple_threshold=0.3, complex_threshold=0.7, enable_nexa=True, enable_ollama=True
         )
 
     def test_analyze_simple_query(self, router):

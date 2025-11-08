@@ -3,10 +3,10 @@
 사용자 행동을 추적하여 선호도 학습
 """
 
-from typing import Dict, List, Optional, Tuple
-from datetime import datetime
-from collections import defaultdict
 import json
+from collections import defaultdict
+from datetime import datetime
+from typing import Dict, List, Optional, Tuple
 
 
 class UserInteractionTracker:
@@ -21,13 +21,7 @@ class UserInteractionTracker:
         # Redis 없을 경우 메모리 저장
         self._memory_store: Dict[str, List[Dict]] = defaultdict(list)
 
-    def track(
-        self,
-        user_id: str,
-        product_idx: str,
-        action: str,
-        metadata: Dict = None
-    ) -> bool:
+    def track(self, user_id: str, product_idx: str, action: str, metadata: Dict = None) -> bool:
         """
         사용자 인터랙션 추적
 
@@ -46,7 +40,7 @@ class UserInteractionTracker:
             "action": action,
             "timestamp": datetime.now().isoformat(),
             "weight": self._get_action_weight(action),
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
 
         # Redis 저장 시도
@@ -68,11 +62,7 @@ class UserInteractionTracker:
 
         return True
 
-    def get_interactions(
-        self,
-        user_id: str,
-        limit: int = 50
-    ) -> List[Dict]:
+    def get_interactions(self, user_id: str, limit: int = 50) -> List[Dict]:
         """
         사용자의 최근 인터랙션 조회
 
@@ -103,7 +93,7 @@ class UserInteractionTracker:
             "select": 0.7,
             "purchase": 1.0,
             "add_to_cart": 0.8,
-            "favorite": 0.9
+            "favorite": 0.9,
         }
         return weights.get(action, 0.1)
 
@@ -114,7 +104,7 @@ class CollaborativeRecommender:
     def __init__(
         self,
         interaction_tracker: UserInteractionTracker,
-        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
+        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final",
     ):
         """
         Args:
@@ -154,7 +144,7 @@ class CollaborativeRecommender:
             "category_preference": defaultdict(float),
             "price_sensitivity": 0.0,
             "total_interactions": len(interactions),
-            "last_updated": datetime.now().isoformat()
+            "last_updated": datetime.now().isoformat(),
         }
 
         # 인터랙션 분석
@@ -178,7 +168,8 @@ class CollaborativeRecommender:
             capacity_str = specs.get("capacity", "")
             if capacity_str:
                 import re
-                match = re.search(r'(\d+)', capacity_str)
+
+                match = re.search(r"(\d+)", capacity_str)
                 if match:
                     capacity = float(match.group(1))
                     cap_range = self._get_capacity_range(capacity)
@@ -205,8 +196,12 @@ class CollaborativeRecommender:
         # 정규화 (선호도를 0-1 범위로)
         total_weight = sum(i["weight"] for i in interactions)
         if total_weight > 0:
-            for key in ["material_preference", "capacity_preference",
-                       "neck_size_preference", "category_preference"]:
+            for key in [
+                "material_preference",
+                "capacity_preference",
+                "neck_size_preference",
+                "category_preference",
+            ]:
                 for item in profile[key]:
                     profile[key][item] /= total_weight
 
@@ -217,12 +212,7 @@ class CollaborativeRecommender:
 
         return profile
 
-    def recommend_for_user(
-        self,
-        user_id: str,
-        products: List[Dict],
-        limit: int = 10
-    ) -> List[Dict]:
+    def recommend_for_user(self, user_id: str, products: List[Dict], limit: int = 10) -> List[Dict]:
         """
         사용자 맞춤 추천
 
@@ -246,13 +236,15 @@ class CollaborativeRecommender:
         for product in products:
             score = self._calculate_personalization_score(product, profile)
 
-            scored_products.append({
-                **product,
-                "personalization_score": score,
-                "personalization_reason": self._generate_personalization_reason(
-                    product, profile
-                )
-            })
+            scored_products.append(
+                {
+                    **product,
+                    "personalization_score": score,
+                    "personalization_reason": self._generate_personalization_reason(
+                        product, profile
+                    ),
+                }
+            )
 
         # 개인화 점수 순 정렬
         scored_products.sort(key=lambda x: x["personalization_score"], reverse=True)
@@ -262,11 +254,7 @@ class CollaborativeRecommender:
 
         return diverse_results
 
-    def _calculate_personalization_score(
-        self,
-        product: Dict,
-        profile: Dict
-    ) -> float:
+    def _calculate_personalization_score(self, product: Dict, profile: Dict) -> float:
         """
         제품의 개인화 점수 계산
 
@@ -289,7 +277,8 @@ class CollaborativeRecommender:
         capacity_str = specs.get("capacity", "")
         if capacity_str:
             import re
-            match = re.search(r'(\d+)', capacity_str)
+
+            match = re.search(r"(\d+)", capacity_str)
             if match:
                 capacity = float(match.group(1))
                 cap_range = self._get_capacity_range(capacity)
@@ -313,11 +302,7 @@ class CollaborativeRecommender:
 
         return min(1.0, score)
 
-    def _generate_personalization_reason(
-        self,
-        product: Dict,
-        profile: Dict
-    ) -> str:
+    def _generate_personalization_reason(self, product: Dict, profile: Dict) -> str:
         """개인화 추천 이유 생성"""
         reasons = []
         specs = product.get("specifications", {})
@@ -332,7 +317,8 @@ class CollaborativeRecommender:
         capacity_str = specs.get("capacity", "")
         if capacity_str:
             import re
-            match = re.search(r'(\d+)', capacity_str)
+
+            match = re.search(r"(\d+)", capacity_str)
             if match:
                 capacity = float(match.group(1))
                 cap_range = self._get_capacity_range(capacity)
@@ -351,11 +337,7 @@ class CollaborativeRecommender:
 
         return " | ".join(reasons)
 
-    def _ensure_diversity(
-        self,
-        products: List[Dict],
-        limit: int
-    ) -> List[Dict]:
+    def _ensure_diversity(self, products: List[Dict], limit: int) -> List[Dict]:
         """
         다양성 보장 (같은 재질/용량만 추천하지 않도록)
 
@@ -380,7 +362,8 @@ class CollaborativeRecommender:
 
             # 재질 다양성 체크 (최대 40% 같은 재질)
             material_count = sum(
-                1 for p in diverse
+                1
+                for p in diverse
                 if p.get("specifications", {}).get("재질(원료)", "").upper() == material
             )
 
@@ -390,22 +373,29 @@ class CollaborativeRecommender:
             # 용량 다양성 체크
             if capacity_str:
                 import re
-                match = re.search(r'(\d+)', capacity_str)
+
+                match = re.search(r"(\d+)", capacity_str)
                 if match:
                     capacity = float(match.group(1))
                     cap_range = self._get_capacity_range(capacity)
 
                     capacity_count = sum(
-                        1 for p in diverse
+                        1
+                        for p in diverse
                         if self._get_capacity_range(
                             float(
-                                re.search(r'(\d+)',
-                                         p.get("specifications", {}).get("capacity", "0") or "0"
-                                         ).group(1) if re.search(r'(\d+)',
-                                                                p.get("specifications", {}).get("capacity", "0") or "0")
+                                re.search(
+                                    r"(\d+)",
+                                    p.get("specifications", {}).get("capacity", "0") or "0",
+                                ).group(1)
+                                if re.search(
+                                    r"(\d+)",
+                                    p.get("specifications", {}).get("capacity", "0") or "0",
+                                )
                                 else "0"
                             )
-                        ) == cap_range
+                        )
+                        == cap_range
                     )
 
                     if capacity_count >= limit * 0.4:
@@ -440,19 +430,19 @@ class CollaborativeRecommender:
             "category_preference": {},
             "price_sensitivity": 0.5,
             "total_interactions": 0,
-            "last_updated": datetime.now().isoformat()
+            "last_updated": datetime.now().isoformat(),
         }
 
     def _load_product(self, idx: str) -> Optional[Dict]:
         """제품 데이터 로드 (간단한 구현)"""
         # 실제로는 DB 또는 캐시에서 로드
-        from pathlib import Path
         import json
+        from pathlib import Path
 
         for category in ["Bottle", "Cappump", "Pump", "Jar"]:
             for json_file in (Path(self.data_root) / category).rglob(f"idx_{idx}.json"):
                 try:
-                    with open(json_file, 'r', encoding='utf-8') as f:
+                    with open(json_file, "r", encoding="utf-8") as f:
                         return json.load(f)
                 except Exception:
                     continue

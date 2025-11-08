@@ -5,11 +5,11 @@ This module consolidates all API schemas from across the application
 to provide a single source of truth for request/response models.
 """
 
+import re
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field, field_validator
-import re
 
+from pydantic import BaseModel, Field, field_validator
 
 # ============================================================================
 # QA Schemas

@@ -5,17 +5,19 @@ Routes queries to the optimal LLM engine (NexaAI or Ollama) based on
 query complexity, modality, and performance requirements.
 """
 
+import logging
+import re
 from enum import Enum
 from typing import Dict, List, Optional
+
 from pydantic import BaseModel, Field
-import re
-import logging
 
 logger = logging.getLogger(__name__)
 
 
 class ModelEngine(str, Enum):
     """Available model engines"""
+
     NEXA = "nexa"
     OLLAMA = "ollama"
 
@@ -23,51 +25,28 @@ class ModelEngine(str, Enum):
 class QueryComplexity(BaseModel):
     """Query complexity analysis result"""
 
-    score: float = Field(
-        description="Complexity score (0-1)",
-        ge=0.0,
-        le=1.0
-    )
+    score: float = Field(description="Complexity score (0-1)", ge=0.0, le=1.0)
     has_multimodal: bool = Field(
-        default=False,
-        description="Whether query requires multimodal processing"
+        default=False, description="Whether query requires multimodal processing"
     )
     has_reasoning: bool = Field(
-        default=False,
-        description="Whether query requires complex reasoning"
+        default=False, description="Whether query requires complex reasoning"
     )
-    entity_count: int = Field(
-        default=0,
-        description="Number of entities detected"
-    )
-    token_count: int = Field(
-        description="Approximate token count"
-    )
+    entity_count: int = Field(default=0, description="Number of entities detected")
+    token_count: int = Field(description="Approximate token count")
     requires_vision: bool = Field(
-        default=False,
-        description="Whether query requires vision-language model"
+        default=False, description="Whether query requires vision-language model"
     )
 
 
 class RoutingDecision(BaseModel):
     """Routing decision with reasoning"""
 
-    engine: ModelEngine = Field(
-        description="Selected engine"
-    )
-    model: str = Field(
-        description="Specific model to use"
-    )
-    reason: str = Field(
-        description="Reason for this routing decision"
-    )
-    complexity_score: float = Field(
-        description="Query complexity score"
-    )
-    confidence: float = Field(
-        default=1.0,
-        description="Confidence in routing decision (0-1)"
-    )
+    engine: ModelEngine = Field(description="Selected engine")
+    model: str = Field(description="Specific model to use")
+    reason: str = Field(description="Reason for this routing decision")
+    complexity_score: float = Field(description="Query complexity score")
+    confidence: float = Field(default=1.0, description="Confidence in routing decision (0-1)")
 
 
 class ModelRouter:
@@ -86,7 +65,7 @@ class ModelRouter:
         simple_threshold: float = 0.3,
         complex_threshold: float = 0.7,
         enable_nexa: bool = True,
-        enable_ollama: bool = True
+        enable_ollama: bool = True,
     ):
         """
         Initialize model router
@@ -107,51 +86,71 @@ class ModelRouter:
             "simple": {
                 "engine": ModelEngine.NEXA,
                 "model": "Qwen3-1.7B",
-                "description": "Fast inference for simple queries"
+                "description": "Fast inference for simple queries",
             },
             "medium": {
                 "engine": ModelEngine.NEXA,
                 "model": "Qwen3-VL-4B-Instruct",
-                "description": "Balanced performance for medium complexity"
+                "description": "Balanced performance for medium complexity",
             },
             "complex": {
                 "engine": ModelEngine.OLLAMA,
                 "model": "qwen2.5:7b-instruct",
-                "description": "High quality for complex reasoning"
+                "description": "High quality for complex reasoning",
             },
             "vision": {
                 "engine": ModelEngine.NEXA,
                 "model": "Qwen3-VL-4B-Instruct",
-                "description": "Vision-language processing"
-            }
+                "description": "Vision-language processing",
+            },
         }
 
         # Entity extraction patterns
         self.entity_patterns = {
-            "capacity": re.compile(r'\d+\s*(ml|ML|L|리터|밀리리터)', re.IGNORECASE),
-            "neck": re.compile(r'\d+\s*(파이|Φ|ø|phi)', re.IGNORECASE),
+            "capacity": re.compile(r"\d+\s*(ml|ML|L|리터|밀리리터)", re.IGNORECASE),
+            "neck": re.compile(r"\d+\s*(파이|Φ|ø|phi)", re.IGNORECASE),
             "material": re.compile(
-                r'\b(PP|PE|PET|PETG|PS|HDPE|LDPE|LLDPE|폴리프로필렌|폴리에틸렌)\b',
-                re.IGNORECASE
+                r"\b(PP|PE|PET|PETG|PS|HDPE|LDPE|LLDPE|폴리프로필렌|폴리에틸렌)\b", re.IGNORECASE
             ),
-            "moq": re.compile(r'\d+\s*(개|ea|pcs|개입)', re.IGNORECASE),
-            "price": re.compile(r'\d+\s*(원|won|₩)', re.IGNORECASE),
+            "moq": re.compile(r"\d+\s*(개|ea|pcs|개입)", re.IGNORECASE),
+            "price": re.compile(r"\d+\s*(원|won|₩)", re.IGNORECASE),
             "color": re.compile(
-                r'\b(빨강|파랑|노랑|초록|검정|하양|투명|red|blue|yellow|green|black|white|clear)\b',
-                re.IGNORECASE
-            )
+                r"\b(빨강|파랑|노랑|초록|검정|하양|투명|red|blue|yellow|green|black|white|clear)\b",
+                re.IGNORECASE,
+            ),
         }
 
         # Reasoning keywords (Korean + English)
         self.reasoning_keywords = [
-            "왜", "어떻게", "무엇", "비교", "분석", "설명", "차이",
-            "why", "how", "what", "compare", "analyze", "explain", "difference"
+            "왜",
+            "어떻게",
+            "무엇",
+            "비교",
+            "분석",
+            "설명",
+            "차이",
+            "why",
+            "how",
+            "what",
+            "compare",
+            "analyze",
+            "explain",
+            "difference",
         ]
 
         # Multimodal keywords
         self.multimodal_keywords = [
-            "이미지", "사진", "그림", "영상", "동영상", "비디오",
-            "image", "photo", "picture", "video", "visual"
+            "이미지",
+            "사진",
+            "그림",
+            "영상",
+            "동영상",
+            "비디오",
+            "image",
+            "photo",
+            "picture",
+            "video",
+            "visual",
         ]
 
         logger.info(
@@ -177,16 +176,10 @@ class ModelRouter:
         entity_count = len(entities)
 
         # Check for reasoning keywords
-        has_reasoning = any(
-            keyword in query.lower()
-            for keyword in self.reasoning_keywords
-        )
+        has_reasoning = any(keyword in query.lower() for keyword in self.reasoning_keywords)
 
         # Check for multimodal requirements
-        has_multimodal = any(
-            keyword in query.lower()
-            for keyword in self.multimodal_keywords
-        )
+        has_multimodal = any(keyword in query.lower() for keyword in self.multimodal_keywords)
 
         # Check if vision-language model is required
         requires_vision = has_multimodal
@@ -198,10 +191,10 @@ class ModelRouter:
         # - Reasoning requirement (30%)
         # - Multimodal requirement (20%)
         score = (
-            0.2 * min(token_count / 100, 1.0) +
-            0.3 * min(entity_count / 10, 1.0) +
-            0.3 * (1.0 if has_reasoning else 0.0) +
-            0.2 * (1.0 if has_multimodal else 0.0)
+            0.2 * min(token_count / 100, 1.0)
+            + 0.3 * min(entity_count / 10, 1.0)
+            + 0.3 * (1.0 if has_reasoning else 0.0)
+            + 0.2 * (1.0 if has_multimodal else 0.0)
         )
 
         complexity = QueryComplexity(
@@ -210,7 +203,7 @@ class ModelRouter:
             has_reasoning=has_reasoning,
             entity_count=entity_count,
             token_count=token_count,
-            requires_vision=requires_vision
+            requires_vision=requires_vision,
         )
 
         logger.debug(
@@ -225,7 +218,7 @@ class ModelRouter:
         self,
         query: str,
         force_engine: Optional[ModelEngine] = None,
-        force_model: Optional[str] = None
+        force_model: Optional[str] = None,
     ) -> RoutingDecision:
         """
         Route query to appropriate engine and model
@@ -249,7 +242,7 @@ class ModelRouter:
                 model=force_model or rule["model"],
                 reason="forced_routing",
                 complexity_score=complexity.score,
-                confidence=1.0
+                confidence=1.0,
             )
 
         # Check engine availability
@@ -266,7 +259,7 @@ class ModelRouter:
                 model=self.routing_rules["vision"]["model"],
                 reason="vision_language_required",
                 complexity_score=complexity.score,
-                confidence=1.0
+                confidence=1.0,
             )
 
         # Route based on complexity score
@@ -279,7 +272,7 @@ class ModelRouter:
                     model=rule["model"],
                     reason="simple_query_fast_inference",
                     complexity_score=complexity.score,
-                    confidence=0.9
+                    confidence=0.9,
                 )
             else:
                 # Fallback to Ollama
@@ -289,7 +282,7 @@ class ModelRouter:
                     model=rule["model"],
                     reason="nexa_unavailable_fallback",
                     complexity_score=complexity.score,
-                    confidence=0.7
+                    confidence=0.7,
                 )
 
         elif complexity.score < self.complex_threshold:
@@ -301,7 +294,7 @@ class ModelRouter:
                     model=rule["model"],
                     reason="medium_complexity_balanced",
                     complexity_score=complexity.score,
-                    confidence=0.85
+                    confidence=0.85,
                 )
             else:
                 # Fallback to Ollama
@@ -311,7 +304,7 @@ class ModelRouter:
                     model=rule["model"],
                     reason="nexa_unavailable_fallback",
                     complexity_score=complexity.score,
-                    confidence=0.7
+                    confidence=0.7,
                 )
 
         else:
@@ -323,7 +316,7 @@ class ModelRouter:
                     model=rule["model"],
                     reason="complex_reasoning_high_quality",
                     complexity_score=complexity.score,
-                    confidence=0.95
+                    confidence=0.95,
                 )
             else:
                 # Fallback to NexaAI
@@ -333,7 +326,7 @@ class ModelRouter:
                     model=rule["model"],
                     reason="ollama_unavailable_fallback",
                     complexity_score=complexity.score,
-                    confidence=0.6
+                    confidence=0.6,
                 )
 
     def _extract_entities(self, query: str) -> List[str]:
@@ -354,11 +347,7 @@ class ModelRouter:
 
         return entities
 
-    def _get_rule_for_engine(
-        self,
-        engine: ModelEngine,
-        complexity: QueryComplexity
-    ) -> Dict:
+    def _get_rule_for_engine(self, engine: ModelEngine, complexity: QueryComplexity) -> Dict:
         """
         Get routing rule for specific engine
 
@@ -391,5 +380,5 @@ class ModelRouter:
             "complex_threshold": self.complex_threshold,
             "enable_nexa": self.enable_nexa,
             "enable_ollama": self.enable_ollama,
-            "routing_rules": self.routing_rules
+            "routing_rules": self.routing_rules,
         }

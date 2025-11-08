@@ -1,8 +1,10 @@
 """
 빠른 API 테스트
 """
-import requests
+
 import json
+
+import requests
 
 API_BASE = "http://localhost:8001"
 
@@ -28,10 +30,7 @@ print(f"메트릭 목록: {list(result['metrics'].keys())}")
 print("\n3. 제품 비교 (2개 제품)")
 response = requests.post(
     f"{API_BASE}/compare/products",
-    json={
-        "product_idxs": ["823", "209"],
-        "metrics": ["재질", "용량", "가격", "호환성"]
-    }
+    json={"product_idxs": ["823", "209"], "metrics": ["재질", "용량", "가격", "호환성"]},
 )
 print(f"Status: {response.status_code}")
 if response.status_code == 200:
@@ -40,14 +39,14 @@ if response.status_code == 200:
 
     # 제품 이름
     print("\n📦 비교 제품:")
-    for i, product in enumerate(result['products'], 1):
+    for i, product in enumerate(result["products"], 1):
         print(f"  {i}. {product.get('product_name', 'N/A')}")
 
     # 비교 매트릭스
     print("\n📊 비교 매트릭스:")
-    for row in result['comparison_matrix']:
-        metric = row['metric']
-        values = " | ".join([v['display'] for v in row['values']])
+    for row in result["comparison_matrix"]:
+        metric = row["metric"]
+        values = " | ".join([v["display"] for v in row["values"]])
         print(f"  {metric}: {values}")
 
     # 추천
@@ -61,10 +60,7 @@ print("\n" + "=" * 60)
 print("4. 제품 비교 (5개 제품 - 전체 메트릭)")
 response = requests.post(
     f"{API_BASE}/compare/products",
-    json={
-        "product_idxs": ["823", "209", "248", "835", "321"],
-        "metrics": None  # 전체 메트릭
-    }
+    json={"product_idxs": ["823", "209", "248", "835", "321"], "metrics": None},  # 전체 메트릭
 )
 print(f"Status: {response.status_code}")
 if response.status_code == 200:
@@ -74,15 +70,15 @@ if response.status_code == 200:
 
     # 하이라이트 개수
     highlights = 0
-    for row in result['comparison_matrix']:
-        for value in row['values']:
-            if value.get('highlight') == 'best':
+    for row in result["comparison_matrix"]:
+        for value in row["values"]:
+            if value.get("highlight") == "best":
                 highlights += 1
     print(f"하이라이트: {highlights}개 ★")
 
     # 추천
     print(f"\n💡 추천:")
-    for line in result['recommendation'].split('\n'):
+    for line in result["recommendation"].split("\n"):
         if line.strip():
             print(f"  {line}")
 else:

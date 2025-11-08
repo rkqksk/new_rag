@@ -4,13 +4,15 @@ Unit tests for app/core/routing/llm_router.py
 Tests the ClaudeRouter and ComplexityAnalyzer classes for automatic
 selection between Claude Haiku 4.5 and Sonnet 4.5 based on query complexity.
 """
+
 import pytest
+
 from app.core.routing.llm_router import (
+    ClaudeModel,
     ClaudeRouter,
     ComplexityAnalyzer,
-    ClaudeModel,
     ComplexityScore,
-    ModelSelection
+    ModelSelection,
 )
 
 
@@ -214,10 +216,10 @@ def test_result_structure(claude_router):
     result = claude_router.route(query)
 
     # Verify all required fields
-    assert hasattr(result, 'model')
-    assert hasattr(result, 'complexity_score')
-    assert hasattr(result, 'reason')
-    assert hasattr(result, 'cost_type')
+    assert hasattr(result, "model")
+    assert hasattr(result, "complexity_score")
+    assert hasattr(result, "reason")
+    assert hasattr(result, "cost_type")
 
     # Verify types
     assert isinstance(result.model, ClaudeModel)

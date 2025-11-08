@@ -4,9 +4,10 @@ Admin API Endpoints
 Provides administrative endpoints for system monitoring and configuration.
 """
 
+from typing import Dict, List, Optional
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Dict, List, Optional
 
 from src.services.unified_llm_service import get_unified_llm
 
@@ -15,6 +16,7 @@ router = APIRouter(prefix="/admin", tags=["admin"])
 
 class RouterConfigUpdate(BaseModel):
     """Router configuration update"""
+
     simple_threshold: Optional[float] = None
     complex_threshold: Optional[float] = None
 
@@ -90,26 +92,20 @@ async def update_router_config(update: RouterConfigUpdate):
 
     if update.simple_threshold is not None:
         if not 0 <= update.simple_threshold <= 1:
-            raise HTTPException(
-                status_code=400,
-                detail="simple_threshold must be between 0 and 1"
-            )
+            raise HTTPException(status_code=400, detail="simple_threshold must be between 0 and 1")
         llm.router.simple_threshold = update.simple_threshold
 
     if update.complex_threshold is not None:
         if not 0 <= update.complex_threshold <= 1:
-            raise HTTPException(
-                status_code=400,
-                detail="complex_threshold must be between 0 and 1"
-            )
+            raise HTTPException(status_code=400, detail="complex_threshold must be between 0 and 1")
         llm.router.complex_threshold = update.complex_threshold
 
     return {
         "success": True,
         "config": {
             "simple_threshold": llm.router.simple_threshold,
-            "complex_threshold": llm.router.complex_threshold
-        }
+            "complex_threshold": llm.router.complex_threshold,
+        },
     }
 
 
@@ -126,10 +122,7 @@ async def reset_stats():
     llm.stats["ollama_requests"] = 0
     llm.stats["errors"] = 0
 
-    return {
-        "success": True,
-        "message": "Statistics reset"
-    }
+    return {"success": True, "message": "Statistics reset"}
 
 
 @router.get("/engine/{engine}/status")
@@ -159,8 +152,8 @@ async def get_engine_status(engine: str):
                 "base_url": llm.nexa.config.base_url,
                 "default_model": llm.nexa.config.default_text_model,
                 "vision_model": llm.nexa.config.default_vision_model,
-                "embedding_model": llm.nexa.config.default_embedding_model
-            }
+                "embedding_model": llm.nexa.config.default_embedding_model,
+            },
         }
 
     elif engine == "ollama":
@@ -175,12 +168,11 @@ async def get_engine_status(engine: str):
             "healthy": health.get("healthy", False),
             "config": {
                 "base_url": llm.ollama.config.base_url,
-                "default_model": llm.ollama.config.default_model
-            }
+                "default_model": llm.ollama.config.default_model,
+            },
         }
 
     else:
         raise HTTPException(
-            status_code=400,
-            detail=f"Invalid engine: {engine}. Must be 'nexa' or 'ollama'"
+            status_code=400, detail=f"Invalid engine: {engine}. Must be 'nexa' or 'ollama'"
         )

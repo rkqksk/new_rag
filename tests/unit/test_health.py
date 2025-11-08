@@ -12,13 +12,13 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 
 from app.core.health import (
-    HealthStatus,
-    ComponentHealth,
-    PostgreSQLHealthChecker,
-    RedisHealthChecker,
-    QdrantHealthChecker,
     ClaudeAPIHealthChecker,
-    HealthCheckOrchestrator
+    ComponentHealth,
+    HealthCheckOrchestrator,
+    HealthStatus,
+    PostgreSQLHealthChecker,
+    QdrantHealthChecker,
+    RedisHealthChecker,
 )
 
 
@@ -32,9 +32,7 @@ class TestPostgreSQLHealthChecker:
         # Mock psycopg connection
         mock_cursor = AsyncMock()
         mock_cursor.execute = AsyncMock()
-        mock_cursor.fetchone = AsyncMock(
-            side_effect=[(1,), ("PostgreSQL 14.0",)]
-        )
+        mock_cursor.fetchone = AsyncMock(side_effect=[(1,), ("PostgreSQL 14.0",)])
         mock_cursor.__aenter__ = AsyncMock(return_value=mock_cursor)
         mock_cursor.__aexit__ = AsyncMock(return_value=None)
 
@@ -43,10 +41,7 @@ class TestPostgreSQLHealthChecker:
         mock_conn.close = AsyncMock()
 
         with patch("psycopg.AsyncConnection.connect", return_value=mock_conn):
-            checker = PostgreSQLHealthChecker(
-                "postgresql://user:pass@localhost/db",
-                timeout=5.0
-            )
+            checker = PostgreSQLHealthChecker("postgresql://user:pass@localhost/db", timeout=5.0)
 
             result = await checker.check()
 
@@ -65,12 +60,9 @@ class TestPostgreSQLHealthChecker:
 
         with patch(
             "psycopg.AsyncConnection.connect",
-            side_effect=psycopg.OperationalError("Connection refused")
+            side_effect=psycopg.OperationalError("Connection refused"),
         ):
-            checker = PostgreSQLHealthChecker(
-                "postgresql://user:pass@localhost/db",
-                timeout=5.0
-            )
+            checker = PostgreSQLHealthChecker("postgresql://user:pass@localhost/db", timeout=5.0)
 
             result = await checker.check()
 
@@ -82,6 +74,7 @@ class TestPostgreSQLHealthChecker:
 
     async def test_timeout_handling(self):
         """Test PostgreSQL health check timeout."""
+
         # Mock connection that never completes
         async def slow_connect(*args, **kwargs):
             await asyncio.sleep(10)
@@ -89,8 +82,7 @@ class TestPostgreSQLHealthChecker:
 
         with patch("psycopg.AsyncConnection.connect", side_effect=slow_connect):
             checker = PostgreSQLHealthChecker(
-                "postgresql://user:pass@localhost/db",
-                timeout=0.5  # Short timeout
+                "postgresql://user:pass@localhost/db", timeout=0.5  # Short timeout
             )
 
             result = await checker.check_with_timeout()
@@ -112,11 +104,13 @@ class TestRedisHealthChecker:
         # Mock Redis connection
         mock_redis = AsyncMock()
         mock_redis.ping = AsyncMock(return_value=True)
-        mock_redis.info = AsyncMock(return_value={
-            "redis_version": "7.0.0",
-            "uptime_in_seconds": 12345,
-            "connected_clients": 5
-        })
+        mock_redis.info = AsyncMock(
+            return_value={
+                "redis_version": "7.0.0",
+                "uptime_in_seconds": 12345,
+                "connected_clients": 5,
+            }
+        )
         mock_redis.close = AsyncMock()
 
         # Mock from_url to return an awaitable that resolves to mock_redis
@@ -124,10 +118,7 @@ class TestRedisHealthChecker:
             return mock_redis
 
         with patch("redis.asyncio.from_url", side_effect=async_from_url):
-            checker = RedisHealthChecker(
-                "redis://localhost:6379",
-                timeout=3.0
-            )
+            checker = RedisHealthChecker("redis://localhost:6379", timeout=3.0)
 
             result = await checker.check()
 
@@ -146,13 +137,9 @@ class TestRedisHealthChecker:
         from redis import asyncio as aioredis
 
         with patch(
-            "redis.asyncio.from_url",
-            side_effect=aioredis.ConnectionError("Connection refused")
+            "redis.asyncio.from_url", side_effect=aioredis.ConnectionError("Connection refused")
         ):
-            checker = RedisHealthChecker(
-                "redis://localhost:6379",
-                timeout=3.0
-            )
+            checker = RedisHealthChecker("redis://localhost:6379", timeout=3.0)
 
             result = await checker.check()
 
@@ -166,16 +153,14 @@ class TestRedisHealthChecker:
 
     async def test_timeout_handling(self):
         """Test Redis health check timeout."""
+
         # Mock Redis that times out
         async def slow_connect(*args, **kwargs):
             await asyncio.sleep(10)
             return AsyncMock()
 
         with patch("redis.asyncio.from_url", side_effect=slow_connect):
-            checker = RedisHealthChecker(
-                "redis://localhost:6379",
-                timeout=0.5
-            )
+            checker = RedisHealthChecker("redis://localhost:6379", timeout=0.5)
 
             result = await checker.check_with_timeout()
 
@@ -199,26 +184,16 @@ class TestQdrantHealthChecker:
         mock_response_collections = MagicMock()
         mock_response_collections.status_code = 200
         mock_response_collections.json.return_value = {
-            "result": {
-                "collections": [
-                    {"name": "documents"},
-                    {"name": "images"}
-                ]
-            }
+            "result": {"collections": [{"name": "documents"}, {"name": "images"}]}
         }
 
         mock_client = AsyncMock()
-        mock_client.get = AsyncMock(
-            side_effect=[mock_response_health, mock_response_collections]
-        )
+        mock_client.get = AsyncMock(side_effect=[mock_response_health, mock_response_collections])
 
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client_class.return_value.__aenter__.return_value = mock_client
 
-            checker = QdrantHealthChecker(
-                "http://localhost:6333",
-                timeout=5.0
-            )
+            checker = QdrantHealthChecker("http://localhost:6333", timeout=5.0)
 
             result = await checker.check()
 
@@ -232,17 +207,12 @@ class TestQdrantHealthChecker:
         import httpx
 
         mock_client = AsyncMock()
-        mock_client.get = AsyncMock(
-            side_effect=httpx.ConnectError("Connection refused")
-        )
+        mock_client.get = AsyncMock(side_effect=httpx.ConnectError("Connection refused"))
 
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client_class.return_value.__aenter__.return_value = mock_client
 
-            checker = QdrantHealthChecker(
-                "http://localhost:6333",
-                timeout=5.0
-            )
+            checker = QdrantHealthChecker("http://localhost:6333", timeout=5.0)
 
             result = await checker.check()
 
@@ -256,17 +226,12 @@ class TestQdrantHealthChecker:
         import httpx
 
         mock_client = AsyncMock()
-        mock_client.get = AsyncMock(
-            side_effect=httpx.TimeoutException("Request timeout")
-        )
+        mock_client.get = AsyncMock(side_effect=httpx.TimeoutException("Request timeout"))
 
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client_class.return_value.__aenter__.return_value = mock_client
 
-            checker = QdrantHealthChecker(
-                "http://localhost:6333",
-                timeout=5.0
-            )
+            checker = QdrantHealthChecker("http://localhost:6333", timeout=5.0)
 
             result = await checker.check()
 
@@ -287,7 +252,7 @@ class TestClaudeAPIHealthChecker:
         mock_response.status_code = 200
         mock_response.json.return_value = {
             "model": "claude-3-haiku-20240307",
-            "content": [{"text": "pong"}]
+            "content": [{"text": "pong"}],
         }
 
         mock_client = AsyncMock()
@@ -296,10 +261,7 @@ class TestClaudeAPIHealthChecker:
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client_class.return_value.__aenter__.return_value = mock_client
 
-            checker = ClaudeAPIHealthChecker(
-                api_key="test-key",
-                timeout=10.0
-            )
+            checker = ClaudeAPIHealthChecker(api_key="test-key", timeout=10.0)
 
             result = await checker.check()
 
@@ -319,10 +281,7 @@ class TestClaudeAPIHealthChecker:
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client_class.return_value.__aenter__.return_value = mock_client
 
-            checker = ClaudeAPIHealthChecker(
-                api_key="invalid-key",
-                timeout=10.0
-            )
+            checker = ClaudeAPIHealthChecker(api_key="invalid-key", timeout=10.0)
 
             result = await checker.check()
 
@@ -336,17 +295,12 @@ class TestClaudeAPIHealthChecker:
         import httpx
 
         mock_client = AsyncMock()
-        mock_client.post = AsyncMock(
-            side_effect=httpx.TimeoutException("API timeout")
-        )
+        mock_client.post = AsyncMock(side_effect=httpx.TimeoutException("API timeout"))
 
         with patch("httpx.AsyncClient") as mock_client_class:
             mock_client_class.return_value.__aenter__.return_value = mock_client
 
-            checker = ClaudeAPIHealthChecker(
-                api_key="test-key",
-                timeout=10.0
-            )
+            checker = ClaudeAPIHealthChecker(api_key="test-key", timeout=10.0)
 
             result = await checker.check()
 
@@ -370,19 +324,11 @@ class TestHealthCheckOrchestrator:
                 "password": "pass",
                 "host": "localhost",
                 "port": 5432,
-                "database": "testdb"
+                "database": "testdb",
             },
-            "redis": {
-                "host": "localhost",
-                "port": 6379
-            },
-            "qdrant": {
-                "host": "localhost",
-                "port": 6333
-            },
-            "claude": {
-                "api_key": "test-key"
-            }
+            "redis": {"host": "localhost", "port": 6379},
+            "qdrant": {"host": "localhost", "port": 6333},
+            "claude": {"api_key": "test-key"},
         }.get(key, default)
 
         return mock_config
@@ -397,23 +343,17 @@ class TestHealthCheckOrchestrator:
                 component="postgresql",
                 status=HealthStatus.HEALTHY,
                 latency_ms=50.0,
-                message="Healthy"
+                message="Healthy",
             )
 
         async def mock_redis_check(self):
             return ComponentHealth(
-                component="redis",
-                status=HealthStatus.HEALTHY,
-                latency_ms=30.0,
-                message="Healthy"
+                component="redis", status=HealthStatus.HEALTHY, latency_ms=30.0, message="Healthy"
             )
 
         async def mock_qdrant_check(self):
             return ComponentHealth(
-                component="qdrant",
-                status=HealthStatus.HEALTHY,
-                latency_ms=40.0,
-                message="Healthy"
+                component="qdrant", status=HealthStatus.HEALTHY, latency_ms=40.0, message="Healthy"
             )
 
         async def mock_claude_check(self):
@@ -421,32 +361,16 @@ class TestHealthCheckOrchestrator:
                 component="claude_api",
                 status=HealthStatus.HEALTHY,
                 latency_ms=100.0,
-                message="Healthy"
+                message="Healthy",
             )
 
-        with patch.object(
-            PostgreSQLHealthChecker,
-            "check_with_timeout",
-            mock_pg_check
-        ):
-            with patch.object(
-                RedisHealthChecker,
-                "check_with_timeout",
-                mock_redis_check
-            ):
-                with patch.object(
-                    QdrantHealthChecker,
-                    "check_with_timeout",
-                    mock_qdrant_check
-                ):
+        with patch.object(PostgreSQLHealthChecker, "check_with_timeout", mock_pg_check):
+            with patch.object(RedisHealthChecker, "check_with_timeout", mock_redis_check):
+                with patch.object(QdrantHealthChecker, "check_with_timeout", mock_qdrant_check):
                     with patch.object(
-                        ClaudeAPIHealthChecker,
-                        "check_with_timeout",
-                        mock_claude_check
+                        ClaudeAPIHealthChecker, "check_with_timeout", mock_claude_check
                     ):
-                        orchestrator = HealthCheckOrchestrator(
-                            mock_config
-                        )
+                        orchestrator = HealthCheckOrchestrator(mock_config)
                         results = await orchestrator.check_all()
 
                         assert results["status"] == "healthy"
@@ -464,7 +388,7 @@ class TestHealthCheckOrchestrator:
                 component="postgresql",
                 status=HealthStatus.HEALTHY,
                 latency_ms=50.0,
-                message="Healthy"
+                message="Healthy",
             )
 
         async def mock_redis_check(self):
@@ -472,15 +396,12 @@ class TestHealthCheckOrchestrator:
                 component="redis",
                 status=HealthStatus.DEGRADED,
                 latency_ms=30.0,
-                message="Cache unavailable"
+                message="Cache unavailable",
             )
 
         async def mock_qdrant_check(self):
             return ComponentHealth(
-                component="qdrant",
-                status=HealthStatus.HEALTHY,
-                latency_ms=40.0,
-                message="Healthy"
+                component="qdrant", status=HealthStatus.HEALTHY, latency_ms=40.0, message="Healthy"
             )
 
         async def mock_claude_check(self):
@@ -488,28 +409,14 @@ class TestHealthCheckOrchestrator:
                 component="claude_api",
                 status=HealthStatus.DEGRADED,
                 latency_ms=100.0,
-                message="Rate limited"
+                message="Rate limited",
             )
 
-        with patch.object(
-            PostgreSQLHealthChecker,
-            "check_with_timeout",
-            mock_pg_check
-        ):
-            with patch.object(
-                RedisHealthChecker,
-                "check_with_timeout",
-                mock_redis_check
-            ):
-                with patch.object(
-                    QdrantHealthChecker,
-                    "check_with_timeout",
-                    mock_qdrant_check
-                ):
+        with patch.object(PostgreSQLHealthChecker, "check_with_timeout", mock_pg_check):
+            with patch.object(RedisHealthChecker, "check_with_timeout", mock_redis_check):
+                with patch.object(QdrantHealthChecker, "check_with_timeout", mock_qdrant_check):
                     with patch.object(
-                        ClaudeAPIHealthChecker,
-                        "check_with_timeout",
-                        mock_claude_check
+                        ClaudeAPIHealthChecker, "check_with_timeout", mock_claude_check
                     ):
                         orchestrator = HealthCheckOrchestrator(mock_config)
                         results = await orchestrator.check_all()
@@ -528,40 +435,22 @@ class TestHealthCheckOrchestrator:
                 component="postgresql",
                 status=HealthStatus.UNHEALTHY,
                 latency_ms=50.0,
-                message="Connection failed"
+                message="Connection failed",
             )
 
         async def mock_redis_check(self):
             return ComponentHealth(
-                component="redis",
-                status=HealthStatus.HEALTHY,
-                latency_ms=30.0,
-                message="Healthy"
+                component="redis", status=HealthStatus.HEALTHY, latency_ms=30.0, message="Healthy"
             )
 
         async def mock_qdrant_check(self):
             return ComponentHealth(
-                component="qdrant",
-                status=HealthStatus.HEALTHY,
-                latency_ms=40.0,
-                message="Healthy"
+                component="qdrant", status=HealthStatus.HEALTHY, latency_ms=40.0, message="Healthy"
             )
 
-        with patch.object(
-            PostgreSQLHealthChecker,
-            "check_with_timeout",
-            mock_pg_check
-        ):
-            with patch.object(
-                RedisHealthChecker,
-                "check_with_timeout",
-                mock_redis_check
-            ):
-                with patch.object(
-                    QdrantHealthChecker,
-                    "check_with_timeout",
-                    mock_qdrant_check
-                ):
+        with patch.object(PostgreSQLHealthChecker, "check_with_timeout", mock_pg_check):
+            with patch.object(RedisHealthChecker, "check_with_timeout", mock_redis_check):
+                with patch.object(QdrantHealthChecker, "check_with_timeout", mock_qdrant_check):
                     orchestrator = HealthCheckOrchestrator(mock_config)
                     results = await orchestrator.check_all()
 
@@ -580,7 +469,7 @@ class TestHealthCheckOrchestrator:
                 component=component,
                 status=HealthStatus.HEALTHY,
                 latency_ms=delay * 1000,
-                message="Healthy"
+                message="Healthy",
             )
 
         async def mock_pg_check(self):
@@ -595,25 +484,11 @@ class TestHealthCheckOrchestrator:
         async def mock_claude_check(self):
             return await slow_check(0.2, "claude_api")
 
-        with patch.object(
-            PostgreSQLHealthChecker,
-            "check_with_timeout",
-            mock_pg_check
-        ):
-            with patch.object(
-                RedisHealthChecker,
-                "check_with_timeout",
-                mock_redis_check
-            ):
-                with patch.object(
-                    QdrantHealthChecker,
-                    "check_with_timeout",
-                    mock_qdrant_check
-                ):
+        with patch.object(PostgreSQLHealthChecker, "check_with_timeout", mock_pg_check):
+            with patch.object(RedisHealthChecker, "check_with_timeout", mock_redis_check):
+                with patch.object(QdrantHealthChecker, "check_with_timeout", mock_qdrant_check):
                     with patch.object(
-                        ClaudeAPIHealthChecker,
-                        "check_with_timeout",
-                        mock_claude_check
+                        ClaudeAPIHealthChecker, "check_with_timeout", mock_claude_check
                     ):
                         orchestrator = HealthCheckOrchestrator(mock_config)
 
@@ -639,7 +514,7 @@ class TestHealthCheckOrchestrator:
                 component="postgresql",
                 status=HealthStatus.HEALTHY,
                 latency_ms=50.0,
-                message="Healthy"
+                message="Healthy",
             )
 
         async def mock_redis_check(self):
@@ -649,32 +524,17 @@ class TestHealthCheckOrchestrator:
                 status=HealthStatus.UNHEALTHY,
                 latency_ms=3000.0,
                 message="Health check timed out",
-                metadata={"error": "timeout"}
+                metadata={"error": "timeout"},
             )
 
         async def mock_qdrant_check(self):
             return ComponentHealth(
-                component="qdrant",
-                status=HealthStatus.HEALTHY,
-                latency_ms=40.0,
-                message="Healthy"
+                component="qdrant", status=HealthStatus.HEALTHY, latency_ms=40.0, message="Healthy"
             )
 
-        with patch.object(
-            PostgreSQLHealthChecker,
-            "check_with_timeout",
-            mock_pg_check
-        ):
-            with patch.object(
-                RedisHealthChecker,
-                "check_with_timeout",
-                mock_redis_check
-            ):
-                with patch.object(
-                    QdrantHealthChecker,
-                    "check_with_timeout",
-                    mock_qdrant_check
-                ):
+        with patch.object(PostgreSQLHealthChecker, "check_with_timeout", mock_pg_check):
+            with patch.object(RedisHealthChecker, "check_with_timeout", mock_redis_check):
+                with patch.object(QdrantHealthChecker, "check_with_timeout", mock_qdrant_check):
                     orchestrator = HealthCheckOrchestrator(mock_config)
                     results = await orchestrator.check_all()
 
@@ -684,8 +544,7 @@ class TestHealthCheckOrchestrator:
 
                     # Find Redis component result
                     redis_result = next(
-                        c for c in results["components"]
-                        if c["component"] == "redis"
+                        c for c in results["components"] if c["component"] == "redis"
                     )
                     assert redis_result["status"] == "unhealthy"
                     assert "timed out" in redis_result["message"].lower()

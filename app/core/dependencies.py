@@ -4,15 +4,16 @@ Dependency Injection Container
 Manages service lifecycle and dependency resolution using FastAPI's
 dependency injection system with lru_cache for singleton pattern.
 """
+
+import logging
 import os
 from functools import lru_cache
 from typing import Optional
-import logging
 
+import redis
 from fastapi import Depends
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
-import redis
 
 logger = logging.getLogger(__name__)
 
@@ -21,12 +22,14 @@ logger = logging.getLogger(__name__)
 # Configuration Dependencies
 # ============================================================
 
+
 class AppConfig:
     """Application configuration loaded from environment variables"""
 
     def __init__(self):
         """Initialize configuration from .env and environment"""
         from dotenv import load_dotenv
+
         load_dotenv()
 
         # Qdrant Configuration
@@ -50,8 +53,7 @@ class AppConfig:
 
         # Embedding Model Configuration
         self.embedding_model = os.getenv(
-            "EMBEDDING_MODEL",
-            "sentence-transformers/all-MiniLM-L6-v2"
+            "EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-v2"
         )
         self.embedding_dim = int(os.getenv("EMBEDDING_DIM", "384"))
 
@@ -64,13 +66,8 @@ class AppConfig:
         self.ollama_model = os.getenv("OLLAMA_DEFAULT_MODEL", "qwen2.5:7b-instruct-q4_K_M")
 
         # CORS Configuration
-        self.allowed_origins = os.getenv(
-            "ALLOWED_ORIGINS",
-            "http://localhost:3000"
-        ).split(",")
-        self.allowed_origins = [
-            origin.strip() for origin in self.allowed_origins if origin.strip()
-        ]
+        self.allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+        self.allowed_origins = [origin.strip() for origin in self.allowed_origins if origin.strip()]
 
         # Validate critical configuration
         if not self.postgres_password:
@@ -92,6 +89,7 @@ def get_config() -> AppConfig:
 # Infrastructure Dependencies
 # ============================================================
 
+
 def get_qdrant_client(config: AppConfig = Depends(get_config)) -> QdrantClient:
     """
     Get Qdrant client (no caching to allow config changes)
@@ -103,9 +101,7 @@ def get_qdrant_client(config: AppConfig = Depends(get_config)) -> QdrantClient:
         QdrantClient configured with host and port
     """
     client = QdrantClient(host=config.qdrant_host, port=config.qdrant_port)
-    logger.info(
-        f"✅ Qdrant client initialized: {config.qdrant_host}:{config.qdrant_port}"
-    )
+    logger.info(f"✅ Qdrant client initialized: {config.qdrant_host}:{config.qdrant_port}")
     return client
 
 
@@ -120,28 +116,18 @@ def get_redis_client(config: AppConfig = Depends(get_config)) -> redis.Redis:
     Returns:
         Redis client configured with host and port
     """
-    client = redis.Redis(
-        host=config.redis_host,
-        port=config.redis_port,
-        decode_responses=True
-    )
+    client = redis.Redis(host=config.redis_host, port=config.redis_port, decode_responses=True)
     # Verify connection
     try:
         client.ping()
-        logger.info(
-            f"✅ Redis client initialized: {config.redis_host}:{config.redis_port}"
-        )
+        logger.info(f"✅ Redis client initialized: {config.redis_host}:{config.redis_port}")
     except Exception as e:
-        logger.warning(
-            f"⚠️ Redis connection warning (may not be critical): {e}"
-        )
+        logger.warning(f"⚠️ Redis connection warning (may not be critical): {e}")
     return client
 
 
 @lru_cache()
-def get_embedding_model(
-    config: AppConfig = Depends(get_config)
-) -> SentenceTransformer:
+def get_embedding_model(config: AppConfig = Depends(get_config)) -> SentenceTransformer:
     """
     Get embedding model (singleton - expensive to load)
 
@@ -160,10 +146,11 @@ def get_embedding_model(
 # Service Dependencies
 # ============================================================
 
+
 def get_rag_qa_service(
     qdrant_client: QdrantClient = Depends(get_qdrant_client),
     embedding_model: SentenceTransformer = Depends(get_embedding_model),
-    config: AppConfig = Depends(get_config)
+    config: AppConfig = Depends(get_config),
 ):
     """
     Get RAG QA Service (request-scoped - new instance per request)
@@ -182,14 +169,14 @@ def get_rag_qa_service(
         qdrant_client=qdrant_client,
         embedding_model=embedding_model,
         ollama_url=config.ollama_url,
-        model_name=config.ollama_model
+        model_name=config.ollama_model,
     )
 
 
 def get_async_rag_qa_service(
     qdrant_client: QdrantClient = Depends(get_qdrant_client),
     embedding_model: SentenceTransformer = Depends(get_embedding_model),
-    config: AppConfig = Depends(get_config)
+    config: AppConfig = Depends(get_config),
 ):
     """
     Get Async RAG QA Service (request-scoped - new instance per request)
@@ -216,13 +203,13 @@ def get_async_rag_qa_service(
         ollama_url=config.ollama_url,
         model_name=config.ollama_model,
         timeout=30,
-        max_retries=3
+        max_retries=3,
     )
 
 
 def get_consultation_service(
     qdrant_client: QdrantClient = Depends(get_qdrant_client),
-    embedding_model: SentenceTransformer = Depends(get_embedding_model)
+    embedding_model: SentenceTransformer = Depends(get_embedding_model),
 ):
     """
     Get Consultation Service (request-scoped)
@@ -237,16 +224,14 @@ def get_consultation_service(
     from app.services.consultation_service import ConsultationService
 
     return ConsultationService(
-        search_client=qdrant_client,
-        embedding_model=embedding_model,
-        llm_client=None
+        search_client=qdrant_client, embedding_model=embedding_model, llm_client=None
     )
 
 
 def get_document_ingestion_service(
     qdrant_client: QdrantClient = Depends(get_qdrant_client),
     embedding_model: SentenceTransformer = Depends(get_embedding_model),
-    redis_client: redis.Redis = Depends(get_redis_client)
+    redis_client: redis.Redis = Depends(get_redis_client),
 ):
     """
     Get Document Ingestion Service (request-scoped)
@@ -262,15 +247,14 @@ def get_document_ingestion_service(
     from app.services.document_ingestion_service import DocumentIngestionService
 
     return DocumentIngestionService(
-        qdrant_client=qdrant_client,
-        embedding_model=embedding_model,
-        redis_client=redis_client
+        qdrant_client=qdrant_client, embedding_model=embedding_model, redis_client=redis_client
     )
 
 
 # ============================================================
 # Testing Utilities
 # ============================================================
+
 
 def override_dependencies_for_testing():
     """
@@ -279,7 +263,7 @@ def override_dependencies_for_testing():
     Usage in tests:
         app.dependency_overrides = override_dependencies_for_testing()
     """
-    from unittest.mock import Mock, AsyncMock
+    from unittest.mock import AsyncMock, Mock
 
     def get_mock_qdrant():
         """Mock Qdrant client"""

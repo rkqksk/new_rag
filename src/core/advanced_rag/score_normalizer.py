@@ -4,7 +4,8 @@ Normalizes scores from different collections for fair comparison
 """
 
 import logging
-from typing import List, Dict, Any
+from typing import Any, Dict, List
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -20,7 +21,7 @@ class ScoreNormalizer:
     - sigmoid normalization
     """
 
-    def __init__(self, method: str = 'minmax'):
+    def __init__(self, method: str = "minmax"):
         """
         Initialize score normalizer
 
@@ -30,9 +31,7 @@ class ScoreNormalizer:
         self.method = method
 
     def normalize(
-        self,
-        results_by_collection: Dict[str, List[Any]],
-        score_attr: str = 'score'
+        self, results_by_collection: Dict[str, List[Any]], score_attr: str = "score"
     ) -> Dict[str, List[Any]]:
         """
         Normalize scores across collections
@@ -44,19 +43,17 @@ class ScoreNormalizer:
         Returns:
             Normalized results
         """
-        if self.method == 'minmax':
+        if self.method == "minmax":
             return self._normalize_minmax(results_by_collection, score_attr)
-        elif self.method == 'zscore':
+        elif self.method == "zscore":
             return self._normalize_zscore(results_by_collection, score_attr)
-        elif self.method == 'sigmoid':
+        elif self.method == "sigmoid":
             return self._normalize_sigmoid(results_by_collection, score_attr)
         else:
             raise ValueError(f"Unknown normalization method: {self.method}")
 
     def _normalize_minmax(
-        self,
-        results_by_collection: Dict[str, List[Any]],
-        score_attr: str
+        self, results_by_collection: Dict[str, List[Any]], score_attr: str
     ) -> Dict[str, List[Any]]:
         """Min-max normalization to [0, 1]"""
         normalized = {}
@@ -77,10 +74,7 @@ class ScoreNormalizer:
                 # All scores are the same
                 norm_scores = [1.0] * len(scores)
             else:
-                norm_scores = [
-                    (s - min_score) / (max_score - min_score)
-                    for s in scores
-                ]
+                norm_scores = [(s - min_score) / (max_score - min_score) for s in scores]
 
             # Update results
             norm_results = []
@@ -94,9 +88,7 @@ class ScoreNormalizer:
         return normalized
 
     def _normalize_zscore(
-        self,
-        results_by_collection: Dict[str, List[Any]],
-        score_attr: str
+        self, results_by_collection: Dict[str, List[Any]], score_attr: str
     ) -> Dict[str, List[Any]]:
         """Z-score normalization"""
         normalized = {}
@@ -130,9 +122,7 @@ class ScoreNormalizer:
         return normalized
 
     def _normalize_sigmoid(
-        self,
-        results_by_collection: Dict[str, List[Any]],
-        score_attr: str
+        self, results_by_collection: Dict[str, List[Any]], score_attr: str
     ) -> Dict[str, List[Any]]:
         """Sigmoid normalization"""
         normalized = {}

@@ -3,13 +3,13 @@ Real-Time Analytics Dashboard for Phase 8.2
 Live metrics collection and streaming
 """
 
-import logging
 import asyncio
-from typing import Dict, List, Any, Optional
+import logging
+import time
+from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from collections import deque, defaultdict
-import time
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Metric:
     """Single metric value"""
+
     name: str
     value: float
     timestamp: datetime
@@ -26,6 +27,7 @@ class Metric:
 @dataclass
 class MetricSeries:
     """Time series of metrics"""
+
     name: str
     values: deque  # Recent values
     max_size: int = 100
@@ -49,21 +51,15 @@ class MetricSeries:
     def get_stats(self) -> Dict[str, float]:
         """Calculate statistics"""
         if not self.values:
-            return {
-                'count': 0,
-                'sum': 0.0,
-                'avg': 0.0,
-                'min': 0.0,
-                'max': 0.0
-            }
+            return {"count": 0, "sum": 0.0, "avg": 0.0, "min": 0.0, "max": 0.0}
 
         values = [v for _, v in self.values]
         return {
-            'count': len(values),
-            'sum': sum(values),
-            'avg': sum(values) / len(values),
-            'min': min(values),
-            'max': max(values)
+            "count": len(values),
+            "sum": sum(values),
+            "avg": sum(values) / len(values),
+            "min": min(values),
+            "max": max(values),
         }
 
 
@@ -101,10 +97,7 @@ class RealTimeAnalytics:
     """
 
     def __init__(
-        self,
-        sse_manager=None,
-        retention_seconds: int = 3600,  # 1 hour
-        max_series_size: int = 1000
+        self, sse_manager=None, retention_seconds: int = 3600, max_series_size: int = 1000  # 1 hour
     ):
         """
         Initialize Real-Time Analytics
@@ -133,12 +126,7 @@ class RealTimeAnalytics:
 
         logger.info("✅ RealTimeAnalytics initialized")
 
-    async def record(
-        self,
-        metric_name: str,
-        value: float,
-        tags: Optional[Dict[str, str]] = None
-    ):
+    async def record(self, metric_name: str, value: float, tags: Optional[Dict[str, str]] = None):
         """
         Record metric value
 
@@ -155,7 +143,7 @@ class RealTimeAnalytics:
             self.series[metric_name] = MetricSeries(
                 name=metric_name,
                 values=deque(maxlen=self.max_series_size),
-                max_size=self.max_series_size
+                max_size=self.max_series_size,
             )
 
         # Add to series
@@ -211,10 +199,10 @@ class RealTimeAnalytics:
             >>> print(dashboard)
         """
         dashboard = {
-            'timestamp': datetime.now().isoformat(),
-            'metrics': {},
-            'counters': dict(self.counters),
-            'timers': {}
+            "timestamp": datetime.now().isoformat(),
+            "metrics": {},
+            "counters": dict(self.counters),
+            "timers": {},
         }
 
         # Metrics with stats
@@ -222,32 +210,28 @@ class RealTimeAnalytics:
             stats = series.get_stats()
             recent = series.get_recent(seconds=60)
 
-            dashboard['metrics'][name] = {
-                'current': recent[-1][1] if recent else 0.0,
-                'stats': stats,
-                'recent_count': len(recent)
+            dashboard["metrics"][name] = {
+                "current": recent[-1][1] if recent else 0.0,
+                "stats": stats,
+                "recent_count": len(recent),
             }
 
         # Timer stats
         for name, durations in self.timers.items():
             if durations:
-                dashboard['timers'][name] = {
-                    'count': len(durations),
-                    'avg': sum(durations) / len(durations),
-                    'min': min(durations),
-                    'max': max(durations),
-                    'p50': self._percentile(durations, 50),
-                    'p95': self._percentile(durations, 95),
-                    'p99': self._percentile(durations, 99)
+                dashboard["timers"][name] = {
+                    "count": len(durations),
+                    "avg": sum(durations) / len(durations),
+                    "min": min(durations),
+                    "max": max(durations),
+                    "p50": self._percentile(durations, 50),
+                    "p95": self._percentile(durations, 95),
+                    "p99": self._percentile(durations, 99),
                 }
 
         return dashboard
 
-    async def get_metric_series(
-        self,
-        metric_name: str,
-        seconds: int = 300
-    ) -> List[Dict[str, Any]]:
+    async def get_metric_series(self, metric_name: str, seconds: int = 300) -> List[Dict[str, Any]]:
         """
         Get time series for metric
 
@@ -267,13 +251,7 @@ class RealTimeAnalytics:
         series = self.series[metric_name]
         recent = series.get_recent(seconds=seconds)
 
-        return [
-            {
-                'timestamp': ts.isoformat(),
-                'value': val
-            }
-            for ts, val in recent
-        ]
+        return [{"timestamp": ts.isoformat(), "value": val} for ts, val in recent]
 
     async def start_streaming(self, interval: int = 5):
         """
@@ -316,9 +294,7 @@ class RealTimeAnalytics:
                 # Emit via SSE
                 if self.sse_manager:
                     await self.sse_manager.emit(
-                        channel="analytics",
-                        event="analytics_update",
-                        data=dashboard
+                        channel="analytics", event="analytics_update", data=dashboard
                     )
 
             except asyncio.CancelledError:
@@ -338,10 +314,10 @@ class RealTimeAnalytics:
     def get_stats(self) -> Dict[str, Any]:
         """Get analytics statistics"""
         return {
-            'metrics_count': len(self.series),
-            'counters_count': len(self.counters),
-            'timers_count': len(self.timers),
-            'streaming_active': self.streaming_task is not None and not self.streaming_task.done()
+            "metrics_count": len(self.series),
+            "counters_count": len(self.counters),
+            "timers_count": len(self.timers),
+            "streaming_active": self.streaming_task is not None and not self.streaming_task.done(),
         }
 
     def __repr__(self):

@@ -4,7 +4,8 @@ Generate shape descriptors (Hu Moments, Fourier Descriptors)
 """
 
 import logging
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -21,11 +22,7 @@ class ShapeDescriptor:
     - Rotation, scale, translation invariant
     """
 
-    def __init__(
-        self,
-        fourier_coeffs: int = 60,
-        normalize: bool = True
-    ):
+    def __init__(self, fourier_coeffs: int = 60, normalize: bool = True):
         """
         Initialize shape descriptor
 
@@ -39,6 +36,7 @@ class ShapeDescriptor:
         # Check OpenCV availability
         try:
             import cv2
+
             self.cv2 = cv2
             self.available = True
             logger.info("✅ Shape descriptor initialized")
@@ -82,9 +80,7 @@ class ShapeDescriptor:
         return hu_moments
 
     def compute_fourier_descriptors(
-        self,
-        contour: np.ndarray,
-        num_coeffs: Optional[int] = None
+        self, contour: np.ndarray, num_coeffs: Optional[int] = None
     ) -> np.ndarray:
         """
         Compute Fourier Descriptors
@@ -120,23 +116,16 @@ class ShapeDescriptor:
 
         # Keep only first num_coeffs (low frequencies)
         # Skip DC component (index 0) as it's now normalized to 1
-        descriptors = fourier_magnitudes[1:num_coeffs+1]
+        descriptors = fourier_magnitudes[1 : num_coeffs + 1]
 
         # Pad if contour is too small
         if len(descriptors) < num_coeffs:
-            descriptors = np.pad(
-                descriptors,
-                (0, num_coeffs - len(descriptors)),
-                mode='constant'
-            )
+            descriptors = np.pad(descriptors, (0, num_coeffs - len(descriptors)), mode="constant")
 
         return descriptors
 
     def compute_combined_descriptor(
-        self,
-        contour: np.ndarray,
-        hu_weight: float = 0.3,
-        fourier_weight: float = 0.7
+        self, contour: np.ndarray, hu_weight: float = 0.3, fourier_weight: float = 0.7
     ) -> np.ndarray:
         """
         Compute combined descriptor (Hu + Fourier)
@@ -174,7 +163,7 @@ class ShapeDescriptor:
         contour: np.ndarray,
         num_points: int = 100,
         num_bins_r: int = 5,
-        num_bins_theta: int = 12
+        num_bins_theta: int = 12,
     ) -> np.ndarray:
         """
         Compute Shape Context descriptor
@@ -193,7 +182,7 @@ class ShapeDescriptor:
 
         # Sample points uniformly
         if len(contour) > num_points:
-            indices = np.linspace(0, len(contour)-1, num_points, dtype=int)
+            indices = np.linspace(0, len(contour) - 1, num_points, dtype=int)
             sampled = contour[indices]
         else:
             sampled = contour
@@ -210,18 +199,14 @@ class ShapeDescriptor:
             diff = sampled - point
 
             # Distances (log scale for better distribution)
-            distances = np.sqrt(diff[:, 0]**2 + diff[:, 1]**2)
+            distances = np.sqrt(diff[:, 0] ** 2 + diff[:, 1] ** 2)
             log_r = np.log(distances + 1e-10)
 
             # Angles
             theta = np.arctan2(diff[:, 1], diff[:, 0])
 
             # Create histogram
-            hist, _, _ = np.histogram2d(
-                log_r,
-                theta,
-                bins=[num_bins_r, num_bins_theta]
-            )
+            hist, _, _ = np.histogram2d(log_r, theta, bins=[num_bins_r, num_bins_theta])
 
             shape_contexts.append(hist.flatten())
 
@@ -231,10 +216,7 @@ class ShapeDescriptor:
         return shape_context
 
     def match_shapes(
-        self,
-        descriptor1: np.ndarray,
-        descriptor2: np.ndarray,
-        metric: str = 'euclidean'
+        self, descriptor1: np.ndarray, descriptor2: np.ndarray, metric: str = "euclidean"
     ) -> float:
         """
         Compare two shape descriptors
@@ -247,17 +229,17 @@ class ShapeDescriptor:
         Returns:
             Similarity score (lower is more similar for euclidean)
         """
-        if metric == 'euclidean':
+        if metric == "euclidean":
             distance = np.linalg.norm(descriptor1 - descriptor2)
 
-        elif metric == 'cosine':
+        elif metric == "cosine":
             # Cosine similarity (convert to distance)
             dot_product = np.dot(descriptor1, descriptor2)
             norm_product = np.linalg.norm(descriptor1) * np.linalg.norm(descriptor2)
             cosine_sim = dot_product / (norm_product + 1e-10)
             distance = 1.0 - cosine_sim
 
-        elif metric == 'correlation':
+        elif metric == "correlation":
             # Correlation (convert to distance)
             correlation = np.corrcoef(descriptor1, descriptor2)[0, 1]
             distance = 1.0 - correlation
@@ -267,11 +249,7 @@ class ShapeDescriptor:
 
         return float(distance)
 
-    def batch_compute(
-        self,
-        contours: List[np.ndarray],
-        method: str = 'combined'
-    ) -> np.ndarray:
+    def batch_compute(self, contours: List[np.ndarray], method: str = "combined") -> np.ndarray:
         """
         Compute descriptors for multiple contours
 
@@ -285,13 +263,13 @@ class ShapeDescriptor:
         descriptors = []
 
         for contour in contours:
-            if method == 'hu':
+            if method == "hu":
                 desc = self.compute_hu_moments(contour)
-            elif method == 'fourier':
+            elif method == "fourier":
                 desc = self.compute_fourier_descriptors(contour)
-            elif method == 'combined':
+            elif method == "combined":
                 desc = self.compute_combined_descriptor(contour)
-            elif method == 'shape_context':
+            elif method == "shape_context":
                 desc = self.compute_shape_context(contour)
             else:
                 raise ValueError(f"Unknown method: {method}")
@@ -300,7 +278,7 @@ class ShapeDescriptor:
 
         return np.array(descriptors)
 
-    def get_descriptor_dimension(self, method: str = 'combined') -> int:
+    def get_descriptor_dimension(self, method: str = "combined") -> int:
         """
         Get dimension of descriptor
 
@@ -310,13 +288,13 @@ class ShapeDescriptor:
         Returns:
             Descriptor dimension
         """
-        if method == 'hu':
+        if method == "hu":
             return 7
-        elif method == 'fourier':
+        elif method == "fourier":
             return self.fourier_coeffs
-        elif method == 'combined':
+        elif method == "combined":
             return 7 + self.fourier_coeffs
-        elif method == 'shape_context':
+        elif method == "shape_context":
             return 5 * 12  # Default bins
         else:
             raise ValueError(f"Unknown method: {method}")

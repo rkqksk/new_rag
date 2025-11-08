@@ -8,17 +8,18 @@ import asyncio
 import json
 import subprocess
 import sys
-from typing import Dict, Any, List
 from pathlib import Path
+from typing import Any, Dict, List
+
 
 # 색상 출력용
 class Colors:
-    GREEN = '\033[92m'
-    RED = '\033[91m'
-    YELLOW = '\033[93m'
-    BLUE = '\033[94m'
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
+    GREEN = "\033[92m"
+    RED = "\033[91m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
 
 
 class MCPServerTester:
@@ -52,10 +53,7 @@ class MCPServerTester:
         print(f"{Colors.BLUE}ℹ️  {text}{Colors.RESET}")
 
     async def test_mcp_server(
-        self,
-        server_name: str,
-        server_path: Path,
-        test_request: Dict[str, Any]
+        self, server_name: str, server_path: Path, test_request: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
         개별 MCP 서버 테스트
@@ -77,14 +75,13 @@ class MCPServerTester:
                 str(server_path),
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
+                stderr=asyncio.subprocess.PIPE,
             )
 
             # 요청 전송
             request_json = json.dumps(test_request) + "\n"
             stdout, stderr = await asyncio.wait_for(
-                process.communicate(request_json.encode()),
-                timeout=10.0
+                process.communicate(request_json.encode()), timeout=10.0
             )
 
             # 응답 파싱
@@ -97,102 +94,55 @@ class MCPServerTester:
                     return {
                         "server": server_name,
                         "status": "failed",
-                        "error": response['error']['message']
+                        "error": response["error"]["message"],
                     }
 
                 # 성공
                 result = response.get("result", {})
                 self.print_success(f"{server_name}: {result.get('status', 'OK')}")
 
-                return {
-                    "server": server_name,
-                    "status": "passed",
-                    "result": result
-                }
+                return {"server": server_name, "status": "passed", "result": result}
             else:
                 # stderr 확인
                 error_msg = stderr.decode().strip() if stderr else "No response"
                 self.print_error(f"{server_name}: {error_msg}")
-                return {
-                    "server": server_name,
-                    "status": "failed",
-                    "error": error_msg
-                }
+                return {"server": server_name, "status": "failed", "error": error_msg}
 
         except asyncio.TimeoutError:
             self.print_error(f"{server_name}: Timeout (>10s)")
-            return {
-                "server": server_name,
-                "status": "timeout",
-                "error": "Request timeout"
-            }
+            return {"server": server_name, "status": "timeout", "error": "Request timeout"}
 
         except FileNotFoundError:
             self.print_error(f"{server_name}: Server file not found")
-            return {
-                "server": server_name,
-                "status": "not_found",
-                "error": "Server file not found"
-            }
+            return {"server": server_name, "status": "not_found", "error": "Server file not found"}
 
         except Exception as e:
             self.print_error(f"{server_name}: {str(e)}")
-            return {
-                "server": server_name,
-                "status": "error",
-                "error": str(e)
-            }
+            return {"server": server_name, "status": "error", "error": str(e)}
 
     async def test_claude_haiku_server(self) -> Dict[str, Any]:
         """Claude Haiku MCP 서버 테스트"""
         server_path = self.mcp_servers_dir / "claude_haiku_server.py"
 
-        test_request = {
-            "jsonrpc": "2.0",
-            "id": 1,
-            "method": "health",
-            "params": {}
-        }
+        test_request = {"jsonrpc": "2.0", "id": 1, "method": "health", "params": {}}
 
-        return await self.test_mcp_server(
-            "Claude Haiku Server",
-            server_path,
-            test_request
-        )
+        return await self.test_mcp_server("Claude Haiku Server", server_path, test_request)
 
     async def test_qdrant_server(self) -> Dict[str, Any]:
         """Qdrant MCP 서버 테스트"""
         server_path = self.mcp_servers_dir / "qdrant_server.py"
 
-        test_request = {
-            "jsonrpc": "2.0",
-            "id": 2,
-            "method": "health",
-            "params": {}
-        }
+        test_request = {"jsonrpc": "2.0", "id": 2, "method": "health", "params": {}}
 
-        return await self.test_mcp_server(
-            "Qdrant Server",
-            server_path,
-            test_request
-        )
+        return await self.test_mcp_server("Qdrant Server", server_path, test_request)
 
     async def test_ollama_server(self) -> Dict[str, Any]:
         """Ollama MCP 서버 테스트"""
         server_path = self.mcp_servers_dir / "ollama_server.py"
 
-        test_request = {
-            "jsonrpc": "2.0",
-            "id": 3,
-            "method": "health",
-            "params": {}
-        }
+        test_request = {"jsonrpc": "2.0", "id": 3, "method": "health", "params": {}}
 
-        return await self.test_mcp_server(
-            "Ollama Server",
-            server_path,
-            test_request
-        )
+        return await self.test_mcp_server("Ollama Server", server_path, test_request)
 
     async def run_all_tests(self):
         """모든 MCP 서버 테스트 실행"""
@@ -210,7 +160,7 @@ class MCPServerTester:
         servers = [
             ("claude_haiku_server.py", "Claude Haiku Server"),
             ("qdrant_server.py", "Qdrant Server"),
-            ("ollama_server.py", "Ollama Server")
+            ("ollama_server.py", "Ollama Server"),
         ]
 
         for filename, name in servers:
@@ -245,7 +195,9 @@ class MCPServerTester:
         self.print_header("📊 Test Summary")
 
         passed = sum(1 for r in self.results if r["status"] == "passed")
-        failed = sum(1 for r in self.results if r["status"] in ["failed", "error", "timeout", "not_found"])
+        failed = sum(
+            1 for r in self.results if r["status"] in ["failed", "error", "timeout", "not_found"]
+        )
         total = len(self.results)
 
         print(f"Total Tests: {total}")

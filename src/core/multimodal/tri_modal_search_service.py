@@ -3,15 +3,16 @@ Tri-Modal Search Service for Phase 6.3
 Unified search using Text + Image + Shape embeddings
 """
 
-import logging
-from typing import List, Dict, Any, Optional, Tuple
-from dataclasses import dataclass
-from PIL import Image
-import numpy as np
 import asyncio
+import logging
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
+from PIL import Image
 from qdrant_client import QdrantClient
 from qdrant_client.models import NamedVector
+
 from ..shape_processors import ShapeEmbedder
 
 logger = logging.getLogger(__name__)
@@ -20,11 +21,12 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TriModalMatch:
     """Tri-modal search result"""
+
     product_id: str
-    text_score: float           # Text similarity (0 if not used)
-    visual_score: float         # Image similarity (0 if not used)
-    shape_score: float          # Shape similarity (0 if not used)
-    combined_score: float       # Weighted combination
+    text_score: float  # Text similarity (0 if not used)
+    visual_score: float  # Image similarity (0 if not used)
+    shape_score: float  # Shape similarity (0 if not used)
+    combined_score: float  # Weighted combination
     payload: Dict[str, Any]
     image_url: Optional[str] = None
     modalities_used: List[str] = None  # ['text', 'image', 'shape']
@@ -33,6 +35,7 @@ class TriModalMatch:
 @dataclass
 class SearchQuery:
     """Multi-modal search query"""
+
     text: Optional[str] = None
     image: Optional[Image.Image] = None
     use_shape: bool = True
@@ -76,7 +79,7 @@ class TriModalSearchService:
         image_embedder,  # OpenCLIP or similar
         shape_embedder: ShapeEmbedder,
         collection_name: str = "products_multimodal",
-        default_weights: Optional[Dict[str, float]] = None
+        default_weights: Optional[Dict[str, float]] = None,
     ):
         """
         Initialize Tri-Modal Search Service
@@ -98,11 +101,7 @@ class TriModalSearchService:
 
         # Default weights
         if default_weights is None:
-            self.weights = {
-                'text': 0.5,
-                'visual': 0.3,
-                'shape': 0.2
-            }
+            self.weights = {"text": 0.5, "visual": 0.3, "shape": 0.2}
         else:
             # Normalize weights
             total = sum(default_weights.values())
@@ -116,10 +115,7 @@ class TriModalSearchService:
         )
 
     async def search(
-        self,
-        query: SearchQuery,
-        top_k: int = 20,
-        custom_weights: Optional[Dict[str, float]] = None
+        self, query: SearchQuery, top_k: int = 20, custom_weights: Optional[Dict[str, float]] = None
     ) -> List[TriModalMatch]:
         """
         Execute tri-modal search
@@ -143,9 +139,9 @@ class TriModalSearchService:
         # Determine active modalities
         modalities_used = []
         if query.text is not None:
-            modalities_used.append('text')
+            modalities_used.append("text")
         if query.image is not None:
-            modalities_used.extend(['visual', 'shape'] if query.use_shape else ['visual'])
+            modalities_used.extend(["visual", "shape"] if query.use_shape else ["visual"])
 
         # Get weights
         weights = custom_weights if custom_weights else self.weights
@@ -162,48 +158,31 @@ class TriModalSearchService:
 
         # Execute searches in parallel
         search_results = await self._parallel_search(
-            embeddings,
-            top_k * 2,  # Get more for fusion
-            query.filters
+            embeddings, top_k * 2, query.filters  # Get more for fusion
         )
 
         # Fuse results
-        matches = self._fuse_results(
-            search_results,
-            active_weights,
-            modalities_used,
-            top_k
-        )
+        matches = self._fuse_results(search_results, active_weights, modalities_used, top_k)
 
         logger.info(f"Found {len(matches)} tri-modal matches")
 
         return matches
 
     def search_sync(
-        self,
-        query: SearchQuery,
-        top_k: int = 20,
-        custom_weights: Optional[Dict[str, float]] = None
+        self, query: SearchQuery, top_k: int = 20, custom_weights: Optional[Dict[str, float]] = None
     ) -> List[TriModalMatch]:
         """Synchronous version of search()"""
         loop = asyncio.get_event_loop()
         if loop.is_running():
             import concurrent.futures
+
             with concurrent.futures.ThreadPoolExecutor() as executor:
-                future = executor.submit(
-                    asyncio.run,
-                    self.search(query, top_k, custom_weights)
-                )
+                future = executor.submit(asyncio.run, self.search(query, top_k, custom_weights))
                 return future.result()
         else:
-            return loop.run_until_complete(
-                self.search(query, top_k, custom_weights)
-            )
+            return loop.run_until_complete(self.search(query, top_k, custom_weights))
 
-    async def _generate_embeddings(
-        self,
-        query: SearchQuery
-    ) -> Dict[str, Any]:
+    async def _generate_embeddings(self, query: SearchQuery) -> Dict[str, Any]:
         """Generate embeddings for all modalities"""
         embeddings = {}
 
@@ -211,15 +190,15 @@ class TriModalSearchService:
 
         # Text embedding
         if query.text is not None:
-            tasks.append(('text', self._generate_text_embedding(query.text)))
+            tasks.append(("text", self._generate_text_embedding(query.text)))
 
         # Image embedding
         if query.image is not None:
-            tasks.append(('visual', self._generate_visual_embedding(query.image)))
+            tasks.append(("visual", self._generate_visual_embedding(query.image)))
 
             # Shape embedding (if enabled)
             if query.use_shape:
-                tasks.append(('shape', self._generate_shape_embedding(query.image)))
+                tasks.append(("shape", self._generate_shape_embedding(query.image)))
 
         # Execute in parallel
         results = await asyncio.gather(*[task[1] for task in tasks])
@@ -233,46 +212,31 @@ class TriModalSearchService:
     async def _generate_text_embedding(self, text: str) -> List[float]:
         """Generate text embedding"""
         # Check if embedder has async method
-        if hasattr(self.text_embedder, 'encode_text_async'):
+        if hasattr(self.text_embedder, "encode_text_async"):
             return await self.text_embedder.encode_text_async(text)
         else:
             # Run sync method in thread pool
             loop = asyncio.get_event_loop()
-            return await loop.run_in_executor(
-                None,
-                self.text_embedder.encode_text,
-                text
-            )
+            return await loop.run_in_executor(None, self.text_embedder.encode_text, text)
 
     async def _generate_visual_embedding(self, image: Image.Image) -> List[float]:
         """Generate visual embedding (OpenCLIP)"""
         # Check if embedder has async method
-        if hasattr(self.image_embedder, 'encode_image_async'):
+        if hasattr(self.image_embedder, "encode_image_async"):
             return await self.image_embedder.encode_image_async(image)
         else:
             # Run sync method in thread pool
             loop = asyncio.get_event_loop()
-            return await loop.run_in_executor(
-                None,
-                self.image_embedder.encode_image,
-                image
-            )
+            return await loop.run_in_executor(None, self.image_embedder.encode_image, image)
 
     async def _generate_shape_embedding(self, image: Image.Image) -> np.ndarray:
         """Generate shape embedding"""
         # Shape embedder is typically CPU-bound, run in thread pool
         loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(
-            None,
-            self.shape_embedder.encode_shape,
-            image
-        )
+        return await loop.run_in_executor(None, self.shape_embedder.encode_shape, image)
 
     async def _parallel_search(
-        self,
-        embeddings: Dict[str, Any],
-        limit: int,
-        filters: Optional[Dict] = None
+        self, embeddings: Dict[str, Any], limit: int, filters: Optional[Dict] = None
     ) -> Dict[str, List]:
         """Execute parallel searches for each modality"""
         search_tasks = []
@@ -283,12 +247,7 @@ class TriModalSearchService:
                 embedding = embedding.tolist()
 
             # Create search task
-            task = self._search_single_modality(
-                modality,
-                embedding,
-                limit,
-                filters
-            )
+            task = self._search_single_modality(modality, embedding, limit, filters)
             search_tasks.append((modality, task))
 
         # Execute in parallel
@@ -302,11 +261,7 @@ class TriModalSearchService:
         return search_results
 
     async def _search_single_modality(
-        self,
-        modality: str,
-        embedding: List[float],
-        limit: int,
-        filters: Optional[Dict] = None
+        self, modality: str, embedding: List[float], limit: int, filters: Optional[Dict] = None
     ) -> List:
         """Search using a single modality"""
         # Run search in thread pool (Qdrant client is sync)
@@ -317,7 +272,7 @@ class TriModalSearchService:
                 collection_name=self.collection_name,
                 query_vector=(modality, embedding),  # Named vector
                 limit=limit,
-                query_filter=filters
+                query_filter=filters,
             )
 
         return await loop.run_in_executor(None, _search)
@@ -327,7 +282,7 @@ class TriModalSearchService:
         search_results: Dict[str, List],
         weights: Dict[str, float],
         modalities_used: List[str],
-        top_k: int
+        top_k: int,
     ) -> List[TriModalMatch]:
         """
         Fuse multi-modal search results
@@ -355,15 +310,15 @@ class TriModalSearchService:
         # Compute combined scores
         matches = []
         for product_id in all_ids:
-            text_score = score_maps.get('text', {}).get(product_id, 0.0)
-            visual_score = score_maps.get('visual', {}).get(product_id, 0.0)
-            shape_score = score_maps.get('shape', {}).get(product_id, 0.0)
+            text_score = score_maps.get("text", {}).get(product_id, 0.0)
+            visual_score = score_maps.get("visual", {}).get(product_id, 0.0)
+            shape_score = score_maps.get("shape", {}).get(product_id, 0.0)
 
             # Weighted combination
             combined_score = (
-                weights.get('text', 0.0) * text_score +
-                weights.get('visual', 0.0) * visual_score +
-                weights.get('shape', 0.0) * shape_score
+                weights.get("text", 0.0) * text_score
+                + weights.get("visual", 0.0) * visual_score
+                + weights.get("shape", 0.0) * shape_score
             )
 
             match = TriModalMatch(
@@ -374,7 +329,7 @@ class TriModalSearchService:
                 combined_score=combined_score,
                 payload=payload_map.get(product_id, {}),
                 image_url=payload_map.get(product_id, {}).get("image_url"),
-                modalities_used=modalities_used
+                modalities_used=modalities_used,
             )
             matches.append(match)
 
@@ -403,9 +358,9 @@ class TriModalSearchService:
     def get_stats(self) -> Dict[str, Any]:
         """Get service statistics"""
         return {
-            'collection': self.collection_name,
-            'weights': self.weights,
-            'modalities': ['text', 'visual', 'shape']
+            "collection": self.collection_name,
+            "weights": self.weights,
+            "modalities": ["text", "visual", "shape"],
         }
 
     def __repr__(self):

@@ -6,36 +6,36 @@
 """
 
 import asyncio
+import csv
 import hashlib
 import json
 import logging
 import os
 import xml.etree.ElementTree as ET
-import csv
 from datetime import datetime
 from pathlib import Path
-from typing import Optional, List, Dict, Any
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 import aiohttp
 import pandas as pd
+import pytesseract
 import requests
 from bs4 import BeautifulSoup
 from PIL import Image
-import pytesseract
-from qdrant_client.models import PointStruct, VectorParams, Distance
+from qdrant_client.models import Distance, PointStruct, VectorParams
 from sentence_transformers import SentenceTransformer
-from unstructured.partition.pdf import partition_pdf
 from unstructured.partition.html import partition_html
 from unstructured.partition.image import partition_image
+from unstructured.partition.pdf import partition_pdf
 
 logger = logging.getLogger(__name__)
 
 
 class DocumentChunk:
     """문서 청크 데이터 모델"""
-    def __init__(self, text: str, doc_id: str, chunk_index: int,
-                 metadata: Dict[str, Any] = None):
+
+    def __init__(self, text: str, doc_id: str, chunk_index: int, metadata: Dict[str, Any] = None):
         self.id = str(uuid4())
         self.text = text
         self.doc_id = doc_id
@@ -50,7 +50,7 @@ class DocumentChunk:
             "doc_id": self.doc_id,
             "chunk_index": self.chunk_index,
             "metadata": self.metadata,
-            "created_at": self.created_at
+            "created_at": self.created_at,
         }
 
 
@@ -59,7 +59,9 @@ class DocumentIngestionService:
     다양한 형식의 문서를 처리하고 Qdrant에 저장하는 서비스
     """
 
-    def __init__(self, qdrant_client, embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"):
+    def __init__(
+        self, qdrant_client, embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    ):
         self.qdrant_client = qdrant_client
         self.embedding_model = SentenceTransformer(embedding_model)
         self.collection_name = "documents"
@@ -78,15 +80,13 @@ class DocumentIngestionService:
             # 컬렉션이 없으면 생성
             self.qdrant_client.create_collection(
                 collection_name=self.collection_name,
-                vectors_config=VectorParams(
-                    size=self.vector_size,
-                    distance=Distance.COSINE
-                )
+                vectors_config=VectorParams(size=self.vector_size, distance=Distance.COSINE),
             )
             logger.info(f"Created Qdrant collection: {self.collection_name}")
 
-    async def ingest_file(self, file_path: str, doc_type: Optional[str] = None,
-                         metadata: Dict[str, Any] = None) -> Dict[str, Any]:
+    async def ingest_file(
+        self, file_path: str, doc_type: Optional[str] = None, metadata: Dict[str, Any] = None
+    ) -> Dict[str, Any]:
         """
         파일을 업로드하고 처리
 
@@ -144,7 +144,7 @@ class DocumentIngestionService:
                 "chunks_count": len(chunks),
                 "vectors_stored": stored_count,
                 "metadata": metadata,
-                "processed_at": datetime.utcnow().isoformat()
+                "processed_at": datetime.utcnow().isoformat(),
             }
 
             logger.info(f"Successfully ingested {len(chunks)} chunks from {file_path}")
@@ -195,14 +195,17 @@ class DocumentIngestionService:
         else:
             return "text"  # 기본값
 
-    async def _process_pdf(self, file_path: str, doc_id: str,
-                          metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_pdf(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """PDF 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "pdf",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "pdf",
+                "file_path": file_path,
+            }
+        )
 
         try:
             # unstructured를 사용한 PDF 파싱
@@ -226,7 +229,7 @@ class DocumentIngestionService:
                         text=chunk_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata=metadata.copy()
+                        metadata=metadata.copy(),
                     )
                     chunks.append(chunk)
                     text_buffer = []
@@ -242,7 +245,7 @@ class DocumentIngestionService:
                     text=chunk_text,
                     doc_id=doc_id,
                     chunk_index=len(chunks),
-                    metadata=metadata.copy()
+                    metadata=metadata.copy(),
                 )
                 chunks.append(chunk)
 
@@ -252,14 +255,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_excel(self, file_path: str, doc_id: str,
-                            metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_excel(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """Excel 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "excel",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "excel",
+                "file_path": file_path,
+            }
+        )
 
         try:
             # CSV도 같은 방식으로 처리
@@ -275,19 +281,13 @@ class DocumentIngestionService:
 
                 for idx, row in df.iterrows():
                     # 행의 모든 열을 텍스트로 변환
-                    row_text = " | ".join(
-                        f"{col}: {val}" for col, val in row.items()
-                    )
+                    row_text = " | ".join(f"{col}: {val}" for col, val in row.items())
 
                     chunk = DocumentChunk(
                         text=row_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata={
-                            **metadata,
-                            "row_index": idx,
-                            "sheet_name": sheet_name
-                        }
+                        metadata={**metadata, "row_index": idx, "sheet_name": sheet_name},
                     )
                     chunks.append(chunk)
 
@@ -297,14 +297,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_image(self, file_path: str, doc_id: str,
-                            metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_image(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """이미지 파일 처리 (OCR)"""
         chunks = []
-        metadata.update({
-            "source": "image",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "image",
+                "file_path": file_path,
+            }
+        )
 
         try:
             # unstructured의 이미지 파싱
@@ -319,10 +322,7 @@ class DocumentIngestionService:
             if text_parts:
                 combined_text = " ".join(text_parts)
                 chunk = DocumentChunk(
-                    text=combined_text,
-                    doc_id=doc_id,
-                    chunk_index=0,
-                    metadata=metadata.copy()
+                    text=combined_text, doc_id=doc_id, chunk_index=0, metadata=metadata.copy()
                 )
                 chunks.append(chunk)
 
@@ -332,14 +332,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_html(self, file_path: str, doc_id: str,
-                           metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_html(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """HTML 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "html",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "html",
+                "file_path": file_path,
+            }
+        )
 
         try:
             # 파일에서 읽거나 URL에서 가져오기
@@ -348,7 +351,7 @@ class DocumentIngestionService:
                     async with session.get(file_path) as resp:
                         html_content = await resp.text()
             else:
-                with open(file_path, 'r', encoding='utf-8') as f:
+                with open(file_path, "r", encoding="utf-8") as f:
                     html_content = f.read()
 
             # unstructured를 사용한 HTML 파싱
@@ -370,7 +373,7 @@ class DocumentIngestionService:
                         text=chunk_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata=metadata.copy()
+                        metadata=metadata.copy(),
                     )
                     chunks.append(chunk)
                     text_buffer = []
@@ -385,7 +388,7 @@ class DocumentIngestionService:
                     text=chunk_text,
                     doc_id=doc_id,
                     chunk_index=len(chunks),
-                    metadata=metadata.copy()
+                    metadata=metadata.copy(),
                 )
                 chunks.append(chunk)
 
@@ -395,17 +398,20 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_text(self, file_path: str, doc_id: str,
-                           metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_text(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """텍스트 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "text",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "text",
+                "file_path": file_path,
+            }
+        )
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 text = f.read()
 
             # 고정 크기로 청킹
@@ -413,13 +419,13 @@ class DocumentIngestionService:
             chunk_words = int(self.chunk_size / 1.3)  # 토큰을 단어로 변환
 
             for i in range(0, len(words), chunk_words - int(self.chunk_overlap / 1.3)):
-                chunk_text = " ".join(words[i:i + chunk_words])
+                chunk_text = " ".join(words[i : i + chunk_words])
                 if chunk_text.strip():
                     chunk = DocumentChunk(
                         text=chunk_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata=metadata.copy()
+                        metadata=metadata.copy(),
                     )
                     chunks.append(chunk)
 
@@ -429,14 +435,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_csv(self, file_path: str, doc_id: str,
-                          metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_csv(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """CSV 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "csv",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "csv",
+                "file_path": file_path,
+            }
+        )
 
         try:
             df = pd.read_csv(file_path)
@@ -447,25 +456,19 @@ class DocumentIngestionService:
                 text=f"CSV Headers: {headers}",
                 doc_id=doc_id,
                 chunk_index=0,
-                metadata={**metadata, "chunk_type": "headers"}
+                metadata={**metadata, "chunk_type": "headers"},
             )
             chunks.append(header_chunk)
 
             # 각 행을 청크로 변환
             for idx, row in df.iterrows():
-                row_text = " | ".join(
-                    f"{col}: {str(val)}" for col, val in row.items()
-                )
+                row_text = " | ".join(f"{col}: {str(val)}" for col, val in row.items())
 
                 chunk = DocumentChunk(
                     text=row_text,
                     doc_id=doc_id,
                     chunk_index=len(chunks),
-                    metadata={
-                        **metadata,
-                        "row_index": int(idx),
-                        "chunk_type": "data_row"
-                    }
+                    metadata={**metadata, "row_index": int(idx), "chunk_type": "data_row"},
                 )
                 chunks.append(chunk)
 
@@ -475,14 +478,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_xml(self, file_path: str, doc_id: str,
-                          metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_xml(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """XML 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "xml",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "xml",
+                "file_path": file_path,
+            }
+        )
 
         try:
             tree = ET.parse(file_path)
@@ -512,7 +518,7 @@ class DocumentIngestionService:
                         text=chunk_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata=metadata.copy()
+                        metadata=metadata.copy(),
                     )
                     chunks.append(chunk)
                     text_buffer = []
@@ -527,7 +533,7 @@ class DocumentIngestionService:
                     text=chunk_text,
                     doc_id=doc_id,
                     chunk_index=len(chunks),
-                    metadata=metadata.copy()
+                    metadata=metadata.copy(),
                 )
                 chunks.append(chunk)
 
@@ -537,17 +543,20 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_json(self, file_path: str, doc_id: str,
-                           metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_json(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """JSON 파일 처리"""
         chunks = []
-        metadata.update({
-            "source": "json",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "json",
+                "file_path": file_path,
+            }
+        )
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)
 
             # JSON을 포맷된 텍스트로 변환
@@ -555,7 +564,7 @@ class DocumentIngestionService:
             text_buffer = []
             token_count = 0
 
-            for line in json_text.split('\n'):
+            for line in json_text.split("\n"):
                 if not line.strip():
                     continue
 
@@ -567,7 +576,7 @@ class DocumentIngestionService:
                         text=chunk_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata=metadata.copy()
+                        metadata=metadata.copy(),
                     )
                     chunks.append(chunk)
                     text_buffer = []
@@ -582,7 +591,7 @@ class DocumentIngestionService:
                     text=chunk_text,
                     doc_id=doc_id,
                     chunk_index=len(chunks),
-                    metadata=metadata.copy()
+                    metadata=metadata.copy(),
                 )
                 chunks.append(chunk)
 
@@ -592,14 +601,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_word(self, file_path: str, doc_id: str,
-                           metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_word(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """Word 파일 처리 (.docx, .doc)"""
         chunks = []
-        metadata.update({
-            "source": "word",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "word",
+                "file_path": file_path,
+            }
+        )
 
         try:
             from docx import Document as DocxDocument
@@ -621,7 +633,7 @@ class DocumentIngestionService:
                         text=chunk_text,
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata=metadata.copy()
+                        metadata=metadata.copy(),
                     )
                     chunks.append(chunk)
                     text_buffer = []
@@ -636,7 +648,7 @@ class DocumentIngestionService:
                     text=chunk_text,
                     doc_id=doc_id,
                     chunk_index=len(chunks),
-                    metadata=metadata.copy()
+                    metadata=metadata.copy(),
                 )
                 chunks.append(chunk)
 
@@ -649,14 +661,17 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_powerpoint(self, file_path: str, doc_id: str,
-                                  metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_powerpoint(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """PowerPoint 파일 처리 (.pptx, .ppt)"""
         chunks = []
-        metadata.update({
-            "source": "powerpoint",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "powerpoint",
+                "file_path": file_path,
+            }
+        )
 
         try:
             from pptx import Presentation
@@ -677,7 +692,7 @@ class DocumentIngestionService:
                         text=slide_text.strip(),
                         doc_id=doc_id,
                         chunk_index=len(chunks),
-                        metadata={**metadata, "slide_number": slide_num}
+                        metadata={**metadata, "slide_number": slide_num},
                     )
                     chunks.append(chunk)
 
@@ -690,31 +705,34 @@ class DocumentIngestionService:
 
         return chunks
 
-    async def _process_archive(self, file_path: str, doc_id: str,
-                              metadata: Dict[str, Any]) -> List[DocumentChunk]:
+    async def _process_archive(
+        self, file_path: str, doc_id: str, metadata: Dict[str, Any]
+    ) -> List[DocumentChunk]:
         """압축 파일 처리 (.zip, .tar, .gz)"""
         chunks = []
-        metadata.update({
-            "source": "archive",
-            "file_path": file_path,
-        })
+        metadata.update(
+            {
+                "source": "archive",
+                "file_path": file_path,
+            }
+        )
 
         try:
-            import zipfile
             import tarfile
             import tempfile
+            import zipfile
 
             temp_extract_dir = tempfile.mkdtemp()
 
             try:
                 # ZIP 파일 처리
-                if file_path.endswith('.zip'):
-                    with zipfile.ZipFile(file_path, 'r') as zip_ref:
+                if file_path.endswith(".zip"):
+                    with zipfile.ZipFile(file_path, "r") as zip_ref:
                         zip_ref.extractall(temp_extract_dir)
 
                 # TAR 파일 처리
-                elif file_path.endswith(('.tar', '.tar.gz', '.tgz')):
-                    with tarfile.open(file_path, 'r:*') as tar_ref:
+                elif file_path.endswith((".tar", ".tar.gz", ".tgz")):
+                    with tarfile.open(file_path, "r:*") as tar_ref:
                         tar_ref.extractall(temp_extract_dir)
 
                 # 추출된 파일들 처리
@@ -725,15 +743,25 @@ class DocumentIngestionService:
                             file_type = self._detect_file_type(file_path_inner)
 
                             if file_type == "pdf":
-                                inner_chunks = await self._process_pdf(file_path_inner, doc_id, metadata)
+                                inner_chunks = await self._process_pdf(
+                                    file_path_inner, doc_id, metadata
+                                )
                             elif file_type == "text":
-                                inner_chunks = await self._process_text(file_path_inner, doc_id, metadata)
+                                inner_chunks = await self._process_text(
+                                    file_path_inner, doc_id, metadata
+                                )
                             elif file_type == "csv":
-                                inner_chunks = await self._process_csv(file_path_inner, doc_id, metadata)
+                                inner_chunks = await self._process_csv(
+                                    file_path_inner, doc_id, metadata
+                                )
                             elif file_type == "json":
-                                inner_chunks = await self._process_json(file_path_inner, doc_id, metadata)
+                                inner_chunks = await self._process_json(
+                                    file_path_inner, doc_id, metadata
+                                )
                             else:
-                                inner_chunks = await self._process_text(file_path_inner, doc_id, metadata)
+                                inner_chunks = await self._process_text(
+                                    file_path_inner, doc_id, metadata
+                                )
 
                             chunks.extend(inner_chunks)
                         except Exception as e:
@@ -743,6 +771,7 @@ class DocumentIngestionService:
                 # 임시 디렉토리 정리
                 if os.path.exists(temp_extract_dir):
                     import shutil
+
                     shutil.rmtree(temp_extract_dir)
 
         except Exception as e:
@@ -782,16 +811,13 @@ class DocumentIngestionService:
                             "text": chunk.text,
                             "chunk_index": chunk.chunk_index,
                             "metadata": chunk.metadata,
-                            "created_at": chunk.created_at
-                        }
+                            "created_at": chunk.created_at,
+                        },
                     )
                 )
 
             # Qdrant에 저장
-            self.qdrant_client.upsert(
-                collection_name=self.collection_name,
-                points=points
-            )
+            self.qdrant_client.upsert(collection_name=self.collection_name, points=points)
 
             logger.info(f"Stored {len(points)} vectors for doc_id {doc_id}")
             return len(points)
@@ -820,19 +846,21 @@ class DocumentIngestionService:
                 collection_name=self.collection_name,
                 query_vector=query_embedding,
                 limit=top_k,
-                with_payload=True
+                with_payload=True,
             )
 
             results = []
             for point in search_results:
-                results.append({
-                    "score": point.score,
-                    "chunk_id": point.payload.get("chunk_id"),
-                    "doc_id": point.payload.get("doc_id"),
-                    "text": point.payload.get("text"),
-                    "metadata": point.payload.get("metadata"),
-                    "created_at": point.payload.get("created_at")
-                })
+                results.append(
+                    {
+                        "score": point.score,
+                        "chunk_id": point.payload.get("chunk_id"),
+                        "doc_id": point.payload.get("doc_id"),
+                        "text": point.payload.get("text"),
+                        "metadata": point.payload.get("metadata"),
+                        "created_at": point.payload.get("created_at"),
+                    }
+                )
 
             return results
 
@@ -850,7 +878,11 @@ class DocumentIngestionService:
                 "points_count": collection_info.points_count,
                 "vectors_count": collection_info.vectors_count,
                 "vector_size": self.vector_size,
-                "indexed": collection_info.indexed_vectors_count if hasattr(collection_info, 'indexed_vectors_count') else None
+                "indexed": (
+                    collection_info.indexed_vectors_count
+                    if hasattr(collection_info, "indexed_vectors_count")
+                    else None
+                ),
             }
         except Exception as e:
             logger.error(f"Error getting collection stats: {e}")

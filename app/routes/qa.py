@@ -1,7 +1,9 @@
 """
 Q&A Routes
 """
+
 from fastapi import APIRouter, HTTPException
+
 from app.services.qa_service import search_qa_qdrant
 
 router = APIRouter(prefix="/api/v1", tags=["qa"])
@@ -15,8 +17,4 @@ async def api_search_qa(query: str, limit: int = 1000):
 
     results = await search_qa_qdrant(query, limit)
 
-    return {
-        "query": query,
-        "total": len(results),
-        "results": results
-    }
+    return {"query": query, "total": len(results), "results": results}

@@ -4,8 +4,9 @@
 """
 
 import logging
-from typing import List, Dict, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 class ConsultationRequest(BaseModel):
     """상담 요청 데이터"""
+
     query: str
     customer_id: Optional[str] = None
     context: Optional[str] = None
@@ -21,6 +23,7 @@ class ConsultationRequest(BaseModel):
 
 class ConsultationResponse(BaseModel):
     """상담 응답 데이터"""
+
     consultation_id: str
     query: str
     consultation_type: str
@@ -63,9 +66,7 @@ class ConsultationService:
 
         # 2. 벡터DB에서 유사한 제품 검색
         search_results = self.search_client.search(
-            collection_name="documents",
-            query_vector=query_embedding,
-            limit=5
+            collection_name="documents", query_vector=query_embedding, limit=5
         )
 
         # 3. 검색 결과를 문서로 변환
@@ -82,17 +83,18 @@ class ConsultationService:
 
             # 신뢰도가 높은 것만 추천 제품으로
             if result.score > 0.7:
-                related_products.append({
-                    "name": result.payload.get("filename", "Unknown"),
-                    "confidence": result.score,
-                    "description": result.payload.get("text", "")[:300]
-                })
+                related_products.append(
+                    {
+                        "name": result.payload.get("filename", "Unknown"),
+                        "confidence": result.score,
+                        "description": result.payload.get("text", "")[:300],
+                    }
+                )
 
         # 4. LLM에 기반한 추천 이유 생성
-        context_text = "\n".join([
-            f"- {doc['product_name']}: {doc['text']}"
-            for doc in source_docs[:3]
-        ])
+        context_text = "\n".join(
+            [f"- {doc['product_name']}: {doc['text']}" for doc in source_docs[:3]]
+        )
 
         prompt = f"""사용자 요청: {request.query}
 
@@ -111,9 +113,11 @@ class ConsultationService:
             consultation_type="product_recommendation",
             response=recommendation_reason,
             related_products=related_products,
-            confidence_score=max([p["confidence"] for p in related_products]) if related_products else 0.0,
+            confidence_score=(
+                max([p["confidence"] for p in related_products]) if related_products else 0.0
+            ),
             source_documents=source_docs,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
         logger.info(f"제품 추천 상담 완료: {response.consultation_id}")
@@ -136,9 +140,7 @@ class ConsultationService:
 
         # 2. 벡터DB에서 유사한 불량 관련 문서 검색
         search_results = self.search_client.search(
-            collection_name="documents",
-            query_vector=query_embedding,
-            limit=5
+            collection_name="documents", query_vector=query_embedding, limit=5
         )
 
         # 3. 검색 결과 처리
@@ -152,10 +154,7 @@ class ConsultationService:
             source_docs.append(doc_info)
 
         # 4. LLM에 기반한 불량 진단 생성
-        context_text = "\n".join([
-            f"- {doc['title']}: {doc['content']}"
-            for doc in source_docs[:3]
-        ])
+        context_text = "\n".join([f"- {doc['title']}: {doc['content']}" for doc in source_docs[:3]])
 
         prompt = f"""사용자 불량 문의: {request.query}
 
@@ -175,7 +174,7 @@ class ConsultationService:
             response=diagnosis,
             confidence_score=max([doc["score"] for doc in source_docs]) if source_docs else 0.0,
             source_documents=source_docs,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
 
         logger.info(f"불량 문의 상담 완료: {response.consultation_id}")

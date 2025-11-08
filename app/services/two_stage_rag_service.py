@@ -4,17 +4,17 @@ Stage 1: Planning with Claude Sonnet 4.5
 Stage 2: Execution with Local LLM (Qwen) + Product Dictionary
 """
 
-import logging
 import json
-from typing import List, Dict, Any, Optional
+import logging
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
+import anthropic
+import httpx
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
-import httpx
-import anthropic
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class QueryPlan:
     """Query analysis and execution plan"""
+
     intent: str
     capacity_filter: Optional[str]
     material_preference: Optional[str]
@@ -80,7 +81,7 @@ class TwoStageRAGService:
         dictionary_path: str,
         anthropic_api_key: Optional[str] = None,
         ollama_url: str = "http://localhost:11434",
-        ollama_model: str = "qwen2.5:3b"
+        ollama_model: str = "qwen2.5:3b",
     ):
         self.qdrant = qdrant_client
         self.embedder = embedding_model
@@ -135,7 +136,7 @@ class TwoStageRAGService:
                 model="claude-sonnet-4-5-20250929",
                 max_tokens=1024,
                 temperature=0.3,
-                messages=[{"role": "user", "content": planning_prompt}]
+                messages=[{"role": "user", "content": planning_prompt}],
             )
 
             result_text = response.content[0].text.strip()
@@ -158,7 +159,7 @@ class TwoStageRAGService:
                 use_case=plan_data.get("use_case"),
                 top_k=plan_data.get("top_k", 3),
                 search_strategy=plan_data.get("search_strategy", "comprehensive"),
-                answer_template=answer_template
+                answer_template=answer_template,
             )
 
             logger.info(f"✅ Query plan created: {plan.intent} | top_k={plan.top_k}")
@@ -173,8 +174,8 @@ class TwoStageRAGService:
         import re
 
         # Extract capacity
-        capacity_match = re.search(r'(\d+)\s*ml', question.lower())
-        capacity = capacity_match.group(1) + 'ml' if capacity_match else None
+        capacity_match = re.search(r"(\d+)\s*ml", question.lower())
+        capacity = capacity_match.group(1) + "ml" if capacity_match else None
 
         # Detect use case
         use_case = None
@@ -192,11 +193,9 @@ class TwoStageRAGService:
             use_case=use_case,
             top_k=3,
             search_strategy="comprehensive",
-            answer_template=self._create_answer_template({
-                "intent": "제품 추천",
-                "capacity_filter": capacity,
-                "use_case": use_case
-            })
+            answer_template=self._create_answer_template(
+                {"intent": "제품 추천", "capacity_filter": capacity, "use_case": use_case}
+            ),
         )
 
     def _create_answer_template(self, plan_data: Dict) -> str:
@@ -226,10 +225,7 @@ class TwoStageRAGService:
 
         return template
 
-    def _build_enriched_context(
-        self,
-        products: List[Dict[str, Any]]
-    ) -> str:
+    def _build_enriched_context(self, products: List[Dict[str, Any]]) -> str:
         """Build enriched context from products and dictionary"""
         if not products:
             return "검색된 제품이 없습니다."
@@ -265,10 +261,7 @@ class TwoStageRAGService:
         return "\n".join(context_parts)
 
     async def search_products(
-        self,
-        query: str,
-        plan: QueryPlan,
-        collection: str = "products_all"
+        self, query: str, plan: QueryPlan, collection: str = "products_all"
     ) -> List[Dict[str, Any]]:
         """Search products based on plan"""
         try:
@@ -282,24 +275,27 @@ class TwoStageRAGService:
                 collection_name=collection,
                 query_vector=query_embedding,
                 limit=search_limit,
-                score_threshold=0.3
+                score_threshold=0.3,
             )
 
             # Apply capacity filter if specified
             if plan.capacity_filter:
                 import re
+
                 filtered_results = []
                 for result in results:
                     product_name = result.payload.get("product_name", "")
-                    capacity_match = re.search(r'(\d+ml)', product_name.lower())
+                    capacity_match = re.search(r"(\d+ml)", product_name.lower())
                     if capacity_match and capacity_match.group(1) == plan.capacity_filter:
                         filtered_results.append(result)
-                results = filtered_results[:plan.top_k * 2]
-                logger.info(f"Capacity filter applied: {plan.capacity_filter} - {len(results)} products")
+                results = filtered_results[: plan.top_k * 2]
+                logger.info(
+                    f"Capacity filter applied: {plan.capacity_filter} - {len(results)} products"
+                )
 
             # Convert to product dicts
             products = []
-            for result in results[:plan.top_k * 2]:
+            for result in results[: plan.top_k * 2]:
                 product = {
                     "product_id": result.payload.get("product_id"),
                     "product_name": result.payload.get("product_name"),
@@ -312,22 +308,18 @@ class TwoStageRAGService:
                 products.append(product)
 
             # Sort by enrichment (enriched products first)
-            products.sort(key=lambda x: (
-                1 if "enriched" in x else 0,
-                x["similarity_score"]
-            ), reverse=True)
+            products.sort(
+                key=lambda x: (1 if "enriched" in x else 0, x["similarity_score"]), reverse=True
+            )
 
-            return products[:plan.top_k]
+            return products[: plan.top_k]
 
         except Exception as e:
             logger.error(f"Product search error: {e}")
             return []
 
     async def generate_answer(
-        self,
-        question: str,
-        products: List[Dict[str, Any]],
-        plan: QueryPlan
+        self, question: str, products: List[Dict[str, Any]], plan: QueryPlan
     ) -> tuple[str, float]:
         """
         Stage 2: Generate answer with Ollama (Qwen)
@@ -352,8 +344,8 @@ class TwoStageRAGService:
                             "temperature": 0.7,
                             "top_p": 0.9,
                             "top_k": 40,
-                        }
-                    }
+                        },
+                    },
                 )
 
                 if response.status_code == 200:
@@ -377,11 +369,7 @@ class TwoStageRAGService:
             logger.error(f"Answer generation error: {e}")
             return self._fallback_answer(question, products), 0.5
 
-    def _fallback_answer(
-        self,
-        question: str,
-        products: List[Dict[str, Any]]
-    ) -> str:
+    def _fallback_answer(self, question: str, products: List[Dict[str, Any]]) -> str:
         """Fallback answer using dictionary only"""
         if not products:
             return f"죄송합니다. '{question}'에 대한 관련 제품을 찾지 못했습니다."
@@ -405,9 +393,7 @@ class TwoStageRAGService:
         return "\n".join(answer_parts)
 
     async def answer_question(
-        self,
-        question: str,
-        collection: str = "products_all"
+        self, question: str, collection: str = "products_all"
     ) -> Dict[str, Any]:
         """Two-stage Q&A process"""
         try:
@@ -431,10 +417,10 @@ class TwoStageRAGService:
                     "intent": plan.intent,
                     "capacity_filter": plan.capacity_filter,
                     "top_k": plan.top_k,
-                    "search_strategy": plan.search_strategy
+                    "search_strategy": plan.search_strategy,
                 },
                 "qa_id": qa_id,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }
 
         except Exception as e:
@@ -446,5 +432,5 @@ class TwoStageRAGService:
                 "confidence": 0.0,
                 "plan": None,
                 "qa_id": f"qa_error_{datetime.now().strftime('%Y%m%d%H%M%S')}",
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
             }

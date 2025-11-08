@@ -1,7 +1,9 @@
 """Custom Exceptions with Context"""
-from typing import Any, Dict, Optional
-import traceback
+
 import json
+import traceback
+from typing import Any, Dict, Optional
+
 
 class RAGEnterpriseException(Exception):
     """Base exception with context"""
@@ -10,7 +12,7 @@ class RAGEnterpriseException(Exception):
         self,
         message: str,
         context: Optional[Dict[str, Any]] = None,
-        original_exception: Optional[Exception] = None
+        original_exception: Optional[Exception] = None,
     ):
         self.message = message
         self.context = context or {}
@@ -26,7 +28,7 @@ class RAGEnterpriseException(Exception):
             "message": self.message,
             "context": self.context,
             "original_error": str(self.original_exception) if self.original_exception else None,
-            "traceback": self.traceback_str
+            "traceback": self.traceback_str,
         }
 
     def __str__(self) -> str:
@@ -43,34 +45,41 @@ class RAGEnterpriseException(Exception):
 
 class ServiceException(RAGEnterpriseException):
     """Service layer exception"""
+
     pass
 
 
 class RepositoryException(RAGEnterpriseException):
     """Repository layer exception"""
+
     pass
 
 
 class ValidationException(RAGEnterpriseException):
     """Validation exception"""
+
     pass
 
 
 class SearchException(ServiceException):
     """Search operation exception"""
+
     pass
 
 
 class CacheException(RepositoryException):
     """Cache operation exception"""
+
     pass
 
 
 class DatabaseException(RepositoryException):
     """Database operation exception"""
+
     pass
 
 
 class VectorSearchException(RepositoryException):
     """Vector search exception"""
+
     pass

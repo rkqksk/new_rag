@@ -8,10 +8,18 @@ with anti-detection and lazy-loading support.
 import asyncio
 import logging
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List, Callable
+from typing import Any, Callable, Dict, List, Optional
 from urllib.parse import urlparse
 
-from playwright.async_api import async_playwright, Browser, BrowserContext, Page, TimeoutError as PlaywrightTimeout
+from playwright.async_api import (
+    Browser,
+    BrowserContext,
+    Page,
+)
+from playwright.async_api import TimeoutError as PlaywrightTimeout
+from playwright.async_api import (
+    async_playwright,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -31,12 +39,14 @@ class PlaywrightConfig:
     images_enabled: bool = True
     proxy: Optional[Dict[str, str]] = None
     extra_http_headers: Optional[Dict[str, str]] = None
-    browser_args: List[str] = field(default_factory=lambda: [
-        '--disable-blink-features=AutomationControlled',
-        '--disable-dev-shm-usage',
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-    ])
+    browser_args: List[str] = field(
+        default_factory=lambda: [
+            "--disable-blink-features=AutomationControlled",
+            "--disable-dev-shm-usage",
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+        ]
+    )
 
 
 class DynamicCrawler:
@@ -73,8 +83,7 @@ class DynamicCrawler:
         if self._browser is None:
             playwright = await async_playwright().start()
             self._browser = await playwright.chromium.launch(
-                headless=self.config.headless,
-                args=self.config.browser_args
+                headless=self.config.headless, args=self.config.browser_args
             )
         return self._browser
 
@@ -84,31 +93,31 @@ class DynamicCrawler:
             browser = await self._get_browser()
 
             context_options = {
-                'viewport': {
-                    'width': self.config.viewport_width,
-                    'height': self.config.viewport_height
+                "viewport": {
+                    "width": self.config.viewport_width,
+                    "height": self.config.viewport_height,
                 },
-                'java_script_enabled': self.config.javascript_enabled,
+                "java_script_enabled": self.config.javascript_enabled,
             }
 
             # User agent
             if self.config.user_agent:
-                context_options['user_agent'] = self.config.user_agent
+                context_options["user_agent"] = self.config.user_agent
             else:
                 # Default to realistic user agent
-                context_options['user_agent'] = (
-                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
-                    'AppleWebKit/537.36 (KHTML, like Gecko) '
-                    'Chrome/120.0.0.0 Safari/537.36'
+                context_options["user_agent"] = (
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                    "Chrome/120.0.0.0 Safari/537.36"
                 )
 
             # Proxy
             if self.config.proxy:
-                context_options['proxy'] = self.config.proxy
+                context_options["proxy"] = self.config.proxy
 
             # Extra headers
             if self.config.extra_http_headers:
-                context_options['extra_http_headers'] = self.config.extra_http_headers
+                context_options["extra_http_headers"] = self.config.extra_http_headers
 
             self._context = await browser.new_context(**context_options)
 
@@ -120,7 +129,8 @@ class DynamicCrawler:
             return
 
         # Remove webdriver detection
-        await page.add_init_script("""
+        await page.add_init_script(
+            """
             // Remove webdriver property
             Object.defineProperty(navigator, 'webdriver', {
                 get: () => undefined
@@ -148,7 +158,8 @@ class DynamicCrawler:
                     Promise.resolve({ state: Notification.permission }) :
                     originalQuery(parameters)
             );
-        """)
+        """
+        )
 
     async def crawl(
         self,
@@ -158,7 +169,7 @@ class DynamicCrawler:
         scroll_to_bottom: bool = False,
         execute_script: Optional[str] = None,
         screenshot_path: Optional[str] = None,
-        custom_wait: Optional[Callable[[Page], Any]] = None
+        custom_wait: Optional[Callable[[Page], Any]] = None,
     ) -> Dict[str, Any]:
         """
         Crawl a dynamic website
@@ -190,18 +201,13 @@ class DynamicCrawler:
 
             # Navigate to URL
             response = await page.goto(
-                url,
-                wait_until=self.config.wait_until,
-                timeout=self.config.timeout
+                url, wait_until=self.config.wait_until, timeout=self.config.timeout
             )
 
             # Wait for specific selector
             if wait_for_selector:
                 try:
-                    await page.wait_for_selector(
-                        wait_for_selector,
-                        timeout=self.config.timeout
-                    )
+                    await page.wait_for_selector(wait_for_selector, timeout=self.config.timeout)
                     logger.debug(f"Found selector: {wait_for_selector}")
                 except PlaywrightTimeout:
                     logger.warning(f"Timeout waiting for selector: {wait_for_selector}")
@@ -234,20 +240,20 @@ class DynamicCrawler:
                 screenshot_data = screenshot_path
 
             result = {
-                'url': final_url,
-                'original_url': url,
-                'content': content,
-                'title': title,
-                'status_code': response.status if response else None,
-                'screenshot': screenshot_data,
-                'metadata': {
-                    'viewport': {
-                        'width': self.config.viewport_width,
-                        'height': self.config.viewport_height
+                "url": final_url,
+                "original_url": url,
+                "content": content,
+                "title": title,
+                "status_code": response.status if response else None,
+                "screenshot": screenshot_data,
+                "metadata": {
+                    "viewport": {
+                        "width": self.config.viewport_width,
+                        "height": self.config.viewport_height,
                     },
-                    'user_agent': self.config.user_agent,
-                    'stealth_mode': self.config.stealth_mode
-                }
+                    "user_agent": self.config.user_agent,
+                    "stealth_mode": self.config.stealth_mode,
+                },
             }
 
             await page.close()
@@ -272,7 +278,8 @@ class DynamicCrawler:
         """
         logger.debug("Scrolling to bottom to load lazy content")
 
-        await page.evaluate("""
+        await page.evaluate(
+            """
             async () => {
                 await new Promise((resolve) => {
                     let totalHeight = 0;
@@ -289,16 +296,14 @@ class DynamicCrawler:
                     }, 100);
                 });
             }
-        """)
+        """
+        )
 
         # Wait for any lazy-loaded content
         await asyncio.sleep(scroll_delay)
 
     async def crawl_multiple(
-        self,
-        urls: List[str],
-        concurrent_limit: int = 3,
-        **kwargs
+        self, urls: List[str], concurrent_limit: int = 3, **kwargs
     ) -> List[Dict[str, Any]]:
         """
         Crawl multiple URLs concurrently
@@ -319,11 +324,7 @@ class DynamicCrawler:
                     return await self.crawl(url, **kwargs)
                 except Exception as e:
                     logger.error(f"Error crawling {url}: {e}")
-                    return {
-                        'url': url,
-                        'error': str(e),
-                        'content': None
-                    }
+                    return {"url": url, "error": str(e), "content": None}
 
         tasks = [crawl_with_semaphore(url) for url in urls]
         results = await asyncio.gather(*tasks)
@@ -346,14 +347,17 @@ class DynamicCrawler:
         page = await context.new_page()
 
         try:
-            await page.set_content(result['content'])
+            await page.set_content(result["content"])
 
-            links = await page.evaluate(f"""
+            links = await page.evaluate(
+                f"""
                 (selector) => {{
                     const elements = document.querySelectorAll(selector);
                     return Array.from(elements).map(a => a.href);
                 }}
-            """, selector)
+            """,
+                selector,
+            )
 
             await page.close()
             return links
@@ -364,10 +368,7 @@ class DynamicCrawler:
             return []
 
     async def wait_for_navigation(
-        self,
-        page: Page,
-        trigger_func: Callable,
-        wait_until: str = "networkidle"
+        self, page: Page, trigger_func: Callable, wait_until: str = "networkidle"
     ) -> None:
         """
         Wait for navigation after triggering an action
@@ -403,10 +404,7 @@ class DynamicCrawler:
 
 # Convenience function for one-off crawls
 async def crawl_dynamic_site(
-    url: str,
-    headless: bool = True,
-    stealth: bool = True,
-    **kwargs
+    url: str, headless: bool = True, stealth: bool = True, **kwargs
 ) -> Dict[str, Any]:
     """
     Convenience function for one-off dynamic crawls

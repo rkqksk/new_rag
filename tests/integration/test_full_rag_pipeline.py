@@ -4,14 +4,16 @@ Full RAG Pipeline E2E Test
 Tests complete flow: Document → Plugin → Vector DB → Search → QA
 """
 
-import pytest
-from typing import Dict, Any, List
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
 import asyncio
+from typing import Any, Dict, List
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
 
 try:
-    from plugins.test_plugins import PluginManager, ProcessingResult
     from plugins.base_plugin import DocumentMetadata
+    from plugins.test_plugins import PluginManager, ProcessingResult
+
     PLUGINS_AVAILABLE = True
 except ImportError:
     PLUGINS_AVAILABLE = False
@@ -44,10 +46,7 @@ def manufacturing_document():
         - Machine enclosure must be closed during operation
         """,
         "filename": "cnc_machining_sop.pdf",
-        "metadata": {
-            "doc_type": "SOP",
-            "department": "Manufacturing"
-        }
+        "metadata": {"doc_type": "SOP", "department": "Manufacturing"},
     }
 
 
@@ -56,17 +55,19 @@ def mock_qdrant_client():
     """Mock Qdrant client for testing"""
     mock_client = Mock()
     mock_client.upsert = AsyncMock(return_value={"status": "ok"})
-    mock_client.search = AsyncMock(return_value=[
-        {
-            "id": "doc1",
-            "score": 0.95,
-            "payload": {
-                "text": "CNC machining content",
-                "domain": "manufacturing",
-                "doc_type": "sop"
+    mock_client.search = AsyncMock(
+        return_value=[
+            {
+                "id": "doc1",
+                "score": 0.95,
+                "payload": {
+                    "text": "CNC machining content",
+                    "domain": "manufacturing",
+                    "doc_type": "sop",
+                },
             }
-        }
-    ])
+        ]
+    )
     mock_client.create_collection = AsyncMock(return_value={"status": "ok"})
     mock_client.collection_exists = AsyncMock(return_value=True)
     return mock_client
@@ -104,7 +105,7 @@ class TestFullRAGPipeline:
             "terminology": result.metadata.terminology,
             "entities": result.metadata.extracted_entities,
             "confidence": result.metadata.confidence,
-            "filename": manufacturing_document.get("filename")
+            "filename": manufacturing_document.get("filename"),
         }
 
         # Step 3: Verify payload structure is correct for Qdrant
@@ -115,14 +116,16 @@ class TestFullRAGPipeline:
         assert isinstance(vector_payload["entities"], dict)
 
         # Step 4: Simulate vector DB upsert
-        with patch('qdrant_client.QdrantClient', return_value=mock_qdrant_client):
+        with patch("qdrant_client.QdrantClient", return_value=mock_qdrant_client):
             await mock_qdrant_client.upsert(
                 collection_name="documents",
-                points=[{
-                    "id": "test_doc_1",
-                    "vector": [0.1] * 384,  # Mock embedding
-                    "payload": vector_payload
-                }]
+                points=[
+                    {
+                        "id": "test_doc_1",
+                        "vector": [0.1] * 384,  # Mock embedding
+                        "payload": vector_payload,
+                    }
+                ],
             )
 
         # Verify upsert was called
@@ -139,19 +142,15 @@ class TestFullRAGPipeline:
         result = plugin_manager.process_document(manufacturing_document)
 
         # Step 2: Create search filter based on plugin domain
-        search_filter = {
-            "must": [
-                {"key": "domain", "match": {"value": result.metadata.domain}}
-            ]
-        }
+        search_filter = {"must": [{"key": "domain", "match": {"value": result.metadata.domain}}]}
 
         # Step 3: Simulate domain-filtered search
-        with patch('qdrant_client.QdrantClient', return_value=mock_qdrant_client):
+        with patch("qdrant_client.QdrantClient", return_value=mock_qdrant_client):
             search_results = await mock_qdrant_client.search(
                 collection_name="documents",
                 query_vector=[0.1] * 384,  # Mock query embedding
                 filter=search_filter,
-                limit=10
+                limit=10,
             )
 
         # Verify search was called with correct filter
@@ -165,9 +164,7 @@ class TestFullRAGPipeline:
         assert search_results[0]["payload"]["domain"] == "manufacturing"
 
     @pytest.mark.asyncio
-    async def test_multiple_documents_different_domains(
-        self, plugin_manager, mock_qdrant_client
-    ):
+    async def test_multiple_documents_different_domains(self, plugin_manager, mock_qdrant_client):
         """
         Test pipeline with multiple documents from different domains
         """
@@ -180,7 +177,7 @@ class TestFullRAGPipeline:
             Feed rate: 500 mm/min
             Quality control: CMM inspection required
             """,
-            "filename": "manufacturing_sop.pdf"
+            "filename": "manufacturing_sop.pdf",
         }
 
         packaging_doc = {
@@ -192,7 +189,7 @@ class TestFullRAGPipeline:
             Neck Size: 28mm
             Quality Standards: FDA approved
             """,
-            "filename": "packaging_spec.pdf"
+            "filename": "packaging_spec.pdf",
         }
 
         # Process both documents
@@ -208,13 +205,13 @@ class TestFullRAGPipeline:
             {
                 "text": mfg_result.enriched_content,
                 "domain": mfg_result.metadata.domain,
-                "doc_type": mfg_result.metadata.doc_type
+                "doc_type": mfg_result.metadata.doc_type,
             },
             {
                 "text": pkg_result.enriched_content,
                 "domain": pkg_result.metadata.domain,
-                "doc_type": pkg_result.metadata.doc_type
-            }
+                "doc_type": pkg_result.metadata.doc_type,
+            },
         ]
 
         # Verify both payloads have correct structure
@@ -225,9 +222,7 @@ class TestFullRAGPipeline:
             assert payload["domain"] in ["manufacturing", "packaging"]
 
     @pytest.mark.asyncio
-    async def test_chunk_based_storage(
-        self, plugin_manager, manufacturing_document
-    ):
+    async def test_chunk_based_storage(self, plugin_manager, manufacturing_document):
         """
         Test that chunks are properly prepared for vector storage
         """
@@ -246,10 +241,7 @@ class TestFullRAGPipeline:
             assert "chunk_index" in chunk["metadata"]
 
             # Each chunk should be storable in vector DB
-            chunk_payload = {
-                **chunk["metadata"],
-                "text": chunk["text"]
-            }
+            chunk_payload = {**chunk["metadata"], "text": chunk["text"]}
 
             assert chunk_payload["domain"] == "manufacturing"
 
@@ -267,7 +259,7 @@ class TestFullRAGPipeline:
         payload = {
             "text": result.enriched_content,
             "domain": result.metadata.domain,
-            "plugin_confidence": result.metadata.confidence
+            "plugin_confidence": result.metadata.confidence,
         }
 
         # High confidence documents should be prioritized
@@ -293,7 +285,7 @@ class TestFullRAGPipeline:
         payload = {
             "text": result.enriched_content,
             "domain": result.metadata.domain,
-            "terminology": result.metadata.terminology
+            "terminology": result.metadata.terminology,
         }
 
         # Terminology can be used for:
@@ -312,17 +304,12 @@ class TestPipelineErrorHandling:
     """Test error handling in full pipeline"""
 
     @pytest.mark.asyncio
-    async def test_pipeline_with_failed_plugin_processing(
-        self, plugin_manager, mock_qdrant_client
-    ):
+    async def test_pipeline_with_failed_plugin_processing(self, plugin_manager, mock_qdrant_client):
         """
         Test pipeline handles plugin processing failures gracefully
         """
         # Document that might fail processing
-        invalid_doc = {
-            "content": "",  # Empty content
-            "filename": "invalid.pdf"
-        }
+        invalid_doc = {"content": "", "filename": "invalid.pdf"}  # Empty content
 
         # Process document
         result = plugin_manager.process_document(invalid_doc)
@@ -338,9 +325,7 @@ class TestPipelineErrorHandling:
             assert result.metadata.confidence < 0.5
 
     @pytest.mark.asyncio
-    async def test_pipeline_with_vector_db_failure(
-        self, plugin_manager, manufacturing_document
-    ):
+    async def test_pipeline_with_vector_db_failure(self, plugin_manager, manufacturing_document):
         """
         Test pipeline handles vector DB failures gracefully
         """
@@ -354,10 +339,10 @@ class TestPipelineErrorHandling:
 
         # Pipeline should catch and handle the error
         try:
-            with patch('qdrant_client.QdrantClient', return_value=mock_client):
+            with patch("qdrant_client.QdrantClient", return_value=mock_client):
                 await mock_client.upsert(
                     collection_name="documents",
-                    points=[{"id": "test", "vector": [0.1] * 384, "payload": {}}]
+                    points=[{"id": "test", "vector": [0.1] * 384, "payload": {}}],
                 )
         except Exception as e:
             # Error should be caught and logged
@@ -369,9 +354,7 @@ class TestPipelineErrorHandling:
 class TestPipelineIntegration:
     """Integration tests for complete pipeline"""
 
-    def test_end_to_end_document_lifecycle(
-        self, plugin_manager, manufacturing_document
-    ):
+    def test_end_to_end_document_lifecycle(self, plugin_manager, manufacturing_document):
         """
         Test complete document lifecycle:
         Upload → Process → Store → Search → Retrieve
@@ -393,13 +376,19 @@ class TestPipelineIntegration:
             "terminology": result.metadata.terminology,
             "entities": result.metadata.extracted_entities,
             "confidence": result.metadata.confidence,
-            "original_filename": uploaded_doc.get("filename")
+            "original_filename": uploaded_doc.get("filename"),
         }
 
         # Step 4: Verify storage payload is complete
         required_fields = [
-            "document_id", "text", "domain", "doc_type",
-            "categories", "terminology", "entities", "confidence"
+            "document_id",
+            "text",
+            "domain",
+            "doc_type",
+            "categories",
+            "terminology",
+            "entities",
+            "confidence",
         ]
         for field in required_fields:
             assert field in storage_payload, f"Missing field: {field}"
@@ -407,7 +396,7 @@ class TestPipelineIntegration:
         # Step 5: Search (simulate with filter)
         search_filter = {
             "domain": storage_payload["domain"],
-            "doc_type": storage_payload["doc_type"]
+            "doc_type": storage_payload["doc_type"],
         }
 
         # Step 6: Retrieve (verify payload matches search criteria)
@@ -429,7 +418,7 @@ class TestPipelineIntegration:
             "doc_type": result.metadata.doc_type,
             "confidence": result.metadata.confidence,
             "terminology": result.metadata.terminology,
-            "entities": result.metadata.extracted_entities
+            "entities": result.metadata.extracted_entities,
         }
 
         # Simulate storage and retrieval

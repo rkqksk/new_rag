@@ -5,8 +5,8 @@ Bottle 카테고리 페이지네이션 테스트
 """
 
 import asyncio
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -21,12 +21,12 @@ async def main():
         category_name="Bottle",
         category_url="http://chungjinkorea.com/kr/product/list.php?part_idx=1",
         max_pages=68,
-        delay=2
+        delay=2,
     )
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Bottle 카테고리 크롤링 결과")
-    print("="*80)
+    print("=" * 80)
     print(f"총 페이지: {summary['total_pages']}개")
     print(f"총 제품: {summary['total_products']}개")
     print(f"성공: {summary['success']}개")

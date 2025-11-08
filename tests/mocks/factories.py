@@ -1,6 +1,7 @@
 """Test data factories for consistent test data generation."""
+
 from datetime import datetime
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 from unittest.mock import Mock
 
 
@@ -8,7 +9,7 @@ def create_mock_search_result(
     score: float = 0.9,
     text: str = "Sample text",
     doc_id: str = None,
-    metadata: Dict[str, Any] = None
+    metadata: Dict[str, Any] = None,
 ) -> Dict[str, Any]:
     """
     Create mock Qdrant search result.
@@ -28,21 +29,14 @@ def create_mock_search_result(
     if metadata is None:
         metadata = {}
 
-    return {
-        "id": doc_id,
-        "score": score,
-        "payload": {
-            "text": text,
-            "metadata": metadata
-        }
-    }
+    return {"id": doc_id, "score": score, "payload": {"text": text, "metadata": metadata}}
 
 
 def create_mock_qa_response(
     answer: str = "Mock answer",
     confidence: float = 0.85,
     citations: List[str] = None,
-    sources: List[str] = None
+    sources: List[str] = None,
 ) -> Dict[str, Any]:
     """
     Create mock QA response.
@@ -62,12 +56,7 @@ def create_mock_qa_response(
     if sources is None:
         sources = []
 
-    return {
-        "answer": answer,
-        "citations": citations,
-        "confidence": confidence,
-        "sources": sources
-    }
+    return {"answer": answer, "citations": citations, "confidence": confidence, "sources": sources}
 
 
 def create_mock_embedding(dimension: int = 384) -> List[float]:
@@ -84,9 +73,7 @@ def create_mock_embedding(dimension: int = 384) -> List[float]:
 
 
 def create_mock_document(
-    doc_id: str = None,
-    text: str = "Sample document text",
-    metadata: Dict[str, Any] = None
+    doc_id: str = None, text: str = "Sample document text", metadata: Dict[str, Any] = None
 ) -> Dict[str, Any]:
     """
     Create mock document.
@@ -105,11 +92,7 @@ def create_mock_document(
     if metadata is None:
         metadata = {"source": "test"}
 
-    return {
-        "id": doc_id,
-        "text": text,
-        "metadata": metadata
-    }
+    return {"id": doc_id, "text": text, "metadata": metadata}
 
 
 def create_mock_chunks(count: int = 3, chunk_size: int = 50) -> List[str]:
@@ -133,7 +116,7 @@ def create_mock_complexity_score(
     score: float = 0.5,
     length_score: float = 0.3,
     technical_score: float = 0.5,
-    reasoning_score: float = 0.6
+    reasoning_score: float = 0.6,
 ) -> Dict[str, float]:
     """
     Create mock complexity score breakdown.
@@ -151,7 +134,7 @@ def create_mock_complexity_score(
         "score": score,
         "length_score": length_score,
         "technical_score": technical_score,
-        "reasoning_score": reasoning_score
+        "reasoning_score": reasoning_score,
     }
 
 
@@ -159,7 +142,7 @@ def create_mock_intent_result(
     intent_type: str = "vector_search",
     confidence: float = 0.9,
     mcp_tool: str = None,
-    parameters: Dict[str, Any] = None
+    parameters: Dict[str, Any] = None,
 ) -> Dict[str, Any]:
     """
     Create mock intent detection result.
@@ -180,5 +163,5 @@ def create_mock_intent_result(
         "intent": intent_type,
         "confidence": confidence,
         "mcp_tool": mcp_tool,
-        "parameters": parameters
+        "parameters": parameters,
     }

@@ -2,21 +2,19 @@
 Unit tests for Multi-Modal Embedding Service
 """
 
+import os
+import tempfile
+from pathlib import Path
+
+import numpy as np
 import pytest
 import torch
-import numpy as np
-from pathlib import Path
 from PIL import Image
-import tempfile
-import os
 
-from src.core.multimodal.multimodal_embedder import (
-    MultiModalEmbeddingService,
-    create_embedder
-)
-
+from src.core.multimodal.multimodal_embedder import MultiModalEmbeddingService, create_embedder
 
 # ==================== Fixtures ====================
+
 
 @pytest.fixture
 def embedder():
@@ -37,9 +35,9 @@ def embedder_full():
 @pytest.fixture
 def sample_image():
     """Create a sample image for testing"""
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
         # Create a simple RGB image
-        img = Image.new('RGB', (224, 224), color='red')
+        img = Image.new("RGB", (224, 224), color="red")
         img.save(f.name)
         yield f.name
         # Cleanup
@@ -48,11 +46,12 @@ def sample_image():
 
 # ==================== Text Embedding Tests ====================
 
+
 def test_embedder_initialization(embedder):
     """Test basic initialization"""
     assert embedder is not None
     assert embedder.text_dim == 384
-    assert embedder.device in ['cpu', 'cuda', 'mps']
+    assert embedder.device in ["cpu", "cuda", "mps"]
 
 
 def test_text_embedding_single(embedder):
@@ -67,11 +66,7 @@ def test_text_embedding_single(embedder):
 
 def test_text_embedding_batch(embedder):
     """Test batch text embedding"""
-    texts = [
-        "20파이 캡",
-        "100ml PET 보틀",
-        "화장품 용기"
-    ]
+    texts = ["20파이 캡", "100ml PET 보틀", "화장품 용기"]
 
     embeddings = embedder.embed_texts_batch(texts, show_progress=False)
 
@@ -89,11 +84,7 @@ def test_text_embedding_empty():
 
 def test_text_embedding_korean(embedder):
     """Test Korean text embedding"""
-    korean_texts = [
-        "제품코드: PE-001234",
-        "SPEC: 100ml, Ø20",
-        "MOQ: 5000개"
-    ]
+    korean_texts = ["제품코드: PE-001234", "SPEC: 100ml, Ø20", "MOQ: 5000개"]
 
     for text in korean_texts:
         embedding = embedder.embed_text(text)
@@ -101,6 +92,7 @@ def test_text_embedding_korean(embedder):
 
 
 # ==================== Image Embedding Tests ====================
+
 
 def test_image_embedding_single(embedder_full, sample_image):
     """Test single image embedding"""
@@ -127,26 +119,24 @@ def test_image_embedding_disabled():
 
 # ==================== Multi-Modal Embedding Tests ====================
 
+
 def test_multimodal_text_only(embedder):
     """Test multi-modal with text only"""
     embeddings = embedder.embed(text="20파이 캡")
 
-    assert 'text' in embeddings
-    assert len(embeddings['text']) == 384
-    assert 'image' not in embeddings
+    assert "text" in embeddings
+    assert len(embeddings["text"]) == 384
+    assert "image" not in embeddings
 
 
 def test_multimodal_full(embedder_full, sample_image):
     """Test multi-modal with text and image"""
-    embeddings = embedder_full.embed(
-        text="100ml PET bottle",
-        image=sample_image
-    )
+    embeddings = embedder_full.embed(text="100ml PET bottle", image=sample_image)
 
-    assert 'text' in embeddings
-    assert 'image' in embeddings
-    assert len(embeddings['text']) == 384
-    assert len(embeddings['image']) == 1024
+    assert "text" in embeddings
+    assert "image" in embeddings
+    assert len(embeddings["text"]) == 384
+    assert len(embeddings["image"]) == 1024
 
 
 def test_multimodal_no_input(embedder):
@@ -157,70 +147,69 @@ def test_multimodal_no_input(embedder):
 
 def test_multimodal_batch(embedder):
     """Test batch multi-modal embedding"""
-    items = [
-        {"text": "20파이 캡"},
-        {"text": "100ml 보틀"},
-        {"text": "화장품 용기"}
-    ]
+    items = [{"text": "20파이 캡"}, {"text": "100ml 보틀"}, {"text": "화장품 용기"}]
 
     embeddings = embedder.embed_batch(items, show_progress=False)
 
     assert len(embeddings) == 3
-    assert all('text' in emb for emb in embeddings)
-    assert all(len(emb['text']) == 384 for emb in embeddings)
+    assert all("text" in emb for emb in embeddings)
+    assert all(len(emb["text"]) == 384 for emb in embeddings)
 
 
 # ==================== Utility Methods Tests ====================
+
 
 def test_get_dimensions(embedder):
     """Test get_dimensions method"""
     dims = embedder.get_dimensions()
 
-    assert 'text' in dims
-    assert dims['text'] == 384
+    assert "text" in dims
+    assert dims["text"] == 384
 
 
 def test_get_dimensions_full(embedder_full):
     """Test get_dimensions with image"""
     dims = embedder_full.get_dimensions()
 
-    assert 'text' in dims
-    assert 'image' in dims
-    assert dims['text'] == 384
-    assert dims['image'] == 1024
+    assert "text" in dims
+    assert "image" in dims
+    assert dims["text"] == 384
+    assert dims["image"] == 1024
 
 
 def test_is_available(embedder):
     """Test is_available method"""
-    assert embedder.is_available('text') == True
-    assert embedder.is_available('image') == False
-    assert embedder.is_available('shape') == False
+    assert embedder.is_available("text") == True
+    assert embedder.is_available("image") == False
+    assert embedder.is_available("shape") == False
 
 
 def test_is_available_full(embedder_full):
     """Test is_available with image enabled"""
-    assert embedder_full.is_available('text') == True
-    assert embedder_full.is_available('image') == True
-    assert embedder_full.is_available('shape') == False
+    assert embedder_full.is_available("text") == True
+    assert embedder_full.is_available("image") == True
+    assert embedder_full.is_available("shape") == False
 
 
 # ==================== Device Tests ====================
 
+
 def test_device_auto():
     """Test auto device detection"""
-    embedder = MultiModalEmbeddingService(device='auto', enable_image=False)
+    embedder = MultiModalEmbeddingService(device="auto", enable_image=False)
 
-    assert embedder.device in ['cpu', 'cuda', 'mps']
+    assert embedder.device in ["cpu", "cuda", "mps"]
 
 
 def test_device_cpu():
     """Test CPU device"""
-    embedder = MultiModalEmbeddingService(device='cpu', enable_image=False)
+    embedder = MultiModalEmbeddingService(device="cpu", enable_image=False)
 
-    assert embedder.device == 'cpu'
+    assert embedder.device == "cpu"
 
 
 # ==================== Convenience Function Tests ====================
+
 
 def test_create_embedder():
     """Test create_embedder convenience function"""
@@ -232,16 +221,18 @@ def test_create_embedder():
 
 # ==================== Representation Tests ====================
 
+
 def test_repr(embedder):
     """Test string representation"""
     repr_str = repr(embedder)
 
-    assert 'MultiModalEmbeddingService' in repr_str
-    assert 'text=384d' in repr_str
-    assert 'device=' in repr_str
+    assert "MultiModalEmbeddingService" in repr_str
+    assert "text=384d" in repr_str
+    assert "device=" in repr_str
 
 
 # ==================== Performance Tests ====================
+
 
 @pytest.mark.slow
 def test_batch_performance(embedder):
@@ -257,6 +248,7 @@ def test_batch_performance(embedder):
 
 # ==================== Edge Cases ====================
 
+
 def test_very_long_text(embedder):
     """Test embedding very long text"""
     long_text = " ".join(["word"] * 1000)  # 1000 words
@@ -268,11 +260,7 @@ def test_very_long_text(embedder):
 
 def test_special_characters(embedder):
     """Test text with special characters"""
-    texts = [
-        "제품코드: PE-001234!@#$%",
-        "100ml (± 5ml)",
-        "Ø20 파이 / 28파이"
-    ]
+    texts = ["제품코드: PE-001234!@#$%", "100ml (± 5ml)", "Ø20 파이 / 28파이"]
 
     for text in texts:
         embedding = embedder.embed_text(text)
@@ -288,13 +276,14 @@ def test_empty_batch(embedder):
 
 # ==================== Integration Tests ====================
 
+
 def test_end_to_end_workflow(embedder):
     """Test end-to-end workflow"""
     # Product data
     product = {
         "product_name": "100ml PET Bottle",
         "category": "Bottle",
-        "specifications": "Capacity: 100ml, Neck: Ø20"
+        "specifications": "Capacity: 100ml, Neck: Ø20",
     }
 
     # Generate text
@@ -308,5 +297,5 @@ def test_end_to_end_workflow(embedder):
     assert all(-1.0 <= x <= 1.0 for x in embedding)  # Normalized vectors
 
 
-if __name__ == '__main__':
-    pytest.main([__file__, '-v'])
+if __name__ == "__main__":
+    pytest.main([__file__, "-v"])

@@ -4,9 +4,9 @@ Combines OCR → Embeddings → Qdrant → Search
 """
 
 import logging
-from typing import List, Dict, Any, Optional, Union
-from pathlib import Path
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PipelineResult:
     """Result from end-to-end pipeline"""
+
     product_id: str
     success: bool
     ocr_text: str
@@ -49,7 +50,7 @@ class EndToEndPipeline:
         ocr_integration: Any,  # OCRMultiModalIntegration
         qdrant_uploader: Any,  # MultiModalQdrantUploader
         search_engine: Optional[Any] = None,  # HybridSearchEngine
-        auto_commit: bool = True
+        auto_commit: bool = True,
     ):
         """
         Initialize end-to-end pipeline
@@ -68,10 +69,7 @@ class EndToEndPipeline:
         logger.info("✅ End-to-end pipeline initialized")
 
     def process_document(
-        self,
-        file_path: Union[str, Path],
-        product_id: Optional[str] = None,
-        upload: bool = True
+        self, file_path: Union[str, Path], product_id: Optional[str] = None, upload: bool = True
     ) -> PipelineResult:
         """
         Process single document through full pipeline
@@ -89,15 +87,12 @@ class EndToEndPipeline:
         try:
             # Step 1: OCR + Embedding
             logger.info(f"[1/3] Processing document: {file_path.name}")
-            result = self.ocr_integration.process_document(
-                file_path,
-                product_id=product_id
-            )
+            result = self.ocr_integration.process_document(file_path, product_id=product_id)
 
-            product_id = result['product_id']
-            embeddings = result['embeddings']
-            metadata = result['metadata']
-            ocr_text = result['ocr_text']
+            product_id = result["product_id"]
+            embeddings = result["embeddings"]
+            metadata = result["metadata"]
+            ocr_text = result["ocr_text"]
 
             # Step 2: Upload to Qdrant (optional)
             if upload:
@@ -105,20 +100,20 @@ class EndToEndPipeline:
 
                 # Prepare payload
                 payload = {
-                    'product_id': product_id,
-                    'source_file': str(file_path),
-                    'ocr_text': ocr_text,
-                    'ocr_confidence': result['ocr_confidence'],
-                    **metadata
+                    "product_id": product_id,
+                    "source_file": str(file_path),
+                    "ocr_text": ocr_text,
+                    "ocr_confidence": result["ocr_confidence"],
+                    **metadata,
                 }
 
                 # Upload with named vectors
                 success = self.uploader.upload_product(
                     product_id=product_id,
-                    text_embedding=embeddings.get('text'),
-                    image_embedding=embeddings.get('image'),
-                    shape_embedding=embeddings.get('shape'),
-                    payload=payload
+                    text_embedding=embeddings.get("text"),
+                    image_embedding=embeddings.get("image"),
+                    shape_embedding=embeddings.get("shape"),
+                    payload=payload,
                 )
 
                 if not success:
@@ -134,7 +129,7 @@ class EndToEndPipeline:
                 success=True,
                 ocr_text=ocr_text,
                 embeddings=embeddings,
-                metadata=metadata
+                metadata=metadata,
             )
 
         except Exception as e:
@@ -146,7 +141,7 @@ class EndToEndPipeline:
                 ocr_text="",
                 embeddings={},
                 metadata={},
-                error=str(e)
+                error=str(e),
             )
 
     def process_and_upload(
@@ -154,7 +149,7 @@ class EndToEndPipeline:
         file_paths: List[Union[str, Path]],
         product_ids: Optional[List[str]] = None,
         batch_size: int = 10,
-        show_progress: bool = True
+        show_progress: bool = True,
     ) -> List[PipelineResult]:
         """
         Process and upload multiple documents in batches
@@ -180,21 +175,14 @@ class EndToEndPipeline:
         if show_progress:
             try:
                 from tqdm import tqdm
-                iterator = tqdm(
-                    iterator,
-                    total=total,
-                    desc="Processing pipeline"
-                )
+
+                iterator = tqdm(iterator, total=total, desc="Processing pipeline")
             except ImportError:
                 pass
 
         # Process each document
         for file_path, product_id in iterator:
-            result = self.process_document(
-                file_path,
-                product_id=product_id,
-                upload=True
-            )
+            result = self.process_document(file_path, product_id=product_id, upload=True)
             results.append(result)
 
         # Summary
@@ -214,7 +202,7 @@ class EndToEndPipeline:
         query_image: Optional[Union[str, Path]] = None,
         fusion_strategy: str = "rrf",
         weights: Optional[Dict[str, float]] = None,
-        limit: int = 10
+        limit: int = 10,
     ) -> List[Any]:  # List[SearchResult]
         """
         Search using text query and optional image
@@ -237,27 +225,22 @@ class EndToEndPipeline:
 
         # Text embedding
         text_emb = self.ocr_integration.embedder.embed_text(query)
-        embeddings['text'] = text_emb
+        embeddings["text"] = text_emb
 
         # Image embedding (optional)
-        if query_image and self.ocr_integration.embedder.is_available('image'):
+        if query_image and self.ocr_integration.embedder.is_available("image"):
             image_emb = self.ocr_integration.embedder.embed_image(query_image)
-            embeddings['image'] = image_emb
+            embeddings["image"] = image_emb
 
         # Hybrid search
         results = self.search_engine.search_hybrid(
-            embeddings=embeddings,
-            weights=weights,
-            limit=limit
+            embeddings=embeddings, weights=weights, limit=limit
         )
 
         return results
 
     def search_by_document(
-        self,
-        file_path: Union[str, Path],
-        limit: int = 10,
-        exclude_self: bool = True
+        self, file_path: Union[str, Path], limit: int = 10, exclude_self: bool = True
     ) -> List[Any]:  # List[SearchResult]
         """
         Search by similarity to a document (image/PDF)
@@ -276,17 +259,13 @@ class EndToEndPipeline:
         file_path = Path(file_path)
 
         # Process document to get embeddings
-        result = self.ocr_integration.process_document(
-            file_path,
-            extract_metadata=False
-        )
+        result = self.ocr_integration.process_document(file_path, extract_metadata=False)
 
-        embeddings = result['embeddings']
+        embeddings = result["embeddings"]
 
         # Search
         results = self.search_engine.search_hybrid(
-            embeddings=embeddings,
-            limit=limit + 1 if exclude_self else limit
+            embeddings=embeddings, limit=limit + 1 if exclude_self else limit
         )
 
         # Exclude query document if requested
@@ -304,28 +283,28 @@ class EndToEndPipeline:
             Dictionary with statistics
         """
         stats = {
-            'ocr': {
-                'available': self.ocr_integration.ocr.is_available(),
-                'language': self.ocr_integration.ocr.lang,
-                'gpu_enabled': self.ocr_integration.ocr.use_gpu
+            "ocr": {
+                "available": self.ocr_integration.ocr.is_available(),
+                "language": self.ocr_integration.ocr.lang,
+                "gpu_enabled": self.ocr_integration.ocr.use_gpu,
             },
-            'embeddings': {
-                'text_available': self.ocr_integration.embedder.is_available('text'),
-                'image_available': self.ocr_integration.embedder.is_available('image'),
-                'shape_available': self.ocr_integration.embedder.is_available('shape'),
-                'dimensions': self.ocr_integration.embedder.get_dimensions()
+            "embeddings": {
+                "text_available": self.ocr_integration.embedder.is_available("text"),
+                "image_available": self.ocr_integration.embedder.is_available("image"),
+                "shape_available": self.ocr_integration.embedder.is_available("shape"),
+                "dimensions": self.ocr_integration.embedder.get_dimensions(),
             },
-            'cache': self.ocr_integration.get_cache_stats(),
-            'qdrant': {
-                'collection': self.uploader.collection_name,
-                'stats': self.uploader.get_collection_stats()
-            }
+            "cache": self.ocr_integration.get_cache_stats(),
+            "qdrant": {
+                "collection": self.uploader.collection_name,
+                "stats": self.uploader.get_collection_stats(),
+            },
         }
 
         if self.search_engine:
-            stats['search'] = {
-                'fusion_strategy': self.search_engine.strategy_name,
-                'collection': self.search_engine.collection_name
+            stats["search"] = {
+                "fusion_strategy": self.search_engine.strategy_name,
+                "collection": self.search_engine.collection_name,
             }
 
         return stats
@@ -340,35 +319,33 @@ class EndToEndPipeline:
         validation = {}
 
         # Check OCR
-        validation['ocr_available'] = self.ocr_integration.ocr.is_available()
+        validation["ocr_available"] = self.ocr_integration.ocr.is_available()
 
         # Check embeddings
-        validation['text_embedder_available'] = (
-            self.ocr_integration.embedder.is_available('text')
-        )
-        validation['image_embedder_available'] = (
-            self.ocr_integration.embedder.is_available('image')
-        )
+        validation["text_embedder_available"] = self.ocr_integration.embedder.is_available("text")
+        validation["image_embedder_available"] = self.ocr_integration.embedder.is_available("image")
 
         # Check Qdrant connection
         try:
             stats = self.uploader.get_collection_stats()
-            validation['qdrant_connected'] = True
-            validation['collection_exists'] = True
+            validation["qdrant_connected"] = True
+            validation["collection_exists"] = True
         except Exception:
-            validation['qdrant_connected'] = False
-            validation['collection_exists'] = False
+            validation["qdrant_connected"] = False
+            validation["collection_exists"] = False
 
         # Check search engine
-        validation['search_engine_available'] = self.search_engine is not None
+        validation["search_engine_available"] = self.search_engine is not None
 
         # Overall status
-        validation['pipeline_ready'] = all([
-            validation['ocr_available'],
-            validation['text_embedder_available'],
-            validation['qdrant_connected'],
-            validation['collection_exists']
-        ])
+        validation["pipeline_ready"] = all(
+            [
+                validation["ocr_available"],
+                validation["text_embedder_available"],
+                validation["qdrant_connected"],
+                validation["collection_exists"],
+            ]
+        )
 
         return validation
 

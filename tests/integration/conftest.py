@@ -3,9 +3,11 @@ Pytest configuration for integration tests
 
 Provides shared fixtures and configuration for integration testing
 """
-import pytest
+
 import asyncio
-from unittest.mock import Mock, AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, Mock
+
+import pytest
 from fastapi.testclient import TestClient
 
 
@@ -75,11 +77,9 @@ def mock_config():
 def mock_rag_qa_service():
     """Mock RAG QA service"""
     service = Mock()
-    service.query = AsyncMock(return_value={
-        "answer": "Test answer",
-        "citations": ["source1"],
-        "confidence": 0.9
-    })
+    service.query = AsyncMock(
+        return_value={"answer": "Test answer", "citations": ["source1"], "confidence": 0.9}
+    )
     return service
 
 
@@ -87,10 +87,7 @@ def mock_rag_qa_service():
 def mock_consultation_service():
     """Mock consultation service"""
     service = Mock()
-    service.consult = AsyncMock(return_value={
-        "recommendations": ["rec1"],
-        "confidence": 0.85
-    })
+    service.consult = AsyncMock(return_value={"recommendations": ["rec1"], "confidence": 0.85})
     return service
 
 
@@ -98,11 +95,9 @@ def mock_consultation_service():
 def mock_document_ingestion_service():
     """Mock document ingestion service"""
     service = Mock()
-    service.ingest = AsyncMock(return_value={
-        "document_id": "doc-123",
-        "chunks": 10,
-        "status": "completed"
-    })
+    service.ingest = AsyncMock(
+        return_value={"document_id": "doc-123", "chunks": 10, "status": "completed"}
+    )
     return service
 
 
@@ -112,5 +107,5 @@ def integration_test_markers():
     return {
         "integration": "integration tests requiring mocked services",
         "slow": "slow running integration tests",
-        "asyncio": "async integration tests"
+        "asyncio": "async integration tests",
     }

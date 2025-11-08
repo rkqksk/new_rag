@@ -1,10 +1,12 @@
 """
 Product Interaction Tracking Routes
 """
-from fastapi import APIRouter, HTTPException
-from typing import Optional
-from datetime import datetime
+
 import uuid
+from datetime import datetime
+from typing import Optional
+
+from fastapi import APIRouter, HTTPException
 
 from app.conversation import ConversationManager
 from app.conversation.states import ConversationContext
@@ -13,8 +15,7 @@ router = APIRouter(prefix="/api/v1", tags=["tracking"])
 
 # Initialize conversation manager
 conversation_manager = ConversationManager(
-    ollama_url="http://localhost:11434",
-    qdrant_url="http://localhost:6333"
+    ollama_url="http://localhost:11434", qdrant_url="http://localhost:6333"
 )
 
 
@@ -42,7 +43,7 @@ async def track_product_view(product_id: str, session_id: Optional[str] = None):
     return {
         "success": True,
         "product_id": product_id,
-        "view_count": context.viewed_products[product_id]
+        "view_count": context.viewed_products[product_id],
     }
 
 
@@ -68,7 +69,7 @@ async def track_product_click(product_id: str, session_id: Optional[str] = None)
     return {
         "success": True,
         "product_id": product_id,
-        "total_clicked": len(context.clicked_products)
+        "total_clicked": len(context.clicked_products),
     }
 
 
@@ -94,7 +95,7 @@ async def track_sample_request(product_id: str, session_id: Optional[str] = None
     return {
         "success": True,
         "product_id": product_id,
-        "total_sample_requests": len(context.sample_requested_products)
+        "total_sample_requests": len(context.sample_requested_products),
     }
 
 
@@ -114,5 +115,5 @@ async def get_session_interactions(session_id: str):
         "last_interacted_product": context.last_interacted_product,
         "total_clicks": len(context.clicked_products),
         "total_samples": len(context.sample_requested_products),
-        "total_views": sum(context.viewed_products.values())
+        "total_views": sum(context.viewed_products.values()),
     }

@@ -9,24 +9,24 @@ Features:
 - Session-based learning without login
 """
 
-from .user_profile import UserProfile, PreferenceExtractor
-from .personalized_recommender import PersonalizedRecommender, RecommendationConfig
-from .integrated_service import PersonalizationService
 from .adaptive_weights import AdaptiveWeightsLearner, UserSearchFocus
-from .global_analytics import GlobalAnalytics
-from .compatibility_filter import CompatibilityFilter, CompatibilityRules
 from .advanced_personalization_service import AdvancedPersonalizationService
+from .compatibility_filter import CompatibilityFilter, CompatibilityRules
+from .global_analytics import GlobalAnalytics
+from .integrated_service import PersonalizationService
+from .personalized_recommender import PersonalizedRecommender, RecommendationConfig
+from .user_profile import PreferenceExtractor, UserProfile
 
 __all__ = [
-    'UserProfile',
-    'PreferenceExtractor',
-    'PersonalizedRecommender',
-    'RecommendationConfig',
-    'PersonalizationService',
-    'AdaptiveWeightsLearner',
-    'UserSearchFocus',
-    'GlobalAnalytics',
-    'CompatibilityFilter',
-    'CompatibilityRules',
-    'AdvancedPersonalizationService'
+    "UserProfile",
+    "PreferenceExtractor",
+    "PersonalizedRecommender",
+    "RecommendationConfig",
+    "PersonalizationService",
+    "AdaptiveWeightsLearner",
+    "UserSearchFocus",
+    "GlobalAnalytics",
+    "CompatibilityFilter",
+    "CompatibilityRules",
+    "AdvancedPersonalizationService",
 ]

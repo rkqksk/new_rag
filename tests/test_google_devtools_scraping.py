@@ -43,8 +43,8 @@ async def test_simple_scraping():
         print("\n[3/5] 페이지 데이터 수집 중...")
         crawl_result = await automation.crawl_page()
 
-        if crawl_result.get('status') == 'success':
-            data = crawl_result.get('data', {})
+        if crawl_result.get("status") == "success":
+            data = crawl_result.get("data", {})
             print(f"✓ 데이터 수집 완료")
             print(f"  - 제목: {data.get('title')}")
             print(f"  - URL: {data.get('url')}")
@@ -54,7 +54,7 @@ async def test_simple_scraping():
             print(f"  - 폼 수: {data.get('forms', 0)}")
 
             # 텍스트 미리보기
-            text_content = data.get('text', '')[:200]
+            text_content = data.get("text", "")[:200]
             print(f"\n  📄 텍스트 미리보기:")
             print(f"  {text_content}...")
 
@@ -62,22 +62,22 @@ async def test_simple_scraping():
         print("\n[4/5] 성능 메트릭 수집 중...")
         metrics_result = await automation.get_performance_metrics()
 
-        if metrics_result.get('status') == 'success':
-            metrics = metrics_result.get('metrics', {})
+        if metrics_result.get("status") == "success":
+            metrics = metrics_result.get("metrics", {})
             print(f"✓ 성능 메트릭 수집 완료")
             print(f"  - 페이지 로드 시간: {metrics.get('loadTime', 0)}ms")
             print(f"  - DOM 로드 시간: {metrics.get('domContentLoaded', 0)}ms")
             print(f"  - First Paint: {metrics.get('firstPaint', 0):.0f}ms")
 
-            if metrics.get('memory'):
-                memory = metrics['memory']
+            if metrics.get("memory"):
+                memory = metrics["memory"]
                 print(f"  - 메모리 사용량: {memory.get('heapUsagePercent')}%")
 
         # 5. 스크린샷 저장
         print("\n[5/5] 스크린샷 캡처 중...")
         screenshot_result = await automation.take_screenshot("chungjinkorea_product.png")
 
-        if screenshot_result.get('status') == 'success':
+        if screenshot_result.get("status") == "success":
             print(f"✓ 스크린샷 저장됨: {screenshot_result.get('path')}")
 
         # 종료
@@ -92,6 +92,7 @@ async def test_simple_scraping():
     except Exception as e:
         print(f"\n❌ 오류 발생: {e}")
         import traceback
+
         traceback.print_exc()
     finally:
         # 브라우저가 열려있으면 종료
@@ -109,11 +110,7 @@ async def test_advanced_scraping():
 
     automation = DevToolsAutomation()
 
-    urls = [
-        "https://example.com",
-        "https://www.python.org",
-        "https://github.com"
-    ]
+    urls = ["https://example.com", "https://www.python.org", "https://github.com"]
 
     try:
         print("\n브라우저 시작 중...")
@@ -134,11 +131,11 @@ async def test_advanced_scraping():
 
                 result = {
                     "url": url,
-                    "title": nav_result.get('title'),
-                    "load_time": nav_result.get('load_time', 0),
-                    "links_count": len(crawl_result.get('data', {}).get('links', [])),
-                    "images_count": crawl_result.get('data', {}).get('images', 0),
-                    "load_time_ms": metrics_result.get('metrics', {}).get('loadTime', 0)
+                    "title": nav_result.get("title"),
+                    "load_time": nav_result.get("load_time", 0),
+                    "links_count": len(crawl_result.get("data", {}).get("links", [])),
+                    "images_count": crawl_result.get("data", {}).get("images", 0),
+                    "load_time_ms": metrics_result.get("metrics", {}).get("loadTime", 0),
                 }
 
                 results.append(result)
@@ -168,6 +165,7 @@ async def test_advanced_scraping():
     except Exception as e:
         print(f"\n❌ 오류 발생: {e}")
         import traceback
+
         traceback.print_exc()
 
 

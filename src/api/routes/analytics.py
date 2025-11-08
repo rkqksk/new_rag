@@ -3,13 +3,13 @@
 클릭 추적, 샘플 신청 등
 """
 
+from datetime import datetime
+from typing import Dict, List, Optional
+
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
-from typing import Optional, Dict, List
-from datetime import datetime
 
 from src.analytics.behavior_tracker import get_behavior_tracker
-
 
 router = APIRouter(prefix="/analytics", tags=["analytics"])
 
@@ -18,8 +18,10 @@ router = APIRouter(prefix="/analytics", tags=["analytics"])
 # Request Models
 # ============================================================
 
+
 class ClickEventRequest(BaseModel):
     """클릭 이벤트 요청"""
+
     user_id: str
     session_id: str
     product_idx: str
@@ -36,6 +38,7 @@ class ClickEventRequest(BaseModel):
 
 class PageViewEventRequest(BaseModel):
     """페이지 뷰 이벤트 요청 (상세 페이지)"""
+
     user_id: str
     session_id: str
     product_idx: str
@@ -47,6 +50,7 @@ class PageViewEventRequest(BaseModel):
 
 class SampleRequestSubmit(BaseModel):
     """샘플 신청 제출"""
+
     user_id: str
     session_id: str
     product_idx: str
@@ -62,6 +66,7 @@ class SampleRequestSubmit(BaseModel):
 # ============================================================
 # Endpoints
 # ============================================================
+
 
 @router.post("/track/click")
 async def track_click(request: ClickEventRequest, req: Request):
@@ -97,7 +102,7 @@ async def track_click(request: ClickEventRequest, req: Request):
             click_position=request.click_position,
             search_query=request.search_query,
             referrer=request.referrer,
-            ip_address=ip_address
+            ip_address=ip_address,
         )
 
         return {"status": "success", "message": "Click event tracked"}
@@ -149,7 +154,7 @@ async def track_pageview(request: PageViewEventRequest, req: Request):
             viewed_images=request.viewed_images,
             checked_specs=request.checked_specs,
             checked_compatibility=request.checked_compatibility,
-            ip_address=ip_address
+            ip_address=ip_address,
         )
 
         return {"status": "success", "message": "Page view event tracked"}
@@ -190,7 +195,7 @@ async def submit_sample_request(request: SampleRequestSubmit, req: Request):
             "category": None,
             "material": None,
             "capacity_ml": None,
-            "neck_size": None
+            "neck_size": None,
         }
 
         # 연락처 정보 구성
@@ -198,7 +203,7 @@ async def submit_sample_request(request: SampleRequestSubmit, req: Request):
             "name": request.contact_name,
             "phone": request.contact_phone,
             "email": request.contact_email,
-            "address": request.contact_address
+            "address": request.contact_address,
         }
 
         await tracker.track_sample_request(
@@ -215,13 +220,13 @@ async def submit_sample_request(request: SampleRequestSubmit, req: Request):
             company_name=request.company_name,
             contact_info=contact_info,
             notes=request.notes,
-            ip_address=ip_address
+            ip_address=ip_address,
         )
 
         return {
             "status": "success",
             "message": "샘플 신청이 접수되었습니다.",
-            "request_id": f"{request.user_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            "request_id": f"{request.user_id}_{datetime.now().strftime('%Y%m%d%H%M%S')}",
         }
 
     except Exception as e:
@@ -243,7 +248,7 @@ async def get_tracker_status():
         "status": "active",
         "queue_size": len(tracker.queue),
         "batch_size": tracker.batch_size,
-        "flush_interval_seconds": tracker.flush_interval_seconds
+        "flush_interval_seconds": tracker.flush_interval_seconds,
     }
 
 
@@ -257,7 +262,4 @@ async def flush_tracker():
     tracker = get_behavior_tracker()
     await tracker.flush()
 
-    return {
-        "status": "success",
-        "message": "Tracker flushed successfully"
-    }
+    return {"status": "success", "message": "Tracker flushed successfully"}

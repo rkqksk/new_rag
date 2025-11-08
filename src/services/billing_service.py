@@ -5,12 +5,12 @@ Handles subscription management, billing, and invoicing for SaaS platform.
 """
 
 import os
-from typing import Optional, Dict
 from datetime import datetime, timedelta
+from typing import Dict, Optional
+
 import stripe
 
-from src.models.saas_models import Tenant, PlanTier, SubscriptionStatus, Invoice
-
+from src.models.saas_models import Invoice, PlanTier, SubscriptionStatus, Tenant
 
 # Configure Stripe
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY", "sk_test_placeholder")
@@ -33,20 +33,15 @@ class BillingService:
         PlanTier.FREE: None,  # Free tier has no price
         PlanTier.PRO: {
             "monthly": os.getenv("STRIPE_PRO_MONTHLY_PRICE_ID", "price_pro_monthly"),
-            "yearly": os.getenv("STRIPE_PRO_YEARLY_PRICE_ID", "price_pro_yearly")
+            "yearly": os.getenv("STRIPE_PRO_YEARLY_PRICE_ID", "price_pro_yearly"),
         },
         PlanTier.ENTERPRISE: {
             "monthly": os.getenv("STRIPE_ENTERPRISE_MONTHLY_PRICE_ID", "price_ent_monthly"),
-            "yearly": os.getenv("STRIPE_ENTERPRISE_YEARLY_PRICE_ID", "price_ent_yearly")
-        }
+            "yearly": os.getenv("STRIPE_ENTERPRISE_YEARLY_PRICE_ID", "price_ent_yearly"),
+        },
     }
 
-    def create_customer(
-        self,
-        tenant_id: str,
-        email: str,
-        company_name: str
-    ) -> str:
+    def create_customer(self, tenant_id: str, email: str, company_name: str) -> str:
         """
         Create Stripe customer
 
@@ -59,11 +54,7 @@ class BillingService:
             Stripe customer ID
         """
         customer = stripe.Customer.create(
-            email=email,
-            name=company_name,
-            metadata={
-                "tenant_id": tenant_id
-            }
+            email=email, name=company_name, metadata={"tenant_id": tenant_id}
         )
 
         return customer.id
@@ -72,7 +63,7 @@ class BillingService:
         self,
         customer_id: str,
         plan_tier: PlanTier,
-        billing_period: str = "monthly"  # monthly, yearly
+        billing_period: str = "monthly",  # monthly, yearly
     ) -> Dict:
         """
         Create subscription for customer
@@ -97,20 +88,17 @@ class BillingService:
             items=[{"price": price_id}],
             payment_behavior="default_incomplete",
             payment_settings={"save_default_payment_method": "on_subscription"},
-            expand=["latest_invoice.payment_intent"]
+            expand=["latest_invoice.payment_intent"],
         )
 
         return {
             "subscription_id": subscription.id,
             "client_secret": subscription.latest_invoice.payment_intent.client_secret,
-            "status": subscription.status
+            "status": subscription.status,
         }
 
     def upgrade_subscription(
-        self,
-        subscription_id: str,
-        new_plan_tier: PlanTier,
-        billing_period: str = "monthly"
+        self, subscription_id: str, new_plan_tier: PlanTier, billing_period: str = "monthly"
     ) -> Dict:
         """
         Upgrade subscription to new plan
@@ -132,26 +120,17 @@ class BillingService:
         # Update subscription
         updated_subscription = stripe.Subscription.modify(
             subscription_id,
-            items=[{
-                "id": subscription["items"]["data"][0].id,
-                "price": new_price_id
-            }],
-            proration_behavior="always_invoice"  # Prorate and invoice immediately
+            items=[{"id": subscription["items"]["data"][0].id, "price": new_price_id}],
+            proration_behavior="always_invoice",  # Prorate and invoice immediately
         )
 
         return {
             "subscription_id": updated_subscription.id,
             "status": updated_subscription.status,
-            "current_period_end": datetime.fromtimestamp(
-                updated_subscription.current_period_end
-            )
+            "current_period_end": datetime.fromtimestamp(updated_subscription.current_period_end),
         }
 
-    def cancel_subscription(
-        self,
-        subscription_id: str,
-        immediately: bool = False
-    ) -> Dict:
+    def cancel_subscription(self, subscription_id: str, immediately: bool = False) -> Dict:
         """
         Cancel subscription
 
@@ -167,22 +146,20 @@ class BillingService:
             subscription = stripe.Subscription.delete(subscription_id)
         else:
             # Cancel at period end
-            subscription = stripe.Subscription.modify(
-                subscription_id,
-                cancel_at_period_end=True
-            )
+            subscription = stripe.Subscription.modify(subscription_id, cancel_at_period_end=True)
 
         return {
             "subscription_id": subscription.id,
             "status": subscription.status,
-            "canceled_at": datetime.fromtimestamp(subscription.canceled_at) if subscription.canceled_at else None
+            "canceled_at": (
+                datetime.fromtimestamp(subscription.canceled_at)
+                if subscription.canceled_at
+                else None
+            ),
         }
 
     def get_usage_record(
-        self,
-        subscription_item_id: str,
-        quantity: int,
-        timestamp: Optional[int] = None
+        self, subscription_item_id: str, quantity: int, timestamp: Optional[int] = None
     ):
         """
         Report usage for usage-based billing
@@ -199,17 +176,12 @@ class BillingService:
             subscription_item_id,
             quantity=quantity,
             timestamp=timestamp,
-            action="set"  # set, increment
+            action="set",  # set, increment
         )
 
         return usage_record
 
-    def create_invoice(
-        self,
-        customer_id: str,
-        amount: float,
-        description: str
-    ) -> str:
+    def create_invoice(self, customer_id: str, amount: float, description: str) -> str:
         """
         Create one-time invoice
 
@@ -226,14 +198,11 @@ class BillingService:
             customer=customer_id,
             amount=int(amount * 100),  # Convert to cents
             currency="usd",
-            description=description
+            description=description,
         )
 
         # Create and finalize invoice
-        invoice = stripe.Invoice.create(
-            customer=customer_id,
-            auto_advance=True  # Auto-finalize
-        )
+        invoice = stripe.Invoice.create(customer=customer_id, auto_advance=True)  # Auto-finalize
 
         finalized_invoice = stripe.Invoice.finalize_invoice(invoice.id)
 
@@ -253,9 +222,7 @@ class BillingService:
         webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET")
 
         try:
-            event = stripe.Webhook.construct_event(
-                payload, sig_header, webhook_secret
-            )
+            event = stripe.Webhook.construct_event(payload, sig_header, webhook_secret)
         except ValueError:
             raise ValueError("Invalid payload")
         except stripe.error.SignatureVerificationError:
@@ -271,7 +238,7 @@ class BillingService:
             "customer.subscription.deleted": self._handle_subscription_deleted,
             "invoice.payment_succeeded": self._handle_payment_succeeded,
             "invoice.payment_failed": self._handle_payment_failed,
-            "customer.subscription.trial_will_end": self._handle_trial_ending
+            "customer.subscription.trial_will_end": self._handle_trial_ending,
         }
 
         handler = handlers.get(event_type)
@@ -293,8 +260,12 @@ class BillingService:
                 if tenant:
                     tenant.stripe_subscription_id = subscription["id"]
                     tenant.subscription_status = SubscriptionStatus(subscription["status"])
-                    tenant.current_period_start = datetime.fromtimestamp(subscription["current_period_start"])
-                    tenant.current_period_end = datetime.fromtimestamp(subscription["current_period_end"])
+                    tenant.current_period_start = datetime.fromtimestamp(
+                        subscription["current_period_start"]
+                    )
+                    tenant.current_period_end = datetime.fromtimestamp(
+                        subscription["current_period_end"]
+                    )
                     db.commit()
 
             return {"status": "processed", "tenant_id": tenant_id}
@@ -312,7 +283,9 @@ class BillingService:
                 tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
                 if tenant:
                     tenant.subscription_status = SubscriptionStatus(subscription["status"])
-                    tenant.current_period_end = datetime.fromtimestamp(subscription["current_period_end"])
+                    tenant.current_period_end = datetime.fromtimestamp(
+                        subscription["current_period_end"]
+                    )
                     db.commit()
 
             return {"status": "processed", "tenant_id": tenant_id}
@@ -322,6 +295,7 @@ class BillingService:
     def _handle_subscription_deleted(self, subscription: Dict) -> Dict:
         """Handle subscription deleted (canceled) event"""
         from src.db.session import SessionLocal
+
         from src.models.saas_models import TenantStatus
 
         db = SessionLocal()
@@ -363,7 +337,7 @@ class BillingService:
                     status="paid",
                     paid_at=datetime.fromtimestamp(invoice["status_transitions"]["paid_at"]),
                     invoice_pdf_url=invoice.get("invoice_pdf"),
-                    hosted_invoice_url=invoice.get("hosted_invoice_url")
+                    hosted_invoice_url=invoice.get("hosted_invoice_url"),
                 )
                 db.add(db_invoice)
                 db.commit()
@@ -375,6 +349,7 @@ class BillingService:
     def _handle_payment_failed(self, invoice: Dict) -> Dict:
         """Handle failed payment"""
         from src.db.session import SessionLocal
+
         from src.models.saas_models import TenantStatus
 
         db = SessionLocal()

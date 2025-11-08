@@ -17,7 +17,7 @@ import pickle
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import Optional, Dict, Any, Callable
+from typing import Any, Callable, Dict, Optional
 
 import httpx
 
@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SessionInfo:
     """Session metadata"""
+
     name: str
     created_at: datetime
     last_used: datetime
@@ -72,7 +73,7 @@ class SessionManager:
         if storage_dir:
             self.storage_dir = Path(storage_dir)
         else:
-            self.storage_dir = Path.home() / '.rag-enterprise' / 'sessions'
+            self.storage_dir = Path.home() / ".rag-enterprise" / "sessions"
 
         self.storage_dir.mkdir(parents=True, exist_ok=True)
 
@@ -84,12 +85,12 @@ class SessionManager:
     def _get_session_path(self, name: str) -> Path:
         """Get file path for session"""
         # Sanitize session name
-        safe_name = "".join(c for c in name if c.isalnum() or c in ('-', '_'))
+        safe_name = "".join(c for c in name if c.isalnum() or c in ("-", "_"))
         return self.storage_dir / f"{safe_name}.session"
 
     def _get_info_path(self, name: str) -> Path:
         """Get file path for session info"""
-        safe_name = "".join(c for c in name if c.isalnum() or c in ('-', '_'))
+        safe_name = "".join(c for c in name if c.isalnum() or c in ("-", "_"))
         return self.storage_dir / f"{safe_name}.info"
 
     def save_session(
@@ -97,7 +98,7 @@ class SessionManager:
         name: str,
         client: httpx.AsyncClient,
         validation_url: Optional[str] = None,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ):
         """
         Save session cookies to disk
@@ -113,7 +114,7 @@ class SessionManager:
 
         try:
             # Save cookies
-            with open(session_path, 'wb') as f:
+            with open(session_path, "wb") as f:
                 pickle.dump(client.cookies, f)
 
             # Save session info
@@ -124,10 +125,10 @@ class SessionManager:
                 last_validated=datetime.now(),
                 valid=True,
                 validation_url=validation_url,
-                metadata=metadata or {}
+                metadata=metadata or {},
             )
 
-            with open(info_path, 'wb') as f:
+            with open(info_path, "wb") as f:
                 pickle.dump(info, f)
 
             self._session_info[name] = info
@@ -157,18 +158,18 @@ class SessionManager:
 
         try:
             # Load cookies
-            with open(session_path, 'rb') as f:
+            with open(session_path, "rb") as f:
                 cookies = pickle.load(f)
 
             # Load session info
             if info_path.exists():
-                with open(info_path, 'rb') as f:
+                with open(info_path, "rb") as f:
                     info = pickle.load(f)
                     info.last_used = datetime.now()
                     self._session_info[name] = info
 
                     # Save updated last_used
-                    with open(info_path, 'wb') as f:
+                    with open(info_path, "wb") as f:
                         pickle.dump(info, f)
 
             # Create client with loaded cookies
@@ -182,10 +183,7 @@ class SessionManager:
             return None
 
     async def verify_session(
-        self,
-        client: httpx.AsyncClient,
-        validation_url: str,
-        expected_status: int = 200
+        self, client: httpx.AsyncClient, validation_url: str, expected_status: int = 200
     ) -> bool:
         """
         Verify session is still valid
@@ -203,8 +201,8 @@ class SessionManager:
 
             # Check for redirect to login page
             if response.status_code in (301, 302, 303, 307, 308):
-                location = response.headers.get('location', '')
-                if 'login' in location.lower():
+                location = response.headers.get("location", "")
+                if "login" in location.lower():
                     logger.warning(f"Session expired (redirected to login)")
                     return False
 
@@ -228,7 +226,7 @@ class SessionManager:
         validation_url: str,
         login_func: Callable[[], httpx.AsyncClient],
         max_age_hours: int = 24,
-        force_refresh: bool = False
+        force_refresh: bool = False,
     ) -> httpx.AsyncClient:
         """
         Get existing session or create new one
@@ -269,7 +267,9 @@ class SessionManager:
                 if info:
                     age = datetime.now() - info.created_at
                     if age > timedelta(hours=max_age_hours):
-                        logger.info(f"Session {name} too old ({age.total_seconds() / 3600:.1f} hours), refreshing")
+                        logger.info(
+                            f"Session {name} too old ({age.total_seconds() / 3600:.1f} hours), refreshing"
+                        )
                         await client.aclose()
                         client = None
 
@@ -326,7 +326,7 @@ class SessionManager:
 
         for session_file in self.storage_dir.glob("*.info"):
             try:
-                with open(session_file, 'rb') as f:
+                with open(session_file, "rb") as f:
                     info = pickle.load(f)
                     sessions[info.name] = info
             except Exception as e:
@@ -354,7 +354,7 @@ class SessionManager:
         self,
         name: str,
         login_func: Callable[[], httpx.AsyncClient],
-        validation_url: Optional[str] = None
+        validation_url: Optional[str] = None,
     ) -> httpx.AsyncClient:
         """
         Force refresh a session
@@ -404,7 +404,7 @@ class SessionManager:
             return None
 
         try:
-            with open(info_path, 'rb') as f:
+            with open(info_path, "rb") as f:
                 info = pickle.load(f)
                 self._session_info[name] = info
                 return info
@@ -419,7 +419,7 @@ async def with_session(
     validation_url: str,
     login_func: Callable[[], httpx.AsyncClient],
     operation: Callable[[httpx.AsyncClient], Any],
-    manager: Optional[SessionManager] = None
+    manager: Optional[SessionManager] = None,
 ) -> Any:
     """
     Execute operation with managed session
@@ -455,9 +455,7 @@ async def with_session(
         manager = SessionManager()
 
     client = await manager.get_or_create_session(
-        name=name,
-        validation_url=validation_url,
-        login_func=login_func
+        name=name, validation_url=validation_url, login_func=login_func
     )
 
     try:

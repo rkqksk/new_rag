@@ -10,8 +10,9 @@ Schema Detector
 """
 
 import re
-from typing import Dict, List, Tuple, Optional
 from difflib import SequenceMatcher
+from typing import Dict, List, Optional, Tuple
+
 from src.core.chunk_templates import FieldType
 
 
@@ -21,59 +22,103 @@ class SchemaDetector:
     # 컬럼명 → FieldType 매핑 사전
     COLUMN_PATTERNS = {
         FieldType.PRODUCT_NAME: [
-            "제품명", "product name", "품명", "상품명", "제품이름",
-            "name", "product", "item name", "description",
-            "제품", "상품", "품목"
+            "제품명",
+            "product name",
+            "품명",
+            "상품명",
+            "제품이름",
+            "name",
+            "product",
+            "item name",
+            "description",
+            "제품",
+            "상품",
+            "품목",
         ],
         FieldType.PRODUCT_CODE: [
-            "제품코드", "product code", "품번", "모델번호", "model",
-            "code", "item code", "sku", "part number",
-            "코드", "번호", "모델"
+            "제품코드",
+            "product code",
+            "품번",
+            "모델번호",
+            "model",
+            "code",
+            "item code",
+            "sku",
+            "part number",
+            "코드",
+            "번호",
+            "모델",
         ],
         FieldType.MANUFACTURER: [
-            "제조사", "manufacturer", "공급사", "vendor", "supplier",
-            "maker", "brand", "브랜드", "업체", "제조업체"
+            "제조사",
+            "manufacturer",
+            "공급사",
+            "vendor",
+            "supplier",
+            "maker",
+            "brand",
+            "브랜드",
+            "업체",
+            "제조업체",
         ],
         FieldType.CAPACITY: [
-            "용량", "capacity", "ml", "내용량", "volume",
-            "size", "cc", "리터", "사이즈"
+            "용량",
+            "capacity",
+            "ml",
+            "내용량",
+            "volume",
+            "size",
+            "cc",
+            "리터",
+            "사이즈",
         ],
         FieldType.MATERIAL: [
-            "재질", "material", "소재", "원료",
-            "plastic", "pp", "pe", "pet", "petg"
+            "재질",
+            "material",
+            "소재",
+            "원료",
+            "plastic",
+            "pp",
+            "pe",
+            "pet",
+            "petg",
         ],
-        FieldType.NECK: [
-            "neck", "넥", "파이", "직경", "diameter",
-            "Ø", "phi", "mouth", "opening"
-        ],
+        FieldType.NECK: ["neck", "넥", "파이", "직경", "diameter", "Ø", "phi", "mouth", "opening"],
         FieldType.MOQ: [
-            "moq", "최소주문", "minimum order", "min qty",
-            "최소수량", "주문단위", "포장단위", "package"
+            "moq",
+            "최소주문",
+            "minimum order",
+            "min qty",
+            "최소수량",
+            "주문단위",
+            "포장단위",
+            "package",
         ],
         FieldType.PRICE: [
-            "가격", "price", "단가", "공급가", "supply price",
-            "selling price", "cost", "금액", "판매가"
+            "가격",
+            "price",
+            "단가",
+            "공급가",
+            "supply price",
+            "selling price",
+            "cost",
+            "금액",
+            "판매가",
         ],
-        FieldType.ORIGIN: [
-            "원산지", "origin", "제조국", "country", "made in",
-            "생산국", "국가"
-        ],
-        FieldType.WEIGHT: [
-            "무게", "weight", "중량", "g", "kg"
-        ],
-        FieldType.SIZE: [
-            "크기", "size", "사이즈", "dimensions", "치수"
-        ],
-        FieldType.USE_CASE: [
-            "용도", "use case", "application", "사용처",
-            "쓰임새", "활용"
-        ],
-        FieldType.KEYWORD: [
-            "키워드", "keyword", "tag", "태그"
-        ],
+        FieldType.ORIGIN: ["원산지", "origin", "제조국", "country", "made in", "생산국", "국가"],
+        FieldType.WEIGHT: ["무게", "weight", "중량", "g", "kg"],
+        FieldType.SIZE: ["크기", "size", "사이즈", "dimensions", "치수"],
+        FieldType.USE_CASE: ["용도", "use case", "application", "사용처", "쓰임새", "활용"],
+        FieldType.KEYWORD: ["키워드", "keyword", "tag", "태그"],
         FieldType.DESCRIPTION: [
-            "설명", "description", "상세설명", "비고", "note",
-            "remark", "메모", "detail"
+            "설명",
+            "description",
+            "상세설명",
+            "비고",
+            "note",
+            "remark",
+            "메모",
+            "detail",
         ],
     }
 
@@ -149,9 +194,9 @@ class SchemaDetector:
         # 소문자 변환
         text = text.lower()
         # 공백, 밑줄, 하이픈 제거
-        text = re.sub(r'[\s_\-]', '', text)
+        text = re.sub(r"[\s_\-]", "", text)
         # 괄호 제거
-        text = re.sub(r'[\(\)\[\]]', '', text)
+        text = re.sub(r"[\(\)\[\]]", "", text)
         return text
 
     @classmethod
@@ -228,7 +273,9 @@ class SchemaDetector:
 
         # 유효성 검증
         is_valid = cls.validate_schema(schema)
-        report.append(f"Schema valid: {'✅ Yes' if is_valid else '❌ No (missing required fields)'}")
+        report.append(
+            f"Schema valid: {'✅ Yes' if is_valid else '❌ No (missing required fields)'}"
+        )
 
         return "\n".join(report)
 
@@ -241,8 +288,15 @@ if __name__ == "__main__":
 
     # Test 1: Korean column names
     columns_kr = [
-        "제품명", "제품코드", "용량(ml)", "재질", "가격(원)",
-        "최소주문수량", "제조사", "원산지", "비고"
+        "제품명",
+        "제품코드",
+        "용량(ml)",
+        "재질",
+        "가격(원)",
+        "최소주문수량",
+        "제조사",
+        "원산지",
+        "비고",
     ]
 
     print("\n[Test 1] Korean Column Names")
@@ -255,8 +309,15 @@ if __name__ == "__main__":
 
     # Test 2: English column names
     columns_en = [
-        "Product Name", "SKU", "Capacity (ml)", "Material", "Price ($)",
-        "MOQ", "Manufacturer", "Country of Origin", "Description"
+        "Product Name",
+        "SKU",
+        "Capacity (ml)",
+        "Material",
+        "Price ($)",
+        "MOQ",
+        "Manufacturer",
+        "Country of Origin",
+        "Description",
     ]
 
     print("\n" + "─" * 80)
@@ -268,8 +329,15 @@ if __name__ == "__main__":
 
     # Test 3: Mixed/Partial names
     columns_mixed = [
-        "품명", "Model No.", "ml", "PP/PE", "공급가",
-        "Package Unit", "Vendor", "Made in", "Note"
+        "품명",
+        "Model No.",
+        "ml",
+        "PP/PE",
+        "공급가",
+        "Package Unit",
+        "Vendor",
+        "Made in",
+        "Note",
     ]
 
     print("\n" + "─" * 80)

@@ -9,11 +9,12 @@ CSV 파일 자동 파싱 및 제품 데이터 추출
 - SchemaDetector로 컬럼 자동 인식
 """
 
-import pandas as pd
-import chardet
-from typing import List, Dict, Any, Optional
-from pathlib import Path
 import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import chardet
+import pandas as pd
 
 from src.core.structured_processors.excel_parser import ExcelParser
 
@@ -31,8 +32,8 @@ class CSVParser(ExcelParser):
         self,
         file_path: str,
         encoding: Optional[str] = None,
-        delimiter: str = ',',
-        auto_detect_header: bool = True
+        delimiter: str = ",",
+        auto_detect_header: bool = True,
     ) -> List[Dict[str, Any]]:
         """
         CSV 파일 파싱
@@ -103,20 +104,20 @@ class CSVParser(ExcelParser):
         Returns:
             인코딩 (예: 'utf-8', 'euc-kr', 'cp949')
         """
-        with open(file_path, 'rb') as f:
+        with open(file_path, "rb") as f:
             raw_data = f.read(10000)  # 처음 10KB 읽기
 
         result = chardet.detect(raw_data)
-        encoding = result['encoding']
-        confidence = result['confidence']
+        encoding = result["encoding"]
+        confidence = result["confidence"]
 
         logger.info(f"Encoding detection: {encoding} (confidence: {confidence:.2f})")
 
         # 한글 인코딩 처리
-        if encoding and encoding.lower() in ['euc-kr', 'euckr']:
-            encoding = 'cp949'  # EUC-KR 대신 CP949 사용 (호환성)
+        if encoding and encoding.lower() in ["euc-kr", "euckr"]:
+            encoding = "cp949"  # EUC-KR 대신 CP949 사용 (호환성)
 
-        return encoding or 'utf-8'
+        return encoding or "utf-8"
 
 
 if __name__ == "__main__":
@@ -128,12 +129,12 @@ if __name__ == "__main__":
     print("=" * 80)
 
     # Create test CSV file (UTF-8)
-    with tempfile.NamedTemporaryFile(suffix='.csv', delete=False, mode='w', encoding='utf-8') as f:
+    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False, mode="w", encoding="utf-8") as f:
         temp_path_utf8 = f.name
         f.write("제품명,제품코드,용량(ml),재질,가격(원),최소주문수량,제조사,원산지\n")
-        f.write("100ml PE 보틀,BE100-001,100,PE,\"1,200\",\"5,000개\",금양실업,한국\n")
-        f.write("200ml PET 보틀,BE200-002,200,PET,\"1,500\",\"3,000ea\",청진코리아,중국\n")
-        f.write("24파이 캡,CA024-001,,PP,150,\"10,000\",금양실업,한국\n")
+        f.write('100ml PE 보틀,BE100-001,100,PE,"1,200","5,000개",금양실업,한국\n')
+        f.write('200ml PET 보틀,BE200-002,200,PET,"1,500","3,000ea",청진코리아,중국\n')
+        f.write('24파이 캡,CA024-001,,PP,150,"10,000",금양실업,한국\n')
 
     print(f"\n[Test 1] UTF-8 CSV file: {temp_path_utf8}")
 
@@ -150,7 +151,7 @@ if __name__ == "__main__":
             print(f"   {key:20s}: {value}")
 
     # Create test CSV file (EUC-KR for Korean compatibility)
-    with tempfile.NamedTemporaryFile(suffix='.csv', delete=False, mode='w', encoding='cp949') as f:
+    with tempfile.NamedTemporaryFile(suffix=".csv", delete=False, mode="w", encoding="cp949") as f:
         temp_path_euckr = f.name
         f.write("Product Name,SKU,Capacity (ml),Material,Price ($),MOQ\n")
         f.write("100ml PE Bottle,BE100-001,100,PE,12.00,5000\n")
@@ -171,6 +172,7 @@ if __name__ == "__main__":
 
     # Cleanup
     import os
+
     os.unlink(temp_path_utf8)
     os.unlink(temp_path_euckr)
 

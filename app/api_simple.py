@@ -4,24 +4,25 @@ Simplified API for Cosmetic Packaging Product Search
 Integrates with enhanced product dictionary and Q&A knowledge base
 """
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from pydantic import BaseModel
-from typing import List, Optional, Dict, Any
 import json
 import re
-from pathlib import Path
-from datetime import datetime
-import httpx
 import uuid
+from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
+
+import httpx
+from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 # Initialize FastAPI app
 app = FastAPI(
     title="Cosmetic Packaging API",
     description="Smart product search and inquiry system",
-    version="1.0.0"
+    version="1.0.0",
 )
 
 # CORS middleware
@@ -50,8 +51,7 @@ from app.conversation import ConversationManager
 from app.conversation.compatibility import find_compatible_accessories
 
 conversation_manager = ConversationManager(
-    ollama_url="http://localhost:11434",
-    qdrant_url="http://localhost:6333"
+    ollama_url="http://localhost:11434", qdrant_url="http://localhost:6333"
 )
 
 
@@ -100,7 +100,7 @@ def load_products(categories: List[str] = None) -> Dict[str, Any]:
         categories: List of category names to load. Defaults to ['Bottle', 'Jar', 'Cap', 'Pump']
     """
     if categories is None:
-        categories = ['Bottle', 'Jar', 'Cap', 'Pump']
+        categories = ["Bottle", "Jar", "Cap", "Pump"]
 
     products = {}
 
@@ -112,73 +112,73 @@ def load_products(categories: List[str] = None) -> Dict[str, Any]:
             continue
 
         for material_dir in category_dir.iterdir():
-            if not material_dir.is_dir() or material_dir.name.startswith('.'):
+            if not material_dir.is_dir() or material_dir.name.startswith("."):
                 continue
 
             # Get material from directory name (PE, PET, PP, PETG, Other, etc.)
             material_from_dir = material_dir.name
 
-            products_dir = material_dir / 'products'
+            products_dir = material_dir / "products"
             if not products_dir.exists():
                 continue
 
-            for json_file in products_dir.glob('*.json'):
+            for json_file in products_dir.glob("*.json"):
                 try:
-                    with open(json_file, 'r', encoding='utf-8') as f:
+                    with open(json_file, "r", encoding="utf-8") as f:
                         product = json.load(f)
 
                     # Extract product_id from filename (idx_13.json -> idx_13)
                     product_id = json_file.stem
 
                     # Normalize product structure
-                    specs = product.get('specifications', {})
-                    enrichment = product.get('expert_enrichment', {})
-                    pricing = product.get('pricing', {})
+                    specs = product.get("specifications", {})
+                    enrichment = product.get("expert_enrichment", {})
+                    pricing = product.get("pricing", {})
 
                     # Add print_area_url to specifications if exists
-                    if 'print_area_url' in product:
-                        specs['print_area_url'] = product['print_area_url']
+                    if "print_area_url" in product:
+                        specs["print_area_url"] = product["print_area_url"]
 
                     # Get material: priority is specs, fallback to directory name
-                    material = specs.get('재질(원료)', '') or material_from_dir
+                    material = specs.get("재질(원료)", "") or material_from_dir
 
                     # Get spec: priority is 사양 (full spec), fallback to dimensions (neck size only)
                     # For bottles: 사양="79x153(mm)", dimensions="Ø28"
                     # For caps/pumps: 사양="29x22(mm)/내경Ø20", dimensions="Ø20"
-                    spec = specs.get('사양', '')
-                    if not spec or 'Ø' not in spec:
+                    spec = specs.get("사양", "")
+                    if not spec or "Ø" not in spec:
                         # If 사양 doesn't have Ø, check dimensions field
-                        dimensions = specs.get('dimensions', '')
-                        if dimensions and 'Ø' in dimensions:
+                        dimensions = specs.get("dimensions", "")
+                        if dimensions and "Ø" in dimensions:
                             spec = dimensions
 
                     # Get category_type from product
-                    category_type = product.get('category_type', category.upper())
+                    category_type = product.get("category_type", category.upper())
 
                     products[product_id] = {
-                        'product_id': product_id,
-                        'product_name': product.get('product_name', ''),
-                        'product_code': specs.get('제품 코드', 'N/A'),
-                        'capacity': specs.get('capacity', ''),
-                        'material': material,
-                        'moq': specs.get('moq', ''),
-                        'spec': spec,  # CHANGED: Use spec (with Ø) instead of dimensions
-                        'dimensions': specs.get('사양', ''),  # Keep original 사양 for reference
-                        'neck_size': specs.get('neck_size', ''),
-                        'images': product.get('images', []),
-                        'specifications': specs,
+                        "product_id": product_id,
+                        "product_name": product.get("product_name", ""),
+                        "product_code": specs.get("제품 코드", "N/A"),
+                        "capacity": specs.get("capacity", ""),
+                        "material": material,
+                        "moq": specs.get("moq", ""),
+                        "spec": spec,  # CHANGED: Use spec (with Ø) instead of dimensions
+                        "dimensions": specs.get("사양", ""),  # Keep original 사양 for reference
+                        "neck_size": specs.get("neck_size", ""),
+                        "images": product.get("images", []),
+                        "specifications": specs,
                         # Pricing data
-                        'pricing': pricing,
-                        'print_area_url': product.get('print_area_url', ''),
+                        "pricing": pricing,
+                        "print_area_url": product.get("print_area_url", ""),
                         # Enrichment data
-                        'category': category,
-                        'category_type': category_type,  # NEW: Add category_type
-                        'tags': product.get('tags', []),
-                        'source': product.get('source', ''),
-                        'material_details': enrichment.get('material_details', {}),
-                        'regulatory_compliance': enrichment.get('regulatory_compliance', {}),
-                        'capacity_category': enrichment.get('capacity_category', {}),
-                        'product_category': enrichment.get('product_category', '')
+                        "category": category,
+                        "category_type": category_type,  # NEW: Add category_type
+                        "tags": product.get("tags", []),
+                        "source": product.get("source", ""),
+                        "material_details": enrichment.get("material_details", {}),
+                        "regulatory_compliance": enrichment.get("regulatory_compliance", {}),
+                        "capacity_category": enrichment.get("capacity_category", {}),
+                        "product_category": enrichment.get("product_category", ""),
                     }
                 except Exception as e:
                     print(f"Error loading {json_file}: {e}")
@@ -196,9 +196,9 @@ def extract_capacity(query: str) -> Optional[tuple]:
     """
     # Pattern 1: Number with explicit unit (50ml, 50g, 50미리, etc.)
     patterns_with_unit = [
-        r'(\d+)\s*(ml|ML|미리)',
-        r'(\d+)\s*(g|G|그램)',
-        r'(\d+)\s*밀리',
+        r"(\d+)\s*(ml|ML|미리)",
+        r"(\d+)\s*(g|G|그램)",
+        r"(\d+)\s*밀리",
     ]
 
     for pattern in patterns_with_unit:
@@ -208,22 +208,22 @@ def extract_capacity(query: str) -> Optional[tuple]:
             unit_text = match.group(2).lower()
 
             # Normalize unit
-            if unit_text in ['미리', '밀리', 'ml']:
-                unit = 'ml'
-            elif unit_text in ['그램', 'g']:
-                unit = 'g'
+            if unit_text in ["미리", "밀리", "ml"]:
+                unit = "ml"
+            elif unit_text in ["그램", "g"]:
+                unit = "g"
             else:
                 unit = unit_text
 
             return (value, unit)
 
     # Pattern 2: Number only (50, 100, etc.) - search BOTH ml and g
-    number_only_pattern = r'\b(\d+)\b'
+    number_only_pattern = r"\b(\d+)\b"
     match = re.search(number_only_pattern, query)
     if match:
         value = int(match.group(1))
         # Return 'any' to indicate we should search both ml and g
-        return (value, 'any')
+        return (value, "any")
 
     return None
 
@@ -235,18 +235,27 @@ def is_contextual_query(query: str) -> bool:
     Keywords: 이중에, 여기서, 그중에서, 그 중, 이 중, 저기서, 거기서
     """
     context_keywords = [
-        '이중에', '이 중에', '이중',
-        '여기서', '여기에서',
-        '그중에', '그 중에', '그중',
-        '저기서', '저기에서',
-        '거기서', '거기에서'
+        "이중에",
+        "이 중에",
+        "이중",
+        "여기서",
+        "여기에서",
+        "그중에",
+        "그 중에",
+        "그중",
+        "저기서",
+        "저기에서",
+        "거기서",
+        "거기에서",
     ]
     query_lower = query.lower()
     return any(kw in query_lower for kw in context_keywords)
 
 
 # Filter previous results based on new criteria
-def filter_previous_results(query: str, previous_results: List[Dict[str, Any]], limit: int = 6) -> List[Dict[str, Any]]:
+def filter_previous_results(
+    query: str, previous_results: List[Dict[str, Any]], limit: int = 6
+) -> List[Dict[str, Any]]:
     """Filter previous search results based on additional criteria
 
     Args:
@@ -262,11 +271,11 @@ def filter_previous_results(query: str, previous_results: List[Dict[str, Any]], 
     # Extract filter criteria from query
     # Material keywords (same as search_products)
     material_keywords = {
-        'PETG': ['petg', '피이티지'],
-        'HDPE': ['hdpe', 'high-density', '고밀도'],
-        'PET': ['pet', '페트', '폴리에틸렌 테레프탈레이트', '피이티'],
-        'PP': ['pp', '폴리프로필렌', 'polypropylene', '피피'],
-        'PE': ['pe', '폴리에틸렌', 'polyethylene', '피이', 'ㅍㅇ']
+        "PETG": ["petg", "피이티지"],
+        "HDPE": ["hdpe", "high-density", "고밀도"],
+        "PET": ["pet", "페트", "폴리에틸렌 테레프탈레이트", "피이티"],
+        "PP": ["pp", "폴리프로필렌", "polypropylene", "피피"],
+        "PE": ["pe", "폴리에틸렌", "polyethylene", "피이", "ㅍㅇ"],
     }
 
     # Check for material filter
@@ -284,24 +293,28 @@ def filter_previous_results(query: str, previous_results: List[Dict[str, Any]], 
     for product in previous_results:
         # Apply material filter
         if requested_material:
-            product_material = product.get('material', '').upper()
+            product_material = product.get("material", "").upper()
             if product_material != requested_material:
                 continue
 
         # Apply capacity filter
         if capacity_match:
-            product_capacity_str = product.get('capacity', '')
+            product_capacity_str = product.get("capacity", "")
             product_capacity_match = extract_capacity(product_capacity_str)
 
             if product_capacity_match:
                 # Check if capacities match
-                if capacity_match[1] == 'any':
-                    if not (product_capacity_match[0] == capacity_match[0] and
-                            product_capacity_match[1] in ['ml', 'g']):
+                if capacity_match[1] == "any":
+                    if not (
+                        product_capacity_match[0] == capacity_match[0]
+                        and product_capacity_match[1] in ["ml", "g"]
+                    ):
                         continue
                 else:
-                    if not (product_capacity_match[0] == capacity_match[0] and
-                            product_capacity_match[1] == capacity_match[1]):
+                    if not (
+                        product_capacity_match[0] == capacity_match[0]
+                        and product_capacity_match[1] == capacity_match[1]
+                    ):
                         continue
             else:
                 continue
@@ -332,18 +345,18 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
 
     # Priority 1: Check for PRODUCT CODE exact match (absolute value)
     # Product codes are unique identifiers like OT080-S001, BE030-G001
-    product_code_pattern = r'[A-Z]{2}\d{3,4}[-_][A-Z]\d{3}(?:\(\d+\))?'
+    product_code_pattern = r"[A-Z]{2}\d{3,4}[-_][A-Z]\d{3}(?:\(\d+\))?"
     code_match = re.search(product_code_pattern, query_upper, re.IGNORECASE)
 
     if code_match:
         search_code = code_match.group(0).upper()
         # Search for exact product code match
         for product_id, product in products.items():
-            product_code = product.get('product_code', '').upper()
+            product_code = product.get("product_code", "").upper()
             if product_code == search_code:
                 product_data = product.copy()
-                product_data['product_id'] = product_id
-                product_data['score'] = 100
+                product_data["product_id"] = product_id
+                product_data["score"] = 100
                 # Return ONLY this one product (product code is unique)
                 return [product_data]
 
@@ -355,11 +368,11 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
     # NOTE: Order matters! Check longer keywords first to avoid false matches
     # e.g., "PETG" before "PET", "HDPE" before "PE"
     material_keywords = {
-        'PETG': ['petg', '피이티지'],
-        'HDPE': ['hdpe', 'high-density', '고밀도'],
-        'PET': ['pet', '페트', '폴리에틸렌 테레프탈레이트', '피이티'],
-        'PP': ['pp', '폴리프로필렌', 'polypropylene', '피피'],
-        'PE': ['pe', '폴리에틸렌', 'polyethylene', '피이', 'ㅍㅇ']
+        "PETG": ["petg", "피이티지"],
+        "HDPE": ["hdpe", "high-density", "고밀도"],
+        "PET": ["pet", "페트", "폴리에틸렌 테레프탈레이트", "피이티"],
+        "PP": ["pp", "폴리프로필렌", "polypropylene", "피피"],
+        "PE": ["pe", "폴리에틸렌", "polyethylene", "피이", "ㅍㅇ"],
     }
 
     requested_material = None
@@ -373,10 +386,10 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
     # CRITICAL: Check PUMP and CAP *before* checking for "용기" (container)
     # because "거품용기" should match by keyword "거품", not by "용기" → BOTTLE
     product_type_keywords = {
-        'PUMP': ['펌프', 'pump', '분사', '스프레이'],  # Removed '미스트' to avoid false matches
-        'CAP': ['캡', 'cap', '뚜껑', '마개', '원터치'],
-        'JAR': ['jar', '자', '항아리'],
-        'BOTTLE': ['병', 'bottle', '보틀', '컨테이너'],  # Removed '용기' to prevent false matches
+        "PUMP": ["펌프", "pump", "분사", "스프레이"],  # Removed '미스트' to avoid false matches
+        "CAP": ["캡", "cap", "뚜껑", "마개", "원터치"],
+        "JAR": ["jar", "자", "항아리"],
+        "BOTTLE": ["병", "bottle", "보틀", "컨테이너"],  # Removed '용기' to prevent false matches
     }
 
     requested_product_type = None
@@ -391,13 +404,13 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
 
     # Remove capacity patterns like "50ml", "100g", "30미리"
     if capacity_match:
-        query_keywords = re.sub(r'\d+\s*(ml|g|미리|밀리|리터)', '', query_keywords)
+        query_keywords = re.sub(r"\d+\s*(ml|g|미리|밀리|리터)", "", query_keywords)
 
     # Remove material keywords (they are generic filters)
     if requested_material:
         for mat_kws in material_keywords.values():
             for kw in mat_kws:
-                query_keywords = query_keywords.replace(kw, '')
+                query_keywords = query_keywords.replace(kw, "")
 
     # IMPORTANT: DO NOT remove product type keywords like "용기", "펌프"
     # They are part of product names: "거품용기", "거품펌프"
@@ -408,16 +421,16 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
     keyword_tokens = [kw.strip() for kw in query_keywords.split() if len(kw.strip()) >= 2]
 
     # Additional filtering: remove standalone generic words
-    generic_stopwords = ['제품', '상품', '아이템']
+    generic_stopwords = ["제품", "상품", "아이템"]
     keyword_tokens = [kw for kw in keyword_tokens if kw not in generic_stopwords]
 
     # Extract neck size from query (네크사이즈)
     # Patterns: "20파이", "24 파이", "Ø20", "Ø24", "내경 20"
     requested_neck_size = None
     neck_patterns = [
-        r'(\d+)\s*파이',  # 20파이, 24 파이
-        r'Ø\s*(\d+)',     # Ø20, Ø24
-        r'내경\s*Ø?\s*(\d+)',  # 내경 20, 내경Ø20
+        r"(\d+)\s*파이",  # 20파이, 24 파이
+        r"Ø\s*(\d+)",  # Ø20, Ø24
+        r"내경\s*Ø?\s*(\d+)",  # 내경 20, 내경Ø20
     ]
 
     for pattern in neck_patterns:
@@ -431,9 +444,9 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
     # Patterns: "0.2cc", "0.12cc", "토출량 0.2"
     requested_dosage = None
     dosage_patterns = [
-        r'(\d+\.?\d*)\s*cc',  # 0.2cc, 0.12 cc
-        r'토출량\s*(\d+\.?\d*)',  # 토출량 0.2
-        r'(\d+\.?\d*)\s*씨씨',  # 0.2씨씨
+        r"(\d+\.?\d*)\s*cc",  # 0.2cc, 0.12 cc
+        r"토출량\s*(\d+\.?\d*)",  # 토출량 0.2
+        r"(\d+\.?\d*)\s*씨씨",  # 0.2씨씨
     ]
 
     for pattern in dosage_patterns:
@@ -449,14 +462,14 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
 
     for product_id, product in products.items():
         product_data = product.copy()
-        product_data['product_id'] = product_id
+        product_data["product_id"] = product_id
 
         # Get product name and basic info
-        product_name = product.get('product_name', '').lower()
-        capacity_str = product.get('capacity', '')
-        product_material = product.get('material', '').upper()
-        product_category_type = product.get('category_type', '').upper()
-        product_neck_size = product.get('neck_size', '')
+        product_name = product.get("product_name", "").lower()
+        capacity_str = product.get("capacity", "")
+        product_material = product.get("material", "").upper()
+        product_category_type = product.get("category_type", "").upper()
+        product_neck_size = product.get("neck_size", "")
 
         # Extract capacity value and unit from string like "70ml"
         product_capacity_match = extract_capacity(capacity_str)
@@ -465,13 +478,17 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
         capacity_matches = False
         if capacity_match and product_capacity_match:
             # If query unit is 'any', match both ml and g
-            if capacity_match[1] == 'any':
-                if (product_capacity_match[0] == capacity_match[0] and
-                    product_capacity_match[1] in ['ml', 'g']):
+            if capacity_match[1] == "any":
+                if product_capacity_match[0] == capacity_match[0] and product_capacity_match[1] in [
+                    "ml",
+                    "g",
+                ]:
                     capacity_matches = True
             # Otherwise, exact unit match required
-            elif (product_capacity_match[0] == capacity_match[0] and
-                  product_capacity_match[1] == capacity_match[1]):
+            elif (
+                product_capacity_match[0] == capacity_match[0]
+                and product_capacity_match[1] == capacity_match[1]
+            ):
                 capacity_matches = True
         elif not capacity_match:
             # No capacity specified - allow all
@@ -512,7 +529,7 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
         dosage_matches = False
         if requested_dosage:
             # Get dosage from product specifications
-            product_dosage = product.get('specifications', {}).get('dosage_value')
+            product_dosage = product.get("specifications", {}).get("dosage_value")
             # Exact match: product dosage must equal requested dosage
             if product_dosage and abs(product_dosage - requested_dosage) < 0.001:
                 dosage_matches = True
@@ -554,38 +571,65 @@ def search_products(query: str, products: Dict[str, Any], limit: int = 6) -> Lis
                         keyword_score += 1  # Lower score for fuzzy match
 
         # Priority 1: Exact criteria match WITH keyword match (highest priority)
-        if keyword_score > 0 and capacity_matches and material_matches and product_type_matches and neck_size_matches and dosage_matches:
-            product_data['score'] = 100 + keyword_score * 10
+        if (
+            keyword_score > 0
+            and capacity_matches
+            and material_matches
+            and product_type_matches
+            and neck_size_matches
+            and dosage_matches
+        ):
+            product_data["score"] = 100 + keyword_score * 10
             exact_matches.append(product_data)
         # Priority 2: Keyword match ONLY (for queries like "거품" without criteria)
-        elif keyword_score > 0 and not (capacity_match or requested_material or requested_product_type or requested_neck_size or requested_dosage):
-            product_data['score'] = 90 + keyword_score * 5
+        elif keyword_score > 0 and not (
+            capacity_match
+            or requested_material
+            or requested_product_type
+            or requested_neck_size
+            or requested_dosage
+        ):
+            product_data["score"] = 90 + keyword_score * 5
             keyword_matches.append(product_data)
         # Priority 3: Exact criteria match WITHOUT keyword (lower priority)
-        elif capacity_matches and material_matches and product_type_matches and neck_size_matches and dosage_matches:
-            product_data['score'] = 80
+        elif (
+            capacity_matches
+            and material_matches
+            and product_type_matches
+            and neck_size_matches
+            and dosage_matches
+        ):
+            product_data["score"] = 80
             exact_matches.append(product_data)
         # Priority 4: Fallback - only capacity matches (and no other criteria specified)
-        elif capacity_matches and not requested_material and not requested_product_type and not requested_neck_size and not requested_dosage:
-            product_data['score'] = 50
+        elif (
+            capacity_matches
+            and not requested_material
+            and not requested_product_type
+            and not requested_neck_size
+            and not requested_dosage
+        ):
+            product_data["score"] = 50
             fallback_matches.append(product_data)
 
     # Return results in priority order
     # 1. Exact criteria + keywords
     if exact_matches:
-        exact_matches.sort(key=lambda x: x['score'], reverse=True)
+        exact_matches.sort(key=lambda x: x["score"], reverse=True)
         return exact_matches[:limit]
 
     # 2. Keyword-only matches (for queries like "거품")
     if keyword_matches:
-        keyword_matches.sort(key=lambda x: x['score'], reverse=True)
+        keyword_matches.sort(key=lambda x: x["score"], reverse=True)
         return keyword_matches[:limit]
 
     # 3. Fallback results (capacity only)
     return fallback_matches[:limit]
 
 
-def detect_ambiguity(query: str, results: List[Dict[str, Any]], criteria: Dict[str, Any]) -> Dict[str, Any]:
+def detect_ambiguity(
+    query: str, results: List[Dict[str, Any]], criteria: Dict[str, Any]
+) -> Dict[str, Any]:
     """Detect if search is ambiguous and needs clarification
 
     Returns:
@@ -600,10 +644,10 @@ def detect_ambiguity(query: str, results: List[Dict[str, Any]], criteria: Dict[s
     AMBIGUITY_THRESHOLD = 20
 
     # Check if query has minimal criteria (just keywords, no capacity/material/type)
-    has_capacity = criteria.get('capacity') is not None
-    has_material = criteria.get('material') is not None
-    has_product_type = criteria.get('product_type') is not None
-    has_neck_size = criteria.get('neck_size') is not None
+    has_capacity = criteria.get("capacity") is not None
+    has_material = criteria.get("material") is not None
+    has_product_type = criteria.get("product_type") is not None
+    has_neck_size = criteria.get("neck_size") is not None
 
     minimal_criteria = not (has_capacity or has_material or has_product_type or has_neck_size)
 
@@ -617,7 +661,7 @@ def detect_ambiguity(query: str, results: List[Dict[str, Any]], criteria: Dict[s
             "reason": "too_many_results_minimal_criteria",
             "suggestions": suggestions,
             "threshold": AMBIGUITY_THRESHOLD,
-            "result_count": len(results)
+            "result_count": len(results),
         }
 
     return {
@@ -625,7 +669,7 @@ def detect_ambiguity(query: str, results: List[Dict[str, Any]], criteria: Dict[s
         "reason": None,
         "suggestions": [],
         "threshold": AMBIGUITY_THRESHOLD,
-        "result_count": len(results)
+        "result_count": len(results),
     }
 
 
@@ -642,52 +686,48 @@ def generate_clarifying_suggestions(results: List[Dict[str, Any]]) -> List[Dict[
     suggestions = []
 
     # 1. Category type distribution (BOTTLE, JAR, CAP, PUMP)
-    category_types = [r.get('category_type') for r in results if r.get('category_type')]
+    category_types = [r.get("category_type") for r in results if r.get("category_type")]
     type_counts = Counter(category_types)
 
     if len(type_counts) > 1:
         # Multiple types - ask which type
         type_options = []
-        type_labels = {
-            'BOTTLE': '용기/병',
-            'JAR': '자용기',
-            'CAP': '캡/뚜껑',
-            'PUMP': '펌프'
-        }
+        type_labels = {"BOTTLE": "용기/병", "JAR": "자용기", "CAP": "캡/뚜껑", "PUMP": "펌프"}
 
         for cat_type, count in type_counts.most_common():
-            type_options.append({
-                'value': cat_type,
-                'label': type_labels.get(cat_type, cat_type),
-                'count': count
-            })
+            type_options.append(
+                {"value": cat_type, "label": type_labels.get(cat_type, cat_type), "count": count}
+            )
 
-        suggestions.append({
-            'type': 'category_type',
-            'question': '어떤 제품 타입을 찾으시나요?',
-            'priority': 1,
-            'options': type_options
-        })
+        suggestions.append(
+            {
+                "type": "category_type",
+                "question": "어떤 제품 타입을 찾으시나요?",
+                "priority": 1,
+                "options": type_options,
+            }
+        )
 
     # 2. Capacity distribution (group into ranges)
     capacities = []
     for r in results:
-        cap_str = r.get('capacity', '')
-        if cap_str and ('ml' in cap_str.lower() or 'g' in cap_str.lower()):
+        cap_str = r.get("capacity", "")
+        if cap_str and ("ml" in cap_str.lower() or "g" in cap_str.lower()):
             # Extract numeric value
             import re
-            match = re.search(r'(\d+)', cap_str)
+
+            match = re.search(r"(\d+)", cap_str)
             if match:
                 capacities.append(int(match.group(1)))
 
     if capacities:
         # Group into ranges: <50, 50-100, 100-300, 300-500, >500
         capacity_ranges = {
-            '50ml 이하': (0, 50),
-            '50-100ml': (50, 100),
-            '100-300ml': (100, 300),
-            '300-500ml': (300, 500),
-            '500ml 이상': (500, 10000)
+            "50ml 이하": (0, 50),
+            "50-100ml": (50, 100),
+            "100-300ml": (100, 300),
+            "300-500ml": (300, 500),
+            "500ml 이상": (500, 10000),
         }
 
         range_counts = {}
@@ -699,36 +739,42 @@ def generate_clarifying_suggestions(results: List[Dict[str, Any]]) -> List[Dict[
 
         if range_counts:
             capacity_options = [
-                {'value': range_name, 'label': range_name, 'count': count}
-                for range_name, count in sorted(range_counts.items(), key=lambda x: x[1], reverse=True)
+                {"value": range_name, "label": range_name, "count": count}
+                for range_name, count in sorted(
+                    range_counts.items(), key=lambda x: x[1], reverse=True
+                )
             ]
 
-            suggestions.append({
-                'type': 'capacity_range',
-                'question': '예상 용량 범위가 어떻게 되시나요?',
-                'priority': 2,
-                'options': capacity_options
-            })
+            suggestions.append(
+                {
+                    "type": "capacity_range",
+                    "question": "예상 용량 범위가 어떻게 되시나요?",
+                    "priority": 2,
+                    "options": capacity_options,
+                }
+            )
 
     # 3. Material distribution
-    materials = [r.get('material') for r in results if r.get('material')]
+    materials = [r.get("material") for r in results if r.get("material")]
     material_counts = Counter(materials)
 
     if len(material_counts) > 1:
         material_options = [
-            {'value': material, 'label': material, 'count': count}
+            {"value": material, "label": material, "count": count}
             for material, count in material_counts.most_common()
         ]
 
-        suggestions.append({
-            'type': 'material',
-            'question': '재질 선호도가 있으신가요?',
-            'priority': 3,
-            'options': material_options
-        })
+        suggestions.append(
+            {
+                "type": "material",
+                "question": "재질 선호도가 있으신가요?",
+                "priority": 3,
+                "options": material_options,
+            }
+        )
 
     # Sort by priority
-    suggestions.sort(key=lambda x: x['priority'])
+    suggestions.sort(key=lambda x: x["priority"])
 
     return suggestions
 
@@ -739,17 +785,14 @@ async def generate_embedding(text: str) -> Optional[List[float]]:
     try:
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                'http://localhost:11434/api/embeddings',
-                json={
-                    "model": "nomic-embed-text",
-                    "prompt": text
-                },
-                timeout=30.0
+                "http://localhost:11434/api/embeddings",
+                json={"model": "nomic-embed-text", "prompt": text},
+                timeout=30.0,
             )
 
             if response.status_code == 200:
                 data = response.json()
-                return data.get('embedding')
+                return data.get("embedding")
     except Exception as e:
         print(f"Embedding generation error: {e}")
 
@@ -770,45 +813,49 @@ async def search_qa_qdrant(query: str, limit: int = 5) -> List[Dict[str, Any]]:
         # Step 2: Perform vector similarity search in Qdrant
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                'http://localhost:6333/collections/cosmetic_packaging/points/search',
+                "http://localhost:6333/collections/cosmetic_packaging/points/search",
                 json={
                     "vector": query_vector,
                     "limit": limit,
                     "with_payload": True,
-                    "with_vector": False
+                    "with_vector": False,
                 },
-                timeout=10.0
+                timeout=10.0,
             )
 
             if response.status_code == 200:
                 data = response.json()
-                points = data.get('result', [])
+                points = data.get("result", [])
 
                 results = []
                 for point in points:
-                    payload = point.get('payload', {})
+                    payload = point.get("payload", {})
 
                     # Extract question and answer from text field
-                    text = payload.get('text', '')
-                    question = ''
-                    answer = ''
+                    text = payload.get("text", "")
+                    question = ""
+                    answer = ""
 
-                    if '질문:' in text and '답변:' in text:
-                        parts = text.split('답변:', 1)
-                        question = parts[0].replace('질문:', '').strip()
+                    if "질문:" in text and "답변:" in text:
+                        parts = text.split("답변:", 1)
+                        question = parts[0].replace("질문:", "").strip()
                         answer = parts[1].strip()
                     else:
                         # Fallback: try separate fields
-                        question = payload.get('question', '')
-                        answer = payload.get('answer', '')
+                        question = payload.get("question", "")
+                        answer = payload.get("answer", "")
 
-                    results.append({
-                        'qa_id': payload.get('qa_id', ''),
-                        'question': question,
-                        'answer': answer,
-                        'keywords': payload.get('keywords', []),
-                        'score': point.get('score', 0.0)  # Actual similarity score from vector search
-                    })
+                    results.append(
+                        {
+                            "qa_id": payload.get("qa_id", ""),
+                            "question": question,
+                            "answer": answer,
+                            "keywords": payload.get("keywords", []),
+                            "score": point.get(
+                                "score", 0.0
+                            ),  # Actual similarity score from vector search
+                        }
+                    )
 
                 return results
 
@@ -819,6 +866,7 @@ async def search_qa_qdrant(query: str, limit: int = 5) -> List[Dict[str, Any]]:
 
 
 # API Routes
+
 
 @app.get("/")
 async def root():
@@ -832,19 +880,13 @@ async def list_products():
     products = load_products()
     return {
         "total": len(products),
-        "products": [
-            {**product, "product_id": pid}
-            for pid, product in products.items()
-        ]
+        "products": [{**product, "product_id": pid} for pid, product in products.items()],
     }
 
 
 @app.get("/api/v1/products/search")
 async def api_search_products(
-    query: str,
-    limit: int = 6,
-    session_id: Optional[str] = None,
-    user_id: Optional[str] = None
+    query: str, limit: int = 6, session_id: Optional[str] = None, user_id: Optional[str] = None
 ):
     """Hybrid context-aware product search with LLM intent analysis
 
@@ -870,23 +912,21 @@ async def api_search_products(
 
     # Process query through ConversationManager
     conversation_result = await conversation_manager.process_query(
-        query=query,
-        session_id=session_id,
-        user_id=user_id
+        query=query, session_id=session_id, user_id=user_id
     )
 
-    session_id = conversation_result['session_id']
-    intent = conversation_result['intent']
-    criteria = conversation_result['criteria']
-    should_search_new = conversation_result['should_search_new']
-    should_filter_previous = conversation_result['should_filter_previous']
-    should_recommend_accessory = conversation_result.get('should_recommend_accessory', False)
+    session_id = conversation_result["session_id"]
+    intent = conversation_result["intent"]
+    criteria = conversation_result["criteria"]
+    should_search_new = conversation_result["should_search_new"]
+    should_filter_previous = conversation_result["should_filter_previous"]
+    should_recommend_accessory = conversation_result.get("should_recommend_accessory", False)
 
     # Execute search based on intent
     if should_recommend_accessory:
         # Recommend compatible accessories (pumps/caps) for current bottles
         # GROUPED BY NECK SIZE for clarity
-        current_bottles = conversation_result.get('current_bottles', [])
+        current_bottles = conversation_result.get("current_bottles", [])
 
         if current_bottles:
             # Find compatible accessories (now returns grouped data)
@@ -895,43 +935,43 @@ async def api_search_products(
 
             # Flatten groups into results list with group metadata
             results = []
-            for group in accessories_data['groups']:
-                neck_size = group['neck_size']
+            for group in accessories_data["groups"]:
+                neck_size = group["neck_size"]
 
                 # Add pumps from this group
-                for pump in group['pumps']:
-                    pump['is_accessory'] = True
-                    pump['accessory_type'] = 'pump'
-                    pump['compatible_neck_size'] = neck_size
-                    pump['group_info'] = {
-                        'neck_size': neck_size,
-                        'bottle_count': len(group['bottles']),
-                        'bottle_codes': [b.get('product_code', 'N/A') for b in group['bottles']]
+                for pump in group["pumps"]:
+                    pump["is_accessory"] = True
+                    pump["accessory_type"] = "pump"
+                    pump["compatible_neck_size"] = neck_size
+                    pump["group_info"] = {
+                        "neck_size": neck_size,
+                        "bottle_count": len(group["bottles"]),
+                        "bottle_codes": [b.get("product_code", "N/A") for b in group["bottles"]],
                     }
                     results.append(pump)
 
                 # Add caps from this group
-                for cap in group['caps']:
-                    cap['is_accessory'] = True
-                    cap['accessory_type'] = 'cap'
-                    cap['compatible_neck_size'] = neck_size
-                    cap['group_info'] = {
-                        'neck_size': neck_size,
-                        'bottle_count': len(group['bottles']),
-                        'bottle_codes': [b.get('product_code', 'N/A') for b in group['bottles']]
+                for cap in group["caps"]:
+                    cap["is_accessory"] = True
+                    cap["accessory_type"] = "cap"
+                    cap["compatible_neck_size"] = neck_size
+                    cap["group_info"] = {
+                        "neck_size": neck_size,
+                        "bottle_count": len(group["bottles"]),
+                        "bottle_codes": [b.get("product_code", "N/A") for b in group["bottles"]],
                     }
                     results.append(cap)
         else:
             # No bottles in context - can't recommend accessories
             results = []
             accessories_data = {
-                'groups': [],
-                'summary': {
-                    'total_groups': 0,
-                    'neck_sizes': [],
-                    'total_bottles': 0,
-                    'total_accessories': 0
-                }
+                "groups": [],
+                "summary": {
+                    "total_groups": 0,
+                    "neck_sizes": [],
+                    "total_bottles": 0,
+                    "total_accessories": 0,
+                },
             }
 
     elif should_search_new:
@@ -942,23 +982,27 @@ async def api_search_products(
 
         # Detect ambiguity
         # criteria is already a SearchCriteria object, convert to dict
-        criteria_dict = criteria if isinstance(criteria, dict) else {
-            'capacity': getattr(criteria, 'capacity', None),
-            'material': getattr(criteria, 'material', None),
-            'product_type': getattr(criteria, 'product_type', None),
-            'neck_size': getattr(criteria, 'neck_size', None)
-        }
+        criteria_dict = (
+            criteria
+            if isinstance(criteria, dict)
+            else {
+                "capacity": getattr(criteria, "capacity", None),
+                "material": getattr(criteria, "material", None),
+                "product_type": getattr(criteria, "product_type", None),
+                "neck_size": getattr(criteria, "neck_size", None),
+            }
+        )
         ambiguity_check = detect_ambiguity(query, all_results, criteria_dict)
 
         # If ambiguous, limit results to 5 and add clarifying questions
-        if ambiguity_check['is_ambiguous']:
+        if ambiguity_check["is_ambiguous"]:
             results = all_results[:5]  # Show only 5 as preview
         else:
             results = all_results[:limit]
 
     elif should_filter_previous:
         # Filter previous results
-        previous_results = conversation_result['previous_results']
+        previous_results = conversation_result["previous_results"]
         if previous_results:
             results = filter_previous_results(query, previous_results, limit)
         else:
@@ -977,11 +1021,7 @@ async def api_search_products(
     # Save to Qdrant for long-term memory (async, non-blocking)
     if user_id:
         await conversation_manager.save_to_qdrant(
-            session_id=session_id,
-            query=query,
-            intent=intent,
-            results=results,
-            user_id=user_id
+            session_id=session_id, query=query, intent=intent, results=results, user_id=user_id
         )
 
     # Build response
@@ -990,34 +1030,36 @@ async def api_search_products(
         "total": len(results),
         "products": results,
         "session_id": session_id,
-
         # Conversation context
         "conversation": {
             "intent": intent,
-            "state": conversation_result['state'],
-            "previous_state": conversation_result['previous_state'],
-            "confidence": conversation_result['confidence'],
-            "explanation": conversation_result['explanation'],
+            "state": conversation_result["state"],
+            "previous_state": conversation_result["previous_state"],
+            "confidence": conversation_result["confidence"],
+            "explanation": conversation_result["explanation"],
         },
-
         # Context info
         "context": {
-            "turn_count": conversation_result['context_info']['turn_count'],
-            "query_history": conversation_result['context_info']['query_history'],
+            "turn_count": conversation_result["context_info"]["turn_count"],
+            "query_history": conversation_result["context_info"]["query_history"],
             "is_filtering": should_filter_previous,
             "is_recommending_accessory": should_recommend_accessory,
-            "previous_count": conversation_result['context_info']['previous_results_count'] if should_filter_previous else 0
-        }
+            "previous_count": (
+                conversation_result["context_info"]["previous_results_count"]
+                if should_filter_previous
+                else 0
+            ),
+        },
     }
 
     # Add ambiguity info if search was ambiguous
-    if should_search_new and 'ambiguity_check' in locals():
-        response['ambiguity'] = ambiguity_check
+    if should_search_new and "ambiguity_check" in locals():
+        response["ambiguity"] = ambiguity_check
 
     # Add accessory grouping info if recommending accessories
-    if should_recommend_accessory and 'accessories_data' in locals():
-        response['accessory_groups'] = accessories_data['groups']
-        response['accessory_summary'] = accessories_data['summary']
+    if should_recommend_accessory and "accessories_data" in locals():
+        response["accessory_groups"] = accessories_data["groups"]
+        response["accessory_summary"] = accessories_data["summary"]
 
     return response
 
@@ -1033,9 +1075,7 @@ async def get_product_detail(product_id: str):
     product = products[product_id]
 
     # Return complete product information
-    return {
-        "product": product
-    }
+    return {"product": product}
 
 
 @app.get("/api/v1/qa/search")
@@ -1046,11 +1086,7 @@ async def api_search_qa(query: str, limit: int = 5):
 
     results = await search_qa_qdrant(query, limit)
 
-    return {
-        "query": query,
-        "total": len(results),
-        "results": results
-    }
+    return {"query": query, "total": len(results), "results": results}
 
 
 @app.post("/api/v1/inquiries")
@@ -1062,25 +1098,25 @@ async def create_inquiry(inquiry: InquiryRequest):
     # Load existing inquiries
     inquiries = []
     if inquiries_file.exists():
-        with open(inquiries_file, 'r', encoding='utf-8') as f:
+        with open(inquiries_file, "r", encoding="utf-8") as f:
             inquiries = json.load(f)
 
     # Add new inquiry
     inquiry_data = inquiry.dict()
-    inquiry_data['inquiry_id'] = f"INQ_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    inquiry_data['status'] = 'pending'
-    inquiry_data['created_at'] = datetime.now().isoformat()
+    inquiry_data["inquiry_id"] = f"INQ_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    inquiry_data["status"] = "pending"
+    inquiry_data["created_at"] = datetime.now().isoformat()
 
     inquiries.append(inquiry_data)
 
     # Save inquiries
-    with open(inquiries_file, 'w', encoding='utf-8') as f:
+    with open(inquiries_file, "w", encoding="utf-8") as f:
         json.dump(inquiries, f, ensure_ascii=False, indent=2)
 
     return {
         "success": True,
-        "inquiry_id": inquiry_data['inquiry_id'],
-        "message": "문의가 접수되었습니다"
+        "inquiry_id": inquiry_data["inquiry_id"],
+        "message": "문의가 접수되었습니다",
     }
 
 
@@ -1092,16 +1128,13 @@ async def list_inquiries(limit: int = 50):
     if not inquiries_file.exists():
         return {"total": 0, "inquiries": []}
 
-    with open(inquiries_file, 'r', encoding='utf-8') as f:
+    with open(inquiries_file, "r", encoding="utf-8") as f:
         inquiries = json.load(f)
 
     # Sort by created_at descending
-    inquiries.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    inquiries.sort(key=lambda x: x.get("created_at", ""), reverse=True)
 
-    return {
-        "total": len(inquiries),
-        "inquiries": inquiries[:limit]
-    }
+    return {"total": len(inquiries), "inquiries": inquiries[:limit]}
 
 
 @app.post("/api/v1/sample-request")
@@ -1112,28 +1145,28 @@ async def create_sample_request(request: SampleRequest):
 
     # Load existing requests
     if sample_requests_file.exists():
-        with open(sample_requests_file, 'r', encoding='utf-8') as f:
+        with open(sample_requests_file, "r", encoding="utf-8") as f:
             sample_requests = json.load(f)
     else:
         sample_requests = []
 
     # Add new request
     request_data = request.dict()
-    request_data['id'] = str(uuid.uuid4())
-    request_data['status'] = 'pending'  # pending, processing, completed
-    request_data['created_at'] = datetime.now().isoformat()
+    request_data["id"] = str(uuid.uuid4())
+    request_data["status"] = "pending"  # pending, processing, completed
+    request_data["created_at"] = datetime.now().isoformat()
 
     sample_requests.append(request_data)
 
     # Save to file
     sample_requests_file.parent.mkdir(parents=True, exist_ok=True)
-    with open(sample_requests_file, 'w', encoding='utf-8') as f:
+    with open(sample_requests_file, "w", encoding="utf-8") as f:
         json.dump(sample_requests, f, ensure_ascii=False, indent=2)
 
     return {
         "success": True,
         "message": "Sample request submitted successfully",
-        "request_id": request_data['id']
+        "request_id": request_data["id"],
     }
 
 
@@ -1143,39 +1176,28 @@ async def list_sample_requests(limit: int = 50, status: Optional[str] = None):
     sample_requests_file = DATA_DIR / "sample_requests.json"
 
     if not sample_requests_file.exists():
-        return {
-            "success": True,
-            "count": 0,
-            "requests": []
-        }
+        return {"success": True, "count": 0, "requests": []}
 
-    with open(sample_requests_file, 'r', encoding='utf-8') as f:
+    with open(sample_requests_file, "r", encoding="utf-8") as f:
         all_requests = json.load(f)
 
     # Filter by status if provided
     if status:
-        all_requests = [r for r in all_requests if r.get('status') == status]
+        all_requests = [r for r in all_requests if r.get("status") == status]
 
     # Sort by created_at descending (newest first)
-    all_requests.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+    all_requests.sort(key=lambda x: x.get("created_at", ""), reverse=True)
 
-    return {
-        "success": True,
-        "count": len(all_requests),
-        "requests": all_requests[:limit]
-    }
+    return {"success": True, "count": len(all_requests), "requests": all_requests[:limit]}
 
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    return {
-        "status": "healthy",
-        "timestamp": datetime.now().isoformat(),
-        "version": "1.0.0"
-    }
+    return {"status": "healthy", "timestamp": datetime.now().isoformat(), "version": "1.0.0"}
 
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000, reload=True)

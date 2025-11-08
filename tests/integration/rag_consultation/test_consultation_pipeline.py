@@ -4,26 +4,27 @@ Integration Tests for Consultation Pipeline
 Tests end-to-end consultation flow with mocked Ollama.
 """
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock, patch
-from redis.asyncio import Redis
 import uuid
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
+from redis.asyncio import Redis
 
 from app.rag_consultation.classification import (
-    QueryClassifier,
     IntentDetector,
+    QueryClassifier,
     ToneAnalyzer,
 )
 from app.rag_consultation.context import (
-    ConversationManager,
     ContextStore,
+    ConversationManager,
 )
-from app.rag_consultation.retrieval import QueryExpander
 from app.rag_consultation.generation import (
     PromptBuilder,
     ResponseGenerator,
 )
-from app.rag_consultation.models import QueryType, Intent
+from app.rag_consultation.models import Intent, QueryType
+from app.rag_consultation.retrieval import QueryExpander
 
 
 @pytest.fixture
@@ -32,6 +33,7 @@ async def redis_client():
     # Use fakeredis for testing if available, otherwise skip
     try:
         from fakeredis.aioredis import FakeRedis
+
         redis = FakeRedis(decode_responses=True)
         yield redis
         await redis.aclose()
@@ -82,9 +84,7 @@ def mock_response_generator():
     with patch("httpx.AsyncClient.post") as mock_post:
         # Mock successful Ollama response
         mock_response = MagicMock()
-        mock_response.json.return_value = {
-            "response": "This is a mocked response from Ollama LLM."
-        }
+        mock_response.json.return_value = {"response": "This is a mocked response from Ollama LLM."}
         mock_response.raise_for_status = MagicMock()
         mock_post.return_value = mock_response
 
@@ -229,9 +229,7 @@ class TestConsultationPipeline:
         assert query1 in resolved_query
 
         # Generate response with conversation history
-        conversation_summary = await conversation_manager.get_conversation_summary(
-            session_id
-        )
+        conversation_summary = await conversation_manager.get_conversation_summary(session_id)
 
         prompt2 = prompt_builder.build_prompt(
             query=resolved_query,

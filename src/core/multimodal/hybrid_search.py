@@ -4,12 +4,12 @@ Combines text, image, and shape vectors with fusion strategies
 """
 
 import logging
-from typing import List, Dict, Any, Optional, Union, Literal
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-from collections import defaultdict
-import numpy as np
+from typing import Any, Dict, List, Literal, Optional, Union
 
+import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.models import ScoredPoint
 
@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SearchResult:
     """Search result with multi-modal scores"""
+
     product_id: str
     score: float
     payload: Dict[str, Any]
@@ -32,7 +33,7 @@ class FusionStrategy:
     def fuse(
         self,
         results_by_modality: Dict[str, List[ScoredPoint]],
-        weights: Optional[Dict[str, float]] = None
+        weights: Optional[Dict[str, float]] = None,
     ) -> List[SearchResult]:
         """
         Fuse results from multiple modalities
@@ -53,7 +54,7 @@ class WeightedFusion(FusionStrategy):
     def fuse(
         self,
         results_by_modality: Dict[str, List[ScoredPoint]],
-        weights: Optional[Dict[str, float]] = None
+        weights: Optional[Dict[str, float]] = None,
     ) -> List[SearchResult]:
         """
         Combine scores with weighted average
@@ -62,8 +63,7 @@ class WeightedFusion(FusionStrategy):
         """
         if weights is None:
             # Equal weights
-            weights = {mod: 1.0 / len(results_by_modality)
-                      for mod in results_by_modality}
+            weights = {mod: 1.0 / len(results_by_modality) for mod in results_by_modality}
 
         # Normalize weights
         total_weight = sum(weights.values())
@@ -94,13 +94,15 @@ class WeightedFusion(FusionStrategy):
                 modality_scores[modality] = score
                 weighted_score += weights.get(modality, 0.0) * score
 
-            fused_results.append(SearchResult(
-                product_id=product_id,
-                score=weighted_score,
-                payload=payload or {},
-                modality_scores=modality_scores,
-                rank=0  # Will be set after sorting
-            ))
+            fused_results.append(
+                SearchResult(
+                    product_id=product_id,
+                    score=weighted_score,
+                    payload=payload or {},
+                    modality_scores=modality_scores,
+                    rank=0,  # Will be set after sorting
+                )
+            )
 
         # Sort by score and assign ranks
         fused_results.sort(key=lambda x: x.score, reverse=True)
@@ -123,7 +125,7 @@ class ReciprocalRankFusion(FusionStrategy):
     def fuse(
         self,
         results_by_modality: Dict[str, List[ScoredPoint]],
-        weights: Optional[Dict[str, float]] = None
+        weights: Optional[Dict[str, float]] = None,
     ) -> List[SearchResult]:
         """
         Combine results using Reciprocal Rank Fusion
@@ -175,13 +177,15 @@ class ReciprocalRankFusion(FusionStrategy):
                 else:
                     modality_scores[modality] = 0.0
 
-            fused_results.append(SearchResult(
-                product_id=product_id,
-                score=rrf_score,
-                payload=payload or {},
-                modality_scores=modality_scores,
-                rank=0
-            ))
+            fused_results.append(
+                SearchResult(
+                    product_id=product_id,
+                    score=rrf_score,
+                    payload=payload or {},
+                    modality_scores=modality_scores,
+                    rank=0,
+                )
+            )
 
         # Sort and assign ranks
         fused_results.sort(key=lambda x: x.score, reverse=True)
@@ -216,7 +220,7 @@ class LearnedFusion(FusionStrategy):
     def fuse(
         self,
         results_by_modality: Dict[str, List[ScoredPoint]],
-        weights: Optional[Dict[str, float]] = None
+        weights: Optional[Dict[str, float]] = None,
     ) -> List[SearchResult]:
         """
         Use ML model to predict optimal fusion
@@ -246,7 +250,7 @@ class HybridSearchEngine:
         qdrant_client: QdrantClient,
         collection_name: str = "products_multimodal",
         fusion_strategy: Literal["weighted", "rrf", "learned"] = "rrf",
-        rrf_k: int = 60
+        rrf_k: int = 60,
     ):
         """
         Initialize Hybrid Search Engine
@@ -283,42 +287,42 @@ class HybridSearchEngine:
         self,
         query_embedding: List[float],
         limit: int = 10,
-        filters: Optional[Dict[str, Any]] = None
+        filters: Optional[Dict[str, Any]] = None,
     ) -> List[ScoredPoint]:
         """Search using text embedding"""
         return self.client.search(
             collection_name=self.collection_name,
             query_vector=("text", query_embedding),
             limit=limit,
-            query_filter=filters
+            query_filter=filters,
         )
 
     def search_image(
         self,
         query_embedding: List[float],
         limit: int = 10,
-        filters: Optional[Dict[str, Any]] = None
+        filters: Optional[Dict[str, Any]] = None,
     ) -> List[ScoredPoint]:
         """Search using image embedding"""
         return self.client.search(
             collection_name=self.collection_name,
             query_vector=("image", query_embedding),
             limit=limit,
-            query_filter=filters
+            query_filter=filters,
         )
 
     def search_shape(
         self,
         query_embedding: List[float],
         limit: int = 10,
-        filters: Optional[Dict[str, Any]] = None
+        filters: Optional[Dict[str, Any]] = None,
     ) -> List[ScoredPoint]:
         """Search using shape embedding"""
         return self.client.search(
             collection_name=self.collection_name,
             query_vector=("shape", query_embedding),
             limit=limit,
-            query_filter=filters
+            query_filter=filters,
         )
 
     def search_hybrid(
@@ -327,7 +331,7 @@ class HybridSearchEngine:
         weights: Optional[Dict[str, float]] = None,
         limit: int = 10,
         filters: Optional[Dict[str, Any]] = None,
-        retrieve_limit: int = None
+        retrieve_limit: int = None,
     ) -> List[SearchResult]:
         """
         Hybrid search across multiple modalities
@@ -362,25 +366,19 @@ class HybridSearchEngine:
         if "text" in embeddings:
             logger.debug(f"Searching text modality (top {retrieve_limit})")
             results_by_modality["text"] = self.search_text(
-                embeddings["text"],
-                limit=retrieve_limit,
-                filters=filters
+                embeddings["text"], limit=retrieve_limit, filters=filters
             )
 
         if "image" in embeddings:
             logger.debug(f"Searching image modality (top {retrieve_limit})")
             results_by_modality["image"] = self.search_image(
-                embeddings["image"],
-                limit=retrieve_limit,
-                filters=filters
+                embeddings["image"], limit=retrieve_limit, filters=filters
             )
 
         if "shape" in embeddings:
             logger.debug(f"Searching shape modality (top {retrieve_limit})")
             results_by_modality["shape"] = self.search_shape(
-                embeddings["shape"],
-                limit=retrieve_limit,
-                filters=filters
+                embeddings["shape"], limit=retrieve_limit, filters=filters
             )
 
         # Fuse results
@@ -397,7 +395,7 @@ class HybridSearchEngine:
         weights: Optional[Dict[str, float]] = None,
         limit: int = 10,
         filters: Optional[Dict[str, Any]] = None,
-        rerank_top_k: int = 50
+        rerank_top_k: int = 50,
     ) -> List[SearchResult]:
         """
         Hybrid search with cross-encoder re-ranking
@@ -415,10 +413,7 @@ class HybridSearchEngine:
         """
         # Get initial results
         initial_results = self.search_hybrid(
-            embeddings=embeddings,
-            weights=weights,
-            limit=rerank_top_k,
-            filters=filters
+            embeddings=embeddings, weights=weights, limit=rerank_top_k, filters=filters
         )
 
         # TODO: Implement cross-encoder re-ranking
@@ -427,11 +422,7 @@ class HybridSearchEngine:
 
         return initial_results[:limit]
 
-    def explain_results(
-        self,
-        results: List[SearchResult],
-        top_k: int = 5
-    ) -> Dict[str, Any]:
+    def explain_results(self, results: List[SearchResult], top_k: int = 5) -> Dict[str, Any]:
         """
         Explain fusion results with modality contribution analysis
 
@@ -448,7 +439,7 @@ class HybridSearchEngine:
             "fusion_strategy": self.strategy_name,
             "total_results": len(results),
             "top_k_analyzed": len(top_results),
-            "results": []
+            "results": [],
         }
 
         for result in top_results:
@@ -457,7 +448,7 @@ class HybridSearchEngine:
                 "product_id": result.product_id,
                 "final_score": result.score,
                 "modality_scores": result.modality_scores,
-                "payload": result.payload
+                "payload": result.payload,
             }
 
             # Analyze modality contributions
@@ -468,7 +459,7 @@ class HybridSearchEngine:
                     for modality, score in result.modality_scores.items():
                         contributions[modality] = {
                             "score": score,
-                            "contribution_pct": (score / total) * 100
+                            "contribution_pct": (score / total) * 100,
                         }
                 result_info["modality_contributions"] = contributions
 
@@ -477,6 +468,8 @@ class HybridSearchEngine:
         return explanation
 
     def __repr__(self):
-        return (f"HybridSearchEngine("
-                f"collection='{self.collection_name}', "
-                f"strategy='{self.strategy_name}')")
+        return (
+            f"HybridSearchEngine("
+            f"collection='{self.collection_name}', "
+            f"strategy='{self.strategy_name}')"
+        )

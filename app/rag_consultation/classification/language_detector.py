@@ -139,9 +139,7 @@ class LanguageDetector:
                 return "en"
 
             # Calculate percentages
-            percentages = {
-                lang: count / total_chars for lang, count in char_counts.items()
-            }
+            percentages = {lang: count / total_chars for lang, count in char_counts.items()}
 
             # Select language with highest percentage
             detected_lang = max(percentages.items(), key=lambda x: x[1])[0]

@@ -5,13 +5,14 @@ Provides a unified interface to NexaAI SDK's OpenAI-compatible API
 for text generation, embeddings, and multi-modal analysis.
 """
 
-from typing import List, Dict, Optional, Union, AsyncIterator
-import httpx
-from openai import OpenAI, AsyncOpenAI
-from pydantic import BaseModel, Field
+import base64
 import logging
 from pathlib import Path
-import base64
+from typing import AsyncIterator, Dict, List, Optional, Union
+
+import httpx
+from openai import AsyncOpenAI, OpenAI
+from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
@@ -19,33 +20,18 @@ logger = logging.getLogger(__name__)
 class NexaConfig(BaseModel):
     """NexaAI configuration"""
 
-    base_url: str = Field(
-        default="http://localhost:8080/v1",
-        description="NexaAI server base URL"
-    )
-    api_key: str = Field(
-        default="not-needed",
-        description="API key (not needed for local server)"
-    )
-    timeout: int = Field(
-        default=30,
-        description="Request timeout in seconds"
-    )
-    max_retries: int = Field(
-        default=3,
-        description="Maximum number of retries"
-    )
+    base_url: str = Field(default="http://localhost:8080/v1", description="NexaAI server base URL")
+    api_key: str = Field(default="not-needed", description="API key (not needed for local server)")
+    timeout: int = Field(default=30, description="Request timeout in seconds")
+    max_retries: int = Field(default=3, description="Maximum number of retries")
     default_text_model: str = Field(
-        default="Qwen3-1.7B",
-        description="Default model for text generation"
+        default="Qwen3-1.7B", description="Default model for text generation"
     )
     default_vision_model: str = Field(
-        default="Qwen3-VL-4B-Instruct",
-        description="Default model for vision-language tasks"
+        default="Qwen3-VL-4B-Instruct", description="Default model for vision-language tasks"
     )
     default_embedding_model: str = Field(
-        default="EmbeddingGemma",
-        description="Default model for embeddings"
+        default="EmbeddingGemma", description="Default model for embeddings"
     )
 
 
@@ -74,7 +60,7 @@ class NexaService:
             base_url=self.config.base_url,
             api_key=self.config.api_key,
             timeout=self.config.timeout,
-            max_retries=self.config.max_retries
+            max_retries=self.config.max_retries,
         )
 
         # Initialize async client
@@ -82,7 +68,7 @@ class NexaService:
             base_url=self.config.base_url,
             api_key=self.config.api_key,
             timeout=self.config.timeout,
-            max_retries=self.config.max_retries
+            max_retries=self.config.max_retries,
         )
 
         logger.info(f"NexaAI service initialized with base URL: {self.config.base_url}")
@@ -94,7 +80,7 @@ class NexaService:
         max_tokens: int = 500,
         temperature: float = 0.7,
         stream: bool = False,
-        system_prompt: Optional[str] = None
+        system_prompt: Optional[str] = None,
     ) -> Union[str, AsyncIterator[str]]:
         """
         Generate text completion
@@ -123,10 +109,11 @@ class NexaService:
                 messages=messages,
                 max_tokens=max_tokens,
                 temperature=temperature,
-                stream=stream
+                stream=stream,
             )
 
             if stream:
+
                 async def stream_generator():
                     async for chunk in response:
                         if chunk.choices[0].delta.content:
@@ -141,9 +128,7 @@ class NexaService:
             raise
 
     async def generate_embeddings(
-        self,
-        texts: List[str],
-        model: Optional[str] = None
+        self, texts: List[str], model: Optional[str] = None
     ) -> List[List[float]]:
         """
         Generate embeddings for texts
@@ -158,10 +143,7 @@ class NexaService:
         model = model or self.config.default_embedding_model
 
         try:
-            response = await self.async_client.embeddings.create(
-                model=model,
-                input=texts
-            )
+            response = await self.async_client.embeddings.create(model=model, input=texts)
 
             embeddings = [item.embedding for item in response.data]
 
@@ -181,7 +163,7 @@ class NexaService:
         image_path: Union[str, Path],
         prompt: str,
         model: Optional[str] = None,
-        max_tokens: int = 500
+        max_tokens: int = 500,
     ) -> str:
         """
         Analyze image with vision-language model
@@ -209,11 +191,11 @@ class NexaService:
             # Detect image format
             suffix = image_path.suffix.lower()
             mime_type = {
-                '.jpg': 'image/jpeg',
-                '.jpeg': 'image/jpeg',
-                '.png': 'image/png',
-                '.webp': 'image/webp'
-            }.get(suffix, 'image/jpeg')
+                ".jpg": "image/jpeg",
+                ".jpeg": "image/jpeg",
+                ".png": "image/png",
+                ".webp": "image/webp",
+            }.get(suffix, "image/jpeg")
 
             # Create vision-language request
             response = await self.async_client.chat.completions.create(
@@ -225,14 +207,12 @@ class NexaService:
                             {"type": "text", "text": prompt},
                             {
                                 "type": "image_url",
-                                "image_url": {
-                                    "url": f"data:{mime_type};base64,{image_data}"
-                                }
-                            }
-                        ]
+                                "image_url": {"url": f"data:{mime_type};base64,{image_data}"},
+                            },
+                        ],
                     }
                 ],
-                max_tokens=max_tokens
+                max_tokens=max_tokens,
             )
 
             result = response.choices[0].message.content
@@ -250,7 +230,7 @@ class NexaService:
         image_paths: List[Union[str, Path]],
         prompts: List[str],
         model: Optional[str] = None,
-        max_tokens: int = 500
+        max_tokens: int = 500,
     ) -> List[str]:
         """
         Analyze multiple images in batch
@@ -271,10 +251,7 @@ class NexaService:
 
         for image_path, prompt in zip(image_paths, prompts):
             result = await self.analyze_image(
-                image_path=image_path,
-                prompt=prompt,
-                model=model,
-                max_tokens=max_tokens
+                image_path=image_path, prompt=prompt, model=model, max_tokens=max_tokens
             )
             results.append(result)
 
@@ -290,17 +267,14 @@ class NexaService:
         try:
             async with httpx.AsyncClient(timeout=5.0) as client:
                 # Try to access base URL
-                health_url = self.config.base_url.replace('/v1', '/health')
+                health_url = self.config.base_url.replace("/v1", "/health")
 
                 response = await client.get(health_url)
 
                 if response.status_code == 200:
                     return {"healthy": True}
                 else:
-                    return {
-                        "healthy": False,
-                        "error": f"HTTP {response.status_code}"
-                    }
+                    return {"healthy": False, "error": f"HTTP {response.status_code}"}
 
         except httpx.TimeoutException:
             logger.error("NexaAI health check timed out")
@@ -337,11 +311,7 @@ class NexaService:
         """
         try:
             response = self.client.models.retrieve(model)
-            return {
-                "id": response.id,
-                "created": response.created,
-                "owned_by": response.owned_by
-            }
+            return {"id": response.id, "created": response.created, "owned_by": response.owned_by}
 
         except Exception as e:
             logger.error(f"Failed to get model info: {e}")

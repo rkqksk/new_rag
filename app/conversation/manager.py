@@ -4,27 +4,26 @@ Coordinates intent analysis, state management, and conversation history
 """
 
 import uuid
-import httpx
-from typing import Dict, Any, Optional, List
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
+import httpx
+
+from .intent_analyzer import IntentAnalyzer
 from .states import (
+    ConversationContext,
     ConversationState,
     IntentType,
     SearchCriteria,
-    ConversationContext,
-    get_next_state
+    get_next_state,
 )
-from .intent_analyzer import IntentAnalyzer
 
 
 class ConversationManager:
     """Manages conversation state and context for product search"""
 
     def __init__(
-        self,
-        ollama_url: str = "http://localhost:11434",
-        qdrant_url: str = "http://localhost:6333"
+        self, ollama_url: str = "http://localhost:11434", qdrant_url: str = "http://localhost:6333"
     ):
         self.intent_analyzer = IntentAnalyzer(ollama_url=ollama_url)
         self.qdrant_url = qdrant_url
@@ -33,10 +32,7 @@ class ConversationManager:
         self.sessions: Dict[str, ConversationContext] = {}
 
     async def process_query(
-        self,
-        query: str,
-        session_id: Optional[str] = None,
-        user_id: Optional[str] = None
+        self, query: str, session_id: Optional[str] = None, user_id: Optional[str] = None
     ) -> Dict[str, Any]:
         """Process user query with full context awareness
 
@@ -63,18 +59,15 @@ class ConversationManager:
 
         context = self.sessions.get(session_id)
         if not context:
-            context = ConversationContext(
-                session_id=session_id,
-                user_id=user_id
-            )
+            context = ConversationContext(session_id=session_id, user_id=user_id)
             self.sessions[session_id] = context
 
         # Analyze intent using LLM
         analysis = await self.intent_analyzer.analyze_intent(query, context)
 
-        intent = analysis['intent']
-        criteria = analysis['criteria']
-        confidence = analysis['confidence']
+        intent = analysis["intent"]
+        criteria = analysis["criteria"]
+        confidence = analysis["confidence"]
 
         # Determine next state
         current_state = context.state
@@ -91,10 +84,7 @@ class ConversationManager:
         context.updated_at = datetime.now()
 
         # Determine action based on intent
-        should_search_new = intent in [
-            IntentType.NEW_SEARCH,
-            IntentType.REFINE_SEARCH
-        ]
+        should_search_new = intent in [IntentType.NEW_SEARCH, IntentType.REFINE_SEARCH]
 
         should_filter_previous = intent == IntentType.FILTER_PREVIOUS
         should_recommend_accessory = intent == IntentType.RECOMMEND_ACCESSORY
@@ -127,22 +117,18 @@ class ConversationManager:
             "previous_results": filter_from_results,  # FIXED: Use current_results for filtering
             "current_bottles": context.current_results if should_recommend_accessory else [],
             "confidence": confidence,
-            "explanation": analysis.get('explanation', ''),
+            "explanation": analysis.get("explanation", ""),
             "context_info": {
                 "turn_count": context.turn_count,
                 "query_history": context.queries[-5:],  # Last 5 queries
                 "current_results_count": len(context.current_results),
-                "previous_results_count": len(context.previous_results)
-            }
+                "previous_results_count": len(context.previous_results),
+            },
         }
 
         return response
 
-    async def update_results(
-        self,
-        session_id: str,
-        results: List[Dict[str, Any]]
-    ):
+    async def update_results(self, session_id: str, results: List[Dict[str, Any]]):
         """Update search results for session
 
         Args:
@@ -160,7 +146,7 @@ class ConversationManager:
         query: str,
         intent: str,
         results: List[Dict[str, Any]],
-        user_id: Optional[str] = None
+        user_id: Optional[str] = None,
     ):
         """Save conversation turn to Qdrant for long-term memory
 
@@ -188,27 +174,24 @@ class ConversationManager:
                     "query": query,
                     "intent": intent,
                     "result_count": len(results),
-                    "result_ids": [r.get('product_id') for r in results[:10]],
+                    "result_ids": [r.get("product_id") for r in results[:10]],
                     "timestamp": datetime.now().isoformat(),
-                    "type": "conversation_turn"
-                }
+                    "type": "conversation_turn",
+                },
             }
 
             # Save to Qdrant
             async with httpx.AsyncClient(timeout=10.0) as client:
                 await client.put(
                     f"{self.qdrant_url}/collections/conversation_history/points",
-                    json={"points": [point]}
+                    json={"points": [point]},
                 )
 
         except Exception as e:
             print(f"Failed to save to Qdrant: {e}")
 
     async def retrieve_similar_conversations(
-        self,
-        query: str,
-        user_id: Optional[str] = None,
-        limit: int = 3
+        self, query: str, user_id: Optional[str] = None, limit: int = 3
     ) -> List[Dict[str, Any]]:
         """Retrieve similar past conversations from Qdrant
 
@@ -238,13 +221,13 @@ class ConversationManager:
                         "vector": embedding,
                         "limit": limit,
                         "with_payload": True,
-                        "filter": filter_clause if filter_clause else None
-                    }
+                        "filter": filter_clause if filter_clause else None,
+                    },
                 )
 
                 if response.status_code == 200:
                     data = response.json()
-                    return data.get('result', [])
+                    return data.get("result", [])
 
         except Exception as e:
             print(f"Failed to retrieve from Qdrant: {e}")
@@ -264,15 +247,12 @@ class ConversationManager:
             async with httpx.AsyncClient(timeout=30.0) as client:
                 response = await client.post(
                     f"{self.intent_analyzer.ollama_url}/api/embeddings",
-                    json={
-                        "model": "nomic-embed-text",
-                        "prompt": text
-                    }
+                    json={"model": "nomic-embed-text", "prompt": text},
                 )
 
                 if response.status_code == 200:
                     data = response.json()
-                    return data.get('embedding')
+                    return data.get("embedding")
 
         except Exception as e:
             print(f"Embedding generation error: {e}")

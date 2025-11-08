@@ -8,57 +8,60 @@ Query Parser & Entity Extractor
 """
 
 import re
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class EntityType(Enum):
     """추출 가능한 엔티티 타입"""
+
     # Specifications
-    CAPACITY = "capacity"          # 용량 (ml, g)
-    NECK = "neck"                  # Neck 직경 (파이, Ø)
-    DIAMETER = "diameter"          # 직경
-    SIZE = "size"                  # 사이즈
+    CAPACITY = "capacity"  # 용량 (ml, g)
+    NECK = "neck"  # Neck 직경 (파이, Ø)
+    DIAMETER = "diameter"  # 직경
+    SIZE = "size"  # 사이즈
 
     # Materials
-    MATERIAL = "material"          # 재질 (PE, PET, PP 등)
+    MATERIAL = "material"  # 재질 (PE, PET, PP 등)
 
     # Business
-    MOQ = "moq"                    # 최소 주문량
-    PRICE = "price"                # 가격
+    MOQ = "moq"  # 최소 주문량
+    PRICE = "price"  # 가격
 
     # Category
-    CATEGORY = "category"          # 제품 카테고리
+    CATEGORY = "category"  # 제품 카테고리
 
     # Use Case
-    USE_CASE = "use_case"          # 용도
+    USE_CASE = "use_case"  # 용도
     PRODUCT_TYPE = "product_type"  # 제품 유형
 
     # Origin
-    ORIGIN = "origin"              # 원산지
+    ORIGIN = "origin"  # 원산지
     MANUFACTURER = "manufacturer"  # 제조사
 
     # Attributes
-    ATTRIBUTE = "attribute"        # 속성 (가벼운, 작은, 큰 등)
+    ATTRIBUTE = "attribute"  # 속성 (가벼운, 작은, 큰 등)
 
 
 @dataclass
 class ExtractedEntity:
     """추출된 엔티티"""
+
     entity_type: EntityType
     value: Any
-    original_text: str             # 원본 텍스트
-    confidence: float = 1.0        # 신뢰도
-    position: int = 0              # 텍스트 내 위치
+    original_text: str  # 원본 텍스트
+    confidence: float = 1.0  # 신뢰도
+    position: int = 0  # 텍스트 내 위치
 
 
 @dataclass
 class ParsedQuery:
     """파싱된 쿼리"""
+
     original_query: str
     entities: List[ExtractedEntity]
-    intent: str = "search"         # search, recommend, compare, info
+    intent: str = "search"  # search, recommend, compare, info
 
     def get_entities_by_type(self, entity_type: EntityType) -> List[ExtractedEntity]:
         """특정 타입의 엔티티만 필터링"""
@@ -69,10 +72,7 @@ class ParsedQuery:
         return {
             "original_query": self.original_query,
             "intent": self.intent,
-            "entities": {
-                e.entity_type.value: e.value
-                for e in self.entities
-            }
+            "entities": {e.entity_type.value: e.value for e in self.entities},
         }
 
 
@@ -83,39 +83,39 @@ class QueryParser:
 
     # Neck/Diameter patterns (파이, Ø)
     NECK_PATTERNS = [
-        r"(\d+)\s*파이",               # "20파이", "24 파이"
-        r"Ø\s*(\d+)",                  # "Ø20", "Ø 24"
-        r"(\d+)\s*mm\s*입구",          # "20mm 입구"
-        r"neck\s*(\d+)",               # "neck 20"
-        r"넥\s*(\d+)",                 # "넥 20"
+        r"(\d+)\s*파이",  # "20파이", "24 파이"
+        r"Ø\s*(\d+)",  # "Ø20", "Ø 24"
+        r"(\d+)\s*mm\s*입구",  # "20mm 입구"
+        r"neck\s*(\d+)",  # "neck 20"
+        r"넥\s*(\d+)",  # "넥 20"
     ]
 
     # Capacity patterns (ml, g)
     CAPACITY_PATTERNS = [
-        r"(\d+)\s*ml",                 # "100ml", "100 ml"
-        r"(\d+)\s*g",                  # "50g", "50 g"
-        r"(\d+)\s*리터",               # "1리터"
-        r"(\d+)\s*cc",                 # "100cc"
+        r"(\d+)\s*ml",  # "100ml", "100 ml"
+        r"(\d+)\s*g",  # "50g", "50 g"
+        r"(\d+)\s*리터",  # "1리터"
+        r"(\d+)\s*cc",  # "100cc"
     ]
 
     # MOQ patterns (최소 주문량)
     MOQ_PATTERNS = [
         r"(\d{1,3}(?:,\d{3})*)\s*개",  # "5,000개", "1000개"
         r"최소\s*(\d{1,3}(?:,\d{3})*)",  # "최소 5000"
-        r"MOQ\s*(\d{1,3}(?:,\d{3})*)",   # "MOQ 5000"
+        r"MOQ\s*(\d{1,3}(?:,\d{3})*)",  # "MOQ 5000"
         r"(\d{1,3}(?:,\d{3})*)\s*이상",  # "5000개 이상"
     ]
 
     # Price patterns (가격)
     PRICE_PATTERNS = [
-        r"(\d{1,3}(?:,\d{3})*)\s*원",   # "1,000원"
-        r"가격\s*(\d{1,3}(?:,\d{3})*)", # "가격 1000"
+        r"(\d{1,3}(?:,\d{3})*)\s*원",  # "1,000원"
+        r"가격\s*(\d{1,3}(?:,\d{3})*)",  # "가격 1000"
     ]
 
     # Size patterns (사이즈, 크기)
     SIZE_PATTERNS = [
         r"Ø\s*(\d+\.?\d*)\s*[×xX]\s*(\d+\.?\d*)",  # "Ø23.8 × 51.5"
-        r"(\d+)\s*[×xX]\s*(\d+)\s*mm",              # "50 x 100 mm"
+        r"(\d+)\s*[×xX]\s*(\d+)\s*mm",  # "50 x 100 mm"
     ]
 
     # Material keywords
@@ -230,11 +230,7 @@ class QueryParser:
         # 11. Intent 추출
         intent = self._extract_intent(query)
 
-        return ParsedQuery(
-            original_query=query,
-            entities=entities,
-            intent=intent
-        )
+        return ParsedQuery(original_query=query, entities=entities, intent=intent)
 
     # ========== Entity Extractors ==========
 
@@ -245,13 +241,15 @@ class QueryParser:
             match = re.search(pattern, query, re.IGNORECASE)
             if match:
                 neck_value = int(match.group(1))
-                entities.append(ExtractedEntity(
-                    entity_type=EntityType.NECK,
-                    value=f"Ø{neck_value}",
-                    original_text=match.group(0),
-                    confidence=0.95,
-                    position=match.start()
-                ))
+                entities.append(
+                    ExtractedEntity(
+                        entity_type=EntityType.NECK,
+                        value=f"Ø{neck_value}",
+                        original_text=match.group(0),
+                        confidence=0.95,
+                        position=match.start(),
+                    )
+                )
                 break  # First match wins
         return entities
 
@@ -263,13 +261,15 @@ class QueryParser:
             for match in matches:
                 capacity_value = int(match.group(1))
                 unit = "ml" if "ml" in match.group(0).lower() else "g"
-                entities.append(ExtractedEntity(
-                    entity_type=EntityType.CAPACITY,
-                    value=f"{capacity_value}{unit}",
-                    original_text=match.group(0),
-                    confidence=0.95,
-                    position=match.start()
-                ))
+                entities.append(
+                    ExtractedEntity(
+                        entity_type=EntityType.CAPACITY,
+                        value=f"{capacity_value}{unit}",
+                        original_text=match.group(0),
+                        confidence=0.95,
+                        position=match.start(),
+                    )
+                )
         return entities
 
     def _extract_moq(self, query: str) -> List[ExtractedEntity]:
@@ -280,13 +280,15 @@ class QueryParser:
             if match:
                 moq_str = match.group(1).replace(",", "")
                 moq_value = int(moq_str)
-                entities.append(ExtractedEntity(
-                    entity_type=EntityType.MOQ,
-                    value=moq_value,
-                    original_text=match.group(0),
-                    confidence=0.9,
-                    position=match.start()
-                ))
+                entities.append(
+                    ExtractedEntity(
+                        entity_type=EntityType.MOQ,
+                        value=moq_value,
+                        original_text=match.group(0),
+                        confidence=0.9,
+                        position=match.start(),
+                    )
+                )
                 break
         return entities
 
@@ -298,13 +300,15 @@ class QueryParser:
             if match:
                 price_str = match.group(1).replace(",", "")
                 price_value = int(price_str)
-                entities.append(ExtractedEntity(
-                    entity_type=EntityType.PRICE,
-                    value=price_value,
-                    original_text=match.group(0),
-                    confidence=0.85,
-                    position=match.start()
-                ))
+                entities.append(
+                    ExtractedEntity(
+                        entity_type=EntityType.PRICE,
+                        value=price_value,
+                        original_text=match.group(0),
+                        confidence=0.85,
+                        position=match.start(),
+                    )
+                )
                 break
         return entities
 
@@ -314,13 +318,15 @@ class QueryParser:
         for pattern in self.SIZE_PATTERNS:
             match = re.search(pattern, query, re.IGNORECASE)
             if match:
-                entities.append(ExtractedEntity(
-                    entity_type=EntityType.SIZE,
-                    value=match.group(0),
-                    original_text=match.group(0),
-                    confidence=0.9,
-                    position=match.start()
-                ))
+                entities.append(
+                    ExtractedEntity(
+                        entity_type=EntityType.SIZE,
+                        value=match.group(0),
+                        original_text=match.group(0),
+                        confidence=0.9,
+                        position=match.start(),
+                    )
+                )
                 break
         return entities
 
@@ -330,12 +336,14 @@ class QueryParser:
         for material, keywords in self.MATERIAL_KEYWORDS.items():
             for keyword in keywords:
                 if keyword in query:
-                    entities.append(ExtractedEntity(
-                        entity_type=EntityType.MATERIAL,
-                        value=material,
-                        original_text=keyword,
-                        confidence=0.9
-                    ))
+                    entities.append(
+                        ExtractedEntity(
+                            entity_type=EntityType.MATERIAL,
+                            value=material,
+                            original_text=keyword,
+                            confidence=0.9,
+                        )
+                    )
                     return entities  # First match wins
         return entities
 
@@ -345,12 +353,14 @@ class QueryParser:
         for category, keywords in self.CATEGORY_KEYWORDS.items():
             for keyword in keywords:
                 if keyword in query:
-                    entities.append(ExtractedEntity(
-                        entity_type=EntityType.CATEGORY,
-                        value=category,
-                        original_text=keyword,
-                        confidence=0.95
-                    ))
+                    entities.append(
+                        ExtractedEntity(
+                            entity_type=EntityType.CATEGORY,
+                            value=category,
+                            original_text=keyword,
+                            confidence=0.95,
+                        )
+                    )
                     return entities  # First match wins
         return entities
 
@@ -360,12 +370,14 @@ class QueryParser:
         for use_case, keywords in self.USE_CASE_KEYWORDS.items():
             for keyword in keywords:
                 if keyword in query:
-                    entities.append(ExtractedEntity(
-                        entity_type=EntityType.USE_CASE,
-                        value=use_case,
-                        original_text=keyword,
-                        confidence=0.8
-                    ))
+                    entities.append(
+                        ExtractedEntity(
+                            entity_type=EntityType.USE_CASE,
+                            value=use_case,
+                            original_text=keyword,
+                            confidence=0.8,
+                        )
+                    )
         return entities
 
     def _extract_origin(self, query: str) -> List[ExtractedEntity]:
@@ -374,12 +386,14 @@ class QueryParser:
         for origin, keywords in self.ORIGIN_KEYWORDS.items():
             for keyword in keywords:
                 if keyword in query:
-                    entities.append(ExtractedEntity(
-                        entity_type=EntityType.ORIGIN,
-                        value=origin,
-                        original_text=keyword,
-                        confidence=0.9
-                    ))
+                    entities.append(
+                        ExtractedEntity(
+                            entity_type=EntityType.ORIGIN,
+                            value=origin,
+                            original_text=keyword,
+                            confidence=0.9,
+                        )
+                    )
                     return entities
         return entities
 
@@ -389,12 +403,14 @@ class QueryParser:
         for attr, keywords in self.ATTRIBUTE_KEYWORDS.items():
             for keyword in keywords:
                 if keyword in query:
-                    entities.append(ExtractedEntity(
-                        entity_type=EntityType.ATTRIBUTE,
-                        value=attr,
-                        original_text=keyword,
-                        confidence=0.7
-                    ))
+                    entities.append(
+                        ExtractedEntity(
+                            entity_type=EntityType.ATTRIBUTE,
+                            value=attr,
+                            original_text=keyword,
+                            confidence=0.7,
+                        )
+                    )
         return entities
 
     def _extract_intent(self, query: str) -> str:
@@ -420,9 +436,9 @@ if __name__ == "__main__":
 
     parser = QueryParser()
 
-    print("="*80)
+    print("=" * 80)
     print("QUERY PARSER TEST")
-    print("="*80)
+    print("=" * 80)
 
     for query in test_queries:
         print(f"\n{'─'*80}")

@@ -3,55 +3,44 @@ Multi-Modal RAG Components
 Integrates text, image, and shape embeddings with OCR processing
 """
 
-from .multimodal_embedder import MultiModalEmbeddingService
-from .qdrant_uploader import MultiModalQdrantUploader
+from .end_to_end_pipeline import EndToEndPipeline, PipelineResult
 from .hybrid_search import (
     HybridSearchEngine,
+    LearnedFusion,
+    ReciprocalRankFusion,
     SearchResult,
     WeightedFusion,
-    ReciprocalRankFusion,
-    LearnedFusion
-)
-from .ocr_integration import (
-    OCRProcessor,
-    OCRMultiModalIntegration,
-    OCRResult
-)
-from .end_to_end_pipeline import (
-    EndToEndPipeline,
-    PipelineResult
 )
 
 # Phase 6: Image and Shape Matching
-from .image_matching_service import ImageMatchingService, ImageMatch
-from .tri_modal_search_service import (
-    TriModalSearchService,
-    TriModalMatch,
-    SearchQuery
-)
+from .image_matching_service import ImageMatch, ImageMatchingService
+from .multimodal_embedder import MultiModalEmbeddingService
+from .ocr_integration import OCRMultiModalIntegration, OCRProcessor, OCRResult
+from .qdrant_uploader import MultiModalQdrantUploader
+from .tri_modal_search_service import SearchQuery, TriModalMatch, TriModalSearchService
 
 __all__ = [
     # Embedding
-    'MultiModalEmbeddingService',
+    "MultiModalEmbeddingService",
     # Qdrant
-    'MultiModalQdrantUploader',
+    "MultiModalQdrantUploader",
     # Search
-    'HybridSearchEngine',
-    'SearchResult',
-    'WeightedFusion',
-    'ReciprocalRankFusion',
-    'LearnedFusion',
+    "HybridSearchEngine",
+    "SearchResult",
+    "WeightedFusion",
+    "ReciprocalRankFusion",
+    "LearnedFusion",
     # OCR
-    'OCRProcessor',
-    'OCRMultiModalIntegration',
-    'OCRResult',
+    "OCRProcessor",
+    "OCRMultiModalIntegration",
+    "OCRResult",
     # Pipeline
-    'EndToEndPipeline',
-    'PipelineResult',
+    "EndToEndPipeline",
+    "PipelineResult",
     # Phase 6: Image and Shape Matching
-    'ImageMatchingService',
-    'ImageMatch',
-    'TriModalSearchService',
-    'TriModalMatch',
-    'SearchQuery',
+    "ImageMatchingService",
+    "ImageMatch",
+    "TriModalSearchService",
+    "TriModalMatch",
+    "SearchQuery",
 ]

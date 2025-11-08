@@ -31,9 +31,9 @@ try:
     import sentry_sdk
     from sentry_sdk import capture_exception, capture_message, set_tag, set_user
     from sentry_sdk.integrations.fastapi import FastApiIntegration
+    from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.integrations.redis import RedisIntegration
     from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
-    from sentry_sdk.integrations.logging import LoggingIntegration
     from sentry_sdk.scrubber import DEFAULT_DENYLIST
 
     HAS_SENTRY = True
@@ -82,21 +82,29 @@ class SentryConfig:
     release: Optional[str] = None
     traces_sample_rate: float = 0.01  # 1% of transactions
     profiles_sample_rate: float = 0.01  # 1% of profiles
-    error_sample_rates: Dict[str, float] = field(default_factory=lambda: {
-        "critical": 1.0,   # 100% of critical errors
-        "error": 0.5,      # 50% of errors
-        "warning": 0.2,    # 20% of warnings
-        "info": 0.1,       # 10% of info messages
-    })
+    error_sample_rates: Dict[str, float] = field(
+        default_factory=lambda: {
+            "critical": 1.0,  # 100% of critical errors
+            "error": 0.5,  # 50% of errors
+            "warning": 0.2,  # 20% of warnings
+            "info": 0.1,  # 10% of info messages
+        }
+    )
     attach_stacktrace: bool = True
     send_default_pii: bool = False
-    ignored_errors: Set[str] = field(default_factory=lambda: {
-        "KeyboardInterrupt",
-        "SystemExit",
-        "asyncio.CancelledError",
-    })
-    before_send: Optional[Callable[[Dict[str, Any], Dict[str, Any]], Optional[Dict[str, Any]]]] = None
-    before_send_transaction: Optional[Callable[[Dict[str, Any], Dict[str, Any]], Optional[Dict[str, Any]]]] = None
+    ignored_errors: Set[str] = field(
+        default_factory=lambda: {
+            "KeyboardInterrupt",
+            "SystemExit",
+            "asyncio.CancelledError",
+        }
+    )
+    before_send: Optional[Callable[[Dict[str, Any], Dict[str, Any]], Optional[Dict[str, Any]]]] = (
+        None
+    )
+    before_send_transaction: Optional[
+        Callable[[Dict[str, Any], Dict[str, Any]], Optional[Dict[str, Any]]]
+    ] = None
 
     def __post_init__(self) -> None:
         """Validate configuration after initialization."""
@@ -209,11 +217,7 @@ class SentryIntegration:
         set_tag("version", version)
         set_tag("environment", self.config.environment.value)
 
-    def capture_exception(
-        self,
-        exception: Exception,
-        **kwargs: Any
-    ) -> Optional[str]:
+    def capture_exception(self, exception: Exception, **kwargs: Any) -> Optional[str]:
         """Capture an exception to Sentry.
 
         Args:
@@ -241,12 +245,7 @@ class SentryIntegration:
 
         return capture_exception(exception)
 
-    def capture_message(
-        self,
-        message: str,
-        level: str = "info",
-        **kwargs: Any
-    ) -> Optional[str]:
+    def capture_message(self, message: str, level: str = "info", **kwargs: Any) -> Optional[str]:
         """Capture a message to Sentry.
 
         Args:
@@ -281,7 +280,7 @@ class SentryIntegration:
         user_id: str,
         email: Optional[str] = None,
         username: Optional[str] = None,
-        **kwargs: Any
+        **kwargs: Any,
     ) -> None:
         """Set user context for error tracking.
 
@@ -310,13 +309,7 @@ class SentryIntegration:
 
         set_user(user_data)
 
-    def add_breadcrumb(
-        self,
-        category: str,
-        message: str,
-        level: str = "info",
-        **data: Any
-    ) -> None:
+    def add_breadcrumb(self, category: str, message: str, level: str = "info", **data: Any) -> None:
         """Add a breadcrumb for error context.
 
         Args:
@@ -344,9 +337,7 @@ class SentryIntegration:
         )
 
     def _before_send_callback(
-        self,
-        event: Dict[str, Any],
-        hint: Dict[str, Any]
+        self, event: Dict[str, Any], hint: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         """Process events before sending to Sentry.
 
@@ -376,9 +367,7 @@ class SentryIntegration:
         return event
 
     def _before_send_transaction_callback(
-        self,
-        event: Dict[str, Any],
-        hint: Dict[str, Any]
+        self, event: Dict[str, Any], hint: Dict[str, Any]
     ) -> Optional[Dict[str, Any]]:
         """Process transactions before sending to Sentry.
 
@@ -393,9 +382,7 @@ class SentryIntegration:
         return event
 
     def _generate_fingerprint(
-        self,
-        event: Dict[str, Any],
-        hint: Dict[str, Any]
+        self, event: Dict[str, Any], hint: Dict[str, Any]
     ) -> Optional[List[str]]:
         """Generate fingerprint for intelligent error grouping.
 
@@ -423,8 +410,8 @@ class SentryIntegration:
         # Database errors - group by query template
         if "database" in exc_name.lower() or "sql" in exc_name.lower():
             # Remove parameters from SQL queries
-            query_template = re.sub(r'\b\d+\b', '?', exc_message)
-            query_template = re.sub(r"'[^']*'", '?', query_template)
+            query_template = re.sub(r"\b\d+\b", "?", exc_message)
+            query_template = re.sub(r"'[^']*'", "?", query_template)
             query_hash = hashlib.md5(query_template.encode()).hexdigest()[:8]
             return ["database-error", exc_name, query_hash]
 
@@ -434,8 +421,8 @@ class SentryIntegration:
             url = request_data.get("url", "unknown")
             method = request_data.get("method", "unknown")
             # Extract endpoint path (remove IDs)
-            path = re.sub(r'/\d+', '/:id', url)
-            path = re.sub(r'/[a-f0-9-]{36}', '/:uuid', path)
+            path = re.sub(r"/\d+", "/:id", url)
+            path = re.sub(r"/[a-f0-9-]{36}", "/:uuid", path)
             return ["api-error", method, path, exc_name]
 
         # Validation errors - group by field names
@@ -546,10 +533,7 @@ class SentryMiddleware(BaseHTTPMiddleware):
             for key, value in headers.items()
         }
 
-    async def _extract_user_from_token(
-        self,
-        request: Request
-    ) -> Optional[Dict[str, Any]]:
+    async def _extract_user_from_token(self, request: Request) -> Optional[Dict[str, Any]]:
         """Extract user information from JWT token.
 
         Args:
@@ -568,6 +552,7 @@ class SentryMiddleware(BaseHTTPMiddleware):
         try:
             # Decode JWT token (simplified - replace with actual JWT validation)
             import jwt
+
             payload = jwt.decode(token, options={"verify_signature": False})
 
             return {
@@ -583,6 +568,7 @@ class SentryMiddleware(BaseHTTPMiddleware):
 # ============================================================
 # Utility Functions
 # ============================================================
+
 
 @lru_cache()
 def get_sentry_instance() -> SentryIntegration:

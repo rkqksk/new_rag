@@ -3,9 +3,12 @@ Integration tests for app/api/ route handlers
 
 Tests HTTP endpoints using FastAPI TestClient with mocked dependencies
 """
+
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
 import pytest
 from starlette.testclient import TestClient
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
+
 from app.api.main import app
 from app.core.dependencies import override_dependencies_for_testing
 
@@ -82,7 +85,7 @@ class TestQueryRoutes:
         response = client.post(
             "/api/v1/query",
             json={"question": "What is AI?"},
-            headers={"Content-Type": "application/json"}
+            headers={"Content-Type": "application/json"},
         )
         # Either 200, 422 (validation error), or 503 (service unavailable)
         assert response.status_code in [200, 422, 503, 500]
@@ -90,14 +93,9 @@ class TestQueryRoutes:
     @pytest.mark.integration
     def test_query_with_valid_payload(self, client):
         """Test query endpoint with valid payload"""
-        payload = {
-            "question": "What is machine learning?",
-            "top_k": 5
-        }
+        payload = {"question": "What is machine learning?", "top_k": 5}
         response = client.post(
-            "/api/v1/query",
-            json=payload,
-            headers={"Content-Type": "application/json"}
+            "/api/v1/query", json=payload, headers={"Content-Type": "application/json"}
         )
         # Accept multiple status codes (depends on service availability)
         assert response.status_code in [200, 422, 500, 503]
@@ -106,10 +104,7 @@ class TestQueryRoutes:
     def test_query_with_empty_question(self, client):
         """Test query endpoint with empty question"""
         payload = {"question": ""}
-        response = client.post(
-            "/api/v1/query",
-            json=payload
-        )
+        response = client.post("/api/v1/query", json=payload)
         # Should fail validation
         assert response.status_code in [422, 400]
 
@@ -117,10 +112,7 @@ class TestQueryRoutes:
     def test_query_with_missing_question(self, client):
         """Test query endpoint with missing question field"""
         payload = {"top_k": 5}
-        response = client.post(
-            "/api/v1/query",
-            json=payload
-        )
+        response = client.post("/api/v1/query", json=payload)
         # Should fail validation
         assert response.status_code in [422, 400]
 
@@ -208,9 +200,7 @@ class TestErrorHandling:
     def test_invalid_json_payload(self, client):
         """Test endpoint with invalid JSON"""
         response = client.post(
-            "/api/v1/query",
-            data="invalid json{",
-            headers={"Content-Type": "application/json"}
+            "/api/v1/query", data="invalid json{", headers={"Content-Type": "application/json"}
         )
         # Should return 422 or 400
         assert response.status_code in [422, 400]
@@ -324,19 +314,13 @@ class TestHeaderHandling:
     @pytest.mark.integration
     def test_custom_headers_preserved(self, client):
         """Test custom headers don't break requests"""
-        response = client.get(
-            "/",
-            headers={"X-Custom-Header": "test-value"}
-        )
+        response = client.get("/", headers={"X-Custom-Header": "test-value"})
         assert response.status_code == 200
 
     @pytest.mark.integration
     def test_user_agent_header(self, client):
         """Test requests with User-Agent header"""
-        response = client.get(
-            "/",
-            headers={"User-Agent": "Test-Client/1.0"}
-        )
+        response = client.get("/", headers={"User-Agent": "Test-Client/1.0"})
         assert response.status_code == 200
 
 
@@ -358,9 +342,6 @@ class TestStatusCodes:
     @pytest.mark.integration
     def test_422_on_validation_error(self, client):
         """Test 422 Unprocessable Entity on validation errors"""
-        response = client.post(
-            "/api/v1/query",
-            json={"invalid_field": "value"}
-        )
+        response = client.post("/api/v1/query", json={"invalid_field": "value"})
         # Should fail validation
         assert response.status_code in [422, 400]

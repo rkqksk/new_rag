@@ -4,30 +4,23 @@ SaaS API Endpoints
 Multi-tenancy, billing, and usage management endpoints.
 """
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Header
-from pydantic import BaseModel, EmailStr
-from typing import List, Optional
 from datetime import datetime
+from typing import List, Optional
 
+from fastapi import APIRouter, Depends, Header, HTTPException, Request
+from pydantic import BaseModel, EmailStr
+
+from src.core.auth.api_key_handler import APIKeyManager, get_current_tenant
 from src.core.auth.jwt_handler import (
-    get_current_user_from_token,
     TokenData,
     create_token_response,
+    get_current_user_from_token,
     hash_password,
-    verify_password
+    verify_password,
 )
-from src.core.auth.api_key_handler import APIKeyManager, get_current_tenant
+from src.models.saas_models import APIKey, PlanTier, Tenant, TenantStatus, User, UserRole
 from src.services.billing_service import billing_service
 from src.services.usage_tracker import usage_tracker
-from src.models.saas_models import (
-    Tenant,
-    User,
-    APIKey,
-    PlanTier,
-    UserRole,
-    TenantStatus
-)
-
 
 router = APIRouter()
 
@@ -36,8 +29,10 @@ router = APIRouter()
 # Request/Response Models
 # ============================================================================
 
+
 class TenantCreate(BaseModel):
     """Create tenant request"""
+
     company_name: str
     subdomain: str
     email: EmailStr
@@ -48,6 +43,7 @@ class TenantCreate(BaseModel):
 
 class TenantResponse(BaseModel):
     """Tenant response"""
+
     id: str
     company_name: str
     subdomain: str
@@ -60,18 +56,21 @@ class TenantResponse(BaseModel):
 
 class UserLogin(BaseModel):
     """User login request"""
+
     email: EmailStr
     password: str
 
 
 class APIKeyCreate(BaseModel):
     """Create API key request"""
+
     name: str
     expires_days: Optional[int] = None
 
 
 class APIKeyResponse(BaseModel):
     """API key response"""
+
     api_key: str  # Only shown once!
     key_id: str
     key_prefix: str
@@ -82,6 +81,7 @@ class APIKeyResponse(BaseModel):
 
 class SubscriptionUpgrade(BaseModel):
     """Upgrade subscription request"""
+
     plan_tier: PlanTier
     billing_period: str = "monthly"  # monthly, yearly
 
@@ -89,6 +89,7 @@ class SubscriptionUpgrade(BaseModel):
 # ============================================================================
 # Authentication Endpoints
 # ============================================================================
+
 
 @router.post("/auth/register", response_model=TenantResponse, tags=["Auth"])
 async def register_tenant(request: TenantCreate):
@@ -116,15 +117,13 @@ async def register_tenant(request: TenantCreate):
             subdomain=request.subdomain,
             email=request.email,
             plan_tier=request.plan_tier,
-            status=TenantStatus.ACTIVE
+            status=TenantStatus.ACTIVE,
         )
 
         # Create Stripe customer if not free tier
         if request.plan_tier != PlanTier.FREE:
             stripe_customer_id = billing_service.create_customer(
-                tenant_id=str(tenant.id),
-                email=request.email,
-                company_name=request.company_name
+                tenant_id=str(tenant.id), email=request.email, company_name=request.company_name
             )
             tenant.stripe_customer_id = stripe_customer_id
 
@@ -139,7 +138,7 @@ async def register_tenant(request: TenantCreate):
             name=request.admin_name,
             role=UserRole.ADMIN,
             is_active=True,
-            email_verified=False
+            email_verified=False,
         )
         db.add(admin_user)
 
@@ -154,7 +153,7 @@ async def register_tenant(request: TenantCreate):
             plan_tier=tenant.plan_tier,
             subscription_status=tenant.subscription_status.value,
             status=tenant.status.value,
-            created_at=tenant.created_at
+            created_at=tenant.created_at,
         )
 
     finally:
@@ -196,7 +195,7 @@ async def login(credentials: UserLogin):
             user_id=str(user.id),
             tenant_id=str(user.tenant_id),
             email=user.email,
-            role=user.role.value
+            role=user.role.value,
         )
 
         return token_response
@@ -209,10 +208,10 @@ async def login(credentials: UserLogin):
 # API Key Management
 # ============================================================================
 
+
 @router.post("/api-keys", response_model=APIKeyResponse, tags=["API Keys"])
 async def create_api_key(
-    request: APIKeyCreate,
-    current_user: TokenData = Depends(get_current_user_from_token)
+    request: APIKeyCreate, current_user: TokenData = Depends(get_current_user_from_token)
 ):
     """
     Create new API key
@@ -222,18 +221,14 @@ async def create_api_key(
     manager = APIKeyManager()
 
     result = manager.generate_api_key(
-        tenant_id=current_user.tenant_id,
-        name=request.name,
-        expires_days=request.expires_days
+        tenant_id=current_user.tenant_id, name=request.name, expires_days=request.expires_days
     )
 
     return APIKeyResponse(**result)
 
 
 @router.get("/api-keys", tags=["API Keys"])
-async def list_api_keys(
-    current_user: TokenData = Depends(get_current_user_from_token)
-):
+async def list_api_keys(current_user: TokenData = Depends(get_current_user_from_token)):
     """List all API keys for current tenant"""
     manager = APIKeyManager()
     return manager.list_api_keys(current_user.tenant_id)
@@ -241,8 +236,7 @@ async def list_api_keys(
 
 @router.delete("/api-keys/{key_id}", tags=["API Keys"])
 async def revoke_api_key(
-    key_id: str,
-    current_user: TokenData = Depends(get_current_user_from_token)
+    key_id: str, current_user: TokenData = Depends(get_current_user_from_token)
 ):
     """Revoke API key"""
     manager = APIKeyManager()
@@ -256,10 +250,9 @@ async def revoke_api_key(
 # Billing & Subscriptions
 # ============================================================================
 
+
 @router.get("/billing/subscription", tags=["Billing"])
-async def get_subscription(
-    tenant_id: str = Depends(get_current_tenant)
-):
+async def get_subscription(tenant_id: str = Depends(get_current_tenant)):
     """Get current subscription info"""
     from src.db.session import SessionLocal
 
@@ -273,9 +266,11 @@ async def get_subscription(
         return {
             "plan_tier": tenant.plan_tier.value,
             "subscription_status": tenant.subscription_status.value,
-            "current_period_end": tenant.current_period_end.isoformat() if tenant.current_period_end else None,
+            "current_period_end": (
+                tenant.current_period_end.isoformat() if tenant.current_period_end else None
+            ),
             "stripe_customer_id": tenant.stripe_customer_id,
-            "stripe_subscription_id": tenant.stripe_subscription_id
+            "stripe_subscription_id": tenant.stripe_subscription_id,
         }
 
     finally:
@@ -284,8 +279,7 @@ async def get_subscription(
 
 @router.post("/billing/upgrade", tags=["Billing"])
 async def upgrade_subscription(
-    request: SubscriptionUpgrade,
-    tenant_id: str = Depends(get_current_tenant)
+    request: SubscriptionUpgrade, tenant_id: str = Depends(get_current_tenant)
 ):
     """
     Upgrade subscription plan
@@ -307,9 +301,7 @@ async def upgrade_subscription(
             # Create Stripe customer if needed
             if not tenant.stripe_customer_id:
                 customer_id = billing_service.create_customer(
-                    tenant_id=tenant_id,
-                    email=tenant.email,
-                    company_name=tenant.company_name
+                    tenant_id=tenant_id, email=tenant.email, company_name=tenant.company_name
                 )
                 tenant.stripe_customer_id = customer_id
                 db.commit()
@@ -318,7 +310,7 @@ async def upgrade_subscription(
             result = billing_service.create_subscription(
                 customer_id=tenant.stripe_customer_id,
                 plan_tier=request.plan_tier,
-                billing_period=request.billing_period
+                billing_period=request.billing_period,
             )
 
             # Update tenant
@@ -329,7 +321,7 @@ async def upgrade_subscription(
             return {
                 "message": "Subscription created",
                 "client_secret": result["client_secret"],
-                "status": result["status"]
+                "status": result["status"],
             }
 
         # Upgrading existing subscription
@@ -337,7 +329,7 @@ async def upgrade_subscription(
             result = billing_service.upgrade_subscription(
                 subscription_id=tenant.stripe_subscription_id,
                 new_plan_tier=request.plan_tier,
-                billing_period=request.billing_period
+                billing_period=request.billing_period,
             )
 
             # Update tenant
@@ -347,7 +339,7 @@ async def upgrade_subscription(
             return {
                 "message": "Subscription upgraded",
                 "subscription_id": result["subscription_id"],
-                "status": result["status"]
+                "status": result["status"],
             }
 
     finally:
@@ -356,8 +348,7 @@ async def upgrade_subscription(
 
 @router.post("/billing/cancel", tags=["Billing"])
 async def cancel_subscription(
-    immediately: bool = False,
-    tenant_id: str = Depends(get_current_tenant)
+    immediately: bool = False, tenant_id: str = Depends(get_current_tenant)
 ):
     """Cancel subscription"""
     from src.db.session import SessionLocal
@@ -374,14 +365,13 @@ async def cancel_subscription(
 
         # Cancel via Stripe
         result = billing_service.cancel_subscription(
-            subscription_id=tenant.stripe_subscription_id,
-            immediately=immediately
+            subscription_id=tenant.stripe_subscription_id, immediately=immediately
         )
 
         return {
             "message": "Subscription canceled",
             "canceled_at": result["canceled_at"].isoformat() if result["canceled_at"] else None,
-            "effective": "immediately" if immediately else "at period end"
+            "effective": "immediately" if immediately else "at period end",
         }
 
     finally:
@@ -390,8 +380,7 @@ async def cancel_subscription(
 
 @router.post("/billing/webhook", tags=["Billing"])
 async def stripe_webhook(
-    request: Request,
-    stripe_signature: str = Header(None, alias="Stripe-Signature")
+    request: Request, stripe_signature: str = Header(None, alias="Stripe-Signature")
 ):
     """Handle Stripe webhooks"""
     payload = await request.body()
@@ -407,19 +396,15 @@ async def stripe_webhook(
 # Usage & Analytics
 # ============================================================================
 
+
 @router.get("/usage/quota", tags=["Usage"])
-async def check_quota(
-    tenant_id: str = Depends(get_current_tenant)
-):
+async def check_quota(tenant_id: str = Depends(get_current_tenant)):
     """Check current quota status"""
     return usage_tracker.check_quota(tenant_id)
 
 
 @router.get("/usage/stats", tags=["Usage"])
-async def get_usage_stats(
-    days: int = 30,
-    tenant_id: str = Depends(get_current_tenant)
-):
+async def get_usage_stats(days: int = 30, tenant_id: str = Depends(get_current_tenant)):
     """Get usage statistics"""
     from datetime import timedelta
 
@@ -427,9 +412,7 @@ async def get_usage_stats(
     start_date = end_date - timedelta(days=days)
 
     return usage_tracker.get_usage_stats(
-        tenant_id=tenant_id,
-        start_date=start_date,
-        end_date=end_date
+        tenant_id=tenant_id, start_date=start_date, end_date=end_date
     )
 
 
@@ -437,11 +420,10 @@ async def get_usage_stats(
 # Tenant Management (Admin only)
 # ============================================================================
 
+
 @router.get("/tenants", tags=["Admin"])
 async def list_tenants(
-    skip: int = 0,
-    limit: int = 100,
-    current_user: TokenData = Depends(get_current_user_from_token)
+    skip: int = 0, limit: int = 100, current_user: TokenData = Depends(get_current_user_from_token)
 ):
     """
     List all tenants (admin only)
@@ -466,7 +448,7 @@ async def list_tenants(
                 "subdomain": t.subdomain,
                 "plan_tier": t.plan_tier.value,
                 "status": t.status.value,
-                "created_at": t.created_at.isoformat()
+                "created_at": t.created_at.isoformat(),
             }
             for t in tenants
         ]

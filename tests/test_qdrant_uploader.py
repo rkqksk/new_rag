@@ -3,13 +3,13 @@ Integration tests for MultiModalQdrantUploader
 Requires Qdrant running at localhost:6333
 """
 
-import pytest
 from typing import List
+
+import pytest
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
 from src.core.multimodal.qdrant_uploader import MultiModalQdrantUploader
-
 
 # Test collection name (separate from production)
 TEST_COLLECTION = "test_multimodal"
@@ -42,8 +42,8 @@ def test_collection(qdrant_client):
         vectors_config={
             "text": VectorParams(size=384, distance=Distance.COSINE),
             "image": VectorParams(size=1024, distance=Distance.COSINE),
-            "shape": VectorParams(size=128, distance=Distance.COSINE)
-        }
+            "shape": VectorParams(size=128, distance=Distance.COSINE),
+        },
     )
 
     yield TEST_COLLECTION
@@ -63,6 +63,7 @@ def uploader(qdrant_client, test_collection):
 
 # ==================== Initialization Tests ====================
 
+
 def test_uploader_initialization(uploader):
     """Test uploader initialization"""
     assert uploader is not None
@@ -77,12 +78,11 @@ def test_uploader_invalid_collection(qdrant_client):
 
 # ==================== Single Upload Tests ====================
 
+
 def test_upload_text_only(uploader):
     """Test upload with text embedding only"""
     success = uploader.upload_product(
-        product_id="test-text-001",
-        text_embedding=[0.1] * 384,
-        payload={"name": "Test Product"}
+        product_id="test-text-001", text_embedding=[0.1] * 384, payload={"name": "Test Product"}
     )
 
     assert success == True
@@ -100,7 +100,7 @@ def test_upload_text_image(uploader):
         product_id="test-multi-001",
         text_embedding=[0.2] * 384,
         image_embedding=[0.3] * 1024,
-        payload={"name": "Multi-modal Product"}
+        payload={"name": "Multi-modal Product"},
     )
 
     assert success == True
@@ -121,7 +121,7 @@ def test_upload_all_vectors(uploader):
         text_embedding=[0.4] * 384,
         image_embedding=[0.5] * 1024,
         shape_embedding=[0.6] * 128,
-        payload={"name": "Full Multi-modal"}
+        payload={"name": "Full Multi-modal"},
     )
 
     assert success == True
@@ -137,22 +137,19 @@ def test_upload_all_vectors(uploader):
 def test_upload_no_embeddings(uploader):
     """Test error when no embeddings provided"""
     with pytest.raises(ValueError):
-        uploader.upload_product(
-            product_id="test-empty-001",
-            payload={"name": "Empty"}
-        )
+        uploader.upload_product(product_id="test-empty-001", payload={"name": "Empty"})
 
 
 def test_upload_wrong_dimension(uploader):
     """Test error with wrong vector dimension"""
     with pytest.raises(ValueError):
         uploader.upload_product(
-            product_id="test-wrong-001",
-            text_embedding=[0.1] * 100  # Wrong: should be 384
+            product_id="test-wrong-001", text_embedding=[0.1] * 100  # Wrong: should be 384
         )
 
 
 # ==================== Batch Upload Tests ====================
+
 
 def test_batch_upload(uploader):
     """Test batch upload"""
@@ -160,7 +157,7 @@ def test_batch_upload(uploader):
         {
             "product_id": f"batch-{i:03d}",
             "text_embedding": [0.1 * i] * 384,
-            "payload": {"name": f"Product {i}"}
+            "payload": {"name": f"Product {i}"},
         }
         for i in range(10)
     ]
@@ -178,7 +175,7 @@ def test_batch_upload_large(uploader):
         {
             "product_id": f"large-{i:04d}",
             "text_embedding": [0.01 * i] * 384,
-            "payload": {"index": i}
+            "payload": {"index": i},
         }
         for i in range(250)  # 2.5 batches (batch_size=100)
     ]
@@ -196,14 +193,14 @@ def test_batch_upload_mixed(uploader):
         {
             "product_id": "mixed-001",
             "text_embedding": [0.1] * 384,
-            "payload": {"type": "text_only"}
+            "payload": {"type": "text_only"},
         },
         # Text + Image
         {
             "product_id": "mixed-002",
             "text_embedding": [0.2] * 384,
             "image_embedding": [0.3] * 1024,
-            "payload": {"type": "text_image"}
+            "payload": {"type": "text_image"},
         },
         # All three
         {
@@ -211,8 +208,8 @@ def test_batch_upload_mixed(uploader):
             "text_embedding": [0.4] * 384,
             "image_embedding": [0.5] * 1024,
             "shape_embedding": [0.6] * 128,
-            "payload": {"type": "all"}
-        }
+            "payload": {"type": "all"},
+        },
     ]
 
     stats = uploader.upload_batch(products, show_progress=False)
@@ -236,13 +233,12 @@ def test_batch_upload_mixed(uploader):
 
 # ==================== Retrieval Tests ====================
 
+
 def test_get_product(uploader):
     """Test product retrieval"""
     # Upload
     uploader.upload_product(
-        product_id="retrieve-001",
-        text_embedding=[0.7] * 384,
-        payload={"name": "Retrieve Test"}
+        product_id="retrieve-001", text_embedding=[0.7] * 384, payload={"name": "Retrieve Test"}
     )
 
     # Retrieve
@@ -262,13 +258,12 @@ def test_get_product_not_found(uploader):
 
 # ==================== Deletion Tests ====================
 
+
 def test_delete_product(uploader):
     """Test product deletion"""
     # Upload
     uploader.upload_product(
-        product_id="delete-001",
-        text_embedding=[0.8] * 384,
-        payload={"name": "To Delete"}
+        product_id="delete-001", text_embedding=[0.8] * 384, payload={"name": "To Delete"}
     )
 
     # Verify exists
@@ -286,6 +281,7 @@ def test_delete_product(uploader):
 
 # ==================== Statistics Tests ====================
 
+
 def test_collection_stats(uploader):
     """Test collection statistics"""
     stats = uploader.get_collection_stats()
@@ -301,12 +297,11 @@ def test_collection_stats(uploader):
 
 # ==================== Metadata Tests ====================
 
+
 def test_metadata_auto_added(uploader):
     """Test that metadata is automatically added"""
     uploader.upload_product(
-        product_id="meta-001",
-        text_embedding=[0.9] * 384,
-        payload={"name": "Metadata Test"}
+        product_id="meta-001", text_embedding=[0.9] * 384, payload={"name": "Metadata Test"}
     )
 
     product = uploader.get_product("meta-001")
@@ -320,16 +315,13 @@ def test_metadata_auto_added(uploader):
 
 # ==================== Edge Cases ====================
 
+
 def test_upload_with_special_characters(uploader):
     """Test upload with special characters in payload"""
     uploader.upload_product(
         product_id="special-001",
         text_embedding=[0.1] * 384,
-        payload={
-            "name": "제품명: 20파이 캡",
-            "spec": "Ø20, MOQ: 5,000개",
-            "price": "₩1,500"
-        }
+        payload={"name": "제품명: 20파이 캡", "spec": "Ø20, MOQ: 5,000개", "price": "₩1,500"},
     )
 
     product = uploader.get_product("special-001")

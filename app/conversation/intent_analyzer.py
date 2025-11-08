@@ -3,10 +3,12 @@ LLM-based Intent Analyzer using Ollama
 Analyzes user queries to understand intent and extract criteria
 """
 
-import httpx
 import json
-from typing import Dict, Any, Optional, List
-from .states import IntentType, SearchCriteria, ConversationContext
+from typing import Any, Dict, List, Optional
+
+import httpx
+
+from .states import ConversationContext, IntentType, SearchCriteria
 
 
 class IntentAnalyzer:
@@ -17,9 +19,7 @@ class IntentAnalyzer:
         self.model = "llama3.1:8b"
 
     async def analyze_intent(
-        self,
-        query: str,
-        context: Optional[ConversationContext] = None
+        self, query: str, context: Optional[ConversationContext] = None
     ) -> Dict[str, Any]:
         """Analyze user query and determine intent
 
@@ -47,13 +47,13 @@ class IntentAnalyzer:
                         "model": self.model,
                         "prompt": prompt,
                         "stream": False,
-                        "format": "json"  # Request JSON output
-                    }
+                        "format": "json",  # Request JSON output
+                    },
                 )
 
                 if response.status_code == 200:
                     data = response.json()
-                    llm_response = data.get('response', '{}')
+                    llm_response = data.get("response", "{}")
 
                     # Parse LLM response
                     try:
@@ -69,11 +69,7 @@ class IntentAnalyzer:
             print(f"Intent analysis error: {e}")
             return self._fallback_intent_analysis(query, context)
 
-    def _build_analysis_prompt(
-        self,
-        query: str,
-        context: Optional[ConversationContext]
-    ) -> str:
+    def _build_analysis_prompt(self, query: str, context: Optional[ConversationContext]) -> str:
         """Build detailed prompt for intent analysis"""
 
         base_prompt = f"""당신은 화장품 용기 검색 시스템의 대화 이해 전문가입니다.
@@ -145,21 +141,21 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
         """Normalize and validate LLM result"""
 
         # Ensure intent is valid
-        intent_str = result.get('intent', 'new_search')
+        intent_str = result.get("intent", "new_search")
         try:
             intent = IntentType(intent_str)
         except ValueError:
             intent = IntentType.NEW_SEARCH
 
         # Extract criteria
-        criteria_dict = result.get('criteria', {})
+        criteria_dict = result.get("criteria", {})
         criteria = SearchCriteria(**criteria_dict) if criteria_dict else SearchCriteria()
 
         return {
             "intent": intent,
             "criteria": criteria,
-            "confidence": float(result.get('confidence', 0.5)),
-            "explanation": result.get('explanation', '')
+            "confidence": float(result.get("confidence", 0.5)),
+            "explanation": result.get("explanation", ""),
         }
 
     def _extract_json_from_text(self, text: str) -> Dict[str, Any]:
@@ -168,10 +164,10 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
         import re
 
         # Try to find JSON in code blocks
-        json_match = re.search(r'```(?:json)?\s*(\{.*?\})\s*```', text, re.DOTALL)
+        json_match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
         if not json_match:
             # Try to find raw JSON
-            json_match = re.search(r'\{.*\}', text, re.DOTALL)
+            json_match = re.search(r"\{.*\}", text, re.DOTALL)
 
         if json_match:
             try:
@@ -186,13 +182,11 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
             "intent": IntentType.NEW_SEARCH,
             "criteria": SearchCriteria(),
             "confidence": 0.3,
-            "explanation": "Failed to parse LLM response"
+            "explanation": "Failed to parse LLM response",
         }
 
     def _fallback_intent_analysis(
-        self,
-        query: str,
-        context: Optional[ConversationContext]
+        self, query: str, context: Optional[ConversationContext]
     ) -> Dict[str, Any]:
         """Fallback rule-based intent analysis when LLM fails"""
 
@@ -200,33 +194,55 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
 
         # Detect contextual keywords (맥락 필터링)
         context_keywords = [
-            '이중에', '이 중에', '이중',
-            '여기서', '여기에서',
-            '그중에', '그 중에', '그중',
-            '저기서', '저기에서',
-            '거기서', '거기에서',
-            '이것', '저것', '그것',
-            '만', '만보여', '만 보여'  # "PET만", "PETG만"
+            "이중에",
+            "이 중에",
+            "이중",
+            "여기서",
+            "여기에서",
+            "그중에",
+            "그 중에",
+            "그중",
+            "저기서",
+            "저기에서",
+            "거기서",
+            "거기에서",
+            "이것",
+            "저것",
+            "그것",
+            "만",
+            "만보여",
+            "만 보여",  # "PET만", "PETG만"
         ]
         is_contextual = any(kw in query_lower for kw in context_keywords)
 
         # Detect reset keywords
-        reset_keywords = ['처음부터', '다시', '새로', '초기화', '리셋']
+        reset_keywords = ["처음부터", "다시", "새로", "초기화", "리셋"]
         is_reset = any(kw in query_lower for kw in reset_keywords)
 
         # Detect detail view
-        detail_keywords = ['자세히', '상세', '디테일', '정보']
+        detail_keywords = ["자세히", "상세", "디테일", "정보"]
         is_detail = any(kw in query_lower for kw in detail_keywords)
 
         # Detect quote request
-        quote_keywords = ['견적', '가격', '얼마']
+        quote_keywords = ["견적", "가격", "얼마"]
         is_quote = any(kw in query_lower for kw in quote_keywords)
 
         # Detect accessory recommendation
         accessory_keywords = [
-            '펌프', 'pump', '캡', 'cap', '뚜껑',
-            '추천', 'recommend', '맞는', '호환', '어울리', '잘 맞',
-            '같이', '함께', '세트'
+            "펌프",
+            "pump",
+            "캡",
+            "cap",
+            "뚜껑",
+            "추천",
+            "recommend",
+            "맞는",
+            "호환",
+            "어울리",
+            "잘 맞",
+            "같이",
+            "함께",
+            "세트",
         ]
         is_accessory = any(kw in query_lower for kw in accessory_keywords)
 
@@ -259,7 +275,7 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
             "intent": intent,
             "criteria": criteria,
             "confidence": 0.7 if is_contextual else 0.6,
-            "explanation": f"Fallback analysis: {intent.value} (contextual={is_contextual})"
+            "explanation": f"Fallback analysis: {intent.value} (contextual={is_contextual})",
         }
 
     def _extract_basic_criteria(self, query: str) -> SearchCriteria:
@@ -269,21 +285,21 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
         criteria = SearchCriteria()
 
         # Extract capacity
-        capacity_match = re.search(r'(\d+)\s*(ml|미리|밀리|g|그램)', query, re.IGNORECASE)
+        capacity_match = re.search(r"(\d+)\s*(ml|미리|밀리|g|그램)", query, re.IGNORECASE)
         if capacity_match:
             criteria.capacity = float(capacity_match.group(1))
             unit = capacity_match.group(2).lower()
-            if unit in ['미리', '밀리', 'ml']:
-                criteria.capacity_unit = 'ml'
-            elif unit in ['그램', 'g']:
-                criteria.capacity_unit = 'g'
+            if unit in ["미리", "밀리", "ml"]:
+                criteria.capacity_unit = "ml"
+            elif unit in ["그램", "g"]:
+                criteria.capacity_unit = "g"
 
         # Extract material
         material_keywords = {
-            'PETG': ['petg', '피이티지'],
-            'PET': ['pet', '페트', '피이티'],
-            'PP': ['pp', '피피'],
-            'PE': ['pe', '피이'],
+            "PETG": ["petg", "피이티지"],
+            "PET": ["pet", "페트", "피이티"],
+            "PP": ["pp", "피피"],
+            "PE": ["pe", "피이"],
         }
 
         for material, keywords in material_keywords.items():
@@ -294,10 +310,10 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
         # Extract product type (BOTTLE, JAR, CAP, PUMP)
         # NOTE: Order matters! Check specific types before general ones
         product_type_keywords = {
-            'PUMP': ['펌프', 'pump', '분사', '스프레이', '미스트'],
-            'CAP': ['캡', 'cap', '뚜껑', '마개', '원터치'],
-            'JAR': ['jar', '자', '항아리'],
-            'BOTTLE': ['병', '용기', 'bottle', '보틀', '컨테이너'],
+            "PUMP": ["펌프", "pump", "분사", "스프레이", "미스트"],
+            "CAP": ["캡", "cap", "뚜껑", "마개", "원터치"],
+            "JAR": ["jar", "자", "항아리"],
+            "BOTTLE": ["병", "용기", "bottle", "보틀", "컨테이너"],
         }
 
         query_lower = query.lower()
@@ -309,9 +325,9 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
         # Extract neck size (네크사이즈)
         # Patterns: "20파이", "24 파이", "Ø20", "Ø24", "내경 20", "내경Ø20"
         neck_patterns = [
-            r'(\d+)\s*파이',  # 20파이, 24 파이
-            r'Ø\s*(\d+)',     # Ø20, Ø24
-            r'내경\s*Ø?\s*(\d+)',  # 내경 20, 내경Ø20
+            r"(\d+)\s*파이",  # 20파이, 24 파이
+            r"Ø\s*(\d+)",  # Ø20, Ø24
+            r"내경\s*Ø?\s*(\d+)",  # 내경 20, 내경Ø20
         ]
 
         for pattern in neck_patterns:
@@ -324,9 +340,9 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
         # Extract dosage (토출량)
         # Patterns: "0.2cc", "0.12cc", "토출량 0.2", "0.2 cc"
         dosage_patterns = [
-            r'(\d+\.?\d*)\s*cc',  # 0.2cc, 0.12 cc
-            r'토출량\s*(\d+\.?\d*)',  # 토출량 0.2
-            r'(\d+\.?\d*)\s*씨씨',  # 0.2씨씨
+            r"(\d+\.?\d*)\s*cc",  # 0.2cc, 0.12 cc
+            r"토출량\s*(\d+\.?\d*)",  # 토출량 0.2
+            r"(\d+\.?\d*)\s*씨씨",  # 0.2씨씨
         ]
 
         for pattern in dosage_patterns:
@@ -336,7 +352,7 @@ JSON만 반환하세요. 추가 설명은 필요 없습니다.
                 break
 
         # Extract product code
-        code_match = re.search(r'[A-Z]{2}\d{3,4}[-_][A-Z]\d{3}', query.upper())
+        code_match = re.search(r"[A-Z]{2}\d{3,4}[-_][A-Z]\d{3}", query.upper())
         if code_match:
             criteria.product_code = code_match.group(0)
 

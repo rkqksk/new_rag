@@ -2,9 +2,10 @@
 Integration Tests for NexaAI RAG System
 """
 
+from unittest.mock import AsyncMock, Mock, patch
+
 import pytest
 from fastapi.testclient import TestClient
-from unittest.mock import patch, AsyncMock, Mock
 
 # Import will fail if dependencies not installed, so we'll mock
 pytestmark = pytest.mark.integration
@@ -19,6 +20,7 @@ class TestAdminEndpoints:
         # This test validates the admin health endpoint exists
         # and can be imported without errors
         from app.api.v1.admin import health_check
+
         assert health_check is not None
 
     @pytest.mark.skip(reason="TestClient version incompatibility - tested manually")
@@ -27,6 +29,7 @@ class TestAdminEndpoints:
         # This test validates the admin stats endpoint exists
         # and can be imported without errors
         from app.api.v1.admin import get_stats
+
         assert get_stats is not None
 
 
@@ -35,7 +38,7 @@ class TestSearchIntegration:
 
     def test_simple_search_routes_to_nexa(self):
         """Test that simple searches route to NexaAI"""
-        from src.core.model_router import ModelRouter, ModelEngine
+        from src.core.model_router import ModelEngine, ModelRouter
 
         router = ModelRouter()
         simple_query = "50ml 용기"
@@ -47,10 +50,12 @@ class TestSearchIntegration:
 
     def test_complex_search_routes_to_ollama(self):
         """Test that very complex searches route appropriately"""
-        from src.core.model_router import ModelRouter, ModelEngine
+        from src.core.model_router import ModelEngine, ModelRouter
 
         router = ModelRouter()
-        complex_query = "100ml PET와 PP 용기의 화학적 특성을 비교하고 각각의 장단점을 상세히 분석해주세요"
+        complex_query = (
+            "100ml PET와 PP 용기의 화학적 특성을 비교하고 각각의 장단점을 상세히 분석해주세요"
+        )
 
         routing = router.route(complex_query)
 
@@ -70,11 +75,12 @@ class TestEndToEnd:
     @pytest.mark.asyncio
     async def test_full_search_pipeline(self):
         """Test complete search pipeline"""
-        from src.services.unified_llm_service import UnifiedLLMService
         from unittest.mock import MagicMock
 
-        with patch('src.services.unified_llm_service.NexaService'):
-            with patch('src.services.unified_llm_service.OllamaService'):
+        from src.services.unified_llm_service import UnifiedLLMService
+
+        with patch("src.services.unified_llm_service.NexaService"):
+            with patch("src.services.unified_llm_service.OllamaService"):
                 service = UnifiedLLMService()
                 service.nexa_available = True
                 service.ollama_available = True
@@ -94,8 +100,10 @@ class TestEndToEnd:
         """Test engine fallback when primary fails"""
         from src.services.unified_llm_service import UnifiedLLMService
 
-        with patch('src.services.unified_llm_service.NexaService', side_effect=Exception("NexaAI down")):
-            with patch('src.services.unified_llm_service.OllamaService'):
+        with patch(
+            "src.services.unified_llm_service.NexaService", side_effect=Exception("NexaAI down")
+        ):
+            with patch("src.services.unified_llm_service.OllamaService"):
                 service = UnifiedLLMService()
 
                 # NexaAI should be unavailable

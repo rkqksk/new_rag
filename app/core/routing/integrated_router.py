@@ -23,11 +23,11 @@ Workflow:
 """
 
 import logging
-from typing import Dict, Optional, List
 from dataclasses import dataclass
+from typing import Dict, List, Optional
 
-from .intent_router import MCPRouter, IntentResult, Intent
-from .llm_router import ClaudeRouter, ModelSelection, ClaudeModel
+from .intent_router import Intent, IntentResult, MCPRouter
+from .llm_router import ClaudeModel, ClaudeRouter, ModelSelection
 
 logger = logging.getLogger(__name__)
 
@@ -35,6 +35,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class RoutingDecision:
     """통합 라우팅 결정"""
+
     # MCP 관련
     requires_mcp: bool
     mcp_tool: Optional[str]
@@ -69,7 +70,7 @@ class IntegratedRouter:
             "security": ["security-engineer"],
             "ai": ["ai-integrator"],
             "research": ["deep-research-agent"],
-            "python": ["python-expert"]
+            "python": ["python-expert"],
         }
 
     def route(self, query: str, context: Dict = None) -> RoutingDecision:
@@ -110,7 +111,7 @@ class IntegratedRouter:
             model_selection=model_selection,
             recommended_agents=recommended_agents,
             execution_strategy=execution_strategy,
-            cost_type=model_selection.cost_type
+            cost_type=model_selection.cost_type,
         )
 
     def _select_agents(self, query: str, model_selection: ModelSelection) -> List[str]:
@@ -135,7 +136,9 @@ class IntegratedRouter:
         if any(kw in query_lower for kw in ["backend", "api", "fastapi", "라우터", "router"]):
             agents.extend(self.agent_mapping["backend"])
 
-        if any(kw in query_lower for kw in ["시스템", "아키텍처", "architecture", "system", "설계"]):
+        if any(
+            kw in query_lower for kw in ["시스템", "아키텍처", "architecture", "system", "설계"]
+        ):
             agents.extend(self.agent_mapping["system"])
 
         if any(kw in query_lower for kw in ["성능", "performance", "최적화", "optimize"]):
@@ -221,11 +224,7 @@ class IntegratedRouter:
             lines.append("\n🤖 [Agent] 불필요 (단순 작업)")
 
         # 실행 전략
-        strategy_emoji = {
-            "mcp_only": "📂",
-            "claude_only": "💬",
-            "mcp_then_claude": "📂 → 💬"
-        }
+        strategy_emoji = {"mcp_only": "📂", "claude_only": "💬", "mcp_then_claude": "📂 → 💬"}
         emoji = strategy_emoji.get(decision.execution_strategy, "⚙️")
         lines.append(f"\n{emoji} [실행 전략] {decision.execution_strategy}")
 
@@ -258,7 +257,7 @@ if __name__ == "__main__":
         ("vault 폴더에 있는 파일들 개수는?", {}),
         ("FastAPI 인증 라우터 3개 만들어줘", {}),
         ("RAG 시스템 설계 문서 검색해줘", {}),
-        ("전체 시스템 성능 최적화 및 검증", {"file_count": 30})
+        ("전체 시스템 성능 최적화 및 검증", {"file_count": 30}),
     ]
 
     router = IntegratedRouter()

@@ -5,19 +5,21 @@ Provides a single interface to multiple LLM engines (NexaAI and Ollama)
 with intelligent routing based on query complexity and requirements.
 """
 
-from typing import Union, AsyncIterator, List, Optional
 import logging
+from typing import AsyncIterator, List, Optional, Union
+
 import httpx
 from pydantic import BaseModel
 
-from src.services.nexa_service import NexaService, NexaConfig
-from src.core.model_router import ModelRouter, ModelEngine, RoutingDecision
+from src.core.model_router import ModelEngine, ModelRouter, RoutingDecision
+from src.services.nexa_service import NexaConfig, NexaService
 
 logger = logging.getLogger(__name__)
 
 
 class OllamaConfig(BaseModel):
     """Ollama configuration"""
+
     base_url: str = "http://localhost:11434"
     timeout: int = 60
     default_model: str = "qwen2.5:7b-instruct"
@@ -39,7 +41,7 @@ class OllamaService:
         prompt: str,
         model: Optional[str] = None,
         stream: bool = False,
-        system: Optional[str] = None
+        system: Optional[str] = None,
     ) -> Union[str, AsyncIterator[str]]:
         """
         Generate text with Ollama
@@ -57,11 +59,7 @@ class OllamaService:
 
         url = f"{self.config.base_url}/api/generate"
 
-        payload = {
-            "model": model,
-            "prompt": prompt,
-            "stream": stream
-        }
+        payload = {"model": model, "prompt": prompt, "stream": stream}
 
         if system:
             payload["system"] = system
@@ -69,11 +67,13 @@ class OllamaService:
         try:
             async with httpx.AsyncClient(timeout=self.config.timeout) as client:
                 if stream:
+
                     async def stream_generator():
                         async with client.stream("POST", url, json=payload) as response:
                             async for line in response.aiter_lines():
                                 if line:
                                     import json
+
                                     data = json.loads(line)
                                     if "response" in data:
                                         yield data["response"]
@@ -90,9 +90,7 @@ class OllamaService:
             raise
 
     async def embed(
-        self,
-        texts: List[str],
-        model: str = "nomic-embed-text:latest"
+        self, texts: List[str], model: str = "nomic-embed-text:latest"
     ) -> List[List[float]]:
         """
         Generate embeddings with Ollama
@@ -111,10 +109,7 @@ class OllamaService:
         try:
             async with httpx.AsyncClient(timeout=self.config.timeout) as client:
                 for text in texts:
-                    payload = {
-                        "model": model,
-                        "prompt": text
-                    }
+                    payload = {"model": model, "prompt": text}
 
                     response = await client.post(url, json=payload)
                     response.raise_for_status()
@@ -149,7 +144,7 @@ class UnifiedLLMService:
         self,
         nexa_config: Optional[NexaConfig] = None,
         ollama_config: Optional[OllamaConfig] = None,
-        router_config: Optional[dict] = None
+        router_config: Optional[dict] = None,
     ):
         """
         Initialize unified LLM service
@@ -179,17 +174,11 @@ class UnifiedLLMService:
         # Initialize router
         router_config = router_config or {}
         self.router = ModelRouter(
-            enable_nexa=self.nexa_available,
-            enable_ollama=self.ollama_available,
-            **router_config
+            enable_nexa=self.nexa_available, enable_ollama=self.ollama_available, **router_config
         )
 
         # Statistics
-        self.stats = {
-            "nexa_requests": 0,
-            "ollama_requests": 0,
-            "errors": 0
-        }
+        self.stats = {"nexa_requests": 0, "ollama_requests": 0, "errors": 0}
 
         logger.info(
             f"UnifiedLLMService initialized "
@@ -204,7 +193,7 @@ class UnifiedLLMService:
         force_engine: Optional[ModelEngine] = None,
         force_model: Optional[str] = None,
         max_tokens: int = 500,
-        temperature: float = 0.7
+        temperature: float = 0.7,
     ) -> Union[str, AsyncIterator[str]]:
         """
         Generate response with automatic routing
@@ -223,9 +212,7 @@ class UnifiedLLMService:
         """
         # Route to appropriate engine
         routing: RoutingDecision = self.router.route(
-            query=prompt,
-            force_engine=force_engine,
-            force_model=force_model
+            query=prompt, force_engine=force_engine, force_model=force_model
         )
 
         logger.info(
@@ -247,7 +234,7 @@ class UnifiedLLMService:
                     stream=stream,
                     system_prompt=system_prompt,
                     max_tokens=max_tokens,
-                    temperature=temperature
+                    temperature=temperature,
                 )
 
             else:  # OLLAMA
@@ -257,10 +244,7 @@ class UnifiedLLMService:
                 self.stats["ollama_requests"] += 1
 
                 return await self.ollama.generate(
-                    prompt=prompt,
-                    model=routing.model,
-                    stream=stream,
-                    system=system_prompt
+                    prompt=prompt, model=routing.model, stream=stream, system=system_prompt
                 )
 
         except Exception as e:
@@ -269,9 +253,7 @@ class UnifiedLLMService:
             raise
 
     async def embed(
-        self,
-        texts: List[str],
-        engine: Optional[ModelEngine] = None
+        self, texts: List[str], engine: Optional[ModelEngine] = None
     ) -> List[List[float]]:
         """
         Generate embeddings
@@ -304,12 +286,7 @@ class UnifiedLLMService:
             logger.error(f"Embedding generation failed: {e}")
             raise
 
-    async def analyze_image(
-        self,
-        image_path: str,
-        prompt: str,
-        max_tokens: int = 500
-    ) -> str:
+    async def analyze_image(self, image_path: str, prompt: str, max_tokens: int = 500) -> str:
         """
         Analyze image (requires NexaAI)
 
@@ -325,9 +302,7 @@ class UnifiedLLMService:
             raise RuntimeError("Image analysis requires NexaAI")
 
         return await self.nexa.analyze_image(
-            image_path=image_path,
-            prompt=prompt,
-            max_tokens=max_tokens
+            image_path=image_path, prompt=prompt, max_tokens=max_tokens
         )
 
     async def health_check(self) -> dict:
@@ -337,10 +312,7 @@ class UnifiedLLMService:
         Returns:
             Health status dict
         """
-        health = {
-            "unified": True,
-            "engines": {}
-        }
+        health = {"unified": True, "engines": {}}
 
         # Check NexaAI
         if self.nexa_available:
@@ -372,7 +344,7 @@ class UnifiedLLMService:
             **self.stats,
             "nexa_available": self.nexa_available,
             "ollama_available": self.ollama_available,
-            "router": self.router.get_stats()
+            "router": self.router.get_stats(),
         }
 
 
@@ -383,16 +355,14 @@ _unified_llm: Optional[UnifiedLLMService] = None
 def get_unified_llm(
     nexa_config: Optional[NexaConfig] = None,
     ollama_config: Optional[OllamaConfig] = None,
-    router_config: Optional[dict] = None
+    router_config: Optional[dict] = None,
 ) -> UnifiedLLMService:
     """Get or create unified LLM service singleton"""
     global _unified_llm
 
     if _unified_llm is None:
         _unified_llm = UnifiedLLMService(
-            nexa_config=nexa_config,
-            ollama_config=ollama_config,
-            router_config=router_config
+            nexa_config=nexa_config, ollama_config=ollama_config, router_config=router_config
         )
 
     return _unified_llm

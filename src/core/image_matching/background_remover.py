@@ -4,8 +4,9 @@ Uses U2-Net (rembg) for high-quality background removal
 """
 
 import logging
-from typing import Union, Optional, Tuple
 from pathlib import Path
+from typing import Optional, Tuple, Union
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -22,12 +23,7 @@ class BackgroundRemover:
     - Quality validation
     """
 
-    def __init__(
-        self,
-        model_name: str = 'u2net',
-        alpha_matting: bool = True,
-        use_gpu: bool = True
-    ):
+    def __init__(self, model_name: str = "u2net", alpha_matting: bool = True, use_gpu: bool = True):
         """
         Initialize background remover
 
@@ -43,7 +39,8 @@ class BackgroundRemover:
 
         # Try to import rembg
         try:
-            from rembg import remove, new_session
+            from rembg import new_session, remove
+
             self.remove = remove
             self.new_session = new_session
             self.available = True
@@ -62,7 +59,7 @@ class BackgroundRemover:
         self,
         image_path: Union[str, Path],
         output_path: Optional[Union[str, Path]] = None,
-        return_mask: bool = False
+        return_mask: bool = False,
     ) -> Union[np.ndarray, Tuple[np.ndarray, np.ndarray]]:
         """
         Remove background from image
@@ -94,7 +91,7 @@ class BackgroundRemover:
             alpha_matting=self.alpha_matting,
             alpha_matting_foreground_threshold=240,
             alpha_matting_background_threshold=10,
-            alpha_matting_erode_size=10
+            alpha_matting_erode_size=10,
         )
 
         # Save if output path provided
@@ -123,7 +120,7 @@ class BackgroundRemover:
         self,
         image_paths: list,
         output_dir: Optional[Union[str, Path]] = None,
-        show_progress: bool = True
+        show_progress: bool = True,
     ) -> list:
         """
         Batch process multiple images
@@ -146,6 +143,7 @@ class BackgroundRemover:
         if show_progress:
             try:
                 from tqdm import tqdm
+
                 iterator = tqdm(image_paths, desc="Removing backgrounds")
             except ImportError:
                 pass
@@ -161,10 +159,7 @@ class BackgroundRemover:
                     output_path = None
 
                 # Process image
-                result = self.remove_background(
-                    image_path,
-                    output_path=output_path
-                )
+                result = self.remove_background(image_path, output_path=output_path)
 
                 results.append(result)
 
@@ -178,7 +173,7 @@ class BackgroundRemover:
         self,
         image: np.ndarray,
         min_foreground_ratio: float = 0.1,
-        max_foreground_ratio: float = 0.9
+        max_foreground_ratio: float = 0.9,
     ) -> dict:
         """
         Validate background removal quality
@@ -205,18 +200,16 @@ class BackgroundRemover:
         edge_smoothness = 1.0 / (1.0 + np.std(alpha))
 
         # Quality flags
-        is_valid = (
-            min_foreground_ratio <= foreground_ratio <= max_foreground_ratio
-        )
+        is_valid = min_foreground_ratio <= foreground_ratio <= max_foreground_ratio
 
         return {
-            'is_valid': is_valid,
-            'foreground_ratio': foreground_ratio,
-            'foreground_pixels': int(foreground_pixels),
-            'total_pixels': int(total_pixels),
-            'edge_smoothness': float(edge_smoothness),
-            'alpha_mean': float(np.mean(alpha)),
-            'alpha_std': float(np.std(alpha))
+            "is_valid": is_valid,
+            "foreground_ratio": foreground_ratio,
+            "foreground_pixels": int(foreground_pixels),
+            "total_pixels": int(total_pixels),
+            "edge_smoothness": float(edge_smoothness),
+            "alpha_mean": float(np.mean(alpha)),
+            "alpha_std": float(np.std(alpha)),
         }
 
     def get_bounding_box(self, image: np.ndarray) -> Tuple[int, int, int, int]:
@@ -247,11 +240,7 @@ class BackgroundRemover:
 
         return (int(x1), int(y1), int(x2), int(y2))
 
-    def crop_to_foreground(
-        self,
-        image: np.ndarray,
-        padding: int = 10
-    ) -> np.ndarray:
+    def crop_to_foreground(self, image: np.ndarray, padding: int = 10) -> np.ndarray:
         """
         Crop image to tight bounding box around foreground
 

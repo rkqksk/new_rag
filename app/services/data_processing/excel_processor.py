@@ -14,14 +14,14 @@ Handles complex Excel files with:
 import io
 import logging
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Optional, Dict, Any, List, Tuple
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 import openpyxl
 from openpyxl import load_workbook
+from openpyxl.utils import column_index_from_string, get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
-from openpyxl.utils import get_column_letter, column_index_from_string
 from PIL import Image
 
 logger = logging.getLogger(__name__)
@@ -30,6 +30,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MergedCell:
     """Merged cell information"""
+
     range: str  # "A1:C1"
     start_row: int
     start_col: int
@@ -43,6 +44,7 @@ class MergedCell:
 @dataclass
 class ExcelImage:
     """Excel embedded image"""
+
     path: str  # Saved image path
     width: int
     height: int
@@ -55,6 +57,7 @@ class ExcelImage:
 @dataclass
 class CellStyle:
     """Cell style information"""
+
     font: Dict[str, Any] = field(default_factory=dict)
     fill: Dict[str, Any] = field(default_factory=dict)
     border: Dict[str, Any] = field(default_factory=dict)
@@ -65,6 +68,7 @@ class CellStyle:
 @dataclass
 class ExcelSheet:
     """Single Excel sheet data"""
+
     name: str
     data: List[List[Any]]  # Raw cell values
     merged_cells: List[MergedCell]
@@ -78,6 +82,7 @@ class ExcelSheet:
 @dataclass
 class ExcelData:
     """Complete Excel workbook data"""
+
     metadata: Dict[str, Any]
     sheets: Dict[str, ExcelSheet]
     sheet_names: List[str]
@@ -86,6 +91,7 @@ class ExcelData:
 @dataclass
 class ExcelProcessorConfig:
     """Excel processor configuration"""
+
     extract_images: bool = True
     extract_formulas: bool = True
     extract_styles: bool = True
@@ -123,11 +129,7 @@ class AdvancedExcelProcessor:
         >>>     print(f"{merge.range}: {merge.value}")
     """
 
-    def __init__(
-        self,
-        file_path: str,
-        config: Optional[ExcelProcessorConfig] = None
-    ):
+    def __init__(self, file_path: str, config: Optional[ExcelProcessorConfig] = None):
         self.file_path = Path(file_path)
         self.config = config or ExcelProcessorConfig()
 
@@ -135,10 +137,7 @@ class AdvancedExcelProcessor:
             raise FileNotFoundError(f"Excel file not found: {file_path}")
 
         # Load workbook
-        self.workbook = load_workbook(
-            filename=str(self.file_path),
-            data_only=self.config.data_only
-        )
+        self.workbook = load_workbook(filename=str(self.file_path), data_only=self.config.data_only)
 
         # Image output directory
         if self.config.image_output_dir:
@@ -176,11 +175,7 @@ class AdvancedExcelProcessor:
             sheet = self.workbook[sheet_name]
             sheets[sheet_name] = self._process_sheet(sheet, sheet_name)
 
-        result = ExcelData(
-            metadata=metadata,
-            sheets=sheets,
-            sheet_names=sheet_names
-        )
+        result = ExcelData(metadata=metadata, sheets=sheets, sheet_names=sheet_names)
 
         logger.info(f"Excel processing complete: {len(sheets)} sheets processed")
         return result
@@ -190,19 +185,19 @@ class AdvancedExcelProcessor:
         props = self.workbook.properties
 
         return {
-            'file_path': str(self.file_path),
-            'file_size': self.file_path.stat().st_size,
-            'creator': props.creator,
-            'created': props.created.isoformat() if props.created else None,
-            'modified': props.modified.isoformat() if props.modified else None,
-            'last_modified_by': props.lastModifiedBy,
-            'title': props.title,
-            'subject': props.subject,
-            'description': props.description,
-            'keywords': props.keywords,
-            'category': props.category,
-            'sheet_count': len(self.workbook.sheetnames),
-            'sheet_names': self.workbook.sheetnames
+            "file_path": str(self.file_path),
+            "file_size": self.file_path.stat().st_size,
+            "creator": props.creator,
+            "created": props.created.isoformat() if props.created else None,
+            "modified": props.modified.isoformat() if props.modified else None,
+            "last_modified_by": props.lastModifiedBy,
+            "title": props.title,
+            "subject": props.subject,
+            "description": props.description,
+            "keywords": props.keywords,
+            "category": props.category,
+            "sheet_count": len(self.workbook.sheetnames),
+            "sheet_names": self.workbook.sheetnames,
         }
 
     def _process_sheet(self, sheet: Worksheet, sheet_name: str) -> ExcelSheet:
@@ -239,7 +234,7 @@ class AdvancedExcelProcessor:
             styles=styles,
             formulas=formulas,
             max_row=sheet.max_row,
-            max_col=sheet.max_column
+            max_col=sheet.max_column,
         )
 
     def _extract_data(self, sheet: Worksheet) -> List[List[Any]]:
@@ -273,7 +268,7 @@ class AdvancedExcelProcessor:
                 end_col=max_col,
                 value=cell.value,
                 rows_span=max_row - min_row + 1,
-                cols_span=max_col - min_col + 1
+                cols_span=max_col - min_col + 1,
             )
 
             merged.append(merged_cell)
@@ -285,7 +280,7 @@ class AdvancedExcelProcessor:
         """Extract embedded images"""
         images = []
 
-        if not hasattr(sheet, '_images'):
+        if not hasattr(sheet, "_images"):
             return images
 
         for idx, image in enumerate(sheet._images):
@@ -308,7 +303,7 @@ class AdvancedExcelProcessor:
 
                 # Get anchor cell
                 anchor = image.anchor
-                if hasattr(anchor, '_from'):
+                if hasattr(anchor, "_from"):
                     anchor_col = anchor._from.col
                     anchor_row = anchor._from.row
                     anchor_cell = f"{get_column_letter(anchor_col + 1)}{anchor_row + 1}"
@@ -324,7 +319,7 @@ class AdvancedExcelProcessor:
                     format=pil_image.format,
                     anchor_cell=anchor_cell,
                     anchor_row=anchor_row,
-                    anchor_col=anchor_col
+                    anchor_col=anchor_col,
                 )
 
                 images.append(excel_image)
@@ -342,7 +337,7 @@ class AdvancedExcelProcessor:
 
         for row in sheet.iter_rows():
             for cell in row:
-                if cell.data_type == 'f':  # Formula cell
+                if cell.data_type == "f":  # Formula cell
                     coord = cell.coordinate
                     formulas[coord] = cell.value
 
@@ -366,29 +361,37 @@ class AdvancedExcelProcessor:
 
                 style = CellStyle(
                     font={
-                        'name': font.name,
-                        'size': font.size,
-                        'bold': font.bold,
-                        'italic': font.italic,
-                        'color': str(font.color.rgb) if font.color and font.color.rgb else None
+                        "name": font.name,
+                        "size": font.size,
+                        "bold": font.bold,
+                        "italic": font.italic,
+                        "color": str(font.color.rgb) if font.color and font.color.rgb else None,
                     },
                     fill={
-                        'fill_type': fill.fill_type,
-                        'start_color': str(fill.start_color.rgb) if fill.start_color and hasattr(fill.start_color, 'rgb') else None,
-                        'end_color': str(fill.end_color.rgb) if fill.end_color and hasattr(fill.end_color, 'rgb') else None
+                        "fill_type": fill.fill_type,
+                        "start_color": (
+                            str(fill.start_color.rgb)
+                            if fill.start_color and hasattr(fill.start_color, "rgb")
+                            else None
+                        ),
+                        "end_color": (
+                            str(fill.end_color.rgb)
+                            if fill.end_color and hasattr(fill.end_color, "rgb")
+                            else None
+                        ),
                     },
                     border={
-                        'left': str(border.left.style) if border.left else None,
-                        'right': str(border.right.style) if border.right else None,
-                        'top': str(border.top.style) if border.top else None,
-                        'bottom': str(border.bottom.style) if border.bottom else None
+                        "left": str(border.left.style) if border.left else None,
+                        "right": str(border.right.style) if border.right else None,
+                        "top": str(border.top.style) if border.top else None,
+                        "bottom": str(border.bottom.style) if border.bottom else None,
                     },
                     alignment={
-                        'horizontal': alignment.horizontal,
-                        'vertical': alignment.vertical,
-                        'wrap_text': alignment.wrap_text
+                        "horizontal": alignment.horizontal,
+                        "vertical": alignment.vertical,
+                        "wrap_text": alignment.wrap_text,
                     },
-                    number_format=cell.number_format
+                    number_format=cell.number_format,
                 )
 
                 coord = cell.coordinate
@@ -397,7 +400,9 @@ class AdvancedExcelProcessor:
         logger.debug(f"Extracted styles for {len(styles)} cells")
         return styles
 
-    def get_merged_cell_value(self, sheet_name: str, row: int, col: int, data: ExcelData) -> Tuple[Any, Optional[MergedCell]]:
+    def get_merged_cell_value(
+        self, sheet_name: str, row: int, col: int, data: ExcelData
+    ) -> Tuple[Any, Optional[MergedCell]]:
         """
         Get cell value, accounting for merged cells
 
@@ -414,12 +419,16 @@ class AdvancedExcelProcessor:
 
         # Check if cell is part of a merged range
         for merged in sheet.merged_cells:
-            if (merged.start_row <= row <= merged.end_row and
-                merged.start_col <= col <= merged.end_col):
+            if (
+                merged.start_row <= row <= merged.end_row
+                and merged.start_col <= col <= merged.end_col
+            ):
                 return merged.value, merged
 
         # Not merged, return normal value
-        value = sheet.data[row - 1][col - 1] if row <= sheet.max_row and col <= sheet.max_col else None
+        value = (
+            sheet.data[row - 1][col - 1] if row <= sheet.max_row and col <= sheet.max_col else None
+        )
         return value, None
 
     def export_to_dict(self, data: ExcelData) -> Dict[str, Any]:
@@ -432,38 +441,35 @@ class AdvancedExcelProcessor:
         Returns:
             Dictionary representation
         """
-        result = {
-            'metadata': data.metadata,
-            'sheets': {}
-        }
+        result = {"metadata": data.metadata, "sheets": {}}
 
         for sheet_name, sheet in data.sheets.items():
-            result['sheets'][sheet_name] = {
-                'name': sheet.name,
-                'data': sheet.data,
-                'max_row': sheet.max_row,
-                'max_col': sheet.max_col,
-                'merged_cells': [
+            result["sheets"][sheet_name] = {
+                "name": sheet.name,
+                "data": sheet.data,
+                "max_row": sheet.max_row,
+                "max_col": sheet.max_col,
+                "merged_cells": [
                     {
-                        'range': m.range,
-                        'value': m.value,
-                        'rows_span': m.rows_span,
-                        'cols_span': m.cols_span
+                        "range": m.range,
+                        "value": m.value,
+                        "rows_span": m.rows_span,
+                        "cols_span": m.cols_span,
                     }
                     for m in sheet.merged_cells
                 ],
-                'images': [
+                "images": [
                     {
-                        'path': img.path,
-                        'width': img.width,
-                        'height': img.height,
-                        'format': img.format,
-                        'anchor_cell': img.anchor_cell
+                        "path": img.path,
+                        "width": img.width,
+                        "height": img.height,
+                        "format": img.format,
+                        "anchor_cell": img.anchor_cell,
                     }
                     for img in sheet.images
                 ],
-                'formulas': sheet.formulas,
-                'styles_count': len(sheet.styles)
+                "formulas": sheet.formulas,
+                "styles_count": len(sheet.styles),
             }
 
         return result
@@ -471,9 +477,7 @@ class AdvancedExcelProcessor:
 
 # Convenience function
 def process_excel_file(
-    file_path: str,
-    extract_all: bool = True,
-    image_output_dir: Optional[str] = None
+    file_path: str, extract_all: bool = True, image_output_dir: Optional[str] = None
 ) -> ExcelData:
     """
     Convenience function to process Excel file
@@ -496,7 +500,7 @@ def process_excel_file(
         extract_formulas=extract_all,
         extract_styles=extract_all,
         extract_merged_cells=extract_all,
-        image_output_dir=image_output_dir
+        image_output_dir=image_output_dir,
     )
 
     processor = AdvancedExcelProcessor(file_path, config)

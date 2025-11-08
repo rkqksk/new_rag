@@ -9,11 +9,13 @@ Tests complete document processing pipeline:
 5. Search & Retrieval
 6. Response Generation with LLM
 """
-import pytest
+
 import asyncio
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
-from datetime import datetime
 import uuid
+from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
 
 
 @pytest.mark.integration
@@ -38,21 +40,19 @@ async def test_e2e_document_ingestion_pipeline():
 
     # Create service with mocks
     service = DocumentIngestionService(
-        qdrant_client=mock_qdrant,
-        embedding_model=mock_embedding,
-        redis_client=mock_redis
+        qdrant_client=mock_qdrant, embedding_model=mock_embedding, redis_client=mock_redis
     )
 
     # Simulate document upload
     document_data = {
         "content": "Test document about machine learning",
         "metadata": {"source": "test", "format": "txt"},
-        "document_id": str(uuid.uuid4())
+        "document_id": str(uuid.uuid4()),
     }
 
     # The service should be instantiated without errors
     assert service is not None
-    assert hasattr(service, 'ingest')
+    assert hasattr(service, "ingest")
 
 
 @pytest.mark.integration
@@ -66,9 +66,9 @@ async def test_e2e_query_to_response_pipeline():
 
     # Setup mocks
     mock_qdrant = Mock()
-    mock_qdrant.search = AsyncMock(return_value=[
-        Mock(payload={"content": "Machine learning is a subset of AI"}, score=0.95)
-    ])
+    mock_qdrant.search = AsyncMock(
+        return_value=[Mock(payload={"content": "Machine learning is a subset of AI"}, score=0.95)]
+    )
 
     mock_embedding = Mock()
     mock_embedding.encode = Mock(return_value=[[0.1] * 384])
@@ -78,18 +78,19 @@ async def test_e2e_query_to_response_pipeline():
         qdrant_client=mock_qdrant,
         embedding_model=mock_embedding,
         ollama_url="http://localhost:11434",
-        model_name="test-model"
+        model_name="test-model",
     )
 
     assert service is not None
-    assert hasattr(service, 'query')
+    assert hasattr(service, "query")
 
 
 @pytest.mark.integration
 def test_e2e_document_to_embedding_to_vector_storage():
     """Test document → embedding → Qdrant pipeline"""
-    from app.core.dependencies import get_config
     from sentence_transformers import SentenceTransformer
+
+    from app.core.dependencies import get_config
 
     config = get_config()
 
@@ -118,9 +119,9 @@ def test_e2e_config_chain():
     """Test configuration chain for entire pipeline"""
     from app.core.dependencies import (
         get_config,
+        get_embedding_model,
         get_qdrant_client,
         get_redis_client,
-        get_embedding_model,
     )
 
     # Get config
@@ -167,12 +168,12 @@ def test_e2e_service_dependency_chain():
 def test_e2e_metrics_collection_setup():
     """Test metrics collection is properly set up for pipeline"""
     from app.core.metrics import (
-        http_requests_total,
-        embedding_generation_total,
-        vector_search_total,
-        llm_query_total,
-        errors_total,
         active_requests,
+        embedding_generation_total,
+        errors_total,
+        http_requests_total,
+        llm_query_total,
+        vector_search_total,
     )
 
     # All metrics should be initialized
@@ -184,21 +185,21 @@ def test_e2e_metrics_collection_setup():
     assert active_requests is not None
 
     # All should have proper structure for recording metrics
-    assert hasattr(http_requests_total, 'labels')
-    assert hasattr(embedding_generation_total, 'labels')
-    assert hasattr(vector_search_total, 'labels')
-    assert hasattr(llm_query_total, 'labels')
-    assert hasattr(active_requests, 'labels')
+    assert hasattr(http_requests_total, "labels")
+    assert hasattr(embedding_generation_total, "labels")
+    assert hasattr(vector_search_total, "labels")
+    assert hasattr(llm_query_total, "labels")
+    assert hasattr(active_requests, "labels")
 
 
 @pytest.mark.integration
 def test_e2e_schema_validation_pipeline():
     """Test schema validation through entire pipeline"""
     from app.models.schemas import (
-        QARequest,
-        QAResponse,
         ConsultationRequest,
         ConsultationResponse,
+        QARequest,
+        QAResponse,
     )
 
     # Test QA request/response pipeline
@@ -210,15 +211,14 @@ def test_e2e_schema_validation_pipeline():
         answer="AI is artificial intelligence",
         citations=["source1"],
         confidence=0.9,
-        query="What is AI?"
+        query="What is AI?",
     )
     assert qa_response.answer is not None
     assert len(qa_response.citations) > 0
 
     # Test consultation pipeline
     consultation_request = ConsultationRequest(
-        query="Recommend a product",
-        consultation_type="product_recommendation"
+        query="Recommend a product", consultation_type="product_recommendation"
     )
     assert consultation_request.query is not None
 
@@ -232,7 +232,7 @@ def test_e2e_error_handling_pipeline():
     error = ErrorResponse(
         error="QUERY_ERROR",
         message="Failed to process query",
-        timestamp=datetime.utcnow().isoformat()
+        timestamp=datetime.utcnow().isoformat(),
     )
 
     assert error.error == "QUERY_ERROR"
@@ -243,12 +243,12 @@ def test_e2e_error_handling_pipeline():
 @pytest.mark.integration
 def test_e2e_middleware_in_pipeline():
     """Test metrics middleware is integrated in pipeline"""
-    from app.core.middleware import MetricsMiddleware
     from app.api.main import app
+    from app.core.middleware import MetricsMiddleware
 
     # Middleware should be in app
     assert app is not None
-    assert hasattr(app, 'middleware')
+    assert hasattr(app, "middleware")
 
     # MetricsMiddleware should be importable
     assert MetricsMiddleware is not None
@@ -270,11 +270,11 @@ async def test_e2e_async_pipeline_flow():
         qdrant_client=mock_qdrant,
         embedding_model=mock_embedding,
         ollama_url="http://localhost:11434",
-        model_name="test-model"
+        model_name="test-model",
     )
 
     # Service should support async operations
-    assert hasattr(service, 'query')
+    assert hasattr(service, "query")
     assert service is not None
 
 
@@ -284,24 +284,28 @@ def test_e2e_data_flow_through_layers():
 
     # Layer 1: API
     from app.api.main import app
+
     assert app is not None
 
     # Layer 2: Core
     from app.core.dependencies import get_config
     from app.core.metrics import REGISTRY
     from app.core.middleware import MetricsMiddleware
+
     assert get_config is not None
     assert REGISTRY is not None
     assert MetricsMiddleware is not None
 
     # Layer 3: Services
-    from app.services.rag_qa_service import RAGQAService
     from app.services.document_ingestion_service import DocumentIngestionService
+    from app.services.rag_qa_service import RAGQAService
+
     assert RAGQAService is not None
     assert DocumentIngestionService is not None
 
     # Layer 4: Models
     from app.models.schemas import QARequest, QAResponse
+
     assert QARequest is not None
     assert QAResponse is not None
 
@@ -330,12 +334,12 @@ def test_e2e_configuration_flow():
 def test_e2e_metrics_flow():
     """Test metrics flow through pipeline"""
     from app.core.metrics import (
-        http_requests_total,
-        embedding_generation_total,
-        vector_search_total,
-        llm_query_total,
         active_requests,
+        embedding_generation_total,
         errors_total,
+        http_requests_total,
+        llm_query_total,
+        vector_search_total,
     )
 
     # Metrics should track all pipeline stages
@@ -363,23 +367,23 @@ def test_e2e_import_chain():
     # Go through core
     from app.core.dependencies import (
         get_config,
+        get_embedding_model,
         get_qdrant_client,
         get_redis_client,
-        get_embedding_model,
     )
-
-    # Go through services
-    from app.services.rag_qa_service import RAGQAService
-    from app.services.consultation_service import ConsultationService
-    from app.services.document_ingestion_service import DocumentIngestionService
 
     # Go through models
     from app.models.schemas import (
-        QARequest,
-        QAResponse,
         ConsultationRequest,
         ConsultationResponse,
+        QARequest,
+        QAResponse,
     )
+    from app.services.consultation_service import ConsultationService
+    from app.services.document_ingestion_service import DocumentIngestionService
+
+    # Go through services
+    from app.services.rag_qa_service import RAGQAService
 
     # Verify all are importable
     assert app is not None
@@ -401,8 +405,8 @@ def test_e2e_no_missing_dependencies():
     overrides = override_dependencies_for_testing()
 
     # Try to instantiate RAGQAService with mock dependencies
-    mock_qdrant = overrides.get('get_qdrant_client', lambda: Mock())
-    mock_model = overrides.get('get_embedding_model', lambda: Mock())
+    mock_qdrant = overrides.get("get_qdrant_client", lambda: Mock())
+    mock_model = overrides.get("get_embedding_model", lambda: Mock())
 
     if callable(mock_qdrant):
         qdrant = mock_qdrant()
@@ -419,7 +423,7 @@ def test_e2e_no_missing_dependencies():
         qdrant_client=qdrant,
         embedding_model=model,
         ollama_url="http://localhost:11434",
-        model_name="test"
+        model_name="test",
     )
 
     assert service is not None
@@ -470,10 +474,7 @@ def test_e2e_pipeline_scalability():
     from app.models.schemas import QARequest
 
     # Create multiple requests
-    requests = [
-        QARequest(question=f"Question {i}?")
-        for i in range(100)
-    ]
+    requests = [QARequest(question=f"Question {i}?") for i in range(100)]
 
     # All should be valid
     assert len(requests) == 100

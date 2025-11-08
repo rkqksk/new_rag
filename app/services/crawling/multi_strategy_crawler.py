@@ -18,20 +18,21 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Optional, Dict, Any, List, Callable
+from typing import Any, Callable, Dict, List, Optional
 from urllib.parse import urlparse
 
-from .static_crawler import StaticCrawler, StaticCrawlerConfig
+from .auth_manager import AuthCredentials, AuthenticationManager, AuthType
 from .dynamic_crawler import DynamicCrawler, PlaywrightConfig
-from .auth_manager import AuthenticationManager, AuthType, AuthCredentials
-from .session_manager import SessionManager
 from .evasion import AntiDetectionManager, EvasionConfig, RateLimiter
+from .session_manager import SessionManager
+from .static_crawler import StaticCrawler, StaticCrawlerConfig
 
 logger = logging.getLogger(__name__)
 
 
 class CrawlMethod(Enum):
     """Crawling method"""
+
     AUTO = "auto"  # Auto-detect
     STATIC = "static"  # BeautifulSoup
     DYNAMIC = "dynamic"  # Playwright
@@ -111,23 +112,25 @@ class MultiStrategyCrawler:
 
     # JavaScript framework indicators
     JS_FRAMEWORK_INDICATORS = [
-        'react', 'vue', 'angular', 'ember', 'backbone',
-        'next.js', 'nuxt', 'gatsby', 'svelte'
+        "react",
+        "vue",
+        "angular",
+        "ember",
+        "backbone",
+        "next.js",
+        "nuxt",
+        "gatsby",
+        "svelte",
     ]
 
     # API endpoint indicators
-    API_INDICATORS = [
-        '/api/', '/v1/', '/v2/', '/v3/',
-        '/graphql', '/rest/', '/json'
-    ]
+    API_INDICATORS = ["/api/", "/v1/", "/v2/", "/v3/", "/graphql", "/rest/", "/json"]
 
     def __init__(self, config: Optional[CrawlConfig] = None):
         self.config = config or CrawlConfig()
 
         # Initialize components
-        self.static_crawler = StaticCrawler(
-            self.config.static_config or StaticCrawlerConfig()
-        )
+        self.static_crawler = StaticCrawler(self.config.static_config or StaticCrawlerConfig())
 
         # Dynamic crawler initialized on demand (resource-intensive)
         self._dynamic_crawler: Optional[DynamicCrawler] = None
@@ -148,18 +151,17 @@ class MultiStrategyCrawler:
 
         # Rate limiter
         self.rate_limiter = RateLimiter(
-            max_requests=self.config.rate_limit_requests,
-            time_window=self.config.rate_limit_window
+            max_requests=self.config.rate_limit_requests, time_window=self.config.rate_limit_window
         )
 
         # Statistics
         self.stats = {
-            'total_requests': 0,
-            'static_requests': 0,
-            'dynamic_requests': 0,
-            'api_requests': 0,
-            'failed_requests': 0,
-            'fallbacks': 0
+            "total_requests": 0,
+            "static_requests": 0,
+            "dynamic_requests": 0,
+            "api_requests": 0,
+            "failed_requests": 0,
+            "fallbacks": 0,
         }
 
         logger.info("Multi-strategy crawler initialized")
@@ -168,9 +170,7 @@ class MultiStrategyCrawler:
     def dynamic_crawler(self) -> DynamicCrawler:
         """Lazy-load dynamic crawler"""
         if self._dynamic_crawler is None:
-            self._dynamic_crawler = DynamicCrawler(
-                self.config.dynamic_config or PlaywrightConfig()
-            )
+            self._dynamic_crawler = DynamicCrawler(self.config.dynamic_config or PlaywrightConfig())
         return self._dynamic_crawler
 
     async def detect_method(self, url: str) -> CrawlMethod:
@@ -199,13 +199,19 @@ class MultiStrategyCrawler:
         # Try a quick static fetch to check for JS frameworks
         try:
             result = await self.static_crawler.crawl(url, parse_html=False)
-            content = result['text'].lower()
+            content = result["text"].lower()
 
             # Check for JavaScript framework signatures in HTML
             js_indicators = [
-                'data-react', 'ng-app', 'v-app', 'data-vue',
-                'react.js', 'vue.js', 'angular.js',
-                '__NEXT_DATA__', '__NUXT__'
+                "data-react",
+                "ng-app",
+                "v-app",
+                "data-vue",
+                "react.js",
+                "vue.js",
+                "angular.js",
+                "__NEXT_DATA__",
+                "__NUXT__",
             ]
 
             if any(indicator in content for indicator in js_indicators):
@@ -213,7 +219,7 @@ class MultiStrategyCrawler:
                 return CrawlMethod.DYNAMIC
 
             # Check if content is mostly empty (likely needs JS)
-            text_content = result['content'].get_text(strip=True) if result.get('content') else ''
+            text_content = result["content"].get_text(strip=True) if result.get("content") else ""
             if len(text_content) < 100:
                 logger.info(f"Little content detected, likely requires JS: {url}")
                 return CrawlMethod.DYNAMIC
@@ -228,10 +234,7 @@ class MultiStrategyCrawler:
             return CrawlMethod.STATIC
 
     async def crawl(
-        self,
-        url: str,
-        method: Optional[CrawlMethod] = None,
-        **kwargs
+        self, url: str, method: Optional[CrawlMethod] = None, **kwargs
     ) -> Dict[str, Any]:
         """
         Crawl a URL with auto-detection
@@ -248,7 +251,7 @@ class MultiStrategyCrawler:
         await self.rate_limiter.acquire()
 
         # Stats
-        self.stats['total_requests'] += 1
+        self.stats["total_requests"] += 1
 
         # Determine method
         if method is None or method == CrawlMethod.AUTO:
@@ -264,25 +267,25 @@ class MultiStrategyCrawler:
         try:
             if method == CrawlMethod.STATIC:
                 result = await self._crawl_static(url, **kwargs)
-                self.stats['static_requests'] += 1
+                self.stats["static_requests"] += 1
 
             elif method == CrawlMethod.DYNAMIC:
                 result = await self._crawl_dynamic(url, **kwargs)
-                self.stats['dynamic_requests'] += 1
+                self.stats["dynamic_requests"] += 1
 
             elif method == CrawlMethod.API:
                 result = await self._crawl_api(url, **kwargs)
-                self.stats['api_requests'] += 1
+                self.stats["api_requests"] += 1
 
             else:
                 raise ValueError(f"Unknown crawl method: {method}")
 
             # Add metadata
-            result['crawl_method'] = method.value
-            result['crawl_config'] = {
-                'evasion_enabled': self.config.use_evasion,
-                'auth_enabled': self.config.auth_type is not None,
-                'session_enabled': self.config.session_name is not None
+            result["crawl_method"] = method.value
+            result["crawl_config"] = {
+                "evasion_enabled": self.config.use_evasion,
+                "auth_enabled": self.config.auth_type is not None,
+                "session_enabled": self.config.session_name is not None,
             }
 
             return result
@@ -293,17 +296,17 @@ class MultiStrategyCrawler:
             # Fallback to dynamic if static failed
             if self.config.fallback_enabled and method == CrawlMethod.STATIC:
                 logger.info(f"Falling back to dynamic crawling for {url}")
-                self.stats['fallbacks'] += 1
+                self.stats["fallbacks"] += 1
 
                 try:
                     result = await self._crawl_dynamic(url, **kwargs)
-                    result['crawl_method'] = 'dynamic_fallback'
-                    self.stats['dynamic_requests'] += 1
+                    result["crawl_method"] = "dynamic_fallback"
+                    self.stats["dynamic_requests"] += 1
                     return result
                 except Exception as fallback_error:
                     logger.error(f"Fallback also failed: {fallback_error}")
 
-            self.stats['failed_requests'] += 1
+            self.stats["failed_requests"] += 1
             raise
 
     async def _crawl_static(self, url: str, **kwargs) -> Dict[str, Any]:
@@ -330,7 +333,7 @@ class MultiStrategyCrawler:
         urls: List[str],
         method: Optional[CrawlMethod] = None,
         concurrent_limit: int = 3,
-        **kwargs
+        **kwargs,
     ) -> List[Dict[str, Any]]:
         """
         Crawl multiple URLs
@@ -352,12 +355,7 @@ class MultiStrategyCrawler:
                     return await self.crawl(url, method=method, **kwargs)
                 except Exception as e:
                     logger.error(f"Error crawling {url}: {e}")
-                    return {
-                        'url': url,
-                        'error': str(e),
-                        'content': None,
-                        'crawl_method': 'failed'
-                    }
+                    return {"url": url, "error": str(e), "content": None, "crawl_method": "failed"}
 
         tasks = [crawl_with_semaphore(url) for url in urls]
         results = await asyncio.gather(*tasks)
@@ -370,7 +368,7 @@ class MultiStrategyCrawler:
         auth_type: AuthType,
         credentials: AuthCredentials,
         login_url: Optional[str] = None,
-        **kwargs
+        **kwargs,
     ) -> Dict[str, Any]:
         """
         Crawl with authentication
@@ -389,9 +387,7 @@ class MultiStrategyCrawler:
 
         # Authenticate
         session = await self.auth_manager.authenticate(
-            auth_type=auth_type,
-            credentials=credentials,
-            login_url=login_url
+            auth_type=auth_type, credentials=credentials, login_url=login_url
         )
 
         # TODO: Integrate authenticated session with crawlers
@@ -409,12 +405,12 @@ class MultiStrategyCrawler:
         stats = dict(self.stats)
 
         if self.evasion_manager:
-            stats['evasion'] = self.evasion_manager.get_stats()
+            stats["evasion"] = self.evasion_manager.get_stats()
 
-        stats['rate_limit'] = {
-            'current_rate': self.rate_limiter.get_current_rate(),
-            'max_requests': self.config.rate_limit_requests,
-            'time_window': self.config.rate_limit_window
+        stats["rate_limit"] = {
+            "current_rate": self.rate_limiter.get_current_rate(),
+            "max_requests": self.config.rate_limit_requests,
+            "time_window": self.config.rate_limit_window,
         }
 
         return stats
@@ -448,11 +444,7 @@ async def crawl_smart(url: str, **kwargs) -> Dict[str, Any]:
         return await crawler.crawl(url, **kwargs)
 
 
-async def crawl_with_config(
-    url: str,
-    config: CrawlConfig,
-    **kwargs
-) -> Dict[str, Any]:
+async def crawl_with_config(url: str, config: CrawlConfig, **kwargs) -> Dict[str, Any]:
     """
     Crawl with custom configuration
 

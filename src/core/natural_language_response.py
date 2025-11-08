@@ -6,19 +6,20 @@ Natural Language Response Generator
 전략: 템플릿 기반 + LLM 옵션
 """
 
-from typing import List, Dict, Optional
 from dataclasses import dataclass
+from typing import Dict, List, Optional
 
-from src.core.search_engine import SearchResult
 from src.core.query_parser import ParsedQuery
+from src.core.search_engine import SearchResult
 
 
 @dataclass
 class NaturalLanguageResponse:
     """자연어 응답"""
-    answer: str                  # 자연어 답변
-    products: List[SearchResult] # 추천 제품 리스트
-    query_understanding: str     # 쿼리 이해 요약
+
+    answer: str  # 자연어 답변
+    products: List[SearchResult]  # 추천 제품 리스트
+    query_understanding: str  # 쿼리 이해 요약
 
 
 class NaturalLanguageResponseGenerator:
@@ -34,9 +35,7 @@ class NaturalLanguageResponseGenerator:
         self.use_llm = use_llm
 
     def generate(
-        self,
-        parsed_query: ParsedQuery,
-        search_results: List[SearchResult]
+        self, parsed_query: ParsedQuery, search_results: List[SearchResult]
     ) -> NaturalLanguageResponse:
         """
         자연어 답변 생성
@@ -58,9 +57,7 @@ class NaturalLanguageResponseGenerator:
             answer = self._generate_results_message(parsed_query, search_results)
 
         return NaturalLanguageResponse(
-            answer=answer,
-            products=search_results,
-            query_understanding=query_understanding
+            answer=answer, products=search_results, query_understanding=query_understanding
         )
 
     def _summarize_query(self, parsed_query: ParsedQuery) -> str:
@@ -102,9 +99,7 @@ class NaturalLanguageResponseGenerator:
         )
 
     def _generate_results_message(
-        self,
-        parsed_query: ParsedQuery,
-        results: List[SearchResult]
+        self, parsed_query: ParsedQuery, results: List[SearchResult]
     ) -> str:
         """검색 결과 메시지 생성"""
         intent = parsed_query.intent
@@ -133,7 +128,7 @@ class NaturalLanguageResponseGenerator:
                 details.append(f"• Neck: {metadata['neck']}")
 
             if "moq" in metadata:
-                moq_value = metadata['moq']
+                moq_value = metadata["moq"]
                 if isinstance(moq_value, (int, float)):
                     details.append(f"• 최소주문수량: {int(moq_value):,}개")
 
@@ -156,8 +151,8 @@ class NaturalLanguageResponseGenerator:
             if result.matched_chunks:
                 matched_reasons = []
                 for chunk in result.matched_chunks[:3]:  # Top 3 chunks
-                    field_type = chunk.get('field_type', '')
-                    chunk_text = chunk.get('chunk_text', '')
+                    field_type = chunk.get("field_type", "")
+                    chunk_text = chunk.get("chunk_text", "")
                     if field_type and chunk_text:
                         matched_reasons.append(f"  - {chunk_text}")
 
@@ -169,7 +164,9 @@ class NaturalLanguageResponseGenerator:
 
         # Add summary
         if len(results) > 3:
-            lines.append(f"총 {len(results)}개 제품이 검색되었습니다. 상위 {min(3, len(results))}개만 표시했습니다.")
+            lines.append(
+                f"총 {len(results)}개 제품이 검색되었습니다. 상위 {min(3, len(results))}개만 표시했습니다."
+            )
 
         return "\n".join(lines)
 
@@ -179,9 +176,9 @@ if __name__ == "__main__":
     from src.core.query_parser import QueryParser
     from src.core.search_engine import SearchEngine
 
-    print("="*80)
+    print("=" * 80)
     print("NATURAL LANGUAGE RESPONSE GENERATOR TEST")
-    print("="*80)
+    print("=" * 80)
 
     # Initialize
     query_parser = QueryParser()

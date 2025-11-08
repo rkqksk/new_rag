@@ -3,20 +3,20 @@ Integration tests for HybridSearchEngine
 Requires Qdrant running at localhost:6333
 """
 
-import pytest
 from typing import List
+
+import pytest
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
 from src.core.multimodal.hybrid_search import (
     HybridSearchEngine,
-    WeightedFusion,
-    ReciprocalRankFusion,
     LearnedFusion,
-    SearchResult
+    ReciprocalRankFusion,
+    SearchResult,
+    WeightedFusion,
 )
 from src.core.multimodal.qdrant_uploader import MultiModalQdrantUploader
-
 
 # Test collection name
 TEST_COLLECTION = "test_hybrid_search"
@@ -48,8 +48,8 @@ def test_collection(qdrant_client):
         vectors_config={
             "text": VectorParams(size=384, distance=Distance.COSINE),
             "image": VectorParams(size=1024, distance=Distance.COSINE),
-            "shape": VectorParams(size=128, distance=Distance.COSINE)
-        }
+            "shape": VectorParams(size=128, distance=Distance.COSINE),
+        },
     )
 
     # Upload sample data
@@ -61,33 +61,33 @@ def test_collection(qdrant_client):
             "product_id": "bottle-100ml",
             "text_embedding": [0.9] * 384,  # High text relevance
             "image_embedding": [0.3] * 1024,  # Low image relevance
-            "payload": {"name": "100ml PET Bottle", "category": "Bottle"}
+            "payload": {"name": "100ml PET Bottle", "category": "Bottle"},
         },
         {
             "product_id": "bottle-200ml",
             "text_embedding": [0.7] * 384,  # Medium text relevance
             "image_embedding": [0.8] * 1024,  # High image relevance
-            "payload": {"name": "200ml PET Bottle", "category": "Bottle"}
+            "payload": {"name": "200ml PET Bottle", "category": "Bottle"},
         },
         {
             "product_id": "cap-20mm",
             "text_embedding": [0.5] * 384,  # Medium text relevance
             "image_embedding": [0.5] * 1024,  # Medium image relevance
             "shape_embedding": [0.9] * 128,  # High shape relevance
-            "payload": {"name": "20mm Cap", "category": "Cap"}
+            "payload": {"name": "20mm Cap", "category": "Cap"},
         },
         {
             "product_id": "jar-50ml",
             "text_embedding": [0.3] * 384,  # Low text relevance
             "image_embedding": [0.9] * 1024,  # High image relevance
-            "payload": {"name": "50ml Cosmetic Jar", "category": "Jar"}
+            "payload": {"name": "50ml Cosmetic Jar", "category": "Jar"},
         },
         {
             "product_id": "pump-dispenser",
             "text_embedding": [0.2] * 384,  # Low text relevance
             "image_embedding": [0.4] * 1024,  # Low image relevance
-            "payload": {"name": "Pump Dispenser", "category": "Pump"}
-        }
+            "payload": {"name": "Pump Dispenser", "category": "Pump"},
+        },
     ]
 
     uploader.upload_batch(products, show_progress=False)
@@ -104,22 +104,15 @@ def test_collection(qdrant_client):
 @pytest.fixture
 def search_engine(qdrant_client, test_collection):
     """Create search engine instance"""
-    return HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="rrf"
-    )
+    return HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="rrf")
 
 
 # ==================== Initialization Tests ====================
 
+
 def test_engine_initialization_rrf(qdrant_client, test_collection):
     """Test initialization with RRF strategy"""
-    engine = HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="rrf"
-    )
+    engine = HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="rrf")
     assert engine is not None
     assert engine.strategy_name == "rrf"
     assert isinstance(engine.fusion, ReciprocalRankFusion)
@@ -127,11 +120,7 @@ def test_engine_initialization_rrf(qdrant_client, test_collection):
 
 def test_engine_initialization_weighted(qdrant_client, test_collection):
     """Test initialization with weighted strategy"""
-    engine = HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="weighted"
-    )
+    engine = HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="weighted")
     assert engine is not None
     assert engine.strategy_name == "weighted"
     assert isinstance(engine.fusion, WeightedFusion)
@@ -139,11 +128,7 @@ def test_engine_initialization_weighted(qdrant_client, test_collection):
 
 def test_engine_initialization_learned(qdrant_client, test_collection):
     """Test initialization with learned strategy"""
-    engine = HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="learned"
-    )
+    engine = HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="learned")
     assert engine is not None
     assert engine.strategy_name == "learned"
     assert isinstance(engine.fusion, LearnedFusion)
@@ -152,23 +137,17 @@ def test_engine_initialization_learned(qdrant_client, test_collection):
 def test_engine_invalid_strategy(qdrant_client, test_collection):
     """Test error with invalid fusion strategy"""
     with pytest.raises(ValueError):
-        HybridSearchEngine(
-            qdrant_client,
-            test_collection,
-            fusion_strategy="invalid_strategy"
-        )
+        HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="invalid_strategy")
 
 
 def test_engine_invalid_collection(qdrant_client):
     """Test error with non-existent collection"""
     with pytest.raises(ValueError):
-        HybridSearchEngine(
-            qdrant_client,
-            "nonexistent_collection"
-        )
+        HybridSearchEngine(qdrant_client, "nonexistent_collection")
 
 
 # ==================== Single Modality Search Tests ====================
+
 
 def test_search_text_only(search_engine):
     """Test text-only search"""
@@ -203,17 +182,15 @@ def test_search_shape_only(search_engine):
 
 # ==================== Hybrid Search Tests ====================
 
+
 def test_hybrid_search_text_image(search_engine):
     """Test hybrid search with text + image"""
     embeddings = {
         "text": [0.9] * 384,  # High text similarity
-        "image": [0.9] * 1024  # High image similarity
+        "image": [0.9] * 1024,  # High image similarity
     }
 
-    results = search_engine.search_hybrid(
-        embeddings=embeddings,
-        limit=5
-    )
+    results = search_engine.search_hybrid(embeddings=embeddings, limit=5)
 
     assert len(results) > 0
     assert isinstance(results[0], SearchResult)
@@ -228,13 +205,10 @@ def test_hybrid_search_all_modalities(search_engine):
     embeddings = {
         "text": [0.5] * 384,
         "image": [0.5] * 1024,
-        "shape": [0.9] * 128  # High shape similarity
+        "shape": [0.9] * 128,  # High shape similarity
     }
 
-    results = search_engine.search_hybrid(
-        embeddings=embeddings,
-        limit=5
-    )
+    results = search_engine.search_hybrid(embeddings=embeddings, limit=5)
 
     assert len(results) > 0
     # cap-20mm should rank high due to shape match
@@ -243,23 +217,16 @@ def test_hybrid_search_all_modalities(search_engine):
 
 def test_hybrid_search_with_weights(search_engine):
     """Test hybrid search with custom weights"""
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.3] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.3] * 1024}
 
     # Text-heavy weighting
     results_text_heavy = search_engine.search_hybrid(
-        embeddings=embeddings,
-        weights={"text": 0.9, "image": 0.1},
-        limit=5
+        embeddings=embeddings, weights={"text": 0.9, "image": 0.1}, limit=5
     )
 
     # Image-heavy weighting
     results_image_heavy = search_engine.search_hybrid(
-        embeddings=embeddings,
-        weights={"text": 0.1, "image": 0.9},
-        limit=5
+        embeddings=embeddings, weights={"text": 0.1, "image": 0.9}, limit=5
     )
 
     assert len(results_text_heavy) > 0
@@ -279,10 +246,7 @@ def test_hybrid_search_single_modality(search_engine):
     """Test hybrid search with only one modality"""
     embeddings = {"text": [0.9] * 384}
 
-    results = search_engine.search_hybrid(
-        embeddings=embeddings,
-        limit=5
-    )
+    results = search_engine.search_hybrid(embeddings=embeddings, limit=5)
 
     assert len(results) > 0
     assert "text" in results[0].modality_scores
@@ -290,19 +254,12 @@ def test_hybrid_search_single_modality(search_engine):
 
 # ==================== Fusion Strategy Tests ====================
 
+
 def test_rrf_fusion(qdrant_client, test_collection):
     """Test RRF fusion strategy"""
-    engine = HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="rrf",
-        rrf_k=60
-    )
+    engine = HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="rrf", rrf_k=60)
 
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.9] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.9] * 1024}
 
     results = engine.search_hybrid(embeddings, limit=5)
 
@@ -313,22 +270,11 @@ def test_rrf_fusion(qdrant_client, test_collection):
 
 def test_weighted_fusion(qdrant_client, test_collection):
     """Test weighted fusion strategy"""
-    engine = HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="weighted"
-    )
+    engine = HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="weighted")
 
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.3] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.3] * 1024}
 
-    results = engine.search_hybrid(
-        embeddings,
-        weights={"text": 0.7, "image": 0.3},
-        limit=5
-    )
+    results = engine.search_hybrid(embeddings, weights={"text": 0.7, "image": 0.3}, limit=5)
 
     assert len(results) > 0
     # Weighted scores should be between 0 and 1
@@ -337,16 +283,9 @@ def test_weighted_fusion(qdrant_client, test_collection):
 
 def test_learned_fusion_fallback(qdrant_client, test_collection):
     """Test learned fusion falls back to weighted"""
-    engine = HybridSearchEngine(
-        qdrant_client,
-        test_collection,
-        fusion_strategy="learned"
-    )
+    engine = HybridSearchEngine(qdrant_client, test_collection, fusion_strategy="learned")
 
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.9] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.9] * 1024}
 
     results = engine.search_hybrid(embeddings, limit=5)
 
@@ -356,12 +295,10 @@ def test_learned_fusion_fallback(qdrant_client, test_collection):
 
 # ==================== Result Ranking Tests ====================
 
+
 def test_result_ranking(search_engine):
     """Test that results are properly ranked"""
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.9] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.9] * 1024}
 
     results = search_engine.search_hybrid(embeddings, limit=5)
 
@@ -389,12 +326,10 @@ def test_result_limit(search_engine):
 
 # ==================== Result Explanation Tests ====================
 
+
 def test_explain_results(search_engine):
     """Test result explanation"""
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.9] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.9] * 1024}
 
     results = search_engine.search_hybrid(embeddings, limit=5)
     explanation = search_engine.explain_results(results, top_k=3)
@@ -416,10 +351,7 @@ def test_explain_results(search_engine):
 
 def test_explain_modality_contributions(search_engine):
     """Test modality contribution analysis"""
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.3] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.3] * 1024}
 
     results = search_engine.search_hybrid(embeddings, limit=5)
     explanation = search_engine.explain_results(results, top_k=1)
@@ -434,13 +366,11 @@ def test_explain_modality_contributions(search_engine):
 
 # ==================== Edge Cases ====================
 
+
 def test_search_with_missing_vectors(search_engine):
     """Test search when some products lack certain vectors"""
     # bottle-100ml has no shape embedding
-    embeddings = {
-        "text": [0.9] * 384,
-        "shape": [0.9] * 128
-    }
+    embeddings = {"text": [0.9] * 384, "shape": [0.9] * 128}
 
     results = search_engine.search_hybrid(embeddings, limit=5)
 
@@ -450,10 +380,7 @@ def test_search_with_missing_vectors(search_engine):
 
 def test_search_with_no_matches(search_engine):
     """Test search with very low similarity"""
-    embeddings = {
-        "text": [0.0] * 384,
-        "image": [0.0] * 1024
-    }
+    embeddings = {"text": [0.0] * 384, "image": [0.0] * 1024}
 
     results = search_engine.search_hybrid(embeddings, limit=5)
 
@@ -472,14 +399,12 @@ def test_repr(search_engine):
 
 # ==================== Performance Tests ====================
 
+
 def test_search_performance(search_engine):
     """Test search performance (basic benchmark)"""
     import time
 
-    embeddings = {
-        "text": [0.9] * 384,
-        "image": [0.9] * 1024
-    }
+    embeddings = {"text": [0.9] * 384, "image": [0.9] * 1024}
 
     # Warm-up
     search_engine.search_hybrid(embeddings, limit=10)

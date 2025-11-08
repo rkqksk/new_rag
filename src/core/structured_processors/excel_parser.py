@@ -10,13 +10,14 @@ Excel 파일 자동 파싱 및 제품 데이터 추출
 - 데이터 검증 및 정제
 """
 
-import pandas as pd
-from typing import List, Dict, Any, Optional, Tuple
-from pathlib import Path
 import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
-from src.core.structured_processors.schema_detector import SchemaDetector
+import pandas as pd
+
 from src.core.chunk_templates import FieldType
+from src.core.structured_processors.schema_detector import SchemaDetector
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +29,7 @@ class ExcelParser:
         self.detector = SchemaDetector()
 
     def parse_file(
-        self,
-        file_path: str,
-        sheet_name: Optional[str] = None,
-        auto_detect_header: bool = True
+        self, file_path: str, sheet_name: Optional[str] = None, auto_detect_header: bool = True
     ) -> List[Dict[str, Any]]:
         """
         Excel 파일 파싱
@@ -72,10 +70,7 @@ class ExcelParser:
         return all_products
 
     def _parse_sheet(
-        self,
-        excel_file: pd.ExcelFile,
-        sheet_name: str,
-        auto_detect_header: bool
+        self, excel_file: pd.ExcelFile, sheet_name: str, auto_detect_header: bool
     ) -> List[Dict[str, Any]]:
         """
         단일 시트 파싱
@@ -121,9 +116,7 @@ class ExcelParser:
         return products
 
     def _dataframe_to_products(
-        self,
-        df: pd.DataFrame,
-        schema: Dict[str, Tuple[FieldType, float]]
+        self, df: pd.DataFrame, schema: Dict[str, Tuple[FieldType, float]]
     ) -> List[Dict[str, Any]]:
         """
         DataFrame을 제품 데이터 리스트로 변환
@@ -185,10 +178,11 @@ class ExcelParser:
             try:
                 if isinstance(value, str):
                     # 숫자 추출 (쉼표 제거)
-                    value = value.replace(',', '').replace(' ', '')
+                    value = value.replace(",", "").replace(" ", "")
                     # 단위 제거 (ea, 개, pcs 등)
                     import re
-                    match = re.search(r'([\d.]+)', value)
+
+                    match = re.search(r"([\d.]+)", value)
                     if match:
                         value = match.group(1)
                 return int(float(value))
@@ -201,9 +195,12 @@ class ExcelParser:
             try:
                 if isinstance(value, str):
                     # 숫자 추출
-                    value = value.replace(',', '').replace(' ', '').replace('원', '').replace('$', '')
+                    value = (
+                        value.replace(",", "").replace(" ", "").replace("원", "").replace("$", "")
+                    )
                     import re
-                    match = re.search(r'([\d.]+)', value)
+
+                    match = re.search(r"([\d.]+)", value)
                     if match:
                         value = match.group(1)
                 return float(value)
@@ -231,6 +228,7 @@ class ExcelParser:
 if __name__ == "__main__":
     # Test Excel parser
     import tempfile
+
     import openpyxl
 
     print("=" * 80)
@@ -238,7 +236,7 @@ if __name__ == "__main__":
     print("=" * 80)
 
     # Create test Excel file
-    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False, mode='wb') as f:
+    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False, mode="wb") as f:
         temp_path = f.name
 
     # Create workbook
@@ -247,11 +245,15 @@ if __name__ == "__main__":
     ws.title = "Products"
 
     # Header
-    ws.append(["제품명", "제품코드", "용량(ml)", "재질", "가격(원)", "최소주문수량", "제조사", "원산지"])
+    ws.append(
+        ["제품명", "제품코드", "용량(ml)", "재질", "가격(원)", "최소주문수량", "제조사", "원산지"]
+    )
 
     # Sample data
     ws.append(["100ml PE 보틀", "BE100-001", "100", "PE", "1,200", "5,000개", "금양실업", "한국"])
-    ws.append(["200ml PET 보틀", "BE200-002", "200", "PET", "1,500", "3,000ea", "청진코리아", "중국"])
+    ws.append(
+        ["200ml PET 보틀", "BE200-002", "200", "PET", "1,500", "3,000ea", "청진코리아", "중국"]
+    )
     ws.append(["24파이 캡", "CA024-001", "", "PP", "150", "10,000", "금양실업", "한국"])
 
     wb.save(temp_path)
@@ -272,6 +274,7 @@ if __name__ == "__main__":
 
     # Cleanup
     import os
+
     os.unlink(temp_path)
 
     print("\n" + "=" * 80)

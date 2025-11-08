@@ -22,9 +22,10 @@ logger = logging.getLogger(__name__)
 
 class RobotsPolicy(Enum):
     """robots.txt 정책"""
+
     RESPECT = "respect"  # 준수
-    IGNORE = "ignore"    # 무시
-    BYPASS = "bypass"    # 우회 (User-Agent 변경)
+    IGNORE = "ignore"  # 무시
+    BYPASS = "bypass"  # 우회 (User-Agent 변경)
 
 
 class RobotsHandler:
@@ -44,11 +45,7 @@ class RobotsHandler:
         >>> # 항상 True 반환
     """
 
-    def __init__(
-        self,
-        policy: RobotsPolicy = RobotsPolicy.RESPECT,
-        user_agent: str = "*"
-    ):
+    def __init__(self, policy: RobotsPolicy = RobotsPolicy.RESPECT, user_agent: str = "*"):
         """
         Args:
             policy: robots.txt 정책
@@ -171,6 +168,7 @@ class RobotsHandler:
 
 # Convenience functions
 
+
 async def check_robots(url: str, respect: bool = True) -> bool:
     """
     robots.txt 확인 (간편 함수)
@@ -214,6 +212,7 @@ async def bypass_robots(url: str) -> bool:
 
 
 # Integration with crawlers
+
 
 def add_robots_check_to_crawler(crawler, policy: RobotsPolicy = RobotsPolicy.RESPECT):
     """

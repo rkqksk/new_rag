@@ -2,16 +2,18 @@
 RAG Enterprise API - Main Application
 High-end, enterprise-grade backend system with comprehensive debugging
 """
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+
+from app.api.v1 import admin, analytics, debug, personalization, search
 from app.core.config import settings
-from app.core.logging import setup_logging, get_logger
 from app.core.exceptions import RAGEnterpriseException
-from app.api.v1 import search, personalization, analytics, debug, admin
-from app.middleware.request_tracing import RequestTracingMiddleware
-from app.middleware.request_logging import RequestLoggingMiddleware
+from app.core.logging import get_logger, setup_logging
 from app.middleware.performance_timing import PerformanceTimingMiddleware
+from app.middleware.request_logging import RequestLoggingMiddleware
+from app.middleware.request_tracing import RequestTracingMiddleware
 
 # Setup logging
 logger = setup_logging(settings.environment)
@@ -23,7 +25,7 @@ app = FastAPI(
     version="1.0.0",
     docs_url=f"{settings.api_prefix}/docs",
     redoc_url=f"{settings.api_prefix}/redoc",
-    description="Enterprise-grade RAG system with multi-modal search, personalization, and analytics"
+    description="Enterprise-grade RAG system with multi-modal search, personalization, and analytics",
 )
 
 # ============================================================================
@@ -54,15 +56,13 @@ if settings.debug_config.enabled:
 # Exception Handlers
 # ============================================================================
 
+
 @app.exception_handler(RAGEnterpriseException)
 async def rag_exception_handler(request: Request, exc: RAGEnterpriseException):
     """Handle custom RAG exceptions with context"""
     app_logger.error(
         f"RAG Exception: {exc.message}",
-        extra={
-            'exception': exc.to_dict(),
-            'path': request.url.path
-        }
+        extra={"exception": exc.to_dict(), "path": request.url.path},
     )
 
     return JSONResponse(
@@ -70,84 +70,72 @@ async def rag_exception_handler(request: Request, exc: RAGEnterpriseException):
         content={
             "error": exc.__class__.__name__,
             "message": exc.message,
-            "context": exc.context if settings.debug_config.enabled else None
-        }
+            "context": exc.context if settings.debug_config.enabled else None,
+        },
     )
+
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):
     """Handle unexpected exceptions"""
     app_logger.error(
         f"Unexpected error: {str(exc)}",
-        extra={
-            'exception_type': exc.__class__.__name__,
-            'path': request.url.path
-        },
-        exc_info=True
+        extra={"exception_type": exc.__class__.__name__, "path": request.url.path},
+        exc_info=True,
     )
 
     return JSONResponse(
         status_code=500,
         content={
             "error": "InternalServerError",
-            "message": str(exc) if settings.debug_config.enabled else "An unexpected error occurred"
-        }
+            "message": (
+                str(exc) if settings.debug_config.enabled else "An unexpected error occurred"
+            ),
+        },
     )
+
 
 # ============================================================================
 # Include Routers
 # ============================================================================
 
 # Core API routes
-app.include_router(
-    search.router,
-    prefix=f"{settings.api_prefix}/search",
-    tags=["search"]
-)
+app.include_router(search.router, prefix=f"{settings.api_prefix}/search", tags=["search"])
 
 app.include_router(
     personalization.router,
     prefix=f"{settings.api_prefix}/personalization",
-    tags=["personalization"]
+    tags=["personalization"],
 )
 
-app.include_router(
-    analytics.router,
-    prefix=f"{settings.api_prefix}/analytics",
-    tags=["analytics"]
-)
+app.include_router(analytics.router, prefix=f"{settings.api_prefix}/analytics", tags=["analytics"])
 
 # Debug routes (only if debug enabled)
 if settings.debug_config.enabled:
-    app.include_router(
-        debug.router,
-        prefix=f"{settings.api_prefix}/debug",
-        tags=["debug"]
-    )
+    app.include_router(debug.router, prefix=f"{settings.api_prefix}/debug", tags=["debug"])
     app_logger.info("🔧 Debug endpoints enabled at /api/v1/debug")
 
 # Admin routes (NexaAI integration)
-app.include_router(
-    admin.router,
-    prefix=settings.api_prefix,
-    tags=["admin"]
-)
+app.include_router(admin.router, prefix=settings.api_prefix, tags=["admin"])
 app_logger.info("⚙️  Admin endpoints enabled at /api/v1/admin")
 
 # ============================================================================
 # Health Check Endpoints
 # ============================================================================
 
+
 @app.get("/health/live")
 async def liveness():
     """Liveness probe - is the app running?"""
     return {"status": "alive", "version": "1.0.0"}
+
 
 @app.get("/health/ready")
 async def readiness():
     """Readiness probe - is the app ready to serve traffic?"""
     # TODO: Check database connections
     return {"status": "ready", "debug_enabled": settings.debug_config.enabled}
+
 
 @app.get("/")
 async def root():
@@ -164,13 +152,15 @@ async def root():
             "Real-time analytics",
             "Cross-encoder re-ranking",
             "Intelligent query routing",
-            "Session-based profiling"
-        ]
+            "Session-based profiling",
+        ],
     }
+
 
 # ============================================================================
 # Startup/Shutdown Events
 # ============================================================================
+
 
 @app.on_event("startup")
 async def startup_event():
@@ -180,10 +170,12 @@ async def startup_event():
     app_logger.info(f"Debug Mode: {settings.debug_config.enabled}")
     app_logger.info(f"API Prefix: {settings.api_prefix}")
 
+
 @app.on_event("shutdown")
 async def shutdown_event():
     """Application shutdown tasks"""
     app_logger.info("👋 RAG Enterprise API shutting down...")
+
 
 # ============================================================================
 # Run Application
@@ -191,9 +183,10 @@ async def shutdown_event():
 
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(
         app,
         host="0.0.0.0",
         port=8001,
-        log_level="info" if not settings.debug_config.enabled else "debug"
+        log_level="info" if not settings.debug_config.enabled else "debug",
     )

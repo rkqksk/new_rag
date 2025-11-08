@@ -4,16 +4,16 @@ API Key Handler for SaaS Authentication
 Handles API key generation, validation, and management for programmatic access.
 """
 
-import secrets
 import hashlib
+import secrets
 from datetime import datetime, timedelta
 from typing import Optional
-from fastapi import HTTPException, Security, Header
+
+from fastapi import Header, HTTPException, Security
 from fastapi.security import APIKeyHeader
-
 from src.db.session import get_db
-from src.models.saas_models import APIKey, Tenant
 
+from src.models.saas_models import APIKey, Tenant
 
 # Security scheme
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
@@ -31,11 +31,7 @@ class APIKeyManager:
     """
 
     @staticmethod
-    def generate_api_key(
-        tenant_id: str,
-        name: str,
-        expires_days: Optional[int] = None
-    ) -> dict:
+    def generate_api_key(tenant_id: str, name: str, expires_days: Optional[int] = None) -> dict:
         """
         Generate new API key for tenant
 
@@ -78,7 +74,7 @@ class APIKeyManager:
                 scopes=["*"],  # Full access by default
                 is_active=True,
                 expires_at=expires_at,
-                created_at=datetime.utcnow()
+                created_at=datetime.utcnow(),
             )
 
             db.add(db_api_key)
@@ -91,7 +87,7 @@ class APIKeyManager:
                 "key_prefix": key_prefix,
                 "name": name,
                 "created_at": db_api_key.created_at.isoformat(),
-                "expires_at": db_api_key.expires_at.isoformat() if db_api_key.expires_at else None
+                "expires_at": db_api_key.expires_at.isoformat() if db_api_key.expires_at else None,
             }
 
         finally:
@@ -120,38 +116,24 @@ class APIKeyManager:
             key_hash = hashlib.sha256(api_key.encode()).hexdigest()
 
             # Query database
-            db_key = db.query(APIKey).filter(
-                APIKey.key_hash == key_hash
-            ).first()
+            db_key = db.query(APIKey).filter(APIKey.key_hash == key_hash).first()
 
             # Check if key exists
             if not db_key:
-                raise HTTPException(
-                    status_code=401,
-                    detail="Invalid API key"
-                )
+                raise HTTPException(status_code=401, detail="Invalid API key")
 
             # Check if key is active
             if not db_key.is_active:
-                raise HTTPException(
-                    status_code=401,
-                    detail="API key has been revoked"
-                )
+                raise HTTPException(status_code=401, detail="API key has been revoked")
 
             # Check if key is expired
             if db_key.is_expired:
-                raise HTTPException(
-                    status_code=401,
-                    detail="API key has expired"
-                )
+                raise HTTPException(status_code=401, detail="API key has expired")
 
             # Check tenant status
             tenant = db.query(Tenant).filter(Tenant.id == db_key.tenant_id).first()
             if not tenant or not tenant.is_active:
-                raise HTTPException(
-                    status_code=403,
-                    detail="Tenant account is suspended"
-                )
+                raise HTTPException(status_code=403, detail="Tenant account is suspended")
 
             # Update last used timestamp
             db_key.last_used_at = datetime.utcnow()
@@ -183,16 +165,12 @@ class APIKeyManager:
         db = SessionLocal()
 
         try:
-            db_key = db.query(APIKey).filter(
-                APIKey.id == key_id,
-                APIKey.tenant_id == tenant_id
-            ).first()
+            db_key = (
+                db.query(APIKey).filter(APIKey.id == key_id, APIKey.tenant_id == tenant_id).first()
+            )
 
             if not db_key:
-                raise HTTPException(
-                    status_code=404,
-                    detail="API key not found"
-                )
+                raise HTTPException(status_code=404, detail="API key not found")
 
             db_key.is_active = False
             db.commit()
@@ -218,9 +196,7 @@ class APIKeyManager:
         db = SessionLocal()
 
         try:
-            keys = db.query(APIKey).filter(
-                APIKey.tenant_id == tenant_id
-            ).all()
+            keys = db.query(APIKey).filter(APIKey.tenant_id == tenant_id).all()
 
             return [
                 {
@@ -232,7 +208,7 @@ class APIKeyManager:
                     "total_requests": k.total_requests,
                     "created_at": k.created_at.isoformat(),
                     "last_used_at": k.last_used_at.isoformat() if k.last_used_at else None,
-                    "expires_at": k.expires_at.isoformat() if k.expires_at else None
+                    "expires_at": k.expires_at.isoformat() if k.expires_at else None,
                 }
                 for k in keys
             ]
@@ -242,9 +218,7 @@ class APIKeyManager:
 
 
 # FastAPI dependency for API key authentication
-async def get_current_tenant_from_api_key(
-    api_key: Optional[str] = Security(api_key_header)
-) -> str:
+async def get_current_tenant_from_api_key(api_key: Optional[str] = Security(api_key_header)) -> str:
     """
     Extract tenant_id from API key header
 
@@ -260,9 +234,7 @@ async def get_current_tenant_from_api_key(
     """
     if not api_key:
         raise HTTPException(
-            status_code=401,
-            detail="API key required",
-            headers={"WWW-Authenticate": "ApiKey"}
+            status_code=401, detail="API key required", headers={"WWW-Authenticate": "ApiKey"}
         )
 
     tenant_id, key_id = APIKeyManager.verify_api_key(api_key)
@@ -272,7 +244,7 @@ async def get_current_tenant_from_api_key(
 # Alternative: support both JWT and API key
 async def get_current_tenant(
     api_key: Optional[str] = Header(None, alias="X-API-Key"),
-    authorization: Optional[str] = Header(None)
+    authorization: Optional[str] = Header(None),
 ) -> str:
     """
     Extract tenant_id from either API key or JWT token
@@ -305,6 +277,7 @@ async def get_current_tenant(
         token = authorization.replace("Bearer ", "")
         try:
             from src.core.auth.jwt_handler import verify_token
+
             token_data = verify_token(token)
             return token_data.tenant_id
         except HTTPException:
@@ -314,5 +287,5 @@ async def get_current_tenant(
     raise HTTPException(
         status_code=401,
         detail="Authentication required (API key or Bearer token)",
-        headers={"WWW-Authenticate": "Bearer, ApiKey"}
+        headers={"WWW-Authenticate": "Bearer, ApiKey"},
     )

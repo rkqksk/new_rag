@@ -8,12 +8,12 @@ Automatically learns user's search focus and adjusts weights:
 - Price-focused users: High weight on MOQ/price
 """
 
-import logging
-from typing import Dict, Any, List, Optional
-from dataclasses import dataclass, field
-from collections import Counter
-import re
 import json
+import logging
+import re
+from collections import Counter
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -25,20 +25,21 @@ class UserSearchFocus:
 
     Automatically learned from search patterns
     """
+
     session_id: str
 
     # Focus scores (0.0 - 1.0, higher = more focused)
-    supplier_focus: float = 0.0       # Searches include supplier/manufacturer names
+    supplier_focus: float = 0.0  # Searches include supplier/manufacturer names
     compatibility_focus: float = 0.0  # Searches include neck size, capacity matching
-    material_focus: float = 0.0       # Searches emphasize material (glass, PET, PP)
-    price_focus: float = 0.0          # Searches include MOQ, price, business terms
-    category_focus: float = 0.0       # Searches are category-specific (bottle, cap)
+    material_focus: float = 0.0  # Searches emphasize material (glass, PET, PP)
+    price_focus: float = 0.0  # Searches include MOQ, price, business terms
+    category_focus: float = 0.0  # Searches are category-specific (bottle, cap)
     specification_focus: float = 0.0  # Searches include detailed specs (dimensions, etc.)
 
     # Detected patterns
     frequent_suppliers: List[str] = field(default_factory=list)  # Top 3 suppliers
     frequent_materials: List[str] = field(default_factory=list)  # Top 3 materials
-    frequent_categories: List[str] = field(default_factory=list) # Top 3 categories
+    frequent_categories: List[str] = field(default_factory=list)  # Top 3 categories
 
     # Statistics
     total_searches: int = 0
@@ -52,43 +53,43 @@ class UserSearchFocus:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
         return {
-            'session_id': self.session_id,
-            'supplier_focus': self.supplier_focus,
-            'compatibility_focus': self.compatibility_focus,
-            'material_focus': self.material_focus,
-            'price_focus': self.price_focus,
-            'category_focus': self.category_focus,
-            'specification_focus': self.specification_focus,
-            'frequent_suppliers': self.frequent_suppliers,
-            'frequent_materials': self.frequent_materials,
-            'frequent_categories': self.frequent_categories,
-            'total_searches': self.total_searches,
-            'searches_with_supplier': self.searches_with_supplier,
-            'searches_with_compatibility': self.searches_with_compatibility,
-            'searches_with_material': self.searches_with_material,
-            'searches_with_price': self.searches_with_price,
-            'searches_with_category': self.searches_with_category,
-            'searches_with_spec': self.searches_with_spec
+            "session_id": self.session_id,
+            "supplier_focus": self.supplier_focus,
+            "compatibility_focus": self.compatibility_focus,
+            "material_focus": self.material_focus,
+            "price_focus": self.price_focus,
+            "category_focus": self.category_focus,
+            "specification_focus": self.specification_focus,
+            "frequent_suppliers": self.frequent_suppliers,
+            "frequent_materials": self.frequent_materials,
+            "frequent_categories": self.frequent_categories,
+            "total_searches": self.total_searches,
+            "searches_with_supplier": self.searches_with_supplier,
+            "searches_with_compatibility": self.searches_with_compatibility,
+            "searches_with_material": self.searches_with_material,
+            "searches_with_price": self.searches_with_price,
+            "searches_with_category": self.searches_with_category,
+            "searches_with_spec": self.searches_with_spec,
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'UserSearchFocus':
+    def from_dict(cls, data: Dict[str, Any]) -> "UserSearchFocus":
         """Create from dictionary"""
         return cls(**data)
 
     def get_dominant_focus(self) -> str:
         """Get user's dominant search focus"""
         focuses = {
-            'supplier': self.supplier_focus,
-            'compatibility': self.compatibility_focus,
-            'material': self.material_focus,
-            'price': self.price_focus,
-            'category': self.category_focus,
-            'specification': self.specification_focus
+            "supplier": self.supplier_focus,
+            "compatibility": self.compatibility_focus,
+            "material": self.material_focus,
+            "price": self.price_focus,
+            "category": self.category_focus,
+            "specification": self.specification_focus,
         }
 
         if max(focuses.values()) < 0.3:
-            return 'general'  # No clear focus yet
+            return "general"  # No clear focus yet
 
         return max(focuses.items(), key=lambda x: x[1])[0]
 
@@ -110,70 +111,70 @@ class AdaptiveWeightsLearner:
 
         # Supplier patterns (Korean manufacturers)
         self.supplier_patterns = [
-            r'\b(춘진|onehago|원하고|프리몰드|freemold|장업|jangup)\b',
-            r'\b(주)\s*\w+',  # 주식회사
-            r'\b회사\b',
-            r'\b제조\b',
-            r'\b공급\b',
-            r'\b업체\b'
+            r"\b(춘진|onehago|원하고|프리몰드|freemold|장업|jangup)\b",
+            r"\b(주)\s*\w+",  # 주식회사
+            r"\b회사\b",
+            r"\b제조\b",
+            r"\b공급\b",
+            r"\b업체\b",
         ]
 
         # Compatibility patterns (neck, capacity matching)
         self.compatibility_patterns = [
-            r'(\d+)\s*파이',
-            r'(\d+)\s*mm\s*(넥|neck)',
-            r'호환',
-            r'맞는',
-            r'적합',
-            r'와\s*함께',
-            r'세트'
+            r"(\d+)\s*파이",
+            r"(\d+)\s*mm\s*(넥|neck)",
+            r"호환",
+            r"맞는",
+            r"적합",
+            r"와\s*함께",
+            r"세트",
         ]
 
         # Material patterns
         self.material_patterns = [
-            r'\b(PET|pet|페트|펫)\b',
-            r'\b(PP|pp|폴리프로필렌)\b',
-            r'\b(PE|pe|폴리에틸렌)\b',
-            r'\b(PS|ps|폴리스티렌)\b',
-            r'\b(PVC|pvc)\b',
-            r'\b(유리|glass|Glass|GLASS|초자)\b',
-            r'\b(알루미늄|aluminum)\b',
-            r'\b(금속|metal)\b',
-            r'\b재질\b',
-            r'\b소재\b'
+            r"\b(PET|pet|페트|펫)\b",
+            r"\b(PP|pp|폴리프로필렌)\b",
+            r"\b(PE|pe|폴리에틸렌)\b",
+            r"\b(PS|ps|폴리스티렌)\b",
+            r"\b(PVC|pvc)\b",
+            r"\b(유리|glass|Glass|GLASS|초자)\b",
+            r"\b(알루미늄|aluminum)\b",
+            r"\b(금속|metal)\b",
+            r"\b재질\b",
+            r"\b소재\b",
         ]
 
         # Price/business patterns
         self.price_patterns = [
-            r'\bMOQ\b',
-            r'\b최소\s*주문\b',
-            r'\b가격\b',
-            r'\b단가\b',
-            r'\b견적\b',
-            r'\b대량\b',
-            r'\b도매\b',
-            r'\b수량\b'
+            r"\bMOQ\b",
+            r"\b최소\s*주문\b",
+            r"\b가격\b",
+            r"\b단가\b",
+            r"\b견적\b",
+            r"\b대량\b",
+            r"\b도매\b",
+            r"\b수량\b",
         ]
 
         # Category patterns
         self.category_patterns = {
-            'Bottle': [r'\b(병|보틀|bottle|용기|container)\b'],
-            'Cap': [r'\b(캡|cap|뚜껑|lid|마개)\b'],
-            'Pump': [r'\b(펌프|pump|디스펜서|dispenser)\b'],
-            'Jar': [r'\b(자|jar|단지)\b']
+            "Bottle": [r"\b(병|보틀|bottle|용기|container)\b"],
+            "Cap": [r"\b(캡|cap|뚜껑|lid|마개)\b"],
+            "Pump": [r"\b(펌프|pump|디스펜서|dispenser)\b"],
+            "Jar": [r"\b(자|jar|단지)\b"],
         }
 
         # Specification patterns
         self.spec_patterns = [
-            r'(\d+)\s*(ml|ML|미리|밀리)',
-            r'(\d+)\s*(l|L|리터)',
-            r'(\d+)\s*(mm|cm|m)',
-            r'(\d+)\s*x\s*(\d+)',  # Dimensions
-            r'직경',
-            r'높이',
-            r'두께',
-            r'무게',
-            r'사이즈'
+            r"(\d+)\s*(ml|ML|미리|밀리)",
+            r"(\d+)\s*(l|L|리터)",
+            r"(\d+)\s*(mm|cm|m)",
+            r"(\d+)\s*x\s*(\d+)",  # Dimensions
+            r"직경",
+            r"높이",
+            r"두께",
+            r"무게",
+            r"사이즈",
         ]
 
         logger.info("✅ AdaptiveWeightsLearner initialized")
@@ -191,55 +192,57 @@ class AdaptiveWeightsLearner:
         query_lower = query.lower()
 
         analysis = {
-            'has_supplier': False,
-            'has_compatibility': False,
-            'has_material': False,
-            'has_price': False,
-            'has_category': False,
-            'has_spec': False,
-            'detected_suppliers': [],
-            'detected_materials': [],
-            'detected_categories': [],
-            'detected_specs': []
+            "has_supplier": False,
+            "has_compatibility": False,
+            "has_material": False,
+            "has_price": False,
+            "has_category": False,
+            "has_spec": False,
+            "detected_suppliers": [],
+            "detected_materials": [],
+            "detected_categories": [],
+            "detected_specs": [],
         }
 
         # Check supplier
         for pattern in self.supplier_patterns:
             if re.search(pattern, query, re.IGNORECASE):
-                analysis['has_supplier'] = True
+                analysis["has_supplier"] = True
                 matches = re.findall(pattern, query, re.IGNORECASE)
-                analysis['detected_suppliers'].extend(matches)
+                analysis["detected_suppliers"].extend(matches)
 
         # Check compatibility
         for pattern in self.compatibility_patterns:
             if re.search(pattern, query, re.IGNORECASE):
-                analysis['has_compatibility'] = True
+                analysis["has_compatibility"] = True
 
         # Check material
         for pattern in self.material_patterns:
             if re.search(pattern, query, re.IGNORECASE):
-                analysis['has_material'] = True
+                analysis["has_material"] = True
                 matches = re.findall(pattern, query, re.IGNORECASE)
-                analysis['detected_materials'].extend([m.upper() if len(m) <= 3 else m for m in matches])
+                analysis["detected_materials"].extend(
+                    [m.upper() if len(m) <= 3 else m for m in matches]
+                )
 
         # Check price
         for pattern in self.price_patterns:
             if re.search(pattern, query, re.IGNORECASE):
-                analysis['has_price'] = True
+                analysis["has_price"] = True
 
         # Check category
         for category, patterns in self.category_patterns.items():
             for pattern in patterns:
                 if re.search(pattern, query, re.IGNORECASE):
-                    analysis['has_category'] = True
-                    analysis['detected_categories'].append(category)
+                    analysis["has_category"] = True
+                    analysis["detected_categories"].append(category)
 
         # Check specification
         for pattern in self.spec_patterns:
             if re.search(pattern, query, re.IGNORECASE):
-                analysis['has_spec'] = True
+                analysis["has_spec"] = True
                 matches = re.findall(pattern, query, re.IGNORECASE)
-                analysis['detected_specs'].extend(matches)
+                analysis["detected_specs"].extend(matches)
 
         return analysis
 
@@ -257,38 +260,38 @@ class AdaptiveWeightsLearner:
         # Update counters
         focus.total_searches += 1
 
-        if analysis['has_supplier']:
+        if analysis["has_supplier"]:
             focus.searches_with_supplier += 1
             # Track frequent suppliers
-            for supplier in analysis['detected_suppliers']:
+            for supplier in analysis["detected_suppliers"]:
                 if isinstance(supplier, tuple):
                     supplier = supplier[0]
                 if supplier and supplier not in focus.frequent_suppliers:
                     focus.frequent_suppliers.append(supplier)
 
-        if analysis['has_compatibility']:
+        if analysis["has_compatibility"]:
             focus.searches_with_compatibility += 1
 
-        if analysis['has_material']:
+        if analysis["has_material"]:
             focus.searches_with_material += 1
             # Track frequent materials
-            for material in analysis['detected_materials']:
+            for material in analysis["detected_materials"]:
                 if isinstance(material, tuple):
                     material = material[0]
                 if material and material not in focus.frequent_materials:
                     focus.frequent_materials.append(material)
 
-        if analysis['has_price']:
+        if analysis["has_price"]:
             focus.searches_with_price += 1
 
-        if analysis['has_category']:
+        if analysis["has_category"]:
             focus.searches_with_category += 1
             # Track frequent categories
-            for category in analysis['detected_categories']:
+            for category in analysis["detected_categories"]:
                 if category not in focus.frequent_categories:
                     focus.frequent_categories.append(category)
 
-        if analysis['has_spec']:
+        if analysis["has_spec"]:
             focus.searches_with_spec += 1
 
         # Calculate focus scores (normalized to [0, 1])
@@ -319,61 +322,61 @@ class AdaptiveWeightsLearner:
         """
         # Base weights (default)
         weights = {
-            'capacity_importance': 1.0,
-            'material_importance': 0.8,
-            'neck_importance': 0.9,
-            'category_importance': 0.7,
-            'supplier_importance': 0.5,  # New
-            'price_importance': 0.6,     # New
-            'compatibility_boost': 0.2,
-            'vector_score_weight': 0.6,
-            'preference_score_weight': 0.4
+            "capacity_importance": 1.0,
+            "material_importance": 0.8,
+            "neck_importance": 0.9,
+            "category_importance": 0.7,
+            "supplier_importance": 0.5,  # New
+            "price_importance": 0.6,  # New
+            "compatibility_boost": 0.2,
+            "vector_score_weight": 0.6,
+            "preference_score_weight": 0.4,
         }
 
         # Adjust based on user's dominant focus
         dominant = focus.get_dominant_focus()
 
-        if dominant == 'supplier':
+        if dominant == "supplier":
             # Supplier-focused: boost supplier, reduce others
-            weights['supplier_importance'] = 1.5
-            weights['material_importance'] = 0.6
-            weights['neck_importance'] = 0.7
-            weights['preference_score_weight'] = 0.5  # More weight on preferences
+            weights["supplier_importance"] = 1.5
+            weights["material_importance"] = 0.6
+            weights["neck_importance"] = 0.7
+            weights["preference_score_weight"] = 0.5  # More weight on preferences
             logger.debug("Supplier-focused weights applied")
 
-        elif dominant == 'compatibility':
+        elif dominant == "compatibility":
             # Compatibility-focused: boost neck/capacity matching
-            weights['neck_importance'] = 1.5
-            weights['capacity_importance'] = 1.2
-            weights['compatibility_boost'] = 0.4  # Double boost!
-            weights['material_importance'] = 0.6
+            weights["neck_importance"] = 1.5
+            weights["capacity_importance"] = 1.2
+            weights["compatibility_boost"] = 0.4  # Double boost!
+            weights["material_importance"] = 0.6
             logger.debug("Compatibility-focused weights applied")
 
-        elif dominant == 'material':
+        elif dominant == "material":
             # Material-focused: boost material importance
-            weights['material_importance'] = 1.5
-            weights['neck_importance'] = 0.7
-            weights['category_importance'] = 0.6
+            weights["material_importance"] = 1.5
+            weights["neck_importance"] = 0.7
+            weights["category_importance"] = 0.6
             logger.debug("Material-focused weights applied")
 
-        elif dominant == 'price':
+        elif dominant == "price":
             # Price-focused: boost price/MOQ importance
-            weights['price_importance'] = 1.5
-            weights['supplier_importance'] = 1.0
-            weights['material_importance'] = 0.6
+            weights["price_importance"] = 1.5
+            weights["supplier_importance"] = 1.0
+            weights["material_importance"] = 0.6
             logger.debug("Price-focused weights applied")
 
-        elif dominant == 'category':
+        elif dominant == "category":
             # Category-focused: boost category matching
-            weights['category_importance'] = 1.2
-            weights['material_importance'] = 0.7
+            weights["category_importance"] = 1.2
+            weights["material_importance"] = 0.7
             logger.debug("Category-focused weights applied")
 
-        elif dominant == 'specification':
+        elif dominant == "specification":
             # Specification-focused: boost all spec attributes
-            weights['capacity_importance'] = 1.2
-            weights['neck_importance'] = 1.1
-            weights['material_importance'] = 1.0
+            weights["capacity_importance"] = 1.2
+            weights["neck_importance"] = 1.1
+            weights["material_importance"] = 1.0
             logger.debug("Specification-focused weights applied")
 
         else:
@@ -397,7 +400,7 @@ class AdaptiveWeightsLearner:
         lines = [
             f"🎯 User Search Focus: {dominant.upper()}",
             f"   Total Searches: {focus.total_searches}",
-            ""
+            "",
         ]
 
         # Focus scores
@@ -421,17 +424,17 @@ class AdaptiveWeightsLearner:
 
         # Recommendation
         lines.append(f"\n   💡 Recommendation Strategy:")
-        if dominant == 'supplier':
+        if dominant == "supplier":
             lines.append("      → Prioritize products from user's preferred suppliers")
-        elif dominant == 'compatibility':
+        elif dominant == "compatibility":
             lines.append("      → Strongly filter by neck/capacity compatibility")
-        elif dominant == 'material':
+        elif dominant == "material":
             lines.append("      → Emphasize material matching (e.g., glass only)")
-        elif dominant == 'price':
+        elif dominant == "price":
             lines.append("      → Highlight MOQ and pricing information")
-        elif dominant == 'category':
+        elif dominant == "category":
             lines.append("      → Focus on specific product categories")
-        elif dominant == 'specification':
+        elif dominant == "specification":
             lines.append("      → Match detailed specifications closely")
         else:
             lines.append("      → Use balanced recommendation approach")

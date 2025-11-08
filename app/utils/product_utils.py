@@ -3,11 +3,11 @@ Product utility functions for RAG system
 제품 데이터 처리 및 무결성 검증 유틸리티
 """
 
+import logging
 import os
 import re
-import logging
-from typing import Dict, Any, Optional, List
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +16,7 @@ def generate_image_urls(
     product_id: str,
     category: str,
     base_path: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final",
-    max_images: int = 3
+    max_images: int = 3,
 ) -> List[str]:
     """
     제품 ID와 카테고리를 기반으로 이미지 URL 목록 생성
@@ -37,7 +37,7 @@ def generate_image_urls(
     image_urls = []
 
     # Extract idx number from product_id (idx_123 → 123)
-    idx_match = re.search(r'idx_(\d+)', product_id)
+    idx_match = re.search(r"idx_(\d+)", product_id)
     if not idx_match:
         logger.warning(f"Invalid product_id format: {product_id}")
         return image_urls
@@ -68,9 +68,7 @@ def generate_image_urls(
 
 
 def validate_product_integrity(
-    product: Dict[str, Any],
-    require_images: bool = True,
-    require_specs: bool = True
+    product: Dict[str, Any], require_images: bool = True, require_specs: bool = True
 ) -> Dict[str, Any]:
     """
     제품 데이터 무결성 검증 및 보완
@@ -95,10 +93,7 @@ def validate_product_integrity(
 
     # 2. 이미지 URL 생성 및 추가
     if "image_urls" not in product or not product["image_urls"]:
-        product["image_urls"] = generate_image_urls(
-            product["product_id"],
-            product["category"]
-        )
+        product["image_urls"] = generate_image_urls(product["product_id"], product["category"])
 
     # 3. 이미지 무결성 검증
     if require_images and not product["image_urls"]:
@@ -137,9 +132,7 @@ def validate_product_integrity(
 
     # 7. 완전성 플래그
     product["is_complete"] = (
-        product["has_images"] and
-        product["has_specs"] and
-        product["print_area_url"] is not None
+        product["has_images"] and product["has_specs"] and product["print_area_url"] is not None
     )
 
     return product
@@ -149,7 +142,7 @@ def batch_validate_products(
     products: List[Dict[str, Any]],
     require_images: bool = False,  # 대량 검증 시 경고만 발생
     require_specs: bool = False,
-    min_integrity_score: float = 0.0
+    min_integrity_score: float = 0.0,
 ) -> List[Dict[str, Any]]:
     """
     여러 제품 데이터 일괄 검증 및 필터링
@@ -168,9 +161,7 @@ def batch_validate_products(
     for product in products:
         try:
             validated = validate_product_integrity(
-                product,
-                require_images=require_images,
-                require_specs=require_specs
+                product, require_images=require_images, require_specs=require_specs
             )
 
             # 무결성 점수 필터링
@@ -187,10 +178,7 @@ def batch_validate_products(
             continue
 
     # 무결성 점수 기준 정렬 (높은 순)
-    validated_products.sort(
-        key=lambda x: x["integrity_score"],
-        reverse=True
-    )
+    validated_products.sort(key=lambda x: x["integrity_score"], reverse=True)
 
     # 통계 로깅
     total = len(products)
@@ -206,9 +194,7 @@ def batch_validate_products(
 
 
 def enrich_product_with_metadata(
-    product: Dict[str, Any],
-    include_image_count: bool = True,
-    include_spec_count: bool = True
+    product: Dict[str, Any], include_image_count: bool = True, include_spec_count: bool = True
 ) -> Dict[str, Any]:
     """
     제품 데이터에 추가 메타데이터 보강
@@ -246,16 +232,16 @@ def extract_capacity_from_name(product_name: str) -> Optional[str]:
         "50ml"
     """
     # ml 우선 검색
-    ml_pattern = re.compile(r'(\d+)\s*ml', re.IGNORECASE)
+    ml_pattern = re.compile(r"(\d+)\s*ml", re.IGNORECASE)
     match = ml_pattern.search(product_name)
     if match:
-        return match.group(1) + 'ml'
+        return match.group(1) + "ml"
 
     # g 검색
-    g_pattern = re.compile(r'(\d+)\s*g\b', re.IGNORECASE)
+    g_pattern = re.compile(r"(\d+)\s*g\b", re.IGNORECASE)
     match = g_pattern.search(product_name)
     if match:
-        return match.group(1) + 'g'
+        return match.group(1) + "g"
 
     return None
 
@@ -274,8 +260,8 @@ def extract_material_from_category(category: str) -> Optional[str]:
         >>> extract_material_from_category("Bottle/PET")
         "PET"
     """
-    if '/' in category:
-        material = category.split('/')[-1]
+    if "/" in category:
+        material = category.split("/")[-1]
         if material in ["PET", "PE", "PP", "PETG", "Other"]:
             return material
 

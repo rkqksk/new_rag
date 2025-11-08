@@ -9,11 +9,13 @@ Tests the complete flow:
 5. Domain-filtered search
 """
 
+from typing import Any, Dict, List
+
 import pytest
-from typing import Dict, Any, List
 
 try:
     from plugins.test_plugins import PluginManager, ProcessingResult
+
     PLUGINS_AVAILABLE = True
 except ImportError:
     PLUGINS_AVAILABLE = False
@@ -55,8 +57,8 @@ def manufacturing_document():
         "metadata": {
             "filename": "injection_molding_sop.pdf",
             "doc_type": "SOP",
-            "department": "Manufacturing"
-        }
+            "department": "Manufacturing",
+        },
     }
 
 
@@ -89,17 +91,15 @@ def packaging_document():
         "metadata": {
             "filename": "cream_container_spec.pdf",
             "doc_type": "Specification",
-            "product_type": "Cosmetics"
-        }
+            "product_type": "Cosmetics",
+        },
     }
 
 
 class TestManufacturingPluginE2E:
     """E2E tests for Manufacturing Expert Plugin"""
 
-    def test_manufacturing_document_processing(
-        self, plugin_manager, manufacturing_document
-    ):
+    def test_manufacturing_document_processing(self, plugin_manager, manufacturing_document):
         """Test complete manufacturing document flow"""
         # Process document
         result = plugin_manager.process_document(manufacturing_document)
@@ -130,22 +130,28 @@ class TestManufacturingPluginE2E:
         # Check for specific manufacturing terms or entities
         if len(result.metadata.terminology) > 0:
             manufacturing_terms = [
-                "injection molding", "mold temperature", "injection pressure",
-                "cooling time", "quality control"
+                "injection molding",
+                "mold temperature",
+                "injection pressure",
+                "cooling time",
+                "quality control",
             ]
             extracted_terms_lower = [t.lower() for t in result.metadata.terminology]
             found_terms = [
-                term for term in manufacturing_terms
+                term
+                for term in manufacturing_terms
                 if any(term in ext_term for ext_term in extracted_terms_lower)
             ]
-            assert len(found_terms) > 0, f"Expected manufacturing terms, found: {result.metadata.terminology}"
+            assert (
+                len(found_terms) > 0
+            ), f"Expected manufacturing terms, found: {result.metadata.terminology}"
         else:
             # If no terminology, verify entities are extracted instead
-            assert 'parameters' in result.metadata.extracted_entities, f"Expected parameters in entities: {result.metadata.extracted_entities}"
+            assert (
+                "parameters" in result.metadata.extracted_entities
+            ), f"Expected parameters in entities: {result.metadata.extracted_entities}"
 
-    def test_manufacturing_metadata_enrichment(
-        self, plugin_manager, manufacturing_document
-    ):
+    def test_manufacturing_metadata_enrichment(self, plugin_manager, manufacturing_document):
         """Test metadata enrichment quality"""
         result = plugin_manager.process_document(manufacturing_document)
 
@@ -168,9 +174,7 @@ class TestManufacturingPluginE2E:
 class TestPackagingPluginE2E:
     """E2E tests for Packaging Expert Plugin"""
 
-    def test_packaging_document_processing(
-        self, plugin_manager, packaging_document
-    ):
+    def test_packaging_document_processing(self, plugin_manager, packaging_document):
         """Test complete packaging document flow"""
         # Process document
         result = plugin_manager.process_document(packaging_document)
@@ -192,19 +196,18 @@ class TestPackagingPluginE2E:
         assert len(result.metadata.terminology) > 0
 
         # Check for specific packaging terms
-        packaging_terms = [
-            "pet", "polyethylene", "capacity", "neck size", "iso 9001"
-        ]
+        packaging_terms = ["pet", "polyethylene", "capacity", "neck size", "iso 9001"]
         extracted_terms_lower = [t.lower() for t in result.metadata.terminology]
         found_terms = [
-            term for term in packaging_terms
+            term
+            for term in packaging_terms
             if any(term in ext_term for ext_term in extracted_terms_lower)
         ]
-        assert len(found_terms) > 0, f"Expected packaging terms, found: {result.metadata.terminology}"
+        assert (
+            len(found_terms) > 0
+        ), f"Expected packaging terms, found: {result.metadata.terminology}"
 
-    def test_packaging_material_detection(
-        self, plugin_manager, packaging_document
-    ):
+    def test_packaging_material_detection(self, plugin_manager, packaging_document):
         """Test material detection in packaging documents"""
         result = plugin_manager.process_document(packaging_document)
 
@@ -212,11 +215,10 @@ class TestPackagingPluginE2E:
         terminology_lower = [t.lower() for t in result.metadata.terminology]
 
         # Should detect PET material in terminology
-        material_found = any(
-            "pet" in term or "polyethylene" in term
-            for term in terminology_lower
-        )
-        assert material_found, f"Expected to find PET material, got terminology: {result.metadata.terminology}"
+        material_found = any("pet" in term or "polyethylene" in term for term in terminology_lower)
+        assert (
+            material_found
+        ), f"Expected to find PET material, got terminology: {result.metadata.terminology}"
 
 
 class TestPluginSelectionLogic:
@@ -230,9 +232,7 @@ class TestPluginSelectionLogic:
         assert result.metadata.domain == "manufacturing"
         assert result.metadata.confidence >= 0.3
 
-    def test_packaging_plugin_selected_for_packaging_doc(
-        self, plugin_manager, packaging_document
-    ):
+    def test_packaging_plugin_selected_for_packaging_doc(self, plugin_manager, packaging_document):
         """Verify correct plugin selection for packaging content"""
         result = plugin_manager.process_document(packaging_document)
         assert result.metadata.domain == "packaging"
@@ -242,7 +242,7 @@ class TestPluginSelectionLogic:
         """Test handling of documents with unclear domain"""
         ambiguous_doc = {
             "text": "This is a general document about product development.",
-            "metadata": {"filename": "general_doc.txt"}
+            "metadata": {"filename": "general_doc.txt"},
         }
 
         result = plugin_manager.process_document(ambiguous_doc)
@@ -258,10 +258,7 @@ class TestPluginErrorHandling:
 
     def test_empty_document(self, plugin_manager):
         """Test handling of empty document"""
-        empty_doc = {
-            "content": "",
-            "filename": "empty.txt"
-        }
+        empty_doc = {"content": "", "filename": "empty.txt"}
 
         result = plugin_manager.process_document(empty_doc)
 
@@ -275,9 +272,7 @@ class TestPluginErrorHandling:
 
     def test_missing_metadata(self, plugin_manager):
         """Test handling of document with missing metadata"""
-        doc_no_metadata = {
-            "content": "Some manufacturing process details about injection molding."
-        }
+        doc_no_metadata = {"content": "Some manufacturing process details about injection molding."}
 
         # Should not crash
         result = plugin_manager.process_document(doc_no_metadata)
@@ -285,9 +280,7 @@ class TestPluginErrorHandling:
 
     def test_malformed_document(self, plugin_manager):
         """Test handling of malformed document structure"""
-        malformed_doc = {
-            "invalid_field": "Some content"
-        }
+        malformed_doc = {"invalid_field": "Some content"}
 
         # Should handle gracefully or raise appropriate error
         result = plugin_manager.process_document(malformed_doc)
@@ -315,7 +308,9 @@ class TestPluginManager:
 
         expected_domains = ["manufacturing", "packaging"]
         for expected in expected_domains:
-            assert expected in plugin_domains, f"Expected domain {expected} not found in {plugin_domains}"
+            assert (
+                expected in plugin_domains
+            ), f"Expected domain {expected} not found in {plugin_domains}"
 
     def test_plugin_metadata(self, plugin_manager):
         """Test plugin metadata is complete"""
@@ -334,9 +329,7 @@ class TestPluginManager:
 class TestEndToEndFlow:
     """Integration test for complete RAG pipeline with plugins"""
 
-    def test_complete_document_to_search_flow(
-        self, plugin_manager, manufacturing_document
-    ):
+    def test_complete_document_to_search_flow(self, plugin_manager, manufacturing_document):
         """
         Test complete flow:
         1. Process document with plugin

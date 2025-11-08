@@ -4,16 +4,15 @@ JWT Token Handler for SaaS Authentication
 Handles JWT token creation, validation, and user authentication.
 """
 
+import os
 from datetime import datetime, timedelta
 from typing import Optional
-import os
 
+from fastapi import Depends, HTTPException, Security
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from fastapi import HTTPException, Depends, Security
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
 
 # Configuration
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-change-in-production")
@@ -29,6 +28,7 @@ security = HTTPBearer()
 
 class TokenData(BaseModel):
     """JWT token payload"""
+
     user_id: str
     tenant_id: str
     email: str
@@ -38,6 +38,7 @@ class TokenData(BaseModel):
 
 class TokenResponse(BaseModel):
     """Token response model"""
+
     access_token: str
     token_type: str = "bearer"
     expires_in: int
@@ -54,11 +55,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def create_access_token(
-    user_id: str,
-    tenant_id: str,
-    email: str,
-    role: str,
-    expires_delta: Optional[timedelta] = None
+    user_id: str, tenant_id: str, email: str, role: str, expires_delta: Optional[timedelta] = None
 ) -> str:
     """
     Create JWT access token
@@ -84,7 +81,7 @@ def create_access_token(
         "email": email,
         "role": role,
         "exp": expire,
-        "iat": datetime.utcnow()
+        "iat": datetime.utcnow(),
     }
 
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
@@ -123,11 +120,7 @@ def verify_token(token: str) -> TokenData:
             raise credentials_exception
 
         token_data = TokenData(
-            user_id=user_id,
-            tenant_id=tenant_id,
-            email=email,
-            role=role,
-            exp=exp
+            user_id=user_id, tenant_id=tenant_id, email=email, role=role, exp=exp
         )
 
         return token_data
@@ -137,7 +130,7 @@ def verify_token(token: str) -> TokenData:
 
 
 async def get_current_user_from_token(
-    credentials: HTTPAuthorizationCredentials = Security(security)
+    credentials: HTTPAuthorizationCredentials = Security(security),
 ) -> TokenData:
     """
     Extract current user from JWT token
@@ -153,12 +146,7 @@ async def get_current_user_from_token(
     return verify_token(token)
 
 
-def create_token_response(
-    user_id: str,
-    tenant_id: str,
-    email: str,
-    role: str
-) -> TokenResponse:
+def create_token_response(user_id: str, tenant_id: str, email: str, role: str) -> TokenResponse:
     """
     Create complete token response with metadata
 
@@ -171,17 +159,12 @@ def create_token_response(
     Returns:
         TokenResponse with token and metadata
     """
-    access_token = create_access_token(
-        user_id=user_id,
-        tenant_id=tenant_id,
-        email=email,
-        role=role
-    )
+    access_token = create_access_token(user_id=user_id, tenant_id=tenant_id, email=email, role=role)
 
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
-        expires_in=ACCESS_TOKEN_EXPIRE_MINUTES * 60  # Convert to seconds
+        expires_in=ACCESS_TOKEN_EXPIRE_MINUTES * 60,  # Convert to seconds
     )
 
 

@@ -2,9 +2,10 @@
 Image search routes for visual product search with drag & drop support
 """
 
-from fastapi import APIRouter, UploadFile, File, Form, Depends, HTTPException
-from typing import Optional
 import logging
+from typing import Optional
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
 from app.core.dependencies import get_qdrant_client
 from app.services.image_search_service import ImageSearchService
@@ -16,11 +17,15 @@ router = APIRouter(prefix="/api/v1/search", tags=["Image Search"])
 @router.post("/image")
 async def search_by_image(
     image: UploadFile = File(..., description="Container image (JPEG/JPG/PNG, max 5MB)"),
-    query: Optional[str] = Form(None, description="Optional text filter (e.g., '50ml only', 'PET material')"),
+    query: Optional[str] = Form(
+        None, description="Optional text filter (e.g., '50ml only', 'PET material')"
+    ),
     top_k: int = Form(10, description="Number of results to return (max 50)", ge=1, le=50),
-    material: Optional[str] = Form(None, description="Filter by material: PE, PET, PETG, PP, Other"),
+    material: Optional[str] = Form(
+        None, description="Filter by material: PE, PET, PETG, PP, Other"
+    ),
     category: Optional[str] = Form(None, description="Filter by category: Bottle, Jar, CapPump"),
-    qdrant_client = Depends(get_qdrant_client)
+    qdrant_client=Depends(get_qdrant_client),
 ):
     """
     🔍 **Image-based product search with drag & drop**
@@ -60,7 +65,7 @@ async def search_by_image(
             top_k=top_k,
             collection="products_all",
             material_filter=material,
-            category_filter=category
+            category_filter=category,
         )
 
         logger.info(

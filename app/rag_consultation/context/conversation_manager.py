@@ -21,13 +21,13 @@ import logging
 import re
 import uuid
 from datetime import datetime
-from typing import Optional, List
+from typing import List, Optional
 
 from app.rag_consultation.context.context_store import ContextStore
 from app.rag_consultation.models import (
     ConversationContext,
-    QueryAnalysis,
     IntentDetection,
+    QueryAnalysis,
     ToneAnalysis,
 )
 
@@ -159,10 +159,7 @@ class ConversationManager:
         # Save updated context
         await self.context_store.save_context(session_id, context)
 
-        logger.info(
-            f"Added turn to session {session_id} "
-            f"(total turns: {len(context.turns)})"
-        )
+        logger.info(f"Added turn to session {session_id} " f"(total turns: {len(context.turns)})")
 
         return context
 
@@ -198,8 +195,7 @@ class ConversationManager:
 
         # Check if query contains references
         has_reference = any(
-            re.search(pattern, query, re.IGNORECASE)
-            for pattern, _ in reference_patterns
+            re.search(pattern, query, re.IGNORECASE) for pattern, _ in reference_patterns
         )
 
         if not has_reference:
@@ -293,8 +289,6 @@ class ConversationManager:
             "turn_count": len(context.turns),
             "created_at": context.created_at.isoformat(),
             "updated_at": context.updated_at.isoformat(),
-            "duration_minutes": (
-                (context.updated_at - context.created_at).total_seconds() / 60
-            ),
+            "duration_minutes": ((context.updated_at - context.created_at).total_seconds() / 60),
             "summary": context.get_conversation_summary(),
         }

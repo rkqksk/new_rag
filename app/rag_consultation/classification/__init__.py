@@ -8,10 +8,10 @@ Provides comprehensive query analysis through:
 - LanguageDetector: Language identification
 """
 
-from app.rag_consultation.classification.query_classifier import QueryClassifier
 from app.rag_consultation.classification.intent_detector import IntentDetector
-from app.rag_consultation.classification.tone_analyzer import ToneAnalyzer
 from app.rag_consultation.classification.language_detector import LanguageDetector
+from app.rag_consultation.classification.query_classifier import QueryClassifier
+from app.rag_consultation.classification.tone_analyzer import ToneAnalyzer
 
 __all__ = [
     "QueryClassifier",

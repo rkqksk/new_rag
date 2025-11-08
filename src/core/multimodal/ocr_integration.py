@@ -3,11 +3,11 @@ OCR Integration for Multi-Modal RAG Pipeline
 Processes PDF/images with OCR and integrates with embedding service
 """
 
-import logging
-from typing import List, Dict, Any, Optional, Union
-from pathlib import Path
-from dataclasses import dataclass
 import json
+import logging
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class OCRResult:
     """OCR extraction result"""
+
     text: str
     confidence: float
     metadata: Dict[str, Any]
@@ -35,10 +36,7 @@ class OCRProcessor:
     """
 
     def __init__(
-        self,
-        lang: str = 'korean',
-        use_gpu: bool = True,
-        enable_layout_analysis: bool = False
+        self, lang: str = "korean", use_gpu: bool = True, enable_layout_analysis: bool = False
     ):
         """
         Initialize OCR processor
@@ -61,11 +59,7 @@ class OCRProcessor:
         try:
             from paddleocr import PaddleOCR
 
-            self.ocr_engine = PaddleOCR(
-                lang=self.lang,
-                use_gpu=self.use_gpu,
-                show_log=False
-            )
+            self.ocr_engine = PaddleOCR(lang=self.lang, use_gpu=self.use_gpu, show_log=False)
             logger.info(f"✅ PaddleOCR initialized (lang={self.lang}, gpu={self.use_gpu})")
 
         except ImportError:
@@ -81,11 +75,7 @@ class OCRProcessor:
         """Check if OCR engine is available"""
         return self.ocr_engine is not None
 
-    def process_image(
-        self,
-        image_path: Union[str, Path],
-        min_confidence: float = 0.5
-    ) -> OCRResult:
+    def process_image(self, image_path: Union[str, Path], min_confidence: float = 0.5) -> OCRResult:
         """
         Process single image with OCR
 
@@ -118,11 +108,7 @@ class OCRProcessor:
 
                 if confidence >= min_confidence:
                     extracted_text.append(text)
-                    bounding_boxes.append({
-                        'text': text,
-                        'confidence': confidence,
-                        'bbox': bbox
-                    })
+                    bounding_boxes.append({"text": text, "confidence": confidence, "bbox": bbox})
                     total_confidence += confidence
                     count += 1
 
@@ -133,19 +119,19 @@ class OCRProcessor:
             text="\n".join(extracted_text),
             confidence=avg_confidence,
             metadata={
-                'line_count': len(extracted_text),
-                'total_detections': count,
-                'language': self.lang
+                "line_count": len(extracted_text),
+                "total_detections": count,
+                "language": self.lang,
             },
             source_file=str(image_path),
-            bounding_boxes=bounding_boxes
+            bounding_boxes=bounding_boxes,
         )
 
     def process_pdf(
         self,
         pdf_path: Union[str, Path],
         min_confidence: float = 0.5,
-        max_pages: Optional[int] = None
+        max_pages: Optional[int] = None,
     ) -> List[OCRResult]:
         """
         Process PDF with OCR (converts to images first)
@@ -184,11 +170,7 @@ class OCRProcessor:
 
         return results
 
-    def _pdf_to_images(
-        self,
-        pdf_path: Path,
-        max_pages: Optional[int] = None
-    ) -> List[Path]:
+    def _pdf_to_images(self, pdf_path: Path, max_pages: Optional[int] = None) -> List[Path]:
         """
         Convert PDF to images
 
@@ -212,20 +194,19 @@ class OCRProcessor:
 
         # Save images to temp directory
         import tempfile
+
         temp_dir = Path(tempfile.mkdtemp())
 
         image_paths = []
         for i, image in enumerate(images, start=1):
             image_path = temp_dir / f"page_{i}.jpg"
-            image.save(str(image_path), 'JPEG')
+            image.save(str(image_path), "JPEG")
             image_paths.append(image_path)
 
         return image_paths
 
     def batch_process(
-        self,
-        file_paths: List[Union[str, Path]],
-        min_confidence: float = 0.5
+        self, file_paths: List[Union[str, Path]], min_confidence: float = 0.5
     ) -> List[OCRResult]:
         """
         Batch process multiple files
@@ -243,7 +224,7 @@ class OCRProcessor:
             file_path = Path(file_path)
 
             try:
-                if file_path.suffix.lower() == '.pdf':
+                if file_path.suffix.lower() == ".pdf":
                     # Process PDF
                     pdf_results = self.process_pdf(file_path, min_confidence)
                     results.extend(pdf_results)
@@ -274,7 +255,7 @@ class OCRMultiModalIntegration:
         self,
         ocr_processor: OCRProcessor,
         embedding_service: Any,  # MultiModalEmbeddingService
-        cache_embeddings: bool = True
+        cache_embeddings: bool = True,
     ):
         """
         Initialize OCR multi-modal integration
@@ -293,7 +274,7 @@ class OCRMultiModalIntegration:
         self,
         file_path: Union[str, Path],
         product_id: Optional[str] = None,
-        extract_metadata: bool = True
+        extract_metadata: bool = True,
     ) -> Dict[str, Any]:
         """
         Process document end-to-end: OCR → Embeddings
@@ -317,7 +298,7 @@ class OCRMultiModalIntegration:
         # Step 1: OCR extraction
         logger.info(f"Processing: {file_path.name}")
 
-        if file_path.suffix.lower() == '.pdf':
+        if file_path.suffix.lower() == ".pdf":
             ocr_results = self.ocr.process_pdf(file_path)
             # Combine all pages
             combined_text = "\n\n".join([r.text for r in ocr_results])
@@ -335,39 +316,37 @@ class OCRMultiModalIntegration:
         # Text embedding from OCR text
         if combined_text.strip():
             text_emb = self.embedder.embed_text(combined_text)
-            embeddings['text'] = text_emb
+            embeddings["text"] = text_emb
             logger.info(f"✅ Generated text embedding ({len(text_emb)} dim)")
 
         # Image embedding from original file
-        if self.embedder.is_available('image'):
+        if self.embedder.is_available("image"):
             try:
                 image_emb = self.embedder.embed_image(file_path)
-                embeddings['image'] = image_emb
+                embeddings["image"] = image_emb
                 logger.info(f"✅ Generated image embedding ({len(image_emb)} dim)")
             except Exception as e:
                 logger.warning(f"Failed to generate image embedding: {e}")
 
         # Step 3: Build result
         result = {
-            'product_id': product_id or file_path.stem,
-            'source_file': str(file_path),
-            'ocr_text': combined_text,
-            'ocr_confidence': avg_confidence,
-            'embeddings': embeddings,
-            'metadata': {
-                'filename': file_path.name,
-                'file_type': file_path.suffix,
-                'character_count': len(combined_text),
-                'has_text_embedding': 'text' in embeddings,
-                'has_image_embedding': 'image' in embeddings
-            }
+            "product_id": product_id or file_path.stem,
+            "source_file": str(file_path),
+            "ocr_text": combined_text,
+            "ocr_confidence": avg_confidence,
+            "embeddings": embeddings,
+            "metadata": {
+                "filename": file_path.name,
+                "file_type": file_path.suffix,
+                "character_count": len(combined_text),
+                "has_text_embedding": "text" in embeddings,
+                "has_image_embedding": "image" in embeddings,
+            },
         }
 
         # Extract additional metadata if requested
         if extract_metadata:
-            result['metadata'].update(
-                self._extract_product_metadata(combined_text)
-            )
+            result["metadata"].update(self._extract_product_metadata(combined_text))
 
         # Cache result
         if self.cache_embeddings:
@@ -379,7 +358,7 @@ class OCRMultiModalIntegration:
         self,
         file_paths: List[Union[str, Path]],
         product_ids: Optional[List[str]] = None,
-        show_progress: bool = True
+        show_progress: bool = True,
     ) -> List[Dict[str, Any]]:
         """
         Process multiple documents in batch
@@ -402,6 +381,7 @@ class OCRMultiModalIntegration:
         if show_progress:
             try:
                 from tqdm import tqdm
+
                 iterator = tqdm(iterator, total=len(file_paths), desc="Processing documents")
             except ImportError:
                 pass
@@ -439,35 +419,35 @@ class OCRMultiModalIntegration:
         metadata = {}
 
         # Product code patterns (e.g., PET-100, Bottle-200)
-        code_pattern = r'[A-Z]{2,}-\d{2,}'
+        code_pattern = r"[A-Z]{2,}-\d{2,}"
         codes = re.findall(code_pattern, text)
         if codes:
-            metadata['product_code'] = codes[0]
+            metadata["product_code"] = codes[0]
 
         # Capacity patterns (e.g., 100ml, 200cc)
-        capacity_pattern = r'(\d+)\s*(ml|cc|L|g|kg)'
+        capacity_pattern = r"(\d+)\s*(ml|cc|L|g|kg)"
         capacities = re.findall(capacity_pattern, text, re.IGNORECASE)
         if capacities:
-            metadata['capacity'] = f"{capacities[0][0]}{capacities[0][1]}"
+            metadata["capacity"] = f"{capacities[0][0]}{capacities[0][1]}"
 
         # Material patterns
-        materials = ['PET', 'HDPE', 'PP', 'PE', 'Glass', 'Aluminum']
+        materials = ["PET", "HDPE", "PP", "PE", "Glass", "Aluminum"]
         for material in materials:
             if material.lower() in text.lower():
-                metadata['material'] = material
+                metadata["material"] = material
                 break
 
         # MOQ pattern (e.g., MOQ: 5000, 최소주문: 1000)
-        moq_pattern = r'(?:MOQ|최소주문|최소 주문)[\s:]*(\d+)'
+        moq_pattern = r"(?:MOQ|최소주문|최소 주문)[\s:]*(\d+)"
         moq_match = re.search(moq_pattern, text, re.IGNORECASE)
         if moq_match:
-            metadata['moq'] = int(moq_match.group(1))
+            metadata["moq"] = int(moq_match.group(1))
 
         # Price pattern (e.g., 100원, ₩200, $1.50)
-        price_pattern = r'(?:₩|원|$)\s*(\d+(?:,\d{3})*(?:\.\d{2})?)'
+        price_pattern = r"(?:₩|원|$)\s*(\d+(?:,\d{3})*(?:\.\d{2})?)"
         price_match = re.search(price_pattern, text)
         if price_match:
-            metadata['price'] = price_match.group(1)
+            metadata["price"] = price_match.group(1)
 
         return metadata
 
@@ -485,7 +465,5 @@ class OCRMultiModalIntegration:
         return {
             "enabled": True,
             "entries": len(self._cache),
-            "size_mb": sum(
-                len(str(v)) for v in self._cache.values()
-            ) / (1024 * 1024)
+            "size_mb": sum(len(str(v)) for v in self._cache.values()) / (1024 * 1024),
         }

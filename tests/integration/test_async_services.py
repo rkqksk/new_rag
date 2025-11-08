@@ -4,12 +4,13 @@ Async Service Functionality Tests
 Tests asynchronous service operations including search, query processing,
 and concurrent async workflows with mocked dependencies.
 """
-import pytest
-import asyncio
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
-from datetime import datetime
-import time
 
+import asyncio
+import time
+from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
 
 # ============================================================
 # RAG QA Service Async Tests
@@ -24,18 +25,12 @@ class TestRAGQAServiceAsync:
     def mock_qdrant_async(self):
         """Mock Qdrant client with async support"""
         client = Mock()
-        client.search = AsyncMock(return_value=[
-            Mock(
-                id=1,
-                score=0.95,
-                payload={"text": "Steel specification", "source": "test"}
-            ),
-            Mock(
-                id=2,
-                score=0.87,
-                payload={"text": "Material properties", "source": "test"}
-            )
-        ])
+        client.search = AsyncMock(
+            return_value=[
+                Mock(id=1, score=0.95, payload={"text": "Steel specification", "source": "test"}),
+                Mock(id=2, score=0.87, payload={"text": "Material properties", "source": "test"}),
+            ]
+        )
         return client
 
     @pytest.fixture
@@ -57,11 +52,11 @@ class TestRAGQAServiceAsync:
             qdrant_client=mock_qdrant_async,
             embedding_model=mock_embedding_async,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         # Verify service has async search capability
-        assert hasattr(service, 'search_products')
+        assert hasattr(service, "search_products")
         assert callable(service.search_products)
 
     @pytest.mark.asyncio
@@ -76,7 +71,7 @@ class TestRAGQAServiceAsync:
             qdrant_client=mock_qdrant_async,
             embedding_model=mock_embedding_async,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         # Simulate concurrent searches
@@ -87,7 +82,7 @@ class TestRAGQAServiceAsync:
             "Steel specifications",
             "Aluminum properties",
             "Material durability",
-            "Cost analysis"
+            "Cost analysis",
         ]
 
         # Run searches concurrently
@@ -109,7 +104,7 @@ class TestRAGQAServiceAsync:
             qdrant_client=mock_qdrant_async,
             embedding_model=mock_embedding_async,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         async def slow_search():
@@ -125,6 +120,7 @@ class TestRAGQAServiceAsync:
     @pytest.mark.asyncio
     async def test_async_error_handling(self):
         """Test async error handling in search operations"""
+
         async def failing_search():
             raise ValueError("Search failed")
 
@@ -162,6 +158,7 @@ class TestLLMQueryAsync:
     @pytest.mark.asyncio
     async def test_concurrent_llm_queries(self):
         """Test concurrent LLM queries"""
+
         async def llm_query(question_id):
             await asyncio.sleep(0.01)
             return {"id": question_id, "answer": f"Answer to Q{question_id}"}
@@ -178,6 +175,7 @@ class TestLLMQueryAsync:
     @pytest.mark.asyncio
     async def test_llm_query_batching(self):
         """Test batch LLM query processing"""
+
         async def batch_query(questions):
             await asyncio.sleep(0.02)
             return [f"Answer to: {q}" for q in questions]
@@ -201,10 +199,7 @@ class TestVectorSearchAsync:
     @pytest.mark.asyncio
     async def test_async_vector_search(self):
         """Test async vector search"""
-        mock_search = AsyncMock(return_value=[
-            {"id": 1, "score": 0.95},
-            {"id": 2, "score": 0.87}
-        ])
+        mock_search = AsyncMock(return_value=[{"id": 1, "score": 0.95}, {"id": 2, "score": 0.87}])
 
         results = await mock_search(query_vector=[0.1] * 768, top_k=2)
 
@@ -214,13 +209,10 @@ class TestVectorSearchAsync:
     @pytest.mark.asyncio
     async def test_concurrent_vector_searches(self):
         """Test multiple concurrent vector searches"""
+
         async def vector_search(search_id):
             await asyncio.sleep(0.01)
-            return {
-                "search_id": search_id,
-                "results_count": 5,
-                "top_score": 0.95
-            }
+            return {"search_id": search_id, "results_count": 5, "top_score": 0.95}
 
         search_ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         results = await asyncio.gather(*[vector_search(sid) for sid in search_ids])
@@ -251,6 +243,7 @@ class TestEmbeddingAsync:
     @pytest.mark.asyncio
     async def test_batch_embedding_generation(self):
         """Test batch embedding generation"""
+
         async def batch_embed(texts):
             await asyncio.sleep(0.02)
             return [[0.1] * 768 for _ in texts]
@@ -264,19 +257,16 @@ class TestEmbeddingAsync:
     @pytest.mark.asyncio
     async def test_concurrent_embedding_batches(self):
         """Test concurrent batch embeddings"""
+
         async def embed_batch(batch_id, texts):
             await asyncio.sleep(0.01)
             return {
                 "batch_id": batch_id,
                 "count": len(texts),
-                "embeddings": [[0.1] * 768 for _ in texts]
+                "embeddings": [[0.1] * 768 for _ in texts],
             }
 
-        batches = [
-            (1, ["A", "B", "C"]),
-            (2, ["D", "E", "F"]),
-            (3, ["G", "H", "I"])
-        ]
+        batches = [(1, ["A", "B", "C"]), (2, ["D", "E", "F"]), (3, ["G", "H", "I"])]
 
         results = await asyncio.gather(*[embed_batch(bid, texts) for bid, texts in batches])
 
@@ -296,6 +286,7 @@ class TestAsyncPipelineFlow:
     @pytest.mark.asyncio
     async def test_query_to_answer_pipeline(self):
         """Test complete query to answer async pipeline"""
+
         # Step 1: Parse query
         async def parse_query(query):
             await asyncio.sleep(0.01)
@@ -329,6 +320,7 @@ class TestAsyncPipelineFlow:
     @pytest.mark.asyncio
     async def test_parallel_pipeline_execution(self):
         """Test parallel execution of independent pipeline stages"""
+
         async def stage_1():
             await asyncio.sleep(0.01)
             return "Stage 1 result"
@@ -350,6 +342,7 @@ class TestAsyncPipelineFlow:
     @pytest.mark.asyncio
     async def test_sequential_dependent_pipeline(self):
         """Test sequential pipeline with dependencies"""
+
         async def fetch_config():
             await asyncio.sleep(0.01)
             return {"model": "test-model", "temperature": 0.7}
@@ -383,6 +376,7 @@ class TestAsyncErrorHandling:
     @pytest.mark.asyncio
     async def test_async_timeout_recovery(self):
         """Test recovery from async timeout"""
+
         async def slow_operation():
             await asyncio.sleep(0.1)
             return "Completed"
@@ -400,6 +394,7 @@ class TestAsyncErrorHandling:
     @pytest.mark.asyncio
     async def test_async_exception_handling(self):
         """Test exception handling in async context"""
+
         async def may_fail(should_fail):
             if should_fail:
                 raise ValueError("Operation failed")
@@ -416,6 +411,7 @@ class TestAsyncErrorHandling:
     @pytest.mark.asyncio
     async def test_async_partial_failure_handling(self):
         """Test handling partial failures in concurrent operations"""
+
         async def operation(op_id, should_fail):
             await asyncio.sleep(0.01)
             if should_fail:
@@ -427,7 +423,7 @@ class TestAsyncErrorHandling:
             operation(2, True),
             operation(3, False),
             operation(4, True),
-            operation(5, False)
+            operation(5, False),
         ]
 
         results = []
@@ -457,6 +453,7 @@ class TestAsyncPerformance:
     @pytest.mark.asyncio
     async def test_concurrent_vs_sequential_performance(self):
         """Compare concurrent vs sequential performance"""
+
         async def task(duration):
             await asyncio.sleep(duration)
             return "Done"
@@ -478,6 +475,7 @@ class TestAsyncPerformance:
     @pytest.mark.asyncio
     async def test_large_concurrent_task_pool(self):
         """Test handling large concurrent task pool"""
+
         async def fast_task(task_id):
             await asyncio.sleep(0.001)
             return task_id
@@ -495,6 +493,7 @@ class TestAsyncPerformance:
     @pytest.mark.asyncio
     async def test_async_iteration_speed(self):
         """Test async iteration performance"""
+
         async def async_generator():
             for i in range(100):
                 await asyncio.sleep(0.001)
@@ -523,6 +522,7 @@ class TestAsyncContextManagement:
     @pytest.mark.asyncio
     async def test_async_context_manager(self):
         """Test async context manager"""
+
         class AsyncResource:
             def __init__(self):
                 self.opened = False
@@ -547,6 +547,7 @@ class TestAsyncContextManagement:
     @pytest.mark.asyncio
     async def test_nested_async_context(self):
         """Test nested async contexts"""
+
         class AsyncResource:
             def __init__(self, name):
                 self.name = name
@@ -621,4 +622,3 @@ class TestAsyncRateLimiting:
 
         # Should respect queue size limit
         assert queue.qsize() <= 5
-

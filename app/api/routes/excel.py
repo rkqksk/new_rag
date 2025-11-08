@@ -4,10 +4,11 @@ Excel Upload and Analysis Routes
 """
 
 import logging
+from typing import Any, Dict
+
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from qdrant_client import QdrantClient
-from typing import Dict, Any
 
 from app.core.dependencies import get_qdrant_client
 from app.services.excel_parser_service import ExcelParserService
@@ -19,8 +20,7 @@ router = APIRouter(prefix="/api/v1/admin/excel", tags=["Excel Management"])
 
 @router.post("/analyze")
 async def analyze_excel(
-    filename: str,
-    qdrant_client: QdrantClient = Depends(get_qdrant_client)
+    filename: str, qdrant_client: QdrantClient = Depends(get_qdrant_client)
 ) -> Dict[str, Any]:
     """
     Excel 파일 분석 및 DB 비교
@@ -40,16 +40,12 @@ async def analyze_excel(
 
         if not excel_products:
             raise HTTPException(
-                status_code=400,
-                detail=f"Failed to parse Excel or no products found: {filename}"
+                status_code=400, detail=f"Failed to parse Excel or no products found: {filename}"
             )
 
         # 2. Qdrant에서 모든 제품 가져오기
         points, _ = qdrant_client.scroll(
-            collection_name="products_all",
-            limit=1000,
-            with_payload=True,
-            with_vector=False
+            collection_name="products_all", limit=1000, with_payload=True, with_vector=False
         )
 
         db_products = [p.payload for p in points if p.payload]
@@ -65,7 +61,7 @@ async def analyze_excel(
             "filename": filename,
             "report": report,
             "parsed_data_saved": saved_path,
-            "message": f"분석 완료: Excel {report['total_excel']}개 vs DB {report['total_db']}개"
+            "message": f"분석 완료: Excel {report['total_excel']}개 vs DB {report['total_db']}개",
         }
 
     except HTTPException:
@@ -92,7 +88,7 @@ async def list_excel_files() -> Dict[str, Any]:
             "processed_files": [f.name for f in processed_files],
             "image_count": len(image_files),
             "upload_path": str(parser.raw_dir),
-            "instructions": "Excel 파일을 upload_path에 복사 후 /analyze 호출"
+            "instructions": "Excel 파일을 upload_path에 복사 후 /analyze 호출",
         }
 
     except Exception as e:

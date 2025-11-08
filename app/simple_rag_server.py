@@ -5,12 +5,13 @@
 - 벡터 검색 + LLM 응답
 """
 
+from typing import List, Optional
+
+import ollama
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from typing import List, Optional
-import ollama
 from qdrant_client import QdrantClient
-import uvicorn
 
 app = FastAPI(title="청진코리아 제품 검색 API")
 
@@ -47,22 +48,15 @@ class RAGResponse(BaseModel):
 
 def embed_text(text: str) -> List[float]:
     """텍스트를 벡터로 변환"""
-    response = ollama.embeddings(
-        model=MODEL_NAME,
-        prompt=text
-    )
-    return response['embedding']
+    response = ollama.embeddings(model=MODEL_NAME, prompt=text)
+    return response["embedding"]
 
 
 @app.get("/")
 async def root():
     return {
         "message": "청진코리아 제품 검색 API",
-        "endpoints": {
-            "/search": "벡터 검색",
-            "/ask": "RAG 질의응답",
-            "/stats": "통계 정보"
-        }
+        "endpoints": {"/search": "벡터 검색", "/ask": "RAG 질의응답", "/stats": "통계 정보"},
     }
 
 
@@ -75,22 +69,22 @@ async def search_products(request: SearchRequest):
 
         # Qdrant 검색
         results = client.search(
-            collection_name=COLLECTION_NAME,
-            query_vector=query_vector,
-            limit=request.top_k
+            collection_name=COLLECTION_NAME, query_vector=query_vector, limit=request.top_k
         )
 
         # 결과 변환
         search_results = []
         for result in results:
-            search_results.append(SearchResult(
-                product_code=result.payload.get('product_code', ''),
-                product_name=result.payload.get('product_name', ''),
-                category=result.payload.get('category', ''),
-                material=result.payload.get('material', ''),
-                specifications=result.payload.get('specifications', {}),
-                score=result.score
-            ))
+            search_results.append(
+                SearchResult(
+                    product_code=result.payload.get("product_code", ""),
+                    product_name=result.payload.get("product_name", ""),
+                    category=result.payload.get("category", ""),
+                    material=result.payload.get("material", ""),
+                    specifications=result.payload.get("specifications", {}),
+                    score=result.score,
+                )
+            )
 
         return search_results
 
@@ -106,39 +100,33 @@ async def ask_question(request: RAGRequest):
         query_vector = embed_text(request.question)
 
         results = client.search(
-            collection_name=COLLECTION_NAME,
-            query_vector=query_vector,
-            limit=request.top_k
+            collection_name=COLLECTION_NAME, query_vector=query_vector, limit=request.top_k
         )
 
         if not results:
-            return RAGResponse(
-                answer="관련 제품을 찾을 수 없습니다.",
-                sources=[]
-            )
+            return RAGResponse(answer="관련 제품을 찾을 수 없습니다.", sources=[])
 
         # 2. 컨텍스트 생성
         context_parts = []
         sources = []
 
         for i, result in enumerate(results):
-            product_code = result.payload.get('product_code', '')
-            product_name = result.payload.get('product_name', '')
-            specs = result.payload.get('specifications', {})
+            product_code = result.payload.get("product_code", "")
+            product_name = result.payload.get("product_name", "")
+            specs = result.payload.get("specifications", {})
 
-            context_parts.append(
-                f"제품 {i+1}: {product_name} ({product_code})\n"
-                f"사양: {specs}"
+            context_parts.append(f"제품 {i+1}: {product_name} ({product_code})\n" f"사양: {specs}")
+
+            sources.append(
+                SearchResult(
+                    product_code=product_code,
+                    product_name=product_name,
+                    category=result.payload.get("category", ""),
+                    material=result.payload.get("material", ""),
+                    specifications=specs,
+                    score=result.score,
+                )
             )
-
-            sources.append(SearchResult(
-                product_code=product_code,
-                product_name=product_name,
-                category=result.payload.get('category', ''),
-                material=result.payload.get('material', ''),
-                specifications=specs,
-                score=result.score
-            ))
 
         context = "\n\n".join(context_parts)
 
@@ -153,17 +141,11 @@ async def ask_question(request: RAGRequest):
 
 답변 (간결하고 정확하게):"""
 
-        response = ollama.generate(
-            model=LLM_MODEL,
-            prompt=prompt
-        )
+        response = ollama.generate(model=LLM_MODEL, prompt=prompt)
 
-        answer = response['response'].strip()
+        answer = response["response"].strip()
 
-        return RAGResponse(
-            answer=answer,
-            sources=sources
-        )
+        return RAGResponse(answer=answer, sources=sources)
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -179,24 +161,21 @@ async def get_stats():
             "collection": COLLECTION_NAME,
             "total_products": collection_info.points_count,
             "vector_dimension": collection_info.config.params.vectors.size,
-            "model": {
-                "embedding": MODEL_NAME,
-                "llm": LLM_MODEL
-            }
+            "model": {"embedding": MODEL_NAME, "llm": LLM_MODEL},
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 if __name__ == "__main__":
-    print("="*60)
+    print("=" * 60)
     print("청진코리아 제품 RAG 서버 시작")
-    print("="*60)
+    print("=" * 60)
     print(f"Collection: {COLLECTION_NAME}")
     print(f"Embedding Model: {MODEL_NAME}")
     print(f"LLM Model: {LLM_MODEL}")
     print(f"Server: http://localhost:8000")
     print(f"Docs: http://localhost:8000/docs")
-    print("="*60)
+    print("=" * 60)
 
     uvicorn.run(app, host="0.0.0.0", port=8000)

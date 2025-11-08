@@ -4,7 +4,8 @@ Improves search result quality by re-ranking with cross-encoder models
 """
 
 import logging
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -23,9 +24,7 @@ class CrossEncoderReranker:
     """
 
     def __init__(
-        self,
-        model_name: str = 'cross-encoder/ms-marco-MiniLM-L-6-v2',
-        device: str = 'auto'
+        self, model_name: str = "cross-encoder/ms-marco-MiniLM-L-6-v2", device: str = "auto"
     ):
         """
         Initialize cross-encoder re-ranker
@@ -41,6 +40,7 @@ class CrossEncoderReranker:
         # Try to import sentence-transformers
         try:
             from sentence_transformers import CrossEncoder
+
             self.CrossEncoder = CrossEncoder
             self.available = True
         except ImportError:
@@ -58,22 +58,19 @@ class CrossEncoderReranker:
             import torch
 
             # Auto-detect device
-            if self.device == 'auto':
+            if self.device == "auto":
                 if torch.backends.mps.is_available():
-                    device = 'mps'
+                    device = "mps"
                 elif torch.cuda.is_available():
-                    device = 'cuda'
+                    device = "cuda"
                 else:
-                    device = 'cpu'
+                    device = "cpu"
             else:
                 device = self.device
 
             logger.info(f"Loading cross-encoder: {self.model_name} on {device}")
 
-            self.model = self.CrossEncoder(
-                self.model_name,
-                device=device
-            )
+            self.model = self.CrossEncoder(self.model_name, device=device)
 
             logger.info(f"✅ Cross-encoder loaded on {device}")
 
@@ -87,11 +84,7 @@ class CrossEncoderReranker:
         return self.available and self.model is not None
 
     def rerank(
-        self,
-        query: str,
-        results: List[Any],
-        top_k: Optional[int] = None,
-        text_field: str = 'text'
+        self, query: str, results: List[Any], top_k: Optional[int] = None, text_field: str = "text"
     ) -> List[Any]:
         """
         Re-rank search results using cross-encoder
@@ -116,7 +109,7 @@ class CrossEncoderReranker:
         pairs = []
         for result in results:
             # Extract text from result
-            if hasattr(result, 'payload') and text_field in result.payload:
+            if hasattr(result, "payload") and text_field in result.payload:
                 text = result.payload[text_field]
             elif hasattr(result, text_field):
                 text = getattr(result, text_field)
@@ -137,12 +130,12 @@ class CrossEncoderReranker:
         scored_results = []
         for result, score in zip(results, scores):
             # Store original score
-            if hasattr(result, 'score'):
+            if hasattr(result, "score"):
                 result.original_score = result.score
                 result.score = float(score)
-            elif hasattr(result, 'payload'):
-                if not hasattr(result, 'original_score'):
-                    result.original_score = result.payload.get('score', 0.0)
+            elif hasattr(result, "payload"):
+                if not hasattr(result, "original_score"):
+                    result.original_score = result.payload.get("score", 0.0)
                 result.score = float(score)
 
             result.reranked = True
@@ -163,12 +156,18 @@ class CrossEncoderReranker:
         """Extract text from result object"""
         # Try common text fields
         text_fields = [
-            'text', 'ocr_text', 'content', 'description',
-            'product_name', 'name', 'title', 'body'
+            "text",
+            "ocr_text",
+            "content",
+            "description",
+            "product_name",
+            "name",
+            "title",
+            "body",
         ]
 
         # Check payload
-        if hasattr(result, 'payload'):
+        if hasattr(result, "payload"):
             for field in text_fields:
                 if field in result.payload:
                     return str(result.payload[field])
@@ -182,10 +181,7 @@ class CrossEncoderReranker:
         return str(result)
 
     def rerank_with_explanation(
-        self,
-        query: str,
-        results: List[Any],
-        top_k: Optional[int] = None
+        self, query: str, results: List[Any], top_k: Optional[int] = None
     ) -> Tuple[List[Any], Dict[str, Any]]:
         """
         Re-rank with detailed explanation
@@ -199,40 +195,37 @@ class CrossEncoderReranker:
             Tuple of (reranked_results, explanation)
         """
         if not self.is_available():
-            return results[:top_k] if top_k else results, {'available': False}
+            return results[:top_k] if top_k else results, {"available": False}
 
-        original_order = [getattr(r, 'id', i) for i, r in enumerate(results)]
+        original_order = [getattr(r, "id", i) for i, r in enumerate(results)]
 
         # Re-rank
         reranked = self.rerank(query, results, top_k=top_k)
 
         # Build explanation
         explanation = {
-            'available': True,
-            'model': self.model_name,
-            'original_count': len(results),
-            'reranked_count': len(reranked),
-            'score_changes': []
+            "available": True,
+            "model": self.model_name,
+            "original_count": len(results),
+            "reranked_count": len(reranked),
+            "score_changes": [],
         }
 
         for i, result in enumerate(reranked[:10]):  # Top 10 explanations
-            if hasattr(result, 'original_score') and hasattr(result, 'score'):
+            if hasattr(result, "original_score") and hasattr(result, "score"):
                 change = {
-                    'rank': i + 1,
-                    'id': getattr(result, 'id', 'unknown'),
-                    'original_score': float(result.original_score),
-                    'reranked_score': float(result.score),
-                    'score_diff': float(result.score - result.original_score)
+                    "rank": i + 1,
+                    "id": getattr(result, "id", "unknown"),
+                    "original_score": float(result.original_score),
+                    "reranked_score": float(result.score),
+                    "score_diff": float(result.score - result.original_score),
                 }
-                explanation['score_changes'].append(change)
+                explanation["score_changes"].append(change)
 
         return reranked, explanation
 
     def benchmark_reranking(
-        self,
-        query: str,
-        results: List[Any],
-        ground_truth_ids: List[str]
+        self, query: str, results: List[Any], ground_truth_ids: List[str]
     ) -> Dict[str, float]:
         """
         Benchmark re-ranking quality
@@ -246,14 +239,14 @@ class CrossEncoderReranker:
             Dictionary with metrics
         """
         if not self.is_available():
-            return {'available': False}
+            return {"available": False}
 
         # Get original ranking
-        original_ids = [getattr(r, 'id', str(i)) for i, r in enumerate(results)]
+        original_ids = [getattr(r, "id", str(i)) for i, r in enumerate(results)]
 
         # Re-rank
         reranked = self.rerank(query, results)
-        reranked_ids = [getattr(r, 'id', str(i)) for i, r in enumerate(reranked)]
+        reranked_ids = [getattr(r, "id", str(i)) for i, r in enumerate(reranked)]
 
         # Calculate metrics
         def calculate_metrics(ranking, ground_truth, k=10):
@@ -264,22 +257,22 @@ class CrossEncoderReranker:
             precision = relevant_in_top_k / k if k > 0 else 0
 
             return {
-                'recall@k': recall,
-                'precision@k': precision,
-                'relevant_in_top_k': relevant_in_top_k
+                "recall@k": recall,
+                "precision@k": precision,
+                "relevant_in_top_k": relevant_in_top_k,
             }
 
         original_metrics = calculate_metrics(original_ids, ground_truth_ids)
         reranked_metrics = calculate_metrics(reranked_ids, ground_truth_ids)
 
         return {
-            'available': True,
-            'original': original_metrics,
-            'reranked': reranked_metrics,
-            'improvement': {
-                'recall': reranked_metrics['recall@k'] - original_metrics['recall@k'],
-                'precision': reranked_metrics['precision@k'] - original_metrics['precision@k']
-            }
+            "available": True,
+            "original": original_metrics,
+            "reranked": reranked_metrics,
+            "improvement": {
+                "recall": reranked_metrics["recall@k"] - original_metrics["recall@k"],
+                "precision": reranked_metrics["precision@k"] - original_metrics["precision@k"],
+            },
         }
 
     def __repr__(self):

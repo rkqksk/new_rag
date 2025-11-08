@@ -1,21 +1,22 @@
 import logging
 import traceback
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
+
 
 class RAGError(Exception):
     """Base exception for RAG pipeline errors"""
+
     def __init__(self, message: str, error_type: str = "UnknownError"):
         self.message = message
         self.error_type = error_type
         super().__init__(self.message)
 
+
 class ErrorHandler:
     """Comprehensive error handling and logging utility"""
 
     def __init__(
-        self,
-        log_level: Optional[int] = None,
-        log_file: Optional[str] = "rag_pipeline.log"
+        self, log_level: Optional[int] = None, log_file: Optional[str] = "rag_pipeline.log"
     ):
         """
         Initialize error handler with logging configuration
@@ -34,9 +35,7 @@ class ErrorHandler:
         self.logger.setLevel(log_level)
 
         # Create formatter
-        formatter = logging.Formatter(
-            '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
+        formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 
         # Console handler
         console_handler = logging.StreamHandler()
@@ -52,10 +51,7 @@ class ErrorHandler:
             self.logger.addHandler(file_handler)
 
     def log_error(
-        self,
-        error: Exception,
-        context: Optional[Dict[str, Any]] = None,
-        severity: str = 'error'
+        self, error: Exception, context: Optional[Dict[str, Any]] = None, severity: str = "error"
     ) -> Dict[str, Any]:
         """
         Comprehensive error logging with structured output
@@ -69,10 +65,10 @@ class ErrorHandler:
             Structured error information
         """
         error_info = {
-            'error_type': type(error).__name__,
-            'error_message': str(error),
-            'traceback': traceback.format_exc(),
-            'context': context or {}
+            "error_type": type(error).__name__,
+            "error_message": str(error),
+            "traceback": traceback.format_exc(),
+            "context": context or {},
         }
 
         log_method = getattr(self.logger, severity, self.logger.error)
@@ -85,10 +81,7 @@ class ErrorHandler:
         return error_info
 
     def handle_error(
-        self,
-        error: Exception,
-        context: Optional[Dict[str, Any]] = None,
-        severity: str = 'error'
+        self, error: Exception, context: Optional[Dict[str, Any]] = None, severity: str = "error"
     ) -> bool:
         """
         Error handling with optional retry or fallback mechanisms
@@ -112,16 +105,12 @@ class ErrorHandler:
         except Exception as handler_error:
             # Fallback error logging if primary error handler fails
             self.logger.critical(
-                f"Error handler failed: {handler_error}\n"
-                f"Original Error: {error}"
+                f"Error handler failed: {handler_error}\n" f"Original Error: {error}"
             )
             return False
 
     def create_error_event(
-        self,
-        error_type: str,
-        message: str,
-        context: Optional[Dict[str, Any]] = None
+        self, error_type: str, message: str, context: Optional[Dict[str, Any]] = None
     ) -> RAGError:
         """
         Create a standardized RAG error event
@@ -134,7 +123,4 @@ class ErrorHandler:
         Returns:
             RAGError instance
         """
-        return RAGError(
-            message=message,
-            error_type=error_type
-        )
+        return RAGError(message=message, error_type=error_type)

@@ -1,21 +1,21 @@
-from typing import Dict, Any, Optional, Union
 from enum import Enum
+from typing import Any, Dict, Optional, Union
+
 
 class ModelProvider(Enum):
     """Supported model providers"""
+
     LOCAL = "local"
     OPENAI = "openai"
     ANTHROPIC = "anthropic"
     OLLAMA = "ollama"
 
+
 class ModelConfig:
     """Configuration for different language models"""
+
     def __init__(
-        self,
-        provider: ModelProvider,
-        model_name: str,
-        api_key: Optional[str] = None,
-        **kwargs
+        self, provider: ModelProvider, model_name: str, api_key: Optional[str] = None, **kwargs
     ):
         """
         Initialize model configuration
@@ -31,6 +31,7 @@ class ModelConfig:
         self.api_key = api_key
         self.extra_config = kwargs
 
+
 class ModelIntegrator:
     """
     Centralized model integration and management utility
@@ -40,11 +41,7 @@ class ModelIntegrator:
         """Initialize model integrator"""
         self._models: Dict[str, ModelConfig] = {}
 
-    def register_model(
-        self,
-        name: str,
-        config: ModelConfig
-    ) -> None:
+    def register_model(self, name: str, config: ModelConfig) -> None:
         """
         Register a new model configuration
 
@@ -54,10 +51,7 @@ class ModelIntegrator:
         """
         self._models[name] = config
 
-    def get_model_config(
-        self,
-        name: str
-    ) -> Optional[ModelConfig]:
+    def get_model_config(self, name: str) -> Optional[ModelConfig]:
         """
         Retrieve model configuration
 
@@ -78,11 +72,7 @@ class ModelIntegrator:
         """
         return self._models
 
-    def create_model_instance(
-        self,
-        model_name: str,
-        **override_params
-    ) -> Any:
+    def create_model_instance(self, model_name: str, **override_params) -> Any:
         """
         Create a model instance based on configuration
 
@@ -112,11 +102,7 @@ class ModelIntegrator:
         else:
             raise NotImplementedError(f"Provider {model_config.provider} not supported")
 
-    def _create_local_model(
-        self,
-        config: ModelConfig,
-        **kwargs
-    ) -> Any:
+    def _create_local_model(self, config: ModelConfig, **kwargs) -> Any:
         """Create local model instance"""
         from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -125,33 +111,22 @@ class ModelIntegrator:
 
         return model, tokenizer
 
-    def _create_openai_model(
-        self,
-        config: ModelConfig,
-        **kwargs
-    ) -> Any:
+    def _create_openai_model(self, config: ModelConfig, **kwargs) -> Any:
         """Create OpenAI model instance"""
         import openai
+
         openai.api_key = config.api_key
 
         return openai.ChatCompletion.create
 
-    def _create_anthropic_model(
-        self,
-        config: ModelConfig,
-        **kwargs
-    ) -> Any:
+    def _create_anthropic_model(self, config: ModelConfig, **kwargs) -> Any:
         """Create Anthropic model instance"""
         from anthropic import Anthropic
 
         client = Anthropic(api_key=config.api_key)
         return client.messages.create
 
-    def _create_ollama_model(
-        self,
-        config: ModelConfig,
-        **kwargs
-    ) -> Any:
+    def _create_ollama_model(self, config: ModelConfig, **kwargs) -> Any:
         """Create Ollama model instance"""
         import ollama
 

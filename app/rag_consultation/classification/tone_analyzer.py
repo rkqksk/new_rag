@@ -21,10 +21,10 @@ import re
 from typing import Dict, List, Tuple
 
 from app.rag_consultation.models import (
-    ToneAnalysis,
-    FormalityLevel,
-    UrgencyLevel,
     ExpertiseLevel,
+    FormalityLevel,
+    ToneAnalysis,
+    UrgencyLevel,
 )
 
 logger = logging.getLogger(__name__)
@@ -124,9 +124,7 @@ class ToneAnalyzer:
         if formal_count + casual_count == 0:
             return FormalityLevel.NEUTRAL, 0.5
 
-        formality_score = (formal_count - casual_count) / (
-            formal_count + casual_count
-        )
+        formality_score = (formal_count - casual_count) / (formal_count + casual_count)
 
         # Map score to formality level
         if formality_score > 0.5:

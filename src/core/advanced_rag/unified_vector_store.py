@@ -3,12 +3,13 @@ Unified Vector Store Manager
 Manages multiple Qdrant collections for integrated search
 """
 
-import logging
 import asyncio
-from typing import List, Dict, Any, Optional, Set
+import logging
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Set
+
 from qdrant_client import QdrantClient
-from qdrant_client.models import Distance, VectorParams, PointStruct
+from qdrant_client.models import Distance, PointStruct, VectorParams
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CollectionConfig:
     """Configuration for a collection"""
+
     name: str
     vector_size: int
     distance: Distance = Distance.COSINE
@@ -35,9 +37,7 @@ class UnifiedVectorStore:
     """
 
     def __init__(
-        self,
-        qdrant_client: QdrantClient,
-        collections: Optional[List[CollectionConfig]] = None
+        self, qdrant_client: QdrantClient, collections: Optional[List[CollectionConfig]] = None
     ):
         """
         Initialize Unified Vector Store
@@ -61,33 +61,31 @@ class UnifiedVectorStore:
                 name="products_multimodal",
                 vector_size=384,  # Text dimension (primary)
                 description="Multi-modal product data (text, image, shape)",
-                enabled=True
+                enabled=True,
             ),
             CollectionConfig(
                 name="documents_semantic",
                 vector_size=384,
                 description="PDF documents and manuals",
-                enabled=False  # Not yet created
+                enabled=False,  # Not yet created
             ),
             CollectionConfig(
                 name="images_visual",
                 vector_size=1024,
                 description="Product images",
-                enabled=False  # Not yet created
+                enabled=False,  # Not yet created
             ),
             CollectionConfig(
                 name="tables_structured",
                 vector_size=384,
                 description="Structured table data",
-                enabled=False  # Not yet created
-            )
+                enabled=False,  # Not yet created
+            ),
         ]
 
     def _verify_collections(self):
         """Verify that collections exist"""
-        existing_collections = {
-            col.name for col in self.client.get_collections().collections
-        }
+        existing_collections = {col.name for col in self.client.get_collections().collections}
 
         for collection in self.collections:
             if collection.enabled:
@@ -114,7 +112,7 @@ class UnifiedVectorStore:
         vector_size: int,
         distance: Distance = Distance.COSINE,
         description: str = "",
-        **kwargs
+        **kwargs,
     ) -> bool:
         """
         Create a new collection
@@ -140,11 +138,8 @@ class UnifiedVectorStore:
             # Create collection
             self.client.create_collection(
                 collection_name=name,
-                vectors_config=VectorParams(
-                    size=vector_size,
-                    distance=distance
-                ),
-                **kwargs
+                vectors_config=VectorParams(size=vector_size, distance=distance),
+                **kwargs,
             )
 
             # Add to managed collections
@@ -153,7 +148,7 @@ class UnifiedVectorStore:
                 vector_size=vector_size,
                 distance=distance,
                 description=description,
-                enabled=True
+                enabled=True,
             )
 
             self.collections.append(config)
@@ -194,11 +189,11 @@ class UnifiedVectorStore:
             collection_info = self.client.get_collection(name)
 
             return {
-                'name': name,
-                'points_count': collection_info.points_count,
-                'vectors_count': collection_info.vectors_count,
-                'indexed_vectors_count': collection_info.indexed_vectors_count,
-                'status': collection_info.status
+                "name": name,
+                "points_count": collection_info.points_count,
+                "vectors_count": collection_info.vectors_count,
+                "indexed_vectors_count": collection_info.indexed_vectors_count,
+                "status": collection_info.status,
             }
 
         except Exception as e:
@@ -219,7 +214,7 @@ class UnifiedVectorStore:
         collection_name: str,
         query_vector: List[float],
         limit: int = 10,
-        filters: Optional[Dict] = None
+        filters: Optional[Dict] = None,
     ) -> List[Any]:
         """
         Async search in a single collection
@@ -242,16 +237,14 @@ class UnifiedVectorStore:
                 collection_name=collection_name,
                 query_vector=query_vector,
                 limit=limit,
-                query_filter=filters
-            )
+                query_filter=filters,
+            ),
         )
 
         return results
 
     async def search_parallel(
-        self,
-        queries: Dict[str, tuple],
-        limit: int = 10
+        self, queries: Dict[str, tuple], limit: int = 10
     ) -> Dict[str, List[Any]]:
         """
         Search multiple collections in parallel
@@ -281,12 +274,7 @@ class UnifiedVectorStore:
                 logger.warning(f"Skipping disabled collection: {collection_name}")
                 continue
 
-            task = self.search_async(
-                collection_name,
-                query_vector,
-                limit=limit,
-                filters=filters
-            )
+            task = self.search_async(collection_name, query_vector, limit=limit, filters=filters)
 
             tasks.append(task)
             collection_names.append(collection_name)
@@ -312,7 +300,7 @@ class UnifiedVectorStore:
         self,
         query_vectors: Dict[str, List[float]],
         limit: int = 10,
-        filters: Optional[Dict[str, Dict]] = None
+        filters: Optional[Dict[str, Dict]] = None,
     ) -> Dict[str, List[Any]]:
         """
         Synchronous search across all enabled collections
@@ -339,7 +327,7 @@ class UnifiedVectorStore:
                     collection_name=name,
                     query_vector=query_vectors[name],
                     limit=limit,
-                    query_filter=filters.get(name)
+                    query_filter=filters.get(name),
                 )
 
                 results[name] = search_results

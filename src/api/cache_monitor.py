@@ -7,8 +7,9 @@ FastAPI 엔드포인트:
 - POST /cache/clear - 캐시 초기화
 """
 
+from typing import Any, Dict
+
 from fastapi import APIRouter, HTTPException
-from typing import Dict, Any
 
 # This would be imported from the main app
 # from src.core.caching.cache_manager import CacheManager
@@ -78,22 +79,22 @@ async def cache_health():
         return {
             "status": "unavailable",
             "connected": False,
-            "message": "Cache manager not initialized"
+            "message": "Cache manager not initialized",
         }
 
     stats = _cache_manager.get_stats()
 
-    if stats['connected']:
+    if stats["connected"]:
         return {
             "status": "healthy",
             "connected": True,
-            "message": "Redis connected and operational"
+            "message": "Redis connected and operational",
         }
     else:
         return {
             "status": "degraded",
             "connected": False,
-            "message": "Using in-memory fallback (Redis unavailable)"
+            "message": "Using in-memory fallback (Redis unavailable)",
         }
 
 

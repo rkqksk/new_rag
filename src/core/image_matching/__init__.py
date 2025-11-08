@@ -8,9 +8,4 @@ from .contour_extractor import ContourExtractor
 from .shape_descriptor import ShapeDescriptor
 from .shape_embedder import ShapeEmbedder
 
-__all__ = [
-    'BackgroundRemover',
-    'ContourExtractor',
-    'ShapeDescriptor',
-    'ShapeEmbedder'
-]
+__all__ = ["BackgroundRemover", "ContourExtractor", "ShapeDescriptor", "ShapeEmbedder"]

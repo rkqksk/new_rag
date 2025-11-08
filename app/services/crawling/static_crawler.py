@@ -5,10 +5,10 @@ Fast crawling for static HTML websites (no JavaScript).
 """
 
 import logging
-from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List
-from urllib.parse import urljoin, urlparse
 import random
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from urllib.parse import urljoin, urlparse
 
 import httpx
 from bs4 import BeautifulSoup
@@ -53,10 +53,10 @@ class StaticCrawler:
     """
 
     DEFAULT_USER_AGENTS = [
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0',
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15',
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.1 Safari/605.1.15",
     ]
 
     def __init__(self, config: Optional[StaticCrawlerConfig] = None):
@@ -68,20 +68,22 @@ class StaticCrawler:
 
         # User agent
         if self.config.user_agent:
-            headers['User-Agent'] = self.config.user_agent
+            headers["User-Agent"] = self.config.user_agent
         else:
             # Random user agent for anti-detection
-            headers['User-Agent'] = random.choice(self.DEFAULT_USER_AGENTS)
+            headers["User-Agent"] = random.choice(self.DEFAULT_USER_AGENTS)
 
         # Common headers to appear more human
-        headers.update({
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Accept-Language': 'en-US,en;q=0.5',
-            'Accept-Encoding': 'gzip, deflate, br',
-            'DNT': '1',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-        })
+        headers.update(
+            {
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.5",
+                "Accept-Encoding": "gzip, deflate, br",
+                "DNT": "1",
+                "Connection": "keep-alive",
+                "Upgrade-Insecure-Requests": "1",
+            }
+        )
 
         # Extra headers
         if self.config.extra_headers:
@@ -94,7 +96,7 @@ class StaticCrawler:
         url: str,
         method: str = "GET",
         data: Optional[Dict[str, Any]] = None,
-        parse_html: bool = True
+        parse_html: bool = True,
     ) -> Dict[str, Any]:
         """
         Crawl a static website
@@ -116,18 +118,20 @@ class StaticCrawler:
         headers = self._get_headers()
 
         client_kwargs = {
-            'timeout': self.config.timeout,
-            'follow_redirects': self.config.follow_redirects,
-            'verify': self.config.verify_ssl,
+            "timeout": self.config.timeout,
+            "follow_redirects": self.config.follow_redirects,
+            "verify": self.config.verify_ssl,
         }
 
         if self.config.proxy:
-            client_kwargs['proxies'] = self.config.proxy
+            client_kwargs["proxies"] = self.config.proxy
 
         async with httpx.AsyncClient(**client_kwargs) as client:
             for attempt in range(self.config.max_retries):
                 try:
-                    logger.info(f"Crawling static site: {url} (attempt {attempt + 1}/{self.config.max_retries})")
+                    logger.info(
+                        f"Crawling static site: {url} (attempt {attempt + 1}/{self.config.max_retries})"
+                    )
 
                     if method.upper() == "GET":
                         response = await client.get(url, headers=headers)
@@ -141,24 +145,26 @@ class StaticCrawler:
                     # Parse HTML if requested
                     content = response.text
                     if parse_html:
-                        soup = BeautifulSoup(content, 'html.parser')
+                        soup = BeautifulSoup(content, "html.parser")
                         content = soup
 
                     result = {
-                        'url': str(response.url),
-                        'original_url': url,
-                        'content': content,
-                        'text': response.text,
-                        'status_code': response.status_code,
-                        'headers': dict(response.headers),
-                        'encoding': response.encoding,
-                        'metadata': {
-                            'method': method,
-                            'attempts': attempt + 1,
-                        }
+                        "url": str(response.url),
+                        "original_url": url,
+                        "content": content,
+                        "text": response.text,
+                        "status_code": response.status_code,
+                        "headers": dict(response.headers),
+                        "encoding": response.encoding,
+                        "metadata": {
+                            "method": method,
+                            "attempts": attempt + 1,
+                        },
                     }
 
-                    logger.info(f"Successfully crawled: {url} (status: {response.status_code}, length: {len(response.text)} chars)")
+                    logger.info(
+                        f"Successfully crawled: {url} (status: {response.status_code}, length: {len(response.text)} chars)"
+                    )
                     return result
 
                 except httpx.HTTPStatusError as e:
@@ -182,10 +188,7 @@ class StaticCrawler:
         raise Exception(f"Failed to crawl {url} after {self.config.max_retries} attempts")
 
     async def crawl_multiple(
-        self,
-        urls: List[str],
-        concurrent_limit: int = 5,
-        **kwargs
+        self, urls: List[str], concurrent_limit: int = 5, **kwargs
     ) -> List[Dict[str, Any]]:
         """
         Crawl multiple URLs concurrently
@@ -208,11 +211,7 @@ class StaticCrawler:
                     return await self.crawl(url, **kwargs)
                 except Exception as e:
                     logger.error(f"Error crawling {url}: {e}")
-                    return {
-                        'url': url,
-                        'error': str(e),
-                        'content': None
-                    }
+                    return {"url": url, "error": str(e), "content": None}
 
         tasks = [crawl_with_semaphore(url) for url in urls]
         results = await asyncio.gather(*tasks)
@@ -220,10 +219,7 @@ class StaticCrawler:
         return results
 
     async def extract_links(
-        self,
-        url: str,
-        selector: str = "a[href]",
-        absolute: bool = True
+        self, url: str, selector: str = "a[href]", absolute: bool = True
     ) -> List[str]:
         """
         Extract links from a page
@@ -237,11 +233,11 @@ class StaticCrawler:
             List of URLs
         """
         result = await self.crawl(url, parse_html=True)
-        soup = result['content']
+        soup = result["content"]
 
         links = []
         for link in soup.select(selector):
-            href = link.get('href')
+            href = link.get("href")
             if href:
                 if absolute:
                     href = urljoin(url, href)
@@ -261,11 +257,11 @@ class StaticCrawler:
             Extracted text
         """
         result = await self.crawl(url, parse_html=True)
-        soup = result['content']
+        soup = result["content"]
 
         if selector:
             elements = soup.select(selector)
-            return '\n\n'.join(elem.get_text(strip=True) for elem in elements)
+            return "\n\n".join(elem.get_text(strip=True) for elem in elements)
         else:
             return soup.get_text(strip=True)
 
@@ -283,21 +279,20 @@ class StaticCrawler:
         headers = self._get_headers()
 
         async with httpx.AsyncClient(
-            timeout=self.config.timeout,
-            follow_redirects=self.config.follow_redirects
+            timeout=self.config.timeout, follow_redirects=self.config.follow_redirects
         ) as client:
             response = await client.get(url, headers=headers)
             response.raise_for_status()
 
-            with open(output_path, 'wb') as f:
+            with open(output_path, "wb") as f:
                 f.write(response.content)
 
             return {
-                'url': url,
-                'output_path': output_path,
-                'size': len(response.content),
-                'content_type': response.headers.get('content-type'),
-                'status_code': response.status_code
+                "url": url,
+                "output_path": output_path,
+                "size": len(response.content),
+                "content_type": response.headers.get("content-type"),
+                "status_code": response.status_code,
             }
 
 

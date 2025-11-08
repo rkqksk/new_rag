@@ -3,14 +3,14 @@ Server-Sent Events (SSE) Manager for Phase 8.1
 Real-time streaming for search results, pipeline progress, and analytics
 """
 
-import logging
 import asyncio
 import json
-from typing import Dict, List, Any, Optional, AsyncGenerator, Callable
-from dataclasses import dataclass, asdict
-from datetime import datetime
-from collections import defaultdict
+import logging
 import uuid
+from collections import defaultdict
+from dataclasses import asdict, dataclass
+from datetime import datetime
+from typing import Any, AsyncGenerator, Callable, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SSEEvent:
     """Server-Sent Event"""
+
     event: str  # Event type (e.g., 'search_result', 'pipeline_update')
     data: Dict[str, Any]  # Event data
     id: Optional[str] = None  # Event ID
@@ -120,11 +121,7 @@ class SSEManager:
         ... )
     """
 
-    def __init__(
-        self,
-        keepalive_interval: int = 30,  # seconds
-        max_queue_size: int = 100
-    ):
+    def __init__(self, keepalive_interval: int = 30, max_queue_size: int = 100):  # seconds
         """
         Initialize SSE Manager
 
@@ -138,11 +135,7 @@ class SSEManager:
         self.keepalive_interval = keepalive_interval
         self.max_queue_size = max_queue_size
 
-        self.stats = {
-            'total_connections': 0,
-            'total_events_sent': 0,
-            'active_connections': 0
-        }
+        self.stats = {"total_connections": 0, "total_events_sent": 0, "active_connections": 0}
 
         # Start keepalive task
         self.keepalive_task = None
@@ -150,9 +143,7 @@ class SSEManager:
         logger.info("✅ SSEManager initialized")
 
     async def subscribe(
-        self,
-        client_id: Optional[str] = None,
-        channels: Optional[List[str]] = None
+        self, client_id: Optional[str] = None, channels: Optional[List[str]] = None
     ) -> AsyncGenerator[SSEEvent, None]:
         """
         Subscribe to SSE events
@@ -185,8 +176,8 @@ class SSEManager:
             self.channels[channel].append(client_id)
 
         # Update stats
-        self.stats['total_connections'] += 1
-        self.stats['active_connections'] = len(self.connections)
+        self.stats["total_connections"] += 1
+        self.stats["active_connections"] = len(self.connections)
 
         logger.info(f"✅ Client connected: {client_id} (channels: {channels})")
 
@@ -200,7 +191,7 @@ class SSEManager:
                 event = await connection.receive()
                 yield event
 
-                self.stats['total_events_sent'] += 1
+                self.stats["total_events_sent"] += 1
 
         except asyncio.CancelledError:
             logger.info(f"Client disconnected: {client_id}")
@@ -209,11 +200,7 @@ class SSEManager:
             await self._cleanup_connection(client_id)
 
     async def emit(
-        self,
-        channel: str,
-        event: str,
-        data: Dict[str, Any],
-        event_id: Optional[str] = None
+        self, channel: str, event: str, data: Dict[str, Any], event_id: Optional[str] = None
     ):
         """
         Emit event to channel
@@ -239,11 +226,7 @@ class SSEManager:
             return
 
         # Create event
-        sse_event = SSEEvent(
-            event=event,
-            data=data,
-            id=event_id or str(uuid.uuid4())
-        )
+        sse_event = SSEEvent(event=event, data=data, id=event_id or str(uuid.uuid4()))
 
         # Send to all subscribed clients
         for client_id in client_ids:
@@ -256,12 +239,7 @@ class SSEManager:
 
         logger.debug(f"Emitted event '{event}' to {len(client_ids)} clients on channel '{channel}'")
 
-    async def emit_to_client(
-        self,
-        client_id: str,
-        event: str,
-        data: Dict[str, Any]
-    ):
+    async def emit_to_client(self, client_id: str, event: str, data: Dict[str, Any]):
         """
         Emit event to specific client
 
@@ -282,11 +260,7 @@ class SSEManager:
             logger.warning(f"Client not found: {client_id}")
             return
 
-        sse_event = SSEEvent(
-            event=event,
-            data=data,
-            id=str(uuid.uuid4())
-        )
+        sse_event = SSEEvent(event=event, data=data, id=str(uuid.uuid4()))
 
         await connection.send(sse_event)
 
@@ -298,8 +272,7 @@ class SSEManager:
 
                 # Send keepalive to all connections
                 keepalive_event = SSEEvent(
-                    event="keepalive",
-                    data={"timestamp": datetime.now().isoformat()}
+                    event="keepalive", data={"timestamp": datetime.now().isoformat()}
                 )
 
                 for client_id, connection in list(self.connections.items()):
@@ -325,7 +298,7 @@ class SSEManager:
                     self.channels[channel].remove(client_id)
 
             # Update stats
-            self.stats['active_connections'] = len(self.connections)
+            self.stats["active_connections"] = len(self.connections)
 
             logger.debug(f"Cleaned up connection: {client_id}")
 
@@ -333,10 +306,7 @@ class SSEManager:
         """Get manager statistics"""
         return {
             **self.stats,
-            'channels': {
-                channel: len(clients)
-                for channel, clients in self.channels.items()
-            }
+            "channels": {channel: len(clients) for channel, clients in self.channels.items()},
         }
 
     def get_active_clients(self, channel: Optional[str] = None) -> List[str]:

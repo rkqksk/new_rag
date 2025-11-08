@@ -1,4 +1,3 @@
-```python
 # tests/unit/test_logging.py
 """
 app/core/logging 모듈 테스트

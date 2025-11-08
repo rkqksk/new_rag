@@ -20,13 +20,13 @@ NEVER use for unauthorized access!
 """
 
 import asyncio
-import logging
-from dataclasses import dataclass
-from enum import Enum
-from typing import Optional, Dict, Any, Callable
 import base64
 import hashlib
+import logging
 import secrets
+from dataclasses import dataclass
+from enum import Enum
+from typing import Any, Callable, Dict, Optional
 
 import httpx
 import pyotp
@@ -37,6 +37,7 @@ logger = logging.getLogger(__name__)
 
 class AuthType(Enum):
     """Authentication method types"""
+
     BASIC = "basic"  # HTTP Basic Auth
     FORM = "form"  # Form-based login
     OAUTH = "oauth"  # OAuth 2.0
@@ -106,7 +107,7 @@ class AuthenticationManager:
         auth_type: AuthType,
         credentials: AuthCredentials,
         login_url: Optional[str] = None,
-        form_selectors: Optional[Dict[str, str]] = None
+        form_selectors: Optional[Dict[str, str]] = None,
     ) -> httpx.AsyncClient:
         """
         Authenticate and return session
@@ -166,7 +167,7 @@ class AuthenticationManager:
         self,
         credentials: AuthCredentials,
         login_url: str,
-        form_selectors: Optional[Dict[str, str]] = None
+        form_selectors: Optional[Dict[str, str]] = None,
     ) -> httpx.AsyncClient:
         """
         Form-based login with cookies
@@ -183,9 +184,9 @@ class AuthenticationManager:
 
         # Default selectors
         selectors = form_selectors or {}
-        username_field = selectors.get('username_field', 'username')
-        password_field = selectors.get('password_field', 'password')
-        submit_url = selectors.get('submit_url', login_url)
+        username_field = selectors.get("username_field", "username")
+        password_field = selectors.get("password_field", "password")
+        submit_url = selectors.get("submit_url", login_url)
 
         # Create session
         client = httpx.AsyncClient()
@@ -194,17 +195,14 @@ class AuthenticationManager:
             # Submit login form
             response = await client.post(
                 submit_url,
-                data={
-                    username_field: credentials.username,
-                    password_field: credentials.password
-                },
-                follow_redirects=True
+                data={username_field: credentials.username, password_field: credentials.password},
+                follow_redirects=True,
             )
 
             response.raise_for_status()
 
             # Check if login succeeded (basic check)
-            if 'login' in response.url.path.lower() and response.status_code == 200:
+            if "login" in response.url.path.lower() and response.status_code == 200:
                 logger.warning("Login might have failed (still on login page)")
             else:
                 logger.info(f"Form login successful (redirected to: {response.url})")
@@ -223,23 +221,32 @@ class AuthenticationManager:
         Note: This is a simplified OAuth flow.
         Full implementation requires a web server for redirect callback.
         """
-        if not all([credentials.client_id, credentials.client_secret,
-                   credentials.redirect_uri, credentials.auth_url, credentials.token_url]):
-            raise ValueError("OAuth requires: client_id, client_secret, redirect_uri, auth_url, token_url")
+        if not all(
+            [
+                credentials.client_id,
+                credentials.client_secret,
+                credentials.redirect_uri,
+                credentials.auth_url,
+                credentials.token_url,
+            ]
+        ):
+            raise ValueError(
+                "OAuth requires: client_id, client_secret, redirect_uri, auth_url, token_url"
+            )
 
         logger.info("Starting OAuth 2.0 flow")
 
         oauth = OAuth2Session(
-            credentials.client_id,
-            redirect_uri=credentials.redirect_uri,
-            scope=credentials.scope
+            credentials.client_id, redirect_uri=credentials.redirect_uri, scope=credentials.scope
         )
 
         # Get authorization URL
         authorization_url, state = oauth.authorization_url(credentials.auth_url)
 
         logger.info(f"Authorization URL: {authorization_url}")
-        logger.warning("⚠️  OAuth flow requires manual authorization. Visit URL and get callback code.")
+        logger.warning(
+            "⚠️  OAuth flow requires manual authorization. Visit URL and get callback code."
+        )
 
         # In a real implementation, you'd:
         # 1. Open authorization_url in browser
@@ -258,7 +265,7 @@ class AuthenticationManager:
         self,
         credentials: AuthCredentials,
         login_url: str,
-        form_selectors: Optional[Dict[str, str]] = None
+        form_selectors: Optional[Dict[str, str]] = None,
     ) -> httpx.AsyncClient:
         """
         TOTP (2FA) authentication
@@ -287,14 +294,12 @@ class AuthenticationManager:
         client = await self._form_auth(credentials, login_url, selectors)
 
         # Then submit TOTP code
-        totp_url = selectors.get('totp_url', login_url)
-        totp_field = selectors.get('totp_field', 'totp_code')
+        totp_url = selectors.get("totp_url", login_url)
+        totp_field = selectors.get("totp_field", "totp_code")
 
         try:
             response = await client.post(
-                totp_url,
-                data={totp_field: totp_code},
-                follow_redirects=True
+                totp_url, data={totp_field: totp_code}, follow_redirects=True
             )
 
             response.raise_for_status()
@@ -335,7 +340,7 @@ class AuthenticationManager:
 
         logger.info("Creating bearer token authenticated session")
 
-        headers = {'Authorization': f'Bearer {credentials.bearer_token}'}
+        headers = {"Authorization": f"Bearer {credentials.bearer_token}"}
 
         if credentials.extra_headers:
             headers.update(credentials.extra_headers)
@@ -378,7 +383,9 @@ class AuthenticationManager:
         """
         secret = pyotp.random_base32()
         logger.info(f"Generated TOTP secret: {secret}")
-        logger.warning("⚠️  Keep this secret secure! Store in environment variable or secrets manager.")
+        logger.warning(
+            "⚠️  Keep this secret secure! Store in environment variable or secrets manager."
+        )
         return secret
 
     @staticmethod
@@ -399,10 +406,7 @@ class AuthenticationManager:
         return uri
 
     async def verify_authentication(
-        self,
-        client: httpx.AsyncClient,
-        test_url: str,
-        expected_status: int = 200
+        self, client: httpx.AsyncClient, test_url: str, expected_status: int = 200
     ) -> bool:
         """
         Verify authentication is working
@@ -422,7 +426,9 @@ class AuthenticationManager:
             if authenticated:
                 logger.info(f"Authentication verified: {test_url} returned {response.status_code}")
             else:
-                logger.warning(f"Authentication may have failed: {test_url} returned {response.status_code}")
+                logger.warning(
+                    f"Authentication may have failed: {test_url} returned {response.status_code}"
+                )
 
             return authenticated
 
@@ -445,10 +451,7 @@ async def authenticate_basic(username: str, password: str) -> httpx.AsyncClient:
     return await auth_manager.authenticate(AuthType.BASIC, credentials)
 
 
-async def authenticate_api_key(
-    api_key: str,
-    header_name: str = "X-API-Key"
-) -> httpx.AsyncClient:
+async def authenticate_api_key(api_key: str, header_name: str = "X-API-Key") -> httpx.AsyncClient:
     """
     Quick API key authentication (RECOMMENDED)
 

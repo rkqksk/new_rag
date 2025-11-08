@@ -54,9 +54,7 @@ class ContextStore:
         self.redis_client = redis_client
         self.ttl = ttl
         self.key_prefix = key_prefix
-        logger.info(
-            f"Context store initialized with TTL={ttl}s, prefix={key_prefix}"
-        )
+        logger.info(f"Context store initialized with TTL={ttl}s, prefix={key_prefix}")
 
     def _get_key(self, session_id: str) -> str:
         """Generate Redis key for session.
@@ -95,10 +93,7 @@ class ContextStore:
 
             await self.redis_client.setex(key, self.ttl, serialized)
 
-            logger.info(
-                f"Saved context for session {session_id} "
-                f"({len(context.turns)} turns)"
-            )
+            logger.info(f"Saved context for session {session_id} " f"({len(context.turns)} turns)")
             return True
 
         except Exception as e:
@@ -131,8 +126,7 @@ class ContextStore:
             context = ConversationContext.model_validate_json(serialized)
 
             logger.info(
-                f"Retrieved context for session {session_id} "
-                f"({len(context.turns)} turns)"
+                f"Retrieved context for session {session_id} " f"({len(context.turns)} turns)"
             )
             return context
 

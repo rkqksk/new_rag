@@ -4,11 +4,12 @@ Prometheus Metrics Validation Tests
 Tests that Prometheus metrics are properly collected during request execution.
 Validates metrics emission, labeling, and data integrity.
 """
-import pytest
-from unittest.mock import Mock, AsyncMock, patch
-from datetime import datetime
-import re
 
+import re
+from datetime import datetime
+from unittest.mock import AsyncMock, Mock, patch
+
+import pytest
 
 # ============================================================
 # Metrics Initialization Tests
@@ -22,18 +23,19 @@ class TestMetricsInitialization:
     def test_metrics_registry_initialized(self):
         """Test Prometheus registry is initialized"""
         from app.core.metrics import REGISTRY
+
         assert REGISTRY is not None
 
     def test_all_metrics_defined(self):
         """Test all required metrics are defined"""
         from app.core.metrics import (
-            http_requests_total,
-            http_request_duration_seconds,
+            active_requests,
             embedding_generation_total,
-            vector_search_total,
-            llm_query_total,
             errors_total,
-            active_requests
+            http_request_duration_seconds,
+            http_requests_total,
+            llm_query_total,
+            vector_search_total,
         )
 
         # All metrics should be importable and initialized
@@ -47,11 +49,11 @@ class TestMetricsInitialization:
 
     def test_metrics_have_required_attributes(self):
         """Test metrics have required Prometheus attributes"""
-        from app.core.metrics import http_requests_total, http_request_duration_seconds
+        from app.core.metrics import http_request_duration_seconds, http_requests_total
 
         # Counter and Histogram metrics should have labels method
-        assert hasattr(http_requests_total, 'labels')
-        assert hasattr(http_request_duration_seconds, 'observe')
+        assert hasattr(http_requests_total, "labels")
+        assert hasattr(http_request_duration_seconds, "observe")
 
     def test_metrics_registry_collectors(self):
         """Test metrics are registered with Prometheus registry"""
@@ -75,7 +77,7 @@ class TestMetricsCollection:
         from app.core.metrics import http_requests_total
 
         # Metrics should support labels for method and status
-        assert hasattr(http_requests_total, 'labels')
+        assert hasattr(http_requests_total, "labels")
         # Should be callable
         assert callable(http_requests_total.labels)
 
@@ -83,28 +85,28 @@ class TestMetricsCollection:
         """Test embedding metrics have proper structure"""
         from app.core.metrics import embedding_generation_total
 
-        assert hasattr(embedding_generation_total, 'labels')
+        assert hasattr(embedding_generation_total, "labels")
         assert callable(embedding_generation_total.labels)
 
     def test_vector_search_metrics_structure(self):
         """Test vector search metrics have proper structure"""
         from app.core.metrics import vector_search_total
 
-        assert hasattr(vector_search_total, 'labels')
+        assert hasattr(vector_search_total, "labels")
         assert callable(vector_search_total.labels)
 
     def test_llm_query_metrics_structure(self):
         """Test LLM query metrics have proper structure"""
         from app.core.metrics import llm_query_total
 
-        assert hasattr(llm_query_total, 'labels')
+        assert hasattr(llm_query_total, "labels")
         assert callable(llm_query_total.labels)
 
     def test_error_metrics_structure(self):
         """Test error metrics have proper structure"""
         from app.core.metrics import errors_total
 
-        assert hasattr(errors_total, 'labels')
+        assert hasattr(errors_total, "labels")
         assert callable(errors_total.labels)
 
 
@@ -180,7 +182,7 @@ class TestMetricsInstrumentation:
         metric = http_requests_total.labels(method="GET", endpoint="/health", status="200")
 
         # Should support inc() method for counters
-        assert hasattr(metric, 'inc')
+        assert hasattr(metric, "inc")
         assert callable(metric.inc)
 
     def test_histogram_observe_simulation(self):
@@ -191,7 +193,7 @@ class TestMetricsInstrumentation:
         metric = http_request_duration_seconds.labels(method="GET", endpoint="/health")
 
         # Should support observe() method for histograms
-        assert hasattr(metric, 'observe')
+        assert hasattr(metric, "observe")
         assert callable(metric.observe)
 
     def test_gauge_set_simulation(self):
@@ -199,7 +201,7 @@ class TestMetricsInstrumentation:
         from app.core.metrics import active_requests
 
         # Gauge should support set() method
-        assert hasattr(active_requests, 'set')
+        assert hasattr(active_requests, "set")
         assert callable(active_requests.set)
 
     def test_gauge_inc_dec_simulation(self):
@@ -207,8 +209,8 @@ class TestMetricsInstrumentation:
         from app.core.metrics import active_requests
 
         # Gauge should support inc() and dec()
-        assert hasattr(active_requests, 'inc')
-        assert hasattr(active_requests, 'dec')
+        assert hasattr(active_requests, "inc")
+        assert hasattr(active_requests, "dec")
         assert callable(active_requests.inc)
         assert callable(active_requests.dec)
 
@@ -233,13 +235,14 @@ class TestMetricsMiddleware:
         """Test middleware has dispatch method for request processing"""
         from app.core.middleware import MetricsMiddleware
 
-        assert hasattr(MetricsMiddleware, 'dispatch')
+        assert hasattr(MetricsMiddleware, "dispatch")
         assert callable(MetricsMiddleware.dispatch)
 
     def test_middleware_dispatch_is_async(self):
         """Test middleware dispatch is async"""
-        from app.core.middleware import MetricsMiddleware
         import inspect
+
+        from app.core.middleware import MetricsMiddleware
 
         # dispatch should be async
         assert inspect.iscoroutinefunction(MetricsMiddleware.dispatch)
@@ -256,8 +259,9 @@ class TestMetricsAggregation:
 
     def test_prometheus_format_export(self):
         """Test metrics can be exported in Prometheus format"""
-        from app.core.metrics import REGISTRY
         from prometheus_client import generate_latest
+
+        from app.core.metrics import REGISTRY
 
         # Should generate Prometheus text format
         metrics_output = generate_latest(REGISTRY)
@@ -268,14 +272,15 @@ class TestMetricsAggregation:
 
     def test_prometheus_format_contains_metrics(self):
         """Test exported metrics contain expected metric names"""
-        from app.core.metrics import REGISTRY
         from prometheus_client import generate_latest
 
-        metrics_output = generate_latest(REGISTRY).decode('utf-8')
+        from app.core.metrics import REGISTRY
+
+        metrics_output = generate_latest(REGISTRY).decode("utf-8")
 
         # Should contain metric declarations
-        assert 'http_requests_total' in metrics_output or len(metrics_output) > 0
-        assert 'HELP' in metrics_output or len(metrics_output) > 0
+        assert "http_requests_total" in metrics_output or len(metrics_output) > 0
+        assert "HELP" in metrics_output or len(metrics_output) > 0
 
 
 # ============================================================
@@ -294,19 +299,19 @@ class TestMetricsDataIntegrity:
         metric = http_requests_total.labels(method="POST", endpoint="/api/query", status="201")
 
         # Counters should only support inc()
-        assert hasattr(metric, 'inc')
+        assert hasattr(metric, "inc")
         # Should not have dec() or set() (those are for gauges)
-        assert not hasattr(metric, 'dec')
-        assert not hasattr(metric, 'set')
+        assert not hasattr(metric, "dec")
+        assert not hasattr(metric, "set")
 
     def test_gauge_can_change_direction(self):
         """Test gauge metrics can increase and decrease"""
         from app.core.metrics import active_requests
 
         # Gauges support inc, dec, and set
-        assert hasattr(active_requests, 'inc')
-        assert hasattr(active_requests, 'dec')
-        assert hasattr(active_requests, 'set')
+        assert hasattr(active_requests, "inc")
+        assert hasattr(active_requests, "dec")
+        assert hasattr(active_requests, "set")
 
     def test_histogram_tracks_duration(self):
         """Test histogram metrics track duration values"""
@@ -315,7 +320,7 @@ class TestMetricsDataIntegrity:
         metric = http_request_duration_seconds.labels(method="GET", endpoint="/health")
 
         # Histogram should track observations
-        assert hasattr(metric, 'observe')
+        assert hasattr(metric, "observe")
         assert callable(metric.observe)
 
 
@@ -331,11 +336,11 @@ class TestMetricsPipelineIntegration:
     def test_metrics_cover_all_pipeline_stages(self):
         """Test metrics exist for all pipeline stages"""
         from app.core.metrics import (
-            http_requests_total,
             embedding_generation_total,
-            vector_search_total,
+            errors_total,
+            http_requests_total,
             llm_query_total,
-            errors_total
+            vector_search_total,
         )
 
         pipeline_stages = {
@@ -343,7 +348,7 @@ class TestMetricsPipelineIntegration:
             "Embedding": embedding_generation_total,
             "Search": vector_search_total,
             "LLM": llm_query_total,
-            "Error": errors_total
+            "Error": errors_total,
         }
 
         # All stages should have metrics
@@ -353,10 +358,10 @@ class TestMetricsPipelineIntegration:
     def test_metrics_enable_monitoring(self):
         """Test metrics enable comprehensive monitoring"""
         from app.core.metrics import (
-            http_requests_total,
-            http_request_duration_seconds,
             active_requests,
-            errors_total
+            errors_total,
+            http_request_duration_seconds,
+            http_requests_total,
         )
 
         # Should support monitoring request volume, latency, concurrency, and errors
@@ -364,7 +369,7 @@ class TestMetricsPipelineIntegration:
             "volume": http_requests_total,
             "latency": http_request_duration_seconds,
             "concurrency": active_requests,
-            "errors": errors_total
+            "errors": errors_total,
         }
 
         for capability, metric in monitoring_capabilities.items():
@@ -382,8 +387,9 @@ class TestMetricsPerformance:
 
     def test_metrics_registry_responsiveness(self):
         """Test metrics registry responds quickly"""
-        from app.core.metrics import REGISTRY
         import time
+
+        from app.core.metrics import REGISTRY
 
         start = time.time()
         # Access registry
@@ -395,8 +401,9 @@ class TestMetricsPerformance:
 
     def test_counter_increment_speed(self):
         """Test counter increment is fast"""
-        from app.core.metrics import http_requests_total
         import time
+
+        from app.core.metrics import http_requests_total
 
         metric = http_requests_total.labels(method="GET", endpoint="/health", status="200")
 
@@ -462,27 +469,27 @@ class TestMetricsConfiguration:
         # Registry should be initialized
         assert REGISTRY is not None
         # Should be able to collect metrics
-        assert hasattr(REGISTRY, 'collect')
+        assert hasattr(REGISTRY, "collect")
 
     def test_metrics_naming_convention(self):
         """Test metrics follow Prometheus naming conventions"""
         from app.core.metrics import (
-            http_requests_total,
+            embedding_generation_total,
             http_request_duration_seconds,
-            embedding_generation_total
+            http_requests_total,
         )
 
         # Prometheus names should be snake_case and have appropriate suffixes
         # _total for counters, _seconds for histograms, no suffix for gauges
-        assert hasattr(http_requests_total, '_name')
-        assert hasattr(http_request_duration_seconds, '_name')
-        assert hasattr(embedding_generation_total, '_name')
+        assert hasattr(http_requests_total, "_name")
+        assert hasattr(http_request_duration_seconds, "_name")
+        assert hasattr(embedding_generation_total, "_name")
 
     def test_metrics_documentation(self):
         """Test metrics have documentation"""
         from app.core.metrics import http_requests_total
 
         # Metrics should have descriptions
-        assert hasattr(http_requests_total, '_documentation')
+        assert hasattr(http_requests_total, "_documentation")
         # Documentation should not be empty
         assert http_requests_total._documentation
