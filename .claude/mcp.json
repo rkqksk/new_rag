@@ -95,6 +95,14 @@
       "skills": ["frontend-platform"],
       "enabled": true,
       "note": "Provides access to 50+ shadcn/ui components with documentation and examples"
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "description": "Chrome DevTools for AI debugging - control & inspect live Chrome browser (DOM, CSS, Console, Performance, Network)",
+      "skills": ["debugging-expert", "frontend-platform", "web-scraping-expert"],
+      "enabled": true,
+      "note": "Requires Node.js ≥22 and Chrome browser - AI can debug, test, and fix code in real browser"
     }
   },
   "metadata": {
@@ -104,13 +112,14 @@
     "documentation": "https://github.com/modelcontextprotocol/servers"
   },
   "skillMappings": {
-    "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "tavily", "brave-search"],
+    "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "tavily", "brave-search", "chrome-devtools"],
     "web-crawler-pipeline": ["puppeteer", "fetch", "filesystem"],
     "data-collector": ["puppeteer", "fetch", "postgres", "sqlite", "filesystem", "tavily", "brave-search"],
     "embedding-expert": ["filesystem"],
     "chunking-expert": ["filesystem"],
     "saas-platform": ["postgres", "filesystem"],
-    "frontend-platform": ["shadcn-ui", "filesystem", "git"],
+    "frontend-platform": ["shadcn-ui", "filesystem", "git", "chrome-devtools"],
+    "debugging-expert": ["chrome-devtools", "filesystem", "git"],
     "manufacturing-expert": ["filesystem"],
     "packaging-expert": ["filesystem"],
     "rag-pipeline": ["filesystem", "postgres"],
@@ -125,7 +134,7 @@
   },
   "notes": {
     "installation": "MCP servers are auto-installed via npx when needed",
-    "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui"],
+    "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools"],
     "requires_api_keys": ["github", "brave-search", "tavily", "google-drive"],
     "requires_configuration": ["postgres", "sqlite"],
     "documentation": {

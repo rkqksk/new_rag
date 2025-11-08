@@ -195,6 +195,7 @@ git status && git branch
 | **data-collector** | ✅ | collect, process, schedule, monitor | Universal data collection |
 | **saas-platform** | ✅ | auth, billing, usage, tenants | SaaS management |
 | **frontend-platform** | ✅ | design-system, create-page, component | Monochrome UI design system |
+| **debugging-expert** | ✅ **NEW** | inspect, console-log, network-log, performance | Live browser debugging with Chrome DevTools |
 
 ### Domain Experts
 
@@ -221,6 +222,7 @@ git status && git branch
 | **puppeteer** | ✅ | Browser automation (headless Chrome) | web-scraping-expert, data-collector |
 | **fetch** | ✅ | Web content fetching | web-scraping-expert, data-collector |
 | **shadcn-ui** | ✅ | shadcn/ui component library (React, Tailwind) | frontend-platform |
+| **chrome-devtools** | ✅ | Live Chrome debugging (DOM, Console, Network, Performance) | debugging-expert, frontend-platform, web-scraping |
 | postgres | 🔧 | PostgreSQL database access | saas-platform, data-collector |
 | github | 🔧 | GitHub API integration | pcb-expert, mold-expert |
 | **tavily** | 🔧 ⭐ | AI-optimized search (real-time, content extraction) | marketing-expert, business-expert, web-scraping |
@@ -240,6 +242,7 @@ git status && git branch
 - `puppeteer` - Web scraping automation
 - `fetch` - Web content fetching
 - `shadcn-ui` - React component library (50+ components)
+- `chrome-devtools` - Live browser debugging (requires Node.js ≥22)
 
 **Requires API Keys/Setup**:
 ```bash
@@ -265,13 +268,14 @@ export GOOGLE_DRIVE_CREDENTIALS="/path/to/credentials.json"
 ### Skill-to-MCP Mappings
 
 **Web Scraping & Data Collection**:
-- `web-scraping-expert` → puppeteer, fetch, tavily, brave-search, filesystem
+- `web-scraping-expert` → puppeteer, fetch, tavily, brave-search, chrome-devtools, filesystem
 - `web-crawler-pipeline` → puppeteer, fetch, filesystem
 - `data-collector` → puppeteer, fetch, tavily, brave-search, postgres, sqlite, filesystem
 
 **Platform & Infrastructure**:
 - `saas-platform` → postgres, filesystem
-- `frontend-platform` → shadcn-ui, filesystem, git
+- `frontend-platform` → shadcn-ui, chrome-devtools, filesystem, git
+- `debugging-expert` → chrome-devtools, filesystem, git
 
 **Domain Experts**:
 - `marketing-expert` → tavily, brave-search, google-drive, filesystem
