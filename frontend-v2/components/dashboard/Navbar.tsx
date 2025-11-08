@@ -1,8 +1,8 @@
 "use client"
 
-import { Bell, Search } from "lucide-react"
+import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+import { NotificationCenter } from "@/components/dashboard/NotificationCenter"
 
 interface NavbarProps {
   title: string
@@ -29,15 +29,7 @@ export function Navbar({ title, subtitle }: NavbarProps) {
         </div>
 
         {/* Notifications */}
-        <button className="relative rounded-lg p-2 text-stone-400 transition-colors hover:bg-stone-900 hover:text-stone-100">
-          <Bell className="h-5 w-5" />
-          <Badge
-            variant="destructive"
-            className="absolute -right-1 -top-1 h-5 w-5 rounded-full p-0 text-xs"
-          >
-            3
-          </Badge>
-        </button>
+        <NotificationCenter />
       </div>
     </div>
   )
