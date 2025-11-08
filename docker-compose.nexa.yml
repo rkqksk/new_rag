@@ -1,0 +1,31 @@
+# Docker Compose - NexaAI Integration
+# Extends docker-compose.yml with NexaAI server
+
+version: '3.8'
+
+services:
+  # NexaAI Server (Optional - can also run natively)
+  # Note: NexaAI server best runs natively with nexa CLI
+  # This is a placeholder for custom Docker setup
+
+  api:
+    environment:
+      # NexaAI Configuration
+      - NEXA_ENABLED=true
+      - NEXA_BASE_URL=http://host.docker.internal:8080/v1
+      - NEXA_DEFAULT_MODEL=Qwen3-1.7B
+      - NEXA_VISION_MODEL=Qwen3-VL-4B-Instruct
+      - NEXA_EMBEDDING_MODEL=EmbeddingGemma
+
+      # Model Router Configuration
+      - MODEL_ROUTER_ENABLED=true
+      - MODEL_ROUTER_SIMPLE_THRESHOLD=0.3
+      - MODEL_ROUTER_COMPLEX_THRESHOLD=0.7
+
+      # Engine Availability
+      - ENABLE_NEXA=true
+      - ENABLE_OLLAMA=true
+
+    extra_hosts:
+      # Allow container to access host services
+      - "host.docker.internal:host-gateway"
