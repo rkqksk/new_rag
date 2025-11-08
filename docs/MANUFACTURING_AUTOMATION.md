@@ -1,6 +1,47 @@
 # Manufacturing Automation & Vision Inspection System
 
+**Version**: v5.0.0
+**Symbol Domain**: §manufacturing.*
 **Edge AI-powered quality control with YOLO + Jetson Orin Nano/Raspberry Pi**
+
+---
+
+## 📍 Symbol Navigation
+
+**Quick Access**: Use these symbols for efficient documentation navigation
+
+| Symbol | Description | Location |
+|--------|-------------|----------|
+| §manufacturing.status | System status & capabilities | SYMBOLS.md |
+| §manufacturing.vision | Vision inspection (YOLOv8/v10) | This document, SYMBOLS.md |
+| §manufacturing.devices | Edge devices (Jetson, Pi) | This document, SYMBOLS.md |
+| §manufacturing.quality | Quality control (SPC) | This document, SYMBOLS.md |
+| §api.endpoints | All Manufacturing API endpoints | API_DOCUMENTATION.md |
+| §rag.core | RAG integration | RAG_ACTIVATION_STRATEGY.md |
+
+**See Also**:
+- **CLAUDE.md**: Quick reference with all symbols
+- **SYMBOLS.md**: Complete symbol map (§manufacturing.* section)
+- **Skills**: `.claude/skills/manufacturing-expert/SKILL.md`
+
+---
+
+## ⚡ Quick Reference (Token-Optimized)
+
+```
+Manufacturing Automation v5.0.0
+├─ Vision: YOLOv8 (80-120 FPS) | YOLOv10 (60-100 FPS) → §manufacturing.vision
+├─ Defects: 7 types (scratch, crack, deformation, etc.) → §manufacturing.vision
+├─ Edge AI: Jetson (120 FPS, TensorRT) | Pi (15 FPS, ONNX) → §manufacturing.devices
+├─ Quality: SPC charts, defect trends, alerts → §manufacturing.quality
+└─ Comm: MQTT (edge→server), REST API → §api.endpoints
+
+Devices:
+• Jetson Orin Nano: $499, 120 FPS, 15W, TensorRT INT8
+• Raspberry Pi 4: $55, 15 FPS, 5W, ONNX Runtime
+```
+
+**💡 Use symbols above to jump to detailed sections in SYMBOLS.md**
 
 ---
 

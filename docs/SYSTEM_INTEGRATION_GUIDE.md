@@ -1,6 +1,60 @@
 # System Integration Guide - Complete Enterprise Platform
 
+**Version**: v5.0.0
+**Symbol Domains**: §arch.*, §rag.*, §saas.*, §collector.*, §manufacturing.*
 **Unified platform: RAG + SaaS + Manufacturing Automation + Data Collection**
+
+---
+
+## 📍 Symbol Navigation
+
+**Quick Access**: Use these symbols for efficient documentation navigation
+
+| Symbol | Description | Location |
+|--------|-------------|----------|
+| §arch.overview | System architecture | SYMBOLS.md |
+| §rag.core | RAG core modules | RAG_ACTIVATION_STRATEGY.md |
+| §saas.auth | SaaS authentication | SAAS_ARCHITECTURE.md |
+| §collector.pipeline | Data collection pipeline | DATA_COLLECTOR_ARCHITECTURE.md |
+| §manufacturing.vision | Vision inspection | MANUFACTURING_AUTOMATION.md |
+| §api.endpoints | All API endpoints (35+) | API_DOCUMENTATION.md |
+| §deploy.docker | Docker deployment | DEPLOYMENT_GUIDE.md |
+
+**See Also**:
+- **CLAUDE.md**: Quick reference with all symbols
+- **SYMBOLS.md**: Complete symbol map (all domains)
+- **README.md**: Platform overview with 35+ features
+
+---
+
+## ⚡ Quick Reference (Token-Optimized)
+
+```
+Complete Enterprise Platform v5.0.0 = 4 Major Modules
+
+RAG System              → §rag.*
+├─ Search: Text/Image/Hybrid (0.79-0.82 quality)
+├─ LLM: NexaAI (<500ms) + Ollama (~2s)
+└─ OCR: PaddleOCR → EasyOCR → Tesseract
+
+SaaS Platform          → §saas.*
+├─ Auth: JWT + API Keys
+├─ Billing: Stripe (Free/Pro/Enterprise)
+└─ Usage: Redis + PostgreSQL tracking
+
+Manufacturing          → §manufacturing.*
+├─ Vision: YOLOv8/v10 defect detection
+└─ Edge: Jetson (120 FPS) | Pi (15 FPS)
+
+Data Collector         → §collector.*
+├─ Web: BeautifulSoup | Playwright
+├─ API: REST/GraphQL polling
+└─ Files: CSV/Excel/PDF/JSON/XML
+
+Total: 35+ API endpoints | 8 skills | 4 databases
+```
+
+**💡 Use symbols above to jump to specific module documentation**
 
 ---
 

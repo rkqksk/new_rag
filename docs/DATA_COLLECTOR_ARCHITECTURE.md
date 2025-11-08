@@ -1,6 +1,49 @@
 # Data Collector - Universal Data Ingestion System
 
+**Version**: v5.0.0
+**Symbol Domain**: §collector.*
 **Modular, scalable data collection pipeline for any source**
+
+---
+
+## 📍 Symbol Navigation
+
+**Quick Access**: Use these symbols for efficient documentation navigation
+
+| Symbol | Description | Location |
+|--------|-------------|----------|
+| §collector.status | System status & capabilities | SYMBOLS.md |
+| §collector.pipeline | Complete data pipeline | This document, SYMBOLS.md |
+| §collector.sources | Collection sources (web/API/file) | This document, SYMBOLS.md |
+| §collector.scheduling | Job scheduling (APScheduler) | This document, SYMBOLS.md |
+| §api.endpoints | All Collector API endpoints | API_DOCUMENTATION.md |
+| §rag.core | RAG integration | RAG_ACTIVATION_STRATEGY.md |
+
+**See Also**:
+- **CLAUDE.md**: Quick reference with all symbols
+- **SYMBOLS.md**: Complete symbol map (§collector.* section)
+- **Skills**: `.claude/skills/data-collector/SKILL.md`
+
+---
+
+## ⚡ Quick Reference (Token-Optimized)
+
+```
+Data Collector v5.0.0
+├─ Web: BeautifulSoup (50-100 p/min) | Playwright (10-20 p/min) → §collector.sources
+├─ API: REST/GraphQL, OAuth2, pagination (100-500 req/min) → §collector.sources
+├─ Files: CSV/Excel/PDF/JSON/XML (10K-50K rows/sec) → §collector.sources
+├─ Pipeline: Validate → Clean → Transform → Enrich → §collector.pipeline
+├─ Storage: PostgreSQL + Qdrant + MinIO → §collector.pipeline
+└─ Schedule: APScheduler (cron, interval) → §collector.scheduling
+
+Performance:
+• BeautifulSoup: 50MB RAM, fast static pages
+• Playwright: 200MB RAM, JS rendering
+• Selenium: 500MB RAM, complex interactions
+```
+
+**💡 Use symbols above to jump to detailed sections in SYMBOLS.md**
 
 ---
 

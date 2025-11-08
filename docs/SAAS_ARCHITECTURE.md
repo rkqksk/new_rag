@@ -1,6 +1,49 @@
 # SaaS Architecture - Enterprise Multi-Tenancy System
 
+**Version**: v5.0.0
+**Symbol Domain**: §saas.*
 **Production-ready SaaS platform with multi-tenancy, billing, and usage management**
+
+---
+
+## 📍 Symbol Navigation
+
+**Quick Access**: Use these symbols for efficient documentation navigation
+
+| Symbol | Description | Location |
+|--------|-------------|----------|
+| §saas.status | Platform status & capabilities | SYMBOLS.md |
+| §saas.auth | Authentication (JWT + API keys) | This document, SYMBOLS.md |
+| §saas.billing | Stripe billing integration | This document, SYMBOLS.md |
+| §saas.usage | Usage tracking & quotas | This document, SYMBOLS.md |
+| §saas.tenants | Multi-tenancy system | This document, SYMBOLS.md |
+| §api.endpoints | All SaaS API endpoints | API_DOCUMENTATION.md |
+| §deploy.docker | Docker deployment | DEPLOYMENT_GUIDE.md |
+
+**See Also**:
+- **CLAUDE.md**: Quick reference with all symbols
+- **SYMBOLS.md**: Complete symbol map (§saas.* section)
+- **Skills**: `.claude/skills/saas-platform/SKILL.md`
+
+---
+
+## ⚡ Quick Reference (Token-Optimized)
+
+```
+SaaS Platform v5.0.0
+├─ Auth: JWT (24h) + API Keys (SHA-256) → §saas.auth
+├─ Billing: Stripe (Free/Pro/Enterprise) → §saas.billing
+├─ Usage: Redis + PostgreSQL tracking → §saas.usage
+├─ Multi-Tenancy: PostgreSQL RLS → §saas.tenants
+└─ API: 10+ endpoints → §api.endpoints
+
+Tiers:
+• Free: $0/mo, 1K calls, 1GB, 1 user, 10 req/min
+• Pro: $49/mo, 100K calls, 50GB, 10 users, 100 req/min
+• Enterprise: $499/mo, Unlimited, 500GB, ∞ users, 1000 req/min
+```
+
+**💡 Use symbols above to jump to detailed sections in SYMBOLS.md**
 
 ---
 
