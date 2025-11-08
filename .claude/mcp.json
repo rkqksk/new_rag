@@ -112,6 +112,7 @@
     "documentation": "https://github.com/modelcontextprotocol/servers"
   },
   "skillMappings": {
+    "advanced-data-acquisition": ["puppeteer", "fetch", "filesystem", "chrome-devtools"],
     "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "tavily", "brave-search", "chrome-devtools"],
     "web-crawler-pipeline": ["puppeteer", "fetch", "filesystem"],
     "data-collector": ["puppeteer", "fetch", "postgres", "sqlite", "filesystem", "tavily", "brave-search"],
