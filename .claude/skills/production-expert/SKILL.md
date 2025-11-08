@@ -1,3 +1,8 @@
+---
+name: production-expert
+description: Production Expert Skill
+---
+
 # Production Expert Skill
 
 **Version**: 1.0.0

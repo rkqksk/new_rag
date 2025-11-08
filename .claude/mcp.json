@@ -1,6 +1,7 @@
 {
   "mcpServers": {
     "filesystem": {
+      "transport": "stdio",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
       "description": "Secure file operations for RAG Enterprise codebase",
@@ -9,6 +10,7 @@
       "note": "Core MCP - always enabled for token efficiency"
     },
     "git": {
+      "transport": "stdio",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "/home/user/rag-enterprise"],
       "description": "Git repository operations and code search",

@@ -1,3 +1,8 @@
+---
+name: advanced-data-acquisition
+description: Advanced Data Acquisition Skill
+---
+
 # Advanced Data Acquisition Skill
 
 **Purpose**: Comprehensive data crawling and extraction with authentication, anti-bot evasion, and complex file processing

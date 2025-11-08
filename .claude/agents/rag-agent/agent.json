@@ -12,10 +12,15 @@
   "mcpServers": {
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/rag-enterprise"
+      ],
       "description": "File operations for RAG data processing",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     }
   },
   "tools": [

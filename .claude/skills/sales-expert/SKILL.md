@@ -1,3 +1,8 @@
+---
+name: sales-expert
+description: Sales Expert Skill
+---
+
 # Sales Expert Skill
 
 **Version**: 1.0.0

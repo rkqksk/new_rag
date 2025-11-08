@@ -1,3 +1,8 @@
+---
+name: debugging-expert
+description: Debugging Expert Skill
+---
+
 # Debugging Expert Skill
 
 **Version**: 1.0.0

@@ -1,3 +1,8 @@
+---
+name: marketing-expert
+description: Marketing Expert Skill
+---
+
 # Marketing Expert Skill
 
 **Version**: 1.0.0

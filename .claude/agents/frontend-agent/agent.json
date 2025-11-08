@@ -12,25 +12,38 @@
   "mcpServers": {
     "shadcn-ui": {
       "command": "npx",
-      "args": ["-y", "@ymadd/shadcn-ui-mcp-server"],
+      "args": [
+        "-y",
+        "@ymadd/shadcn-ui-mcp-server"
+      ],
       "description": "shadcn/ui component library (50+ React components with Tailwind)",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     },
     "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
       "description": "Live browser debugging (DOM, CSS, Console, Performance, Network)",
       "enabled": true,
       "priority": "high",
-      "note": "Requires Node.js ≥22 and Chrome browser"
+      "note": "Requires Node.js \u226522 and Chrome browser",
+      "transport": "stdio"
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/rag-enterprise"
+      ],
       "description": "File operations for frontend code",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     }
   },
   "config": {

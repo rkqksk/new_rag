@@ -1,3 +1,8 @@
+---
+name: saas-platform
+description: SaaS Platform Skill
+---
+
 # SaaS Platform Skill
 
 **Purpose**: Multi-tenant SaaS platform management including authentication, billing, usage tracking, and tenant administration.

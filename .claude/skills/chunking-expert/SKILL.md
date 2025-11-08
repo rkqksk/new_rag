@@ -1,3 +1,8 @@
+---
+name: chunking-expert
+description: Chunking Expert Skill
+---
+
 # Chunking Expert Skill
 
 **Version**: 1.0.0

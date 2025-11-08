@@ -1,3 +1,8 @@
+---
+name: architecture-optimizer
+description: Architecture Optimizer Skill
+---
+
 # Architecture Optimizer Skill
 
 **Purpose**: Analyze, optimize, and clean up RAG Enterprise system architecture, documentation, and modular organization

@@ -1,3 +1,8 @@
+---
+name: pcb-expert
+description: PCB Expert Skill
+---
+
 # PCB Expert Skill
 
 **Version**: 1.0.0

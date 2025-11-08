@@ -1,3 +1,8 @@
+---
+name: embedding-expert
+description: Embedding Expert Skill
+---
+
 # Embedding Expert Skill
 
 **Version**: 1.0.0

@@ -1,3 +1,8 @@
+---
+name: mold-expert
+description: Mold Expert Skill
+---
+
 # Mold Expert Skill
 
 **Version**: 1.0.0

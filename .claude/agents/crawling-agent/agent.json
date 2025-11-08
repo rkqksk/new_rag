@@ -12,49 +12,75 @@
   "mcpServers": {
     "puppeteer": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-puppeteer"
+      ],
       "description": "Browser automation for dynamic content",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/test"],
+      "args": [
+        "-y",
+        "@playwright/test"
+      ],
       "description": "Advanced browser automation with anti-detection",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     },
     "fetch": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-fetch"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-fetch"
+      ],
       "description": "Fast HTTP requests for static content",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     },
     "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@latest"],
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest"
+      ],
       "description": "Live browser debugging and inspection",
       "enabled": true,
-      "priority": "medium"
+      "priority": "medium",
+      "transport": "stdio"
     },
     "tavily": {
       "command": "npx",
-      "args": ["-y", "@tavily/mcp-server"],
+      "args": [
+        "-y",
+        "@tavily/mcp-server"
+      ],
       "env": {
         "TAVILY_API_KEY": "${TAVILY_API_KEY}"
       },
       "description": "AI-optimized web search and content extraction (1000 requests/month free)",
       "enabled": false,
       "priority": "medium",
-      "note": "Optional - Free tier available at https://tavily.com (recommended for AI-optimized search)"
+      "note": "Optional - Free tier available at https://tavily.com (recommended for AI-optimized search)",
+      "transport": "http",
+      "url": "https://api.tavily.com"
     },
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/rag-enterprise"
+      ],
       "description": "File operations for crawled data storage",
       "enabled": true,
-      "priority": "high"
+      "priority": "high",
+      "transport": "stdio"
     }
   },
   "tools": [

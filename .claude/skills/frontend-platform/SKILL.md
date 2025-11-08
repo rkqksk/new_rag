@@ -1,3 +1,8 @@
+---
+name: frontend-platform
+description: Frontend Platform Skill
+---
+
 # Frontend Platform Skill
 
 **Purpose**: Unified frontend architecture with minimal monochrome design system for enterprise SaaS platform.

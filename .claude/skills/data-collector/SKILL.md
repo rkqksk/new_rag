@@ -1,3 +1,8 @@
+---
+name: data-collector
+description: Data Collector Skill
+---
+
 # Data Collector Skill
 
 **Purpose**: Universal data collection, processing, and database integration for RAG Enterprise Platform.

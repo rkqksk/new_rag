@@ -1,3 +1,8 @@
+---
+name: business-expert
+description: Business Expert Skill
+---
+
 # Business Expert Skill
 
 **Version**: 1.0.0
