@@ -31,6 +31,7 @@ const navItems: NavItem[] = [
   { title: "데이터 분석", href: "/admin/analytics", icon: "📈", roles: ["super-user", "admin", "manager"] },
   { title: "결제 관리", href: "/admin/billing", icon: "💰", roles: ["super-user", "admin", "manager"] },
   { title: "API 키 관리", href: "/admin/api-keys", icon: "🔑", roles: ["super-user", "admin"] },
+  { title: "팀 관리", href: "/admin/team", icon: "👥", roles: ["super-user", "admin", "manager"] },
 
   // Staff + Operator
   { title: "제조 관리", href: "/staff", icon: "🏭", roles: ["super-user", "admin", "staff", "operator"] },
