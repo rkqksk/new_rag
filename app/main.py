@@ -8,7 +8,7 @@ from fastapi.responses import JSONResponse
 from app.core.config import settings
 from app.core.logging import setup_logging, get_logger
 from app.core.exceptions import RAGEnterpriseException
-from app.api.v1 import search, personalization, analytics, debug
+from app.api.v1 import search, personalization, analytics, debug, admin
 from app.middleware.request_tracing import RequestTracingMiddleware
 from app.middleware.request_logging import RequestLoggingMiddleware
 from app.middleware.performance_timing import PerformanceTimingMiddleware
@@ -125,6 +125,14 @@ if settings.debug_config.enabled:
         tags=["debug"]
     )
     app_logger.info("🔧 Debug endpoints enabled at /api/v1/debug")
+
+# Admin routes (NexaAI integration)
+app.include_router(
+    admin.router,
+    prefix=settings.api_prefix,
+    tags=["admin"]
+)
+app_logger.info("⚙️  Admin endpoints enabled at /api/v1/admin")
 
 # ============================================================================
 # Health Check Endpoints
