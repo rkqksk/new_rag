@@ -76,6 +76,14 @@
       "skills": ["business-expert", "sales-expert"],
       "enabled": false,
       "note": "Requires Google OAuth credentials"
+    },
+    "shadcn-ui": {
+      "command": "npx",
+      "args": ["-y", "@ymadd/shadcn-ui-mcp-server"],
+      "description": "shadcn/ui component library (React, Tailwind) - components, blocks, examples",
+      "skills": ["frontend-platform"],
+      "enabled": true,
+      "note": "Provides access to 50+ shadcn/ui components with documentation and examples"
     }
   },
   "metadata": {
@@ -91,7 +99,7 @@
     "embedding-expert": ["filesystem"],
     "chunking-expert": ["filesystem"],
     "saas-platform": ["postgres", "filesystem"],
-    "frontend-platform": ["filesystem", "git"],
+    "frontend-platform": ["shadcn-ui", "filesystem", "git"],
     "manufacturing-expert": ["filesystem"],
     "packaging-expert": ["filesystem"],
     "rag-pipeline": ["filesystem", "postgres"],
@@ -106,7 +114,7 @@
   },
   "notes": {
     "installation": "MCP servers are auto-installed via npx when needed",
-    "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer"],
+    "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui"],
     "requires_api_keys": ["github", "brave-search", "google-drive"],
     "requires_configuration": ["postgres", "sqlite"],
     "documentation": {

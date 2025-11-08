@@ -220,6 +220,7 @@ git status && git branch
 | **git** | ✅ | Git repository operations | All skills |
 | **puppeteer** | ✅ | Browser automation (headless Chrome) | web-scraping-expert, data-collector |
 | **fetch** | ✅ | Web content fetching | web-scraping-expert, data-collector |
+| **shadcn-ui** | ✅ | shadcn/ui component library (React, Tailwind) | frontend-platform |
 | postgres | 🔧 | PostgreSQL database access | saas-platform, data-collector |
 | github | 🔧 | GitHub API integration | pcb-expert, mold-expert |
 | brave-search | 🔧 | Privacy-focused web search | marketing-expert, data-collector |
@@ -237,6 +238,7 @@ git status && git branch
 - `git` - Git repository operations
 - `puppeteer` - Web scraping automation
 - `fetch` - Web content fetching
+- `shadcn-ui` - React component library (50+ components)
 
 **Requires API Keys/Setup**:
 ```bash
@@ -264,7 +266,7 @@ export GOOGLE_DRIVE_CREDENTIALS="/path/to/credentials.json"
 
 **Platform & Infrastructure**:
 - `saas-platform` → postgres, filesystem
-- `frontend-platform` → filesystem, git
+- `frontend-platform` → shadcn-ui, filesystem, git
 
 **Domain Experts**:
 - `marketing-expert` → brave-search, google-drive, filesystem
