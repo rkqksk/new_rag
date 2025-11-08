@@ -7,6 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
+from app.api.routes import image_processing
 from app.api.v1 import admin, analytics, debug, personalization, search
 from app.core.config import settings
 from app.core.exceptions import RAGEnterpriseException
@@ -109,6 +110,10 @@ app.include_router(
 )
 
 app.include_router(analytics.router, prefix=f"{settings.api_prefix}/analytics", tags=["analytics"])
+
+# Image processing routes (watermark removal, OCR preprocessing)
+app.include_router(image_processing.router)
+app_logger.info("🎨 Image processing endpoints enabled at /api/v1/image")
 
 # Debug routes (only if debug enabled)
 if settings.debug_config.enabled:

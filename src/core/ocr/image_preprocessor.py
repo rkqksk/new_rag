@@ -1,7 +1,7 @@
 """Image Preprocessing for OCR Optimization"""
 
 import logging
-from typing import Optional, Tuple
+from typing import List, Optional, Tuple
 
 import cv2
 import numpy as np
@@ -15,6 +15,7 @@ class ImagePreprocessor:
     Advanced image preprocessing for OCR optimization.
 
     Features:
+    - Watermark removal (NEW)
     - Deskew (angle correction)
     - Denoise (Gaussian blur)
     - Binarization (Otsu's method)
@@ -28,22 +29,36 @@ class ImagePreprocessor:
         enable_denoising: bool = True,
         enable_deskew: bool = True,
         enable_contrast: bool = True,
+        enable_watermark_removal: bool = False,
+        watermark_method: str = "telea",
     ):
         self.target_dpi = target_dpi
         self.enable_denoising = enable_denoising
         self.enable_deskew = enable_deskew
         self.enable_contrast = enable_contrast
+        self.enable_watermark_removal = enable_watermark_removal
+        self.watermark_method = watermark_method
+        self._watermark_remover = None
 
-    def optimize_for_ocr(self, image: Image.Image) -> Image.Image:
+    def optimize_for_ocr(
+        self,
+        image: Image.Image,
+        watermark_regions: Optional[List[Tuple[int, int, int, int]]] = None,
+    ) -> Image.Image:
         """
         Multi-stage preprocessing pipeline.
 
         Args:
             image: PIL Image
+            watermark_regions: Optional manual watermark regions [(x, y, w, h), ...]
 
         Returns:
             Optimized PIL Image
         """
+        # 0. Remove watermarks (if enabled)
+        if self.enable_watermark_removal:
+            image = self._remove_watermarks(image, watermark_regions)
+
         # Convert PIL to OpenCV format
         img_cv = self._pil_to_cv2(image)
 
@@ -257,3 +272,35 @@ class ImagePreprocessor:
                 angles.append(angle)
 
         return float(np.median(angles)) if angles else 0.0
+
+    def _remove_watermarks(
+        self,
+        image: Image.Image,
+        regions: Optional[List[Tuple[int, int, int, int]]] = None,
+    ) -> Image.Image:
+        """
+        Remove watermarks from image using inpainting.
+
+        Args:
+            image: PIL Image
+            regions: Optional manual regions [(x, y, w, h), ...]
+
+        Returns:
+            Image with watermarks removed
+        """
+        # Lazy load watermark remover
+        if self._watermark_remover is None:
+            from src.core.ocr.watermark_remover import (
+                InpaintingMethod,
+                WatermarkRemover,
+            )
+
+            self._watermark_remover = WatermarkRemover(
+                method=InpaintingMethod(self.watermark_method),
+                enable_text_detection=True,
+            )
+
+        # Remove watermarks
+        return self._watermark_remover.remove_watermark(
+            image, regions=regions, auto_detect=True
+        )
