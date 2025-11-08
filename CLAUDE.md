@@ -223,6 +223,7 @@ git status && git branch
 | **shadcn-ui** | ✅ | shadcn/ui component library (React, Tailwind) | frontend-platform |
 | postgres | 🔧 | PostgreSQL database access | saas-platform, data-collector |
 | github | 🔧 | GitHub API integration | pcb-expert, mold-expert |
+| **tavily** | 🔧 ⭐ | AI-optimized search (real-time, content extraction) | marketing-expert, business-expert, web-scraping |
 | brave-search | 🔧 | Privacy-focused web search | marketing-expert, data-collector |
 | google-drive | 🔧 | Google Drive integration | business-expert, sales-expert |
 | sqlite | 🔧 | SQLite database | data-collector |
@@ -245,7 +246,11 @@ git status && git branch
 # GitHub MCP (optional)
 export GITHUB_PERSONAL_ACCESS_TOKEN="ghp_..."
 
-# Brave Search MCP (optional)
+# Tavily Search MCP (recommended for AI tasks) ⭐
+# Get free API key at https://tavily.com
+export TAVILY_API_KEY="tvly-..."
+
+# Brave Search MCP (optional, privacy-focused)
 export BRAVE_API_KEY="BSA..."
 
 # Google Drive MCP (optional)
@@ -260,18 +265,18 @@ export GOOGLE_DRIVE_CREDENTIALS="/path/to/credentials.json"
 ### Skill-to-MCP Mappings
 
 **Web Scraping & Data Collection**:
-- `web-scraping-expert` → puppeteer, fetch, filesystem, brave-search
+- `web-scraping-expert` → puppeteer, fetch, tavily, brave-search, filesystem
 - `web-crawler-pipeline` → puppeteer, fetch, filesystem
-- `data-collector` → puppeteer, fetch, postgres, sqlite, brave-search
+- `data-collector` → puppeteer, fetch, tavily, brave-search, postgres, sqlite, filesystem
 
 **Platform & Infrastructure**:
 - `saas-platform` → postgres, filesystem
 - `frontend-platform` → shadcn-ui, filesystem, git
 
 **Domain Experts**:
-- `marketing-expert` → brave-search, google-drive, filesystem
+- `marketing-expert` → tavily, brave-search, google-drive, filesystem
 - `sales-expert` → google-drive, filesystem
-- `business-expert` → google-drive, filesystem
+- `business-expert` → tavily, google-drive, filesystem
 - `pcb-expert` → filesystem, github
 - `mold-expert` → filesystem, github
 - `production-expert` → filesystem, postgres

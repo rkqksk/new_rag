@@ -51,6 +51,17 @@
       "enabled": false,
       "note": "Requires BRAVE_API_KEY to be set"
     },
+    "tavily": {
+      "command": "npx",
+      "args": ["-y", "@tavily/mcp-server"],
+      "env": {
+        "TAVILY_API_KEY": "<your_tavily_api_key>"
+      },
+      "description": "AI-optimized search API with real-time web search, content extraction, and structured data",
+      "skills": ["web-scraping-expert", "data-collector", "marketing-expert", "business-expert"],
+      "enabled": false,
+      "note": "Requires TAVILY_API_KEY (get free key at tavily.com) - Recommended over Brave Search for AI tasks"
+    },
     "fetch": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-fetch"],
@@ -93,9 +104,9 @@
     "documentation": "https://github.com/modelcontextprotocol/servers"
   },
   "skillMappings": {
-    "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "brave-search"],
+    "web-scraping-expert": ["puppeteer", "fetch", "filesystem", "tavily", "brave-search"],
     "web-crawler-pipeline": ["puppeteer", "fetch", "filesystem"],
-    "data-collector": ["puppeteer", "fetch", "postgres", "sqlite", "filesystem", "brave-search"],
+    "data-collector": ["puppeteer", "fetch", "postgres", "sqlite", "filesystem", "tavily", "brave-search"],
     "embedding-expert": ["filesystem"],
     "chunking-expert": ["filesystem"],
     "saas-platform": ["postgres", "filesystem"],
@@ -105,9 +116,9 @@
     "rag-pipeline": ["filesystem", "postgres"],
     "nexa-rag-optimizer": ["filesystem"],
     "multimodal-processor": ["filesystem"],
-    "marketing-expert": ["brave-search", "google-drive", "filesystem"],
+    "marketing-expert": ["tavily", "brave-search", "google-drive", "filesystem"],
     "sales-expert": ["google-drive", "filesystem"],
-    "business-expert": ["google-drive", "filesystem"],
+    "business-expert": ["tavily", "google-drive", "filesystem"],
     "pcb-expert": ["filesystem", "github"],
     "mold-expert": ["filesystem", "github"],
     "production-expert": ["filesystem", "postgres"]
@@ -115,7 +126,7 @@
   "notes": {
     "installation": "MCP servers are auto-installed via npx when needed",
     "enabled_by_default": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui"],
-    "requires_api_keys": ["github", "brave-search", "google-drive"],
+    "requires_api_keys": ["github", "brave-search", "tavily", "google-drive"],
     "requires_configuration": ["postgres", "sqlite"],
     "documentation": {
       "official": "https://modelcontextprotocol.io/",
