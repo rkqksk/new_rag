@@ -27,7 +27,7 @@ MarkupSafe==3.0.3
 numpy==2.3.4
 oauthlib==3.2.2
 packaging==24.0
-patch-ng==1.18.1
+patch-ng==1.19.0
 portalocker==3.2.0
 protobuf==6.33.0
 pydantic==2.12.4
