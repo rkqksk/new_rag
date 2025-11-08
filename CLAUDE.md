@@ -173,8 +173,11 @@ git status && git branch
 | manufacturing-expert | ✅ | process, classify |
 | packaging-expert | ✅ | process, classify |
 | web-crawler-pipeline | ✅ | crawl, monitor |
+| **nexa-rag-optimizer** | ✅ **NEW** | analyze, optimize-search, tune-routing, benchmark |
+| **multimodal-processor** | ✅ **NEW** | analyze-image, ocr-document, visual-search, hybrid-search |
 
 **Location**: `.claude/skills/`
+**Note**: Skills use progressive disclosure (references/ folder) for token efficiency
 
 ---
 
@@ -274,6 +277,66 @@ docs/
 - Modular scripts (scripts/lib/)
 
 **Full Stack**: `docs/TECHNOLOGY_STACK.md`
+
+---
+
+## 🤖 NexaAI Integration (NEW)
+
+### Dual-Engine Architecture
+
+**NexaAI** (Fast) + **Ollama** (Quality) = Optimal Performance
+
+| Engine | Model | Use Case | Latency | Activation |
+|--------|-------|----------|---------|------------|
+| NexaAI | Qwen3-1.7B | Simple queries | < 500ms | Score < 0.3 |
+| NexaAI | Qwen3-VL-4B | Medium + Vision | < 1s | 0.3 ≤ Score < 0.7 |
+| Ollama | qwen2.5:7b | Complex reasoning | ~2s | Score ≥ 0.7 |
+
+### Quick Start
+
+```bash
+# 1. Install NexaAI SDK (optional - can run without)
+pip install nexaai
+
+# 2. Start NexaAI server (localhost)
+nexa server start
+
+# 3. System auto-routes to optimal engine
+curl -X POST http://localhost:8001/api/v1/search \
+  -d '{"query":"50ml PET 용기"}'
+# → Auto-routes to NexaAI (fast)
+
+curl -X POST http://localhost:8001/api/v1/search \
+  -d '{"query":"PET와 PP의 화학적 특성 비교 분석"}'
+# → Auto-routes to Ollama (quality)
+```
+
+### Configuration
+
+```bash
+# Enable NexaAI (optional)
+NEXA_ENABLED=true
+NEXA_BASE_URL=http://localhost:8080/v1
+
+# Router thresholds
+MODEL_ROUTER_SIMPLE_THRESHOLD=0.3
+MODEL_ROUTER_COMPLEX_THRESHOLD=0.7
+```
+
+### Admin API
+
+```bash
+# Check system health
+curl http://localhost:8001/api/v1/admin/health
+
+# View routing statistics
+curl http://localhost:8001/api/v1/admin/stats
+
+# List available models
+curl http://localhost:8001/api/v1/admin/models
+```
+
+**Full Documentation**: `docs/NEXA_SDK_INTEGRATION_PLAN.md`
 
 ---
 

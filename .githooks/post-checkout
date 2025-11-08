@@ -1,0 +1,47 @@
+#!/bin/bash
+#
+# Post-checkout hook
+# Automatically run setup after git clone/checkout
+#
+# To install: ./scripts/install-hooks.sh
+#
+
+PREV_HEAD=$1
+NEW_HEAD=$2
+BRANCH_CHECKOUT=$3
+
+# Only run on branch checkout (not file checkout)
+if [ "$BRANCH_CHECKOUT" = "1" ]; then
+    PROJECT_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+    cd "$PROJECT_ROOT"
+
+    echo ""
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "  🤖 RAG Enterprise - Auto Setup"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo ""
+
+    # Check if setup needed
+    if [ ! -d ".venv" ] || [ ! -f ".env" ]; then
+        echo "ℹ️  First time setup detected"
+        echo ""
+        read -p "Run automatic setup? (y/n) " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            ./setup-all.sh --minimal
+        else
+            echo "Skipped. Run manually: ./setup-all.sh"
+        fi
+    else
+        echo "✅ Environment already configured"
+    fi
+
+    # Check PYTHONPATH
+    if [[ "$PYTHONPATH" != *"$PROJECT_ROOT"* ]]; then
+        echo ""
+        echo "⚠️  PYTHONPATH not set. Run:"
+        echo "   export PYTHONPATH=$PROJECT_ROOT:\$PYTHONPATH"
+    fi
+
+    echo ""
+fi

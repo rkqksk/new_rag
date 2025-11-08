@@ -1,9 +1,13 @@
 ---
 name: web-crawler
 description: Universal web crawler for plastic/packaging sites (chunjinkorea, onehago, freemold, jangup) with site-specific configurations, error detection, auto-restart, and progress monitoring. Handles 2.1M+ total products with proven battle-tested patterns
-tools: Bash, Read, Write, Glob, Grep, TodoWrite
+tools: Bash, Read, Write, Glob, Grep, TodoWrite, mcp__filesystem
 model: sonnet
 color: blue
+metadata:
+  mcp_access:
+    filesystem: "Read crawl scripts and monitor output files"
+  optimization: "Token-efficient by restricting to essential tools only"
 ---
 
 # Universal Web Crawler Agent
@@ -55,13 +59,13 @@ scale: 5000 products
 pattern: single_pass
 
 scripts:
-  main: /Users/oypnus/Project/rag-enterprise/scripts/crawl_chunjin_universal.py
+  main: ${PROJECT_ROOT}/scripts/crawl_chunjin_universal.py
 
 logs:
   main: /tmp/chunjin_crawl.log
 
 output:
-  directory: /Users/oypnus/Project/rag-enterprise/data/chunjinkorea/crawled/
+  directory: ${PROJECT_ROOT}/data/chunjinkorea/crawled/
   format: products_complete.jsonl
   progress: progress.json
 
@@ -91,16 +95,16 @@ scale: 2011553 products
 pattern: phase_based_multiworker
 
 scripts:
-  phase1: /Users/oypnus/Project/rag-enterprise/scripts/phase1_production_full.py
-  phase2: /Users/oypnus/Project/rag-enterprise/scripts/phase2_production_text_only.py
-  orchestrator: /Users/oypnus/Project/rag-enterprise/scripts/onehago_orchestrator_continuous.py
+  phase1: ${PROJECT_ROOT}/scripts/phase1_production_full.py
+  phase2: ${PROJECT_ROOT}/scripts/phase2_production_text_only.py
+  orchestrator: ${PROJECT_ROOT}/scripts/onehago_orchestrator_continuous.py
 
 logs:
   phase1: /tmp/onehago_phase1.log
   phase2: /tmp/onehago_12workers_IMAGES.log
 
 output:
-  directory: /Users/oypnus/Project/rag-enterprise/data/onehago/crawled/production/
+  directory: ${PROJECT_ROOT}/data/onehago/crawled/production/
   phase1_urls: product_urls_complete.jsonl
   phase2_products: products_text_only/worker_*_output.jsonl
   progress: phase2_progress.json
@@ -138,22 +142,22 @@ scale: 1964 products (A003 category)
 pattern: phase_based_auth
 
 scripts:
-  phase1: /Users/oypnus/Project/rag-enterprise/scripts/freemold_cat2_phase1_discovery.py
-  phase2: /Users/oypnus/Project/rag-enterprise/scripts/freemold_phase2_hybrid.py
+  phase1: ${PROJECT_ROOT}/scripts/freemold_cat2_phase1_discovery.py
+  phase2: ${PROJECT_ROOT}/scripts/freemold_phase2_hybrid.py
 
 logs:
   phase1: /tmp/freemold_phase1_A003_discovery.log
   phase2: /tmp/freemold_phase2_hybrid_resume.log
 
 output:
-  directory: /Users/oypnus/Project/rag-enterprise/data/freemold/crawled/
+  directory: ${PROJECT_ROOT}/data/freemold/crawled/
   phase1_urls: product_urls_A003_complete.jsonl
   phase2_products: products_text_hybrid_complete.jsonl
   progress: freemold_phase2_hybrid_progress.json
 
 authentication:
   method: cookie_based
-  cookie_file: /Users/oypnus/Project/rag-enterprise/cookies.json
+  cookie_file: ${PROJECT_ROOT}/cookies.json
   notes: "Export cookies after manual login, refresh weekly"
 
 error_policy:
@@ -188,13 +192,13 @@ scale: 81000 products
 pattern: single_pass
 
 scripts:
-  main: /Users/oypnus/Project/rag-enterprise/scripts/crawl_jangup_full_81k.py
+  main: ${PROJECT_ROOT}/scripts/crawl_jangup_full_81k.py
 
 logs:
   main: /tmp/jangup_full.log
 
 output:
-  directory: /Users/oypnus/Project/rag-enterprise/data/jangup/crawled/
+  directory: ${PROJECT_ROOT}/data/jangup/crawled/
   format: products_complete.jsonl
   progress: progress.json
 
@@ -233,13 +237,13 @@ SITE=$(detect_site_from_input "$USER_INPUT")
 
 case "$SITE" in
   chunjinkorea)
-    cd /Users/oypnus/Project/rag-enterprise
+    cd ${PROJECT_ROOT}
     python3 scripts/crawl_chunjin_universal.py 2>&1 | tee /tmp/chunjin_crawl.log &
     echo "✅ Chunjinkorea crawler started"
     ;;
 
   onehago)
-    cd /Users/oypnus/Project/rag-enterprise
+    cd ${PROJECT_ROOT}
     # Phase 1: Collect URLs
     python3 scripts/phase1_production_full.py 2>&1 | tee /tmp/onehago_phase1.log &
     echo "✅ Onehago Phase 1 (URL discovery) started"
@@ -247,7 +251,7 @@ case "$SITE" in
     ;;
 
   freemold)
-    cd /Users/oypnus/Project/rag-enterprise
+    cd ${PROJECT_ROOT}
     # Phase 1: Discover product URLs
     python3 scripts/freemold_cat2_phase1_discovery.py 2>&1 | tee /tmp/freemold_phase1_A003_discovery.log &
     echo "✅ Freemold Phase 1 (URL discovery) started"
@@ -255,7 +259,7 @@ case "$SITE" in
     ;;
 
   jangup)
-    cd /Users/oypnus/Project/rag-enterprise
+    cd ${PROJECT_ROOT}
     python3 scripts/crawl_jangup_full_81k.py 2>&1 | tee /tmp/jangup_full.log &
     echo "✅ Jangup crawler started"
     ;;
@@ -282,7 +286,7 @@ echo "📊 Total Scale: 2,098,517 products"
 echo "⏱️  Estimated Total Time: ~137 hours (5.7 days)"
 echo ""
 
-cd /Users/oypnus/Project/rag-enterprise
+cd ${PROJECT_ROOT}
 
 # Site 1: Chunjinkorea (~2 hours)
 echo "1️⃣  Starting Chunjinkorea (5,000 products)..."
@@ -346,10 +350,10 @@ else
     echo "   Status: ○ STOPPED"
 fi
 
-if [ -f /Users/oypnus/Project/rag-enterprise/data/chunjinkorea/crawled/progress.json ]; then
+if [ -f ${PROJECT_ROOT}/data/chunjinkorea/crawled/progress.json ]; then
     python3 << 'EOF'
 import json
-with open('/Users/oypnus/Project/rag-enterprise/data/chunjinkorea/crawled/progress.json') as f:
+with open('${PROJECT_ROOT}/data/chunjinkorea/crawled/progress.json') as f:
     data = json.load(f)
     completed = data.get('completed_items', 0)
     total = data.get('total_items', 5000)
@@ -369,10 +373,10 @@ else
     echo "   Status: ○ STOPPED"
 fi
 
-if [ -f /Users/oypnus/Project/rag-enterprise/data/onehago/crawled/production/products_text_only/phase2_progress.json ]; then
+if [ -f ${PROJECT_ROOT}/data/onehago/crawled/production/products_text_only/phase2_progress.json ]; then
     python3 << 'EOF'
 import json
-with open('/Users/oypnus/Project/rag-enterprise/data/onehago/crawled/production/products_text_only/phase2_progress.json') as f:
+with open('${PROJECT_ROOT}/data/onehago/crawled/production/products_text_only/phase2_progress.json') as f:
     data = json.load(f)
     completed = data.get('completed_batches', 0) * 1000
     total = 2011553
@@ -390,8 +394,8 @@ else
     echo "   Status: ○ STOPPED"
 fi
 
-if [ -f /Users/oypnus/Project/rag-enterprise/data/freemold/crawled/products_text_hybrid_complete.jsonl ]; then
-    EXTRACTED=$(wc -l < /Users/oypnus/Project/rag-enterprise/data/freemold/crawled/products_text_hybrid_complete.jsonl)
+if [ -f ${PROJECT_ROOT}/data/freemold/crawled/products_text_hybrid_complete.jsonl ]; then
+    EXTRACTED=$(wc -l < ${PROJECT_ROOT}/data/freemold/crawled/products_text_hybrid_complete.jsonl)
     PCT=$(echo "scale=1; $EXTRACTED * 100 / 1964" | bc)
     echo "   Progress: [$EXTRACTED/1,964] ($PCT%)"
 fi
@@ -405,10 +409,10 @@ else
     echo "   Status: ○ STOPPED"
 fi
 
-if [ -f /Users/oypnus/Project/rag-enterprise/data/jangup/crawled/progress.json ]; then
+if [ -f ${PROJECT_ROOT}/data/jangup/crawled/progress.json ]; then
     python3 << 'EOF'
 import json
-with open('/Users/oypnus/Project/rag-enterprise/data/jangup/crawled/progress.json') as f:
+with open('${PROJECT_ROOT}/data/jangup/crawled/progress.json') as f:
     data = json.load(f)
     completed = data.get('completed_items', 0)
     total = data.get('total_items', 81000)
@@ -427,14 +431,14 @@ echo "Active Crawlers: $ACTIVE_COUNT/4"
 
 # Calculate total products extracted across all sites
 TOTAL_EXTRACTED=0
-[ -f /Users/oypnus/Project/rag-enterprise/data/chunjinkorea/crawled/products_complete.jsonl ] && TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + $(wc -l < /Users/oypnus/Project/rag-enterprise/data/chunjinkorea/crawled/products_complete.jsonl)))
-[ -f /Users/oypnus/Project/rag-enterprise/data/jangup/crawled/products_complete.jsonl ] && TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + $(wc -l < /Users/oypnus/Project/rag-enterprise/data/jangup/crawled/products_complete.jsonl)))
-[ -f /Users/oypnus/Project/rag-enterprise/data/freemold/crawled/products_text_hybrid_complete.jsonl ] && TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + $(wc -l < /Users/oypnus/Project/rag-enterprise/data/freemold/crawled/products_text_hybrid_complete.jsonl)))
+[ -f ${PROJECT_ROOT}/data/chunjinkorea/crawled/products_complete.jsonl ] && TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + $(wc -l < ${PROJECT_ROOT}/data/chunjinkorea/crawled/products_complete.jsonl)))
+[ -f ${PROJECT_ROOT}/data/jangup/crawled/products_complete.jsonl ] && TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + $(wc -l < ${PROJECT_ROOT}/data/jangup/crawled/products_complete.jsonl)))
+[ -f ${PROJECT_ROOT}/data/freemold/crawled/products_text_hybrid_complete.jsonl ] && TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + $(wc -l < ${PROJECT_ROOT}/data/freemold/crawled/products_text_hybrid_complete.jsonl)))
 
 # Onehago requires special handling (multiple worker files)
 ONEHAGO_COUNT=0
-if [ -d /Users/oypnus/Project/rag-enterprise/data/onehago/crawled/production/products_text_only ]; then
-    ONEHAGO_COUNT=$(find /Users/oypnus/Project/rag-enterprise/data/onehago/crawled/production/products_text_only -name "worker_*.jsonl" -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}')
+if [ -d ${PROJECT_ROOT}/data/onehago/crawled/production/products_text_only ]; then
+    ONEHAGO_COUNT=$(find ${PROJECT_ROOT}/data/onehago/crawled/production/products_text_only -name "worker_*.jsonl" -exec wc -l {} + 2>/dev/null | tail -1 | awk '{print $1}')
     TOTAL_EXTRACTED=$((TOTAL_EXTRACTED + ONEHAGO_COUNT))
 fi
 
@@ -560,7 +564,7 @@ while true; do
             echo "🚨 [$(date)] Chunjinkorea error detected - restarting"
             pkill -f "crawl_chunjin_universal.py"
             sleep 10
-            cd /Users/oypnus/Project/rag-enterprise
+            cd ${PROJECT_ROOT}
             python3 scripts/crawl_chunjin_universal.py 2>&1 | tee /tmp/chunjin_crawl.log &
         fi
     fi
@@ -571,7 +575,7 @@ while true; do
             echo "🚨 [$(date)] Jangup error detected - restarting"
             pkill -f "crawl_jangup_full_81k.py"
             sleep 10
-            cd /Users/oypnus/Project/rag-enterprise
+            cd ${PROJECT_ROOT}
             python3 scripts/crawl_jangup_full_81k.py 2>&1 | tee /tmp/jangup_full.log &
         fi
     fi
@@ -584,7 +588,7 @@ while true; do
             echo "🚨 [$(date)] Freemold error rate >50% - restarting"
             pkill -f "freemold_phase2_hybrid.py"
             sleep 30
-            cd /Users/oypnus/Project/rag-enterprise
+            cd ${PROJECT_ROOT}
             python3 scripts/freemold_phase2_hybrid.py 2>&1 | tee -a /tmp/freemold_phase2_hybrid_resume.log &
         fi
     fi
@@ -597,7 +601,7 @@ while true; do
             pkill -f "onehago_orchestrator_continuous.py"
             pkill -9 "Google Chrome"
             sleep 30
-            cd /Users/oypnus/Project/rag-enterprise
+            cd ${PROJECT_ROOT}
             python3 scripts/onehago_orchestrator_continuous.py 2>&1 | tee /tmp/onehago_12workers_IMAGES.log &
         fi
     fi
@@ -620,22 +624,22 @@ crontab -e
 # Add these lines:
 
 # Chunjinkorea - Every Sunday 4:00 AM
-0 4 * * 0 cd /Users/oypnus/Project/rag-enterprise && python3 scripts/crawl_chunjin_universal.py >> /tmp/chunjin_weekly.log 2>&1
+0 4 * * 0 cd ${PROJECT_ROOT} && python3 scripts/crawl_chunjin_universal.py >> /tmp/chunjin_weekly.log 2>&1
 
 # Jangup - Every Sunday 5:00 AM (after chunjin finishes)
-0 5 * * 0 cd /Users/oypnus/Project/rag-enterprise && python3 scripts/crawl_jangup_full_81k.py >> /tmp/jangup_weekly.log 2>&1
+0 5 * * 0 cd ${PROJECT_ROOT} && python3 scripts/crawl_jangup_full_81k.py >> /tmp/jangup_weekly.log 2>&1
 
 # Freemold Phase 1 - Every other Monday 3:00 AM
-0 3 * * 1 [ $(expr $(date +\%W) \% 2) -eq 0 ] && cd /Users/oypnus/Project/rag-enterprise && python3 scripts/freemold_cat2_phase1_discovery.py >> /tmp/freemold_phase1_weekly.log 2>&1
+0 3 * * 1 [ $(expr $(date +\%W) \% 2) -eq 0 ] && cd ${PROJECT_ROOT} && python3 scripts/freemold_cat2_phase1_discovery.py >> /tmp/freemold_phase1_weekly.log 2>&1
 
 # Freemold Phase 2 - Every other Monday 4:00 AM (after Phase 1)
-0 4 * * 1 [ $(expr $(date +\%W) \% 2) -eq 0 ] && cd /Users/oypnus/Project/rag-enterprise && python3 scripts/freemold_phase2_hybrid.py >> /tmp/freemold_phase2_weekly.log 2>&1
+0 4 * * 1 [ $(expr $(date +\%W) \% 2) -eq 0 ] && cd ${PROJECT_ROOT} && python3 scripts/freemold_phase2_hybrid.py >> /tmp/freemold_phase2_weekly.log 2>&1
 
 # Onehago Phase 1 - Every Sunday 2:00 AM
-0 2 * * 0 cd /Users/oypnus/Project/rag-enterprise && python3 scripts/phase1_production_full.py >> /tmp/onehago_phase1_weekly.log 2>&1
+0 2 * * 0 cd ${PROJECT_ROOT} && python3 scripts/phase1_production_full.py >> /tmp/onehago_phase1_weekly.log 2>&1
 
 # Onehago Phase 2 - Every Monday 2:00 AM (after Phase 1 finishes Sunday)
-0 2 * * 1 cd /Users/oypnus/Project/rag-enterprise && python3 scripts/onehago_orchestrator_continuous.py >> /tmp/onehago_phase2_weekly.log 2>&1
+0 2 * * 1 cd ${PROJECT_ROOT} && python3 scripts/onehago_orchestrator_continuous.py >> /tmp/onehago_phase2_weekly.log 2>&1
 
 # Save and exit (:wq)
 
