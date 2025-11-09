@@ -1,0 +1,22 @@
+# Code Owners - Auto-assign reviewers for PRs
+
+# Default owner for everything
+* @rkqksk
+
+# Core API
+/app/api/ @rkqksk
+/app/core/ @rkqksk
+/app/services/ @rkqksk
+
+# Infrastructure
+/k8s/ @rkqksk
+/docker-compose.yml @rkqksk
+/.github/ @rkqksk
+
+# Documentation
+/docs/ @rkqksk
+*.md @rkqksk
+
+# Security
+/app/middleware/ @rkqksk
+requirements.txt @rkqksk

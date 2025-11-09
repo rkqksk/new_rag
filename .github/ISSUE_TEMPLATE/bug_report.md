@@ -1,43 +1,24 @@
 ---
 name: Bug Report
-about: Report a bug or issue
+about: Create a bug report
 title: '[BUG] '
 labels: bug
-assignees: ''
 ---
 
-## Description
+## Bug Description
 
-<!-- Clear description of the bug -->
-
-## Steps to Reproduce
-
+## To Reproduce
 1.
 2.
 3.
 
-## Expected Behavior
-
-<!-- What should happen -->
-
-## Actual Behavior
-
-<!-- What actually happens -->
+## Expected vs Actual Behavior
 
 ## Environment
+- OS:
+- Python:
+- Docker:
 
-- OS: <!-- macOS, Linux, Windows -->
-- Python version: <!-- 3.11, 3.12, etc. -->
-- Branch: <!-- main, feature/xyz -->
-
-## Logs/Screenshots
-
-<!-- Error messages, stack traces, or screenshots -->
-
+## Error Logs
 ```
-# Paste logs here
 ```
-
-## Additional Context
-
-<!-- Any other relevant information -->

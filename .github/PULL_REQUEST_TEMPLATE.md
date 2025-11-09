@@ -1,32 +1,19 @@
-## Summary
+# Pull Request
 
-<!-- Brief description of changes -->
+## Description
 
-## Changes
-
--
--
--
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Breaking change
+- [ ] Documentation
 
 ## Testing
-
-<!-- How did you test these changes? -->
-
-- [ ] Tests pass (`pytest tests/ -v`)
-- [ ] Manual testing completed
-- [ ] Documentation updated (if needed)
-
-## Related Issues
-
-<!-- Link related issues: Closes #123 -->
+- [ ] Unit tests pass
+- [ ] Integration tests pass
+- [ ] Manual testing complete
 
 ## Checklist
-
-- [ ] Code follows project style (see `CLAUDE.md`)
-- [ ] Symbol references updated (if architecture changed)
-- [ ] CHANGELOG.md updated
-- [ ] No sensitive data committed (.env, keys, etc.)
-
-## Screenshots (if applicable)
-
-<!-- Add screenshots for UI changes -->
+- [ ] Code review completed
+- [ ] Documentation updated
+- [ ] No new warnings
