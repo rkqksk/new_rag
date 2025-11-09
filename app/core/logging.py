@@ -44,9 +44,27 @@ class ContextualJsonFormatter(jsonlogger.JsonFormatter):
 
 
 def setup_logging(level: str = "INFO"):
-    """Setup structured logging with context support"""
+    """Setup structured logging with context support
+
+    Args:
+        level: Either a standard logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+               or an environment name (development, production) which will be mapped
+    """
+    # Map environment names to logging levels
+    level_mapping = {
+        "development": "DEBUG",
+        "dev": "DEBUG",
+        "production": "INFO",
+        "prod": "INFO",
+        "staging": "INFO",
+        "test": "DEBUG",
+    }
+
+    # Convert environment to logging level if needed
+    log_level = level_mapping.get(level.lower(), level.upper())
+
     logger = logging.getLogger()
-    logger.setLevel(level)
+    logger.setLevel(log_level)
 
     # Remove existing handlers
     logger.handlers.clear()

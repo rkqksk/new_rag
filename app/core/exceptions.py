@@ -2,7 +2,9 @@
 
 import json
 import traceback
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Type
+
+from fastapi import HTTPException, status
 
 
 class RAGEnterpriseException(Exception):
@@ -83,3 +85,62 @@ class VectorSearchException(RepositoryException):
     """Vector search exception"""
 
     pass
+
+
+# ============================================================================
+# HTTP Exception Helpers
+# ============================================================================
+
+
+def get_status_code_for_exception(exc: Exception) -> int:
+    """Get HTTP status code for a given exception type.
+
+    Args:
+        exc: Exception instance
+
+    Returns:
+        int: HTTP status code
+    """
+    exception_status_map = {
+        ValidationException: status.HTTP_400_BAD_REQUEST,
+        SearchException: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        CacheException: status.HTTP_503_SERVICE_UNAVAILABLE,
+        DatabaseException: status.HTTP_503_SERVICE_UNAVAILABLE,
+        VectorSearchException: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        ServiceException: status.HTTP_500_INTERNAL_SERVER_ERROR,
+        RepositoryException: status.HTTP_503_SERVICE_UNAVAILABLE,
+        RAGEnterpriseException: status.HTTP_500_INTERNAL_SERVER_ERROR,
+    }
+
+    # Find the most specific exception class
+    for exc_class, status_code in exception_status_map.items():
+        if isinstance(exc, exc_class):
+            return status_code
+
+    return status.HTTP_500_INTERNAL_SERVER_ERROR
+
+
+def create_http_exception(
+    exc: RAGEnterpriseException,
+    status_code: Optional[int] = None,
+) -> HTTPException:
+    """Create an HTTPException from a RAGEnterpriseException.
+
+    Args:
+        exc: RAGEnterpriseException instance
+        status_code: Optional HTTP status code override
+
+    Returns:
+        HTTPException: FastAPI HTTPException
+    """
+    if status_code is None:
+        status_code = get_status_code_for_exception(exc)
+
+    return HTTPException(
+        status_code=status_code,
+        detail={
+            "error": exc.__class__.__name__,
+            "message": exc.message,
+            "context": exc.context,
+        },
+    )

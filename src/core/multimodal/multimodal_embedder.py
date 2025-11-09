@@ -567,3 +567,7 @@ def create_embedder(device: str = "auto", enable_image: bool = True) -> MultiMod
         Configured MultiModalEmbeddingService
     """
     return MultiModalEmbeddingService(device=device, enable_image=enable_image)
+
+
+# Alias for backward compatibility
+MultiModalEmbedder = MultiModalEmbeddingService

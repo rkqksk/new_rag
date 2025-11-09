@@ -167,6 +167,21 @@ class InquiryRequest(BaseModel):
     timestamp: str = Field(..., description="Timestamp")
 
 
+class SampleRequest(BaseModel):
+    """Product sample request schema."""
+    product_id: str = Field(..., description="Product ID")
+    product_name: str = Field(..., description="Product name")
+    product_code: str = Field(..., description="Product code")
+    company_name: str = Field(..., description="Company name")
+    contact_name: str = Field(..., description="Contact name")
+    contact_phone: str = Field(..., description="Contact phone")
+    contact_email: str = Field(..., description="Contact email")
+    quantity: Optional[str] = Field(None, description="Sample quantity")
+    delivery_address: Optional[str] = Field(None, description="Delivery address")
+    message: Optional[str] = Field(None, description="Additional message")
+    timestamp: str = Field(..., description="Timestamp")
+
+
 class QASearchRequest(BaseModel):
     """QA search request schema."""
     query: str = Field(..., min_length=1, max_length=500, description="Search query")

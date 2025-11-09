@@ -7,8 +7,11 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api.routes import image_processing
+from app.api.routes import image_processing, excel, health, async_qa
 from app.api.v1 import admin, analytics, debug, personalization, search
+from app.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
+from app.routes import products, qa, inquiries, tracking
+from src.api.v1 import saas
 from app.core.config import settings
 from app.core.exceptions import RAGEnterpriseException
 from app.core.logging import get_logger, setup_logging
@@ -123,6 +126,79 @@ if settings.debug_config.enabled:
 # Admin routes (NexaAI integration)
 app.include_router(admin.router, prefix=settings.api_prefix, tags=["admin"])
 app_logger.info("⚙️  Admin endpoints enabled at /api/v1/admin")
+
+# ============================================================================
+# SaaS Platform - Multi-Tenancy, Authentication, Billing
+# ============================================================================
+app.include_router(
+    saas.router,
+    prefix=f"{settings.api_prefix}/saas",
+    tags=["SaaS Platform"]
+)
+app_logger.info("🏢 SaaS Platform endpoints enabled at /api/v1/saas")
+
+# ============================================================================
+# Product Management - Products, Q&A, Inquiries
+# ============================================================================
+# Products API (already has /api/v1 prefix in router)
+app.include_router(products.router)
+app_logger.info("📦 Product endpoints enabled at /api/v1/products")
+
+# Q&A API (already has /api/v1 prefix in router)
+app.include_router(qa.router)
+app_logger.info("❓ Q&A endpoints enabled at /api/v1/qa")
+
+# Async Q&A (has /api/v2 prefix in router)
+app.include_router(async_qa.router)
+app_logger.info("⚡ Async Q&A endpoints enabled at /api/v2/async-qa")
+
+# Inquiries API (already has /api/v1 prefix in router)
+app.include_router(inquiries.router)
+app_logger.info("💬 Inquiries endpoints enabled at /api/v1/inquiries")
+
+# ============================================================================
+# Workflow Orchestration
+# ============================================================================
+# Workflow API (already has /api/v1/workflow prefix in router)
+app.include_router(workflow_routes.router)
+app_logger.info("🔄 Workflow endpoints enabled at /api/v1/workflow")
+
+# ============================================================================
+# Data Management - Excel, Ingestion
+# ============================================================================
+# Excel Processing (already has /api/v1/admin/excel prefix in router)
+app.include_router(excel.router)
+app_logger.info("📊 Excel processing endpoints enabled at /api/v1/admin/excel")
+
+# Data Ingestion (already has /api/v1/ingestion prefix in router)
+app.include_router(ingestion_routes.router)
+app_logger.info("📥 Data ingestion endpoints enabled at /api/v1/ingestion")
+
+# ============================================================================
+# Dashboard & Monitoring
+# ============================================================================
+# Dashboard routes
+app.include_router(dashboard_routes.router, prefix=settings.api_prefix)
+app_logger.info("📈 Dashboard endpoints enabled at /api/v1/dashboard")
+
+# Consultation routes (already has /consultation prefix)
+app.include_router(consultation.router, prefix=settings.api_prefix)
+app_logger.info("🤝 Consultation endpoints enabled at /api/v1/consultation")
+
+# ============================================================================
+# System Health & Tracking
+# ============================================================================
+# Health monitoring (comprehensive health checks beyond basic liveness/readiness)
+app.include_router(health.router)
+app_logger.info("❤️  Health monitoring endpoints enabled")
+
+# Tracking system (already has /api/v1 prefix in router)
+app.include_router(tracking.router)
+app_logger.info("📍 Tracking endpoints enabled at /api/v1/tracking")
+
+# Query management (already has /api/v1/query prefix in router)
+app.include_router(query_routes.router)
+app_logger.info("🔍 Query management endpoints enabled at /api/v1/query")
 
 # ============================================================================
 # Health Check Endpoints

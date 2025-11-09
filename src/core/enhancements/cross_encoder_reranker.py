@@ -7,8 +7,27 @@ import logging
 from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
+from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
+
+
+class RerankingConfig(BaseModel):
+    """Configuration for cross-encoder re-ranking"""
+
+    model_name: str = Field(
+        default="cross-encoder/ms-marco-MiniLM-L-6-v2",
+        description="Cross-encoder model name from HuggingFace",
+    )
+    device: str = Field(
+        default="auto", description="Device to use: 'auto', 'cpu', 'cuda', or 'mps'"
+    )
+    top_k: Optional[int] = Field(
+        default=None, description="Number of top results to return after re-ranking"
+    )
+    batch_size: int = Field(
+        default=32, description="Batch size for cross-encoder prediction"
+    )
 
 
 class CrossEncoderReranker:
