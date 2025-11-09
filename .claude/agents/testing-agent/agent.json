@@ -10,6 +10,29 @@
     "test-optimization"
   ],
   "mcpServers": {
+    "testsprite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@testsprite/testsprite-mcp"
+      ],
+      "env": {
+        "TESTSPRITE_API_KEY": "${TESTSPRITE_API_KEY}"
+      },
+      "description": "AI-powered automatic testing, debugging, and code quality validation",
+      "enabled": true,
+      "priority": "critical",
+      "note": "Improves AI code quality from 42% to 93% pass rate. Get free API key at https://testsprite.com",
+      "transport": "stdio",
+      "features": [
+        "automatic-test-generation",
+        "smart-test-plans",
+        "parallel-test-execution",
+        "failure-diagnosis",
+        "structured-test-reports",
+        "cloud-infrastructure"
+      ]
+    },
     "filesystem": {
       "command": "npx",
       "args": [
@@ -37,9 +60,15 @@
   },
   "metadata": {
     "created": "2025-11-08",
-    "updated": "2025-11-08",
+    "updated": "2025-11-09",
     "status": "production-ready",
-    "cost": "$0/month (100% open-source)",
-    "current_coverage": "95%+ target"
+    "cost": "$0/month (100% open-source + TestSprite free tier)",
+    "current_coverage": "95%+ target",
+    "enhancements": [
+      "Added TestSprite MCP for intelligent test automation",
+      "Automatic test case generation from PRD",
+      "Cloud-based parallel test execution",
+      "AI-powered failure diagnosis"
+    ]
   }
 }

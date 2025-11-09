@@ -298,6 +298,11 @@ git status && git branch
 
 ### MCP Priority Levels
 
+**Priority 0: Critical - AI-Powered Quality** ⭐ NEW
+- `testsprite` - AI-powered testing & debugging (1000 tests/month free, **42% → 93% quality improvement**)
+- **Get free key**: https://testsprite.com
+- **Installed in**: `code-review-agent`, `testing-agent`
+
 **Priority 1: No API Key Required** ($0/month)
 - `filesystem`, `git`, `fetch`, `puppeteer`, `shadcn-ui`, `chrome-devtools`
 - **Use freely** - no setup required
@@ -322,6 +327,9 @@ git status && git branch
 
 **Sub-Agents** (optional setup):
 ```bash
+# TestSprite ⭐ RECOMMENDED - AI-powered testing (1000 free tests/month)
+export TESTSPRITE_API_KEY="your_key"  # Get at https://testsprite.com
+
 # Tavily (optional - 1000 free requests/month)
 export TAVILY_API_KEY="tvly-..."  # Get at https://tavily.com
 
@@ -404,6 +412,7 @@ npm install -g @modelcontextprotocol/server-github
 ### Quick Access Guides
 - **Quick Reference**: `docs/guides/QUICK_REFERENCE.md` ⭐ Start here
 - **Complete Symbols**: `docs/reference/SYMBOLS.md` ⭐ All § references
+- **TestSprite Setup**: `docs/TESTSPRITE_SETUP.md` ⭐ AI-powered testing
 - **API Documentation**: `docs/reference/API_DOCUMENTATION.md`
 - **Deployment Guide**: `docs/DEPLOYMENT_GUIDE.md`
 

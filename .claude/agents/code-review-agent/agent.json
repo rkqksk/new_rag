@@ -10,6 +10,28 @@
     "repository-management"
   ],
   "mcpServers": {
+    "testsprite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@testsprite/testsprite-mcp"
+      ],
+      "env": {
+        "TESTSPRITE_API_KEY": "${TESTSPRITE_API_KEY}"
+      },
+      "description": "AI-powered automatic testing, debugging, and code quality validation",
+      "enabled": true,
+      "priority": "critical",
+      "note": "Improves AI code quality from 42% to 93% pass rate. Get free API key at https://testsprite.com",
+      "transport": "stdio",
+      "features": [
+        "automatic-test-generation",
+        "smart-test-plans",
+        "failure-diagnosis",
+        "code-quality-validation",
+        "prd-based-testing"
+      ]
+    },
     "github": {
       "command": "npx",
       "args": [
@@ -46,8 +68,13 @@
   },
   "metadata": {
     "created": "2025-11-08",
-    "updated": "2025-11-08",
+    "updated": "2025-11-09",
     "status": "production-ready",
-    "cost": "$0/month (GitHub API is free)"
+    "cost": "$0/month (GitHub API is free, TestSprite has free tier)",
+    "enhancements": [
+      "Added TestSprite MCP for AI code quality validation",
+      "Automatic test generation and debugging",
+      "PRD-based intelligent testing"
+    ]
   }
 }

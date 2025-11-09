@@ -16,8 +16,9 @@ Specialized sub-agent for test automation and quality assurance.
 - ✅ **Unit testing** (pytest)
 - ✅ **Integration testing** (API, DB, services)
 - ✅ **Coverage analysis** (pytest-cov)
-- ✅ **Test generation** (AI-powered)
-- ✅ **Parallel execution** (pytest-xdist)
+- ⭐ **AI-powered test generation** (TestSprite)
+- ✅ **Parallel execution** (pytest-xdist + TestSprite Cloud)
+- ⭐ **Automatic debugging & fixing** (TestSprite)
 
 ---
 
@@ -51,9 +52,39 @@ pytest tests/ -n auto
 
 ---
 
-## 🔧 Configuration
+## 🔧 MCP Servers
 
-Located in `agent.json`:
+| Server | Purpose | Cost | Priority |
+|--------|---------|------|----------|
+| **testsprite** ⭐ | AI-powered testing & debugging | Free tier available | Critical |
+| **filesystem** | File operations | $0/month | High |
+
+**Total Cost**: $0/month (with free tier)
+
+### ⭐ TestSprite Features
+
+- **Automatic test generation** from PRD
+- **Smart test plans** based on code changes
+- **Parallel execution** on cloud infrastructure
+- **Failure diagnosis** with AI-powered insights
+- **Structured reports** for coding agents
+- **42% → 93% quality improvement**
+
+---
+
+## ⚙️ Configuration
+
+### TestSprite API Key Setup (Recommended) ⭐
+
+```bash
+# Get free API key at: https://testsprite.com
+export TESTSPRITE_API_KEY="your_api_key_here"
+
+# Or add to .env file
+echo "TESTSPRITE_API_KEY=your_api_key_here" >> .env
+```
+
+### Agent Config (in `agent.json`)
 
 ```json
 {
@@ -84,4 +115,5 @@ Located in `agent.json`:
 ---
 
 **Created**: 2025-11-08
-**Last Updated**: 2025-11-08
+**Last Updated**: 2025-11-09
+**Enhancement**: Added TestSprite MCP for intelligent test automation and AI-powered debugging
