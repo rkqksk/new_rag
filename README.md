@@ -12,7 +12,39 @@
 
 ## 🎉 What's New in v5.8.0
 
-### 🆕 Latest Features (v5.7-5.8)
+### 🚀 Infrastructure & Performance (v5.8 - Latest) ⭐ NEW
+
+#### Monitoring & Observability
+- **Prometheus**: Metrics collection on port 9090
+- **Grafana**: Pre-configured dashboards on port 3000 (admin/admin)
+- **Health Checks**: Kubernetes-ready readiness/liveness probes
+- **Real-time Metrics**: Request rate, p95 response time, error tracking
+
+#### Database Migrations
+- **Alembic**: Version-controlled schema management
+- **10 Tables**: 6 SaaS + 4 Analytics tables
+- **Migration Commands**: `alembic upgrade head`, rollback support
+- **Schema History**: Full audit trail of all database changes
+
+#### Performance Optimization
+- **3-Layer Caching**: Exact (1h) + Semantic (30min) + Result (10min)
+- **Semantic Cache**: Cosine similarity search (0.95 threshold) with Redis
+- **Product Loading**: In-memory caching for recommendations
+- **DB-Backed Analytics**: PostgreSQL tracking (search, click, conversation, samples)
+
+#### Docker & DevOps
+- **Multi-Stage Builds**: 50% image size reduction (800MB → 400MB)
+- **Security Hardening**: Non-root user, minimal runtime dependencies
+- **Makefile**: 40+ commands (setup, test, lint, format, docker, migrate)
+- **Pre-commit Hooks**: 9 automated checks (Black, isort, flake8, secrets)
+
+#### Developer Experience
+- **Automated Setup**: `make setup` - complete environment generation
+- **Workflow Commands**: `make dev`, `make test`, `make docker-up`
+- **Migration Tools**: `make migrate-create`, `make migrate-upgrade`
+- **Code Quality**: Automatic formatting, linting, type checking
+
+### 🆕 Image Processing & Agents (v5.7)
 
 #### Image Processing & Watermark Removal
 - **Auto Watermark Removal**: PaddleOCR text detection + OpenCV inpainting
@@ -93,6 +125,16 @@
 - ✅ **File Parsing**: 6 formats (CSV, Excel, PDF, JSON, XML)
 - ✅ **Processing**: Validation, deduplication, normalization, entity extraction
 - ✅ **Storage**: PostgreSQL + Qdrant + MinIO
+
+### Infrastructure & DevOps ⭐ NEW
+- ✅ **Monitoring**: Prometheus (metrics) + Grafana (dashboards)
+- ✅ **Database Migrations**: Alembic with 10 production tables
+- ✅ **3-Layer Caching**: Redis-backed semantic cache (0.95 similarity)
+- ✅ **Analytics**: PostgreSQL tracking (search/click/conversation/sample logs)
+- ✅ **Docker**: Multi-stage builds, 50% smaller images, security hardening
+- ✅ **Automation**: Makefile (40+ commands), pre-commit hooks (9 checks)
+- ✅ **Health Checks**: Kubernetes-ready readiness/liveness probes
+- ✅ **Developer Tools**: Auto setup, workflow commands, migration tools
 
 ---
 

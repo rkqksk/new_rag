@@ -1,0 +1,152 @@
+groups:
+  - name: rag_enterprise_alerts
+    interval: 30s
+    rules:
+      # =========================================================================
+      # Critical Alerts - Immediate action required
+      # =========================================================================
+
+      - alert: HighErrorRate
+        expr: |
+          sum(rate(http_requests_total{status=~"5.."}[5m]))
+          /
+          sum(rate(http_requests_total[5m]))
+          > 0.05
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High error rate detected ({{ $value | humanizePercentage }})"
+          description: "Error rate is above 5% for the last 5 minutes. Current: {{ $value | humanizePercentage }}"
+          runbook: "Check application logs and recent deployments. Investigate errors in /api/v1/debug/errors endpoint."
+
+      - alert: DatabaseConnectionFailure
+        expr: |
+          up{job="postgres"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "PostgreSQL database is down"
+          description: "Cannot connect to PostgreSQL database. All database operations will fail."
+          runbook: "Check PostgreSQL service status: docker-compose logs postgres"
+
+      - alert: ServiceDown
+        expr: |
+          up{job="rag-api"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "RAG API service is down"
+          description: "RAG API service is not responding to health checks."
+          runbook: "Check service logs: docker-compose logs api"
+
+      # =========================================================================
+      # Warning Alerts - Action needed soon
+      # =========================================================================
+
+      - alert: SlowResponseTime
+        expr: |
+          histogram_quantile(0.95,
+            rate(http_request_duration_seconds_bucket[5m])
+          ) > 2
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow API response time (p95: {{ $value | humanizeDuration }})"
+          description: "95th percentile response time is above 2 seconds for the last 10 minutes."
+          runbook: "Check /api/v1/debug/performance/summary for slow queries. Consider scaling or optimization."
+
+      - alert: CacheUnavailable
+        expr: |
+          up{job="redis"} == 0
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Redis cache is unavailable"
+          description: "Redis cache service is down. Semantic caching and rate limiting will not work."
+          runbook: "Check Redis service: docker-compose logs redis. Verify Redis port 6379."
+
+      - alert: LowCacheHitRatio
+        expr: |
+          sum(rate(cache_hits_total[10m]))
+          /
+          (sum(rate(cache_hits_total[10m])) + sum(rate(cache_misses_total[10m])))
+          < 0.3
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low cache hit ratio ({{ $value | humanizePercentage }})"
+          description: "Cache hit ratio is below 30%. Cache effectiveness is low."
+          runbook: "Review cache TTL settings and cache warming strategy. Check cache key generation logic."
+
+      - alert: HighLLMLatency
+        expr: |
+          histogram_quantile(0.95,
+            rate(llm_request_duration_seconds_bucket[5m])
+          ) > 5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High LLM latency (p95: {{ $value | humanizeDuration }})"
+          description: "LLM response time is above 5 seconds (p95) for the last 10 minutes."
+          runbook: "Check Ollama/NexaAI service status. Consider model optimization or load balancing."
+
+      - alert: HighDatabaseQueryTime
+        expr: |
+          histogram_quantile(0.95,
+            rate(db_query_duration_seconds_bucket[5m])
+          ) > 0.5
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Slow database queries (p95: {{ $value | humanizeDuration }})"
+          description: "Database query time is above 500ms (p95) for the last 10 minutes."
+          runbook: "Check slow queries in PostgreSQL logs. Consider adding indexes or query optimization."
+
+      # =========================================================================
+      # Info Alerts - Informational only
+      # =========================================================================
+
+      - alert: HighRequestRate
+        expr: |
+          sum(rate(http_requests_total[5m])) > 100
+        for: 5m
+        labels:
+          severity: info
+        annotations:
+          summary: "High request rate ({{ $value | humanize }} req/s)"
+          description: "Request rate is above 100 req/s. System is under high load."
+          runbook: "Monitor system resources. Consider scaling if sustained."
+
+      - alert: VectorDBHighMemoryUsage
+        expr: |
+          qdrant_memory_usage_bytes / qdrant_memory_limit_bytes > 0.8
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Qdrant memory usage high ({{ $value | humanizePercentage }})"
+          description: "Vector database memory usage is above 80%."
+          runbook: "Consider increasing Qdrant memory limit or cleaning up old vectors."
+
+      # =========================================================================
+      # Business Metrics Alerts
+      # =========================================================================
+
+      - alert: NoSearchActivity
+        expr: |
+          sum(rate(search_logs_total[30m])) == 0
+        for: 30m
+        labels:
+          severity: info
+        annotations:
+          summary: "No search activity detected"
+          description: "No search queries in the last 30 minutes. This might be normal during off-hours."
+          runbook: "Verify if this is expected. Check if search service is working properly."
