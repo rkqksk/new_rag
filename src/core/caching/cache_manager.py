@@ -15,9 +15,26 @@ import logging
 from datetime import timedelta
 from typing import Any, Dict, List, Optional
 
+import numpy as np
 import redis
 
 logger = logging.getLogger(__name__)
+
+
+def cosine_similarity(vec1: List[float], vec2: List[float]) -> float:
+    """
+    Calculate cosine similarity between two vectors
+
+    Args:
+        vec1: First vector
+        vec2: Second vector
+
+    Returns:
+        Similarity score (0-1)
+    """
+    v1 = np.array(vec1)
+    v2 = np.array(vec2)
+    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
 
 
 class CacheManager:
@@ -144,14 +161,55 @@ class CacheManager:
         Returns:
             캐시된 결과 or None
         """
-        # TODO: Implement semantic similarity search
-        # Requires:
-        # 1. Store query embeddings in Redis
-        # 2. Compute cosine similarity
-        # 3. Return if similarity > threshold
+        if not self.connected:
+            return None
 
-        logger.debug(f"[Semantic Cache] Not implemented yet")
-        return None
+        try:
+            # Get all semantic cache keys
+            pattern = "semantic:*"
+            keys = self.redis_client.keys(pattern)
+
+            if not keys:
+                logger.debug(f"[Semantic Cache MISS] No cached queries")
+                return None
+
+            best_match = None
+            best_similarity = 0.0
+
+            # Find the most similar cached query
+            for key in keys:
+                cached_data = self.redis_client.get(key)
+                if not cached_data:
+                    continue
+
+                cached = json.loads(cached_data)
+                cached_embedding = cached.get("embedding")
+
+                if not cached_embedding:
+                    continue
+
+                # Calculate cosine similarity
+                similarity = cosine_similarity(query_embedding, cached_embedding)
+
+                if similarity > best_similarity:
+                    best_similarity = similarity
+                    best_match = cached.get("result")
+
+            # Return if similarity exceeds threshold
+            if best_similarity >= similarity_threshold:
+                logger.debug(
+                    f"[Semantic Cache HIT] Query: {query[:50]}, Similarity: {best_similarity:.3f}"
+                )
+                return best_match
+
+            logger.debug(
+                f"[Semantic Cache MISS] Best similarity: {best_similarity:.3f} < {similarity_threshold}"
+            )
+            return None
+
+        except Exception as e:
+            logger.error(f"[Semantic Cache] Error: {e}")
+            return None
 
     def set_semantic(
         self,
@@ -169,9 +227,23 @@ class CacheManager:
             result: 검색 결과
             ttl: Time to live (seconds)
         """
-        # TODO: Implement semantic cache storage
-        logger.debug(f"[Semantic Cache SET] Not implemented yet")
-        pass
+        if not self.connected:
+            return
+
+        try:
+            # Create unique key using query hash
+            query_hash = hashlib.md5(query.encode()).hexdigest()
+            cache_key = f"semantic:{query_hash}"
+
+            # Store embedding and result
+            cache_data = {"embedding": query_embedding, "result": result, "query": query}
+
+            self.redis_client.setex(cache_key, ttl, json.dumps(cache_data))
+
+            logger.debug(f"[Semantic Cache SET] Query: {query[:50]}, TTL: {ttl}s")
+
+        except Exception as e:
+            logger.error(f"[Semantic Cache SET] Error: {e}")
 
     # =========================================================================
     # Layer 3: Search Result Cache

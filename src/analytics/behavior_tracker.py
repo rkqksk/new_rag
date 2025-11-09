@@ -336,34 +336,104 @@ class BehaviorTracker:
 
     async def _insert_search_logs(self, rows: List[Dict]):
         """검색 로그 INSERT"""
-        # TODO: 실제 DB 연결 구현
-        # await self.db.executemany("""
-        #     INSERT INTO search_logs (
-        #         user_id, session_id, query, normalized_query, filters,
-        #         result_count, result_product_indices, intent, product_type,
-        #         response_time_ms, ip_address, searched_at
-        #     ) VALUES (
-        #         %(user_id)s, %(session_id)s, %(query)s, %(normalized_query)s, %(filters)s,
-        #         %(result_count)s, %(result_product_indices)s, %(intent)s, %(product_type)s,
-        #         %(response_time_ms)s, %(ip_address)s, %(searched_at)s
-        #     )
-        # """, rows)
-        print(f"[BehaviorTracker] Inserted {len(rows)} search logs")
+        if not self.db:
+            print(f"[BehaviorTracker] No DB connection - skipping {len(rows)} search logs")
+            return
+
+        try:
+            # Execute SQL insert with SQLAlchemy
+            sql = """
+                INSERT INTO search_logs (
+                    user_id, session_id, query, normalized_query, filters,
+                    result_count, result_product_indices, intent, product_type,
+                    response_time_ms, ip_address, searched_at
+                ) VALUES (
+                    :user_id, :session_id, :query, :normalized_query, :filters,
+                    :result_count, :result_product_indices, :intent, :product_type,
+                    :response_time_ms, :ip_address, :searched_at
+                )
+            """
+            await asyncio.to_thread(self.db.execute, sql, rows)
+            await asyncio.to_thread(self.db.commit)
+            print(f"[BehaviorTracker] Inserted {len(rows)} search logs")
+        except Exception as e:
+            print(f"[BehaviorTracker] Failed to insert search logs: {e}")
+            await asyncio.to_thread(self.db.rollback)
 
     async def _insert_click_logs(self, rows: List[Dict]):
         """클릭 로그 INSERT"""
-        # TODO: 실제 DB 연결 구현
-        print(f"[BehaviorTracker] Inserted {len(rows)} click logs")
+        if not self.db:
+            print(f"[BehaviorTracker] No DB connection - skipping {len(rows)} click logs")
+            return
+
+        try:
+            sql = """
+                INSERT INTO click_logs (
+                    user_id, session_id, product_idx, product_code, product_name,
+                    category, material, capacity_ml, position, source_query,
+                    clicked_at
+                ) VALUES (
+                    :user_id, :session_id, :product_idx, :product_code, :product_name,
+                    :category, :material, :capacity_ml, :position, :source_query,
+                    :clicked_at
+                )
+            """
+            await asyncio.to_thread(self.db.execute, sql, rows)
+            await asyncio.to_thread(self.db.commit)
+            print(f"[BehaviorTracker] Inserted {len(rows)} click logs")
+        except Exception as e:
+            print(f"[BehaviorTracker] Failed to insert click logs: {e}")
+            await asyncio.to_thread(self.db.rollback)
 
     async def _insert_conversation_logs(self, rows: List[Dict]):
         """대화 로그 INSERT"""
-        # TODO: 실제 DB 연결 구현
-        print(f"[BehaviorTracker] Inserted {len(rows)} conversation logs")
+        if not self.db:
+            print(f"[BehaviorTracker] No DB connection - skipping {len(rows)} conversation logs")
+            return
+
+        try:
+            sql = """
+                INSERT INTO conversation_logs (
+                    user_id, session_id, message_id, role, content,
+                    intent, extracted_entities, response_time_ms, model_used,
+                    created_at
+                ) VALUES (
+                    :user_id, :session_id, :message_id, :role, :content,
+                    :intent, :extracted_entities, :response_time_ms, :model_used,
+                    :created_at
+                )
+            """
+            await asyncio.to_thread(self.db.execute, sql, rows)
+            await asyncio.to_thread(self.db.commit)
+            print(f"[BehaviorTracker] Inserted {len(rows)} conversation logs")
+        except Exception as e:
+            print(f"[BehaviorTracker] Failed to insert conversation logs: {e}")
+            await asyncio.to_thread(self.db.rollback)
 
     async def _insert_sample_requests(self, rows: List[Dict]):
         """샘플 신청 INSERT"""
-        # TODO: 실제 DB 연결 구현
-        print(f"[BehaviorTracker] Inserted {len(rows)} sample requests")
+        if not self.db:
+            print(f"[BehaviorTracker] No DB connection - skipping {len(rows)} sample requests")
+            return
+
+        try:
+            sql = """
+                INSERT INTO sample_requests (
+                    user_id, session_id, product_idx, product_code, product_name,
+                    customer_name, customer_email, customer_phone, company_name,
+                    quantity, message, status, requested_at
+                ) VALUES (
+                    :user_id, :session_id, :product_idx, :product_code, :product_name,
+                    :customer_name, :customer_email, :customer_phone, :company_name,
+                    :quantity, :message, :status, :requested_at
+                )
+            """
+            await asyncio.to_thread(self.db.execute, sql, rows)
+            await asyncio.to_thread(self.db.commit)
+            print(f"[BehaviorTracker] Inserted {len(rows)} sample requests")
+        except Exception as e:
+            print(f"[BehaviorTracker] Failed to insert sample requests: {e}")
+            await asyncio.to_thread(self.db.rollback)
 
     async def _save_to_file(self, batch: List[Dict]):
         """파일로 백업 저장"""
