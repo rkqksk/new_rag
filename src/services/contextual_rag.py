@@ -4,11 +4,11 @@
 """
 
 import json
-from typing import Dict, List, Optional, Any
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from src.core.conversation_manager import ConversationManager
-from src.core.intent_classifier import IntentClassifier, Intent
+from src.core.intent_classifier import Intent, IntentClassifier
 from src.core.reference_resolver import ReferenceResolver
 from src.services.intent_recommender import get_intent_recommender
 
@@ -21,7 +21,7 @@ class ContextualRAG:
         conv_manager: ConversationManager,
         intent_classifier: IntentClassifier,
         reference_resolver: ReferenceResolver,
-        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled/chungjinkorea/crawled_products_final"
+        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled/chungjinkorea/crawled_products_final",
     ):
         """
         Args:
@@ -41,11 +41,7 @@ class ContextualRAG:
         # 제품 데이터 캐시 (간단한 인메모리 캐시)
         self._product_cache: Dict[str, Dict] = {}
 
-    async def query(
-        self,
-        session_id: str,
-        user_query: str
-    ) -> Dict[str, Any]:
+    async def query(self, session_id: str, user_query: str) -> Dict[str, Any]:
         """
         컨텍스트 기반 쿼리 처리
 
@@ -64,15 +60,12 @@ class ContextualRAG:
             context = self.conv_manager.get_context(session_id)
 
         # 2. 의도 분류
-        intent_result = self.intent_classifier.classify_detailed(
-            user_query, context
-        )
+        intent_result = self.intent_classifier.classify_detailed(user_query, context)
         intent = Intent(intent_result["intent"])
         entities = intent_result["entities"]
 
         # 3. 참조 해결
-        resolved, product_idx, product_list = \
-            self.reference_resolver.resolve(user_query, context)
+        resolved, product_idx, product_list = self.reference_resolver.resolve(user_query, context)
 
         if resolved and product_idx:
             # 참조된 제품 데이터 로드
@@ -91,9 +84,7 @@ class ContextualRAG:
         # 4. 인텐트별 처리
         if intent == Intent.REFERENCE and resolved:
             # 참조 쿼리 - 참조된 제품에 대한 정보
-            result = await self._handle_reference_query(
-                expanded_query, product_idx, intent_result
-            )
+            result = await self._handle_reference_query(expanded_query, product_idx, intent_result)
         elif intent == Intent.COMPATIBILITY:
             # 호환성 쿼리
             result = await self._handle_compatibility_query(
@@ -101,24 +92,16 @@ class ContextualRAG:
             )
         elif intent == Intent.PRICE:
             # 가격 쿼리
-            result = await self._handle_price_query(
-                expanded_query, entities, context, product_idx
-            )
+            result = await self._handle_price_query(expanded_query, entities, context, product_idx)
         elif intent == Intent.COMPARE:
             # 비교 쿼리
-            result = await self._handle_compare_query(
-                expanded_query, entities, context
-            )
+            result = await self._handle_compare_query(expanded_query, entities, context)
         elif intent == Intent.FILTER:
             # 필터 쿼리
-            result = await self._handle_filter_query(
-                expanded_query, entities, context
-            )
+            result = await self._handle_filter_query(expanded_query, entities, context)
         else:
             # 기본 검색
-            result = await self._handle_search_query(
-                expanded_query, entities, context
-            )
+            result = await self._handle_search_query(expanded_query, entities, context)
 
         # 5. 컨텍스트 업데이트
         if result.get("products"):
@@ -126,19 +109,11 @@ class ContextualRAG:
 
             # 포커스 업데이트
             if product_idxs:
-                self.conv_manager.update_focus(
-                    session_id,
-                    product_idxs[0],
-                    product_idxs
-                )
+                self.conv_manager.update_focus(session_id, product_idxs[0], product_idxs)
 
         # 6. 히스토리 추가
         self.conv_manager.add_to_history(
-            session_id,
-            user_query,
-            intent.value,
-            result.get("products", []),
-            result.get("response")
+            session_id, user_query, intent.value, result.get("products", []), result.get("response")
         )
 
         # 7. 응답 구성
@@ -148,16 +123,13 @@ class ContextualRAG:
             "intent": intent_result,
             "reference_resolved": resolved,
             "expanded_query": expanded_query if resolved else None,
-            **result
+            **result,
         }
 
         return response
 
     async def _handle_reference_query(
-        self,
-        query: str,
-        product_idx: str,
-        intent_result: Dict
+        self, query: str, product_idx: str, intent_result: Dict
     ) -> Dict:
         """참조 쿼리 처리"""
         product = self._load_product(product_idx)
@@ -166,7 +138,7 @@ class ContextualRAG:
             return {
                 "products": [],
                 "response": f"제품 {product_idx}를 찾을 수 없습니다.",
-                "total_count": 0
+                "total_count": 0,
             }
 
         # 참조 쿼리 의도 파악
@@ -184,11 +156,7 @@ class ContextualRAG:
         return self._get_product_detail(product)
 
     async def _handle_compatibility_query(
-        self,
-        query: str,
-        entities: Dict,
-        context: Dict,
-        product_idx: Optional[str]
+        self, query: str, entities: Dict, context: Dict, product_idx: Optional[str]
     ) -> Dict:
         """호환성 쿼리 처리"""
         if product_idx:
@@ -199,15 +167,11 @@ class ContextualRAG:
         return {
             "products": [],
             "response": "호환성을 확인할 제품을 먼저 선택해주세요.",
-            "total_count": 0
+            "total_count": 0,
         }
 
     async def _handle_price_query(
-        self,
-        query: str,
-        entities: Dict,
-        context: Dict,
-        product_idx: Optional[str]
+        self, query: str, entities: Dict, context: Dict, product_idx: Optional[str]
     ) -> Dict:
         """가격 쿼리 처리"""
         if product_idx:
@@ -218,12 +182,7 @@ class ContextualRAG:
         # 가격 필터 적용하여 검색
         return await self._handle_search_query(query, entities, context)
 
-    async def _handle_compare_query(
-        self,
-        query: str,
-        entities: Dict,
-        context: Dict
-    ) -> Dict:
+    async def _handle_compare_query(self, query: str, entities: Dict, context: Dict) -> Dict:
         """비교 쿼리 처리"""
         # 이전 제품 목록에서 비교
         previous_products = context.get("previous_products", [])[:5]
@@ -238,15 +197,10 @@ class ContextualRAG:
             "products": products,
             "response": f"{len(products)}개 제품을 비교할 수 있습니다.",
             "total_count": len(products),
-            "comparison_mode": True
+            "comparison_mode": True,
         }
 
-    async def _handle_filter_query(
-        self,
-        query: str,
-        entities: Dict,
-        context: Dict
-    ) -> Dict:
+    async def _handle_filter_query(self, query: str, entities: Dict, context: Dict) -> Dict:
         """필터 쿼리 처리"""
         # 필터 추출 및 적용
         filters = self._extract_filters(entities, query)
@@ -257,11 +211,7 @@ class ContextualRAG:
         return await self._handle_search_query(query, entities, context, filters)
 
     async def _handle_search_query(
-        self,
-        query: str,
-        entities: Dict,
-        context: Dict,
-        additional_filters: Dict = None
+        self, query: str, entities: Dict, context: Dict, additional_filters: Dict = None
     ) -> Dict:
         """기본 검색 쿼리 처리 (스마트 추천 통합)"""
         # 1. 제품 유형 감지
@@ -312,14 +262,14 @@ class ContextualRAG:
                     "products": [],
                     "response": f"{exact_capacity}ml {product_type} 제품을 찾을 수 없습니다.",
                     "total_count": 0,
-                    "matched_profile": product_type
+                    "matched_profile": product_type,
                 }
         elif not products:
             return {
                 "products": [],
                 "response": "검색 결과가 없습니다. 다른 조건으로 검색해보세요.",
                 "total_count": 0,
-                "matched_profile": product_type
+                "matched_profile": product_type,
             }
         else:
             response_msg = None
@@ -328,9 +278,7 @@ class ContextualRAG:
         if product_type:
             # 의도 기반 추천 적용
             recommended_products = self.intent_recommender.recommend(
-                query=query,
-                products=products,
-                limit=10
+                query=query, products=products, limit=10
             )
 
             if response_msg is None:
@@ -350,14 +298,10 @@ class ContextualRAG:
             "filters_applied": filters,
             "matched_profile": product_type,
             "recommendation_applied": product_type is not None,
-            "exact_capacity": exact_capacity
+            "exact_capacity": exact_capacity,
         }
 
-    def _search_products(
-        self,
-        query: str,
-        filters: Dict
-    ) -> List[Dict]:
+    def _search_products(self, query: str, filters: Dict) -> List[Dict]:
         """제품 검색 (간단한 파일 기반 구현)"""
         # 모든 제품 파일 로드 (실제로는 DB 쿼리 또는 벡터 검색)
         products = []
@@ -437,7 +381,8 @@ class ContextualRAG:
                 # 용량 정보가 없으면 제외
                 return False
             import re
-            match = re.search(r'(\d+)', capacity_str)
+
+            match = re.search(r"(\d+)", capacity_str)
             if match:
                 capacity = float(match.group(1))
                 if capacity != filters["capacity_exact"]:
@@ -448,7 +393,8 @@ class ContextualRAG:
             capacity_str = specs.get("capacity", "")
             if capacity_str:
                 import re
-                match = re.search(r'(\d+)', capacity_str)
+
+                match = re.search(r"(\d+)", capacity_str)
                 if match:
                     capacity = float(match.group(1))
                     if "capacity_min" in filters and capacity < filters["capacity_min"]:
@@ -471,10 +417,7 @@ class ContextualRAG:
         return True
 
     def _build_filters(
-        self,
-        entities: Dict,
-        context: Dict,
-        additional_filters: Dict = None
+        self, entities: Dict, context: Dict, additional_filters: Dict = None
     ) -> Dict:
         """필터 구성"""
         filters = {}
@@ -543,7 +486,7 @@ class ContextualRAG:
             "products": compatible_products,
             "response": f"{product.get('product_name')}와 호환되는 Cap/Pump {len(compatible_products)}개를 찾았습니다.",
             "total_count": len(compatible_products),
-            "compatibility_for": product.get("idx")
+            "compatibility_for": product.get("idx"),
         }
 
     def _get_product_price(self, product: Dict) -> Dict:
@@ -557,12 +500,7 @@ class ContextualRAG:
         response += f"- 정가: {regular_price}원\n"
         response += f"- 할인가: {discount_price}원"
 
-        return {
-            "products": [product],
-            "response": response,
-            "total_count": 1,
-            "pricing": pricing
-        }
+        return {"products": [product], "response": response, "total_count": 1, "pricing": pricing}
 
     def _get_product_detail(self, product: Dict) -> Dict:
         """제품 상세 정보"""
@@ -579,17 +517,9 @@ class ContextualRAG:
             compat_count = compat.get("compatible_caps_pumps", {}).get("count", 0)
             response += f"호환 Cap/Pump: {compat_count}개"
 
-        return {
-            "products": [product],
-            "response": response,
-            "total_count": 1
-        }
+        return {"products": [product], "response": response, "total_count": 1}
 
-    def _generate_search_response(
-        self,
-        products: List[Dict],
-        entities: Dict
-    ) -> str:
+    def _generate_search_response(self, products: List[Dict], entities: Dict) -> str:
         """검색 응답 메시지 생성"""
         count = len(products)
 
@@ -629,7 +559,7 @@ class ContextualRAG:
     def _load_product_from_file(self, file_path: Path) -> Optional[Dict]:
         """파일에서 제품 로드"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 product = json.load(f)
 
             # images 배열에 downloaded_images의 local_path 추가
@@ -659,8 +589,9 @@ class ContextualRAG:
     def _extract_exact_capacity(self, query: str) -> Optional[float]:
         """쿼리에서 정확한 용량값 추출 (예: '50미리' → 50.0)"""
         import re
+
         # "미리", "ml", "mL" 패턴 찾기
-        match = re.search(r'(\d+)\s*(?:미리|ml|mL)', query)
+        match = re.search(r"(\d+)\s*(?:미리|ml|mL)", query)
         if match:
             return float(match.group(1))
         return None
@@ -682,13 +613,14 @@ class ContextualRAG:
 
             for json_file in category_path.rglob("*.json"):
                 try:
-                    with open(json_file, 'r', encoding='utf-8') as f:
+                    with open(json_file, "r", encoding="utf-8") as f:
                         product = json.load(f)
                     specs = product.get("specifications", {})
                     capacity_str = specs.get("capacity", "")
                     if capacity_str:
                         import re
-                        match = re.search(r'(\d+)', capacity_str)
+
+                        match = re.search(r"(\d+)", capacity_str)
                         if match:
                             cap = float(match.group(1))
                             if cap_min <= cap <= cap_max:
@@ -715,11 +647,7 @@ class ContextualRAG:
         return None
 
     def _search_nearby_products(
-        self,
-        query: str,
-        nearby_capacities_str: str,
-        filters: Dict,
-        product_type: str
+        self, query: str, nearby_capacities_str: str, filters: Dict, product_type: str
     ) -> List[Dict]:
         """근처 용량으로 제품 재검색"""
         products = []

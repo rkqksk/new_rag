@@ -3,14 +3,14 @@ Automated Data Pipeline for Phase 7.3
 End-to-end orchestration: Cloud → Processing → Vector Store
 """
 
+import asyncio
+import json
 import logging
 import os
-import asyncio
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
-from pathlib import Path
 from datetime import datetime
-import json
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class PipelineConfig:
     """Pipeline configuration"""
+
     # Source
     source_type: str  # 'google_drive' or 's3'
     source_params: Dict[str, Any]
@@ -42,6 +43,7 @@ class PipelineConfig:
 @dataclass
 class PipelineResult:
     """Pipeline execution result"""
+
     run_id: str
     start_time: datetime
     end_time: datetime
@@ -106,7 +108,7 @@ class AutomatedDataPipeline:
         s3=None,  # S3Integration
         processor=None,  # Multi-modal processor
         vector_store=None,  # Vector store uploader
-        embedder=None  # Text/Image embedder
+        embedder=None,  # Text/Image embedder
     ):
         """
         Initialize Automated Data Pipeline
@@ -161,7 +163,7 @@ class AutomatedDataPipeline:
             chunks_created=0,
             vectors_uploaded=0,
             errors=[],
-            success=False
+            success=False,
         )
 
         try:
@@ -182,7 +184,7 @@ class AutomatedDataPipeline:
             processed_data = await self._process_files(local_files, config)
 
             result.files_processed = len(processed_data)
-            result.processing_success = sum(1 for d in processed_data if d.get('success', False))
+            result.processing_success = sum(1 for d in processed_data if d.get("success", False))
             result.processing_failed = result.files_processed - result.processing_success
 
             # Step 3: Chunking and Embedding
@@ -230,48 +232,35 @@ class AutomatedDataPipeline:
 
     async def _ingest_from_cloud(self, config: PipelineConfig) -> List[Any]:
         """Ingest files from cloud storage"""
-        if config.source_type == 'google_drive':
+        if config.source_type == "google_drive":
             if not self.google_drive:
                 raise RuntimeError("Google Drive integration not configured")
 
-            folder_id = config.source_params.get('folder_id')
+            folder_id = config.source_params.get("folder_id")
             mime_types = self._get_mime_types(config.file_types)
 
             # Download from Google Drive
             all_files = []
             for mime_type in mime_types:
-                files = await self.google_drive.list_files(
-                    folder_id=folder_id,
-                    mime_type=mime_type
-                )
+                files = await self.google_drive.list_files(folder_id=folder_id, mime_type=mime_type)
                 all_files.extend(files)
 
-            results = await self.google_drive.download_files(
-                all_files,
-                config.output_dir
-            )
+            results = await self.google_drive.download_files(all_files, config.output_dir)
 
             return results
 
-        elif config.source_type == 's3':
+        elif config.source_type == "s3":
             if not self.s3:
                 raise RuntimeError("S3 integration not configured")
 
-            bucket = config.source_params.get('bucket')
-            prefix = config.source_params.get('prefix', '')
-            suffix = config.source_params.get('suffix')
+            bucket = config.source_params.get("bucket")
+            prefix = config.source_params.get("prefix", "")
+            suffix = config.source_params.get("suffix")
 
             # Download from S3
-            s3_objects = await self.s3.list_objects(
-                bucket=bucket,
-                prefix=prefix,
-                suffix=suffix
-            )
+            s3_objects = await self.s3.list_objects(bucket=bucket, prefix=prefix, suffix=suffix)
 
-            results = await self.s3.download_objects(
-                s3_objects,
-                config.output_dir
-            )
+            results = await self.s3.download_objects(s3_objects, config.output_dir)
 
             return results
 
@@ -279,9 +268,7 @@ class AutomatedDataPipeline:
             raise ValueError(f"Unknown source type: {config.source_type}")
 
     async def _process_files(
-        self,
-        file_paths: List[str],
-        config: PipelineConfig
+        self, file_paths: List[str], config: PipelineConfig
     ) -> List[Dict[str, Any]]:
         """Process downloaded files"""
         processed_data = []
@@ -291,109 +278,92 @@ class AutomatedDataPipeline:
                 # Determine file type
                 ext = Path(file_path).suffix.lower()
 
-                if ext == '.pdf':
+                if ext == ".pdf":
                     # Process PDF with OCR
                     data = await self._process_pdf(file_path)
-                elif ext in ['.jpg', '.jpeg', '.png']:
+                elif ext in [".jpg", ".jpeg", ".png"]:
                     # Process image
                     data = await self._process_image(file_path)
-                elif ext in ['.xlsx', '.xls', '.csv']:
+                elif ext in [".xlsx", ".xls", ".csv"]:
                     # Process spreadsheet
                     data = await self._process_spreadsheet(file_path)
                 else:
                     logger.warning(f"Unsupported file type: {ext}")
                     continue
 
-                data['file_path'] = file_path
-                data['success'] = True
+                data["file_path"] = file_path
+                data["success"] = True
                 processed_data.append(data)
 
             except Exception as e:
                 logger.error(f"Failed to process {file_path}: {e}")
-                processed_data.append({
-                    'file_path': file_path,
-                    'success': False,
-                    'error': str(e)
-                })
+                processed_data.append({"file_path": file_path, "success": False, "error": str(e)})
 
         return processed_data
 
     async def _process_pdf(self, file_path: str) -> Dict[str, Any]:
         """Process PDF file with OCR"""
         # Use OCR processor if available
-        if self.processor and hasattr(self.processor, 'process_pdf'):
+        if self.processor and hasattr(self.processor, "process_pdf"):
             return await self.processor.process_pdf(file_path)
         else:
             # Simplified processing
-            return {
-                'type': 'pdf',
-                'text': '',
-                'metadata': {'source': file_path}
-            }
+            return {"type": "pdf", "text": "", "metadata": {"source": file_path}}
 
     async def _process_image(self, file_path: str) -> Dict[str, Any]:
         """Process image file"""
         # Use image processor if available
-        if self.processor and hasattr(self.processor, 'process_image'):
+        if self.processor and hasattr(self.processor, "process_image"):
             return await self.processor.process_image(file_path)
         else:
-            return {
-                'type': 'image',
-                'image_path': file_path,
-                'metadata': {'source': file_path}
-            }
+            return {"type": "image", "image_path": file_path, "metadata": {"source": file_path}}
 
     async def _process_spreadsheet(self, file_path: str) -> Dict[str, Any]:
         """Process spreadsheet file"""
         # Use spreadsheet processor if available
-        if self.processor and hasattr(self.processor, 'process_spreadsheet'):
+        if self.processor and hasattr(self.processor, "process_spreadsheet"):
             return await self.processor.process_spreadsheet(file_path)
         else:
             return {
-                'type': 'spreadsheet',
-                'data_path': file_path,
-                'metadata': {'source': file_path}
+                "type": "spreadsheet",
+                "data_path": file_path,
+                "metadata": {"source": file_path},
             }
 
     async def _create_chunks(
-        self,
-        processed_data: List[Dict[str, Any]],
-        config: PipelineConfig
+        self, processed_data: List[Dict[str, Any]], config: PipelineConfig
     ) -> List[Dict[str, Any]]:
         """Create chunks from processed data"""
         chunks = []
 
         for data in processed_data:
-            if not data.get('success', False):
+            if not data.get("success", False):
                 continue
 
             # Extract text content
-            text = data.get('text', '')
+            text = data.get("text", "")
 
             if text:
                 # Simple chunking (can be enhanced)
                 chunk_size = 500
-                text_chunks = [
-                    text[i:i + chunk_size]
-                    for i in range(0, len(text), chunk_size)
-                ]
+                text_chunks = [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
 
                 for i, chunk_text in enumerate(text_chunks):
-                    chunks.append({
-                        'text': chunk_text,
-                        'metadata': {
-                            **data.get('metadata', {}),
-                            'chunk_index': i,
-                            'total_chunks': len(text_chunks)
+                    chunks.append(
+                        {
+                            "text": chunk_text,
+                            "metadata": {
+                                **data.get("metadata", {}),
+                                "chunk_index": i,
+                                "total_chunks": len(text_chunks),
+                            },
                         }
-                    })
+                    )
 
         return chunks
 
     async def _upload_to_vector_store(
-        self,
-        chunks: List[Dict[str, Any]],
-        config: PipelineConfig
+        self, chunks: List[Dict[str, Any]], config: PipelineConfig
     ) -> int:
         """Upload chunks to vector store"""
         if not self.vector_store:
@@ -402,9 +372,9 @@ class AutomatedDataPipeline:
 
         try:
             # Generate embeddings
-            texts = [c['text'] for c in chunks]
+            texts = [c["text"] for c in chunks]
 
-            if self.embedder and hasattr(self.embedder, 'encode_batch'):
+            if self.embedder and hasattr(self.embedder, "encode_batch"):
                 embeddings = self.embedder.encode_batch(texts)
             else:
                 logger.warning("Embedder not configured, skipping embedding")
@@ -426,6 +396,7 @@ class AutomatedDataPipeline:
         """Cleanup temporary files"""
         try:
             import shutil
+
             shutil.rmtree(output_dir)
             logger.info(f"Cleaned up: {output_dir}")
         except Exception as e:
@@ -434,10 +405,10 @@ class AutomatedDataPipeline:
     def _get_mime_types(self, file_types: List[str]) -> List[str]:
         """Convert file types to MIME types"""
         mime_type_map = {
-            'pdf': 'application/pdf',
-            'image': 'image/jpeg',
-            'excel': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            'csv': 'text/csv'
+            "pdf": "application/pdf",
+            "image": "image/jpeg",
+            "excel": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "csv": "text/csv",
         }
 
         mime_types = []
@@ -457,11 +428,11 @@ class AutomatedDataPipeline:
         successful_runs = sum(1 for r in self.run_history if r.success)
 
         return {
-            'total_runs': total_runs,
-            'successful_runs': successful_runs,
-            'failed_runs': total_runs - successful_runs,
-            'total_files_processed': sum(r.files_processed for r in self.run_history),
-            'total_vectors_uploaded': sum(r.vectors_uploaded for r in self.run_history)
+            "total_runs": total_runs,
+            "successful_runs": successful_runs,
+            "failed_runs": total_runs - successful_runs,
+            "total_files_processed": sum(r.files_processed for r in self.run_history),
+            "total_vectors_uploaded": sum(r.vectors_uploaded for r in self.run_history),
         }
 
     def __repr__(self):

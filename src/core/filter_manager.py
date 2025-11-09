@@ -3,15 +3,16 @@
 영업사원처럼 이전 검색 결과를 기억하고 점진적으로 필터링
 """
 
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
-from copy import deepcopy
 import re
+from copy import deepcopy
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
 
 @dataclass
 class FilterOperation:
     """필터 연산"""
+
     operation_type: str  # "add", "remove", "replace", "reset"
     filter_key: str
     filter_value: Any
@@ -35,10 +36,7 @@ class FilterManager:
         self.cached_filters: Optional[Dict] = None
 
     def add_filter(
-        self,
-        filter_key: str,
-        filter_value: Any,
-        replace: bool = False
+        self, filter_key: str, filter_value: Any, replace: bool = False
     ) -> Dict[str, Any]:
         """
         필터 추가 (누적)
@@ -70,12 +68,14 @@ class FilterManager:
             self.active_filters[filter_key] = existing
 
         # 히스토리 기록
-        self.filter_history.append(FilterOperation(
-            operation_type=operation_type,
-            filter_key=filter_key,
-            filter_value=filter_value,
-            timestamp=datetime.now().isoformat()
-        ))
+        self.filter_history.append(
+            FilterOperation(
+                operation_type=operation_type,
+                filter_key=filter_key,
+                filter_value=filter_value,
+                timestamp=datetime.now().isoformat(),
+            )
+        )
 
         return deepcopy(self.active_filters)
 
@@ -86,12 +86,14 @@ class FilterManager:
         if filter_key in self.active_filters:
             removed_value = self.active_filters.pop(filter_key)
 
-            self.filter_history.append(FilterOperation(
-                operation_type="remove",
-                filter_key=filter_key,
-                filter_value=removed_value,
-                timestamp=datetime.now().isoformat()
-            ))
+            self.filter_history.append(
+                FilterOperation(
+                    operation_type="remove",
+                    filter_key=filter_key,
+                    filter_value=removed_value,
+                    timestamp=datetime.now().isoformat(),
+                )
+            )
 
         return deepcopy(self.active_filters)
 
@@ -103,19 +105,19 @@ class FilterManager:
         self.cached_results = None
         self.cached_filters = None
 
-        self.filter_history.append(FilterOperation(
-            operation_type="reset",
-            filter_key="all",
-            filter_value=None,
-            timestamp=datetime.now().isoformat()
-        ))
+        self.filter_history.append(
+            FilterOperation(
+                operation_type="reset",
+                filter_key="all",
+                filter_value=None,
+                timestamp=datetime.now().isoformat(),
+            )
+        )
 
         return {}
 
     def apply_incremental_filter(
-        self,
-        new_filter: Dict[str, Any],
-        cached_results: List[Dict]
+        self, new_filter: Dict[str, Any], cached_results: List[Dict]
     ) -> List[Dict]:
         """
         이전 결과에 점진적 필터 적용
@@ -141,10 +143,7 @@ class FilterManager:
         return filtered
 
     def _apply_single_filter(
-        self,
-        products: List[Dict],
-        filter_key: str,
-        filter_value: Any
+        self, products: List[Dict], filter_key: str, filter_value: Any
     ) -> List[Dict]:
         """단일 필터 적용"""
 
@@ -177,7 +176,7 @@ class FilterManager:
             capacity_str = specs.get("capacity", "")
 
             # 용량 추출
-            match = re.search(r'(\d+(?:\.\d+)?)\s*ml', capacity_str.lower())
+            match = re.search(r"(\d+(?:\.\d+)?)\s*ml", capacity_str.lower())
             if match:
                 cap = float(match.group(1))
                 if min_cap <= cap <= max_cap:
@@ -193,7 +192,7 @@ class FilterManager:
             specs = product.get("specifications", {})
             capacity_str = specs.get("capacity", "")
 
-            match = re.search(r'(\d+(?:\.\d+)?)\s*ml', capacity_str.lower())
+            match = re.search(r"(\d+(?:\.\d+)?)\s*ml", capacity_str.lower())
             if match:
                 cap = float(match.group(1))
                 if cap == capacity_value:
@@ -234,7 +233,7 @@ class FilterManager:
 
         for product in products:
             pricing = product.get("pricing", {})
-            price = pricing.get("discount_price") or pricing.get("regular_price", float('inf'))
+            price = pricing.get("discount_price") or pricing.get("regular_price", float("inf"))
 
             if isinstance(price, (int, float)) and price <= max_price:
                 filtered.append(product)
@@ -312,5 +311,5 @@ class FilterManager:
             "filter_count": len(self.active_filters),
             "has_cache": self.cached_results is not None,
             "cached_result_count": len(self.cached_results) if self.cached_results else 0,
-            "history_length": len(self.filter_history)
+            "history_length": len(self.filter_history),
         }

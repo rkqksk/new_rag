@@ -18,7 +18,7 @@ class ReferenceResolver:
             r"세\s*번째|세번째": 2,
             r"네\s*번째|네번째": 3,
             r"다섯\s*번째|다섯번째": 4,
-            r"마지막": -1
+            r"마지막": -1,
         }
 
         # 지시 대명사 패턴
@@ -28,7 +28,7 @@ class ReferenceResolver:
             r"저\s*거",
             r"그\s*제품",
             r"이\s*제품",
-            r"저\s*제품"
+            r"저\s*제품",
         ]
 
         # 상대 위치 참조
@@ -36,14 +36,10 @@ class ReferenceResolver:
             r"위\s*에|위쪽": -1,
             r"아래\s*에|아래쪽": 1,
             r"이전|전\s*에|앞\s*에": -1,
-            r"다음|후\s*에|뒤\s*에": 1
+            r"다음|후\s*에|뒤\s*에": 1,
         }
 
-    def resolve(
-        self,
-        query: str,
-        context: Dict
-    ) -> Tuple[bool, Optional[str], Optional[List[str]]]:
+    def resolve(self, query: str, context: Dict) -> Tuple[bool, Optional[str], Optional[List[str]]]:
         """
         쿼리에서 참조 해결
 
@@ -80,9 +76,7 @@ class ReferenceResolver:
         return False, None, None
 
     def _resolve_ordinal(
-        self,
-        query: str,
-        context: Dict
+        self, query: str, context: Dict
     ) -> Tuple[bool, Optional[str], Optional[List[str]]]:
         """순서 참조 해결"""
         previous_products = context.get("previous_products", [])
@@ -109,17 +103,14 @@ class ReferenceResolver:
         return False, None, None
 
     def _resolve_demonstrative(
-        self,
-        query: str,
-        context: Dict
+        self, query: str, context: Dict
     ) -> Tuple[bool, Optional[str], Optional[List[str]]]:
         """지시 대명사 참조 해결"""
         current_focus = context.get("current_focus")
 
         # 지시 대명사가 있는지 확인
         has_demonstrative = any(
-            re.search(pattern, query)
-            for pattern in self.demonstrative_patterns
+            re.search(pattern, query) for pattern in self.demonstrative_patterns
         )
 
         if has_demonstrative and current_focus:
@@ -128,9 +119,7 @@ class ReferenceResolver:
         return False, None, None
 
     def _resolve_relative(
-        self,
-        query: str,
-        context: Dict
+        self, query: str, context: Dict
     ) -> Tuple[bool, Optional[str], Optional[List[str]]]:
         """상대 위치 참조 해결"""
         current_focus = context.get("current_focus")
@@ -155,9 +144,7 @@ class ReferenceResolver:
         return False, None, None
 
     def _resolve_implicit(
-        self,
-        query: str,
-        context: Dict
+        self, query: str, context: Dict
     ) -> Tuple[bool, Optional[str], Optional[List[str]]]:
         """암묵적 참조 해결 (짧은 질문 + 포커스)"""
         current_focus = context.get("current_focus")
@@ -165,9 +152,7 @@ class ReferenceResolver:
         # 짧은 쿼리 (20자 이하) + 포커스 있음
         if len(query) <= 20 and current_focus:
             # 검색 키워드가 없는 경우만 (기존 제품에 대한 질문으로 간주)
-            search_indicators = [
-                "ml", "파이", "용기", "병", "PE", "PET", "PETG"
-            ]
+            search_indicators = ["ml", "파이", "용기", "병", "PE", "PET", "PETG"]
 
             has_search_term = any(ind in query for ind in search_indicators)
 
@@ -176,12 +161,7 @@ class ReferenceResolver:
 
         return False, None, None
 
-    def expand_query(
-        self,
-        query: str,
-        product_idx: str,
-        product_data: Dict
-    ) -> str:
+    def expand_query(self, query: str, product_idx: str, product_data: Dict) -> str:
         """
         참조를 실제 제품 정보로 확장
 

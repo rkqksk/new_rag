@@ -4,28 +4,31 @@ Advanced methods for combining scores from multiple sources
 """
 
 import logging
-import numpy as np
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
+
+import numpy as np
 
 logger = logging.getLogger(__name__)
 
 
 class FusionStrategy(Enum):
     """Score fusion strategies"""
-    WEIGHTED_SUM = "weighted_sum"              # Simple weighted average
-    RRF = "reciprocal_rank_fusion"             # Rank-based fusion
-    BORDA_COUNT = "borda_count"                # Voting-based
-    CONDORCET = "condorcet"                    # Pairwise comparison
-    CombSUM = "comb_sum"                       # Unnormalized sum
-    CombMNZ = "comb_mnz"                       # Multiply by number of non-zero
-    LEARNED = "learned"                        # ML-based (future)
+
+    WEIGHTED_SUM = "weighted_sum"  # Simple weighted average
+    RRF = "reciprocal_rank_fusion"  # Rank-based fusion
+    BORDA_COUNT = "borda_count"  # Voting-based
+    CONDORCET = "condorcet"  # Pairwise comparison
+    CombSUM = "comb_sum"  # Unnormalized sum
+    CombMNZ = "comb_mnz"  # Multiply by number of non-zero
+    LEARNED = "learned"  # ML-based (future)
 
 
 @dataclass
 class FusionResult:
     """Fusion result with scores"""
+
     item_id: str
     final_score: float
     source_scores: Dict[str, float]  # {source: score}
@@ -56,7 +59,7 @@ class ScoreFusion:
         self,
         strategy: FusionStrategy = FusionStrategy.WEIGHTED_SUM,
         rrf_k: float = 60,
-        normalize_before_fusion: bool = True
+        normalize_before_fusion: bool = True,
     ):
         """
         Initialize Score Fusion Engine
@@ -75,7 +78,7 @@ class ScoreFusion:
     def fuse_scores(
         self,
         source_results: Dict[str, List[Dict[str, Any]]],
-        weights: Optional[Dict[str, float]] = None
+        weights: Optional[Dict[str, float]] = None,
     ) -> List[FusionResult]:
         """
         Fuse scores from multiple sources
@@ -141,8 +144,7 @@ class ScoreFusion:
         return fused
 
     def _normalize_all_scores(
-        self,
-        source_results: Dict[str, List[Dict[str, Any]]]
+        self, source_results: Dict[str, List[Dict[str, Any]]]
     ) -> Dict[str, List[Dict[str, Any]]]:
         """Normalize scores within each source to [0, 1]"""
         normalized = {}
@@ -152,21 +154,16 @@ class ScoreFusion:
                 normalized[source] = []
                 continue
 
-            scores = [r['score'] for r in results]
+            scores = [r["score"] for r in results]
             min_score = min(scores)
             max_score = max(scores)
 
             if max_score == min_score:
                 # All same score
-                norm_results = [
-                    {**r, 'score': 1.0} for r in results
-                ]
+                norm_results = [{**r, "score": 1.0} for r in results]
             else:
                 norm_results = [
-                    {
-                        **r,
-                        'score': (r['score'] - min_score) / (max_score - min_score)
-                    }
+                    {**r, "score": (r["score"] - min_score) / (max_score - min_score)}
                     for r in results
                 ]
 
@@ -175,9 +172,7 @@ class ScoreFusion:
         return normalized
 
     def _weighted_sum(
-        self,
-        source_results: Dict[str, List[Dict[str, Any]]],
-        weights: Dict[str, float]
+        self, source_results: Dict[str, List[Dict[str, Any]]], weights: Dict[str, float]
     ) -> List[FusionResult]:
         """
         Weighted Sum Fusion
@@ -187,12 +182,12 @@ class ScoreFusion:
         # Collect all unique item IDs
         all_ids = set()
         for results in source_results.values():
-            all_ids.update(r['id'] for r in results)
+            all_ids.update(r["id"] for r in results)
 
         # Build score map: {source: {id: score}}
         score_map = {}
         for source, results in source_results.items():
-            score_map[source] = {r['id']: r['score'] for r in results}
+            score_map[source] = {r["id"]: r["score"] for r in results}
 
         # Compute weighted sum for each item
         fused = []
@@ -205,17 +200,14 @@ class ScoreFusion:
                 source_scores[source] = score
                 weighted_sum += weight * score
 
-            fused.append(FusionResult(
-                item_id=item_id,
-                final_score=weighted_sum,
-                source_scores=source_scores
-            ))
+            fused.append(
+                FusionResult(item_id=item_id, final_score=weighted_sum, source_scores=source_scores)
+            )
 
         return fused
 
     def _reciprocal_rank_fusion(
-        self,
-        source_results: Dict[str, List[Dict[str, Any]]]
+        self, source_results: Dict[str, List[Dict[str, Any]]]
     ) -> List[FusionResult]:
         """
         Reciprocal Rank Fusion (RRF)
@@ -228,14 +220,14 @@ class ScoreFusion:
         # Collect all unique item IDs
         all_ids = set()
         for results in source_results.values():
-            all_ids.update(r['id'] for r in results)
+            all_ids.update(r["id"] for r in results)
 
         # Build rank map: {source: {id: rank}}
         rank_map = {}
         for source, results in source_results.items():
             # Sort by score descending
-            sorted_results = sorted(results, key=lambda x: x['score'], reverse=True)
-            rank_map[source] = {r['id']: rank for rank, r in enumerate(sorted_results, start=1)}
+            sorted_results = sorted(results, key=lambda x: x["score"], reverse=True)
+            rank_map[source] = {r["id"]: rank for rank, r in enumerate(sorted_results, start=1)}
 
         # Compute RRF score for each item
         fused = []
@@ -252,18 +244,13 @@ class ScoreFusion:
                 else:
                     source_scores[source] = 0.0
 
-            fused.append(FusionResult(
-                item_id=item_id,
-                final_score=rrf_score,
-                source_scores=source_scores
-            ))
+            fused.append(
+                FusionResult(item_id=item_id, final_score=rrf_score, source_scores=source_scores)
+            )
 
         return fused
 
-    def _borda_count(
-        self,
-        source_results: Dict[str, List[Dict[str, Any]]]
-    ) -> List[FusionResult]:
+    def _borda_count(self, source_results: Dict[str, List[Dict[str, Any]]]) -> List[FusionResult]:
         """
         Borda Count Fusion
 
@@ -272,17 +259,16 @@ class ScoreFusion:
         """
         all_ids = set()
         for results in source_results.values():
-            all_ids.update(r['id'] for r in results)
+            all_ids.update(r["id"] for r in results)
 
         # Build rank map with Borda points
         borda_map = {}
         for source, results in source_results.items():
-            sorted_results = sorted(results, key=lambda x: x['score'], reverse=True)
+            sorted_results = sorted(results, key=lambda x: x["score"], reverse=True)
             n = len(sorted_results)
 
             borda_map[source] = {
-                r['id']: (n - rank + 1)
-                for rank, r in enumerate(sorted_results, start=1)
+                r["id"]: (n - rank + 1) for rank, r in enumerate(sorted_results, start=1)
             }
 
         # Compute Borda count for each item
@@ -296,18 +282,13 @@ class ScoreFusion:
                 source_scores[source] = points
                 total_points += points
 
-            fused.append(FusionResult(
-                item_id=item_id,
-                final_score=total_points,
-                source_scores=source_scores
-            ))
+            fused.append(
+                FusionResult(item_id=item_id, final_score=total_points, source_scores=source_scores)
+            )
 
         return fused
 
-    def _comb_sum(
-        self,
-        source_results: Dict[str, List[Dict[str, Any]]]
-    ) -> List[FusionResult]:
+    def _comb_sum(self, source_results: Dict[str, List[Dict[str, Any]]]) -> List[FusionResult]:
         """
         CombSUM: Simple sum of scores
 
@@ -315,11 +296,11 @@ class ScoreFusion:
         """
         all_ids = set()
         for results in source_results.values():
-            all_ids.update(r['id'] for r in results)
+            all_ids.update(r["id"] for r in results)
 
         score_map = {}
         for source, results in source_results.items():
-            score_map[source] = {r['id']: r['score'] for r in results}
+            score_map[source] = {r["id"]: r["score"] for r in results}
 
         fused = []
         for item_id in all_ids:
@@ -331,18 +312,13 @@ class ScoreFusion:
                 source_scores[source] = score
                 total_score += score
 
-            fused.append(FusionResult(
-                item_id=item_id,
-                final_score=total_score,
-                source_scores=source_scores
-            ))
+            fused.append(
+                FusionResult(item_id=item_id, final_score=total_score, source_scores=source_scores)
+            )
 
         return fused
 
-    def _comb_mnz(
-        self,
-        source_results: Dict[str, List[Dict[str, Any]]]
-    ) -> List[FusionResult]:
+    def _comb_mnz(self, source_results: Dict[str, List[Dict[str, Any]]]) -> List[FusionResult]:
         """
         CombMNZ: Sum multiplied by number of non-zero scores
 
@@ -352,11 +328,11 @@ class ScoreFusion:
         """
         all_ids = set()
         for results in source_results.values():
-            all_ids.update(r['id'] for r in results)
+            all_ids.update(r["id"] for r in results)
 
         score_map = {}
         for source, results in source_results.items():
-            score_map[source] = {r['id']: r['score'] for r in results}
+            score_map[source] = {r["id"]: r["score"] for r in results}
 
         fused = []
         for item_id in all_ids:
@@ -375,12 +351,14 @@ class ScoreFusion:
             # Multiply by number of non-zero sources
             final_score = total_score * non_zero_count if non_zero_count > 0 else 0.0
 
-            fused.append(FusionResult(
-                item_id=item_id,
-                final_score=final_score,
-                source_scores=source_scores,
-                metadata={'non_zero_sources': non_zero_count}
-            ))
+            fused.append(
+                FusionResult(
+                    item_id=item_id,
+                    final_score=final_score,
+                    source_scores=source_scores,
+                    metadata={"non_zero_sources": non_zero_count},
+                )
+            )
 
         return fused
 

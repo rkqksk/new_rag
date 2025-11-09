@@ -4,12 +4,10 @@ Unit tests for app/core/routing/intent_router.py
 Tests the IntentDetector class for automatic user query intent detection
 and MCP tool routing decisions.
 """
+
 import pytest
-from app.core.routing.intent_router import (
-    IntentDetector,
-    Intent,
-    IntentResult
-)
+
+from app.core.routing.intent_router import Intent, IntentDetector, IntentResult
 
 
 @pytest.fixture
@@ -112,7 +110,7 @@ def test_confidence_scoring_accuracy(intent_detector):
         "문서를 검색해줘",
         "이게 뭐야",
         "시스템 분석해줘",
-        "random text with no clear intent"
+        "random text with no clear intent",
     ]
 
     for query in queries:
@@ -167,12 +165,7 @@ def test_edge_case_very_long_query(intent_detector):
 @pytest.mark.unit
 def test_korean_query_handling(intent_detector):
     """Test proper handling of Korean language queries"""
-    korean_queries = [
-        "폴더 보여줘",
-        "문서 찾아줘",
-        "이거 뭐야",
-        "왜 그래?"
-    ]
+    korean_queries = ["폴더 보여줘", "문서 찾아줘", "이거 뭐야", "왜 그래?"]
 
     for query in korean_queries:
         result = intent_detector.detect(query)
@@ -238,11 +231,11 @@ def test_result_serialization(intent_detector):
     result = intent_detector.detect(query)
 
     # Verify all required fields are present
-    assert hasattr(result, 'intent')
-    assert hasattr(result, 'confidence')
-    assert hasattr(result, 'mcp_tool')
-    assert hasattr(result, 'fallback_tools')
-    assert hasattr(result, 'params')
+    assert hasattr(result, "intent")
+    assert hasattr(result, "confidence")
+    assert hasattr(result, "mcp_tool")
+    assert hasattr(result, "fallback_tools")
+    assert hasattr(result, "params")
 
     # Verify types
     assert isinstance(result.intent, Intent)

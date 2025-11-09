@@ -3,13 +3,13 @@ Google Drive Integration for Phase 7.1
 Automated data ingestion from Google Drive
 """
 
-import logging
 import io
+import logging
+import mimetypes
 import os
-from typing import List, Dict, Any, Optional, BinaryIO
 from dataclasses import dataclass
 from pathlib import Path
-import mimetypes
+from typing import Any, BinaryIO, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class DriveFile:
     """Google Drive file metadata"""
+
     id: str
     name: str
     mime_type: str
@@ -30,6 +31,7 @@ class DriveFile:
 @dataclass
 class DownloadResult:
     """Download result"""
+
     file: DriveFile
     local_path: str
     success: bool
@@ -66,7 +68,7 @@ class GoogleDriveIntegration:
         self,
         credentials_path: str = "credentials.json",
         token_path: str = "token.json",
-        scopes: Optional[List[str]] = None
+        scopes: Optional[List[str]] = None,
     ):
         """
         Initialize Google Drive Integration
@@ -81,8 +83,8 @@ class GoogleDriveIntegration:
 
         if scopes is None:
             self.scopes = [
-                'https://www.googleapis.com/auth/drive.readonly',
-                'https://www.googleapis.com/auth/drive.file'
+                "https://www.googleapis.com/auth/drive.readonly",
+                "https://www.googleapis.com/auth/drive.file",
             ]
         else:
             self.scopes = scopes
@@ -127,11 +129,11 @@ class GoogleDriveIntegration:
                     creds = flow.run_local_server(port=0)
 
                 # Save token
-                with open(self.token_path, 'w') as token:
+                with open(self.token_path, "w") as token:
                     token.write(creds.to_json())
 
             # Build service
-            self.service = build('drive', 'v3', credentials=creds)
+            self.service = build("drive", "v3", credentials=creds)
             self.credentials = creds
 
             logger.info("✅ Google Drive authentication successful")
@@ -146,7 +148,7 @@ class GoogleDriveIntegration:
         folder_id: Optional[str] = None,
         mime_type: Optional[str] = None,
         name_contains: Optional[str] = None,
-        page_size: int = 100
+        page_size: int = 100,
     ) -> List[DriveFile]:
         """
         List files in Google Drive
@@ -189,25 +191,29 @@ class GoogleDriveIntegration:
 
         # Execute request
         try:
-            results = self.service.files().list(
-                q=query,
-                pageSize=page_size,
-                fields="nextPageToken, files(id, name, mimeType, size, createdTime, modifiedTime, webViewLink, parents)"
-            ).execute()
+            results = (
+                self.service.files()
+                .list(
+                    q=query,
+                    pageSize=page_size,
+                    fields="nextPageToken, files(id, name, mimeType, size, createdTime, modifiedTime, webViewLink, parents)",
+                )
+                .execute()
+            )
 
-            items = results.get('files', [])
+            items = results.get("files", [])
 
             # Convert to DriveFile objects
             files = [
                 DriveFile(
-                    id=item['id'],
-                    name=item['name'],
-                    mime_type=item['mimeType'],
-                    size=int(item.get('size', 0)),
-                    created_time=item['createdTime'],
-                    modified_time=item['modifiedTime'],
-                    web_view_link=item.get('webViewLink'),
-                    parents=item.get('parents')
+                    id=item["id"],
+                    name=item["name"],
+                    mime_type=item["mimeType"],
+                    size=int(item.get("size", 0)),
+                    created_time=item["createdTime"],
+                    modified_time=item["modifiedTime"],
+                    web_view_link=item.get("webViewLink"),
+                    parents=item.get("parents"),
                 )
                 for item in items
             ]
@@ -219,11 +225,7 @@ class GoogleDriveIntegration:
             logger.error(f"❌ Failed to list files: {e}")
             return []
 
-    async def download_file(
-        self,
-        file: DriveFile,
-        output_path: str
-    ) -> DownloadResult:
+    async def download_file(self, file: DriveFile, output_path: str) -> DownloadResult:
         """
         Download a file from Google Drive
 
@@ -251,7 +253,7 @@ class GoogleDriveIntegration:
             request = self.service.files().get_media(fileId=file.id)
 
             # Download
-            fh = io.FileIO(output_path, 'wb')
+            fh = io.FileIO(output_path, "wb")
             downloader = MediaIoBaseDownload(fh, request)
 
             done = False
@@ -264,26 +266,14 @@ class GoogleDriveIntegration:
 
             logger.info(f"✅ Downloaded: {file.name} → {output_path}")
 
-            return DownloadResult(
-                file=file,
-                local_path=output_path,
-                success=True
-            )
+            return DownloadResult(file=file, local_path=output_path, success=True)
 
         except Exception as e:
             logger.error(f"❌ Failed to download {file.name}: {e}")
-            return DownloadResult(
-                file=file,
-                local_path=output_path,
-                success=False,
-                error=str(e)
-            )
+            return DownloadResult(file=file, local_path=output_path, success=False, error=str(e))
 
     async def download_files(
-        self,
-        files: List[DriveFile],
-        output_dir: str,
-        create_subfolder: bool = False
+        self, files: List[DriveFile], output_dir: str, create_subfolder: bool = False
     ) -> List[DownloadResult]:
         """
         Download multiple files
@@ -306,7 +296,7 @@ class GoogleDriveIntegration:
             # Determine output path
             if create_subfolder:
                 # Group by MIME type
-                subdir = file.mime_type.replace('/', '_')
+                subdir = file.mime_type.replace("/", "_")
                 output_path = os.path.join(output_dir, subdir, file.name)
             else:
                 output_path = os.path.join(output_dir, file.name)
@@ -321,10 +311,7 @@ class GoogleDriveIntegration:
         return results
 
     async def upload_file(
-        self,
-        file_path: str,
-        folder_id: Optional[str] = None,
-        name: Optional[str] = None
+        self, file_path: str, folder_id: Optional[str] = None, name: Optional[str] = None
     ) -> Optional[DriveFile]:
         """
         Upload a file to Google Drive
@@ -356,32 +343,36 @@ class GoogleDriveIntegration:
             # Determine MIME type
             mime_type, _ = mimetypes.guess_type(file_path)
             if mime_type is None:
-                mime_type = 'application/octet-stream'
+                mime_type = "application/octet-stream"
 
             # Build metadata
-            file_metadata = {'name': name}
+            file_metadata = {"name": name}
             if folder_id:
-                file_metadata['parents'] = [folder_id]
+                file_metadata["parents"] = [folder_id]
 
             # Upload
             media = MediaFileUpload(file_path, mimetype=mime_type)
 
-            file = self.service.files().create(
-                body=file_metadata,
-                media_body=media,
-                fields='id, name, mimeType, size, createdTime, modifiedTime, webViewLink'
-            ).execute()
+            file = (
+                self.service.files()
+                .create(
+                    body=file_metadata,
+                    media_body=media,
+                    fields="id, name, mimeType, size, createdTime, modifiedTime, webViewLink",
+                )
+                .execute()
+            )
 
             logger.info(f"✅ Uploaded: {name} (ID: {file['id']})")
 
             return DriveFile(
-                id=file['id'],
-                name=file['name'],
-                mime_type=file['mimeType'],
-                size=int(file.get('size', 0)),
-                created_time=file['createdTime'],
-                modified_time=file['modifiedTime'],
-                web_view_link=file.get('webViewLink')
+                id=file["id"],
+                name=file["name"],
+                mime_type=file["mimeType"],
+                size=int(file.get("size", 0)),
+                created_time=file["createdTime"],
+                modified_time=file["modifiedTime"],
+                web_view_link=file.get("webViewLink"),
             )
 
         except Exception as e:
@@ -393,7 +384,7 @@ class GoogleDriveIntegration:
         folder_id: str,
         local_dir: str,
         mime_types: Optional[List[str]] = None,
-        incremental: bool = True
+        incremental: bool = True,
     ) -> Dict[str, Any]:
         """
         Synchronize a Google Drive folder to local directory
@@ -448,11 +439,11 @@ class GoogleDriveIntegration:
 
         # Statistics
         stats = {
-            'total_remote_files': len(all_files),
-            'downloaded': len(files_to_download),
-            'success': sum(1 for r in results if r.success),
-            'failed': sum(1 for r in results if not r.success),
-            'skipped': len(all_files) - len(files_to_download)
+            "total_remote_files": len(all_files),
+            "downloaded": len(files_to_download),
+            "success": sum(1 for r in results if r.success),
+            "failed": sum(1 for r in results if not r.success),
+            "skipped": len(all_files) - len(files_to_download),
         }
 
         logger.info(
@@ -467,9 +458,9 @@ class GoogleDriveIntegration:
     def get_stats(self) -> Dict[str, Any]:
         """Get integration statistics"""
         return {
-            'authenticated': self.service is not None,
-            'credentials_path': self.credentials_path,
-            'scopes': self.scopes
+            "authenticated": self.service is not None,
+            "credentials_path": self.credentials_path,
+            "scopes": self.scopes,
         }
 
     def __repr__(self):

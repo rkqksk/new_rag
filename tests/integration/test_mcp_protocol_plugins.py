@@ -4,18 +4,21 @@ MCP Protocol Integration Tests for Plugin System
 Tests that RAG Orchestrator MCP tools work correctly through MCP protocol
 """
 
-import pytest
-import json
 import asyncio
-from typing import Dict, Any
+import json
 
 # Import MCP server and handler
 import sys
 from pathlib import Path
+from typing import Any, Dict
+
+import pytest
+
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "mcp_servers"))
 
 try:
     from rag_orchestrator import RAGOrchestratorServer, handle_request
+
     MCP_SERVER_AVAILABLE = True
 except ImportError:
     MCP_SERVER_AVAILABLE = False
@@ -45,7 +48,7 @@ def sample_manufacturing_document():
         - Injection pressure: 150 MPa
         - Cooling time: 30 seconds
         """,
-        "filename": "injection_molding_sop.pdf"
+        "filename": "injection_molding_sop.pdf",
     }
 
 
@@ -55,10 +58,7 @@ class TestMCPToolsList:
     @pytest.mark.asyncio
     async def test_tools_list_endpoint(self, rag_server):
         """Test that tools/list returns correct tool definitions"""
-        request = {
-            "method": "tools/list",
-            "params": {}
-        }
+        request = {"method": "tools/list", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -76,10 +76,7 @@ class TestMCPToolsList:
     @pytest.mark.asyncio
     async def test_process_document_tool_schema(self, rag_server):
         """Test that process_document tool has correct schema"""
-        request = {
-            "method": "tools/list",
-            "params": {}
-        }
+        request = {"method": "tools/list", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -106,10 +103,7 @@ class TestMCPToolsList:
     @pytest.mark.asyncio
     async def test_get_plugin_info_tool_schema(self, rag_server):
         """Test that get_plugin_info tool has correct schema"""
-        request = {
-            "method": "tools/list",
-            "params": {}
-        }
+        request = {"method": "tools/list", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -137,13 +131,7 @@ class TestMCPToolsCall:
     @pytest.mark.asyncio
     async def test_get_plugin_info_call(self, rag_server):
         """Test calling get_plugin_info through MCP protocol"""
-        request = {
-            "method": "tools/call",
-            "params": {
-                "name": "get_plugin_info",
-                "arguments": {}
-            }
-        }
+        request = {"method": "tools/call", "params": {"name": "get_plugin_info", "arguments": {}}}
 
         response = await handle_request(rag_server, request)
 
@@ -166,18 +154,14 @@ class TestMCPToolsCall:
             assert result["plugin_count"] >= 2  # Manufacturing + Packaging
 
     @pytest.mark.asyncio
-    async def test_process_document_call(
-        self, rag_server, sample_manufacturing_document
-    ):
+    async def test_process_document_call(self, rag_server, sample_manufacturing_document):
         """Test calling process_document through MCP protocol"""
         request = {
             "method": "tools/call",
             "params": {
                 "name": "process_document",
-                "arguments": {
-                    "document": sample_manufacturing_document
-                }
-            }
+                "arguments": {"document": sample_manufacturing_document},
+            },
         }
 
         response = await handle_request(rag_server, request)
@@ -212,12 +196,7 @@ class TestMCPToolsCall:
         """Test process_document with invalid input"""
         request = {
             "method": "tools/call",
-            "params": {
-                "name": "process_document",
-                "arguments": {
-                    "document": {}  # Empty document
-                }
-            }
+            "params": {"name": "process_document", "arguments": {"document": {}}},  # Empty document
         }
 
         response = await handle_request(rag_server, request)
@@ -240,10 +219,7 @@ class TestMCPLegacyProtocol:
     @pytest.mark.asyncio
     async def test_legacy_health_check(self, rag_server):
         """Test legacy health_check method"""
-        request = {
-            "method": "health_check",
-            "params": {}
-        }
+        request = {"method": "health_check", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -255,10 +231,7 @@ class TestMCPLegacyProtocol:
     @pytest.mark.asyncio
     async def test_legacy_get_status(self, rag_server):
         """Test legacy get_status method"""
-        request = {
-            "method": "get_status",
-            "params": {}
-        }
+        request = {"method": "get_status", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -270,10 +243,7 @@ class TestMCPLegacyProtocol:
     @pytest.mark.asyncio
     async def test_legacy_list_capabilities(self, rag_server):
         """Test legacy list_capabilities method"""
-        request = {
-            "method": "list_capabilities",
-            "params": {}
-        }
+        request = {"method": "list_capabilities", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -291,10 +261,7 @@ class TestMCPErrorHandling:
     @pytest.mark.asyncio
     async def test_unknown_method(self, rag_server):
         """Test handling of unknown method"""
-        request = {
-            "method": "unknown_method_xyz",
-            "params": {}
-        }
+        request = {"method": "unknown_method_xyz", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -306,13 +273,7 @@ class TestMCPErrorHandling:
     @pytest.mark.asyncio
     async def test_unknown_tool(self, rag_server):
         """Test handling of unknown tool"""
-        request = {
-            "method": "tools/call",
-            "params": {
-                "name": "unknown_tool_xyz",
-                "arguments": {}
-            }
-        }
+        request = {"method": "tools/call", "params": {"name": "unknown_tool_xyz", "arguments": {}}}
 
         response = await handle_request(rag_server, request)
 
@@ -325,9 +286,7 @@ class TestMCPErrorHandling:
     async def test_malformed_request(self, rag_server):
         """Test handling of malformed request"""
         # Missing method
-        request = {
-            "params": {}
-        }
+        request = {"params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -340,16 +299,11 @@ class TestMCPPluginIntegration:
     """Test MCP protocol integration with plugin system"""
 
     @pytest.mark.asyncio
-    async def test_end_to_end_mcp_plugin_flow(
-        self, rag_server, sample_manufacturing_document
-    ):
+    async def test_end_to_end_mcp_plugin_flow(self, rag_server, sample_manufacturing_document):
         """Test complete flow through MCP protocol"""
 
         # Step 1: List available tools
-        list_request = {
-            "method": "tools/list",
-            "params": {}
-        }
+        list_request = {"method": "tools/list", "params": {}}
         list_response = await handle_request(rag_server, list_request)
 
         tool_names = [tool["name"] for tool in list_response["tools"]]
@@ -358,10 +312,7 @@ class TestMCPPluginIntegration:
         # Step 2: Get plugin info
         info_request = {
             "method": "tools/call",
-            "params": {
-                "name": "get_plugin_info",
-                "arguments": {}
-            }
+            "params": {"name": "get_plugin_info", "arguments": {}},
         }
         info_response = await handle_request(rag_server, info_request)
         info_result = json.loads(info_response["content"][0]["text"])
@@ -373,10 +324,8 @@ class TestMCPPluginIntegration:
             "method": "tools/call",
             "params": {
                 "name": "process_document",
-                "arguments": {
-                    "document": sample_manufacturing_document
-                }
-            }
+                "arguments": {"document": sample_manufacturing_document},
+            },
         }
         process_response = await handle_request(rag_server, process_request)
         process_result = json.loads(process_response["content"][0]["text"])
@@ -410,7 +359,7 @@ class TestMCPPluginIntegration:
                 - Surface roughness: Ra < 1.6 μm
                 - Tolerances: ±0.05mm
                 """,
-                "filename": f"doc_{i}.pdf"
+                "filename": f"doc_{i}.pdf",
             }
             for i in range(3)
         ]
@@ -419,19 +368,13 @@ class TestMCPPluginIntegration:
         requests = [
             {
                 "method": "tools/call",
-                "params": {
-                    "name": "process_document",
-                    "arguments": {"document": doc}
-                }
+                "params": {"name": "process_document", "arguments": {"document": doc}},
             }
             for doc in documents
         ]
 
         # Execute concurrently
-        responses = await asyncio.gather(*[
-            handle_request(rag_server, req)
-            for req in requests
-        ])
+        responses = await asyncio.gather(*[handle_request(rag_server, req) for req in requests])
 
         # Verify all succeeded
         assert len(responses) == 3
@@ -449,10 +392,7 @@ class TestMCPServerCapabilities:
     @pytest.mark.asyncio
     async def test_server_capabilities_include_plugins(self, rag_server):
         """Test that server capabilities include plugin features"""
-        request = {
-            "method": "get_status",
-            "params": {}
-        }
+        request = {"method": "get_status", "params": {}}
 
         response = await handle_request(rag_server, request)
 
@@ -463,10 +403,7 @@ class TestMCPServerCapabilities:
         capabilities = server_info["capabilities"]
 
         # Verify plugin capabilities are listed
-        expected_plugin_capabilities = [
-            "domain_document_processing",
-            "plugin_enhanced_rag"
-        ]
+        expected_plugin_capabilities = ["domain_document_processing", "plugin_enhanced_rag"]
 
         for cap in expected_plugin_capabilities:
             assert cap in capabilities, f"Missing capability: {cap}"

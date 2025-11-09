@@ -1,0 +1,45 @@
+{
+  "name": "testing-agent",
+  "version": "1.0.0",
+  "description": "Automated testing agent - unit tests, integration tests, coverage analysis",
+  "capabilities": [
+    "unit-testing",
+    "integration-testing",
+    "coverage-analysis",
+    "test-generation",
+    "test-optimization"
+  ],
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/rag-enterprise"
+      ],
+      "description": "File operations for test files",
+      "enabled": true,
+      "priority": "high",
+      "transport": "stdio"
+    }
+  },
+  "tools": [
+    "pytest",
+    "pytest-cov",
+    "pytest-asyncio",
+    "pytest-mock"
+  ],
+  "config": {
+    "test_framework": "pytest",
+    "coverage_threshold": 95,
+    "parallel_tests": true,
+    "auto_generate": false
+  },
+  "metadata": {
+    "created": "2025-11-08",
+    "updated": "2025-11-08",
+    "status": "production-ready",
+    "cost": "$0/month (100% open-source)",
+    "current_coverage": "95%+ target"
+  }
+}

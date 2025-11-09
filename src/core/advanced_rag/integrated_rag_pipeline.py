@@ -3,15 +3,15 @@ Integrated Multi-Source RAG Pipeline for Phase 5.4
 End-to-end pipeline combining query routing, multi-source search, and score fusion
 """
 
-import logging
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass
 import asyncio
+import logging
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
 
-from .unified_vector_store import UnifiedVectorStore
 from .multi_source_search_service import MultiSourceSearchService, SearchResult
 from .query_router import AdvancedQueryRouter, QueryIntent
-from .score_fusion import ScoreFusion, FusionStrategy, FusionResult
+from .score_fusion import FusionResult, FusionStrategy, ScoreFusion
+from .unified_vector_store import UnifiedVectorStore
 
 logger = logging.getLogger(__name__)
 
@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class RAGResponse:
     """Complete RAG response"""
+
     query: str
     intent: QueryIntent
     results: List[FusionResult]
@@ -51,7 +52,7 @@ class IntegratedRAGPipeline:
         embedder,  # Text embedding service
         fusion_strategy: FusionStrategy = FusionStrategy.RRF,
         enable_query_routing: bool = True,
-        enable_filters: bool = True
+        enable_filters: bool = True,
     ):
         """
         Initialize Integrated RAG Pipeline
@@ -80,10 +81,7 @@ class IntegratedRAGPipeline:
         )
 
     async def search(
-        self,
-        query: str,
-        top_k: int = 20,
-        custom_weights: Optional[Dict[str, float]] = None
+        self, query: str, top_k: int = 20, custom_weights: Optional[Dict[str, float]] = None
     ) -> RAGResponse:
         """
         Execute end-to-end RAG search
@@ -102,6 +100,7 @@ class IntegratedRAGPipeline:
             >>> print(f"Search time: {response.search_time_ms:.1f}ms")
         """
         import time
+
         start_time = time.time()
 
         # Step 1: Query Analysis
@@ -114,12 +113,13 @@ class IntegratedRAGPipeline:
         else:
             # Default: search all enabled collections
             from .multi_source_search_service import SearchSource
+
             intent = QueryIntent(
                 query_type=SearchSource.PRODUCTS,
-                target_collections=['products_multimodal'],
+                target_collections=["products_multimodal"],
                 confidence=1.0,
                 extracted_entities={},
-                search_strategy="single"
+                search_strategy="single",
             )
 
         # Step 2: Generate embeddings
@@ -137,10 +137,7 @@ class IntegratedRAGPipeline:
                 filter_dict = self.query_router.build_filters(intent)
                 if filter_dict:
                     # Apply same filter to all collections
-                    filters = {
-                        collection: filter_dict
-                        for collection in intent.target_collections
-                    }
+                    filters = {collection: filter_dict for collection in intent.target_collections}
                     logger.debug(f"Applied filters: {filter_dict}")
 
         # Step 4: Multi-source search
@@ -148,7 +145,7 @@ class IntegratedRAGPipeline:
             query_embeddings=query_embeddings,
             sources=None,  # Will use intent.target_collections
             limit_per_source=top_k * 2,  # Get more for fusion
-            filters=filters
+            filters=filters,
         )
 
         # Step 5: Convert to fusion format
@@ -162,14 +159,12 @@ class IntegratedRAGPipeline:
         else:
             # Equal weights
             weights = {
-                src: 1.0 / len(intent.target_collections)
-                for src in intent.target_collections
+                src: 1.0 / len(intent.target_collections) for src in intent.target_collections
             }
 
         # Step 7: Score fusion
         fused_results = self.fusion_engine.fuse_scores(
-            source_results=source_results_map,
-            weights=weights
+            source_results=source_results_map, weights=weights
         )
 
         # Step 8: Limit to top_k
@@ -186,7 +181,7 @@ class IntegratedRAGPipeline:
             total_results=len(fused_results),
             search_time_ms=elapsed_ms,
             sources_searched=intent.target_collections,
-            fusion_strategy=self.fusion_engine.strategy.value
+            fusion_strategy=self.fusion_engine.strategy.value,
         )
 
         logger.info(
@@ -197,10 +192,7 @@ class IntegratedRAGPipeline:
         return response
 
     def search_sync(
-        self,
-        query: str,
-        top_k: int = 20,
-        custom_weights: Optional[Dict[str, float]] = None
+        self, query: str, top_k: int = 20, custom_weights: Optional[Dict[str, float]] = None
     ) -> RAGResponse:
         """
         Synchronous version of search()
@@ -218,35 +210,26 @@ class IntegratedRAGPipeline:
         if loop.is_running():
             # If loop is already running, create a new task
             import concurrent.futures
+
             with concurrent.futures.ThreadPoolExecutor() as executor:
-                future = executor.submit(
-                    asyncio.run,
-                    self.search(query, top_k, custom_weights)
-                )
+                future = executor.submit(asyncio.run, self.search(query, top_k, custom_weights))
                 return future.result()
         else:
             # Run in current loop
-            return loop.run_until_complete(
-                self.search(query, top_k, custom_weights)
-            )
+            return loop.run_until_complete(self.search(query, top_k, custom_weights))
 
     async def _generate_embedding(self, text: str) -> List[float]:
         """Generate text embedding"""
         # Check if embedder has async method
-        if hasattr(self.embedder, 'encode_text_async'):
+        if hasattr(self.embedder, "encode_text_async"):
             return await self.embedder.encode_text_async(text)
         else:
             # Run sync method in thread pool
             loop = asyncio.get_event_loop()
-            return await loop.run_in_executor(
-                None,
-                self.embedder.encode_text,
-                text
-            )
+            return await loop.run_in_executor(None, self.embedder.encode_text, text)
 
     def _group_by_source(
-        self,
-        search_results: List[SearchResult]
+        self, search_results: List[SearchResult]
     ) -> Dict[str, List[Dict[str, Any]]]:
         """
         Group search results by source
@@ -265,23 +248,25 @@ class IntegratedRAGPipeline:
             if source_name not in grouped:
                 grouped[source_name] = []
 
-            grouped[source_name].append({
-                'id': result.id,
-                'score': result.score,
-                'normalized_score': result.normalized_score,
-                'payload': result.payload
-            })
+            grouped[source_name].append(
+                {
+                    "id": result.id,
+                    "score": result.score,
+                    "normalized_score": result.normalized_score,
+                    "payload": result.payload,
+                }
+            )
 
         return grouped
 
     def get_stats(self) -> Dict[str, Any]:
         """Get pipeline statistics"""
         return {
-            'vector_store': self.vector_store.get_all_stats(),
-            'search_service': self.search_service.get_stats(),
-            'fusion_strategy': self.fusion_engine.strategy.value,
-            'query_routing_enabled': self.enable_query_routing,
-            'filters_enabled': self.enable_filters
+            "vector_store": self.vector_store.get_all_stats(),
+            "search_service": self.search_service.get_stats(),
+            "fusion_strategy": self.fusion_engine.strategy.value,
+            "query_routing_enabled": self.enable_query_routing,
+            "filters_enabled": self.enable_filters,
         }
 
     def __repr__(self):

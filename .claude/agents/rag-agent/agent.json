@@ -1,0 +1,45 @@
+{
+  "name": "rag-agent",
+  "version": "1.0.0",
+  "description": "RAG system optimization agent - embeddings, chunking, search, and retrieval",
+  "capabilities": [
+    "embedding-optimization",
+    "chunking-strategies",
+    "vector-search",
+    "retrieval-tuning",
+    "rag-evaluation"
+  ],
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/rag-enterprise"
+      ],
+      "description": "File operations for RAG data processing",
+      "enabled": true,
+      "priority": "high",
+      "transport": "stdio"
+    }
+  },
+  "tools": [
+    "app.services.embedding.EmbeddingService",
+    "app.services.chunking.ChunkingService",
+    "app.services.search.SearchService",
+    "app.services.personalization.PersonalizationService"
+  ],
+  "config": {
+    "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+    "chunking_strategy": "atomic",
+    "vector_db": "qdrant",
+    "search_algorithm": "hybrid"
+  },
+  "metadata": {
+    "created": "2025-11-08",
+    "updated": "2025-11-08",
+    "status": "production-ready",
+    "cost": "$0/month (100% open-source)",
+    "test_coverage": "122+ tests passing"
+  }
+}

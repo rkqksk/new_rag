@@ -167,6 +167,7 @@ temp/
 *.tmp
 *.bak
 *.cache
+*.pid
 
 # ============================================
 # OS Files
@@ -228,3 +229,4 @@ temp/
 frontend/*.backup*
 frontend/chat.html.backup_*
 SuperClaude_Framework/
+.claude-backup*

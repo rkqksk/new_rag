@@ -9,7 +9,8 @@ Enhanced Field Extractor
 """
 
 import re
-from typing import Dict, Any, Optional
+from typing import Any, Dict, Optional
+
 from src.core.chunk_templates import FieldType
 
 
@@ -154,10 +155,10 @@ class EnhancedFieldExtractor:
         """Neck 직경 파싱 (파이, Ø)"""
         # Patterns to match
         patterns = [
-            r"(\d+)\s*파이",       # "24파이"
-            r"Ø\s*(\d+)",          # "Ø24"
-            r"내경\s*Ø\s*(\d+)",   # "내경 Ø24"
-            r"(\d+)Ø",             # "24Ø"
+            r"(\d+)\s*파이",  # "24파이"
+            r"Ø\s*(\d+)",  # "Ø24"
+            r"내경\s*Ø\s*(\d+)",  # "내경 Ø24"
+            r"(\d+)Ø",  # "24Ø"
         ]
 
         # Search in spec, detail, description, note
@@ -266,9 +267,9 @@ class EnhancedFieldExtractor:
 
 if __name__ == "__main__":
     # Test with sample data
-    print("="*80)
+    print("=" * 80)
     print("ENHANCED FIELD EXTRACTOR TEST")
-    print("="*80)
+    print("=" * 80)
 
     # Test 1: Cap/Pump product
     cap_product = {
@@ -306,22 +307,16 @@ if __name__ == "__main__":
         "enriched_info": {
             "material_benefits": {
                 "material": "PE (폴리에틸렌)",
-                "advantages": ["식품등급 안전성", "가벼운 무게"]
+                "advantages": ["식품등급 안전성", "가벼운 무게"],
             },
-            "capacity_info": {
-                "capacity": "40ml",
-                "usage_duration": "1-2주"
-            },
-            "specifications_explained": {
-                "dimensions": "28x95(mm)",
-                "diameter": "Ø20"
-            },
+            "capacity_info": {"capacity": "40ml", "usage_duration": "1-2주"},
+            "specifications_explained": {"dimensions": "28x95(mm)", "diameter": "Ø20"},
             "use_cases": ["에센스", "세럼", "트래블"],
-            "keywords": ["소형", "휴대용", "트래블"]
-        }
+            "keywords": ["소형", "휴대용", "트래블"],
+        },
     }
 
-    print("\n" + "─"*80)
+    print("\n" + "─" * 80)
     print("[Test 2] Bottle/Jar Product")
     print(f"Product: {bottle_product['product_name']}")
 
@@ -336,6 +331,6 @@ if __name__ == "__main__":
     for field_type, value in composite2.items():
         print(f"  {field_type.value}: {value}")
 
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("✅ TEST COMPLETED")
-    print("="*80)
+    print("=" * 80)

@@ -5,11 +5,12 @@ Re-ranks search results based on user preferences
 """
 
 import logging
-from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+
 import numpy as np
 
-from .user_profile import UserProfile, PreferenceExtractor
+from .user_profile import PreferenceExtractor, UserProfile
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +29,7 @@ class RecommendationConfig:
     neck_importance: float = 0.9
     category_importance: float = 0.7
     supplier_importance: float = 0.5  # NEW: For adaptive weights
-    price_importance: float = 0.6     # NEW: For adaptive weights
+    price_importance: float = 0.6  # NEW: For adaptive weights
 
     # Compatibility
     enable_compatibility_boost: bool = True
@@ -41,7 +42,7 @@ class RecommendationConfig:
     # Recency boost
     enable_recency_boost: bool = True
     viewed_penalty: float = 0.1  # Reduce score for already viewed items
-    clicked_boost: float = 0.1   # Boost previously clicked items
+    clicked_boost: float = 0.1  # Boost previously clicked items
 
 
 class PersonalizedRecommender:
@@ -58,7 +59,7 @@ class PersonalizedRecommender:
     def __init__(
         self,
         config: Optional[RecommendationConfig] = None,
-        preference_extractor: Optional[PreferenceExtractor] = None
+        preference_extractor: Optional[PreferenceExtractor] = None,
     ):
         """
         Initialize personalized recommender
@@ -77,7 +78,7 @@ class PersonalizedRecommender:
         results: List[Dict[str, Any]],
         profile: UserProfile,
         query: Optional[str] = None,
-        top_k: Optional[int] = None
+        top_k: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
         Re-rank search results based on user preferences
@@ -104,7 +105,7 @@ class PersonalizedRecommender:
 
         for result in results:
             # Original vector similarity score
-            vector_score = result.get('score', 0.0)
+            vector_score = result.get("score", 0.0)
 
             # Calculate preference score
             preference_score = self._calculate_preference_score(result, profile)
@@ -121,24 +122,24 @@ class PersonalizedRecommender:
 
             # Fuse scores
             final_score = (
-                self.config.vector_score_weight * vector_score +
-                self.config.preference_score_weight * preference_score +
-                compatibility_boost +
-                recency_adjustment
+                self.config.vector_score_weight * vector_score
+                + self.config.preference_score_weight * preference_score
+                + compatibility_boost
+                + recency_adjustment
             )
 
             # Add personalization metadata
             result_copy = result.copy()
-            result_copy['personalized_score'] = final_score
-            result_copy['original_score'] = vector_score
-            result_copy['preference_score'] = preference_score
-            result_copy['compatibility_boost'] = compatibility_boost
-            result_copy['recency_adjustment'] = recency_adjustment
+            result_copy["personalized_score"] = final_score
+            result_copy["original_score"] = vector_score
+            result_copy["preference_score"] = preference_score
+            result_copy["compatibility_boost"] = compatibility_boost
+            result_copy["recency_adjustment"] = recency_adjustment
 
             scored_results.append(result_copy)
 
         # Sort by personalized score
-        scored_results.sort(key=lambda x: x['personalized_score'], reverse=True)
+        scored_results.sort(key=lambda x: x["personalized_score"], reverse=True)
 
         # Apply diversity (optional)
         if self.config.enable_diversity:
@@ -152,11 +153,7 @@ class PersonalizedRecommender:
 
         return scored_results
 
-    def _calculate_preference_score(
-        self,
-        result: Dict[str, Any],
-        profile: UserProfile
-    ) -> float:
+    def _calculate_preference_score(self, result: Dict[str, Any], profile: UserProfile) -> float:
         """
         Calculate preference matching score
 
@@ -170,30 +167,30 @@ class PersonalizedRecommender:
         scores = []
 
         # Capacity matching
-        capacity = result.get('capacity')
+        capacity = result.get("capacity")
         if capacity:
-            weight = profile.get_preference_weight('capacity', capacity)
+            weight = profile.get_preference_weight("capacity", capacity)
             if weight > 0:
                 scores.append(weight * self.config.capacity_importance)
 
         # Material matching
-        material = result.get('material')
+        material = result.get("material")
         if material:
-            weight = profile.get_preference_weight('material', material)
+            weight = profile.get_preference_weight("material", material)
             if weight > 0:
                 scores.append(weight * self.config.material_importance)
 
         # Neck matching
-        neck = result.get('neck')
+        neck = result.get("neck")
         if neck:
-            weight = profile.get_preference_weight('neck', neck)
+            weight = profile.get_preference_weight("neck", neck)
             if weight > 0:
                 scores.append(weight * self.config.neck_importance)
 
         # Category matching
-        category = result.get('category')
+        category = result.get("category")
         if category:
-            weight = profile.get_preference_weight('category', category)
+            weight = profile.get_preference_weight("category", category)
             if weight > 0:
                 scores.append(weight * self.config.category_importance)
 
@@ -203,11 +200,7 @@ class PersonalizedRecommender:
         else:
             return 0.0
 
-    def _calculate_compatibility_boost(
-        self,
-        result: Dict[str, Any],
-        profile: UserProfile
-    ) -> float:
+    def _calculate_compatibility_boost(self, result: Dict[str, Any], profile: UserProfile) -> float:
         """
         Calculate compatibility boost for container-cap matching
 
@@ -225,35 +218,31 @@ class PersonalizedRecommender:
         """
         boost = 0.0
 
-        result_category = result.get('category', '')
-        result_neck = result.get('neck')
+        result_category = result.get("category", "")
+        result_neck = result.get("neck")
 
         # If searching for Cap/Pump and user has Bottle/Jar history
-        if result_category in ['Cap', 'Pump']:
+        if result_category in ["Cap", "Pump"]:
             # Check if neck matches previously viewed containers
             if result_neck:
                 # Check if user has strong preference for this neck size
-                neck_weight = profile.get_preference_weight('neck', result_neck)
+                neck_weight = profile.get_preference_weight("neck", result_neck)
                 if neck_weight > 0.5:  # Strong preference
                     boost += self.config.compatibility_boost
                     logger.debug(f"Compatibility boost: {result_neck} matches user preference")
 
         # If searching for Bottle/Jar and user has Cap/Pump history
-        elif result_category in ['Bottle', 'Jar']:
+        elif result_category in ["Bottle", "Jar"]:
             if result_neck:
                 # Check if neck matches previously viewed caps
-                neck_weight = profile.get_preference_weight('neck', result_neck)
+                neck_weight = profile.get_preference_weight("neck", result_neck)
                 if neck_weight > 0.5:
                     boost += self.config.compatibility_boost
                     logger.debug(f"Compatibility boost: {result_neck} matches user preference")
 
         return boost
 
-    def _calculate_recency_adjustment(
-        self,
-        result: Dict[str, Any],
-        profile: UserProfile
-    ) -> float:
+    def _calculate_recency_adjustment(self, result: Dict[str, Any], profile: UserProfile) -> float:
         """
         Calculate recency-based adjustment
 
@@ -269,7 +258,7 @@ class PersonalizedRecommender:
         """
         adjustment = 0.0
 
-        product_id = result.get('id') or result.get('product_id')
+        product_id = result.get("id") or result.get("product_id")
 
         if not product_id:
             return adjustment
@@ -289,9 +278,7 @@ class PersonalizedRecommender:
         return adjustment
 
     def _apply_diversity(
-        self,
-        results: List[Dict[str, Any]],
-        profile: UserProfile
+        self, results: List[Dict[str, Any]], profile: UserProfile
     ) -> List[Dict[str, Any]]:
         """
         Apply diversity to prevent showing too many similar items
@@ -314,11 +301,11 @@ class PersonalizedRecommender:
         while remaining and len(diversified) < len(results):
             # Find item with max (relevance - similarity_to_selected)
             best_idx = 0
-            best_score = -float('inf')
+            best_score = -float("inf")
 
             for idx, candidate in enumerate(remaining):
                 # Relevance score
-                relevance = candidate['personalized_score']
+                relevance = candidate["personalized_score"]
 
                 # Similarity to already selected items
                 similarity = self._calculate_similarity_to_set(candidate, diversified)
@@ -336,9 +323,7 @@ class PersonalizedRecommender:
         return diversified
 
     def _calculate_similarity_to_set(
-        self,
-        candidate: Dict[str, Any],
-        selected: List[Dict[str, Any]]
+        self, candidate: Dict[str, Any], selected: List[Dict[str, Any]]
     ) -> float:
         """
         Calculate similarity between candidate and selected items
@@ -360,7 +345,7 @@ class PersonalizedRecommender:
             matches = 0
 
             # Check attribute overlap
-            for attr in ['capacity', 'material', 'neck', 'category']:
+            for attr in ["capacity", "material", "neck", "category"]:
                 if candidate.get(attr) and item.get(attr):
                     matches += 1
                     if candidate[attr] == item[attr]:
@@ -376,7 +361,7 @@ class PersonalizedRecommender:
         profile: UserProfile,
         all_products: List[Dict[str, Any]],
         top_k: int = 10,
-        category_filter: Optional[str] = None
+        category_filter: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Get personalized recommendations without query
@@ -399,14 +384,14 @@ class PersonalizedRecommender:
         # Filter by category if specified
         products = all_products
         if category_filter:
-            products = [p for p in products if p.get('category') == category_filter]
+            products = [p for p in products if p.get("category") == category_filter]
 
         # Calculate preference scores
         scored_products = []
 
         for product in products:
             # Skip already viewed items
-            product_id = product.get('id') or product.get('product_id')
+            product_id = product.get("id") or product.get("product_id")
             if product_id in profile.viewed_products:
                 continue
 
@@ -418,20 +403,16 @@ class PersonalizedRecommender:
                 score += self._calculate_compatibility_boost(product, profile)
 
             product_copy = product.copy()
-            product_copy['recommendation_score'] = score
+            product_copy["recommendation_score"] = score
 
             scored_products.append(product_copy)
 
         # Sort by score
-        scored_products.sort(key=lambda x: x['recommendation_score'], reverse=True)
+        scored_products.sort(key=lambda x: x["recommendation_score"], reverse=True)
 
         return scored_products[:top_k]
 
-    def explain_recommendation(
-        self,
-        result: Dict[str, Any],
-        profile: UserProfile
-    ) -> str:
+    def explain_recommendation(self, result: Dict[str, Any], profile: UserProfile) -> str:
         """
         Generate human-readable explanation for recommendation
 
@@ -445,27 +426,27 @@ class PersonalizedRecommender:
         reasons = []
 
         # Check attribute matches
-        capacity = result.get('capacity')
+        capacity = result.get("capacity")
         if capacity:
-            weight = profile.get_preference_weight('capacity', capacity)
+            weight = profile.get_preference_weight("capacity", capacity)
             if weight > 0.5:
                 reasons.append(f"용량 {capacity}을(를) 선호하시네요")
 
-        material = result.get('material')
+        material = result.get("material")
         if material:
-            weight = profile.get_preference_weight('material', material)
+            weight = profile.get_preference_weight("material", material)
             if weight > 0.5:
                 reasons.append(f"재질 {material}을(를) 자주 찾으셨어요")
 
-        neck = result.get('neck')
+        neck = result.get("neck")
         if neck:
-            weight = profile.get_preference_weight('neck', neck)
+            weight = profile.get_preference_weight("neck", neck)
             if weight > 0.5:
                 reasons.append(f"넥 사이즈 {neck}와(과) 호환됩니다")
 
-        category = result.get('category')
+        category = result.get("category")
         if category:
-            weight = profile.get_preference_weight('category', category)
+            weight = profile.get_preference_weight("category", category)
             if weight > 0.5:
                 reasons.append(f"{category} 카테고리를 관심있어 하시네요")
 
@@ -476,7 +457,7 @@ class PersonalizedRecommender:
                 reasons.append("이전에 본 제품과 호환됩니다")
 
         # Previous interaction
-        product_id = result.get('id') or result.get('product_id')
+        product_id = result.get("id") or result.get("product_id")
         if product_id and product_id in profile.clicked_products:
             reasons.append("이전에 관심을 보이셨습니다")
 

@@ -4,12 +4,13 @@ Performance Benchmarking: Critical Path Analysis
 Tests performance of critical code paths and identifies optimization opportunities.
 Measures latency, throughput, and resource utilization.
 """
-import pytest
-import time
-from unittest.mock import Mock, AsyncMock
-import asyncio
-from concurrent.futures import ThreadPoolExecutor
 
+import asyncio
+import time
+from concurrent.futures import ThreadPoolExecutor
+from unittest.mock import AsyncMock, Mock
+
+import pytest
 
 # ============================================================
 # Dependency Injection Performance
@@ -42,9 +43,9 @@ class TestDIPerfomance:
         """Test batch dependency resolution"""
         from app.core.dependencies import (
             get_config,
+            get_embedding_model,
             get_qdrant_client,
             get_redis_client,
-            get_embedding_model
         )
 
         start = time.time()
@@ -126,7 +127,7 @@ class TestSchemaValidationPerformance:
                 related_products=[],
                 confidence=0.95,
                 qa_id=f"qa_{i}",
-                timestamp="2025-10-19T10:00:00Z"
+                timestamp="2025-10-19T10:00:00Z",
             )
             for i in range(500)
         ]
@@ -134,7 +135,7 @@ class TestSchemaValidationPerformance:
         start = time.time()
         for resp in responses:
             # Simulate serialization
-            resp.model_dump_json() if hasattr(resp, 'model_dump_json') else str(resp)
+            resp.model_dump_json() if hasattr(resp, "model_dump_json") else str(resp)
         elapsed = time.time() - start
 
         # Should serialize 500 responses in <100ms
@@ -163,7 +164,7 @@ class TestServiceInstantiationPerformance:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name="test-model"
+                model_name="test-model",
             )
         elapsed = time.time() - start
 
@@ -183,9 +184,7 @@ class TestServiceInstantiationPerformance:
         start = time.time()
         for _ in range(100):
             service = ConsultationService(
-                search_client=mock_search,
-                embedding_model=mock_embedding,
-                llm_client=mock_llm
+                search_client=mock_search, embedding_model=mock_embedding, llm_client=mock_llm
             )
         elapsed = time.time() - start
 
@@ -203,7 +202,7 @@ class TestServiceInstantiationPerformance:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name=f"model-{idx}"
+                model_name=f"model-{idx}",
             )
 
         start = time.time()
@@ -229,11 +228,7 @@ class TestMetricsPerformance:
         """Test counter metric increment throughput"""
         from app.core.metrics import http_requests_total
 
-        metric = http_requests_total.labels(
-            method="GET",
-            endpoint="/health",
-            status="200"
-        )
+        metric = http_requests_total.labels(method="GET", endpoint="/health", status="200")
 
         start = time.time()
         for _ in range(10000):
@@ -249,10 +244,7 @@ class TestMetricsPerformance:
         """Test histogram observation throughput"""
         from app.core.metrics import http_request_duration_seconds
 
-        metric = http_request_duration_seconds.labels(
-            method="GET",
-            endpoint="/health"
-        )
+        metric = http_request_duration_seconds.labels(method="GET", endpoint="/health")
 
         start = time.time()
         for i in range(10000):
@@ -352,7 +344,7 @@ class TestRequestProcessingPipeline:
                 related_products=[],
                 confidence=0.95,
                 qa_id=f"qa_{i}",
-                timestamp="2025-10-19T10:00:00Z"
+                timestamp="2025-10-19T10:00:00Z",
             )
         elapsed = time.time() - start
 
@@ -447,7 +439,7 @@ class TestMemoryEfficiency:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name=f"model-{i}"
+                model_name=f"model-{i}",
             )
             services.append(service)
 
@@ -494,7 +486,7 @@ class TestBottleneckIdentification:
                 qdrant_client=Mock(),
                 embedding_model=Mock(),
                 ollama_url="http://localhost:11434",
-                model_name="test"
+                model_name="test",
             )
         service_time = time.time() - start
 
@@ -531,7 +523,7 @@ class TestCriticalPathAnalysis:
                 qdrant_client=Mock(),
                 embedding_model=Mock(),
                 ollama_url=config.ollama_url,
-                model_name=config.ollama_model
+                model_name=config.ollama_model,
             )
         elapsed = time.time() - start
 
@@ -540,14 +532,12 @@ class TestCriticalPathAnalysis:
 
     def test_request_validation_critical_path(self):
         """Measure request validation critical path"""
-        from app.models.schemas import QARequest, ConsultationRequest
+        from app.models.schemas import ConsultationRequest, QARequest
 
         start = time.time()
         for i in range(500):
             qa_req = QARequest(question=f"Q{i}?")
-            cons_req = ConsultationRequest(
-                requirements=f"Requirement {i}: Need portable products"
-            )
+            cons_req = ConsultationRequest(requirements=f"Requirement {i}: Need portable products")
         elapsed = time.time() - start
 
         # Both request types in <100ms

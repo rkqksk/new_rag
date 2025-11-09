@@ -3,10 +3,10 @@ Streaming Response Support
 Server-Sent Events (SSE) for real-time chat
 """
 
-import logging
 import asyncio
 import json
-from typing import AsyncGenerator, Dict, Any
+import logging
+from typing import Any, AsyncGenerator, Dict
 
 logger = logging.getLogger(__name__)
 
@@ -24,9 +24,7 @@ class StreamingResponse:
 
     @staticmethod
     async def stream_tokens(
-        text: str,
-        chunk_size: int = 10,
-        delay: float = 0.01
+        text: str, chunk_size: int = 10, delay: float = 0.01
     ) -> AsyncGenerator[str, None]:
         """
         Stream text token by token
@@ -41,7 +39,7 @@ class StreamingResponse:
         """
         # Split into chunks
         for i in range(0, len(text), chunk_size):
-            chunk = text[i:i + chunk_size]
+            chunk = text[i : i + chunk_size]
 
             # Format as SSE
             sse_data = f"data: {json.dumps({'type': 'token', 'content': chunk})}\n\n"
@@ -56,8 +54,7 @@ class StreamingResponse:
 
     @staticmethod
     async def stream_search_results(
-        search_results: list,
-        delay: float = 0.05
+        search_results: list, delay: float = 0.05
     ) -> AsyncGenerator[str, None]:
         """
         Stream search results one by one
@@ -72,11 +69,11 @@ class StreamingResponse:
         for i, result in enumerate(search_results):
             # Format result
             result_data = {
-                'type': 'search_result',
-                'rank': i + 1,
-                'product_id': result.product_id if hasattr(result, 'product_id') else result.id,
-                'score': result.score,
-                'payload': result.payload
+                "type": "search_result",
+                "rank": i + 1,
+                "product_id": result.product_id if hasattr(result, "product_id") else result.id,
+                "score": result.score,
+                "payload": result.payload,
             }
 
             sse_data = f"data: {json.dumps(result_data)}\n\n"
@@ -88,10 +85,7 @@ class StreamingResponse:
         yield f"data: {json.dumps({'type': 'search_done', 'total': len(search_results)})}\n\n"
 
     @staticmethod
-    async def stream_progress(
-        steps: list,
-        delay: float = 0.1
-    ) -> AsyncGenerator[str, None]:
+    async def stream_progress(steps: list, delay: float = 0.1) -> AsyncGenerator[str, None]:
         """
         Stream progress updates
 
@@ -106,11 +100,11 @@ class StreamingResponse:
 
         for i, step in enumerate(steps):
             progress_data = {
-                'type': 'progress',
-                'step': i + 1,
-                'total': total,
-                'message': step,
-                'percentage': int((i + 1) / total * 100)
+                "type": "progress",
+                "step": i + 1,
+                "total": total,
+                "message": step,
+                "percentage": int((i + 1) / total * 100),
             }
 
             sse_data = f"data: {json.dumps(progress_data)}\n\n"
@@ -129,19 +123,13 @@ class StreamingResponse:
         Yields:
             Error in SSE format
         """
-        error_data = {
-            'type': 'error',
-            'message': error_message
-        }
+        error_data = {"type": "error", "message": error_message}
 
         yield f"data: {json.dumps(error_data)}\n\n"
 
     @staticmethod
     async def stream_complete_response(
-        query: str,
-        search_results: list,
-        answer: str,
-        chunk_size: int = 10
+        query: str, search_results: list, answer: str, chunk_size: int = 10
     ) -> AsyncGenerator[str, None]:
         """
         Stream complete RAG response
@@ -162,12 +150,12 @@ class StreamingResponse:
             Complete response in SSE format
         """
         # 1. Echo query
-        query_data = {'type': 'query', 'content': query}
+        query_data = {"type": "query", "content": query}
         yield f"data: {json.dumps(query_data)}\n\n"
         await asyncio.sleep(0.05)
 
         # 2. Search progress
-        progress_data = {'type': 'progress', 'message': 'Searching...'}
+        progress_data = {"type": "progress", "message": "Searching..."}
         yield f"data: {json.dumps(progress_data)}\n\n"
         await asyncio.sleep(0.1)
 
@@ -176,12 +164,14 @@ class StreamingResponse:
             yield chunk
 
         # 4. Answer progress
-        progress_data = {'type': 'progress', 'message': 'Generating answer...'}
+        progress_data = {"type": "progress", "message": "Generating answer..."}
         yield f"data: {json.dumps(progress_data)}\n\n"
         await asyncio.sleep(0.1)
 
         # 5. Stream answer
-        async for chunk in StreamingResponse.stream_tokens(answer, chunk_size=chunk_size, delay=0.01):
+        async for chunk in StreamingResponse.stream_tokens(
+            answer, chunk_size=chunk_size, delay=0.01
+        ):
             yield chunk
 
 

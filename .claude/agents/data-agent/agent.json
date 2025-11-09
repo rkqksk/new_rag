@@ -1,0 +1,64 @@
+{
+  "name": "data-agent",
+  "version": "1.0.0",
+  "description": "Database operations and data management agent with PostgreSQL and SQLite",
+  "capabilities": [
+    "database-operations",
+    "sql-queries",
+    "data-migration",
+    "schema-management",
+    "data-analysis"
+  ],
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://user:password@localhost:5432/rag_enterprise"
+      ],
+      "description": "PostgreSQL database access for production data",
+      "enabled": false,
+      "priority": "high",
+      "note": "Configure connection string in production: postgresql://USER:PASSWORD@HOST:PORT/DATABASE",
+      "transport": "stdio"
+    },
+    "sqlite": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sqlite",
+        "--db-path",
+        "/home/user/rag-enterprise/data/cache.db"
+      ],
+      "description": "SQLite database for caching and local data",
+      "enabled": false,
+      "priority": "medium",
+      "note": "Create database file first: mkdir -p data && touch data/cache.db",
+      "transport": "stdio"
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/user/rag-enterprise"
+      ],
+      "description": "File operations for data import/export",
+      "enabled": true,
+      "priority": "high",
+      "transport": "stdio"
+    }
+  },
+  "config": {
+    "primary_db": "postgres",
+    "cache_db": "sqlite",
+    "backup_enabled": true
+  },
+  "metadata": {
+    "created": "2025-11-08",
+    "updated": "2025-11-08",
+    "status": "production-ready",
+    "cost": "$0/month (all MCPs are free, only server costs)"
+  }
+}

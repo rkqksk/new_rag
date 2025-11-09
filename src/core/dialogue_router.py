@@ -3,15 +3,11 @@
 영업사원 수준의 맥락 기반 대화를 위한 의도 해석 및 라우팅
 """
 
-from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional, Tuple
 
-from src.core.conversation_state import (
-    ConversationState,
-    DialogueContext,
-    StateTransition
-)
+from src.core.conversation_state import ConversationState, DialogueContext, StateTransition
 from src.core.enhanced_reference_resolver import EnhancedReferenceResolver
 from src.core.filter_manager import FilterManager
 from src.core.synonym_manager import get_synonym_manager
@@ -19,21 +15,23 @@ from src.core.synonym_manager import get_synonym_manager
 
 class IntentType(str, Enum):
     """사용자 의도 유형"""
-    SEARCH = "search"               # 새로운 제품 검색
-    FILTER = "filter"               # 필터 추가 (누적)
-    REFERENCE = "reference"         # 숫자/대명사 참조
-    DOCUMENT = "document"           # 문서 요청
-    COMPATIBILITY = "compatibility" # 호환성 확인
-    COMPARE = "compare"             # 제품 비교
-    DETAIL = "detail"               # 상세 정보
-    GREETING = "greeting"           # 인사
-    CLARIFICATION = "clarification" # 명확화 필요
-    RESET = "reset"                 # 대화 초기화
+
+    SEARCH = "search"  # 새로운 제품 검색
+    FILTER = "filter"  # 필터 추가 (누적)
+    REFERENCE = "reference"  # 숫자/대명사 참조
+    DOCUMENT = "document"  # 문서 요청
+    COMPATIBILITY = "compatibility"  # 호환성 확인
+    COMPARE = "compare"  # 제품 비교
+    DETAIL = "detail"  # 상세 정보
+    GREETING = "greeting"  # 인사
+    CLARIFICATION = "clarification"  # 명확화 필요
+    RESET = "reset"  # 대화 초기화
 
 
 @dataclass
 class RoutingDecision:
     """라우팅 결정 결과"""
+
     intent: IntentType
     action: str  # "search", "filter", "show_detail", "show_document", etc.
     parameters: Dict[str, Any]
@@ -60,44 +58,67 @@ class DialogueRouter:
         # 의도 분류 키워드
         self.intent_keywords = {
             IntentType.SEARCH: [
-                '찾아줘', '검색', '보여줘', '있어?', '추천',
-                '용기', '병', '캡', '펌프', '제품'
+                "찾아줘",
+                "검색",
+                "보여줘",
+                "있어?",
+                "추천",
+                "용기",
+                "병",
+                "캡",
+                "펌프",
+                "제품",
             ],
             IntentType.FILTER: [
-                'PET', 'HDPE', 'PP', '투명', '불투명',
-                '만', '제외', '빼고', '~ml', '미리'
+                "PET",
+                "HDPE",
+                "PP",
+                "투명",
+                "불투명",
+                "만",
+                "제외",
+                "빼고",
+                "~ml",
+                "미리",
             ],
             IntentType.REFERENCE: [
-                '번', '번째', '그거', '이거', '저거',
-                '첫', '마지막', '위', '아래'
+                "번",
+                "번째",
+                "그거",
+                "이거",
+                "저거",
+                "첫",
+                "마지막",
+                "위",
+                "아래",
             ],
             IntentType.DOCUMENT: [
-                '원산지', '증명서', '스펙', '시트', '사양서',
-                '카탈로그', '자료', '문서', '도면'
+                "원산지",
+                "증명서",
+                "스펙",
+                "시트",
+                "사양서",
+                "카탈로그",
+                "자료",
+                "문서",
+                "도면",
             ],
             IntentType.COMPATIBILITY: [
-                '호환', '맞는', '어울리는', '사용할 수 있는',
-                '네크', '사이즈'
+                "호환",
+                "맞는",
+                "어울리는",
+                "사용할 수 있는",
+                "네크",
+                "사이즈",
             ],
-            IntentType.COMPARE: [
-                '비교', '차이', '다른', '비슷한'
-            ],
-            IntentType.DETAIL: [
-                '자세히', '상세', '정보', '설명'
-            ],
-            IntentType.GREETING: [
-                '안녕', '하이', '헬로', '처음', '도와줘'
-            ],
-            IntentType.RESET: [
-                '초기화', '리셋', '처음부터', '다시'
-            ]
+            IntentType.COMPARE: ["비교", "차이", "다른", "비슷한"],
+            IntentType.DETAIL: ["자세히", "상세", "정보", "설명"],
+            IntentType.GREETING: ["안녕", "하이", "헬로", "처음", "도와줘"],
+            IntentType.RESET: ["초기화", "리셋", "처음부터", "다시"],
         }
 
     def route(
-        self,
-        query: str,
-        context: DialogueContext,
-        filter_manager: FilterManager
+        self, query: str, context: DialogueContext, filter_manager: FilterManager
     ) -> RoutingDecision:
         """
         쿼리를 분석하여 라우팅 결정
@@ -123,19 +144,13 @@ class DialogueRouter:
                 query, context
             )
             if resolved and doc_type:
-                return self._handle_reference(
-                    query, context, product_idx, ref_type, doc_type
-                )
+                return self._handle_reference(query, context, product_idx, ref_type, doc_type)
 
         # 3. 참조 해결 시도 (숫자, 대명사 등)
-        resolved, product_idx, ref_type, doc_type = self.reference_resolver.resolve(
-            query, context
-        )
+        resolved, product_idx, ref_type, doc_type = self.reference_resolver.resolve(query, context)
 
         if resolved:
-            return self._handle_reference(
-                query, context, product_idx, ref_type, doc_type
-            )
+            return self._handle_reference(query, context, product_idx, ref_type, doc_type)
 
         # 3. 의도별 라우팅
         if intent == IntentType.SEARCH:
@@ -163,17 +178,15 @@ class DialogueRouter:
             # 명확화 필요
             return self._handle_clarification(query, context)
 
-    def _classify_intent(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> IntentType:
+    def _classify_intent(self, query: str, context: DialogueContext) -> IntentType:
         """의도 분류"""
 
         # 우선순위 체크 (컨텍스트 기반)
 
         # 1. 호환성 체크 (포커스 제품이 있고 호환성 키워드 포함)
-        if context.focused_product and any(kw in query for kw in self.intent_keywords[IntentType.COMPATIBILITY]):
+        if context.focused_product and any(
+            kw in query for kw in self.intent_keywords[IntentType.COMPATIBILITY]
+        ):
             return IntentType.COMPATIBILITY
 
         # 2. 문서 요청 체크 (문서 키워드 포함)
@@ -210,42 +223,31 @@ class DialogueRouter:
         context: DialogueContext,
         product_idx: str,
         ref_type: str,
-        doc_type: Optional[str]
+        doc_type: Optional[str],
     ) -> RoutingDecision:
         """참조 처리"""
 
         # 문서 요청인 경우
-        if ref_type == 'document' and doc_type:
+        if ref_type == "document" and doc_type:
             return RoutingDecision(
                 intent=IntentType.DOCUMENT,
                 action="show_document",
-                parameters={
-                    'product_idx': product_idx,
-                    'document_type': doc_type,
-                    'query': query
-                },
+                parameters={"product_idx": product_idx, "document_type": doc_type, "query": query},
                 next_state=ConversationState.DOCUMENT_REQUEST,
-                confidence=0.95
+                confidence=0.95,
             )
 
         # 제품 참조 (상세보기)
         return RoutingDecision(
             intent=IntentType.REFERENCE,
             action="show_detail",
-            parameters={
-                'product_idx': product_idx,
-                'reference_type': ref_type,
-                'query': query
-            },
+            parameters={"product_idx": product_idx, "reference_type": ref_type, "query": query},
             next_state=ConversationState.FOCUSED,
-            confidence=0.95
+            confidence=0.95,
         )
 
     def _handle_search(
-        self,
-        query: str,
-        context: DialogueContext,
-        filter_manager: FilterManager
+        self, query: str, context: DialogueContext, filter_manager: FilterManager
     ) -> RoutingDecision:
         """새로운 검색 처리 (동의어 처리 통합)"""
 
@@ -262,20 +264,17 @@ class DialogueRouter:
             intent=IntentType.SEARCH,
             action="search",
             parameters={
-                'query': expanded_query,
-                'filters': filters,
-                'use_hybrid': True,
-                'normalized_query': normalized_query
+                "query": expanded_query,
+                "filters": filters,
+                "use_hybrid": True,
+                "normalized_query": normalized_query,
             },
             next_state=ConversationState.SEARCHING,
-            confidence=0.8
+            confidence=0.8,
         )
 
     def _handle_filter(
-        self,
-        query: str,
-        context: DialogueContext,
-        filter_manager: FilterManager
+        self, query: str, context: DialogueContext, filter_manager: FilterManager
     ) -> RoutingDecision:
         """누적 필터 처리 (동의어 처리 통합)"""
 
@@ -297,20 +296,16 @@ class DialogueRouter:
             intent=IntentType.FILTER,
             action="apply_filter",
             parameters={
-                'filters': new_filters,
-                'cached_results': context.last_search_results,
-                'normalized_query': normalized_query
+                "filters": new_filters,
+                "cached_results": context.last_search_results,
+                "normalized_query": normalized_query,
             },
             next_state=ConversationState.FILTERING,
             use_cache=True,
-            confidence=0.9
+            confidence=0.9,
         )
 
-    def _handle_compatibility(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> RoutingDecision:
+    def _handle_compatibility(self, query: str, context: DialogueContext) -> RoutingDecision:
         """호환성 확인 처리"""
 
         # 포커스 제품이 있어야 호환성 확인 가능
@@ -324,19 +319,15 @@ class DialogueRouter:
             intent=IntentType.COMPATIBILITY,
             action="find_compatible",
             parameters={
-                'base_product_idx': context.focused_product,
-                'compatible_type': compatible_type,
-                'query': query
+                "base_product_idx": context.focused_product,
+                "compatible_type": compatible_type,
+                "query": query,
             },
             next_state=ConversationState.COMPATIBILITY_CHECK,
-            confidence=0.85
+            confidence=0.85,
         )
 
-    def _handle_compare(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> RoutingDecision:
+    def _handle_compare(self, query: str, context: DialogueContext) -> RoutingDecision:
         """제품 비교 처리"""
 
         # 최소 2개 제품 필요
@@ -352,19 +343,12 @@ class DialogueRouter:
         return RoutingDecision(
             intent=IntentType.COMPARE,
             action="compare_products",
-            parameters={
-                'product_indices': products,
-                'query': query
-            },
+            parameters={"product_indices": products, "query": query},
             next_state=ConversationState.COMPARING,
-            confidence=0.8
+            confidence=0.8,
         )
 
-    def _handle_detail(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> RoutingDecision:
+    def _handle_detail(self, query: str, context: DialogueContext) -> RoutingDecision:
         """상세 정보 처리"""
 
         # 포커스 제품이 있으면 그것 사용
@@ -378,65 +362,48 @@ class DialogueRouter:
         return RoutingDecision(
             intent=IntentType.DETAIL,
             action="show_detail",
-            parameters={
-                'product_idx': product_idx,
-                'query': query
-            },
+            parameters={"product_idx": product_idx, "query": query},
             next_state=ConversationState.FOCUSED,
-            confidence=0.8
+            confidence=0.8,
         )
 
-    def _handle_greeting(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> RoutingDecision:
+    def _handle_greeting(self, query: str, context: DialogueContext) -> RoutingDecision:
         """인사 처리"""
 
         return RoutingDecision(
             intent=IntentType.GREETING,
             action="greeting",
-            parameters={'query': query},
+            parameters={"query": query},
             next_state=ConversationState.GREETING,
-            confidence=0.95
+            confidence=0.95,
         )
 
-    def _handle_reset(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> RoutingDecision:
+    def _handle_reset(self, query: str, context: DialogueContext) -> RoutingDecision:
         """대화 초기화 처리"""
 
         return RoutingDecision(
             intent=IntentType.RESET,
             action="reset",
-            parameters={'query': query},
+            parameters={"query": query},
             next_state=ConversationState.IDLE,
-            confidence=0.95
+            confidence=0.95,
         )
 
-    def _handle_clarification(
-        self,
-        query: str,
-        context: DialogueContext
-    ) -> RoutingDecision:
+    def _handle_clarification(self, query: str, context: DialogueContext) -> RoutingDecision:
         """명확화 필요 처리"""
 
         # 명확화 질문 생성
-        clarification = self.reference_resolver.get_clarification_question(
-            query, context
-        )
+        clarification = self.reference_resolver.get_clarification_question(query, context)
 
         return RoutingDecision(
             intent=IntentType.CLARIFICATION,
             action="request_clarification",
             parameters={
-                'query': query,
-                'clarification_message': clarification or "무엇을 도와드릴까요?"
+                "query": query,
+                "clarification_message": clarification or "무엇을 도와드릴까요?",
             },
             next_state=ConversationState.CLARIFICATION,
-            confidence=0.5
+            confidence=0.5,
         )
 
     # ===== 추출 유틸리티 =====
@@ -446,11 +413,7 @@ class DialogueRouter:
         import re
 
         # "50ml", "50미리", "50 ml"
-        patterns = [
-            r'(\d+)\s*ml',
-            r'(\d+)\s*미리',
-            r'(\d+)\s*mL'
-        ]
+        patterns = [r"(\d+)\s*ml", r"(\d+)\s*미리", r"(\d+)\s*mL"]
 
         for pattern in patterns:
             match = re.search(pattern, query)
@@ -461,7 +424,7 @@ class DialogueRouter:
 
     def _extract_material(self, query: str) -> Optional[str]:
         """재질 추출"""
-        materials = ['PET', 'HDPE', 'PP', 'PETG', 'PLA', 'PS', 'PC']
+        materials = ["PET", "HDPE", "PP", "PETG", "PLA", "PS", "PC"]
 
         query_upper = query.upper()
         for material in materials:
@@ -472,10 +435,10 @@ class DialogueRouter:
 
     def _extract_transparency(self, query: str) -> Optional[str]:
         """투명도 추출"""
-        if '투명' in query or 'clear' in query.lower():
-            return 'transparent'
-        elif '불투명' in query or 'opaque' in query.lower():
-            return 'opaque'
+        if "투명" in query or "clear" in query.lower():
+            return "transparent"
+        elif "불투명" in query or "opaque" in query.lower():
+            return "opaque"
 
         return None
 
@@ -484,7 +447,7 @@ class DialogueRouter:
         import re
 
         # "28/410", "24/410"
-        pattern = r'(\d{2}/\d{3})'
+        pattern = r"(\d{2}/\d{3})"
         match = re.search(pattern, query)
         if match:
             return match.group(1)
@@ -494,11 +457,11 @@ class DialogueRouter:
     def _extract_compatible_type(self, query: str) -> Optional[str]:
         """호환 제품 타입 추출"""
         types = {
-            '캡': 'cap',
-            '뚜껑': 'cap',
-            '펌프': 'pump',
-            '스프레이': 'spray',
-            '디스펜서': 'dispenser'
+            "캡": "cap",
+            "뚜껑": "cap",
+            "펌프": "pump",
+            "스프레이": "spray",
+            "디스펜서": "dispenser",
         }
 
         for korean, english in types.items():

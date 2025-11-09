@@ -4,12 +4,13 @@ Unit Tests for ResponseGenerator
 Tests LLM response generation with Ollama integration.
 """
 
-import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
+
 import httpx
+import pytest
 
 from app.rag_consultation.generation.response_generator import ResponseGenerator
-from app.rag_consultation.models import QueryType, FormalityLevel, UrgencyLevel
+from app.rag_consultation.models import FormalityLevel, QueryType, UrgencyLevel
 
 
 @pytest.fixture

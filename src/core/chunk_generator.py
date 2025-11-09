@@ -6,19 +6,20 @@ Chunk Generator
 """
 
 import re
-from typing import Dict, List, Optional
 from dataclasses import dataclass, field
 from enum import Enum
+from typing import Dict, List, Optional
 
 from src.core.product_classifier import (
     ProductCategory,
-    ProductSubCategory,
     ProductClassifier,
+    ProductSubCategory,
 )
 
 
 class ChunkType(Enum):
     """청크 타입"""
+
     PRIMARY = "primary"
     DESCRIPTION = "description"
     USE_CASE = "use_case"
@@ -35,6 +36,7 @@ class ChunkType(Enum):
 @dataclass
 class Chunk:
     """청크 데이터 클래스"""
+
     chunk_id: str
     chunk_type: ChunkType
     text: str
@@ -81,11 +83,7 @@ class ChunkGenerator:
             # Unknown category - create minimal chunk
             return self._generate_fallback_chunks(product)
 
-    def _generate_bottle_jar_chunks(
-        self,
-        product: Dict,
-        classification
-    ) -> List[Chunk]:
+    def _generate_bottle_jar_chunks(self, product: Dict, classification) -> List[Chunk]:
         """
         Bottle/Jar 제품 청크 생성 (8가지 타입)
         """
@@ -100,98 +98,110 @@ class ChunkGenerator:
         # 1. Primary Chunk
         primary_text = self._build_primary_text_bottle(product, enriched)
         if primary_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_primary",
-                chunk_type=ChunkType.PRIMARY,
-                text=primary_text,
-                metadata={**base_metadata, "chunk_type": "primary"},
-                priority=1.0
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_primary",
+                    chunk_type=ChunkType.PRIMARY,
+                    text=primary_text,
+                    metadata={**base_metadata, "chunk_type": "primary"},
+                    priority=1.0,
+                )
+            )
 
         # 2. Description Chunk
         description = enriched.get("detailed_description", "")
         if description:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_description",
-                chunk_type=ChunkType.DESCRIPTION,
-                text=description,
-                metadata={**base_metadata, "chunk_type": "description"},
-                priority=0.9
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_description",
+                    chunk_type=ChunkType.DESCRIPTION,
+                    text=description,
+                    metadata={**base_metadata, "chunk_type": "description"},
+                    priority=0.9,
+                )
+            )
 
         # 3. Use Case Chunk
         use_case_text = self._build_use_case_text(enriched)
         if use_case_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_use_case",
-                chunk_type=ChunkType.USE_CASE,
-                text=use_case_text,
-                metadata={**base_metadata, "chunk_type": "use_case"},
-                priority=0.9
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_use_case",
+                    chunk_type=ChunkType.USE_CASE,
+                    text=use_case_text,
+                    metadata={**base_metadata, "chunk_type": "use_case"},
+                    priority=0.9,
+                )
+            )
 
         # 4. Material Chunk
         material_text = self._build_material_text(enriched)
         if material_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_material",
-                chunk_type=ChunkType.MATERIAL,
-                text=material_text,
-                metadata={**base_metadata, "chunk_type": "material"},
-                priority=0.8
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_material",
+                    chunk_type=ChunkType.MATERIAL,
+                    text=material_text,
+                    metadata={**base_metadata, "chunk_type": "material"},
+                    priority=0.8,
+                )
+            )
 
         # 5. Capacity Chunk
         capacity_text = self._build_capacity_text(enriched)
         if capacity_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_capacity",
-                chunk_type=ChunkType.CAPACITY,
-                text=capacity_text,
-                metadata={**base_metadata, "chunk_type": "capacity"},
-                priority=0.8
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_capacity",
+                    chunk_type=ChunkType.CAPACITY,
+                    text=capacity_text,
+                    metadata={**base_metadata, "chunk_type": "capacity"},
+                    priority=0.8,
+                )
+            )
 
         # 6. Dimension Chunk
         dimension_text = self._build_dimension_text(enriched)
         if dimension_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_dimension",
-                chunk_type=ChunkType.DIMENSION,
-                text=dimension_text,
-                metadata={**base_metadata, "chunk_type": "dimension"},
-                priority=0.7
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_dimension",
+                    chunk_type=ChunkType.DIMENSION,
+                    text=dimension_text,
+                    metadata={**base_metadata, "chunk_type": "dimension"},
+                    priority=0.7,
+                )
+            )
 
         # 7. Keyword Chunk
         keyword_text = self._build_keyword_text(enriched)
         if keyword_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_keyword",
-                chunk_type=ChunkType.KEYWORD,
-                text=keyword_text,
-                metadata={**base_metadata, "chunk_type": "keyword"},
-                priority=0.85
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_keyword",
+                    chunk_type=ChunkType.KEYWORD,
+                    text=keyword_text,
+                    metadata={**base_metadata, "chunk_type": "keyword"},
+                    priority=0.85,
+                )
+            )
 
         # 8. Recommendation Chunk
         recommendation_text = self._build_recommendation_text(enriched)
         if recommendation_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_id}_recommendation",
-                chunk_type=ChunkType.RECOMMENDATION,
-                text=recommendation_text,
-                metadata={**base_metadata, "chunk_type": "recommendation"},
-                priority=0.75
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_id}_recommendation",
+                    chunk_type=ChunkType.RECOMMENDATION,
+                    text=recommendation_text,
+                    metadata={**base_metadata, "chunk_type": "recommendation"},
+                    priority=0.75,
+                )
+            )
 
         return chunks
 
-    def _generate_cap_pump_chunks(
-        self,
-        product: Dict,
-        classification
-    ) -> List[Chunk]:
+    def _generate_cap_pump_chunks(self, product: Dict, classification) -> List[Chunk]:
         """
         Cap/Pump 제품 청크 생성 (4가지 타입)
         """
@@ -204,46 +214,54 @@ class ChunkGenerator:
         # 1. Primary Chunk
         primary_text = self._build_primary_text_cap_pump(product)
         if primary_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_code}_primary",
-                chunk_type=ChunkType.PRIMARY,
-                text=primary_text,
-                metadata={**base_metadata, "chunk_type": "primary"},
-                priority=1.0
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_code}_primary",
+                    chunk_type=ChunkType.PRIMARY,
+                    text=primary_text,
+                    metadata={**base_metadata, "chunk_type": "primary"},
+                    priority=1.0,
+                )
+            )
 
         # 2. Specification Chunk
         spec_text = self._build_specification_text(product)
         if spec_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_code}_specification",
-                chunk_type=ChunkType.SPECIFICATION,
-                text=spec_text,
-                metadata={**base_metadata, "chunk_type": "specification"},
-                priority=0.9
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_code}_specification",
+                    chunk_type=ChunkType.SPECIFICATION,
+                    text=spec_text,
+                    metadata={**base_metadata, "chunk_type": "specification"},
+                    priority=0.9,
+                )
+            )
 
         # 3. Pricing Chunk
         pricing_text = self._build_pricing_text(product)
         if pricing_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_code}_pricing",
-                chunk_type=ChunkType.PRICING,
-                text=pricing_text,
-                metadata={**base_metadata, "chunk_type": "pricing"},
-                priority=0.7
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_code}_pricing",
+                    chunk_type=ChunkType.PRICING,
+                    text=pricing_text,
+                    metadata={**base_metadata, "chunk_type": "pricing"},
+                    priority=0.7,
+                )
+            )
 
         # 4. Compatibility Chunk (추론 기반)
         compatibility_text = self._build_compatibility_text(product)
         if compatibility_text:
-            chunks.append(Chunk(
-                chunk_id=f"{product_code}_compatibility",
-                chunk_type=ChunkType.COMPATIBILITY,
-                text=compatibility_text,
-                metadata={**base_metadata, "chunk_type": "compatibility"},
-                priority=0.8
-            ))
+            chunks.append(
+                Chunk(
+                    chunk_id=f"{product_code}_compatibility",
+                    chunk_type=ChunkType.COMPATIBILITY,
+                    text=compatibility_text,
+                    metadata={**base_metadata, "chunk_type": "compatibility"},
+                    priority=0.8,
+                )
+            )
 
         return chunks
 
@@ -252,13 +270,15 @@ class ChunkGenerator:
         product_id = product.get("product_id", product.get("product_code", "unknown"))
         product_name = product.get("product_name", product.get("description", ""))
 
-        return [Chunk(
-            chunk_id=f"{product_id}_primary",
-            chunk_type=ChunkType.PRIMARY,
-            text=product_name,
-            metadata={"product_id": product_id, "category": "unknown"},
-            priority=0.5
-        )]
+        return [
+            Chunk(
+                chunk_id=f"{product_id}_primary",
+                chunk_type=ChunkType.PRIMARY,
+                text=product_name,
+                metadata={"product_id": product_id, "category": "unknown"},
+                priority=0.5,
+            )
+        ]
 
     # ========== Chunk Text Builders (Bottle/Jar) ==========
 
@@ -606,22 +626,17 @@ if __name__ == "__main__":
             "use_cases": ["고농축 에센스", "트래블 사이즈"],
             "material_benefits": {
                 "material": "PE",
-                "advantages": ["식품등급 안전성", "가벼운 무게"]
+                "advantages": ["식품등급 안전성", "가벼운 무게"],
             },
             "capacity_info": {
                 "capacity": "40ml",
                 "usage_duration": "1-2주",
-                "suitable_products": ["세럼", "에센스"]
+                "suitable_products": ["세럼", "에센스"],
             },
-            "specifications_explained": {
-                "dimensions": "28x95(mm)",
-                "diameter": "Ø20"
-            },
+            "specifications_explained": {"dimensions": "28x95(mm)", "diameter": "Ø20"},
             "keywords": ["소형", "휴대용", "트래블"],
-            "recommendations": {
-                "when_to_use": "고가의 농축 제품"
-            }
-        }
+            "recommendations": {"when_to_use": "고가의 농축 제품"},
+        },
     }
 
     test_product_pump = {
@@ -632,7 +647,7 @@ if __name__ == "__main__":
         "detail": "내경 Ø24",
         "package": "800ea",
         "supply_price": 140.0,
-        "selling_price": 240.0
+        "selling_price": 240.0,
     }
 
     generator = ChunkGenerator()

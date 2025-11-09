@@ -23,7 +23,7 @@ Usage:
 import logging
 from typing import List, Optional
 
-from app.rag_consultation.models import QueryType, ExpertiseLevel
+from app.rag_consultation.models import ExpertiseLevel, QueryType
 
 logger = logging.getLogger(__name__)
 
@@ -212,8 +212,7 @@ Maintain conversation continuity.""",
             full_prompt = "\n".join(components)
 
             logger.debug(
-                f"Built prompt for {query_type.value} query "
-                f"({len(full_prompt)} chars)"
+                f"Built prompt for {query_type.value} query " f"({len(full_prompt)} chars)"
             )
 
             return full_prompt

@@ -6,18 +6,26 @@ Advanced Chunk Generator Pipeline
 전략: Atomic Field-Level Chunking with Category-Specific Templates
 """
 
+from dataclasses import dataclass
+from dataclasses import field as dc_field
 from typing import Dict, List, Optional
-from dataclasses import dataclass, field as dc_field
 
-from src.core.product_classifier import ProductClassifier, ProductCategory as ProdCat, ClassificationResult
-from src.core.chunk_templates import FieldType, ChunkTemplate
-from src.core.enhanced_field_extractor import EnhancedFieldExtractor
 from src.core.category_templates import CategoryTemplateRegistry, ProductCategory
+from src.core.chunk_templates import ChunkTemplate, FieldType
+from src.core.enhanced_field_extractor import EnhancedFieldExtractor
+from src.core.product_classifier import (
+    ClassificationResult,
+)
+from src.core.product_classifier import ProductCategory as ProdCat
+from src.core.product_classifier import (
+    ProductClassifier,
+)
 
 
 @dataclass
 class AtomicChunk:
     """원자 단위 청크 (Atomic Chunk)"""
+
     chunk_id: str
     field_type: FieldType
     text: str
@@ -88,9 +96,9 @@ class AdvancedChunkGenerator:
 
             if not templates:
                 # No category-specific template - use generic template
-                chunks.append(self._create_generic_chunk(
-                    product_id, field_type, value, base_metadata
-                ))
+                chunks.append(
+                    self._create_generic_chunk(product_id, field_type, value, base_metadata)
+                )
                 continue
 
             # Generate chunks from all templates (multiple variations)
@@ -111,7 +119,7 @@ class AdvancedChunkGenerator:
                         "field_type": field_type.value,
                         "template_variant": idx + 1,
                     },
-                    search_keywords=template.search_keywords
+                    search_keywords=template.search_keywords,
                 )
                 chunks.append(chunk)
 
@@ -128,11 +136,7 @@ class AdvancedChunkGenerator:
         }
         return mapping.get(prod_cat, ProductCategory.UNKNOWN)
 
-    def _create_base_metadata(
-        self,
-        product: Dict,
-        classification: ClassificationResult
-    ) -> Dict:
+    def _create_base_metadata(self, product: Dict, classification: ClassificationResult) -> Dict:
         """공통 메타데이터 생성"""
         return {
             "product_id": product.get("product_id", product.get("product_code", "unknown")),
@@ -144,11 +148,7 @@ class AdvancedChunkGenerator:
         }
 
     def _create_generic_chunk(
-        self,
-        product_id: str,
-        field_type: FieldType,
-        value: any,
-        base_metadata: Dict
+        self, product_id: str, field_type: FieldType, value: any, base_metadata: Dict
     ) -> AtomicChunk:
         """Generic chunk 생성 (템플릿 없는 경우)"""
         if isinstance(value, (list, tuple)):
@@ -164,7 +164,7 @@ class AdvancedChunkGenerator:
                 "field_type": field_type.value,
                 "template_variant": 0,  # Generic
             },
-            search_keywords=[]
+            search_keywords=[],
         )
 
 
@@ -234,7 +234,7 @@ if __name__ == "__main__":
             "origin": "한국",
             "manufacturer": "금양실업",
             "phone": "032-671-7630",
-            "email": "toritoya@naver.com"
+            "email": "toritoya@naver.com",
         },
         # Bottle
         {
@@ -246,18 +246,12 @@ if __name__ == "__main__":
                 "use_cases": ["고농축 에센스", "트래블 사이즈"],
                 "material_benefits": {
                     "material": "PE",
-                    "advantages": ["식품등급 안전성", "가벼운 무게"]
+                    "advantages": ["식품등급 안전성", "가벼운 무게"],
                 },
-                "capacity_info": {
-                    "capacity": "40ml",
-                    "suitable_products": ["세럼", "에센스"]
-                },
-                "specifications_explained": {
-                    "dimensions": "28x95(mm)",
-                    "diameter": "Ø20"
-                },
-                "keywords": ["소형", "휴대용", "트래블"]
-            }
+                "capacity_info": {"capacity": "40ml", "suitable_products": ["세럼", "에센스"]},
+                "specifications_explained": {"dimensions": "28x95(mm)", "diameter": "Ø20"},
+                "keywords": ["소형", "휴대용", "트래블"],
+            },
         },
         # Pump
         {
@@ -268,15 +262,15 @@ if __name__ == "__main__":
             "detail": "내경 Ø24",
             "package": "800ea",
             "supply_price": 140.0,
-            "selling_price": 240.0
-        }
+            "selling_price": 240.0,
+        },
     ]
 
     generator = AdvancedChunkGenerator()
 
-    print("="*80)
+    print("=" * 80)
     print("ADVANCED CHUNK GENERATOR - Atomic Field-Level Chunking")
-    print("="*80)
+    print("=" * 80)
 
     all_chunks = []
 

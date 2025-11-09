@@ -60,12 +60,8 @@ class HealthStatusResponse(BaseModel):
     status: str = Field(..., description="Health status")
     latency_ms: float = Field(..., description="Check latency in milliseconds")
     message: str = Field(..., description="Status message")
-    metadata: Dict[str, Any] = Field(
-        default_factory=dict, description="Diagnostic metadata"
-    )
-    remediation: Optional[str] = Field(
-        None, description="Remediation suggestions"
-    )
+    metadata: Dict[str, Any] = Field(default_factory=dict, description="Diagnostic metadata")
+    remediation: Optional[str] = Field(None, description="Remediation suggestions")
 
     class Config:
         json_schema_extra = {
@@ -94,9 +90,7 @@ class HealthCheckResponse(BaseModel):
     status: str = Field(..., description="Overall system status")
     timestamp: str = Field(..., description="Check timestamp (ISO 8601)")
     duration_ms: float = Field(..., description="Total check duration")
-    checks: List[HealthStatusResponse] = Field(
-        ..., description="Component health checks"
-    )
+    checks: List[HealthStatusResponse] = Field(..., description="Component health checks")
     summary: Dict[str, int] = Field(..., description="Health summary")
 
     class Config:
@@ -285,9 +279,7 @@ async def liveness_probe() -> LivenessResponse:
     ),
 )
 async def readiness_probe(
-    orchestrator: HealthCheckOrchestrator = Depends(
-        get_health_orchestrator
-    ),
+    orchestrator: HealthCheckOrchestrator = Depends(get_health_orchestrator),
     response: Response = None,
 ) -> ReadinessResponse:
     """Readiness probe for Kubernetes traffic routing.
@@ -348,9 +340,7 @@ async def readiness_probe(
     ),
 )
 async def health_check(
-    orchestrator: HealthCheckOrchestrator = Depends(
-        get_health_orchestrator
-    ),
+    orchestrator: HealthCheckOrchestrator = Depends(get_health_orchestrator),
 ) -> HealthCheckResponse:
     """Detailed health check with all component diagnostics.
 
@@ -383,9 +373,7 @@ async def health_check(
     checks = []
     for component_data in health_result["components"]:
         # Extract remediation from metadata if present
-        remediation = component_data.get("metadata", {}).get(
-            "remediation", None
-        )
+        remediation = component_data.get("metadata", {}).get("remediation", None)
 
         check_response = HealthStatusResponse(
             component=component_data["component"],
@@ -417,9 +405,7 @@ async def health_check(
     ),
 )
 async def status_summary(
-    orchestrator: HealthCheckOrchestrator = Depends(
-        get_health_orchestrator
-    ),
+    orchestrator: HealthCheckOrchestrator = Depends(get_health_orchestrator),
 ) -> StatusSummaryResponse:
     """Quick status summary without detailed checks.
 

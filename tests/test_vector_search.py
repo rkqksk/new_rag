@@ -3,11 +3,13 @@
 벡터 검색 기반 프론트엔드 테스트
 """
 
-import requests
 import json
 import time
 
+import requests
+
 BASE_URL = "http://localhost:8000"
+
 
 def test_vector_qa(query, top_k=5):
     """벡터 기반 Q&A 검색 테스트"""
@@ -25,14 +27,14 @@ def test_vector_qa(query, top_k=5):
         print(f"\n상태: {response.status_code}")
         print(f"신뢰도: {data.get('confidence', 'N/A'):.2f}")
         print(f"\n답변:")
-        print(data.get('answer', 'N/A'))
+        print(data.get("answer", "N/A"))
 
         print(f"\n추천 제품 ({len(data.get('related_products', []))}개):")
-        for i, product in enumerate(data.get('related_products', [])[:5], 1):
+        for i, product in enumerate(data.get("related_products", [])[:5], 1):
             print(f"\n{i}. {product.get('product_name')}")
             print(f"   제품 코드: {product.get('product_id')}")
             print(f"   용량: {product.get('capacity')}")
-            if product.get('price'):
+            if product.get("price"):
                 print(f"   가격: {product.get('price')}원")
 
         return data
@@ -40,12 +42,13 @@ def test_vector_qa(query, top_k=5):
         print(f"❌ 오류: {e}")
         return None
 
+
 def test_product_with_details(query):
     """제품 상세 정보까지 조회하는 테스트"""
     qa_data = test_vector_qa(query, top_k=3)
 
-    if qa_data and qa_data.get('related_products'):
-        product_id = qa_data['related_products'][0].get('product_id')
+    if qa_data and qa_data.get("related_products"):
+        product_id = qa_data["related_products"][0].get("product_id")
 
         print(f"\n{'='*80}")
         print(f"첫 번째 제품 상세 조회: {product_id}")
@@ -58,7 +61,7 @@ def test_product_with_details(query):
 
             print(f"\n제품명: {detail.get('product_name')}")
 
-            spec = detail.get('specification', {})
+            spec = detail.get("specification", {})
             print(f"\n사양:")
             print(f"  - 제품 코드: {spec.get('product_code')}")
             print(f"  - 용량: {spec.get('capacity')}")
@@ -66,10 +69,10 @@ def test_product_with_details(query):
             print(f"  - 크기: {spec.get('dimension')}")
             print(f"  - 종류: {spec.get('type')}")
 
-            price = detail.get('price', {})
+            price = detail.get("price", {})
             print(f"\n가격:")
             print(f"  - {price.get('primary_price_label')}: {price.get('primary_price')}원")
-            if price.get('discount_price'):
+            if price.get("discount_price"):
                 print(f"  - 할인가: {price.get('discount_price')}원")
 
             print(f"\nMOQ: {detail.get('moq', 'N/A')}")
@@ -77,10 +80,11 @@ def test_product_with_details(query):
         except Exception as e:
             print(f"❌ 오류: {e}")
 
+
 def main():
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("벡터 검색 기반 프론트엔드 테스트")
-    print("="*80)
+    print("=" * 80)
 
     # API 서버 준비 대기
     for i in range(10):
@@ -122,6 +126,7 @@ def main():
     print(f"\n\n{'='*80}")
     print("✅ 모든 테스트 완료!")
     print(f"{'='*80}\n")
+
 
 if __name__ == "__main__":
     main()

@@ -6,7 +6,8 @@ Redis 기반 세션 관리 및 대화 이력 추적
 import json
 import uuid
 from datetime import datetime, timedelta
-from typing import Dict, List, Optional, Any
+from typing import Any, Dict, List, Optional
+
 import redis
 from redis import Redis
 
@@ -19,10 +20,7 @@ class ConversationManager:
         Args:
             redis_url: Redis 연결 URL
         """
-        self.redis_client: Redis = redis.from_url(
-            redis_url,
-            decode_responses=True
-        )
+        self.redis_client: Redis = redis.from_url(redis_url, decode_responses=True)
         self.session_ttl = 3600  # 1시간 (초 단위)
         self.max_history_length = 10  # 최대 대화 이력 개수
 
@@ -49,15 +47,13 @@ class ConversationManager:
                 "previous_products": [],  # 이전 검색 결과 제품들
                 "filters": {},  # 활성 필터
                 "preferences": {},  # 사용자 선호도
-                "conversation_state": "initial"  # 대화 상태
-            }
+                "conversation_state": "initial",  # 대화 상태
+            },
         }
 
         # Redis에 저장 (TTL 설정)
         self.redis_client.setex(
-            session_id,
-            self.session_ttl,
-            json.dumps(session_data, ensure_ascii=False)
+            session_id, self.session_ttl, json.dumps(session_data, ensure_ascii=False)
         )
 
         return session_id
@@ -94,9 +90,7 @@ class ConversationManager:
 
             # Redis에 저장 (TTL 갱신)
             self.redis_client.setex(
-                session_id,
-                self.session_ttl,
-                json.dumps(session_data, ensure_ascii=False)
+                session_id, self.session_ttl, json.dumps(session_data, ensure_ascii=False)
             )
             return True
         except Exception as e:
@@ -104,12 +98,7 @@ class ConversationManager:
             return False
 
     def add_to_history(
-        self,
-        session_id: str,
-        query: str,
-        intent: str,
-        results: List[Dict],
-        response: str = None
+        self, session_id: str, query: str, intent: str, results: List[Dict], response: str = None
     ) -> bool:
         """
         대화 이력에 새로운 턴 추가
@@ -135,7 +124,7 @@ class ConversationManager:
             "intent": intent,
             "result_count": len(results),
             "result_idxs": [r.get("idx") for r in results[:5]],
-            "response": response
+            "response": response,
         }
 
         # 검색 이력에 추가
@@ -143,17 +132,15 @@ class ConversationManager:
 
         # 최대 길이 제한
         if len(session["context"]["search_history"]) > self.max_history_length:
-            session["context"]["search_history"] = \
-                session["context"]["search_history"][-self.max_history_length:]
+            session["context"]["search_history"] = session["context"]["search_history"][
+                -self.max_history_length :
+            ]
 
         # 세션 업데이트
         return self.update_session(session_id, session)
 
     def update_focus(
-        self,
-        session_id: str,
-        product_idx: str,
-        product_list: List[str] = None
+        self, session_id: str, product_idx: str, product_list: List[str] = None
     ) -> bool:
         """
         현재 포커스 제품 업데이트
@@ -182,16 +169,13 @@ class ConversationManager:
 
             # 최대 50개까지만 유지
             if len(session["context"]["previous_products"]) > 50:
-                session["context"]["previous_products"] = \
-                    session["context"]["previous_products"][-50:]
+                session["context"]["previous_products"] = session["context"]["previous_products"][
+                    -50:
+                ]
 
         return self.update_session(session_id, session)
 
-    def update_filters(
-        self,
-        session_id: str,
-        filters: Dict[str, Any]
-    ) -> bool:
+    def update_filters(self, session_id: str, filters: Dict[str, Any]) -> bool:
         """
         활성 필터 업데이트
 
@@ -211,8 +195,7 @@ class ConversationManager:
 
         # None 값 제거 (필터 해제)
         session["context"]["filters"] = {
-            k: v for k, v in session["context"]["filters"].items()
-            if v is not None
+            k: v for k, v in session["context"]["filters"].items() if v is not None
         }
 
         return self.update_session(session_id, session)
@@ -232,11 +215,7 @@ class ConversationManager:
             return session.get("context", {})
         return None
 
-    def get_recent_history(
-        self,
-        session_id: str,
-        limit: int = 3
-    ) -> List[Dict]:
+    def get_recent_history(self, session_id: str, limit: int = 3) -> List[Dict]:
         """
         최근 대화 이력 조회
 
@@ -355,5 +334,5 @@ class ConversationManager:
             "unique_products_viewed": len(set(context.get("previous_products", []))),
             "active_filters": len(context.get("filters", {})),
             "created_at": session["created_at"],
-            "last_activity": session["last_activity"]
+            "last_activity": session["last_activity"],
         }

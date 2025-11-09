@@ -50,8 +50,7 @@ async def test_product_comparison(engine):
     product_idxs = ["823", "209"]
 
     result = engine.compare_products(
-        product_idxs=product_idxs,
-        metrics=["재질", "용량", "가격", "호환성"]
+        product_idxs=product_idxs, metrics=["재질", "용량", "가격", "호환성"]
     )
 
     if "error" in result:
@@ -81,10 +80,7 @@ async def test_multiple_products(engine):
 
     product_idxs = ["823", "209", "248", "835", "321"]
 
-    result = engine.compare_products(
-        product_idxs=product_idxs,
-        metrics=None  # 전체 메트릭
-    )
+    result = engine.compare_products(product_idxs=product_idxs, metrics=None)  # 전체 메트릭
 
     if "error" in result:
         print_error(f"비교 실패: {result['error']}")
@@ -129,11 +125,7 @@ async def test_filtering(engine):
     print_success(f"가격 필터 (0-300원) 적용: {len(products)}개 → {len(filtered)}개")
 
     # 복합 필터 테스트
-    filters = {
-        "재질": "PET",
-        "가격": {"max": 500},
-        "호환성": 5
-    }
+    filters = {"재질": "PET", "가격": {"max": 500}, "호환성": 5}
     filtered = engine.apply_filters(products, filters)
     print_success(f"복합 필터 적용: {len(products)}개 → {len(filtered)}개")
 
@@ -152,10 +144,7 @@ async def test_error_handling(engine):
         print_error("빈 제품 목록 에러 처리 실패")
 
     # 존재하지 않는 제품
-    result = engine.compare_products(
-        product_idxs=["99999", "88888"],
-        metrics=None
-    )
+    result = engine.compare_products(product_idxs=["99999", "88888"], metrics=None)
     if "error" in result:
         print_success("존재하지 않는 제품 에러 처리 OK")
     else:
@@ -192,10 +181,7 @@ async def test_api_integration():
             # 제품 비교
             response = await client.post(
                 "http://localhost:8001/compare/products",
-                json={
-                    "product_idxs": ["823", "209"],
-                    "metrics": ["재질", "용량", "가격"]
-                }
+                json={"product_idxs": ["823", "209"], "metrics": ["재질", "용량", "가격"]},
             )
             if response.status_code == 200:
                 result = response.json()

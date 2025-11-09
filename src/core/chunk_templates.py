@@ -6,13 +6,14 @@ Chunk Template System
 전략: 필드별 템플릿 + 조합 템플릿으로 검색 커버리지 극대화
 """
 
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class FieldType(Enum):
     """필드 타입"""
+
     # Product Identity
     PRODUCT_NAME = "product_name"
     PRODUCT_CODE = "product_code"
@@ -59,6 +60,7 @@ class FieldType(Enum):
 @dataclass
 class ChunkTemplate:
     """청크 템플릿"""
+
     field_type: FieldType
     template: str  # {field} placeholder를 사용
     priority: float  # Search priority
@@ -69,10 +71,7 @@ class ChunkTemplate:
         if isinstance(value, (list, tuple)):
             value = ", ".join(str(v) for v in value)
 
-        text = self.template.format(
-            field=value,
-            category=product_category
-        )
+        text = self.template.format(field=value, category=product_category)
         return text.strip()
 
 
@@ -88,321 +87,396 @@ class ChunkTemplateRegistry:
         """기본 템플릿 등록"""
 
         # ========== Product Identity Templates ==========
-        self.register(FieldType.PRODUCT_NAME, [
-            ChunkTemplate(
-                field_type=FieldType.PRODUCT_NAME,
-                template="{field}",
-                priority=1.0,
-                search_keywords=["제품명", "상품명", "이름"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.PRODUCT_NAME,
-                template="{field} {category}",
-                priority=0.95,
-                search_keywords=["제품", "상품", "용기", "캡", "펌프"]
-            ),
-        ])
+        self.register(
+            FieldType.PRODUCT_NAME,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.PRODUCT_NAME,
+                    template="{field}",
+                    priority=1.0,
+                    search_keywords=["제품명", "상품명", "이름"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.PRODUCT_NAME,
+                    template="{field} {category}",
+                    priority=0.95,
+                    search_keywords=["제품", "상품", "용기", "캡", "펌프"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.PRODUCT_CODE, [
-            ChunkTemplate(
-                field_type=FieldType.PRODUCT_CODE,
-                template="제품코드 {field}",
-                priority=0.9,
-                search_keywords=["제품코드", "코드", "품번", "모델"]
-            ),
-        ])
+        self.register(
+            FieldType.PRODUCT_CODE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.PRODUCT_CODE,
+                    template="제품코드 {field}",
+                    priority=0.9,
+                    search_keywords=["제품코드", "코드", "품번", "모델"],
+                ),
+            ],
+        )
 
         # ========== Specification Templates ==========
-        self.register(FieldType.CAPACITY, [
-            ChunkTemplate(
-                field_type=FieldType.CAPACITY,
-                template="{field} 용량 {category}",
-                priority=0.95,
-                search_keywords=["용량", "ml", "리터", "크기", "사이즈"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.CAPACITY,
-                template="{field} {category} 제품",
-                priority=0.9,
-                search_keywords=["용량", "크기"]
-            ),
-        ])
+        self.register(
+            FieldType.CAPACITY,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.CAPACITY,
+                    template="{field} 용량 {category}",
+                    priority=0.95,
+                    search_keywords=["용량", "ml", "리터", "크기", "사이즈"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.CAPACITY,
+                    template="{field} {category} 제품",
+                    priority=0.9,
+                    search_keywords=["용량", "크기"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.SIZE, [
-            ChunkTemplate(
-                field_type=FieldType.SIZE,
-                template="사이즈 {field}",
-                priority=0.9,
-                search_keywords=["사이즈", "크기", "치수", "규격", "mm"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.SIZE,
-                template="{field} 규격",
-                priority=0.85,
-                search_keywords=["규격", "사이즈"]
-            ),
-        ])
+        self.register(
+            FieldType.SIZE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.SIZE,
+                    template="사이즈 {field}",
+                    priority=0.9,
+                    search_keywords=["사이즈", "크기", "치수", "규격", "mm"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.SIZE,
+                    template="{field} 규격",
+                    priority=0.85,
+                    search_keywords=["규격", "사이즈"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.NECK, [
-            ChunkTemplate(
-                field_type=FieldType.NECK,
-                template="Neck {field} 호환",
-                priority=0.95,
-                search_keywords=["neck", "넥", "입구", "직경", "파이", "Ø"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.NECK,
-                template="{field} neck 입구 {category}",
-                priority=0.9,
-                search_keywords=["입구", "넥"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.NECK,
-                template="{field} 호환 {category}",
-                priority=0.85,
-                search_keywords=["호환", "맞는"]
-            ),
-        ])
+        self.register(
+            FieldType.NECK,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.NECK,
+                    template="Neck {field} 호환",
+                    priority=0.95,
+                    search_keywords=["neck", "넥", "입구", "직경", "파이", "Ø"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.NECK,
+                    template="{field} neck 입구 {category}",
+                    priority=0.9,
+                    search_keywords=["입구", "넥"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.NECK,
+                    template="{field} 호환 {category}",
+                    priority=0.85,
+                    search_keywords=["호환", "맞는"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.DIAMETER, [
-            ChunkTemplate(
-                field_type=FieldType.DIAMETER,
-                template="직경 {field}",
-                priority=0.9,
-                search_keywords=["직경", "지름", "파이", "Ø", "mm"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.DIAMETER,
-                template="{field} 직경 {category}",
-                priority=0.85,
-                search_keywords=["직경"]
-            ),
-        ])
+        self.register(
+            FieldType.DIAMETER,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.DIAMETER,
+                    template="직경 {field}",
+                    priority=0.9,
+                    search_keywords=["직경", "지름", "파이", "Ø", "mm"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.DIAMETER,
+                    template="{field} 직경 {category}",
+                    priority=0.85,
+                    search_keywords=["직경"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.DIMENSIONS, [
-            ChunkTemplate(
-                field_type=FieldType.DIMENSIONS,
-                template="치수 {field}",
-                priority=0.85,
-                search_keywords=["치수", "크기", "사이즈", "규격"]
-            ),
-        ])
+        self.register(
+            FieldType.DIMENSIONS,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.DIMENSIONS,
+                    template="치수 {field}",
+                    priority=0.85,
+                    search_keywords=["치수", "크기", "사이즈", "규격"],
+                ),
+            ],
+        )
 
         # ========== Material & Manufacturing Templates ==========
-        self.register(FieldType.MATERIAL, [
-            ChunkTemplate(
-                field_type=FieldType.MATERIAL,
-                template="{field} 재질 {category}",
-                priority=0.95,
-                search_keywords=["재질", "소재", "material", "PE", "PET", "PP", "플라스틱"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.MATERIAL,
-                template="{field} {category}",
-                priority=0.9,
-                search_keywords=["재질", "소재"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.MATERIAL,
-                template="{field} 플라스틱 {category}",
-                priority=0.85,
-                search_keywords=["플라스틱"]
-            ),
-        ])
+        self.register(
+            FieldType.MATERIAL,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.MATERIAL,
+                    template="{field} 재질 {category}",
+                    priority=0.95,
+                    search_keywords=["재질", "소재", "material", "PE", "PET", "PP", "플라스틱"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.MATERIAL,
+                    template="{field} {category}",
+                    priority=0.9,
+                    search_keywords=["재질", "소재"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.MATERIAL,
+                    template="{field} 플라스틱 {category}",
+                    priority=0.85,
+                    search_keywords=["플라스틱"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.ORIGIN, [
-            ChunkTemplate(
-                field_type=FieldType.ORIGIN,
-                template="{field}산 {category}",
-                priority=0.9,
-                search_keywords=["원산지", "제조국", "국산", "한국산", "중국산"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.ORIGIN,
-                template="{field} 제조 {category}",
-                priority=0.85,
-                search_keywords=["제조", "생산"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.ORIGIN,
-                template="국내산 {category}" if "{field}" == "한국" else "{field}산 {category}",
-                priority=0.8,
-                search_keywords=["국내", "국산"]
-            ),
-        ])
+        self.register(
+            FieldType.ORIGIN,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.ORIGIN,
+                    template="{field}산 {category}",
+                    priority=0.9,
+                    search_keywords=["원산지", "제조국", "국산", "한국산", "중국산"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.ORIGIN,
+                    template="{field} 제조 {category}",
+                    priority=0.85,
+                    search_keywords=["제조", "생산"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.ORIGIN,
+                    template="국내산 {category}" if "{field}" == "한국" else "{field}산 {category}",
+                    priority=0.8,
+                    search_keywords=["국내", "국산"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.MANUFACTURER, [
-            ChunkTemplate(
-                field_type=FieldType.MANUFACTURER,
-                template="{field} 제조 {category}",
-                priority=0.95,
-                search_keywords=["제조사", "제조업체", "업체", "회사", "manufacturer"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.MANUFACTURER,
-                template="{field} {category}",
-                priority=0.9,
-                search_keywords=["제조사"]
-            ),
-        ])
+        self.register(
+            FieldType.MANUFACTURER,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.MANUFACTURER,
+                    template="{field} 제조 {category}",
+                    priority=0.95,
+                    search_keywords=["제조사", "제조업체", "업체", "회사", "manufacturer"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.MANUFACTURER,
+                    template="{field} {category}",
+                    priority=0.9,
+                    search_keywords=["제조사"],
+                ),
+            ],
+        )
 
         # ========== Business Templates ==========
-        self.register(FieldType.MOQ, [
-            ChunkTemplate(
-                field_type=FieldType.MOQ,
-                template="최소주문수량 {field}개",
-                priority=0.95,
-                search_keywords=["MOQ", "최소주문", "최소수량", "minimum", "최소", "개수"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.MOQ,
-                template="{field}개부터 주문 가능",
-                priority=0.9,
-                search_keywords=["주문", "최소"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.MOQ,
-                template="최소 {field}개 단위 주문",
-                priority=0.85,
-                search_keywords=["최소", "단위"]
-            ),
-        ])
+        self.register(
+            FieldType.MOQ,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.MOQ,
+                    template="최소주문수량 {field}개",
+                    priority=0.95,
+                    search_keywords=["MOQ", "최소주문", "최소수량", "minimum", "최소", "개수"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.MOQ,
+                    template="{field}개부터 주문 가능",
+                    priority=0.9,
+                    search_keywords=["주문", "최소"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.MOQ,
+                    template="최소 {field}개 단위 주문",
+                    priority=0.85,
+                    search_keywords=["최소", "단위"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.PRICE, [
-            ChunkTemplate(
-                field_type=FieldType.PRICE,
-                template="가격 {field}원",
-                priority=0.9,
-                search_keywords=["가격", "price", "원", "금액", "비용"]
-            ),
-        ])
+        self.register(
+            FieldType.PRICE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.PRICE,
+                    template="가격 {field}원",
+                    priority=0.9,
+                    search_keywords=["가격", "price", "원", "금액", "비용"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.SUPPLY_PRICE, [
-            ChunkTemplate(
-                field_type=FieldType.SUPPLY_PRICE,
-                template="공급가 {field}원",
-                priority=0.85,
-                search_keywords=["공급가", "도매가", "공급단가"]
-            ),
-        ])
+        self.register(
+            FieldType.SUPPLY_PRICE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.SUPPLY_PRICE,
+                    template="공급가 {field}원",
+                    priority=0.85,
+                    search_keywords=["공급가", "도매가", "공급단가"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.SELLING_PRICE, [
-            ChunkTemplate(
-                field_type=FieldType.SELLING_PRICE,
-                template="판매가 {field}원",
-                priority=0.85,
-                search_keywords=["판매가", "소비자가", "정가"]
-            ),
-        ])
+        self.register(
+            FieldType.SELLING_PRICE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.SELLING_PRICE,
+                    template="판매가 {field}원",
+                    priority=0.85,
+                    search_keywords=["판매가", "소비자가", "정가"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.PACKAGE, [
-            ChunkTemplate(
-                field_type=FieldType.PACKAGE,
-                template="{field} 패키지",
-                priority=0.8,
-                search_keywords=["패키지", "포장", "단위", "박스"]
-            ),
-        ])
+        self.register(
+            FieldType.PACKAGE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.PACKAGE,
+                    template="{field} 패키지",
+                    priority=0.8,
+                    search_keywords=["패키지", "포장", "단위", "박스"],
+                ),
+            ],
+        )
 
         # ========== Contact Templates ==========
-        self.register(FieldType.PHONE, [
-            ChunkTemplate(
-                field_type=FieldType.PHONE,
-                template="전화 {field}",
-                priority=0.7,
-                search_keywords=["전화", "연락처", "tel", "phone"]
-            ),
-        ])
+        self.register(
+            FieldType.PHONE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.PHONE,
+                    template="전화 {field}",
+                    priority=0.7,
+                    search_keywords=["전화", "연락처", "tel", "phone"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.FAX, [
-            ChunkTemplate(
-                field_type=FieldType.FAX,
-                template="팩스 {field}",
-                priority=0.6,
-                search_keywords=["팩스", "fax"]
-            ),
-        ])
+        self.register(
+            FieldType.FAX,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.FAX,
+                    template="팩스 {field}",
+                    priority=0.6,
+                    search_keywords=["팩스", "fax"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.EMAIL, [
-            ChunkTemplate(
-                field_type=FieldType.EMAIL,
-                template="이메일 {field}",
-                priority=0.7,
-                search_keywords=["이메일", "email", "메일"]
-            ),
-        ])
+        self.register(
+            FieldType.EMAIL,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.EMAIL,
+                    template="이메일 {field}",
+                    priority=0.7,
+                    search_keywords=["이메일", "email", "메일"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.MANAGER, [
-            ChunkTemplate(
-                field_type=FieldType.MANAGER,
-                template="담당자 {field}",
-                priority=0.75,
-                search_keywords=["담당", "담당자", "연락처", "매니저"]
-            ),
-        ])
+        self.register(
+            FieldType.MANAGER,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.MANAGER,
+                    template="담당자 {field}",
+                    priority=0.75,
+                    search_keywords=["담당", "담당자", "연락처", "매니저"],
+                ),
+            ],
+        )
 
         # ========== Use Case Templates ==========
-        self.register(FieldType.USE_CASE, [
-            ChunkTemplate(
-                field_type=FieldType.USE_CASE,
-                template="{field}에 적합한 {category}",
-                priority=0.9,
-                search_keywords=["용도", "사용", "적합", "추천"]
-            ),
-            ChunkTemplate(
-                field_type=FieldType.USE_CASE,
-                template="{field} 제품용",
-                priority=0.85,
-                search_keywords=["용도"]
-            ),
-        ])
+        self.register(
+            FieldType.USE_CASE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.USE_CASE,
+                    template="{field}에 적합한 {category}",
+                    priority=0.9,
+                    search_keywords=["용도", "사용", "적합", "추천"],
+                ),
+                ChunkTemplate(
+                    field_type=FieldType.USE_CASE,
+                    template="{field} 제품용",
+                    priority=0.85,
+                    search_keywords=["용도"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.TARGET_PRODUCT, [
-            ChunkTemplate(
-                field_type=FieldType.TARGET_PRODUCT,
-                template="{field} 담을 수 있는 {category}",
-                priority=0.9,
-                search_keywords=["담다", "넣다", "포장", "제품"]
-            ),
-        ])
+        self.register(
+            FieldType.TARGET_PRODUCT,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.TARGET_PRODUCT,
+                    template="{field} 담을 수 있는 {category}",
+                    priority=0.9,
+                    search_keywords=["담다", "넣다", "포장", "제품"],
+                ),
+            ],
+        )
 
         # ========== Description Templates ==========
-        self.register(FieldType.DESCRIPTION, [
-            ChunkTemplate(
-                field_type=FieldType.DESCRIPTION,
-                template="{field}",
-                priority=0.8,
-                search_keywords=["설명", "특징", "description"]
-            ),
-        ])
+        self.register(
+            FieldType.DESCRIPTION,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.DESCRIPTION,
+                    template="{field}",
+                    priority=0.8,
+                    search_keywords=["설명", "특징", "description"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.KEYWORD, [
-            ChunkTemplate(
-                field_type=FieldType.KEYWORD,
-                template="{field}",
-                priority=0.85,
-                search_keywords=["키워드", "검색어"]
-            ),
-        ])
+        self.register(
+            FieldType.KEYWORD,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.KEYWORD,
+                    template="{field}",
+                    priority=0.85,
+                    search_keywords=["키워드", "검색어"],
+                ),
+            ],
+        )
 
         # ========== Composite Templates (조합) ==========
-        self.register(FieldType.SPEC_COMPOSITE, [
-            ChunkTemplate(
-                field_type=FieldType.SPEC_COMPOSITE,
-                template="{field}",  # Custom composition
-                priority=0.95,
-                search_keywords=["스펙", "사양", "규격"]
-            ),
-        ])
+        self.register(
+            FieldType.SPEC_COMPOSITE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.SPEC_COMPOSITE,
+                    template="{field}",  # Custom composition
+                    priority=0.95,
+                    search_keywords=["스펙", "사양", "규격"],
+                ),
+            ],
+        )
 
-        self.register(FieldType.BUSINESS_COMPOSITE, [
-            ChunkTemplate(
-                field_type=FieldType.BUSINESS_COMPOSITE,
-                template="{field}",  # Custom composition
-                priority=0.9,
-                search_keywords=["구매", "주문", "가격"]
-            ),
-        ])
+        self.register(
+            FieldType.BUSINESS_COMPOSITE,
+            [
+                ChunkTemplate(
+                    field_type=FieldType.BUSINESS_COMPOSITE,
+                    template="{field}",  # Custom composition
+                    priority=0.9,
+                    search_keywords=["구매", "주문", "가격"],
+                ),
+            ],
+        )
 
     def register(self, field_type: FieldType, templates: List[ChunkTemplate]):
         """템플릿 등록 (확장 가능)"""
@@ -413,18 +487,14 @@ class ChunkTemplateRegistry:
         return self.templates.get(field_type, [])
 
     def add_custom_template(
-        self,
-        field_type: FieldType,
-        template: str,
-        priority: float,
-        search_keywords: List[str]
+        self, field_type: FieldType, template: str, priority: float, search_keywords: List[str]
     ):
         """커스텀 템플릿 추가 (동적 확장)"""
         custom_template = ChunkTemplate(
             field_type=field_type,
             template=template,
             priority=priority,
-            search_keywords=search_keywords
+            search_keywords=search_keywords,
         )
 
         if field_type not in self.templates:
@@ -434,6 +504,7 @@ class ChunkTemplateRegistry:
 
 
 # ========== Field Extractors (필드 추출기) ==========
+
 
 class FieldExtractor:
     """제품 데이터에서 필드 추출"""
@@ -621,7 +692,7 @@ if __name__ == "__main__":
         "phone": "032-671-7630",
         "fax": "032-671-7631",
         "manager": "김양원 실장 010-9341-1805",
-        "email": "toritoya@naver.com"
+        "email": "toritoya@naver.com",
     }
 
     # Extract fields

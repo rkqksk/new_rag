@@ -5,19 +5,19 @@ RAG Q&A Service
 
 import logging
 import re
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
+import httpx
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
-import httpx
 
 from app.utils.product_utils import (
-    generate_image_urls,
-    validate_product_integrity,
     batch_validate_products,
     enrich_product_with_metadata,
+    generate_image_urls,
+    validate_product_integrity,
 )
 
 logger = logging.getLogger(__name__)
@@ -26,6 +26,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class QARequest:
     """Q&A 요청 데이터"""
+
     question: str
     collection: str = "products_all"
     top_k: int = 3
@@ -37,6 +38,7 @@ class QARequest:
 @dataclass
 class QAResponse:
     """Q&A 응답 데이터"""
+
     question: str
     answer: str
     related_products: List[Dict[str, Any]]
@@ -53,7 +55,7 @@ class RAGQAService:
         qdrant_client: QdrantClient,
         embedding_model: SentenceTransformer,
         ollama_url: str = "http://localhost:11434",
-        model_name: str = "qwen2.5:3b"
+        model_name: str = "qwen2.5:3b",
     ):
         self.qdrant = qdrant_client
         self.embedder = embedding_model
@@ -61,10 +63,10 @@ class RAGQAService:
         self.model_name = model_name
 
         # Compile regex patterns once for better performance
-        self._capacity_ml_pattern = re.compile(r'(\d+)\s*(ml|미리)')
-        self._capacity_g_pattern = re.compile(r'(\d+)\s*g\b')
-        self._product_ml_pattern = re.compile(r'(\d+)\s*ml')
-        self._product_g_pattern = re.compile(r'(\d+)\s*g\b')
+        self._capacity_ml_pattern = re.compile(r"(\d+)\s*(ml|미리)")
+        self._capacity_g_pattern = re.compile(r"(\d+)\s*g\b")
+        self._product_ml_pattern = re.compile(r"(\d+)\s*ml")
+        self._product_g_pattern = re.compile(r"(\d+)\s*g\b")
 
         logger.info(f"✅ RAGQAService initialized with model: {model_name}")
 
@@ -82,12 +84,12 @@ class RAGQAService:
         # ml 우선 검색 (50ml, 50미리)
         match = self._capacity_ml_pattern.search(query.lower())
         if match:
-            return match.group(1) + 'ml'
+            return match.group(1) + "ml"
 
         # g 검색 (50g)
         match = self._capacity_g_pattern.search(query.lower())
         if match:
-            return match.group(1) + 'g'
+            return match.group(1) + "g"
 
         return None
 
@@ -105,12 +107,12 @@ class RAGQAService:
         # ml 우선 검색
         match = self._product_ml_pattern.search(product_name.lower())
         if match:
-            return match.group(1) + 'ml'
+            return match.group(1) + "ml"
 
         # g 검색
         match = self._product_g_pattern.search(product_name.lower())
         if match:
-            return match.group(1) + 'g'
+            return match.group(1) + "g"
 
         return None
 
@@ -120,22 +122,23 @@ class RAGQAService:
         예: "50ml 헤비브로우용기" -> {capacity: "50ml", type: "헤비브로우"}
         """
         import re
+
         spec = {}
 
         # 용량 추출 (ml)
-        capacity_match = re.search(r'(\d+ml)', product_name)
+        capacity_match = re.search(r"(\d+ml)", product_name)
         if capacity_match:
-            spec['capacity'] = capacity_match.group(1)
+            spec["capacity"] = capacity_match.group(1)
 
         # 종류 추출 (헤비, 다층, 파우더 등)
-        if '헤비' in product_name:
-            spec['type'] = '헤비브로우'
-        elif '다층' in product_name:
-            spec['type'] = '다층브로우'
-        elif '파우더' in product_name:
-            spec['type'] = '파우더브로우'
+        if "헤비" in product_name:
+            spec["type"] = "헤비브로우"
+        elif "다층" in product_name:
+            spec["type"] = "다층브로우"
+        elif "파우더" in product_name:
+            spec["type"] = "파우더브로우"
         else:
-            spec['type'] = '일반브로우'
+            spec["type"] = "일반브로우"
 
         return spec
 
@@ -151,14 +154,14 @@ class RAGQAService:
         query_upper = query.upper()
 
         # 정확한 재질 매칭 (우선순위: PETG > PET > PE > PP)
-        if 'PETG' in query_upper:
-            return 'PETG'
-        elif 'PET' in query_upper:
-            return 'PET'
-        elif 'PE' in query_upper and 'PET' not in query_upper:
-            return 'PE'
-        elif 'PP' in query_upper:
-            return 'PP'
+        if "PETG" in query_upper:
+            return "PETG"
+        elif "PET" in query_upper:
+            return "PET"
+        elif "PE" in query_upper and "PET" not in query_upper:
+            return "PE"
+        elif "PP" in query_upper:
+            return "PP"
 
         return None
 
@@ -169,7 +172,7 @@ class RAGQAService:
         top_k: int = 3,
         group_by_spec: bool = True,
         return_all: bool = False,
-        min_integrity_score: float = 0.0
+        min_integrity_score: float = 0.0,
     ) -> List[Dict[str, Any]]:
         """제품 벡터 검색 (엄격한 용량 + 재질 필터링)
 
@@ -208,7 +211,7 @@ class RAGQAService:
                 collection_name=collection,
                 query_vector=("text", query_embedding),  # Use named "text" vector
                 limit=search_limit,
-                score_threshold=0.3  # 최소 유사도
+                score_threshold=0.3,  # 최소 유사도
             )
 
             # 5. 엄격한 필터링 (용량 + 재질)
@@ -226,7 +229,7 @@ class RAGQAService:
 
                     # 재질 체크 (category에서 추출: "Bottle/PET" → "PET")
                     if query_material:
-                        product_material = category.split('/')[-1] if '/' in category else None
+                        product_material = category.split("/")[-1] if "/" in category else None
                         if product_material != query_material:
                             continue  # 재질 불일치 → 제외
 
@@ -250,11 +253,11 @@ class RAGQAService:
 
                     # Qdrant payload에서 specifications 추출 (제품 코드 포함)
                     payload_specs = result.payload.get("specifications", {})
-                    product_code = payload_specs.get('제품 코드', '')
+                    product_code = payload_specs.get("제품 코드", "")
 
                     # 제품명에 제품 코드 추가
                     product_name_with_code = product_name
-                    if product_code and product_code != 'N/A':
+                    if product_code and product_code != "N/A":
                         product_name_with_code = f"{product_name}({product_code})"
 
                     spec_key = f"{spec.get('capacity', 'unknown')}_{spec.get('type', 'unknown')}"
@@ -277,7 +280,9 @@ class RAGQAService:
                 unique_products = []
                 for spec_key, products_in_group in spec_groups.items():
                     # 유사도 순으로 정렬
-                    sorted_products = sorted(products_in_group, key=lambda x: x['similarity_score'], reverse=True)
+                    sorted_products = sorted(
+                        products_in_group, key=lambda x: x["similarity_score"], reverse=True
+                    )
 
                     # return_all=True면 전체, 아니면 top_k까지
                     if return_all:
@@ -286,7 +291,7 @@ class RAGQAService:
                         unique_products.extend(sorted_products[:top_k])
 
                 # 전체 유사도 기준으로 다시 정렬
-                unique_products.sort(key=lambda x: x['similarity_score'], reverse=True)
+                unique_products.sort(key=lambda x: x["similarity_score"], reverse=True)
 
                 logger.info(
                     f"Found {len(unique_products)} products grouped by spec for query: '{query}' "
@@ -308,11 +313,11 @@ class RAGQAService:
 
                     # Qdrant payload에서 specifications 추출 (제품 코드 포함)
                     payload_specs = result.payload.get("specifications", {})
-                    product_code = payload_specs.get('제품 코드', '')
+                    product_code = payload_specs.get("제품 코드", "")
 
                     # 제품명에 제품 코드 추가
                     product_name_with_code = product_name
-                    if product_code and product_code != 'N/A':
+                    if product_code and product_code != "N/A":
                         product_name_with_code = f"{product_name}({product_code})"
 
                     product = {
@@ -341,8 +346,8 @@ class RAGQAService:
             validated_products = batch_validate_products(
                 unique_products,
                 require_images=False,  # 경고만 발생 (필수 아님)
-                require_specs=False,   # 경고만 발생 (필수 아님)
-                min_integrity_score=min_integrity_score
+                require_specs=False,  # 경고만 발생 (필수 아님)
+                min_integrity_score=min_integrity_score,
             )
 
             # 7. 메타데이터 보강
@@ -363,9 +368,7 @@ class RAGQAService:
             return []
 
     async def generate_answer(
-        self,
-        question: str,
-        products: List[Dict[str, Any]]
+        self, question: str, products: List[Dict[str, Any]]
     ) -> tuple[str, float]:
         """LLM을 사용한 답변 생성"""
         try:
@@ -402,8 +405,8 @@ class RAGQAService:
                             "temperature": 0.7,
                             "top_p": 0.9,
                             "top_k": 40,
-                        }
-                    }
+                        },
+                    },
                 )
 
                 if response.status_code == 200:
@@ -443,24 +446,15 @@ class RAGQAService:
 
         return "\n".join(context_parts)
 
-    def _fallback_answer(
-        self,
-        question: str,
-        products: List[Dict[str, Any]]
-    ) -> str:
+    def _fallback_answer(self, question: str, products: List[Dict[str, Any]]) -> str:
         """Fallback 답변 (LLM 실패 시)"""
         if not products:
             return f"죄송합니다. '{question}'에 대한 관련 제품을 찾지 못했습니다. 다른 키워드로 검색해보시겠어요?"
 
-        answer_parts = [
-            f"'{question}'에 대한 추천 제품입니다:",
-            ""
-        ]
+        answer_parts = [f"'{question}'에 대한 추천 제품입니다:", ""]
 
         for idx, product in enumerate(products, 1):
-            answer_parts.append(
-                f"{idx}. **{product['product_name']}** ({product['category']})"
-            )
+            answer_parts.append(f"{idx}. **{product['product_name']}** ({product['category']})")
 
         answer_parts.append("")
         answer_parts.append("더 자세한 정보가 필요하시면 구체적인 질문을 해주세요.")
@@ -478,13 +472,12 @@ class RAGQAService:
                 collection=request.collection,
                 top_k=request.top_k,
                 return_all=request.return_all,
-                min_integrity_score=request.min_integrity_score
+                min_integrity_score=request.min_integrity_score,
             )
 
             # 2. LLM 답변 생성
             answer, confidence = await self.generate_answer(
-                question=request.question,
-                products=products
+                question=request.question, products=products
             )
 
             # 3. 응답 구성
@@ -496,7 +489,7 @@ class RAGQAService:
                 related_products=products,
                 confidence=confidence,
                 qa_id=qa_id,
-                timestamp=datetime.now().isoformat()
+                timestamp=datetime.now().isoformat(),
             )
 
             logger.info(f"Q&A response generated: {qa_id}")
@@ -511,5 +504,5 @@ class RAGQAService:
                 related_products=[],
                 confidence=0.0,
                 qa_id=f"qa_error_{datetime.now().strftime('%Y%m%d%H%M%S')}",
-                timestamp=datetime.now().isoformat()
+                timestamp=datetime.now().isoformat(),
             )

@@ -61,11 +61,7 @@ class HealthStatus(Enum):
         Returns:
             True if this status is less severe than other
         """
-        severity = {
-            HealthStatus.HEALTHY: 0,
-            HealthStatus.DEGRADED: 1,
-            HealthStatus.UNHEALTHY: 2
-        }
+        severity = {HealthStatus.HEALTHY: 0, HealthStatus.DEGRADED: 1, HealthStatus.UNHEALTHY: 2}
         return severity[self] < severity[other]
 
 
@@ -101,7 +97,7 @@ class ComponentHealth:
             "latency_ms": round(self.latency_ms, 2),
             "message": self.message,
             "metadata": self.metadata,
-            "timestamp": self.timestamp
+            "timestamp": self.timestamp,
         }
 
 
@@ -148,17 +144,13 @@ class HealthChecker(ABC):
         start_time = time.time()
 
         try:
-            result = await asyncio.wait_for(
-                self.check(),
-                timeout=self.timeout
-            )
+            result = await asyncio.wait_for(self.check(), timeout=self.timeout)
             return result
 
         except asyncio.TimeoutError:
             latency = (time.time() - start_time) * 1000
             self.logger.error(
-                f"{self.component_name} health check timed out "
-                f"after {self.timeout}s"
+                f"{self.component_name} health check timed out " f"after {self.timeout}s"
             )
             return ComponentHealth(
                 component=self.component_name,
@@ -168,18 +160,13 @@ class HealthChecker(ABC):
                 metadata={
                     "error": "timeout",
                     "timeout_seconds": self.timeout,
-                    "remediation": (
-                        f"Check {self.component_name} connectivity "
-                        "and performance"
-                    )
-                }
+                    "remediation": (f"Check {self.component_name} connectivity " "and performance"),
+                },
             )
 
         except Exception as e:
             latency = (time.time() - start_time) * 1000
-            self.logger.exception(
-                f"{self.component_name} health check failed: {e}"
-            )
+            self.logger.exception(f"{self.component_name} health check failed: {e}")
             return ComponentHealth(
                 component=self.component_name,
                 status=HealthStatus.UNHEALTHY,
@@ -188,10 +175,8 @@ class HealthChecker(ABC):
                 metadata={
                     "error": type(e).__name__,
                     "error_message": str(e),
-                    "remediation": (
-                        f"Investigate {self.component_name} service logs"
-                    )
-                }
+                    "remediation": (f"Investigate {self.component_name} service logs"),
+                },
             )
 
 
@@ -205,11 +190,7 @@ class PostgreSQLHealthChecker(HealthChecker):
         connection_string: PostgreSQL connection string
     """
 
-    def __init__(
-        self,
-        connection_string: str,
-        timeout: float = 5.0
-    ):
+    def __init__(self, connection_string: str, timeout: float = 5.0):
         """Initialize PostgreSQL health checker.
 
         Args:
@@ -231,8 +212,7 @@ class PostgreSQLHealthChecker(HealthChecker):
         try:
             # Establish connection
             conn = await psycopg.AsyncConnection.connect(
-                self.connection_string,
-                connect_timeout=int(self.timeout)
+                self.connection_string, connect_timeout=int(self.timeout)
             )
 
             # Execute test query
@@ -258,8 +238,8 @@ class PostgreSQLHealthChecker(HealthChecker):
                 message="Database is operational",
                 metadata={
                     "version": version.split()[1] if version != "unknown" else "unknown",
-                    "query_time_ms": round(latency, 2)
-                }
+                    "query_time_ms": round(latency, 2),
+                },
             )
 
         except (psycopg.OperationalError, psycopg.DatabaseError) as e:
@@ -275,10 +255,9 @@ class PostgreSQLHealthChecker(HealthChecker):
                     "error": "connection_failed",
                     "error_message": str(e),
                     "remediation": (
-                        "Verify PostgreSQL service is running and "
-                        "connection string is correct"
-                    )
-                }
+                        "Verify PostgreSQL service is running and " "connection string is correct"
+                    ),
+                },
             )
 
         except Exception as e:
@@ -293,8 +272,8 @@ class PostgreSQLHealthChecker(HealthChecker):
                 metadata={
                     "error": type(e).__name__,
                     "error_message": str(e),
-                    "remediation": "Check database logs for errors"
-                }
+                    "remediation": "Check database logs for errors",
+                },
             )
 
         finally:
@@ -333,11 +312,7 @@ class RedisHealthChecker(HealthChecker):
 
         try:
             # Connect to Redis
-            redis = await aioredis.from_url(
-                self.redis_url,
-                encoding="utf-8",
-                decode_responses=True
-            )
+            redis = await aioredis.from_url(self.redis_url, encoding="utf-8", decode_responses=True)
 
             # Execute PING command
             pong = await redis.ping()
@@ -359,15 +334,11 @@ class RedisHealthChecker(HealthChecker):
                     "version": info.get("redis_version", "unknown"),
                     "uptime_seconds": info.get("uptime_in_seconds", 0),
                     "connected_clients": info.get("connected_clients", 0),
-                    "ping_latency_ms": round(latency, 2)
-                }
+                    "ping_latency_ms": round(latency, 2),
+                },
             )
 
-        except (
-            aioredis.ConnectionError,
-            aioredis.TimeoutError,
-            TimeoutError
-        ) as e:
+        except (aioredis.ConnectionError, aioredis.TimeoutError, TimeoutError) as e:
             latency = (time.time() - start_time) * 1000
             self.logger.warning(f"Redis connection failed: {e}")
 
@@ -382,10 +353,9 @@ class RedisHealthChecker(HealthChecker):
                     "error_message": str(e),
                     "impact": "System operational without caching",
                     "remediation": (
-                        "Verify Redis service is running and "
-                        "connection URL is correct"
-                    )
-                }
+                        "Verify Redis service is running and " "connection URL is correct"
+                    ),
+                },
             )
 
         except Exception as e:
@@ -401,8 +371,8 @@ class RedisHealthChecker(HealthChecker):
                     "error": type(e).__name__,
                     "error_message": str(e),
                     "impact": "System operational without caching",
-                    "remediation": "Check Redis logs for errors"
-                }
+                    "remediation": "Check Redis logs for errors",
+                },
             )
 
         finally:
@@ -444,14 +414,10 @@ class QdrantHealthChecker(HealthChecker):
                 response = await client.get(f"{self.qdrant_url}/health")
 
                 if response.status_code != 200:
-                    raise ValueError(
-                        f"Health endpoint returned {response.status_code}"
-                    )
+                    raise ValueError(f"Health endpoint returned {response.status_code}")
 
                 # Get collections for metadata
-                collections_response = await client.get(
-                    f"{self.qdrant_url}/collections"
-                )
+                collections_response = await client.get(f"{self.qdrant_url}/collections")
 
                 collections_data = {}
                 if collections_response.status_code == 200:
@@ -459,11 +425,7 @@ class QdrantHealthChecker(HealthChecker):
 
                 latency = (time.time() - start_time) * 1000
 
-                collection_count = len(
-                    collections_data.get("result", {}).get(
-                        "collections", []
-                    )
-                )
+                collection_count = len(collections_data.get("result", {}).get("collections", []))
 
                 return ComponentHealth(
                     component=self.component_name,
@@ -473,8 +435,8 @@ class QdrantHealthChecker(HealthChecker):
                     metadata={
                         "collections": collection_count,
                         "response_time_ms": round(latency, 2),
-                        "endpoint": self.qdrant_url
-                    }
+                        "endpoint": self.qdrant_url,
+                    },
                 )
 
         except httpx.ConnectError as e:
@@ -491,10 +453,9 @@ class QdrantHealthChecker(HealthChecker):
                     "error_message": str(e),
                     "endpoint": self.qdrant_url,
                     "remediation": (
-                        "Verify Qdrant service is running and "
-                        "accessible at configured URL"
-                    )
-                }
+                        "Verify Qdrant service is running and " "accessible at configured URL"
+                    ),
+                },
             )
 
         except httpx.TimeoutException as e:
@@ -510,8 +471,8 @@ class QdrantHealthChecker(HealthChecker):
                     "error": "timeout",
                     "timeout_seconds": self.timeout,
                     "endpoint": self.qdrant_url,
-                    "remediation": "Check Qdrant performance and load"
-                }
+                    "remediation": "Check Qdrant performance and load",
+                },
             )
 
         except Exception as e:
@@ -527,8 +488,8 @@ class QdrantHealthChecker(HealthChecker):
                     "error": type(e).__name__,
                     "error_message": str(e),
                     "endpoint": self.qdrant_url,
-                    "remediation": "Check Qdrant logs for errors"
-                }
+                    "remediation": "Check Qdrant logs for errors",
+                },
             )
 
 
@@ -544,10 +505,7 @@ class ClaudeAPIHealthChecker(HealthChecker):
     """
 
     def __init__(
-        self,
-        api_key: str,
-        api_url: str = "https://api.anthropic.com",
-        timeout: float = 10.0
+        self, api_key: str, api_url: str = "https://api.anthropic.com", timeout: float = 10.0
     ):
         """Initialize Claude API health checker.
 
@@ -572,23 +530,19 @@ class ClaudeAPIHealthChecker(HealthChecker):
             headers = {
                 "x-api-key": self.api_key,
                 "anthropic-version": "2023-06-01",
-                "content-type": "application/json"
+                "content-type": "application/json",
             }
 
             # Minimal API call for health check
             payload = {
                 "model": "claude-3-haiku-20240307",
                 "max_tokens": 10,
-                "messages": [
-                    {"role": "user", "content": "ping"}
-                ]
+                "messages": [{"role": "user", "content": "ping"}],
             }
 
             async with httpx.AsyncClient(timeout=self.timeout) as client:
                 response = await client.post(
-                    f"{self.api_url}/v1/messages",
-                    headers=headers,
-                    json=payload
+                    f"{self.api_url}/v1/messages", headers=headers, json=payload
                 )
 
                 latency = (time.time() - start_time) * 1000
@@ -604,8 +558,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                         metadata={
                             "model": data.get("model", "unknown"),
                             "api_latency_ms": round(latency, 2),
-                            "endpoint": self.api_url
-                        }
+                            "endpoint": self.api_url,
+                        },
                     )
 
                 elif response.status_code == 401:
@@ -619,8 +573,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                         metadata={
                             "error": "authentication_failed",
                             "status_code": 401,
-                            "remediation": "Verify Claude API key is valid"
-                        }
+                            "remediation": "Verify Claude API key is valid",
+                        },
                     )
 
                 elif response.status_code == 429:
@@ -635,8 +589,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                             "error": "rate_limit",
                             "status_code": 429,
                             "impact": "Temporary API throttling",
-                            "remediation": "Wait for rate limit reset"
-                        }
+                            "remediation": "Wait for rate limit reset",
+                        },
                     )
 
                 else:
@@ -651,8 +605,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                             "error": "api_error",
                             "status_code": response.status_code,
                             "response": error_data[:200],
-                            "remediation": "Check Claude API service status"
-                        }
+                            "remediation": "Check Claude API service status",
+                        },
                     )
 
         except httpx.ConnectError as e:
@@ -668,10 +622,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                     "error": "connection_failed",
                     "error_message": str(e),
                     "endpoint": self.api_url,
-                    "remediation": (
-                        "Check network connectivity and API endpoint"
-                    )
-                }
+                    "remediation": ("Check network connectivity and API endpoint"),
+                },
             )
 
         except httpx.TimeoutException as e:
@@ -687,8 +639,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                     "error": "timeout",
                     "timeout_seconds": self.timeout,
                     "impact": "Slow API response times",
-                    "remediation": "Check Claude API service latency"
-                }
+                    "remediation": "Check Claude API service latency",
+                },
             )
 
         except Exception as e:
@@ -703,8 +655,8 @@ class ClaudeAPIHealthChecker(HealthChecker):
                 metadata={
                     "error": type(e).__name__,
                     "error_message": str(e),
-                    "remediation": "Check API configuration and logs"
-                }
+                    "remediation": "Check API configuration and logs",
+                },
             )
 
 
@@ -748,40 +700,26 @@ class HealthCheckOrchestrator:
             f"{self.config.postgres_host}:5432/"
             f"{self.config.postgres_db}"
         )
-        self.checkers.append(
-            PostgreSQLHealthChecker(pg_connection_string, timeout=5.0)
-        )
+        self.checkers.append(PostgreSQLHealthChecker(pg_connection_string, timeout=5.0))
 
         # Redis checker
         redis_url = f"redis://{self.config.redis_host}:{self.config.redis_port}"
-        self.checkers.append(
-            RedisHealthChecker(redis_url, timeout=3.0)
-        )
+        self.checkers.append(RedisHealthChecker(redis_url, timeout=3.0))
 
         # Qdrant checker
-        self.checkers.append(
-            QdrantHealthChecker(self.config.qdrant_url, timeout=5.0)
-        )
+        self.checkers.append(QdrantHealthChecker(self.config.qdrant_url, timeout=5.0))
 
         # Claude API checker (optional - check if configured)
         try:
             import os
+
             claude_api_key = os.getenv("ANTHROPIC_API_KEY")
             if claude_api_key:
-                self.checkers.append(
-                    ClaudeAPIHealthChecker(
-                        api_key=claude_api_key,
-                        timeout=10.0
-                    )
-                )
+                self.checkers.append(ClaudeAPIHealthChecker(api_key=claude_api_key, timeout=10.0))
             else:
-                self.logger.warning(
-                    "Claude API key not configured, skipping API health check"
-                )
+                self.logger.warning("Claude API key not configured, skipping API health check")
         except Exception as e:
-            self.logger.warning(
-                f"Could not initialize Claude API health check: {e}"
-            )
+            self.logger.warning(f"Could not initialize Claude API health check: {e}")
 
     async def check_all(self) -> Dict[str, Any]:
         """Execute all health checks in parallel.
@@ -811,14 +749,11 @@ class HealthCheckOrchestrator:
         """
         start_time = time.time()
 
-        self.logger.info(
-            f"Starting health checks for {len(self.checkers)} components"
-        )
+        self.logger.info(f"Starting health checks for {len(self.checkers)} components")
 
         # Run all checks in parallel
         results = await asyncio.gather(
-            *[checker.check_with_timeout() for checker in self.checkers],
-            return_exceptions=False
+            *[checker.check_with_timeout() for checker in self.checkers], return_exceptions=False
         )
 
         duration = (time.time() - start_time) * 1000
@@ -828,40 +763,25 @@ class HealthCheckOrchestrator:
 
         # Calculate summary statistics
         summary = {
-            "healthy": sum(
-                1 for r in results
-                if r.status == HealthStatus.HEALTHY
-            ),
-            "degraded": sum(
-                1 for r in results
-                if r.status == HealthStatus.DEGRADED
-            ),
-            "unhealthy": sum(
-                1 for r in results
-                if r.status == HealthStatus.UNHEALTHY
-            )
+            "healthy": sum(1 for r in results if r.status == HealthStatus.HEALTHY),
+            "degraded": sum(1 for r in results if r.status == HealthStatus.DEGRADED),
+            "unhealthy": sum(1 for r in results if r.status == HealthStatus.UNHEALTHY),
         }
 
         # Determine overall status
         overall_status = self._determine_overall_status(results)
 
-        self.logger.info(
-            f"Health checks completed in {duration:.2f}ms: "
-            f"{overall_status.value}"
-        )
+        self.logger.info(f"Health checks completed in {duration:.2f}ms: " f"{overall_status.value}")
 
         return {
             "status": overall_status.value,
             "timestamp": time.time(),
             "duration_ms": round(duration, 2),
             "components": component_results,
-            "summary": summary
+            "summary": summary,
         }
 
-    def _determine_overall_status(
-        self,
-        results: List[ComponentHealth]
-    ) -> HealthStatus:
+    def _determine_overall_status(self, results: List[ComponentHealth]) -> HealthStatus:
         """Determine overall system health from component results.
 
         Args:
@@ -871,9 +791,7 @@ class HealthCheckOrchestrator:
             Overall system health status
         """
         # Create component status map
-        status_map = {
-            result.component: result.status for result in results
-        }
+        status_map = {result.component: result.status for result in results}
 
         # Critical components: PostgreSQL, Qdrant
         critical_components = ["postgresql", "qdrant"]
@@ -881,9 +799,7 @@ class HealthCheckOrchestrator:
         for component in critical_components:
             if component in status_map:
                 if status_map[component] == HealthStatus.UNHEALTHY:
-                    self.logger.error(
-                        f"Critical component {component} is unhealthy"
-                    )
+                    self.logger.error(f"Critical component {component} is unhealthy")
                     return HealthStatus.UNHEALTHY
 
         # Check for any unhealthy components
@@ -897,10 +813,7 @@ class HealthCheckOrchestrator:
         # All components healthy
         return HealthStatus.HEALTHY
 
-    async def check_component(
-        self,
-        component_name: str
-    ) -> Optional[ComponentHealth]:
+    async def check_component(self, component_name: str) -> Optional[ComponentHealth]:
         """Check health of a specific component.
 
         Args:
@@ -913,7 +826,5 @@ class HealthCheckOrchestrator:
             if checker.component_name == component_name:
                 return await checker.check_with_timeout()
 
-        self.logger.warning(
-            f"Component {component_name} not found in health checkers"
-        )
+        self.logger.warning(f"Component {component_name} not found in health checkers")
         return None

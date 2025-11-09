@@ -6,13 +6,14 @@ Product Category Classifier
 """
 
 import re
-from typing import Dict, Tuple, List
 from dataclasses import dataclass
 from enum import Enum
+from typing import Dict, List, Tuple
 
 
 class ProductCategory(Enum):
     """제품 메인 카테고리"""
+
     BOTTLE = "bottle"
     JAR = "jar"
     CAP = "cap"
@@ -22,27 +23,28 @@ class ProductCategory(Enum):
 
 class ProductSubCategory(Enum):
     """제품 서브 카테고리"""
+
     # Bottles
     BLOW_BOTTLE = "blow_bottle"  # 브로우용기
-    PET_BOTTLE = "pet_bottle"    # PET 용기
+    PET_BOTTLE = "pet_bottle"  # PET 용기
     ROUND_BOTTLE = "round_bottle"  # 원형 용기
-    OVAL_BOTTLE = "oval_bottle"   # 타원형 용기
+    OVAL_BOTTLE = "oval_bottle"  # 타원형 용기
     SQUARE_BOTTLE = "square_bottle"  # 사각 용기
 
     # Jars
-    CREAM_JAR = "cream_jar"      # 크림용기
-    ROUND_JAR = "round_jar"      # R용기 (Round jar)
+    CREAM_JAR = "cream_jar"  # 크림용기
+    ROUND_JAR = "round_jar"  # R용기 (Round jar)
     AIRLESS_JAR = "airless_jar"  # 에어리스 용기
 
     # Caps
-    SCREW_CAP = "screw_cap"      # 나사 캡
-    FLIP_CAP = "flip_cap"        # 플립 캡
-    DISC_CAP = "disc_cap"        # 디스크 캡
+    SCREW_CAP = "screw_cap"  # 나사 캡
+    FLIP_CAP = "flip_cap"  # 플립 캡
+    DISC_CAP = "disc_cap"  # 디스크 캡
 
     # Pumps
     REGULAR_PUMP = "regular_pump"  # 일반 펌프
-    DISPENSER = "dispenser"        # 디스펜서
-    MIST_PUMP = "mist_pump"        # 미스트 펌프
+    DISPENSER = "dispenser"  # 디스펜서
+    MIST_PUMP = "mist_pump"  # 미스트 펌프
 
     UNKNOWN = "unknown"
 
@@ -50,10 +52,11 @@ class ProductSubCategory(Enum):
 @dataclass
 class ClassificationResult:
     """분류 결과"""
+
     category: ProductCategory
     sub_category: ProductSubCategory
     confidence: float  # 0.0 ~ 1.0
-    reasoning: str     # 분류 근거
+    reasoning: str  # 분류 근거
 
 
 class ProductClassifier:
@@ -61,24 +64,48 @@ class ProductClassifier:
 
     # 카테고리별 키워드 패턴
     BOTTLE_KEYWORDS = [
-        r"브로우\s*용기", r"블로우\s*용기", r"병", r"보틀",
-        r"PET.*용기", r"PE.*용기", r"PETG.*용기",
-        r"\d+ml.*용기", r"원형.*용기", r"타원형.*용기", r"사각.*용기"
+        r"브로우\s*용기",
+        r"블로우\s*용기",
+        r"병",
+        r"보틀",
+        r"PET.*용기",
+        r"PE.*용기",
+        r"PETG.*용기",
+        r"\d+ml.*용기",
+        r"원형.*용기",
+        r"타원형.*용기",
+        r"사각.*용기",
     ]
 
     JAR_KEYWORDS = [
-        r"크림\s*용기", r"크림\s*자", r"R\s*용기", r"jar",
-        r"에어리스", r"자용기", r"광\s*용기"
+        r"크림\s*용기",
+        r"크림\s*자",
+        r"R\s*용기",
+        r"jar",
+        r"에어리스",
+        r"자용기",
+        r"광\s*용기",
     ]
 
     CAP_KEYWORDS = [
-        r"캡", r"뚜껑", r"cap", r"마개",
-        r"나사\s*캡", r"플립\s*캡", r"디스크\s*캡", r"스크류"
+        r"캡",
+        r"뚜껑",
+        r"cap",
+        r"마개",
+        r"나사\s*캡",
+        r"플립\s*캡",
+        r"디스크\s*캡",
+        r"스크류",
     ]
 
     PUMP_KEYWORDS = [
-        r"펌프", r"pump", r"디스펜서", r"dispenser",
-        r"미스트", r"mist", r"\d+파이.*펌프"
+        r"펌프",
+        r"pump",
+        r"디스펜서",
+        r"dispenser",
+        r"미스트",
+        r"mist",
+        r"\d+파이.*펌프",
     ]
 
     # 서브 카테고리 패턴
@@ -89,17 +116,14 @@ class ProductClassifier:
         ProductSubCategory.ROUND_BOTTLE: [r"원형.*용기"],
         ProductSubCategory.OVAL_BOTTLE: [r"타원형.*용기"],
         ProductSubCategory.SQUARE_BOTTLE: [r"사각.*용기", r"각.*용기"],
-
         # Jars
         ProductSubCategory.CREAM_JAR: [r"크림\s*용기", r"크림\s*자"],
         ProductSubCategory.ROUND_JAR: [r"R\s*용기", r"라운드"],
         ProductSubCategory.AIRLESS_JAR: [r"에어리스"],
-
         # Caps
         ProductSubCategory.SCREW_CAP: [r"나사\s*캡", r"스크류"],
         ProductSubCategory.FLIP_CAP: [r"플립\s*캡"],
         ProductSubCategory.DISC_CAP: [r"디스크\s*캡"],
-
         # Pumps
         ProductSubCategory.REGULAR_PUMP: [r"\d+파이\s*일반\s*펌프", r"일반\s*펌프"],
         ProductSubCategory.DISPENSER: [r"디스펜서"],
@@ -136,17 +160,11 @@ class ProductClassifier:
 
         # 3. 메인 카테고리 분류
         category, cat_confidence, cat_reasoning = self._classify_main_category(
-            product_name,
-            has_enriched_info,
-            has_vendor,
-            has_pump_spec
+            product_name, has_enriched_info, has_vendor, has_pump_spec
         )
 
         # 4. 서브 카테고리 분류
-        sub_category, sub_confidence = self._classify_sub_category(
-            product_name,
-            category
-        )
+        sub_category, sub_confidence = self._classify_sub_category(product_name, category)
 
         # 5. 최종 confidence (메인 카테고리 confidence 우선)
         final_confidence = cat_confidence * 0.7 + sub_confidence * 0.3
@@ -155,15 +173,11 @@ class ProductClassifier:
             category=category,
             sub_category=sub_category,
             confidence=final_confidence,
-            reasoning=cat_reasoning
+            reasoning=cat_reasoning,
         )
 
     def _classify_main_category(
-        self,
-        product_name: str,
-        has_enriched_info: bool,
-        has_vendor: bool,
-        has_pump_spec: bool
+        self, product_name: str, has_enriched_info: bool, has_vendor: bool, has_pump_spec: bool
     ) -> Tuple[ProductCategory, float, str]:
         """
         메인 카테고리 분류
@@ -202,9 +216,7 @@ class ProductClassifier:
         return ProductCategory.UNKNOWN, 0.3, "no clear category match"
 
     def _classify_sub_category(
-        self,
-        product_name: str,
-        main_category: ProductCategory
+        self, product_name: str, main_category: ProductCategory
     ) -> Tuple[ProductSubCategory, float]:
         """
         서브 카테고리 분류
@@ -226,9 +238,7 @@ class ProductClassifier:
         return default_sub, 0.5
 
     def _is_compatible_sub_category(
-        self,
-        main_cat: ProductCategory,
-        sub_cat: ProductSubCategory
+        self, main_cat: ProductCategory, sub_cat: ProductSubCategory
     ) -> bool:
         """메인 카테고리와 서브 카테고리 호환성 확인"""
         compatibility = {
@@ -258,10 +268,7 @@ class ProductClassifier:
 
         return sub_cat in compatibility.get(main_cat, [])
 
-    def _get_default_sub_category(
-        self,
-        main_cat: ProductCategory
-    ) -> ProductSubCategory:
+    def _get_default_sub_category(self, main_cat: ProductCategory) -> ProductSubCategory:
         """메인 카테고리에 대한 기본 서브 카테고리"""
         defaults = {
             ProductCategory.BOTTLE: ProductSubCategory.BLOW_BOTTLE,

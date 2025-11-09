@@ -20,6 +20,7 @@ from pydantic import BaseModel, Field, field_validator
 
 class QueryType(str, Enum):
     """Query type classification categories."""
+
     FACTUAL = "factual"  # "What is X?", "How does Y work?"
     PROCEDURAL = "procedural"  # "How to do X?", "Steps for Y?"
     COMPARISON = "comparison"  # "X vs Y", "Difference between A and B"
@@ -31,6 +32,7 @@ class QueryType(str, Enum):
 
 class Intent(str, Enum):
     """User intent categories (multi-label)."""
+
     INFORMATION_SEEKING = "information_seeking"
     PROBLEM_SOLVING = "problem_solving"
     DECISION_MAKING = "decision_making"
@@ -41,6 +43,7 @@ class Intent(str, Enum):
 
 class FormalityLevel(str, Enum):
     """Communication formality levels."""
+
     VERY_FORMAL = "very_formal"
     FORMAL = "formal"
     NEUTRAL = "neutral"
@@ -50,6 +53,7 @@ class FormalityLevel(str, Enum):
 
 class UrgencyLevel(str, Enum):
     """Query urgency levels."""
+
     CRITICAL = "critical"  # Production down, immediate action needed
     HIGH = "high"  # Important, needs quick response
     MEDIUM = "medium"  # Standard priority
@@ -58,6 +62,7 @@ class UrgencyLevel(str, Enum):
 
 class ExpertiseLevel(str, Enum):
     """User expertise level inference."""
+
     BEGINNER = "beginner"
     INTERMEDIATE = "intermediate"
     ADVANCED = "advanced"
@@ -74,22 +79,14 @@ class QueryAnalysis(BaseModel):
         confidence: Overall classification confidence
         timestamp: Analysis timestamp
     """
+
     query: str = Field(..., min_length=1, description="Original user query")
     query_type: QueryType = Field(..., description="Primary query type")
     query_type_scores: Dict[QueryType, float] = Field(
-        ...,
-        description="Confidence scores for all query types"
+        ..., description="Confidence scores for all query types"
     )
-    confidence: float = Field(
-        ...,
-        ge=0.0,
-        le=1.0,
-        description="Overall classification confidence"
-    )
-    timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Analysis timestamp"
-    )
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Overall classification confidence")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Analysis timestamp")
 
     @field_validator("query_type_scores")
     @classmethod
@@ -97,9 +94,7 @@ class QueryAnalysis(BaseModel):
         """Validate all scores are between 0 and 1."""
         for query_type, score in v.items():
             if not 0.0 <= score <= 1.0:
-                raise ValueError(
-                    f"Score for {query_type} must be between 0 and 1, got {score}"
-                )
+                raise ValueError(f"Score for {query_type} must be between 0 and 1, got {score}")
         return v
 
 
@@ -111,15 +106,10 @@ class IntentDetection(BaseModel):
         primary_intent: Highest confidence intent
         timestamp: Detection timestamp
     """
-    intents: Dict[Intent, float] = Field(
-        ...,
-        description="Detected intents with confidence scores"
-    )
+
+    intents: Dict[Intent, float] = Field(..., description="Detected intents with confidence scores")
     primary_intent: Intent = Field(..., description="Primary intent")
-    timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Detection timestamp"
-    )
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Detection timestamp")
 
     @field_validator("intents")
     @classmethod
@@ -127,9 +117,7 @@ class IntentDetection(BaseModel):
         """Validate all intent scores are between 0 and 1."""
         for intent, score in v.items():
             if not 0.0 <= score <= 1.0:
-                raise ValueError(
-                    f"Score for {intent} must be between 0 and 1, got {score}"
-                )
+                raise ValueError(f"Score for {intent} must be between 0 and 1, got {score}")
         return v
 
 
@@ -144,23 +132,15 @@ class ToneAnalysis(BaseModel):
         urgency_markers: Detected urgency indicators
         timestamp: Analysis timestamp
     """
+
     formality: FormalityLevel = Field(..., description="Formality level")
     urgency: UrgencyLevel = Field(..., description="Urgency level")
     expertise_level: ExpertiseLevel = Field(..., description="User expertise")
-    formality_score: float = Field(
-        ...,
-        ge=0.0,
-        le=1.0,
-        description="Formality confidence"
-    )
+    formality_score: float = Field(..., ge=0.0, le=1.0, description="Formality confidence")
     urgency_markers: List[str] = Field(
-        default_factory=list,
-        description="Detected urgency keywords"
+        default_factory=list, description="Detected urgency keywords"
     )
-    timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Analysis timestamp"
-    )
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Analysis timestamp")
 
 
 class ConversationTurn(BaseModel):
@@ -174,18 +154,13 @@ class ConversationTurn(BaseModel):
         tone: Tone analysis
         timestamp: Turn timestamp
     """
+
     query: str = Field(..., min_length=1, description="User query")
     response: Optional[str] = Field(None, description="System response")
-    query_analysis: Optional[QueryAnalysis] = Field(
-        None,
-        description="Query classification"
-    )
+    query_analysis: Optional[QueryAnalysis] = Field(None, description="Query classification")
     intent: Optional[IntentDetection] = Field(None, description="Intent detection")
     tone: Optional[ToneAnalysis] = Field(None, description="Tone analysis")
-    timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Turn timestamp"
-    )
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Turn timestamp")
 
 
 class ConversationContext(BaseModel):
@@ -199,23 +174,14 @@ class ConversationContext(BaseModel):
         created_at: Session creation time
         updated_at: Last update time
     """
+
     session_id: str = Field(..., min_length=1, description="Session ID")
-    turns: List[ConversationTurn] = Field(
-        default_factory=list,
-        description="Conversation history"
-    )
+    turns: List[ConversationTurn] = Field(default_factory=list, description="Conversation history")
     user_id: Optional[str] = Field(None, description="User identifier")
-    metadata: Dict[str, str] = Field(
-        default_factory=dict,
-        description="Session metadata"
-    )
-    created_at: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Creation timestamp"
-    )
+    metadata: Dict[str, str] = Field(default_factory=dict, description="Session metadata")
+    created_at: datetime = Field(default_factory=datetime.utcnow, description="Creation timestamp")
     updated_at: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Last update timestamp"
+        default_factory=datetime.utcnow, description="Last update timestamp"
     )
 
     def add_turn(
@@ -282,34 +248,15 @@ class RetrievalStrategy(BaseModel):
         filters: Metadata filters
         timestamp: Strategy creation time
     """
-    use_dense_retrieval: bool = Field(
-        default=True,
-        description="Enable dense retrieval"
-    )
-    use_sparse_retrieval: bool = Field(
-        default=True,
-        description="Enable sparse retrieval"
-    )
+
+    use_dense_retrieval: bool = Field(default=True, description="Enable dense retrieval")
+    use_sparse_retrieval: bool = Field(default=True, description="Enable sparse retrieval")
     use_hybrid: bool = Field(default=True, description="Enable hybrid fusion")
     rerank: bool = Field(default=True, description="Enable reranking")
-    top_k: int = Field(
-        default=5,
-        ge=1,
-        le=100,
-        description="Documents to retrieve"
-    )
-    expanded_queries: List[str] = Field(
-        default_factory=list,
-        description="Query variations"
-    )
-    filters: Dict[str, str] = Field(
-        default_factory=dict,
-        description="Metadata filters"
-    )
-    timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Strategy timestamp"
-    )
+    top_k: int = Field(default=5, ge=1, le=100, description="Documents to retrieve")
+    expanded_queries: List[str] = Field(default_factory=list, description="Query variations")
+    filters: Dict[str, str] = Field(default_factory=dict, description="Metadata filters")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Strategy timestamp")
 
 
 class ConsultationRequest(BaseModel):
@@ -321,6 +268,7 @@ class ConsultationRequest(BaseModel):
         user_id: Optional user identifier
         metadata: Additional request metadata
     """
+
     query: str = Field(..., min_length=1, max_length=1000, description="User query")
     session_id: Optional[str] = Field(None, description="Session ID")
     user_id: Optional[str] = Field(None, description="User ID")
@@ -340,22 +288,12 @@ class ConsultationResponse(BaseModel):
         confidence: Overall response confidence
         timestamp: Response timestamp
     """
+
     response: str = Field(..., description="Generated response")
     session_id: str = Field(..., description="Session ID")
     query_analysis: QueryAnalysis = Field(..., description="Query classification")
     intent: IntentDetection = Field(..., description="Intent detection")
     tone: ToneAnalysis = Field(..., description="Tone analysis")
-    retrieval_strategy: RetrievalStrategy = Field(
-        ...,
-        description="Retrieval strategy"
-    )
-    confidence: float = Field(
-        ...,
-        ge=0.0,
-        le=1.0,
-        description="Response confidence"
-    )
-    timestamp: datetime = Field(
-        default_factory=datetime.utcnow,
-        description="Response timestamp"
-    )
+    retrieval_strategy: RetrievalStrategy = Field(..., description="Retrieval strategy")
+    confidence: float = Field(..., ge=0.0, le=1.0, description="Response confidence")
+    timestamp: datetime = Field(default_factory=datetime.utcnow, description="Response timestamp")

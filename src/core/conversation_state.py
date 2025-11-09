@@ -3,24 +3,25 @@
 영업사원 수준의 맥락 기반 대화를 위한 상태 관리
 """
 
-from enum import Enum
-from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ConversationState(str, Enum):
     """대화 상태"""
-    GREETING = "greeting"                    # 인사/시작
-    SEARCHING = "searching"                  # 검색 중
-    RESULTS_SHOWN = "results_shown"          # 결과 표시됨
-    FILTERING = "filtering"                  # 필터링 중 (누적)
-    FOCUSED = "focused"                      # 특정 제품 포커스
-    COMPARING = "comparing"                  # 제품 비교 중
+
+    GREETING = "greeting"  # 인사/시작
+    SEARCHING = "searching"  # 검색 중
+    RESULTS_SHOWN = "results_shown"  # 결과 표시됨
+    FILTERING = "filtering"  # 필터링 중 (누적)
+    FOCUSED = "focused"  # 특정 제품 포커스
+    COMPARING = "comparing"  # 제품 비교 중
     COMPATIBILITY_CHECK = "compatibility_check"  # 호환성 확인 중
-    DOCUMENT_REQUEST = "document_request"    # 문서 요청
-    CLARIFICATION = "clarification"          # 명확화 필요
-    IDLE = "idle"                           # 대기 중
+    DOCUMENT_REQUEST = "document_request"  # 문서 요청
+    CLARIFICATION = "clarification"  # 명확화 필요
+    IDLE = "idle"  # 대기 중
 
 
 @dataclass
@@ -77,7 +78,7 @@ class DialogueContext:
             "focused_product_name": self.focused_product_name,
             "comparison_products": self.comparison_products,
             "conversation_history": self.conversation_history,
-            "user_preferences": self.user_preferences
+            "user_preferences": self.user_preferences,
         }
 
     @classmethod
@@ -89,7 +90,9 @@ class DialogueContext:
             created_at=data["created_at"],
             last_activity=data["last_activity"],
             current_state=ConversationState(data.get("current_state", "greeting")),
-            previous_state=ConversationState(data["previous_state"]) if data.get("previous_state") else None,
+            previous_state=(
+                ConversationState(data["previous_state"]) if data.get("previous_state") else None
+            ),
             last_query=data.get("last_query", ""),
             last_search_results=data.get("last_search_results", []),
             display_indices={int(k): v for k, v in data.get("display_indices", {}).items()},
@@ -99,7 +102,7 @@ class DialogueContext:
             focused_product_name=data.get("focused_product_name"),
             comparison_products=data.get("comparison_products", []),
             conversation_history=data.get("conversation_history", []),
-            user_preferences=data.get("user_preferences", {})
+            user_preferences=data.get("user_preferences", {}),
         )
 
 
@@ -108,93 +111,81 @@ class StateTransition:
 
     @staticmethod
     def can_transition(
-        from_state: ConversationState,
-        to_state: ConversationState,
-        context: DialogueContext
+        from_state: ConversationState, to_state: ConversationState, context: DialogueContext
     ) -> bool:
         """상태 전환 가능 여부 확인"""
 
         # 전환 규칙 매트릭스
         valid_transitions = {
-            ConversationState.GREETING: [
-                ConversationState.SEARCHING,
-                ConversationState.IDLE
-            ],
+            ConversationState.GREETING: [ConversationState.SEARCHING, ConversationState.IDLE],
             ConversationState.SEARCHING: [
                 ConversationState.RESULTS_SHOWN,
-                ConversationState.FILTERING,        # "PET만" (검색 결과 필터링)
-                ConversationState.FOCUSED,          # "3번" (검색 중 특정 제품 선택)
-                ConversationState.SEARCHING,        # 새 검색 (연속 검색)
+                ConversationState.FILTERING,  # "PET만" (검색 결과 필터링)
+                ConversationState.FOCUSED,  # "3번" (검색 중 특정 제품 선택)
+                ConversationState.SEARCHING,  # 새 검색 (연속 검색)
                 ConversationState.CLARIFICATION,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
             ConversationState.RESULTS_SHOWN: [
-                ConversationState.FILTERING,        # "PET만"
-                ConversationState.FOCUSED,          # "3번"
-                ConversationState.COMPARING,        # "비교해줘"
-                ConversationState.SEARCHING,        # 새 검색
+                ConversationState.FILTERING,  # "PET만"
+                ConversationState.FOCUSED,  # "3번"
+                ConversationState.COMPARING,  # "비교해줘"
+                ConversationState.SEARCHING,  # 새 검색
                 ConversationState.COMPATIBILITY_CHECK,  # "호환되는 캡"
-                ConversationState.DOCUMENT_REQUEST, # "원산지 증명서"
-                ConversationState.IDLE
+                ConversationState.DOCUMENT_REQUEST,  # "원산지 증명서"
+                ConversationState.IDLE,
             ],
             ConversationState.FILTERING: [
-                ConversationState.RESULTS_SHOWN,    # 필터 적용 완료
-                ConversationState.FILTERING,        # 추가 필터
+                ConversationState.RESULTS_SHOWN,  # 필터 적용 완료
+                ConversationState.FILTERING,  # 추가 필터
                 ConversationState.FOCUSED,
                 ConversationState.SEARCHING,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
             ConversationState.FOCUSED: [
                 ConversationState.COMPATIBILITY_CHECK,
                 ConversationState.DOCUMENT_REQUEST,
                 ConversationState.COMPARING,
-                ConversationState.RESULTS_SHOWN,    # 목록으로 돌아가기
+                ConversationState.RESULTS_SHOWN,  # 목록으로 돌아가기
                 ConversationState.SEARCHING,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
             ConversationState.COMPARING: [
                 ConversationState.FOCUSED,
                 ConversationState.RESULTS_SHOWN,
                 ConversationState.SEARCHING,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
             ConversationState.COMPATIBILITY_CHECK: [
                 ConversationState.RESULTS_SHOWN,
                 ConversationState.FOCUSED,
                 ConversationState.SEARCHING,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
             ConversationState.DOCUMENT_REQUEST: [
                 ConversationState.FOCUSED,
                 ConversationState.RESULTS_SHOWN,
                 ConversationState.SEARCHING,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
             ConversationState.CLARIFICATION: [
                 ConversationState.SEARCHING,
                 ConversationState.FILTERING,
-                ConversationState.IDLE
+                ConversationState.IDLE,
             ],
-            ConversationState.IDLE: [
-                ConversationState.SEARCHING,
-                ConversationState.GREETING
-            ]
+            ConversationState.IDLE: [ConversationState.SEARCHING, ConversationState.GREETING],
         }
 
         return to_state in valid_transitions.get(from_state, [])
 
     @staticmethod
     def transition(
-        context: DialogueContext,
-        to_state: ConversationState,
-        reason: str = ""
+        context: DialogueContext, to_state: ConversationState, reason: str = ""
     ) -> DialogueContext:
         """상태 전환 실행"""
 
         if not StateTransition.can_transition(context.current_state, to_state, context):
-            raise ValueError(
-                f"Invalid state transition: {context.current_state} -> {to_state}"
-            )
+            raise ValueError(f"Invalid state transition: {context.current_state} -> {to_state}")
 
         # 이전 상태 저장
         context.previous_state = context.current_state
@@ -202,13 +193,15 @@ class StateTransition:
         context.last_activity = datetime.now().isoformat()
 
         # 상태 전환 이벤트 기록
-        context.conversation_history.append({
-            "timestamp": datetime.now().isoformat(),
-            "event": "state_transition",
-            "from": context.previous_state.value,
-            "to": to_state.value,
-            "reason": reason
-        })
+        context.conversation_history.append(
+            {
+                "timestamp": datetime.now().isoformat(),
+                "event": "state_transition",
+                "from": context.previous_state.value,
+                "to": to_state.value,
+                "reason": reason,
+            }
+        )
 
         return context
 
@@ -220,28 +213,21 @@ class StateTransition:
             ConversationState.GREETING: ["search", "greeting"],
             ConversationState.SEARCHING: ["search"],
             ConversationState.RESULTS_SHOWN: [
-                "filter", "reference", "compare", "compatibility",
-                "document", "search", "detail"
+                "filter",
+                "reference",
+                "compare",
+                "compatibility",
+                "document",
+                "search",
+                "detail",
             ],
-            ConversationState.FILTERING: [
-                "filter", "reference", "search"
-            ],
-            ConversationState.FOCUSED: [
-                "compatibility", "document", "detail", "compare", "search"
-            ],
-            ConversationState.COMPARING: [
-                "reference", "detail", "search"
-            ],
-            ConversationState.COMPATIBILITY_CHECK: [
-                "reference", "filter", "search"
-            ],
-            ConversationState.DOCUMENT_REQUEST: [
-                "reference", "search"
-            ],
-            ConversationState.CLARIFICATION: [
-                "search", "filter"
-            ],
-            ConversationState.IDLE: ["search", "greeting"]
+            ConversationState.FILTERING: ["filter", "reference", "search"],
+            ConversationState.FOCUSED: ["compatibility", "document", "detail", "compare", "search"],
+            ConversationState.COMPARING: ["reference", "detail", "search"],
+            ConversationState.COMPATIBILITY_CHECK: ["reference", "filter", "search"],
+            ConversationState.DOCUMENT_REQUEST: ["reference", "search"],
+            ConversationState.CLARIFICATION: ["search", "filter"],
+            ConversationState.IDLE: ["search", "greeting"],
         }
 
         return intent_map.get(state, ["search"])

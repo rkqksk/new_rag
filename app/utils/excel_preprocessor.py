@@ -8,12 +8,13 @@ Handles common Excel parsing challenges:
 - Data normalization
 """
 
-import openpyxl
-from openpyxl.worksheet.worksheet import Worksheet
-from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
-import pandas as pd
 import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+
+import openpyxl
+import pandas as pd
+from openpyxl.worksheet.worksheet import Worksheet
 
 logger = logging.getLogger(__name__)
 
@@ -106,7 +107,7 @@ class ExcelPreprocessor:
         sheet_name: str = None,
         unmerge: bool = True,
         skip_empty_rows: bool = True,
-        skip_empty_cols: bool = True
+        skip_empty_cols: bool = True,
     ) -> pd.DataFrame:
         """
         Convert Excel sheet to pandas DataFrame with preprocessing.
@@ -139,11 +140,11 @@ class ExcelPreprocessor:
 
         # Skip empty rows
         if skip_empty_rows:
-            df = df.dropna(how='all')
+            df = df.dropna(how="all")
 
         # Skip empty columns
         if skip_empty_cols:
-            df = df.dropna(axis=1, how='all')
+            df = df.dropna(axis=1, how="all")
 
         # Reset index
         df = df.reset_index(drop=True)
@@ -199,14 +200,11 @@ class ExcelPreprocessor:
             "merged_cells_count": merged_count,
             "empty_rows_count": len(empty_rows),
             "empty_cols_count": len(empty_cols),
-            "sample_data": sample_rows
+            "sample_data": sample_rows,
         }
 
     def save_preprocessed(
-        self,
-        output_path: str | Path,
-        sheet_name: str = None,
-        format: str = 'csv'
+        self, output_path: str | Path, sheet_name: str = None, format: str = "csv"
     ):
         """
         Save preprocessed Excel data to file.
@@ -219,19 +217,21 @@ class ExcelPreprocessor:
         df = self.sheet_to_dataframe(sheet_name)
         output_path = Path(output_path)
 
-        if format == 'csv':
-            df.to_csv(output_path, index=False, encoding='utf-8-sig')
-        elif format == 'json':
-            df.to_json(output_path, orient='records', force_ascii=False, indent=2)
-        elif format == 'excel':
-            df.to_excel(output_path, index=False, engine='openpyxl')
+        if format == "csv":
+            df.to_csv(output_path, index=False, encoding="utf-8-sig")
+        elif format == "json":
+            df.to_json(output_path, orient="records", force_ascii=False, indent=2)
+        elif format == "excel":
+            df.to_excel(output_path, index=False, engine="openpyxl")
         else:
             raise ValueError(f"Unsupported format: {format}")
 
         logger.info(f"Saved preprocessed data to {output_path}")
 
 
-def quick_preview(excel_path: str | Path, sheet_name: str = None, max_rows: int = 10) -> pd.DataFrame:
+def quick_preview(
+    excel_path: str | Path, sheet_name: str = None, max_rows: int = 10
+) -> pd.DataFrame:
     """
     Quick preview of Excel file with automatic preprocessing.
 
@@ -263,7 +263,7 @@ def analyze_excel_file(excel_path: str | Path) -> Dict[str, Any]:
             "file_path": str(excel_path),
             "total_sheets": len(preprocessor.workbook.sheetnames),
             "sheet_names": preprocessor.workbook.sheetnames,
-            "sheets": {}
+            "sheets": {},
         }
 
         for sheet_name in preprocessor.workbook.sheetnames:

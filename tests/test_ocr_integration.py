@@ -3,25 +3,22 @@ Tests for OCR Integration
 Note: Requires PaddleOCR installed for full functionality
 """
 
-import pytest
 from pathlib import Path
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import MagicMock, Mock, patch
 
-from src.core.multimodal.ocr_integration import (
-    OCRProcessor,
-    OCRMultiModalIntegration,
-    OCRResult
-)
+import pytest
 
+from src.core.multimodal.ocr_integration import OCRMultiModalIntegration, OCRProcessor, OCRResult
 
 # ==================== OCRProcessor Tests ====================
 
+
 def test_ocr_processor_initialization():
     """Test OCR processor initialization"""
-    processor = OCRProcessor(lang='korean', use_gpu=False)
+    processor = OCRProcessor(lang="korean", use_gpu=False)
 
     assert processor is not None
-    assert processor.lang == 'korean'
+    assert processor.lang == "korean"
     assert processor.use_gpu == False
 
 
@@ -35,8 +32,7 @@ def test_ocr_processor_availability():
 
 
 @pytest.mark.skipif(
-    not Path("tests/fixtures/sample_image.jpg").exists(),
-    reason="Sample image not available"
+    not Path("tests/fixtures/sample_image.jpg").exists(), reason="Sample image not available"
 )
 def test_process_image_with_real_image():
     """Test processing real image (if available)"""
@@ -64,7 +60,7 @@ def test_process_image_file_not_found():
         processor.process_image("nonexistent_image.jpg")
 
 
-@patch('src.core.multimodal.ocr_integration.PaddleOCR')
+@patch("src.core.multimodal.ocr_integration.PaddleOCR")
 def test_process_image_with_mock(mock_paddle_ocr):
     """Test image processing with mocked PaddleOCR"""
     # Setup mock
@@ -72,22 +68,21 @@ def test_process_image_with_mock(mock_paddle_ocr):
     mock_paddle_ocr.return_value = mock_ocr_instance
 
     # Mock OCR result
-    mock_ocr_instance.ocr.return_value = [[
-        ([
-            [0, 0], [100, 0], [100, 50], [0, 50]
-        ], ("Sample Text", 0.95)),
-        ([
-            [0, 60], [100, 60], [100, 110], [0, 110]
-        ], ("Another Line", 0.88))
-    ]]
+    mock_ocr_instance.ocr.return_value = [
+        [
+            ([[0, 0], [100, 0], [100, 50], [0, 50]], ("Sample Text", 0.95)),
+            ([[0, 60], [100, 60], [100, 110], [0, 110]], ("Another Line", 0.88)),
+        ]
+    ]
 
     # Create processor (will use mock)
-    with patch('src.core.multimodal.ocr_integration.logger'):
+    with patch("src.core.multimodal.ocr_integration.logger"):
         processor = OCRProcessor(use_gpu=False)
 
     # Create a temp image file
     import tempfile
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
         temp_path = Path(f.name)
 
     try:
@@ -96,13 +91,14 @@ def test_process_image_with_mock(mock_paddle_ocr):
 
         assert result.text == "Sample Text\nAnother Line"
         assert result.confidence > 0.0
-        assert result.metadata['line_count'] == 2
+        assert result.metadata["line_count"] == 2
 
     finally:
         temp_path.unlink()
 
 
 # ==================== OCRMultiModalIntegration Tests ====================
+
 
 @pytest.fixture
 def mock_ocr_processor():
@@ -114,9 +110,9 @@ def mock_ocr_processor():
     processor.process_image.return_value = OCRResult(
         text="100ml PET Bottle\nMOQ: 5000\nPrice: 100원",
         confidence=0.92,
-        metadata={'line_count': 3},
+        metadata={"line_count": 3},
         source_file="sample.jpg",
-        bounding_boxes=[]
+        bounding_boxes=[],
     )
 
     # Mock process_pdf
@@ -124,9 +120,9 @@ def mock_ocr_processor():
         OCRResult(
             text="Page 1 content",
             confidence=0.90,
-            metadata={'line_count': 1},
+            metadata={"line_count": 1},
             source_file="sample.pdf",
-            page_number=1
+            page_number=1,
         )
     ]
 
@@ -150,11 +146,7 @@ def mock_embedder():
 
 def test_integration_initialization(mock_ocr_processor, mock_embedder):
     """Test OCR integration initialization"""
-    integration = OCRMultiModalIntegration(
-        mock_ocr_processor,
-        mock_embedder,
-        cache_embeddings=True
-    )
+    integration = OCRMultiModalIntegration(mock_ocr_processor, mock_embedder, cache_embeddings=True)
 
     assert integration is not None
     assert integration.cache_embeddings == True
@@ -163,27 +155,23 @@ def test_integration_initialization(mock_ocr_processor, mock_embedder):
 def test_process_document_image(mock_ocr_processor, mock_embedder):
     """Test processing image document"""
     integration = OCRMultiModalIntegration(
-        mock_ocr_processor,
-        mock_embedder,
-        cache_embeddings=False
+        mock_ocr_processor, mock_embedder, cache_embeddings=False
     )
 
     # Create temp image
     import tempfile
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
         temp_path = Path(f.name)
 
     try:
-        result = integration.process_document(
-            temp_path,
-            product_id="test-product"
-        )
+        result = integration.process_document(temp_path, product_id="test-product")
 
-        assert result['product_id'] == "test-product"
-        assert 'ocr_text' in result
-        assert 'embeddings' in result
-        assert 'text' in result['embeddings']
-        assert result['metadata']['has_text_embedding'] == True
+        assert result["product_id"] == "test-product"
+        assert "ocr_text" in result
+        assert "embeddings" in result
+        assert "text" in result["embeddings"]
+        assert result["metadata"]["has_text_embedding"] == True
 
     finally:
         temp_path.unlink()
@@ -191,24 +179,22 @@ def test_process_document_image(mock_ocr_processor, mock_embedder):
 
 def test_process_document_with_metadata_extraction(mock_ocr_processor, mock_embedder):
     """Test metadata extraction from OCR text"""
-    integration = OCRMultiModalIntegration(
-        mock_ocr_processor,
-        mock_embedder
-    )
+    integration = OCRMultiModalIntegration(mock_ocr_processor, mock_embedder)
 
     # Create temp file
     import tempfile
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
         temp_path = Path(f.name)
 
     try:
         result = integration.process_document(temp_path, extract_metadata=True)
 
         # Check extracted metadata
-        metadata = result['metadata']
-        assert 'capacity' in metadata  # Should extract "100ml"
-        assert 'moq' in metadata  # Should extract 5000
-        assert 'material' in metadata  # Should extract "PET"
+        metadata = result["metadata"]
+        assert "capacity" in metadata  # Should extract "100ml"
+        assert "moq" in metadata  # Should extract 5000
+        assert "material" in metadata  # Should extract "PET"
 
     finally:
         temp_path.unlink()
@@ -216,30 +202,26 @@ def test_process_document_with_metadata_extraction(mock_ocr_processor, mock_embe
 
 def test_process_batch(mock_ocr_processor, mock_embedder):
     """Test batch processing"""
-    integration = OCRMultiModalIntegration(
-        mock_ocr_processor,
-        mock_embedder
-    )
+    integration = OCRMultiModalIntegration(mock_ocr_processor, mock_embedder)
 
     # Create temp files
     import tempfile
+
     temp_files = []
     for i in range(3):
-        f = tempfile.NamedTemporaryFile(suffix='.jpg', delete=False)
+        f = tempfile.NamedTemporaryFile(suffix=".jpg", delete=False)
         temp_files.append(Path(f.name))
         f.close()
 
     try:
         results = integration.process_batch(
-            temp_files,
-            product_ids=['prod-1', 'prod-2', 'prod-3'],
-            show_progress=False
+            temp_files, product_ids=["prod-1", "prod-2", "prod-3"], show_progress=False
         )
 
         assert len(results) == 3
-        assert results[0]['product_id'] == 'prod-1'
-        assert results[1]['product_id'] == 'prod-2'
-        assert results[2]['product_id'] == 'prod-3'
+        assert results[0]["product_id"] == "prod-1"
+        assert results[1]["product_id"] == "prod-2"
+        assert results[2]["product_id"] == "prod-3"
 
     finally:
         for temp_file in temp_files:
@@ -248,15 +230,12 @@ def test_process_batch(mock_ocr_processor, mock_embedder):
 
 def test_embedding_cache(mock_ocr_processor, mock_embedder):
     """Test embedding caching"""
-    integration = OCRMultiModalIntegration(
-        mock_ocr_processor,
-        mock_embedder,
-        cache_embeddings=True
-    )
+    integration = OCRMultiModalIntegration(mock_ocr_processor, mock_embedder, cache_embeddings=True)
 
     # Create temp file
     import tempfile
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
         temp_path = Path(f.name)
 
     try:
@@ -271,13 +250,13 @@ def test_embedding_cache(mock_ocr_processor, mock_embedder):
 
         # Check cache stats
         stats = integration.get_cache_stats()
-        assert stats['enabled'] == True
-        assert stats['entries'] == 1
+        assert stats["enabled"] == True
+        assert stats["entries"] == 1
 
         # Clear cache
         integration.clear_cache()
         stats = integration.get_cache_stats()
-        assert stats['entries'] == 0
+        assert stats["entries"] == 0
 
     finally:
         temp_path.unlink()
@@ -285,38 +264,36 @@ def test_embedding_cache(mock_ocr_processor, mock_embedder):
 
 def test_metadata_extraction():
     """Test product metadata extraction patterns"""
-    integration = OCRMultiModalIntegration(
-        Mock(),
-        Mock()
-    )
+    integration = OCRMultiModalIntegration(Mock(), Mock())
 
     # Test capacity extraction
     text = "This is a 100ml bottle for cosmetics"
     metadata = integration._extract_product_metadata(text)
-    assert metadata['capacity'] == "100ml"
+    assert metadata["capacity"] == "100ml"
 
     # Test MOQ extraction
     text = "MOQ: 5000 pieces minimum order"
     metadata = integration._extract_product_metadata(text)
-    assert metadata['moq'] == 5000
+    assert metadata["moq"] == 5000
 
     # Test material extraction
     text = "Made of PET plastic material"
     metadata = integration._extract_product_metadata(text)
-    assert metadata['material'] == "PET"
+    assert metadata["material"] == "PET"
 
     # Test product code extraction
     text = "Product code: PET-100 for reference"
     metadata = integration._extract_product_metadata(text)
-    assert metadata['product_code'] == "PET-100"
+    assert metadata["product_code"] == "PET-100"
 
 
 # ==================== Edge Cases ====================
 
+
 def test_ocr_processor_without_paddleocr():
     """Test OCR processor when PaddleOCR not installed"""
-    with patch('src.core.multimodal.ocr_integration.PaddleOCR', side_effect=ImportError):
-        with patch('src.core.multimodal.ocr_integration.logger'):
+    with patch("src.core.multimodal.ocr_integration.PaddleOCR", side_effect=ImportError):
+        with patch("src.core.multimodal.ocr_integration.logger"):
             processor = OCRProcessor()
 
         assert processor.is_available() == False
@@ -328,23 +305,21 @@ def test_integration_without_image_embedder(mock_ocr_processor):
     embedder.is_available.return_value = False
     embedder.embed_text.return_value = [0.1] * 384
 
-    integration = OCRMultiModalIntegration(
-        mock_ocr_processor,
-        embedder
-    )
+    integration = OCRMultiModalIntegration(mock_ocr_processor, embedder)
 
     import tempfile
-    with tempfile.NamedTemporaryFile(suffix='.jpg', delete=False) as f:
+
+    with tempfile.NamedTemporaryFile(suffix=".jpg", delete=False) as f:
         temp_path = Path(f.name)
 
     try:
         result = integration.process_document(temp_path)
 
         # Should have text embedding but not image
-        assert 'text' in result['embeddings']
-        assert 'image' not in result['embeddings']
-        assert result['metadata']['has_text_embedding'] == True
-        assert result['metadata']['has_image_embedding'] == False
+        assert "text" in result["embeddings"]
+        assert "image" not in result["embeddings"]
+        assert result["metadata"]["has_text_embedding"] == True
+        assert result["metadata"]["has_image_embedding"] == False
 
     finally:
         temp_path.unlink()

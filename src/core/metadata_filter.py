@@ -1,5 +1,6 @@
-from typing import List, Dict, Any, Optional
 from datetime import datetime
+from typing import Any, Dict, List, Optional
+
 
 class MetadataFilter:
     """
@@ -11,7 +12,7 @@ class MetadataFilter:
         documents: List[Dict[str, Any]],
         start_date: Optional[datetime] = None,
         end_date: Optional[datetime] = None,
-        date_field: str = 'created_at'
+        date_field: str = "created_at",
     ) -> List[Dict[str, Any]]:
         """
         Filter documents by date range
@@ -27,7 +28,7 @@ class MetadataFilter:
         """
         filtered_docs = []
         for doc in documents:
-            doc_date = doc.get('metadata', {}).get(date_field)
+            doc_date = doc.get("metadata", {}).get(date_field)
 
             if doc_date is None:
                 continue
@@ -38,8 +39,9 @@ class MetadataFilter:
                 except ValueError:
                     continue
 
-            if (start_date is None or doc_date >= start_date) and \
-               (end_date is None or doc_date <= end_date):
+            if (start_date is None or doc_date >= start_date) and (
+                end_date is None or doc_date <= end_date
+            ):
                 filtered_docs.append(doc)
 
         return filtered_docs
@@ -49,7 +51,7 @@ class MetadataFilter:
         documents: List[Dict[str, Any]],
         include_tags: Optional[List[str]] = None,
         exclude_tags: Optional[List[str]] = None,
-        tags_field: str = 'tags'
+        tags_field: str = "tags",
     ) -> List[Dict[str, Any]]:
         """
         Filter documents by inclusion or exclusion of tags
@@ -65,21 +67,15 @@ class MetadataFilter:
         """
         filtered_docs = []
         for doc in documents:
-            doc_tags = doc.get('metadata', {}).get(tags_field, [])
+            doc_tags = doc.get("metadata", {}).get(tags_field, [])
 
             # Ensure doc_tags is a list
             if not isinstance(doc_tags, list):
                 doc_tags = [doc_tags]
 
-            include_condition = (
-                not include_tags or
-                any(tag in doc_tags for tag in include_tags)
-            )
+            include_condition = not include_tags or any(tag in doc_tags for tag in include_tags)
 
-            exclude_condition = (
-                not exclude_tags or
-                not any(tag in doc_tags for tag in exclude_tags)
-            )
+            exclude_condition = not exclude_tags or not any(tag in doc_tags for tag in exclude_tags)
 
             if include_condition and exclude_condition:
                 filtered_docs.append(doc)
@@ -88,8 +84,7 @@ class MetadataFilter:
 
     @staticmethod
     def transform_metadata(
-        documents: List[Dict[str, Any]],
-        field_mapping: Optional[Dict[str, str]] = None
+        documents: List[Dict[str, Any]], field_mapping: Optional[Dict[str, str]] = None
     ) -> List[Dict[str, Any]]:
         """
         Transform metadata fields
@@ -107,13 +102,13 @@ class MetadataFilter:
         transformed_docs = []
         for doc in documents:
             new_doc = doc.copy()
-            new_metadata = new_doc.get('metadata', {}).copy()
+            new_metadata = new_doc.get("metadata", {}).copy()
 
             for old_field, new_field in field_mapping.items():
                 if old_field in new_metadata:
                     new_metadata[new_field] = new_metadata.pop(old_field)
 
-            new_doc['metadata'] = new_metadata
+            new_doc["metadata"] = new_metadata
             transformed_docs.append(new_doc)
 
         return transformed_docs

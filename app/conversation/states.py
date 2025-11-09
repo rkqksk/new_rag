@@ -2,10 +2,11 @@
 Conversation State Machine for Context-Aware Product Search
 """
 
-from enum import Enum
-from typing import Dict, List, Optional, Any
-from pydantic import BaseModel
 from datetime import datetime
+from enum import Enum
+from typing import Any, Dict, List, Optional
+
+from pydantic import BaseModel
 
 
 class ConversationState(str, Enum):
@@ -97,100 +98,89 @@ STATE_TRANSITIONS: List[StateTransition] = [
     StateTransition(
         from_state=ConversationState.IDLE,
         to_state=ConversationState.SEARCHING,
-        trigger_intent=IntentType.NEW_SEARCH
+        trigger_intent=IntentType.NEW_SEARCH,
     ),
-
     # SEARCHING → BROWSING
     StateTransition(
         from_state=ConversationState.SEARCHING,
         to_state=ConversationState.BROWSING,
         trigger_intent=IntentType.NEW_SEARCH,
-        condition="results_found"
+        condition="results_found",
     ),
-
     # BROWSING → FILTERING
     StateTransition(
         from_state=ConversationState.BROWSING,
         to_state=ConversationState.FILTERING,
-        trigger_intent=IntentType.FILTER_PREVIOUS
+        trigger_intent=IntentType.FILTER_PREVIOUS,
     ),
-
     # FILTERING → BROWSING
     StateTransition(
         from_state=ConversationState.FILTERING,
         to_state=ConversationState.BROWSING,
         trigger_intent=IntentType.FILTER_PREVIOUS,
-        condition="filter_applied"
+        condition="filter_applied",
     ),
-
     # BROWSING → COMPARING
     StateTransition(
         from_state=ConversationState.BROWSING,
         to_state=ConversationState.COMPARING,
-        trigger_intent=IntentType.COMPARE_PRODUCTS
+        trigger_intent=IntentType.COMPARE_PRODUCTS,
     ),
-
     # BROWSING → DETAILED
     StateTransition(
         from_state=ConversationState.BROWSING,
         to_state=ConversationState.DETAILED,
-        trigger_intent=IntentType.VIEW_DETAILS
+        trigger_intent=IntentType.VIEW_DETAILS,
     ),
-
     # DETAILED → CHECKOUT
     StateTransition(
         from_state=ConversationState.DETAILED,
         to_state=ConversationState.CHECKOUT,
-        trigger_intent=IntentType.REQUEST_QUOTE
+        trigger_intent=IntentType.REQUEST_QUOTE,
     ),
-
     # Any state → IDLE (reset)
     StateTransition(
         from_state=ConversationState.BROWSING,
         to_state=ConversationState.IDLE,
-        trigger_intent=IntentType.RESET_CONTEXT
+        trigger_intent=IntentType.RESET_CONTEXT,
     ),
     StateTransition(
         from_state=ConversationState.FILTERING,
         to_state=ConversationState.IDLE,
-        trigger_intent=IntentType.RESET_CONTEXT
+        trigger_intent=IntentType.RESET_CONTEXT,
     ),
     StateTransition(
         from_state=ConversationState.COMPARING,
         to_state=ConversationState.IDLE,
-        trigger_intent=IntentType.RESET_CONTEXT
+        trigger_intent=IntentType.RESET_CONTEXT,
     ),
-
     # BROWSING/COMPARING → NEW_SEARCH
     StateTransition(
         from_state=ConversationState.BROWSING,
         to_state=ConversationState.SEARCHING,
-        trigger_intent=IntentType.NEW_SEARCH
+        trigger_intent=IntentType.NEW_SEARCH,
     ),
     StateTransition(
         from_state=ConversationState.COMPARING,
         to_state=ConversationState.SEARCHING,
-        trigger_intent=IntentType.NEW_SEARCH
+        trigger_intent=IntentType.NEW_SEARCH,
     ),
-
     # BROWSING/FILTERING → BROWSING (accessory recommendation)
     StateTransition(
         from_state=ConversationState.BROWSING,
         to_state=ConversationState.BROWSING,
-        trigger_intent=IntentType.RECOMMEND_ACCESSORY
+        trigger_intent=IntentType.RECOMMEND_ACCESSORY,
     ),
     StateTransition(
         from_state=ConversationState.FILTERING,
         to_state=ConversationState.BROWSING,
-        trigger_intent=IntentType.RECOMMEND_ACCESSORY
+        trigger_intent=IntentType.RECOMMEND_ACCESSORY,
     ),
 ]
 
 
 def get_next_state(
-    current_state: ConversationState,
-    intent: IntentType,
-    condition: Optional[str] = None
+    current_state: ConversationState, intent: IntentType, condition: Optional[str] = None
 ) -> Optional[ConversationState]:
     """Get next state based on current state and intent
 
@@ -203,8 +193,7 @@ def get_next_state(
         Next state or None if no valid transition
     """
     for transition in STATE_TRANSITIONS:
-        if (transition.from_state == current_state and
-            transition.trigger_intent == intent):
+        if transition.from_state == current_state and transition.trigger_intent == intent:
 
             # Check condition if specified
             if transition.condition:

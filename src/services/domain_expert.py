@@ -1,19 +1,22 @@
-from typing import List, Dict, Any, Optional
-from src.core.rag_pipeline import RAGPipeline
+from typing import Any, Dict, List, Optional
+
 from src.core.embedding_service import EmbeddingService
-from src.core.model_integrator import ModelIntegrator, ModelConfig, ModelProvider
+from src.core.model_integrator import ModelConfig, ModelIntegrator, ModelProvider
+from src.core.rag_pipeline import RAGPipeline
+
 
 class DomainExpert:
     """
     Specialized domain-specific RAG expert with advanced capabilities
     """
+
     def __init__(
         self,
         name: str,
         domain: str,
         rag_pipeline: RAGPipeline,
         embedding_service: EmbeddingService,
-        model_integrator: ModelIntegrator
+        model_integrator: ModelIntegrator,
     ):
         """
         Initialize a domain-specific expert
@@ -32,9 +35,7 @@ class DomainExpert:
         self.model_integrator = model_integrator
 
     def ingest_domain_documents(
-        self,
-        document_paths: List[str],
-        metadata: Optional[Dict[str, Any]] = None
+        self, document_paths: List[str], metadata: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         Ingest domain-specific documents with optional metadata
@@ -48,18 +49,14 @@ class DomainExpert:
         """
         # Attach domain-specific metadata
         domain_metadata = metadata or {}
-        domain_metadata['domain'] = self.domain
+        domain_metadata["domain"] = self.domain
 
         return self.rag_pipeline.ingest_documents(
-            document_paths,
-            additional_metadata=domain_metadata
+            document_paths, additional_metadata=domain_metadata
         )
 
     def query_domain_knowledge(
-        self,
-        query: str,
-        top_k: int = 5,
-        filters: Optional[Dict[str, Any]] = None
+        self, query: str, top_k: int = 5, filters: Optional[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """
         Perform domain-specific semantic search and query processing
@@ -74,35 +71,24 @@ class DomainExpert:
         """
         # Apply domain-specific filters
         domain_filters = filters or {}
-        domain_filters['domain'] = self.domain
+        domain_filters["domain"] = self.domain
 
         # Retrieve context chunks
         context_chunks = self.rag_pipeline.retrieve(
-            query,
-            top_k=top_k,
-            metadata_filters=domain_filters
+            query, top_k=top_k, metadata_filters=domain_filters
         )
 
         # Generate response
-        response = self.rag_pipeline.generate_response(
-            context_chunks,
-            query
-        )
+        response = self.rag_pipeline.generate_response(context_chunks, query)
 
         # Extract citations
-        citations = self.rag_pipeline.extract_citations(
-            context_chunks,
-            response
-        )
+        citations = self.rag_pipeline.extract_citations(context_chunks, response)
 
         return {
-            'response': response,
-            'context_chunks': context_chunks,
-            'citations': citations['citations'],
-            'metadata': {
-                'domain': self.domain,
-                'citation_count': citations['citation_count']
-            }
+            "response": response,
+            "context_chunks": context_chunks,
+            "citations": citations["citations"],
+            "metadata": {"domain": self.domain, "citation_count": citations["citation_count"]},
         }
 
     @classmethod
@@ -110,8 +96,8 @@ class DomainExpert:
         cls,
         rag_pipeline: RAGPipeline,
         embedding_service: EmbeddingService,
-        model_integrator: Optional[ModelIntegrator] = None
-    ) -> 'DomainExpert':
+        model_integrator: Optional[ModelIntegrator] = None,
+    ) -> "DomainExpert":
         """
         Factory method to create a manufacturing domain expert
 
@@ -127,11 +113,10 @@ class DomainExpert:
         if model_integrator is None:
             model_integrator = ModelIntegrator()
             model_integrator.register_model(
-                'manufacturing_llm',
+                "manufacturing_llm",
                 ModelConfig(
-                    provider=ModelProvider.OLLAMA,
-                    model_name='mistral:7b-instruct-v0.2-q4_K_M'
-                )
+                    provider=ModelProvider.OLLAMA, model_name="mistral:7b-instruct-v0.2-q4_K_M"
+                ),
             )
 
         return cls(
@@ -139,5 +124,5 @@ class DomainExpert:
             domain="manufacturing",
             rag_pipeline=rag_pipeline,
             embedding_service=embedding_service,
-            model_integrator=model_integrator
+            model_integrator=model_integrator,
         )

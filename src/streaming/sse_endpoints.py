@@ -4,10 +4,12 @@ REST API endpoints for Server-Sent Events
 """
 
 import logging
-from typing import Optional, List
+from typing import List, Optional
+
 from fastapi import APIRouter, Query
 from fastapi.responses import StreamingResponse
-from .sse_manager import SSEManager, SSEEvent
+
+from .sse_manager import SSEEvent, SSEManager
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +23,7 @@ router = APIRouter(prefix="/api/v1/stream", tags=["streaming"])
 @router.get("/subscribe")
 async def subscribe_sse(
     channels: Optional[str] = Query(None, description="Comma-separated channel names"),
-    client_id: Optional[str] = Query(None, description="Optional client ID")
+    client_id: Optional[str] = Query(None, description="Optional client ID"),
 ):
     """
     Subscribe to Server-Sent Events
@@ -52,7 +54,7 @@ async def subscribe_sse(
     """
     # Parse channels
     if channels:
-        channel_list = [c.strip() for c in channels.split(',')]
+        channel_list = [c.strip() for c in channels.split(",")]
     else:
         # Default: all channels
         channel_list = ["search", "pipeline", "analytics", "notifications"]
@@ -71,8 +73,8 @@ async def subscribe_sse(
         headers={
             "Cache-Control": "no-cache",
             "Connection": "keep-alive",
-            "X-Accel-Buffering": "no"  # Disable nginx buffering
-        }
+            "X-Accel-Buffering": "no",  # Disable nginx buffering
+        },
     )
 
 
@@ -93,9 +95,7 @@ async def get_sse_stats():
 
 
 @router.get("/clients")
-async def get_active_clients(
-    channel: Optional[str] = Query(None, description="Filter by channel")
-):
+async def get_active_clients(channel: Optional[str] = Query(None, description="Filter by channel")):
     """
     Get active client IDs
 
@@ -115,14 +115,11 @@ async def get_active_clients(
         ```
     """
     clients = sse_manager.get_active_clients(channel=channel)
-    return {
-        "channel": channel,
-        "active_clients": len(clients),
-        "client_ids": clients
-    }
+    return {"channel": channel, "active_clients": len(clients), "client_ids": clients}
 
 
 # Helper functions for emitting events
+
 
 async def emit_search_result(query: str, result: dict):
     """
@@ -135,20 +132,11 @@ async def emit_search_result(query: str, result: dict):
     await sse_manager.emit(
         channel="search",
         event="search_result",
-        data={
-            "query": query,
-            "result": result,
-            "timestamp": "now"
-        }
+        data={"query": query, "result": result, "timestamp": "now"},
     )
 
 
-async def emit_pipeline_update(
-    pipeline_id: str,
-    stage: str,
-    progress: float,
-    message: str
-):
+async def emit_pipeline_update(pipeline_id: str, stage: str, progress: float, message: str):
     """
     Emit pipeline progress update
 
@@ -161,12 +149,7 @@ async def emit_pipeline_update(
     await sse_manager.emit(
         channel="pipeline",
         event="pipeline_update",
-        data={
-            "pipeline_id": pipeline_id,
-            "stage": stage,
-            "progress": progress,
-            "message": message
-        }
+        data={"pipeline_id": pipeline_id, "stage": stage, "progress": progress, "message": message},
     )
 
 
@@ -177,18 +160,10 @@ async def emit_analytics_update(metrics: dict):
     Args:
         metrics: Analytics metrics
     """
-    await sse_manager.emit(
-        channel="analytics",
-        event="analytics_update",
-        data=metrics
-    )
+    await sse_manager.emit(channel="analytics", event="analytics_update", data=metrics)
 
 
-async def emit_notification(
-    level: str,
-    message: str,
-    details: Optional[dict] = None
-):
+async def emit_notification(level: str, message: str, details: Optional[dict] = None):
     """
     Emit system notification
 
@@ -200,9 +175,5 @@ async def emit_notification(
     await sse_manager.emit(
         channel="notifications",
         event="notification",
-        data={
-            "level": level,
-            "message": message,
-            "details": details or {}
-        }
+        data={"level": level, "message": message, "details": details or {}},
     )

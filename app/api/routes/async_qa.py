@@ -3,18 +3,19 @@ Async Q&A Routes
 High-performance async endpoints for product Q&A
 """
 
-from fastapi import APIRouter, Depends, HTTPException
-from typing import List
 import logging
+from typing import List
 
-from app.models.schemas import QARequest, QAResponse
-from app.services.async_rag_qa_service import AsyncRAGQAService
+from fastapi import APIRouter, Depends, HTTPException
+
 from app.core.dependencies import get_async_rag_qa_service
 from app.core.exceptions import (
     RAGEnterpriseException,
     create_http_exception,
-    get_status_code_for_exception
+    get_status_code_for_exception,
 )
+from app.models.schemas import QARequest, QAResponse
+from app.services.async_rag_qa_service import AsyncRAGQAService
 
 logger = logging.getLogger(__name__)
 
@@ -23,8 +24,7 @@ router = APIRouter(prefix="/api/v2", tags=["Async Q&A"])
 
 @router.post("/qa/ask", response_model=QAResponse, summary="Async Q&A Endpoint")
 async def async_qa_endpoint(
-    request: QARequest,
-    service: AsyncRAGQAService = Depends(get_async_rag_qa_service)
+    request: QARequest, service: AsyncRAGQAService = Depends(get_async_rag_qa_service)
 ) -> QAResponse:
     """
     **Async Q&A endpoint with optimized performance**
@@ -70,7 +70,7 @@ async def async_qa_endpoint(
             collection_name=request.collection,
             top_k=request.top_k,
             return_all=request.return_all,
-            min_integrity_score=request.min_integrity_score
+            min_integrity_score=request.min_integrity_score,
         )
 
         response = QAResponse(
@@ -79,7 +79,7 @@ async def async_qa_endpoint(
             related_products=result["related_products"],
             confidence=result["confidence"],
             qa_id=result["qa_id"],
-            timestamp=result["timestamp"]
+            timestamp=result["timestamp"],
         )
 
         logger.info(f"Async Q&A completed: {response.qa_id}")
@@ -96,8 +96,8 @@ async def async_qa_endpoint(
             detail={
                 "error": "InternalServerError",
                 "message": "An unexpected error occurred",
-                "details": {"error": str(e)}
-            }
+                "details": {"error": str(e)},
+            },
         )
 
 
@@ -106,7 +106,7 @@ async def batch_qa_endpoint(
     questions: List[str],
     collection: str = "products_all",
     top_k: int = 3,
-    service: AsyncRAGQAService = Depends(get_async_rag_qa_service)
+    service: AsyncRAGQAService = Depends(get_async_rag_qa_service),
 ) -> List[QAResponse]:
     """
     **Batch Q&A endpoint for multiple questions**
@@ -138,9 +138,7 @@ async def batch_qa_endpoint(
         logger.info(f"Batch Q&A request: {len(questions)} questions")
 
         results = await service.batch_answer_questions(
-            questions=questions,
-            collection_name=collection,
-            top_k=top_k
+            questions=questions, collection_name=collection, top_k=top_k
         )
 
         responses = []
@@ -155,7 +153,7 @@ async def batch_qa_endpoint(
                         related_products=[],
                         confidence=0.0,
                         qa_id=f"error_{len(responses)}",
-                        timestamp=result.get("timestamp", "")
+                        timestamp=result.get("timestamp", ""),
                     )
                 )
             else:
@@ -166,7 +164,7 @@ async def batch_qa_endpoint(
                         related_products=result["related_products"],
                         confidence=result["confidence"],
                         qa_id=result["qa_id"],
-                        timestamp=result["timestamp"]
+                        timestamp=result["timestamp"],
                     )
                 )
 
@@ -180,14 +178,14 @@ async def batch_qa_endpoint(
             detail={
                 "error": "BatchProcessingError",
                 "message": "Failed to process batch questions",
-                "details": {"error": str(e)}
-            }
+                "details": {"error": str(e)},
+            },
         )
 
 
 @router.get("/qa/health", summary="Async Service Health Check")
 async def async_service_health(
-    service: AsyncRAGQAService = Depends(get_async_rag_qa_service)
+    service: AsyncRAGQAService = Depends(get_async_rag_qa_service),
 ) -> dict:
     """
     Check health of async Q&A service
@@ -204,10 +202,5 @@ async def async_service_health(
         "ollama_url": service.ollama_url,
         "timeout": service.timeout,
         "max_retries": service.max_retries,
-        "features": [
-            "async_io",
-            "connection_pooling",
-            "batch_processing",
-            "retry_logic"
-        ]
+        "features": ["async_io", "connection_pooling", "batch_processing", "retry_logic"],
     }

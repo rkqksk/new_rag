@@ -6,8 +6,8 @@ Provides session and context management:
 - ContextStore: Redis-backed persistence
 """
 
-from app.rag_consultation.context.conversation_manager import ConversationManager
 from app.rag_consultation.context.context_store import ContextStore
+from app.rag_consultation.context.conversation_manager import ConversationManager
 
 __all__ = [
     "ConversationManager",

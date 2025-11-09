@@ -4,18 +4,20 @@ Performance and stress testing for Q&A endpoints
 """
 
 import asyncio
-import httpx
+import json
+import statistics
 import time
-from typing import List, Dict, Any
 from dataclasses import dataclass
 from datetime import datetime
-import statistics
-import json
+from typing import Any, Dict, List
+
+import httpx
 
 
 @dataclass
 class LoadTestConfig:
     """Load test configuration"""
+
     base_url: str = "http://localhost:8000"
     concurrent_users: int = 10
     requests_per_user: int = 10
@@ -25,6 +27,7 @@ class LoadTestConfig:
 @dataclass
 class LoadTestResult:
     """Load test results"""
+
     total_requests: int
     successful_requests: int
     failed_requests: int
@@ -50,18 +53,13 @@ class LoadTester:
         self.failed = 0
 
     async def _make_request(
-        self,
-        client: httpx.AsyncClient,
-        endpoint: str,
-        payload: Dict[str, Any]
+        self, client: httpx.AsyncClient, endpoint: str, payload: Dict[str, Any]
     ) -> Dict[str, Any]:
         """Make a single API request"""
         start_time = time.time()
         try:
             response = await client.post(
-                f"{self.config.base_url}{endpoint}",
-                json=payload,
-                timeout=self.config.timeout
+                f"{self.config.base_url}{endpoint}", json=payload, timeout=self.config.timeout
             )
             duration = time.time() - start_time
 
@@ -82,19 +80,14 @@ class LoadTester:
             self.errors.append(error_msg)
             return {"success": False, "error": error_msg, "duration": duration}
 
-    async def _user_session(
-        self,
-        user_id: int,
-        client: httpx.AsyncClient,
-        questions: List[str]
-    ):
+    async def _user_session(self, user_id: int, client: httpx.AsyncClient, questions: List[str]):
         """Simulate a single user making multiple requests"""
         for i, question in enumerate(questions):
             payload = {
                 "question": question,
                 "collection": "products_all",
                 "top_k": 3,
-                "customer_id": f"user_{user_id}"
+                "customer_id": f"user_{user_id}",
             }
 
             await self._make_request(client, "/api/v2/qa/ask", payload)
@@ -116,7 +109,7 @@ class LoadTester:
             tasks = []
             for user_id in range(self.config.concurrent_users):
                 # Each user makes multiple requests
-                user_questions = questions[:self.config.requests_per_user]
+                user_questions = questions[: self.config.requests_per_user]
                 task = self._user_session(user_id, client, user_questions)
                 tasks.append(task)
 
@@ -141,7 +134,7 @@ class LoadTester:
             tasks = []
             for user_id in range(self.config.concurrent_users):
                 # Each user makes multiple requests
-                user_questions = questions[:self.config.requests_per_user]
+                user_questions = questions[: self.config.requests_per_user]
                 task = self._user_session(user_id, client, user_questions)
                 tasks.append(task)
 
@@ -160,11 +153,7 @@ class LoadTester:
         start_time = time.time()
 
         async with httpx.AsyncClient() as client:
-            payload = {
-                "questions": questions,
-                "collection": "products_all",
-                "top_k": 3
-            }
+            payload = {"questions": questions, "collection": "products_all", "top_k": 3}
 
             await self._make_request(client, "/api/v2/qa/batch", payload)
 
@@ -203,7 +192,7 @@ class LoadTester:
             max_response_time=max_time,
             requests_per_second=rps,
             total_duration=total_duration,
-            errors=self.errors[:10]  # First 10 errors
+            errors=self.errors[:10],  # First 10 errors
         )
 
     def reset(self):
@@ -220,8 +209,12 @@ def print_results(test_name: str, result: LoadTestResult):
     print(f"📊 {test_name} Results")
     print(f"{'='*60}")
     print(f"Total Requests:      {result.total_requests}")
-    print(f"Successful:          {result.successful_requests} ({result.successful_requests/result.total_requests*100:.1f}%)")
-    print(f"Failed:              {result.failed_requests} ({result.failed_requests/result.total_requests*100:.1f}%)")
+    print(
+        f"Successful:          {result.successful_requests} ({result.successful_requests/result.total_requests*100:.1f}%)"
+    )
+    print(
+        f"Failed:              {result.failed_requests} ({result.failed_requests/result.total_requests*100:.1f}%)"
+    )
     print(f"Total Duration:      {result.total_duration:.2f}s")
     print(f"Requests/Second:     {result.requests_per_second:.2f}")
     print(f"\nResponse Times:")
@@ -240,9 +233,9 @@ def print_results(test_name: str, result: LoadTestResult):
 
 async def main():
     """Run comprehensive load tests"""
-    print("\n" + "="*60)
+    print("\n" + "=" * 60)
     print("🚀 RAG Enterprise Load Testing")
-    print("="*60)
+    print("=" * 60)
 
     # Test questions
     questions = [
@@ -255,15 +248,11 @@ async def main():
         "투명 PET 용기 찾고 있어요",
         "크림 용기 사이즈별로 알려주세요",
         "에어리스 용기 장점이 뭔가요?",
-        "유리 용기도 판매하시나요?"
+        "유리 용기도 판매하시나요?",
     ]
 
     # Configuration
-    config = LoadTestConfig(
-        concurrent_users=10,
-        requests_per_user=10,
-        timeout=30
-    )
+    config = LoadTestConfig(concurrent_users=10, requests_per_user=10, timeout=30)
 
     # Test 1: Sync endpoint
     tester = LoadTester(config)
@@ -285,39 +274,47 @@ async def main():
     print("📈 Performance Comparison")
     print(f"{'='*60}")
     print(f"Async vs Sync Improvement:")
-    print(f"  Response Time:     {(sync_result.avg_response_time - async_result.avg_response_time) / sync_result.avg_response_time * 100:.1f}% faster")
-    print(f"  Throughput:        {(async_result.requests_per_second - sync_result.requests_per_second) / sync_result.requests_per_second * 100:.1f}% increase")
+    print(
+        f"  Response Time:     {(sync_result.avg_response_time - async_result.avg_response_time) / sync_result.avg_response_time * 100:.1f}% faster"
+    )
+    print(
+        f"  Throughput:        {(async_result.requests_per_second - sync_result.requests_per_second) / sync_result.requests_per_second * 100:.1f}% increase"
+    )
 
     # Save results
     results_file = f"load_test_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-    with open(results_file, 'w') as f:
-        json.dump({
-            "timestamp": datetime.now().isoformat(),
-            "config": {
-                "concurrent_users": config.concurrent_users,
-                "requests_per_user": config.requests_per_user,
-                "timeout": config.timeout
+    with open(results_file, "w") as f:
+        json.dump(
+            {
+                "timestamp": datetime.now().isoformat(),
+                "config": {
+                    "concurrent_users": config.concurrent_users,
+                    "requests_per_user": config.requests_per_user,
+                    "timeout": config.timeout,
+                },
+                "sync_test": {
+                    "total_requests": sync_result.total_requests,
+                    "successful": sync_result.successful_requests,
+                    "avg_response_time_ms": sync_result.avg_response_time * 1000,
+                    "p95_response_time_ms": sync_result.p95_response_time * 1000,
+                    "requests_per_second": sync_result.requests_per_second,
+                },
+                "async_test": {
+                    "total_requests": async_result.total_requests,
+                    "successful": async_result.successful_requests,
+                    "avg_response_time_ms": async_result.avg_response_time * 1000,
+                    "p95_response_time_ms": async_result.p95_response_time * 1000,
+                    "requests_per_second": async_result.requests_per_second,
+                },
+                "batch_test": {
+                    "total_requests": batch_result.total_requests,
+                    "successful": batch_result.successful_requests,
+                    "avg_response_time_ms": batch_result.avg_response_time * 1000,
+                },
             },
-            "sync_test": {
-                "total_requests": sync_result.total_requests,
-                "successful": sync_result.successful_requests,
-                "avg_response_time_ms": sync_result.avg_response_time * 1000,
-                "p95_response_time_ms": sync_result.p95_response_time * 1000,
-                "requests_per_second": sync_result.requests_per_second
-            },
-            "async_test": {
-                "total_requests": async_result.total_requests,
-                "successful": async_result.successful_requests,
-                "avg_response_time_ms": async_result.avg_response_time * 1000,
-                "p95_response_time_ms": async_result.p95_response_time * 1000,
-                "requests_per_second": async_result.requests_per_second
-            },
-            "batch_test": {
-                "total_requests": batch_result.total_requests,
-                "successful": batch_result.successful_requests,
-                "avg_response_time_ms": batch_result.avg_response_time * 1000
-            }
-        }, f, indent=2)
+            f,
+            indent=2,
+        )
 
     print(f"\n✅ Results saved to: {results_file}")
 

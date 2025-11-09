@@ -1,55 +1,82 @@
-# FastAPI & ASGI
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-multipart==0.0.6
+# ========================================
+# RAG Enterprise Requirements
+# Python 3.11+ Compatible (Latest Stable Versions)
+# Updated: 2025-11-09
+# ========================================
 
-# Pydantic
-pydantic==2.5.0
-pydantic-settings==2.1.0
+# FastAPI & ASGI Server
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+python-multipart>=0.0.20
 
-# Database
-psycopg2-binary==2.9.9
-sqlalchemy==2.0.23
-asyncpg==0.29.0
+# Pydantic V2
+pydantic>=2.10.0
+pydantic-settings>=2.7.0
+email-validator>=2.2.0  # Email validation for Pydantic
 
-# Redis
-redis==5.0.1
-hiredis==2.2.3
+# Database - PostgreSQL
+psycopg2-binary>=2.9.10  # Legacy sync driver
+psycopg[binary]>=3.2.0   # Modern async driver (psycopg3)
+sqlalchemy>=2.0.36
+asyncpg>=0.30.0
 
-# Vector Database
-qdrant-client==1.7.0
+# Redis Cache
+redis>=5.2.0
+hiredis>=3.0.0
+
+# Vector Database - Qdrant
+qdrant-client>=1.12.0
 
 # ML & Embeddings
-sentence-transformers==2.2.2
-torch==2.1.1
-transformers==4.35.2
+sentence-transformers>=3.3.0
+torch>=2.5.0
+transformers>=4.47.0
+openai>=1.58.0  # OpenAI SDK for NexaAI compatibility
 
-# OCR & Image (Phase 4: Complete Multi-Modal Pipeline)
-paddleocr==2.7.0.3
-paddlepaddle==2.5.2
-easyocr==1.7.0
-pytesseract==0.3.10
-opencv-python==4.8.1.78
-pillow==10.1.0
-PyMuPDF==1.23.8
-pandas==2.1.4
-openpyxl==3.1.2
-scikit-image==0.22.0
+# OCR & Image Processing (Latest Compatible Versions)
+# Let pip resolve compatible versions automatically
+paddleocr  # Latest version
+paddlepaddle  # Latest stable
+easyocr>=1.7.2
+pytesseract>=0.3.13
+opencv-python-headless  # Headless version for Docker (no GUI dependencies)
+pillow>=11.0.0
+PyMuPDF  # Latest version (pymupdf)
+pandas>=2.2.0
+openpyxl>=3.1.5
+scikit-image>=0.24.0
 
 # Monitoring & Logging
-prometheus-client==0.19.0
-python-json-logger==2.0.7
+prometheus-client>=0.21.0
+python-json-logger>=3.2.1
 
 # HTTP & Async
-httpx==0.25.2
-aiohttp==3.9.1
+httpx>=0.28.0
+aiohttp>=3.11.0
+requests>=2.32.0
+beautifulsoup4>=4.12.3
+lxml>=5.3.0
+
+# Web Crawling & Automation
+playwright>=1.48.0
+selenium>=4.27.0
+
+# Authentication & Security
+pyotp>=2.9.0
+requests-oauthlib>=2.0.0
+python-jose[cryptography]>=3.3.0  # JWT token handling
+passlib>=1.7.4  # Password hashing
+stripe>=11.7.0  # Stripe payment processing
 
 # Testing
-pytest==7.4.3
-pytest-asyncio==0.21.1
-pytest-cov==4.1.0
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+pytest-cov>=6.0.0
 
-# Development
-black==23.11.0
-ruff==0.1.6
-mypy==1.7.1
+# Development Tools
+black>=24.10.0
+ruff>=0.8.0
+mypy>=1.13.0
+
+# Utilities
+python-dotenv>=1.0.1

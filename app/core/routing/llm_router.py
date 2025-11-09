@@ -11,17 +11,18 @@ Strategy:
     복잡/시스템 작업 → Sonnet 4.5 (Max 무제한 활용)
 """
 
-import re
 import logging
-from typing import Dict
+import re
 from dataclasses import dataclass
 from enum import Enum
+from typing import Dict
 
 logger = logging.getLogger(__name__)
 
 
 class ClaudeModel(Enum):
     """Claude 모델 분류"""
+
     HAIKU_4_5 = "claude-haiku-4-5"  # 일반 작업 (deposit)
     SONNET_4_5 = "claude-sonnet-4-5"  # 복잡/검증/시스템 (Max)
 
@@ -29,6 +30,7 @@ class ClaudeModel(Enum):
 @dataclass
 class ComplexityScore:
     """복잡도 점수"""
+
     length_score: int  # 0-20
     technical_score: int  # 0-25
     scope_score: int  # 0-20
@@ -40,6 +42,7 @@ class ComplexityScore:
 @dataclass
 class ModelSelection:
     """모델 선택 결과"""
+
     model: ClaudeModel
     complexity_score: ComplexityScore
     reason: str
@@ -54,20 +57,20 @@ class ComplexityAnalyzer:
             "simple": ["what is", "무엇", "간단히", "짧게", "요약", "뭐야"],
             "moderate": ["how to", "어떻게", "만들어", "작성", "구현", "추가"],
             "complex": ["분석", "설계", "아키텍처", "최적화", "리팩토링", "전체", "검증"],
-            "advanced": ["시스템", "전략", "마이그레이션", "성능", "보안", "대규모"]
+            "advanced": ["시스템", "전략", "마이그레이션", "성능", "보안", "대규모"],
         }
 
         self.scope_keywords = {
             "single": ["this file", "이 함수", "이 변수", "하나만", "단일"],
             "multiple": ["여러", "multiple", "all", "몇 개", "3개", "5개"],
-            "project": ["프로젝트", "project", "system", "시스템", "전체", "모든"]
+            "project": ["프로젝트", "project", "system", "시스템", "전체", "모든"],
         }
 
         self.reasoning_keywords = {
             "shallow": ["is", "인가", "뭐야", "show", "보여"],
             "moderate": ["explain", "설명", "왜", "how", "어떻게"],
             "deep": ["분석", "analyze", "debug", "왜 안되는지", "원인"],
-            "strategic": ["설계", "design", "strategy", "plan", "접근법", "아키텍처"]
+            "strategic": ["설계", "design", "strategy", "plan", "접근법", "아키텍처"],
         }
 
     def analyze(self, query: str) -> ComplexityScore:
@@ -88,13 +91,7 @@ class ComplexityAnalyzer:
         reasoning_score = self._score_reasoning_depth(query_lower)
         creativity_score = self._score_creativity(query_lower)
 
-        total = sum([
-            length_score,
-            technical_score,
-            scope_score,
-            reasoning_score,
-            creativity_score
-        ])
+        total = sum([length_score, technical_score, scope_score, reasoning_score, creativity_score])
 
         return ComplexityScore(
             length_score=length_score,
@@ -102,7 +99,7 @@ class ComplexityAnalyzer:
             scope_score=scope_score,
             reasoning_score=reasoning_score,
             creativity_score=creativity_score,
-            total=min(total, 100)
+            total=min(total, 100),
         )
 
     def _score_length(self, query: str) -> int:
@@ -194,7 +191,7 @@ class ClaudeRouter:
                 model=ClaudeModel.SONNET_4_5,
                 complexity_score=complexity_score,
                 reason="시스템 구축/검증/대규모 작업 - Sonnet 필수",
-                cost_type="max"
+                cost_type="max",
             )
 
         # 3. 점수 기반 모델 선택
@@ -204,7 +201,7 @@ class ClaudeRouter:
                 model=ClaudeModel.HAIKU_4_5,
                 complexity_score=complexity_score,
                 reason=f"일반 작업 (복잡도: {complexity_score.total}/100)",
-                cost_type="deposit"
+                cost_type="deposit",
             )
         else:
             # 복잡한 작업 → Sonnet (Max 무제한)
@@ -212,7 +209,7 @@ class ClaudeRouter:
                 model=ClaudeModel.SONNET_4_5,
                 complexity_score=complexity_score,
                 reason=f"복잡한 작업 (복잡도: {complexity_score.total}/100)",
-                cost_type="max"
+                cost_type="max",
             )
 
     def _requires_sonnet(self, query: str, context: Dict) -> bool:
@@ -237,15 +234,21 @@ class ClaudeRouter:
 
         # Architecture/System keywords
         system_keywords = [
-            "아키텍처", "architecture", "설계", "design system",
-            "전체 시스템", "entire system", "마이그레이션", "migration"
+            "아키텍처",
+            "architecture",
+            "설계",
+            "design system",
+            "전체 시스템",
+            "entire system",
+            "마이그레이션",
+            "migration",
         ]
         if any(kw in query_lower for kw in system_keywords):
             return True
 
         # Performance optimization
-        if ("성능" in query_lower or "performance" in query_lower):
-            if ("최적화" in query_lower or "optimize" in query_lower):
+        if "성능" in query_lower or "performance" in query_lower:
+            if "최적화" in query_lower or "optimize" in query_lower:
                 return True
 
         # Large-scale refactoring
@@ -268,7 +271,7 @@ if __name__ == "__main__":
         ("FastAPI 라우터 3개 만들어줘 - 인증, 사용자, 문서", {}),
         ("전체 RAG 시스템 아키텍처 설계 및 검증", {}),
         ("50개 파일 리팩토링", {"file_count": 50}),
-        ("성능 최적화 검증해줘", {})
+        ("성능 최적화 검증해줘", {}),
     ]
 
     router = ClaudeRouter()

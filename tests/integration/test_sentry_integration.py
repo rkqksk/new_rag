@@ -22,7 +22,6 @@ from app.core.sentry import (
     SentryMiddleware,
 )
 
-
 # ============================================================
 # Test Sentry Configuration Integration
 # ============================================================

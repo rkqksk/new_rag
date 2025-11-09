@@ -22,10 +22,10 @@ import logging
 from typing import Dict, Optional
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
 from redis.asyncio import Redis
+from sentence_transformers import SentenceTransformer
 
-from app.rag_consultation.models import QueryType, QueryAnalysis
+from app.rag_consultation.models import QueryAnalysis, QueryType
 
 logger = logging.getLogger(__name__)
 
@@ -137,9 +137,7 @@ class QueryClassifier:
                 mean_embedding = np.mean(prototype_embeds, axis=0)
                 embeddings[query_type] = mean_embedding
             except Exception as e:
-                logger.error(
-                    f"Failed to compute embeddings for {query_type}: {e}"
-                )
+                logger.error(f"Failed to compute embeddings for {query_type}: {e}")
                 # Use zero vector as fallback
                 embeddings[query_type] = np.zeros(self.model.get_sentence_embedding_dimension())
 
@@ -261,9 +259,7 @@ class QueryClassifier:
 
             # Apply confidence threshold
             if confidence < self.confidence_threshold:
-                logger.warning(
-                    f"Low confidence ({confidence:.2f}) for query: {query[:50]}..."
-                )
+                logger.warning(f"Low confidence ({confidence:.2f}) for query: {query[:50]}...")
                 # Default to conversational if confidence is low
                 primary_type = QueryType.CONVERSATIONAL
 
@@ -279,8 +275,7 @@ class QueryClassifier:
             await self._cache_result(query, analysis)
 
             logger.info(
-                f"Classified query as {primary_type.value} "
-                f"(confidence: {confidence:.2f})"
+                f"Classified query as {primary_type.value} " f"(confidence: {confidence:.2f})"
             )
 
             return analysis

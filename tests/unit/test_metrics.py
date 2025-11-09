@@ -12,10 +12,10 @@ import pytest
 from prometheus_client import CollectorRegistry
 
 from app.core.metrics import (
+    LLMQueryTracker,
     MetricsCollector,
     RequestTracker,
-    LLMQueryTracker,
-    get_metrics_collector
+    get_metrics_collector,
 )
 
 
@@ -72,10 +72,7 @@ class TestMetricsCollector:
 
         # Get counter value (Prometheus strips _total suffix from metric family name)
         metrics = list(registry.collect())
-        cache_ops = next(
-            (m for m in metrics if m.name == "cache_operations"),
-            None
-        )
+        cache_ops = next((m for m in metrics if m.name == "cache_operations"), None)
         assert cache_ops is not None, "cache_operations metric not found"
 
         # Verify counts (filter for _total samples, not _created)
@@ -99,16 +96,10 @@ class TestMetricsCollector:
 
         # Get gauge values
         metrics = registry.collect()
-        db_conns = next(
-            m for m in metrics
-            if m.name == "db_connections_active"
-        )
+        db_conns = next(m for m in metrics if m.name == "db_connections_active")
 
         # Verify values
-        samples = {
-            s.labels["db_type"]: s.value
-            for s in db_conns.samples
-        }
+        samples = {s.labels["db_type"]: s.value for s in db_conns.samples}
 
         assert samples["postgresql"] == 10.0
         assert samples["redis"] == 5.0
@@ -117,15 +108,9 @@ class TestMetricsCollector:
         collector.record_db_connection("postgresql", 15)
 
         metrics = registry.collect()
-        db_conns = next(
-            m for m in metrics
-            if m.name == "db_connections_active"
-        )
+        db_conns = next(m for m in metrics if m.name == "db_connections_active")
 
-        samples = {
-            s.labels["db_type"]: s.value
-            for s in db_conns.samples
-        }
+        samples = {s.labels["db_type"]: s.value for s in db_conns.samples}
 
         assert samples["postgresql"] == 15.0
 
@@ -141,25 +126,13 @@ class TestMetricsCollector:
 
         # Get histogram values
         metrics = registry.collect()
-        db_query_hist = next(
-            m for m in metrics
-            if m.name == "db_query_duration_seconds"
-        )
+        db_query_hist = next(m for m in metrics if m.name == "db_query_duration_seconds")
 
         # Find count and sum for postgresql
-        pg_samples = [
-            s for s in db_query_hist.samples
-            if s.labels.get("db_type") == "postgresql"
-        ]
+        pg_samples = [s for s in db_query_hist.samples if s.labels.get("db_type") == "postgresql"]
 
-        count_sample = next(
-            s for s in pg_samples
-            if s.name.endswith("_count")
-        )
-        sum_sample = next(
-            s for s in pg_samples
-            if s.name.endswith("_sum")
-        )
+        count_sample = next(s for s in pg_samples if s.name.endswith("_count"))
+        sum_sample = next(s for s in pg_samples if s.name.endswith("_sum"))
 
         assert count_sample.value == 3.0
         assert sum_sample.value == pytest.approx(0.45, rel=0.01)
@@ -176,10 +149,7 @@ class TestContextManagers:
         collector = MetricsCollector(registry=registry)
 
         # Track a request
-        async with collector.track_request(
-            "/api/query",
-            "POST"
-        ) as tracker:
+        async with collector.track_request("/api/query", "POST") as tracker:
             tracker.set_status(200)
             tracker.add_request_size(1024)
             tracker.add_response_size(4096)
@@ -188,29 +158,22 @@ class TestContextManagers:
         metrics = list(registry.collect())
 
         # Check requests total
-        requests_total = next(
-            (m for m in metrics if m.name == "http_requests"),
-            None
-        )
+        requests_total = next((m for m in metrics if m.name == "http_requests"), None)
         assert requests_total is not None, "http_requests metric not found"
 
         sample = next(
-            (s for s in requests_total.samples
-             if s.labels == {
-                "method": "POST",
-                "endpoint": "/api/query",
-                "status_code": "200"
-            }),
-            None
+            (
+                s
+                for s in requests_total.samples
+                if s.labels == {"method": "POST", "endpoint": "/api/query", "status_code": "200"}
+            ),
+            None,
         )
         assert sample is not None, "Expected sample not found"
         assert sample.value == 1.0
 
         # Check in-flight requests is back to 0
-        in_flight = next(
-            (m for m in metrics if m.name == "http_requests_in_flight"),
-            None
-        )
+        in_flight = next((m for m in metrics if m.name == "http_requests_in_flight"), None)
         assert in_flight is not None, "http_requests_in_flight metric not found"
         assert in_flight.samples[0].value == 0.0
 
@@ -220,9 +183,7 @@ class TestContextManagers:
         collector = MetricsCollector(registry=registry)
 
         # Track an LLM query
-        async with collector.track_llm_query(
-            "claude-3-opus-20240229"
-        ) as tracker:
+        async with collector.track_llm_query("claude-3-opus-20240229") as tracker:
             tracker.set_status("success")
             tracker.add_tokens(100, 200)
 
@@ -230,46 +191,40 @@ class TestContextManagers:
         metrics = list(registry.collect())
 
         # Check API calls total
-        api_calls = next(
-            (m for m in metrics if m.name == "claude_api_calls"),
-            None
-        )
+        api_calls = next((m for m in metrics if m.name == "claude_api_calls"), None)
         assert api_calls is not None, "claude_api_calls metric not found"
 
         sample = next(
-            (s for s in api_calls.samples
-             if s.labels == {
-                "model": "claude-3-opus-20240229",
-                "endpoint": "messages",
-                "status": "success"
-            }),
-            None
+            (
+                s
+                for s in api_calls.samples
+                if s.labels
+                == {"model": "claude-3-opus-20240229", "endpoint": "messages", "status": "success"}
+            ),
+            None,
         )
         assert sample is not None, "Expected API call sample not found"
         assert sample.value == 1.0
 
         # Check tokens
-        tokens = next(
-            (m for m in metrics if m.name == "claude_tokens"),
-            None
-        )
+        tokens = next((m for m in metrics if m.name == "claude_tokens"), None)
         assert tokens is not None, "claude_tokens metric not found"
 
         input_tokens = next(
-            (s for s in tokens.samples
-             if s.labels == {
-                "model": "claude-3-opus-20240229",
-                "direction": "input"
-            }),
-            None
+            (
+                s
+                for s in tokens.samples
+                if s.labels == {"model": "claude-3-opus-20240229", "direction": "input"}
+            ),
+            None,
         )
         output_tokens = next(
-            (s for s in tokens.samples
-             if s.labels == {
-                "model": "claude-3-opus-20240229",
-                "direction": "output"
-            }),
-            None
+            (
+                s
+                for s in tokens.samples
+                if s.labels == {"model": "claude-3-opus-20240229", "direction": "output"}
+            ),
+            None,
         )
 
         assert input_tokens is not None, "Input tokens sample not found"
@@ -296,18 +251,12 @@ class TestContextManagers:
         metrics = list(registry.collect())
 
         # HTTP metrics
-        requests = next(
-            (m for m in metrics if m.name == "http_requests"),
-            None
-        )
+        requests = next((m for m in metrics if m.name == "http_requests"), None)
         assert requests is not None, "http_requests metric not found"
         assert len([s for s in requests.samples if s.value > 0]) > 0
 
         # LLM metrics
-        api_calls = next(
-            (m for m in metrics if m.name == "claude_api_calls"),
-            None
-        )
+        api_calls = next((m for m in metrics if m.name == "claude_api_calls"), None)
         assert api_calls is not None, "claude_api_calls metric not found"
         assert len([s for s in api_calls.samples if s.value > 0]) > 0
 
@@ -326,16 +275,11 @@ class TestContextManagers:
 
         # Verify error was recorded with status 500 (Prometheus strips _total suffix)
         metrics = list(registry.collect())
-        requests = next(
-            (m for m in metrics if m.name == "http_requests"),
-            None
-        )
+        requests = next((m for m in metrics if m.name == "http_requests"), None)
         assert requests is not None, "http_requests metric not found"
 
         error_sample = next(
-            (s for s in requests.samples
-             if s.labels.get("status_code") == "500"),
-            None
+            (s for s in requests.samples if s.labels.get("status_code") == "500"), None
         )
         assert error_sample is not None, "Error sample with status 500 not found"
         assert error_sample.value == 1.0
@@ -349,16 +293,11 @@ class TestContextManagers:
 
         # Verify error status (Prometheus strips _total suffix)
         metrics = list(registry.collect())
-        api_calls = next(
-            (m for m in metrics if m.name == "claude_api_calls"),
-            None
-        )
+        api_calls = next((m for m in metrics if m.name == "claude_api_calls"), None)
         assert api_calls is not None, "claude_api_calls metric not found"
 
         error_sample = next(
-            (s for s in api_calls.samples
-             if s.labels.get("status") == "error"),
-            None
+            (s for s in api_calls.samples if s.labels.get("status") == "error"), None
         )
         assert error_sample is not None, "Error sample not found"
         assert error_sample.value == 1.0
@@ -411,16 +350,11 @@ class TestMiddlewareIntegration:
         # Verify metrics were collected (Prometheus strips _total suffix)
         metrics = list(registry.collect())
 
-        requests_total = next(
-            (m for m in metrics if m.name == "http_requests"),
-            None
-        )
+        requests_total = next((m for m in metrics if m.name == "http_requests"), None)
         assert requests_total is not None, "http_requests metric not found"
 
         sample = next(
-            (s for s in requests_total.samples
-             if s.labels.get("endpoint") == "/api/test"),
-            None
+            (s for s in requests_total.samples if s.labels.get("endpoint") == "/api/test"), None
         )
         assert sample is not None, "Expected sample not found"
         assert sample.value == 1.0
@@ -455,16 +389,11 @@ class TestMiddlewareIntegration:
         # Verify error metrics (Prometheus strips _total suffix)
         metrics = list(registry.collect())
 
-        requests_total = next(
-            (m for m in metrics if m.name == "http_requests"),
-            None
-        )
+        requests_total = next((m for m in metrics if m.name == "http_requests"), None)
         assert requests_total is not None, "http_requests metric not found"
 
         error_sample = next(
-            (s for s in requests_total.samples
-             if s.labels.get("status_code") == "500"),
-            None
+            (s for s in requests_total.samples if s.labels.get("status_code") == "500"), None
         )
         assert error_sample is not None, "Error sample not found"
 
@@ -532,47 +461,30 @@ async def test_rag_pipeline_metrics():
 
     # Record RAG pipeline metrics
     collector.record_rag_pipeline(
-        duration_seconds=1.5,
-        documents_retrieved=10,
-        confidence_score=0.85
+        duration_seconds=1.5, documents_retrieved=10, confidence_score=0.85
     )
 
     # Verify metrics
     metrics = list(registry.collect())
 
     # Check documents retrieved gauge
-    docs_retrieved = next(
-        (m for m in metrics if m.name == "rag_documents_retrieved"),
-        None
-    )
+    docs_retrieved = next((m for m in metrics if m.name == "rag_documents_retrieved"), None)
     assert docs_retrieved is not None, "rag_documents_retrieved metric not found"
     assert docs_retrieved.samples[0].value == 10.0
 
     # Check duration histogram
-    duration_hist = next(
-        (m for m in metrics if m.name == "rag_pipeline_duration_seconds"),
-        None
-    )
+    duration_hist = next((m for m in metrics if m.name == "rag_pipeline_duration_seconds"), None)
     assert duration_hist is not None, "rag_pipeline_duration_seconds metric not found"
 
-    count_sample = next(
-        (s for s in duration_hist.samples if s.name.endswith("_count")),
-        None
-    )
+    count_sample = next((s for s in duration_hist.samples if s.name.endswith("_count")), None)
     assert count_sample is not None, "Duration count sample not found"
     assert count_sample.value == 1.0
 
     # Check confidence score histogram
-    confidence_hist = next(
-        (m for m in metrics if m.name == "rag_confidence_scores"),
-        None
-    )
+    confidence_hist = next((m for m in metrics if m.name == "rag_confidence_scores"), None)
     assert confidence_hist is not None, "rag_confidence_scores metric not found"
 
-    count_sample = next(
-        (s for s in confidence_hist.samples if s.name.endswith("_count")),
-        None
-    )
+    count_sample = next((s for s in confidence_hist.samples if s.name.endswith("_count")), None)
     assert count_sample is not None, "Confidence count sample not found"
     assert count_sample.value == 1.0
 
@@ -588,10 +500,7 @@ def test_cache_hit_ratio_update():
 
     # Verify metric
     metrics = registry.collect()
-    hit_ratio = next(
-        m for m in metrics
-        if m.name == "cache_hit_ratio"
-    )
+    hit_ratio = next(m for m in metrics if m.name == "cache_hit_ratio")
 
     assert hit_ratio.samples[0].value == 0.75
 
@@ -599,10 +508,7 @@ def test_cache_hit_ratio_update():
     collector.update_cache_hit_ratio(0.85)
 
     metrics = registry.collect()
-    hit_ratio = next(
-        m for m in metrics
-        if m.name == "cache_hit_ratio"
-    )
+    hit_ratio = next(m for m in metrics if m.name == "cache_hit_ratio")
 
     assert hit_ratio.samples[0].value == 0.85
 
@@ -620,10 +526,7 @@ def test_database_error_recording():
 
     # Verify metrics (Prometheus strips _total suffix from metric family name)
     metrics = list(registry.collect())
-    db_errors = next(
-        (m for m in metrics if m.name == "db_errors"),
-        None
-    )
+    db_errors = next((m for m in metrics if m.name == "db_errors"), None)
     assert db_errors is not None, "db_errors metric not found"
 
     # Check error counts (filter for _total samples, not _created)

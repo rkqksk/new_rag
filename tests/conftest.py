@@ -1,8 +1,11 @@
 """Pytest configuration and fixtures for enterprise backend tests"""
-import pytest
-from typing import AsyncGenerator, Dict, Any, List
-from unittest.mock import AsyncMock, MagicMock, patch
+
 import json
+from typing import Any, AsyncGenerator, Dict, List
+from unittest.mock import AsyncMock, MagicMock, patch
+
+import pytest
+
 
 # Test data fixtures
 @pytest.fixture
@@ -17,8 +20,9 @@ def sample_product():
         "material": "PET",
         "supplier": "천진코리아",
         "moq": "5000개",
-        "price": "120원"
+        "price": "120원",
     }
+
 
 @pytest.fixture
 def sample_products():
@@ -32,7 +36,7 @@ def sample_products():
             "capacity": "50ml",
             "material": "PET",
             "supplier": "천진코리아",
-            "score": 0.85
+            "score": 0.85,
         },
         {
             "id": "PROD-002",
@@ -41,7 +45,7 @@ def sample_products():
             "neck_size": "20파이",
             "material": "PP",
             "supplier": "원하고",
-            "score": 0.82
+            "score": 0.82,
         },
         {
             "id": "PROD-003",
@@ -50,9 +54,10 @@ def sample_products():
             "neck_size": "30파이",
             "material": "PP",
             "supplier": "프리몰드",
-            "score": 0.78
-        }
+            "score": 0.78,
+        },
     ]
+
 
 @pytest.fixture
 def sample_search_results():
@@ -65,8 +70,8 @@ def sample_search_results():
                 "text": "50ml PET 용기, 20파이 넥, 천진코리아",
                 "product_id": "PROD-001",
                 "category": "bottle",
-                "neck_size": "20파이"
-            }
+                "neck_size": "20파이",
+            },
         },
         {
             "id": "PROD-002",
@@ -75,20 +80,23 @@ def sample_search_results():
                 "text": "20파이 캡, PP 재질, 원하고",
                 "product_id": "PROD-002",
                 "category": "cap",
-                "neck_size": "20파이"
-            }
-        }
+                "neck_size": "20파이",
+            },
+        },
     ]
+
 
 @pytest.fixture
 def sample_query_vector():
     """Sample embedding vector"""
     return [0.1] * 384  # 384-dim vector for all-MiniLM-L6-v2
 
+
 @pytest.fixture
 def sample_session_id():
     """Sample session ID"""
     return "sess_123456789"
+
 
 @pytest.fixture
 def sample_user_profile():
@@ -101,10 +109,11 @@ def sample_user_profile():
         "preferences": {
             "categories": {"bottle": 0.6, "cap": 0.4},
             "suppliers": {"천진코리아": 0.5, "원하고": 0.3},
-            "neck_sizes": {"20파이": 0.8}
+            "neck_sizes": {"20파이": 0.8},
         },
-        "focus_type": "compatibility"
+        "focus_type": "compatibility",
     }
+
 
 # Mock repository fixtures
 @pytest.fixture
@@ -118,6 +127,7 @@ def mock_qdrant_repo():
     repo.health_check = AsyncMock(return_value=True)
     return repo
 
+
 @pytest.fixture
 def mock_redis_repo():
     """Mock Redis repository"""
@@ -130,6 +140,7 @@ def mock_redis_repo():
     repo.set_json = AsyncMock()
     repo.health_check = AsyncMock(return_value=True)
     return repo
+
 
 @pytest.fixture
 def mock_postgres_repo():
@@ -145,6 +156,7 @@ def mock_postgres_repo():
     repo.health_check = AsyncMock(return_value=True)
     return repo
 
+
 # Mock src/ module fixtures
 @pytest.fixture
 def mock_embedder():
@@ -155,6 +167,7 @@ def mock_embedder():
     embedder.encode_shape = MagicMock(return_value=[0.3] * 128)
     return embedder
 
+
 @pytest.fixture
 def mock_reranker():
     """Mock CrossEncoderReranker"""
@@ -162,12 +175,14 @@ def mock_reranker():
     reranker.rerank = MagicMock()
     return reranker
 
+
 @pytest.fixture
 def mock_router():
     """Mock QueryRouter"""
     router = MagicMock()
     router.route_query = MagicMock()
     return router
+
 
 @pytest.fixture
 def mock_personalization():
@@ -179,6 +194,7 @@ def mock_personalization():
     service.personalize_results = AsyncMock()
     return service
 
+
 # Database fixtures for integration tests
 @pytest.fixture
 async def test_db_connection():
@@ -186,6 +202,7 @@ async def test_db_connection():
     # This would create a test database connection
     # For now, we'll use mocks in unit tests
     pass
+
 
 @pytest.fixture
 def mock_settings():
@@ -202,23 +219,21 @@ def mock_settings():
     settings.database.port = 5432
     return settings
 
+
 # Test client fixture
 @pytest.fixture
 def test_client():
     """FastAPI test client"""
     from fastapi.testclient import TestClient
+
     from app.main import app
+
     return TestClient(app)
+
 
 # Async test markers
 def pytest_configure(config):
     """Configure pytest with custom markers"""
-    config.addinivalue_line(
-        "markers", "asyncio: mark test as async"
-    )
-    config.addinivalue_line(
-        "markers", "integration: mark test as integration test"
-    )
-    config.addinivalue_line(
-        "markers", "unit: mark test as unit test"
-    )
+    config.addinivalue_line("markers", "asyncio: mark test as async")
+    config.addinivalue_line("markers", "integration: mark test as integration test")
+    config.addinivalue_line("markers", "unit: mark test as unit test")

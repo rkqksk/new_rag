@@ -5,20 +5,16 @@
 
 import asyncio
 import json
-from typing import Dict, List, Optional, Any
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from src.core.conversation_state import (
-    ConversationState,
-    DialogueContext,
-    StateTransition
-)
-from src.core.filter_manager import FilterManager
-from src.core.enhanced_reference_resolver import EnhancedReferenceResolver
-from src.core.dialogue_router import DialogueRouter, IntentType, RoutingDecision
-from src.services.intent_recommender import get_intent_recommender
 from src.analytics.behavior_tracker import get_behavior_tracker
+from src.core.conversation_state import ConversationState, DialogueContext, StateTransition
+from src.core.dialogue_router import DialogueRouter, IntentType, RoutingDecision
+from src.core.enhanced_reference_resolver import EnhancedReferenceResolver
+from src.core.filter_manager import FilterManager
+from src.services.intent_recommender import get_intent_recommender
 from src.services.popularity_ranker import get_popularity_ranker
 
 
@@ -34,8 +30,7 @@ class EnhancedContextualRAG:
     """
 
     def __init__(
-        self,
-        data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
+        self, data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
     ):
         """
         Args:
@@ -62,7 +57,7 @@ class EnhancedContextualRAG:
         session_id: str,
         user_query: str,
         user_id: str = "default_user",
-        ip_address: Optional[str] = None
+        ip_address: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
         컨텍스트 기반 쿼리 처리 (영업사원 수준)
@@ -86,7 +81,9 @@ class EnhancedContextualRAG:
         # 2. 라우팅 결정
         routing = self.router.route(user_query, context, filter_manager)
 
-        print(f"[ROUTER] Intent: {routing.intent}, Action: {routing.action}, State: {routing.next_state}")
+        print(
+            f"[ROUTER] Intent: {routing.intent}, Action: {routing.action}, State: {routing.next_state}"
+        )
 
         # 3. 액션별 처리
         if routing.action == "search":
@@ -113,9 +110,7 @@ class EnhancedContextualRAG:
         # 4. 상태 전환
         try:
             StateTransition.transition(
-                context,
-                routing.next_state,
-                reason=f"{routing.intent}: {routing.action}"
+                context, routing.next_state, reason=f"{routing.intent}: {routing.action}"
             )
         except ValueError as e:
             print(f"[STATE] Invalid transition: {e}")
@@ -138,22 +133,27 @@ class EnhancedContextualRAG:
             "state": context.current_state.value,
             "confidence": routing.confidence,
             "response_time_ms": response_time_ms,
-            **result
+            **result,
         }
 
         # 9. 행동 로그 기록 (비동기)
-        asyncio.create_task(self._log_user_behavior(
-            user_id, session_id, user_query, routing, result,
-            context, response_time_ms, ip_address
-        ))
+        asyncio.create_task(
+            self._log_user_behavior(
+                user_id,
+                session_id,
+                user_query,
+                routing,
+                result,
+                context,
+                response_time_ms,
+                ip_address,
+            )
+        )
 
         return response
 
     async def _handle_search(
-        self,
-        routing: RoutingDecision,
-        context: DialogueContext,
-        filter_manager: FilterManager
+        self, routing: RoutingDecision, context: DialogueContext, filter_manager: FilterManager
     ) -> Dict:
         """새로운 검색 처리 (인기도 랭킹 통합)"""
         params = routing.parameters
@@ -167,9 +167,7 @@ class EnhancedContextualRAG:
         product_type = self.intent_recommender.detect_product_type(query)
         if product_type and products:
             products = self.intent_recommender.recommend(
-                query=query,
-                products=products,
-                limit=50  # 더 많이 가져와서 재정렬
+                query=query, products=products, limit=50  # 더 많이 가져와서 재정렬
             )
 
         # 3. 인기도 기반 재정렬 (NEW)
@@ -177,11 +175,13 @@ class EnhancedContextualRAG:
             # 검색 결과를 인기도 랭커 형식으로 변환
             search_results = []
             for i, product in enumerate(products):
-                search_results.append({
-                    'product_idx': product.get('idx'),
-                    'relevance_score': 100 - (i * 1.5),  # 검색 순위 기반 관련성 스코어
-                    'metadata': product
-                })
+                search_results.append(
+                    {
+                        "product_idx": product.get("idx"),
+                        "relevance_score": 100 - (i * 1.5),  # 검색 순위 기반 관련성 스코어
+                        "metadata": product,
+                    }
+                )
 
             # 인기도 랭킹 적용
             reranked = await self.popularity_ranker.rerank(
@@ -190,11 +190,11 @@ class EnhancedContextualRAG:
                 popularity_weight=0.3,
                 context_filters=filters,
                 boost_trending=True,
-                protect_new_products=True
+                protect_new_products=True,
             )
 
             # 재정렬된 제품 리스트로 변환
-            products = [r['metadata'] for r in reranked]
+            products = [r["metadata"] for r in reranked]
 
         # 4. 검색 결과 캐싱
         if products:
@@ -207,14 +207,11 @@ class EnhancedContextualRAG:
             "total_count": len(products),
             "filters_applied": filters,
             "product_type": product_type,
-            "ranking_applied": "popularity"  # 인기도 랭킹 적용 표시
+            "ranking_applied": "popularity",  # 인기도 랭킹 적용 표시
         }
 
     async def _handle_filter(
-        self,
-        routing: RoutingDecision,
-        context: DialogueContext,
-        filter_manager: FilterManager
+        self, routing: RoutingDecision, context: DialogueContext, filter_manager: FilterManager
     ) -> Dict:
         """누적 필터 처리 (인기도 랭킹 통합)"""
         params = routing.parameters
@@ -226,24 +223,24 @@ class EnhancedContextualRAG:
             return {
                 "products": [],
                 "response": "필터를 적용할 이전 검색 결과가 없습니다.",
-                "total_count": 0
+                "total_count": 0,
             }
 
         # 2. 누적 필터 적용
-        filtered_products = filter_manager.apply_incremental_filter(
-            new_filters, cached_results
-        )
+        filtered_products = filter_manager.apply_incremental_filter(new_filters, cached_results)
 
         # 3. 인기도 기반 재정렬 (NEW)
         if filtered_products:
             # 검색 결과를 인기도 랭커 형식으로 변환
             search_results = []
             for i, product in enumerate(filtered_products):
-                search_results.append({
-                    'product_idx': product.get('idx'),
-                    'relevance_score': 100 - (i * 1.5),  # 기존 순위 기반 관련성
-                    'metadata': product
-                })
+                search_results.append(
+                    {
+                        "product_idx": product.get("idx"),
+                        "relevance_score": 100 - (i * 1.5),  # 기존 순위 기반 관련성
+                        "metadata": product,
+                    }
+                )
 
             # 활성 필터를 컨텍스트로 사용하여 카테고리별 인기도 적용
             all_filters = filter_manager.active_filters
@@ -253,11 +250,11 @@ class EnhancedContextualRAG:
                 popularity_weight=0.4,
                 context_filters=all_filters,
                 boost_trending=True,
-                protect_new_products=True
+                protect_new_products=True,
             )
 
             # 재정렬된 제품 리스트로 변환
-            filtered_products = [r['metadata'] for r in reranked]
+            filtered_products = [r["metadata"] for r in reranked]
 
         # 4. 필터링된 결과 재캐싱
         all_filters = filter_manager.active_filters
@@ -270,14 +267,10 @@ class EnhancedContextualRAG:
             "response": f"{filter_desc} 조건으로 {len(filtered_products)}개 제품을 필터링했습니다.",
             "total_count": len(filtered_products),
             "filters_applied": all_filters,
-            "ranking_applied": "popularity_with_context"  # 컨텍스트 기반 인기도 랭킹
+            "ranking_applied": "popularity_with_context",  # 컨텍스트 기반 인기도 랭킹
         }
 
-    async def _handle_detail(
-        self,
-        routing: RoutingDecision,
-        context: DialogueContext
-    ) -> Dict:
+    async def _handle_detail(self, routing: RoutingDecision, context: DialogueContext) -> Dict:
         """상세 정보 처리"""
         product_idx = routing.parameters["product_idx"]
         product = self._load_product(product_idx)
@@ -286,7 +279,7 @@ class EnhancedContextualRAG:
             return {
                 "products": [],
                 "response": f"제품 {product_idx}를 찾을 수 없습니다.",
-                "total_count": 0
+                "total_count": 0,
             }
 
         # 상세 정보 포맷팅
@@ -301,14 +294,10 @@ class EnhancedContextualRAG:
             "products": [product],
             "response": response,
             "total_count": 1,
-            "product_detail": product
+            "product_detail": product,
         }
 
-    async def _handle_document(
-        self,
-        routing: RoutingDecision,
-        context: DialogueContext
-    ) -> Dict:
+    async def _handle_document(self, routing: RoutingDecision, context: DialogueContext) -> Dict:
         """문서 요청 처리"""
         product_idx = routing.parameters["product_idx"]
         doc_type = routing.parameters["document_type"]
@@ -318,18 +307,18 @@ class EnhancedContextualRAG:
             return {
                 "products": [],
                 "response": f"제품 {product_idx}를 찾을 수 없습니다.",
-                "total_count": 0
+                "total_count": 0,
             }
 
         # 문서 타입별 처리
         doc_type_names = {
-            'certificate_of_origin': '원산지 증명서',
-            'specification': '스펙 시트',
-            'catalog': '카탈로그',
-            'drawing': '도면'
+            "certificate_of_origin": "원산지 증명서",
+            "specification": "스펙 시트",
+            "catalog": "카탈로그",
+            "drawing": "도면",
         }
 
-        doc_name = doc_type_names.get(doc_type, '문서')
+        doc_name = doc_type_names.get(doc_type, "문서")
 
         # 실제로는 문서 파일 경로를 반환하거나 생성
         response = f"{product.get('product_name')}의 {doc_name}를 준비 중입니다."
@@ -339,13 +328,11 @@ class EnhancedContextualRAG:
             "response": response,
             "total_count": 1,
             "document_type": doc_type,
-            "document_available": False  # 실제 구현 시 문서 존재 여부 확인
+            "document_available": False,  # 실제 구현 시 문서 존재 여부 확인
         }
 
     async def _handle_compatibility(
-        self,
-        routing: RoutingDecision,
-        context: DialogueContext
+        self, routing: RoutingDecision, context: DialogueContext
     ) -> Dict:
         """호환성 확인 처리"""
         base_product_idx = routing.parameters["base_product_idx"]
@@ -356,7 +343,7 @@ class EnhancedContextualRAG:
             return {
                 "products": [],
                 "response": f"제품 {base_product_idx}를 찾을 수 없습니다.",
-                "total_count": 0
+                "total_count": 0,
             }
 
         # 호환 제품 조회
@@ -376,14 +363,10 @@ class EnhancedContextualRAG:
             "products": compatible_products,
             "response": f"{base_product.get('product_name')}와 호환되는 제품 {len(compatible_products)}개를 찾았습니다.",
             "total_count": len(compatible_products),
-            "compatibility_for": base_product_idx
+            "compatibility_for": base_product_idx,
         }
 
-    async def _handle_compare(
-        self,
-        routing: RoutingDecision,
-        context: DialogueContext
-    ) -> Dict:
+    async def _handle_compare(self, routing: RoutingDecision, context: DialogueContext) -> Dict:
         """제품 비교 처리"""
         product_indices = routing.parameters["product_indices"]
 
@@ -397,29 +380,22 @@ class EnhancedContextualRAG:
             return {
                 "products": products,
                 "response": "비교하려면 최소 2개 제품이 필요합니다.",
-                "total_count": len(products)
+                "total_count": len(products),
             }
 
         return {
             "products": products,
             "response": f"{len(products)}개 제품을 비교합니다.",
             "total_count": len(products),
-            "comparison_mode": True
+            "comparison_mode": True,
         }
 
     def _handle_greeting(self, routing: RoutingDecision) -> Dict:
         """인사 처리"""
-        return {
-            "products": [],
-            "response": "안녕하세요! 무엇을 도와드릴까요?",
-            "total_count": 0
-        }
+        return {"products": [], "response": "안녕하세요! 무엇을 도와드릴까요?", "total_count": 0}
 
     def _handle_reset(
-        self,
-        session_id: str,
-        context: DialogueContext,
-        filter_manager: FilterManager
+        self, session_id: str, context: DialogueContext, filter_manager: FilterManager
     ) -> Dict:
         """대화 초기화 처리"""
         # 필터 초기화
@@ -437,28 +413,21 @@ class EnhancedContextualRAG:
         return {
             "products": [],
             "response": "대화를 초기화했습니다. 무엇을 도와드릴까요?",
-            "total_count": 0
+            "total_count": 0,
         }
 
     def _handle_clarification(self, routing: RoutingDecision) -> Dict:
         """명확화 요청 처리"""
-        clarification_msg = routing.parameters.get(
-            "clarification_message",
-            "무엇을 도와드릴까요?"
-        )
+        clarification_msg = routing.parameters.get("clarification_message", "무엇을 도와드릴까요?")
 
         return {
             "products": [],
             "response": clarification_msg,
             "total_count": 0,
-            "requires_clarification": True
+            "requires_clarification": True,
         }
 
-    def _search_products(
-        self,
-        query: str,
-        filters: Dict
-    ) -> List[Dict]:
+    def _search_products(self, query: str, filters: Dict) -> List[Dict]:
         """제품 검색 (간단한 파일 기반 구현)"""
         products = []
 
@@ -534,7 +503,8 @@ class EnhancedContextualRAG:
             capacity_str = specs.get("capacity", "")
             if capacity_str:
                 import re
-                match = re.search(r'(\d+)', capacity_str)
+
+                match = re.search(r"(\d+)", capacity_str)
                 if match:
                     capacity = float(match.group(1))
                     target = filters["capacity"]
@@ -561,11 +531,7 @@ class EnhancedContextualRAG:
         return True
 
     def _update_context(
-        self,
-        context: DialogueContext,
-        query: str,
-        routing: RoutingDecision,
-        result: Dict
+        self, context: DialogueContext, query: str, routing: RoutingDecision, result: Dict
     ):
         """컨텍스트 업데이트"""
         # 쿼리 업데이트
@@ -578,9 +544,7 @@ class EnhancedContextualRAG:
             context.last_search_results = product_idxs
 
             # 표시 인덱스 생성 (1번, 2번, 3번...)
-            context.display_indices = {
-                i + 1: idx for i, idx in enumerate(product_idxs[:10])
-            }
+            context.display_indices = {i + 1: idx for i, idx in enumerate(product_idxs[:10])}
 
             # 포커스 제품 업데이트
             if routing.action == "show_detail" and product_idxs:
@@ -588,20 +552,18 @@ class EnhancedContextualRAG:
                 context.focused_product_name = products[0].get("product_name")
 
         # 대화 히스토리 추가
-        context.conversation_history.append({
-            "timestamp": datetime.now().isoformat(),
-            "query": query,
-            "intent": routing.intent.value,
-            "action": routing.action,
-            "state": context.current_state.value,
-            "product_count": len(products)
-        })
+        context.conversation_history.append(
+            {
+                "timestamp": datetime.now().isoformat(),
+                "query": query,
+                "intent": routing.intent.value,
+                "action": routing.action,
+                "state": context.current_state.value,
+                "product_count": len(products),
+            }
+        )
 
-    def _get_or_create_context(
-        self,
-        session_id: str,
-        user_id: str
-    ) -> DialogueContext:
+    def _get_or_create_context(self, session_id: str, user_id: str) -> DialogueContext:
         """세션 컨텍스트 로드 또는 생성"""
         if session_id in self.sessions:
             return self.sessions[session_id]
@@ -613,16 +575,13 @@ class EnhancedContextualRAG:
             user_id=user_id,
             created_at=now,
             last_activity=now,
-            current_state=ConversationState.GREETING
+            current_state=ConversationState.GREETING,
         )
 
         self.sessions[session_id] = context
         return context
 
-    def _get_or_create_filter_manager(
-        self,
-        session_id: str
-    ) -> FilterManager:
+    def _get_or_create_filter_manager(self, session_id: str) -> FilterManager:
         """필터 매니저 로드 또는 생성"""
         if session_id in self.filter_managers:
             return self.filter_managers[session_id]
@@ -649,7 +608,7 @@ class EnhancedContextualRAG:
     def _load_product_from_file(self, file_path: Path) -> Optional[Dict]:
         """파일에서 제품 로드"""
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 product = json.load(f)
 
             # images 배열에 downloaded_images의 local_path 추가
@@ -683,7 +642,7 @@ class EnhancedContextualRAG:
         result: Dict,
         context: DialogueContext,
         response_time_ms: int,
-        ip_address: Optional[str]
+        ip_address: Optional[str],
     ):
         """
         사용자 행동 로그 기록
@@ -709,7 +668,7 @@ class EnhancedContextualRAG:
                 product_count=len(products_shown),
                 action_taken=routing.action,
                 response_time_ms=response_time_ms,
-                ip_address=ip_address
+                ip_address=ip_address,
             )
 
             # 2. 검색 로그 (search, filter 액션만)
@@ -728,7 +687,7 @@ class EnhancedContextualRAG:
                     intent=routing.intent.value,
                     product_type=filters.get("product_type"),
                     response_time_ms=response_time_ms,
-                    ip_address=ip_address
+                    ip_address=ip_address,
                 )
 
         except Exception as e:

@@ -4,9 +4,9 @@ Upload multi-modal embeddings (text/image/shape) to Qdrant with named vectors
 """
 
 import logging
-from typing import Optional, List, Dict, Any, Union
-from uuid import uuid4
 from datetime import datetime
+from typing import Any, Dict, List, Optional, Union
+from uuid import uuid4
 
 from qdrant_client import QdrantClient
 from qdrant_client.models import PointStruct, UpdateStatus
@@ -44,11 +44,7 @@ class MultiModalQdrantUploader:
         >>> uploader.upload_batch(products)
     """
 
-    def __init__(
-        self,
-        qdrant_client: QdrantClient,
-        collection_name: str = "products_multimodal"
-    ):
+    def __init__(self, qdrant_client: QdrantClient, collection_name: str = "products_multimodal"):
         """
         Initialize uploader
 
@@ -94,7 +90,7 @@ class MultiModalQdrantUploader:
         text_embedding: Optional[List[float]] = None,
         image_embedding: Optional[List[float]] = None,
         shape_embedding: Optional[List[float]] = None,
-        payload: Optional[Dict[str, Any]] = None
+        payload: Optional[Dict[str, Any]] = None,
     ) -> bool:
         """
         Upload single product with multi-modal embeddings
@@ -156,18 +152,11 @@ class MultiModalQdrantUploader:
         payload["vector_types"] = list(vectors.keys())
 
         # Create point
-        point = PointStruct(
-            id=product_id,
-            vector=vectors,
-            payload=payload
-        )
+        point = PointStruct(id=product_id, vector=vectors, payload=payload)
 
         # Upload
         try:
-            result = self.client.upsert(
-                collection_name=self.collection_name,
-                points=[point]
-            )
+            result = self.client.upsert(collection_name=self.collection_name, points=[point])
 
             if result.status == UpdateStatus.COMPLETED:
                 logger.debug(f"✅ Uploaded product: {product_id} ({list(vectors.keys())})")
@@ -181,10 +170,7 @@ class MultiModalQdrantUploader:
             raise
 
     def upload_batch(
-        self,
-        products: List[Dict[str, Any]],
-        batch_size: int = 100,
-        show_progress: bool = True
+        self, products: List[Dict[str, Any]], batch_size: int = 100, show_progress: bool = True
     ) -> Dict[str, int]:
         """
         Batch upload multiple products
@@ -217,7 +203,7 @@ class MultiModalQdrantUploader:
         logger.info(f"📦 Batch uploading {total} products (batch_size={batch_size})")
 
         for i in range(0, total, batch_size):
-            batch = products[i:i+batch_size]
+            batch = products[i : i + batch_size]
             points = []
 
             # Build points for this batch
@@ -251,20 +237,13 @@ class MultiModalQdrantUploader:
                 payload["vector_types"] = list(vectors.keys())
 
                 # Create point
-                point = PointStruct(
-                    id=product_id,
-                    vector=vectors,
-                    payload=payload
-                )
+                point = PointStruct(id=product_id, vector=vectors, payload=payload)
                 points.append(point)
 
             # Upload batch
             if points:
                 try:
-                    result = self.client.upsert(
-                        collection_name=self.collection_name,
-                        points=points
-                    )
+                    result = self.client.upsert(collection_name=self.collection_name, points=points)
 
                     if result.status == UpdateStatus.COMPLETED:
                         success_count += len(points)
@@ -278,11 +257,7 @@ class MultiModalQdrantUploader:
                     failed_count += len(points)
                     logger.error(f"  ❌ Batch {i//batch_size + 1} error: {e}")
 
-        stats = {
-            "success": success_count,
-            "failed": failed_count,
-            "total": total
-        }
+        stats = {"success": success_count, "failed": failed_count, "total": total}
 
         logger.info(f"\n📊 Upload Summary:")
         logger.info(f"  ✅ Success: {stats['success']}")
@@ -306,16 +281,12 @@ class MultiModalQdrantUploader:
                 collection_name=self.collection_name,
                 ids=[product_id],
                 with_vectors=True,
-                with_payload=True
+                with_payload=True,
             )
 
             if result:
                 point = result[0]
-                return {
-                    "id": point.id,
-                    "vectors": point.vector,
-                    "payload": point.payload
-                }
+                return {"id": point.id, "vectors": point.vector, "payload": point.payload}
             else:
                 return None
 
@@ -335,8 +306,7 @@ class MultiModalQdrantUploader:
         """
         try:
             result = self.client.delete(
-                collection_name=self.collection_name,
-                points_selector=[product_id]
+                collection_name=self.collection_name, points_selector=[product_id]
             )
 
             logger.debug(f"🗑️ Deleted product: {product_id}")
@@ -363,7 +333,7 @@ class MultiModalQdrantUploader:
                     name: {"size": params.size, "distance": params.distance}
                     for name, params in collection_info.config.params.vectors.items()
                 },
-                "status": collection_info.status
+                "status": collection_info.status,
             }
 
         except Exception as e:

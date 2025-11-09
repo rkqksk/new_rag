@@ -1,668 +1,501 @@
-# RAG Enterprise - Production Deployment Guide
+# RAG Enterprise - Complete Deployment Guide
 
-**Version**: 1.0  
-**Last Updated**: 2025-11-06  
-**Status**: Production-Ready
-
----
-
-## 📋 Table of Contents
-
-1. [Prerequisites](#prerequisites)
-2. [Quick Start](#quick-start)
-3. [Environment Configuration](#environment-configuration)
-4. [Docker Deployment](#docker-deployment)
-5. [Testing Deployment](#testing-deployment)
-6. [Production Deployment](#production-deployment)
-7. [Monitoring & Maintenance](#monitoring--maintenance)
-8. [Troubleshooting](#troubleshooting)
+**Version**: 1.0.0
+**Last Updated**: 2025-11-07
 
 ---
 
-## Prerequisites
+## 🎯 Deployment Options
 
-### System Requirements
-
-**Minimum** (Development):
-- CPU: 4 cores
-- RAM: 8GB
-- Disk: 20GB
-- OS: Linux (Ubuntu 20.04+), macOS, Windows (WSL2)
-
-**Recommended** (Production):
-- CPU: 8+ cores
-- RAM: 16GB+
-- Disk: 50GB+ SSD
-- GPU: NVIDIA GPU with CUDA (optional, for OCR acceleration)
-
-### Software Requirements
-
-```bash
-# Docker & Docker Compose
-docker --version  # >= 20.10
-docker-compose --version  # >= 2.0
-
-# Python (for local development)
-python --version  # >= 3.11
-
-# PostgreSQL Client (for migrations)
-psql --version  # >= 15
-
-# Redis CLI (for cache management)
-redis-cli --version  # >= 7.0
-```
-
-### Installation
-
-**Ubuntu/Debian**:
-```bash
-# Docker
-curl -fsSL https://get.docker.com | sh
-sudo usermod -aG docker $USER
-
-# Docker Compose
-sudo apt-get install docker-compose-plugin
-
-# PostgreSQL Client
-sudo apt-get install postgresql-client
-
-# Redis CLI
-sudo apt-get install redis-tools
-```
-
-**macOS**:
-```bash
-# Docker Desktop
-brew install --cask docker
-
-# PostgreSQL Client
-brew install postgresql@15
-
-# Redis CLI
-brew install redis
-```
+### 1️⃣ **Local Development** (localhost)
+### 2️⃣ **Self-Hosted Production** (Docker + Kubernetes)
+### 3️⃣ **Serverless Edge** (Cloudflare Workers + Pages)
+### 4️⃣ **Hybrid** (Edge + Origin)
 
 ---
 
-## Quick Start
+## 1️⃣ Local Development
 
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/your-org/rag-enterprise.git
-cd rag-enterprise
-```
-
-### 2. Configure Environment
+### Quick Start (5 minutes)
 
 ```bash
-# Copy environment template
-cp .env.example .env
+# One command start
+./scripts/start-nexa.sh development
 
-# Edit configuration
-nano .env  # or vim, code, etc.
+# Access services
+# - API: http://localhost:8001
+# - Frontend: http://localhost:3000
+# - Admin: http://localhost:3000/admin
 ```
 
-**Minimal `.env` for development**:
-```bash
-ENVIRONMENT=development
-DEBUG_ENABLED=true
-
-DB_HOST=postgres
-DB_PASSWORD=your_secure_password
-
-REDIS_HOST=redis
-
-QDRANT_HOST=qdrant
-```
-
-### 3. Start Services
+### Manual Setup
 
 ```bash
-# Option A: Quick start (automated)
-./deploy.sh development
+# 1. Install NexaAI CLI
+curl -fsSL https://github.com/NexaAI/nexa-sdk/releases/latest/download/nexa-cli_linux_x86_64.sh -o install.sh
+chmod +x install.sh && ./install.sh
 
-# Option B: Manual start
-docker-compose up -d
+# 2. Pull models
+nexa pull NexaAI/Qwen3-1.7B-GGUF
+nexa pull NexaAI/Qwen3-VL-4B-Instruct-GGUF
+nexa pull NexaAI/EmbeddingGemma-GGUF
+
+# 3. Start NexaAI server
+nexa serve --host 0.0.0.0:8080 &
+
+# 4. Configure environment
+cp .env.nexa.example .env.nexa
+
+# 5. Start Docker services
+docker-compose -f docker-compose.yml -f docker-compose.nexa.yml up -d
+
+# 6. Start frontend
+cd frontend-next
+npm install && npm run dev
 ```
 
-### 4. Verify Deployment
+### Test
 
 ```bash
-#Run test suite
-./test_system.sh
-```
+# Run comprehensive tests
+./scripts/test-all.sh
 
-**Expected Output**:
-```
-✓ Qdrant is running
-✓ Redis is running
-✓ PostgreSQL is running
-✓ Backend is running
-✓ All tests passed!
-```
-
-### 5. Access Services
-
-```
-Frontend:  http://localhost:8080
-API:       http://localhost:8001
-API Docs:  http://localhost:8001/api/v1/docs
-Qdrant UI: http://localhost:6333/dashboard
-```
-
----
-
-## Environment Configuration
-
-### Development Environment
-
-**`.env` for development**:
-```bash
-# Application
-ENVIRONMENT=development
-DEBUG_ENABLED=true
-
-# Debug Configuration
-DEBUG_LOG_REQUESTS=true
-DEBUG_LOG_RESPONSES=true
-DEBUG_LOG_SQL=true
-DEBUG_PROFILE_REQUESTS=true
-DEBUG_SLOW_REQUEST_MS=300
-
-# Database
-DB_HOST=postgres
-DB_PORT=5432
-DB_NAME=rag_enterprise
-DB_USER=postgres
-DB_PASSWORD=dev_password_change_me
-DB_POOL_SIZE=20
-
-# Redis
-REDIS_HOST=redis
-REDIS_PORT=6379
-REDIS_DB=0
-
-# Qdrant
-QDRANT_HOST=qdrant
-QDRANT_PORT=6333
-QDRANT_PRODUCTS_COLLECTION=products_multimodal
-```
-
-### Staging Environment
-
-**`.env` for staging**:
-```bash
-# Application
-ENVIRONMENT=staging
-DEBUG_ENABLED=true  # Enable for troubleshooting
-
-# Debug Configuration (moderate)
-DEBUG_LOG_REQUESTS=true
-DEBUG_LOG_RESPONSES=false  # Too verbose
-DEBUG_LOG_SQL=true
-DEBUG_PROFILE_REQUESTS=true
-DEBUG_SLOW_REQUEST_MS=500
-
-# Database (use staging database)
-DB_HOST=staging-db.your-company.com
-DB_PORT=5432
-DB_NAME=rag_enterprise_staging
-DB_USER=rag_staging_user
-DB_PASSWORD=<from_secrets_manager>
-DB_POOL_SIZE=20
-
-# Redis (use staging Redis)
-REDIS_HOST=staging-redis.your-company.com
-REDIS_PORT=6379
-
-# Qdrant (use staging Qdrant)
-QDRANT_HOST=staging-qdrant.your-company.com
-QDRANT_PORT=6333
-```
-
-### Production Environment
-
-**`.env` for production**:
-```bash
-# Application
-ENVIRONMENT=production
-DEBUG_ENABLED=false  # ⚠️ MUST be false in production
-
-# Database (use production database)
-DB_HOST=prod-db.your-company.com
-DB_PORT=5432
-DB_NAME=rag_enterprise
-DB_USER=rag_prod_user
-DB_PASSWORD=<from_secrets_manager>
-DB_POOL_SIZE=50  # Increase for production
-
-# Redis (use production Redis cluster)
-REDIS_HOST=prod-redis.your-company.com
-REDIS_PORT=6379
-REDIS_PASSWORD=<from_secrets_manager>
-
-# Qdrant (use production Qdrant cluster)
-QDRANT_HOST=prod-qdrant.your-company.com
-QDRANT_PORT=6333
-```
-
----
-
-## Docker Deployment
-
-### Development Deployment
-
-```bash
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-
-# Stop and remove volumes (⚠️ deletes data)
-docker-compose down -v
-```
-
-### Production Docker Compose
-
-Create `docker-compose.prod.yml`:
-
-```yaml
-version: '3.8'
-
-services:
-  postgres:
-    image: postgres:15-alpine
-    environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '2'
-          memory: 4G
-
-  redis:
-    image: redis:7-alpine
-    command: redis-server --requirepass ${REDIS_PASSWORD}
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 2G
-
-  qdrant:
-    image: qdrant/qdrant:v1.7.0
-    ports:
-      - "6333:6333"
-      - "6334:6334"
-    volumes:
-      - qdrant_data:/qdrant/storage
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '4'
-          memory: 8G
-
-  api:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "8001:8001"
-    environment:
-      DB_HOST: ${DB_HOST}
-      DB_NAME: ${DB_NAME}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      REDIS_HOST: ${REDIS_HOST}
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
-      QDRANT_HOST: ${QDRANT_HOST}
-      ENVIRONMENT: production
-      DEBUG_ENABLED: false
-    depends_on:
-      - postgres
-      - redis
-      - qdrant
-    restart: unless-stopped
-    deploy:
-      replicas: 2  # Run 2 instances for HA
-      resources:
-        limits:
-          cpus: '4'
-          memory: 8G
-
-volumes:
-  postgres_data:
-  redis_data:
-  qdrant_data:
-```
-
-**Deploy production**:
-```bash
-docker-compose -f docker-compose.prod.yml up -d
-```
-
----
-
-## Testing Deployment
-
-### Automated Testing
-
-```bash
-# Full test suite
-./test_system.sh
-
-# API tests only
-curl http://localhost:8001/health/live
-curl http://localhost:8001/api/v1/search/ -X POST \
+# Test specific endpoint
+curl -X POST http://localhost:8001/api/v1/search/ \
   -H "Content-Type: application/json" \
-  -d '{"query": "50ml PET 용기", "top_k": 10}'
-
-# Python test suite
-pytest tests/ -v
+  -d '{"query":"50ml PET 용기","top_k":5}'
 ```
-
-### Manual Testing Checklist
-
-- [ ] Health checks pass (`/health/live`, `/health/ready`)
-- [ ] API documentation accessible (`/api/v1/docs`)
-- [ ] Search endpoint works
-- [ ] Personalization tracking works
-- [ ] Analytics endpoints work
-- [ ] Debug endpoints work (if enabled)
-- [ ] OCR pipeline processes files
-- [ ] Frontend connects to backend
-- [ ] Database connections stable
-- [ ] Redis caching works
-- [ ] Qdrant vector search works
 
 ---
 
-## Production Deployment
+## 2️⃣ Self-Hosted Production
 
-### Cloud Deployment Options
+### Option A: Docker Compose
 
-#### AWS Deployment
-
-**Architecture**:
-```
-ELB (Load Balancer)
-  ├─ ECS/Fargate (API containers)
-  ├─ RDS PostgreSQL
-  ├─ ElastiCache Redis
-  └─ EC2 (Qdrant on dedicated instance)
-```
-
-**Steps**:
-1. Create VPC and subnets
-2. Deploy RDS PostgreSQL
-3. Deploy ElastiCache Redis
-4. Deploy Qdrant on EC2 (with EBS volume)
-5. Create ECS cluster
-6. Deploy API containers via ECS/Fargate
-7. Configure ALB (Application Load Balancer)
-8. Set up Route53 for DNS
-
-#### Google Cloud Deployment
-
-**Architecture**:
-```
-Cloud Load Balancer
-  ├─ GKE (Kubernetes cluster)
-  ├─ Cloud SQL (PostgreSQL)
-  ├─ Memorystore (Redis)
-  └─ GCE (Qdrant on VM)
-```
-
-#### On-Premises Deployment
-
-**Architecture**:
-```
-Nginx/HAProxy (Load Balancer)
-  ├─ Docker Swarm / Kubernetes
-  ├─ PostgreSQL (Primary + Replica)
-  ├─ Redis (Cluster mode)
-  └─ Qdrant (Cluster mode)
-```
-
-### Kubernetes Deployment
-
-Create `k8s/deployment.yaml`:
-
-```yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: rag-enterprise-api
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: rag-api
-  template:
-    metadata:
-      labels:
-        app: rag-api
-    spec:
-      containers:
-      - name: api
-        image: your-registry/rag-enterprise:latest
-        ports:
-        - containerPort: 8001
-        env:
-        - name: DB_HOST
-          valueFrom:
-            configMapKeyRef:
-              name: rag-config
-              key: db_host
-        - name: DB_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: rag-secrets
-              key: db_password
-        resources:
-          requests:
-            memory: "2Gi"
-            cpu: "1"
-          limits:
-            memory: "4Gi"
-            cpu: "2"
-```
-
-**Deploy**:
 ```bash
-kubectl apply -f k8s/
+# Production deployment
+./scripts/start-nexa.sh production
+
+# Services will run on:
+# - API: http://your-domain.com:8001
+# - NexaAI: http://your-domain.com:8080
+# - Qdrant: http://your-domain.com:6333
+```
+
+### Option B: Kubernetes
+
+#### Prerequisites
+
+- Kubernetes cluster (1.24+)
+- kubectl configured
+- Helm 3+
+
+#### Deploy
+
+```bash
+# 1. Create namespace
+kubectl create namespace rag-enterprise
+
+# 2. Create secrets
+kubectl create secret generic rag-secrets \
+  --from-literal=postgres-password=your-password \
+  --namespace=rag-enterprise
+
+# 3. Deploy services
+kubectl apply -f k8s/ --namespace=rag-enterprise
+
+# 4. Check status
+kubectl get pods -n rag-enterprise
+
+# Expected output:
+# NAME                        READY   STATUS    RESTARTS   AGE
+# rag-api-xxxxx              1/1     Running   0          2m
+# rag-qdrant-xxxxx           1/1     Running   0          2m
+# rag-redis-xxxxx            1/1     Running   0          2m
+# rag-postgres-xxxxx         1/1     Running   0          2m
+```
+
+#### Scale
+
+```bash
+# Horizontal scaling
+kubectl scale deployment rag-api --replicas=5 -n rag-enterprise
+
+# Auto-scaling
+kubectl autoscale deployment rag-api \
+  --min=3 --max=10 \
+  --cpu-percent=70 \
+  -n rag-enterprise
 ```
 
 ---
 
-## Monitoring & Maintenance
+## 3️⃣ Serverless Edge (Cloudflare)
 
-### Health Monitoring
+### Setup Cloudflare Workers
 
-**Endpoint**: `GET /health/ready`
+#### 1. Create Vectorize Index
 
-**Response**:
-```json
-{
-  "status": "ready",
-  "debug_enabled": false,
-  "components": {
-    "database": "healthy",
-    "redis": "healthy",
-    "qdrant": "healthy"
+```bash
+npx wrangler vectorize create rag-products \
+  --dimensions=384 \
+  --metric=cosine
+```
+
+#### 2. Create D1 Database
+
+```bash
+# Create database
+npx wrangler d1 create rag-metadata
+
+# Execute schema
+npx wrangler d1 execute rag-metadata \
+  --file=./workers/schema.sql
+```
+
+#### 3. Create KV Namespace
+
+```bash
+npx wrangler kv:namespace create "rag-cache"
+```
+
+#### 4. Update wrangler.toml
+
+```toml
+# workers/api/wrangler.toml
+
+account_id = "YOUR_ACCOUNT_ID"
+
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "rag-products"
+
+[[d1_databases]]
+binding = "DB"
+database_id = "YOUR_D1_ID"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "YOUR_KV_ID"
+```
+
+#### 5. Deploy Workers API
+
+```bash
+cd workers/api
+npm install
+npx wrangler deploy
+```
+
+### Setup Cloudflare Pages
+
+#### 1. Build Frontend
+
+```bash
+cd frontend-next
+npm install
+npm run build
+```
+
+#### 2. Deploy to Pages
+
+```bash
+npx wrangler pages deploy ./out \
+  --project-name=rag-enterprise
+```
+
+### Configure Custom Domain
+
+```bash
+# Add custom domain
+npx wrangler pages domain add api.your-domain.com
+
+# DNS will be configured automatically
+```
+
+---
+
+## 4️⃣ Hybrid Deployment
+
+### Edge + Origin Architecture
+
+```
+User Request
+    ↓
+Cloudflare Workers (Edge - Fast queries)
+    ├─→ Workers AI (Simple queries, < 0.3 complexity)
+    └─→ Origin Server (Complex queries, > 0.3 complexity)
+        ├─→ NexaAI (Medium, 0.3-0.7)
+        └─→ Ollama (Complex, > 0.7)
+```
+
+### Configuration
+
+```typescript
+// workers/api/src/hybrid.ts
+
+export async function route(request: Request, env: Env) {
+  const { query } = await request.json()
+
+  // Analyze complexity
+  const complexity = analyzeComplexity(query)
+
+  if (complexity < 0.3) {
+    // Handle at edge with Workers AI
+    return await handleEdge(query, env)
+  } else {
+    // Forward to origin
+    return await fetch('https://origin.your-domain.com/api/v1/search/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query })
+    })
   }
 }
 ```
 
-### Performance Metrics
+---
 
-**Prometheus metrics** exposed at `/metrics`:
-- `http_requests_total` - Total HTTP requests
-- `http_request_duration_seconds` - Request duration
-- `cache_hits_total` - Cache hit count
-- `cache_misses_total` - Cache miss count
-- `vector_search_duration_seconds` - Vector search time
+## 🔧 Configuration
 
-### Log Monitoring
+### Environment Variables
 
-**Structured JSON logs**:
-```json
+```bash
+# .env.production
+
+# NexaAI
+NEXA_ENABLED=true
+NEXA_BASE_URL=http://nexa-server:8080/v1
+
+# Ollama
+OLLAMA_BASE_URL=http://ollama-server:11434
+
+# Qdrant
+QDRANT_HOST=qdrant-server
+QDRANT_PORT=6333
+
+# Redis
+REDIS_HOST=redis-server
+REDIS_PORT=6379
+
+# PostgreSQL
+POSTGRES_HOST=postgres-server
+POSTGRES_PORT=5432
+POSTGRES_DB=rag
+POSTGRES_USER=rag
+POSTGRES_PASSWORD=<from-secret>
+
+# API
+API_HOST=0.0.0.0
+API_PORT=8001
+
+# Router
+MODEL_ROUTER_SIMPLE_THRESHOLD=0.3
+MODEL_ROUTER_COMPLEX_THRESHOLD=0.7
+```
+
+---
+
+## 📊 Monitoring
+
+### Prometheus Metrics
+
+```yaml
+# prometheus.yml
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'rag-api'
+    static_configs:
+      - targets: ['rag-api:8001']
+
+  - job_name: 'qdrant'
+    static_configs:
+      - targets: ['qdrant:6333']
+```
+
+### Grafana Dashboards
+
+```bash
+# Import dashboard
+curl -X POST http://grafana:3000/api/dashboards/db \
+  -H "Content-Type: application/json" \
+  -d @monitoring/grafana-dashboard.json
+```
+
+### Key Metrics
+
+- **Response Time**: p50, p95, p99
+- **Request Rate**: requests/second
+- **Error Rate**: errors/total requests
+- **Model Usage**: NexaAI vs Ollama distribution
+- **Cache Hit Rate**: Redis cache performance
+
+---
+
+## 🔒 Security
+
+### SSL/TLS
+
+```bash
+# Let's Encrypt (certbot)
+sudo certbot --nginx -d api.your-domain.com
+
+# Or use Cloudflare SSL (automatic)
+```
+
+### API Keys
+
+```bash
+# Generate API key
+openssl rand -hex 32
+
+# Add to environment
+export API_KEY=your-generated-key
+
+# Use in requests
+curl -H "Authorization: Bearer $API_KEY" \
+  http://api.your-domain.com/api/v1/search/
+```
+
+---
+
+## 🚀 CI/CD
+
+### GitHub Actions
+
+```yaml
+# .github/workflows/deploy.yml
+
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy Workers
+        run: |
+          cd workers/api
+          npx wrangler deploy
+
+      - name: Deploy Pages
+        run: |
+          cd frontend-next
+          npm run build
+          npx wrangler pages deploy ./out
+
+      - name: Deploy Kubernetes
+        run: |
+          kubectl apply -f k8s/
+```
+
+---
+
+## 📈 Performance Optimization
+
+### Caching Strategy
+
+```python
+# Multi-level caching
+L1: Redis (hot data, < 1s TTL)
+L2: Cloudflare KV (warm data, 1h TTL)
+L3: Origin database (cold data)
+```
+
+### CDN Configuration
+
+```javascript
+// Cloudflare cache rules
 {
-  "timestamp": "2025-11-06T12:34:56Z",
-  "level": "INFO",
-  "correlation_id": "550e8400-e29b-41d4-a716-446655440000",
-  "request_path": "POST /api/v1/search/",
-  "duration_ms": 145.32,
-  "message": "Request completed"
+  "cache": {
+    "/api/v1/search/*": {
+      "edge_ttl": 300,  // 5 minutes
+      "browser_ttl": 60
+    }
+  }
 }
 ```
 
-**Aggregate logs**:
-```bash
-# View all logs
-docker-compose logs -f
-
-# View API logs only
-docker-compose logs -f api
-
-# Search for errors
-docker-compose logs api | grep ERROR
-
-# Follow slow requests
-docker-compose logs api | grep "SLOW REQUEST"
-```
-
-### Database Maintenance
-
-**Backups**:
-```bash
-# Backup PostgreSQL
-docker-compose exec postgres pg_dump -U postgres rag_enterprise > backup.sql
-
-# Restore
-docker-compose exec -T postgres psql -U postgres rag_enterprise < backup.sql
-
-# Backup Qdrant
-curl -X POST http://localhost:6333/collections/products_multimodal/snapshots
-
-# Backup Redis
-docker-compose exec redis redis-cli SAVE
-```
-
 ---
 
-## Troubleshooting
+## 🆘 Troubleshooting
 
 ### Common Issues
 
-**Problem**: Services won't start
+#### 1. NexaAI not responding
 
-**Solution**:
 ```bash
-# Check Docker daemon
-systemctl status docker
+# Check process
+ps aux | grep nexa
 
 # Check logs
-docker-compose logs
+tail -f logs/nexa-server.log
 
-# Restart services
-docker-compose restart
+# Restart
+pkill nexa
+nexa serve --host 0.0.0.0:8080
 ```
 
-**Problem**: Connection refused errors
+#### 2. Qdrant connection failed
 
-**Solution**:
 ```bash
-# Verify services are running
-docker-compose ps
+# Check Docker container
+docker ps | grep qdrant
 
-# Check ports
-netstat -tulpn | grep -E '(6333|6379|5432|8001)'
+# Check logs
+docker logs rag-qdrant
 
-# Check firewall
-sudo ufw status
+# Restart
+docker restart rag-qdrant
 ```
 
-**Problem**: Slow API responses
+#### 3. High latency
 
-**Solution**:
 ```bash
-# Enable debug mode
-DEBUG_ENABLED=true
-DEBUG_PROFILE_REQUESTS=true
+# Check routing stats
+curl http://localhost:8001/api/v1/admin/stats
 
-# Check performance summary
-curl http://localhost:8001/api/v1/debug/performance/summary
-
-# Check slow queries
-curl http://localhost:8001/api/v1/debug/queries/recent?slow_only=true
-```
-
-**Problem**: Out of memory
-
-**Solution**:
-```bash
-# Check memory usage
-docker stats
-
-# Increase Docker memory limit
-# Edit Docker Desktop settings or /etc/docker/daemon.json
-
-# Reduce pool sizes in .env
-DB_POOL_SIZE=10
-REDIS_MAX_CONNECTIONS=20
+# Adjust thresholds
+curl -X POST http://localhost:8001/api/v1/admin/router/config \
+  -d '{"simple_threshold":0.5}'
 ```
 
 ---
 
-## Security Checklist
+## 📝 Deployment Checklist
 
-Production deployment security:
+### Pre-Deployment
 
-- [ ] Change all default passwords
-- [ ] Use secrets manager (AWS Secrets Manager, HashiCorp Vault)
-- [ ] Enable HTTPS (TLS/SSL certificates)
-- [ ] Configure firewall rules
-- [ ] Enable rate limiting
-- [ ] Disable debug mode (`DEBUG_ENABLED=false`)
-- [ ] Review CORS settings
-- [ ] Enable authentication/authorization
-- [ ] Regular security updates
-- [ ] Monitor access logs
-- [ ] Set up intrusion detection
+- [ ] All tests passing (`./scripts/test-all.sh`)
+- [ ] Environment variables configured
+- [ ] Secrets created (API keys, passwords)
+- [ ] SSL certificates ready
+- [ ] Monitoring configured
 
----
+### Deployment
 
-## Support
+- [ ] Build Docker images
+- [ ] Push to registry
+- [ ] Deploy to target environment
+- [ ] Run health checks
+- [ ] Verify routing logic
 
-**Documentation**:
-- [API Documentation](./API_DOCUMENTATION.md)
-- [Debug System](./DEBUG_SYSTEM.md)
-- [OCR Strategy](./OCR_PARSING_STRATEGY.md)
-- [Roadmap](./ROADMAP.md)
+### Post-Deployment
 
-**Issues**: Report at GitHub Issues
+- [ ] Monitor logs for errors
+- [ ] Check performance metrics
+- [ ] Test all endpoints
+- [ ] Verify auto-scaling
+- [ ] Update documentation
 
 ---
 
-**Last Updated**: 2025-11-06  
-**Version**: 1.0  
-**Status**: Production-Ready ✅
+**Deployment Guide** | **Version 1.0** | **Updated: 2025-11-07**

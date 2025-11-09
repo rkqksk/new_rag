@@ -10,14 +10,14 @@ Excel/CSV 파일을 처리하여 RAG 시스템에 통합
 - Qdrant 자동 업로드
 """
 
-from pathlib import Path
-from typing import List, Dict, Any, Optional
 import logging
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
-from src.core.structured_processors.excel_parser import ExcelParser
-from src.core.structured_processors.csv_parser import CSVParser
-from src.core.enhanced_field_extractor import EnhancedFieldExtractor
 from src.core.advanced_chunk_generator import AdvancedChunkGenerator
+from src.core.enhanced_field_extractor import EnhancedFieldExtractor
+from src.core.structured_processors.csv_parser import CSVParser
+from src.core.structured_processors.excel_parser import ExcelParser
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +31,7 @@ class FileProcessor:
         self.field_extractor = EnhancedFieldExtractor()
         self.chunk_generator = AdvancedChunkGenerator()
 
-    def process_file(
-        self,
-        file_path: str,
-        upload_to_qdrant: bool = False
-    ) -> Dict[str, Any]:
+    def process_file(self, file_path: str, upload_to_qdrant: bool = False) -> Dict[str, Any]:
         """
         파일 처리 (전체 파이프라인)
 
@@ -64,9 +60,9 @@ class FileProcessor:
         if not products:
             logger.warning("No products extracted from file")
             return {
-                'products': [],
-                'chunks': [],
-                'stats': {'total_products': 0, 'total_chunks': 0, 'avg_chunks_per_product': 0}
+                "products": [],
+                "chunks": [],
+                "stats": {"total_products": 0, "total_chunks": 0, "avg_chunks_per_product": 0},
             }
 
         # Step 2: 필드 강화 (enhanced_field_extractor)
@@ -84,26 +80,22 @@ class FileProcessor:
 
         # 통계
         stats = {
-            'total_products': len(products),
-            'total_chunks': len(chunks),
-            'avg_chunks_per_product': len(chunks) / len(products) if products else 0
+            "total_products": len(products),
+            "total_chunks": len(chunks),
+            "avg_chunks_per_product": len(chunks) / len(products) if products else 0,
         }
 
-        return {
-            'products': products,
-            'chunks': chunks,
-            'stats': stats
-        }
+        return {"products": products, "chunks": chunks, "stats": stats}
 
     def _parse_file(self, file_path: Path) -> List[Dict[str, Any]]:
         """파일 파싱 (Excel 또는 CSV)"""
         suffix = file_path.suffix.lower()
 
-        if suffix in ['.xlsx', '.xls']:
+        if suffix in [".xlsx", ".xls"]:
             logger.info(f"Detected Excel file: {suffix}")
             return self.excel_parser.parse_file(str(file_path))
 
-        elif suffix == '.csv':
+        elif suffix == ".csv":
             logger.info("Detected CSV file")
             return self.csv_parser.parse_file(str(file_path))
 
@@ -131,10 +123,7 @@ class FileProcessor:
             fields.update(composite_fields)
 
             # FieldType.value → str로 변환
-            enhanced_product = {
-                field_type.value: value
-                for field_type, value in fields.items()
-            }
+            enhanced_product = {field_type.value: value for field_type, value in fields.items()}
 
             enhanced.append(enhanced_product)
 
@@ -154,8 +143,8 @@ class FileProcessor:
 
         for i, product in enumerate(products):
             # product_id 생성 (없으면)
-            if 'product_id' not in product:
-                product['product_id'] = f"uploaded_{i+1:04d}"
+            if "product_id" not in product:
+                product["product_id"] = f"uploaded_{i+1:04d}"
 
             # 청크 생성 (AtomicChunk 객체)
             chunks = self.chunk_generator.generate_chunks(product)
@@ -163,13 +152,13 @@ class FileProcessor:
             # AtomicChunk → dict 변환
             for chunk in chunks:
                 chunk_dict = {
-                    'chunk_id': chunk.chunk_id,
-                    'product_id': product.get('product_id', f"uploaded_{i+1:04d}"),
-                    'field_type': chunk.field_type.value,
-                    'chunk_text': chunk.text,
-                    'priority': chunk.priority,
-                    'metadata': chunk.metadata,
-                    'search_keywords': chunk.search_keywords
+                    "chunk_id": chunk.chunk_id,
+                    "product_id": product.get("product_id", f"uploaded_{i+1:04d}"),
+                    "field_type": chunk.field_type.value,
+                    "chunk_text": chunk.text,
+                    "priority": chunk.priority,
+                    "metadata": chunk.metadata,
+                    "search_keywords": chunk.search_keywords,
                 }
                 all_chunks.append(chunk_dict)
 
@@ -197,7 +186,7 @@ class FileProcessor:
         Returns:
             사람이 읽기 쉬운 리포트
         """
-        stats = result['stats']
+        stats = result["stats"]
 
         report = [
             "File Processing Report",
@@ -205,23 +194,23 @@ class FileProcessor:
             f"Total Products:  {stats['total_products']}",
             f"Total Chunks:    {stats['total_chunks']}",
             f"Avg Chunks/Product: {stats['avg_chunks_per_product']:.1f}",
-            "=" * 50
+            "=" * 50,
         ]
 
         # 샘플 제품 (최대 3개)
-        products = result['products'][:3]
+        products = result["products"][:3]
         if products:
             report.append("\nSample Products:")
             for i, product in enumerate(products, 1):
-                name = product.get('product_name', product.get('description', 'N/A'))
+                name = product.get("product_name", product.get("description", "N/A"))
                 report.append(f"  {i}. {name}")
 
         # 청크 타입 분포
-        chunks = result['chunks']
+        chunks = result["chunks"]
         if chunks:
             field_counts = {}
             for chunk in chunks:
-                field_type = chunk.get('field_type', 'unknown')
+                field_type = chunk.get("field_type", "unknown")
                 field_counts[field_type] = field_counts.get(field_type, 0) + 1
 
             report.append("\nChunk Distribution:")
@@ -234,6 +223,7 @@ class FileProcessor:
 if __name__ == "__main__":
     # Test file processor
     import tempfile
+
     import openpyxl
 
     print("=" * 80)
@@ -241,7 +231,7 @@ if __name__ == "__main__":
     print("=" * 80)
 
     # Create test Excel file
-    with tempfile.NamedTemporaryFile(suffix='.xlsx', delete=False, mode='wb') as f:
+    with tempfile.NamedTemporaryFile(suffix=".xlsx", delete=False, mode="wb") as f:
         temp_path = f.name
 
     wb = openpyxl.Workbook()
@@ -266,6 +256,7 @@ if __name__ == "__main__":
 
     # Cleanup
     import os
+
     os.unlink(temp_path)
 
     print("\n" + "=" * 80)

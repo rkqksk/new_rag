@@ -9,9 +9,9 @@ Cached Search Engine
 - 성능 메트릭 수집
 """
 
-from typing import Dict, Any, List, Optional
-import time
 import logging
+import time
+from typing import Any, Dict, List, Optional
 
 from src.core.caching.cache_manager import CacheManager
 
@@ -30,7 +30,7 @@ class CachedSearchEngine:
         self,
         search_engine,  # Original SearchEngine instance
         cache_manager: Optional[CacheManager] = None,
-        enable_cache: bool = True
+        enable_cache: bool = True,
     ):
         """
         Initialize Cached Search Engine
@@ -46,22 +46,18 @@ class CachedSearchEngine:
 
         # Performance metrics
         self.stats = {
-            'total_queries': 0,
-            'cache_hits': 0,
-            'cache_misses': 0,
-            'total_time_saved': 0.0,  # seconds
-            'avg_cached_response_time': 0.0,
-            'avg_uncached_response_time': 0.0
+            "total_queries": 0,
+            "cache_hits": 0,
+            "cache_misses": 0,
+            "total_time_saved": 0.0,  # seconds
+            "avg_cached_response_time": 0.0,
+            "avg_uncached_response_time": 0.0,
         }
 
         logger.info(f"CachedSearchEngine initialized (cache: {self.enable_cache})")
 
     def search(
-        self,
-        query: str,
-        top_k: int = 5,
-        filters: Optional[Dict] = None,
-        **kwargs
+        self, query: str, top_k: int = 5, filters: Optional[Dict] = None, **kwargs
     ) -> List[Dict[str, Any]]:
         """
         캐싱이 적용된 검색
@@ -76,29 +72,24 @@ class CachedSearchEngine:
             검색 결과 리스트
         """
         start_time = time.time()
-        self.stats['total_queries'] += 1
+        self.stats["total_queries"] += 1
 
         # Step 1: Try exact match cache
         if self.enable_cache:
             cached_result = self._try_cache(query, filters)
             if cached_result is not None:
                 response_time = time.time() - start_time
-                self.stats['cache_hits'] += 1
+                self.stats["cache_hits"] += 1
                 self._update_cached_response_time(response_time)
 
                 logger.info(f"[Cache HIT] Query: {query[:50]}... ({response_time*1000:.1f}ms)")
                 return cached_result[:top_k]
 
         # Step 2: Cache miss - call original search engine
-        self.stats['cache_misses'] += 1
+        self.stats["cache_misses"] += 1
 
         logger.debug(f"[Cache MISS] Calling original search engine...")
-        results = self.search_engine.search(
-            query=query,
-            top_k=top_k,
-            filters=filters,
-            **kwargs
-        )
+        results = self.search_engine.search(query=query, top_k=top_k, filters=filters, **kwargs)
 
         # Step 3: Cache the result
         if self.enable_cache and results:
@@ -111,9 +102,7 @@ class CachedSearchEngine:
         return results
 
     def _try_cache(
-        self,
-        query: str,
-        filters: Optional[Dict] = None
+        self, query: str, filters: Optional[Dict] = None
     ) -> Optional[List[Dict[str, Any]]]:
         """
         캐시 조회 (Layer 1: Exact Match)
@@ -127,20 +116,15 @@ class CachedSearchEngine:
         """
         # Try exact match
         cached = self.cache.get_exact(query)
-        if cached and cached.get('filters') == filters:
-            return cached.get('results')
+        if cached and cached.get("filters") == filters:
+            return cached.get("results")
 
         # TODO: Try semantic cache (Layer 2)
         # TODO: Try search result cache (Layer 3)
 
         return None
 
-    def _cache_result(
-        self,
-        query: str,
-        filters: Optional[Dict],
-        results: List[Dict[str, Any]]
-    ):
+    def _cache_result(self, query: str, filters: Optional[Dict], results: List[Dict[str, Any]]):
         """
         검색 결과 캐싱
 
@@ -150,11 +134,7 @@ class CachedSearchEngine:
             results: 검색 결과
         """
         # Cache in Layer 1 (Exact Match)
-        cache_data = {
-            'query': query,
-            'filters': filters,
-            'results': results
-        }
+        cache_data = {"query": query, "filters": filters, "results": results}
         self.cache.set_exact(query, cache_data, ttl=3600)  # 1 hour
 
         # Also cache in Layer 3 (Search Result) with query hash
@@ -163,27 +143,23 @@ class CachedSearchEngine:
 
     def _update_cached_response_time(self, response_time: float):
         """캐시 히트 응답 시간 업데이트"""
-        n = self.stats['cache_hits']
+        n = self.stats["cache_hits"]
         if n == 1:
-            self.stats['avg_cached_response_time'] = response_time
+            self.stats["avg_cached_response_time"] = response_time
         else:
             # Running average
-            current_avg = self.stats['avg_cached_response_time']
-            self.stats['avg_cached_response_time'] = (
-                (current_avg * (n - 1) + response_time) / n
-            )
+            current_avg = self.stats["avg_cached_response_time"]
+            self.stats["avg_cached_response_time"] = (current_avg * (n - 1) + response_time) / n
 
     def _update_uncached_response_time(self, response_time: float):
         """캐시 미스 응답 시간 업데이트"""
-        n = self.stats['cache_misses']
+        n = self.stats["cache_misses"]
         if n == 1:
-            self.stats['avg_uncached_response_time'] = response_time
+            self.stats["avg_uncached_response_time"] = response_time
         else:
             # Running average
-            current_avg = self.stats['avg_uncached_response_time']
-            self.stats['avg_uncached_response_time'] = (
-                (current_avg * (n - 1) + response_time) / n
-            )
+            current_avg = self.stats["avg_uncached_response_time"]
+            self.stats["avg_uncached_response_time"] = (current_avg * (n - 1) + response_time) / n
 
     def get_stats(self) -> Dict[str, Any]:
         """
@@ -201,28 +177,28 @@ class CachedSearchEngine:
                 'cache_info': Dict (from CacheManager)
             }
         """
-        total_queries = self.stats['total_queries']
-        hit_rate = self.stats['cache_hits'] / total_queries if total_queries > 0 else 0.0
+        total_queries = self.stats["total_queries"]
+        hit_rate = self.stats["cache_hits"] / total_queries if total_queries > 0 else 0.0
 
         # Calculate time saved
-        if self.stats['cache_hits'] > 0 and self.stats['cache_misses'] > 0:
-            avg_uncached = self.stats['avg_uncached_response_time']
-            avg_cached = self.stats['avg_cached_response_time']
+        if self.stats["cache_hits"] > 0 and self.stats["cache_misses"] > 0:
+            avg_uncached = self.stats["avg_uncached_response_time"]
+            avg_cached = self.stats["avg_cached_response_time"]
             time_saved_per_hit = max(0, avg_uncached - avg_cached)
-            total_time_saved = time_saved_per_hit * self.stats['cache_hits']
+            total_time_saved = time_saved_per_hit * self.stats["cache_hits"]
         else:
             total_time_saved = 0.0
 
         return {
-            'total_queries': total_queries,
-            'cache_hits': self.stats['cache_hits'],
-            'cache_misses': self.stats['cache_misses'],
-            'hit_rate': hit_rate,
-            'avg_cached_response_ms': self.stats['avg_cached_response_time'] * 1000,
-            'avg_uncached_response_ms': self.stats['avg_uncached_response_time'] * 1000,
-            'time_saved_total_sec': total_time_saved,
-            'cache_enabled': self.enable_cache,
-            'cache_info': self.cache.get_stats()
+            "total_queries": total_queries,
+            "cache_hits": self.stats["cache_hits"],
+            "cache_misses": self.stats["cache_misses"],
+            "hit_rate": hit_rate,
+            "avg_cached_response_ms": self.stats["avg_cached_response_time"] * 1000,
+            "avg_uncached_response_ms": self.stats["avg_uncached_response_time"] * 1000,
+            "time_saved_total_sec": total_time_saved,
+            "cache_enabled": self.enable_cache,
+            "cache_info": self.cache.get_stats(),
         }
 
     def print_stats(self):
@@ -243,9 +219,9 @@ class CachedSearchEngine:
         print(f"  Cached (avg):     {stats['avg_cached_response_ms']:.1f} ms")
         print(f"  Uncached (avg):   {stats['avg_uncached_response_ms']:.1f} ms")
 
-        if stats['time_saved_total_sec'] > 0:
+        if stats["time_saved_total_sec"] > 0:
             print(f"  Time Saved:       {stats['time_saved_total_sec']:.2f} seconds")
-            speedup = stats['avg_uncached_response_ms'] / max(1, stats['avg_cached_response_ms'])
+            speedup = stats["avg_uncached_response_ms"] / max(1, stats["avg_cached_response_ms"])
             print(f"  Speedup:          {speedup:.1f}x faster (when cached)")
 
         print(f"\n💾 Cache Status:")
@@ -279,12 +255,13 @@ if __name__ == "__main__":
         def search(self, query: str, top_k: int = 5, filters=None, **kwargs):
             """Simulate search with delay"""
             import time
+
             time.sleep(0.1)  # Simulate 100ms search
 
             # Return mock results
             return [
-                {'product_id': '001', 'name': f'Result for: {query}', 'score': 0.95},
-                {'product_id': '002', 'name': 'Another result', 'score': 0.90}
+                {"product_id": "001", "name": f"Result for: {query}", "score": 0.95},
+                {"product_id": "002", "name": "Another result", "score": 0.90},
             ]
 
     # Initialize

@@ -4,7 +4,7 @@ Matches bottles with compatible caps/pumps based on neck size
 """
 
 import re
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
 
 
 def extract_neck_size(spec: str) -> Optional[int]:
@@ -27,7 +27,7 @@ def extract_neck_size(spec: str) -> Optional[int]:
 
     # Pattern: Ø followed by number (with or without space)
     # Handles: "Ø20", "Ø 20", "내경 Ø24", "내경Ø24"
-    pattern = r'[Øø]\s*(\d+)'
+    pattern = r"[Øø]\s*(\d+)"
     match = re.search(pattern, spec)
 
     if match:
@@ -46,32 +46,32 @@ def get_product_category(product: Dict[str, Any]) -> str:
         Category string: "Bottle", "Jar", "CapPump", "Other"
     """
     # Try product_name first
-    name = product.get('product_name', '').lower()
+    name = product.get("product_name", "").lower()
 
     # Bottle indicators
-    if any(word in name for word in ['브로우', 'bottle', '용기']):
-        return 'Bottle'
+    if any(word in name for word in ["브로우", "bottle", "용기"]):
+        return "Bottle"
 
     # Jar indicators
-    if any(word in name for word in ['크림', 'jar', '사출']):
-        return 'Jar'
+    if any(word in name for word in ["크림", "jar", "사출"]):
+        return "Jar"
 
     # Cap/Pump indicators
-    if any(word in name for word in ['캡', 'cap', '펌프', 'pump']):
-        return 'CapPump'
+    if any(word in name for word in ["캡", "cap", "펌프", "pump"]):
+        return "CapPump"
 
     # Try product code pattern
-    code = product.get('product_code', '')
+    code = product.get("product_code", "")
     if code:
         prefix = code[:2].upper()
-        if prefix in ['BE', 'BT', 'BG', 'BP', 'BO']:  # Bottle prefixes
-            return 'Bottle'
-        elif prefix in ['JA', 'JT', 'JE', 'JP']:  # Jar prefixes
-            return 'Jar'
-        elif prefix in ['CA', 'CP', 'EO', 'FO', 'IO', 'LO']:  # Cap/Pump prefixes
-            return 'CapPump'
+        if prefix in ["BE", "BT", "BG", "BP", "BO"]:  # Bottle prefixes
+            return "Bottle"
+        elif prefix in ["JA", "JT", "JE", "JP"]:  # Jar prefixes
+            return "Jar"
+        elif prefix in ["CA", "CP", "EO", "FO", "IO", "LO"]:  # Cap/Pump prefixes
+            return "CapPump"
 
-    return 'Other'
+    return "Other"
 
 
 def get_recommended_dosage_for_capacity(capacity_ml: float) -> tuple:
@@ -101,9 +101,7 @@ def get_recommended_dosage_for_capacity(capacity_ml: float) -> tuple:
 
 
 def find_compatible_accessories(
-    bottles: List[Dict[str, Any]],
-    all_products: Dict[str, Any],
-    limit: int = 10
+    bottles: List[Dict[str, Any]], all_products: Dict[str, Any], limit: int = 10
 ) -> Dict[str, Any]:
     """Find compatible caps/pumps for given bottles, grouped by neck size
 
@@ -149,7 +147,7 @@ def find_compatible_accessories(
     # Group bottles by neck size
     bottles_by_neck = {}
     for bottle in bottles:
-        spec = bottle.get('spec', '')
+        spec = bottle.get("spec", "")
         neck_size = extract_neck_size(spec)
         if neck_size:
             if neck_size not in bottles_by_neck:
@@ -163,8 +161,8 @@ def find_compatible_accessories(
                 "total_groups": 0,
                 "neck_sizes": [],
                 "total_bottles": 0,
-                "total_accessories": 0
-            }
+                "total_accessories": 0,
+            },
         }
 
     # Find accessories for each neck size group
@@ -179,9 +177,9 @@ def find_compatible_accessories(
         # Calculate average bottle capacity for this group (for dosage recommendation)
         capacities = []
         for bottle in group_bottles:
-            capacity_str = bottle.get('capacity', '')
+            capacity_str = bottle.get("capacity", "")
             # Extract numeric capacity from "70ml", "100g" etc
-            capacity_match = re.search(r'(\d+(?:\.\d+)?)', capacity_str)
+            capacity_match = re.search(r"(\d+(?:\.\d+)?)", capacity_str)
             if capacity_match:
                 capacities.append(float(capacity_match.group(1)))
 
@@ -192,60 +190,66 @@ def find_compatible_accessories(
         for product_id, product in all_products.items():
             category = get_product_category(product)
 
-            if category != 'CapPump':
+            if category != "CapPump":
                 continue
 
             # Check if neck size matches
-            spec = product.get('spec', '')
+            spec = product.get("spec", "")
             product_neck_size = extract_neck_size(spec)
 
             if product_neck_size == neck_size:
                 product_data = product.copy()
-                product_data['product_id'] = product_id
-                product_data['category'] = category
-                product_data['neck_size'] = neck_size
+                product_data["product_id"] = product_id
+                product_data["category"] = category
+                product_data["neck_size"] = neck_size
 
                 # Classify as pump or cap
-                name = product.get('product_name', '').lower()
-                if '펌프' in name or 'pump' in name:
+                name = product.get("product_name", "").lower()
+                if "펌프" in name or "pump" in name:
                     # Get pump dosage for suitability scoring
-                    dosage = product.get('specifications', {}).get('dosage_value', 0)
-                    product_data['dosage'] = dosage
+                    dosage = product.get("specifications", {}).get("dosage_value", 0)
+                    product_data["dosage"] = dosage
 
                     # Calculate dosage suitability score (0-100)
                     # Perfect match: dosage within recommended range = 100
                     # Outside range: proportional penalty
                     min_dosage, max_dosage = recommended_dosage_range
                     if min_dosage <= dosage <= max_dosage:
-                        product_data['dosage_suitability'] = 100
+                        product_data["dosage_suitability"] = 100
                     elif dosage < min_dosage:
                         # Too small: penalty based on difference
-                        product_data['dosage_suitability'] = max(0, 100 - (min_dosage - dosage) * 200)
+                        product_data["dosage_suitability"] = max(
+                            0, 100 - (min_dosage - dosage) * 200
+                        )
                     else:
                         # Too large: penalty based on difference
-                        product_data['dosage_suitability'] = max(0, 100 - (dosage - max_dosage) * 200)
+                        product_data["dosage_suitability"] = max(
+                            0, 100 - (dosage - max_dosage) * 200
+                        )
 
                     compatible_pumps.append(product_data)
                 else:
                     compatible_caps.append(product_data)
 
         # Sort pumps by dosage suitability (best matches first)
-        compatible_pumps.sort(key=lambda p: p.get('dosage_suitability', 0), reverse=True)
+        compatible_pumps.sort(key=lambda p: p.get("dosage_suitability", 0), reverse=True)
 
         group_total = len(compatible_pumps) + len(compatible_caps)
         total_accessories += group_total
 
-        groups.append({
-            "neck_size": neck_size,
-            "bottles": group_bottles,
-            "pumps": compatible_pumps[:limit],
-            "caps": compatible_caps[:limit],
-            "total_pumps": len(compatible_pumps),
-            "total_caps": len(compatible_caps),
-            "total_accessories": group_total,
-            "recommended_dosage_range": recommended_dosage_range,
-            "avg_bottle_capacity": avg_capacity
-        })
+        groups.append(
+            {
+                "neck_size": neck_size,
+                "bottles": group_bottles,
+                "pumps": compatible_pumps[:limit],
+                "caps": compatible_caps[:limit],
+                "total_pumps": len(compatible_pumps),
+                "total_caps": len(compatible_caps),
+                "total_accessories": group_total,
+                "recommended_dosage_range": recommended_dosage_range,
+                "avg_bottle_capacity": avg_capacity,
+            }
+        )
 
     return {
         "groups": groups,
@@ -253,14 +257,13 @@ def find_compatible_accessories(
             "total_groups": len(groups),
             "neck_sizes": sorted(bottles_by_neck.keys(), reverse=True),
             "total_bottles": len(bottles),
-            "total_accessories": total_accessories
-        }
+            "total_accessories": total_accessories,
+        },
     }
 
 
 def format_accessory_recommendation(
-    bottles: List[Dict[str, Any]],
-    accessories: Dict[str, Any]
+    bottles: List[Dict[str, Any]], accessories: Dict[str, Any]
 ) -> str:
     """Format accessory recommendation message
 
@@ -271,13 +274,13 @@ def format_accessory_recommendation(
     Returns:
         Formatted recommendation message
     """
-    neck_sizes = accessories['neck_sizes']
+    neck_sizes = accessories["neck_sizes"]
 
     if not neck_sizes:
         return "죄송합니다. 선택하신 용기의 neck size 정보를 찾을 수 없습니다."
 
-    pumps = accessories['compatible_pumps']
-    caps = accessories['compatible_caps']
+    pumps = accessories["compatible_pumps"]
+    caps = accessories["compatible_caps"]
 
     msg_parts = []
     msg_parts.append(f"선택하신 용기는 Ø{', Ø'.join(map(str, neck_sizes))} neck size입니다.")
@@ -295,4 +298,4 @@ def format_accessory_recommendation(
     if not pumps and not caps:
         msg_parts.append("\n\n현재 호환 가능한 펌프/캡이 데이터베이스에 없습니다.")
 
-    return ''.join(msg_parts)
+    return "".join(msg_parts)

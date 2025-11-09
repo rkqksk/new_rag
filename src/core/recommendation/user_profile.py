@@ -4,13 +4,13 @@ User Profile & Preference Extraction
 Tracks user preferences from search and interaction history
 """
 
-import re
-import logging
-from typing import Dict, Any, List, Optional, Set
-from dataclasses import dataclass, field, asdict
-from datetime import datetime, timedelta
-from collections import Counter, defaultdict
 import json
+import logging
+import re
+from collections import Counter, defaultdict
+from dataclasses import asdict, dataclass, field
+from datetime import datetime, timedelta
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -26,24 +26,33 @@ class UserProfile:
     - Viewed products
     - Bookmarked items
     """
+
     session_id: str
 
     # Preference weights (0.0 - 1.0)
-    capacity_preferences: Dict[str, float] = field(default_factory=dict)  # {"50ml": 0.8, "100ml": 0.6}
+    capacity_preferences: Dict[str, float] = field(
+        default_factory=dict
+    )  # {"50ml": 0.8, "100ml": 0.6}
     material_preferences: Dict[str, float] = field(default_factory=dict)  # {"PET": 0.9, "PP": 0.5}
-    neck_preferences: Dict[str, float] = field(default_factory=dict)      # {"20파이": 0.7}
-    category_preferences: Dict[str, float] = field(default_factory=dict)  # {"Bottle": 0.8, "Cap": 0.6}
+    neck_preferences: Dict[str, float] = field(default_factory=dict)  # {"20파이": 0.7}
+    category_preferences: Dict[str, float] = field(
+        default_factory=dict
+    )  # {"Bottle": 0.8, "Cap": 0.6}
 
     # Product history
-    viewed_products: List[str] = field(default_factory=list)      # Product IDs
-    clicked_products: List[str] = field(default_factory=list)     # Product IDs with clicks
-    bookmarked_products: Set[str] = field(default_factory=set)    # Bookmarked IDs
+    viewed_products: List[str] = field(default_factory=list)  # Product IDs
+    clicked_products: List[str] = field(default_factory=list)  # Product IDs with clicks
+    bookmarked_products: Set[str] = field(default_factory=set)  # Bookmarked IDs
 
     # Search history
-    search_queries: List[Dict[str, Any]] = field(default_factory=list)  # [{query, timestamp, extracted_attrs}]
+    search_queries: List[Dict[str, Any]] = field(
+        default_factory=list
+    )  # [{query, timestamp, extracted_attrs}]
 
     # Compatibility tracking (for container-cap matching)
-    compatible_pairs: Dict[str, List[str]] = field(default_factory=dict)  # {"container_id": ["cap_id1", "cap_id2"]}
+    compatible_pairs: Dict[str, List[str]] = field(
+        default_factory=dict
+    )  # {"container_id": ["cap_id1", "cap_id2"]}
 
     # Metadata
     created_at: datetime = field(default_factory=datetime.now)
@@ -53,23 +62,23 @@ class UserProfile:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for serialization"""
         data = asdict(self)
-        data['bookmarked_products'] = list(self.bookmarked_products)
-        data['created_at'] = self.created_at.isoformat()
-        data['last_updated'] = self.last_updated.isoformat()
-        for query in data['search_queries']:
-            if isinstance(query.get('timestamp'), datetime):
-                query['timestamp'] = query['timestamp'].isoformat()
+        data["bookmarked_products"] = list(self.bookmarked_products)
+        data["created_at"] = self.created_at.isoformat()
+        data["last_updated"] = self.last_updated.isoformat()
+        for query in data["search_queries"]:
+            if isinstance(query.get("timestamp"), datetime):
+                query["timestamp"] = query["timestamp"].isoformat()
         return data
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'UserProfile':
+    def from_dict(cls, data: Dict[str, Any]) -> "UserProfile":
         """Create from dictionary"""
-        data['bookmarked_products'] = set(data.get('bookmarked_products', []))
-        data['created_at'] = datetime.fromisoformat(data['created_at'])
-        data['last_updated'] = datetime.fromisoformat(data['last_updated'])
-        for query in data.get('search_queries', []):
-            if isinstance(query.get('timestamp'), str):
-                query['timestamp'] = datetime.fromisoformat(query['timestamp'])
+        data["bookmarked_products"] = set(data.get("bookmarked_products", []))
+        data["created_at"] = datetime.fromisoformat(data["created_at"])
+        data["last_updated"] = datetime.fromisoformat(data["last_updated"])
+        for query in data.get("search_queries", []):
+            if isinstance(query.get("timestamp"), str):
+                query["timestamp"] = datetime.fromisoformat(query["timestamp"])
         return cls(**data)
 
     def get_top_preferences(self, attribute: str, top_k: int = 3) -> List[tuple]:
@@ -115,7 +124,7 @@ class PreferenceExtractor:
         click_weight: float = 1.0,
         view_weight: float = 0.5,
         search_weight: float = 0.3,
-        bookmark_weight: float = 2.0
+        bookmark_weight: float = 2.0,
     ):
         """
         Initialize preference extractor
@@ -135,34 +144,34 @@ class PreferenceExtractor:
 
         # Attribute extraction patterns (Korean + English)
         self.capacity_patterns = [
-            r'(\d+)\s*(ml|ML|미리|밀리)',
-            r'(\d+)\s*(l|L|리터|리터)',
-            r'(\d+)\s*(cc|CC)'
+            r"(\d+)\s*(ml|ML|미리|밀리)",
+            r"(\d+)\s*(l|L|리터|리터)",
+            r"(\d+)\s*(cc|CC)",
         ]
 
         self.material_patterns = [
-            r'\b(PET|pet|페트|펫)\b',
-            r'\b(PP|pp|폴리프로필렌)\b',
-            r'\b(PE|pe|폴리에틸렌)\b',
-            r'\b(PS|ps|폴리스티렌)\b',
-            r'\b(PVC|pvc)\b',
-            r'\b(유리|glass|Glass|GLASS)\b',
-            r'\b(알루미늄|aluminum|Aluminum)\b'
+            r"\b(PET|pet|페트|펫)\b",
+            r"\b(PP|pp|폴리프로필렌)\b",
+            r"\b(PE|pe|폴리에틸렌)\b",
+            r"\b(PS|ps|폴리스티렌)\b",
+            r"\b(PVC|pvc)\b",
+            r"\b(유리|glass|Glass|GLASS)\b",
+            r"\b(알루미늄|aluminum|Aluminum)\b",
         ]
 
         self.neck_patterns = [
-            r'(\d+)\s*파이',
-            r'(\d+)\s*mm\s*넥',
-            r'(\d+)\s*mm\s*neck',
-            r'neck\s*(\d+)',
-            r'넥\s*(\d+)'
+            r"(\d+)\s*파이",
+            r"(\d+)\s*mm\s*넥",
+            r"(\d+)\s*mm\s*neck",
+            r"neck\s*(\d+)",
+            r"넥\s*(\d+)",
         ]
 
         self.category_keywords = {
-            'Bottle': ['병', '보틀', 'bottle', '용기', 'container'],
-            'Cap': ['캡', 'cap', '뚜껑', 'lid', '마개'],
-            'Pump': ['펌프', 'pump', '디스펜서', 'dispenser'],
-            'Jar': ['자', 'jar', '단지', '용기']
+            "Bottle": ["병", "보틀", "bottle", "용기", "container"],
+            "Cap": ["캡", "cap", "뚜껑", "lid", "마개"],
+            "Pump": ["펌프", "pump", "디스펜서", "dispenser"],
+            "Jar": ["자", "jar", "단지", "용기"],
         }
 
         logger.info("✅ PreferenceExtractor initialized")
@@ -177,12 +186,7 @@ class PreferenceExtractor:
         Returns:
             Dictionary of extracted attributes
         """
-        extracted = {
-            'capacity': [],
-            'material': [],
-            'neck': [],
-            'category': []
-        }
+        extracted = {"capacity": [], "material": [], "neck": [], "category": []}
 
         # Extract capacity
         for pattern in self.capacity_patterns:
@@ -191,29 +195,29 @@ class PreferenceExtractor:
                 if isinstance(match, tuple):
                     value = match[0]
                     unit = match[1].lower()
-                    if unit in ['l', '리터', 'liter']:
+                    if unit in ["l", "리터", "liter"]:
                         value = str(int(value) * 1000)  # Convert to ml
-                    extracted['capacity'].append(f"{value}ml")
+                    extracted["capacity"].append(f"{value}ml")
 
         # Extract material
         for pattern in self.material_patterns:
             matches = re.findall(pattern, query, re.IGNORECASE)
             for match in matches:
                 material = match.upper() if len(match) <= 3 else match.capitalize()
-                if material not in extracted['material']:
-                    extracted['material'].append(material)
+                if material not in extracted["material"]:
+                    extracted["material"].append(material)
 
         # Extract neck size
         for pattern in self.neck_patterns:
             matches = re.findall(pattern, query, re.IGNORECASE)
             for match in matches:
-                extracted['neck'].append(f"{match}파이")
+                extracted["neck"].append(f"{match}파이")
 
         # Extract category
         query_lower = query.lower()
         for category, keywords in self.category_keywords.items():
             if any(keyword in query_lower for keyword in keywords):
-                extracted['category'].append(category)
+                extracted["category"].append(category)
 
         return extracted
 
@@ -227,32 +231,31 @@ class PreferenceExtractor:
         Returns:
             Dictionary of extracted attributes
         """
-        extracted = {
-            'capacity': [],
-            'material': [],
-            'neck': [],
-            'category': []
-        }
+        extracted = {"capacity": [], "material": [], "neck": [], "category": []}
 
         # Extract from product fields
-        if 'capacity' in product and product['capacity']:
-            extracted['capacity'].append(product['capacity'])
+        if "capacity" in product and product["capacity"]:
+            extracted["capacity"].append(product["capacity"])
 
-        if 'material' in product and product['material']:
-            material = product['material'].upper() if len(product['material']) <= 3 else product['material']
-            extracted['material'].append(material)
+        if "material" in product and product["material"]:
+            material = (
+                product["material"].upper()
+                if len(product["material"]) <= 3
+                else product["material"]
+            )
+            extracted["material"].append(material)
 
-        if 'neck' in product and product['neck']:
-            extracted['neck'].append(product['neck'])
+        if "neck" in product and product["neck"]:
+            extracted["neck"].append(product["neck"])
 
-        if 'category' in product and product['category']:
-            extracted['category'].append(product['category'])
+        if "category" in product and product["category"]:
+            extracted["category"].append(product["category"])
 
         # Fallback: extract from product name/description
         text = f"{product.get('name', '')} {product.get('description', '')}"
         query_extracted = self.extract_from_query(text)
 
-        for attr in ['capacity', 'material', 'neck', 'category']:
+        for attr in ["capacity", "material", "neck", "category"]:
             for value in query_extracted[attr]:
                 if value not in extracted[attr]:
                     extracted[attr].append(value)
@@ -260,10 +263,7 @@ class PreferenceExtractor:
         return extracted
 
     def update_profile_from_search(
-        self,
-        profile: UserProfile,
-        query: str,
-        timestamp: Optional[datetime] = None
+        self, profile: UserProfile, query: str, timestamp: Optional[datetime] = None
     ):
         """
         Update user profile from search query
@@ -279,11 +279,9 @@ class PreferenceExtractor:
         extracted = self.extract_from_query(query)
 
         # Record search
-        profile.search_queries.append({
-            'query': query,
-            'timestamp': timestamp,
-            'extracted_attrs': extracted
-        })
+        profile.search_queries.append(
+            {"query": query, "timestamp": timestamp, "extracted_attrs": extracted}
+        )
 
         # Update preferences with time decay
         decay_factor = self._calculate_decay(timestamp)
@@ -301,7 +299,7 @@ class PreferenceExtractor:
         profile: UserProfile,
         product_id: str,
         product: Dict[str, Any],
-        timestamp: Optional[datetime] = None
+        timestamp: Optional[datetime] = None,
     ):
         """
         Update user profile from viewed product
@@ -337,7 +335,7 @@ class PreferenceExtractor:
         profile: UserProfile,
         product_id: str,
         product: Dict[str, Any],
-        timestamp: Optional[datetime] = None
+        timestamp: Optional[datetime] = None,
     ):
         """
         Update user profile from clicked product
@@ -369,10 +367,7 @@ class PreferenceExtractor:
         logger.debug(f"Updated profile from click: {product_id} (weight={weight:.2f})")
 
     def update_profile_from_bookmark(
-        self,
-        profile: UserProfile,
-        product_id: str,
-        product: Dict[str, Any]
+        self, profile: UserProfile, product_id: str, product: Dict[str, Any]
     ):
         """
         Update user profile from bookmarked product
@@ -399,10 +394,7 @@ class PreferenceExtractor:
         logger.debug(f"Updated profile from bookmark: {product_id} (weight={weight:.2f})")
 
     def _update_preferences(
-        self,
-        profile: UserProfile,
-        extracted: Dict[str, List[str]],
-        weight: float
+        self, profile: UserProfile, extracted: Dict[str, List[str]], weight: float
     ):
         """
         Update preference weights for extracted attributes
@@ -412,7 +404,7 @@ class PreferenceExtractor:
             extracted: Extracted attributes
             weight: Weight to add
         """
-        for attr_type in ['capacity', 'material', 'neck', 'category']:
+        for attr_type in ["capacity", "material", "neck", "category"]:
             values = extracted.get(attr_type, [])
             pref_dict = getattr(profile, f"{attr_type}_preferences")
 
@@ -430,7 +422,7 @@ class PreferenceExtractor:
 
         Uses softmax-like normalization to maintain relative weights
         """
-        for attr_type in ['capacity', 'material', 'neck', 'category']:
+        for attr_type in ["capacity", "material", "neck", "category"]:
             pref_dict = getattr(profile, f"{attr_type}_preferences")
 
             if not pref_dict:
@@ -475,11 +467,11 @@ class PreferenceExtractor:
             f"👤 User Profile: {profile.session_id}",
             f"   Interactions: {profile.interaction_count}",
             f"   Created: {profile.created_at.strftime('%Y-%m-%d')}",
-            ""
+            "",
         ]
 
         # Top preferences
-        for attr_type in ['capacity', 'material', 'neck', 'category']:
+        for attr_type in ["capacity", "material", "neck", "category"]:
             top_prefs = profile.get_top_preferences(attr_type, top_k=3)
             if top_prefs:
                 lines.append(f"   {attr_type.capitalize()}:")

@@ -6,15 +6,16 @@ Category-Specific Template System
 전략: 같은 필드라도 카테고리에 따라 다른 표현 사용
 """
 
-from typing import Dict, List, Optional
 from dataclasses import dataclass
 from enum import Enum
+from typing import Dict, List, Optional
 
-from src.core.chunk_templates import FieldType, ChunkTemplate
+from src.core.chunk_templates import ChunkTemplate, FieldType
 
 
 class ProductCategory(Enum):
     """제품 카테고리"""
+
     BOTTLE = "bottle"
     JAR = "jar"
     CAP = "cap"
@@ -25,6 +26,7 @@ class ProductCategory(Enum):
 @dataclass
 class CategoryTemplateSet:
     """카테고리별 템플릿 세트"""
+
     category: ProductCategory
     templates: Dict[FieldType, List[ChunkTemplate]]
 
@@ -61,13 +63,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 보틀",
                 priority=1.0,
-                search_keywords=["병", "보틀", "용기", "bottle"]
+                search_keywords=["병", "보틀", "용기", "bottle"],
             ),
             ChunkTemplate(
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 플라스틱 용기",
                 priority=0.95,
-                search_keywords=["플라스틱", "용기"]
+                search_keywords=["플라스틱", "용기"],
             ),
         ]
 
@@ -77,19 +79,19 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.CAPACITY,
                 template="{field} 용량 보틀",
                 priority=0.95,
-                search_keywords=["용량", "ml", "리터", "담다"]
+                search_keywords=["용량", "ml", "리터", "담다"],
             ),
             ChunkTemplate(
                 field_type=FieldType.CAPACITY,
                 template="{field} 병",
                 priority=0.9,
-                search_keywords=["용량", "병"]
+                search_keywords=["용량", "병"],
             ),
             ChunkTemplate(
                 field_type=FieldType.CAPACITY,
                 template="{field} 액상 용기",
                 priority=0.85,
-                search_keywords=["액상", "액체"]
+                search_keywords=["액상", "액체"],
             ),
         ]
 
@@ -99,13 +101,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.NECK,
                 template="Neck {field} 보틀 (캡 호환)",
                 priority=0.95,
-                search_keywords=["neck", "넥", "입구", "캡", "뚜껑", "호환"]
+                search_keywords=["neck", "넥", "입구", "캡", "뚜껑", "호환"],
             ),
             ChunkTemplate(
                 field_type=FieldType.NECK,
                 template="{field} 입구 병 ({field} 캡 사용 가능)",
                 priority=0.9,
-                search_keywords=["입구", "캡", "맞는"]
+                search_keywords=["입구", "캡", "맞는"],
             ),
         ]
 
@@ -115,19 +117,19 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MATERIAL,
                 template="{field} 재질 보틀",
                 priority=0.95,
-                search_keywords=["재질", "소재", "PE", "PET", "PETG"]
+                search_keywords=["재질", "소재", "PE", "PET", "PETG"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MATERIAL,
                 template="{field} 플라스틱 병",
                 priority=0.9,
-                search_keywords=["플라스틱", "병"]
+                search_keywords=["플라스틱", "병"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MATERIAL,
                 template="{field} 소재 액상 용기",
                 priority=0.85,
-                search_keywords=["액상", "소재"]
+                search_keywords=["액상", "소재"],
             ),
         ]
 
@@ -137,13 +139,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.USE_CASE,
                 template="{field} 담는 보틀",
                 priority=0.95,
-                search_keywords=["담다", "넣다", "보관", "용도"]
+                search_keywords=["담다", "넣다", "보관", "용도"],
             ),
             ChunkTemplate(
                 field_type=FieldType.USE_CASE,
                 template="{field} 포장용 병",
                 priority=0.9,
-                search_keywords=["포장", "용도"]
+                search_keywords=["포장", "용도"],
             ),
         ]
 
@@ -158,13 +160,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 자",
                 priority=1.0,
-                search_keywords=["자", "jar", "크림용기", "통"]
+                search_keywords=["자", "jar", "크림용기", "통"],
             ),
             ChunkTemplate(
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 크림 용기",
                 priority=0.95,
-                search_keywords=["크림", "용기"]
+                search_keywords=["크림", "용기"],
             ),
         ]
 
@@ -174,19 +176,19 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.CAPACITY,
                 template="{field} 용량 크림 자",
                 priority=0.95,
-                search_keywords=["용량", "ml", "g", "크림"]
+                search_keywords=["용량", "ml", "g", "크림"],
             ),
             ChunkTemplate(
                 field_type=FieldType.CAPACITY,
                 template="{field} 자",
                 priority=0.9,
-                search_keywords=["용량", "자"]
+                search_keywords=["용량", "자"],
             ),
             ChunkTemplate(
                 field_type=FieldType.CAPACITY,
                 template="{field} 크림 담는 용기",
                 priority=0.85,
-                search_keywords=["크림", "담다"]
+                search_keywords=["크림", "담다"],
             ),
         ]
 
@@ -196,13 +198,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.DIAMETER,
                 template="직경 {field} 크림 자",
                 priority=0.95,
-                search_keywords=["직경", "지름", "파이", "크기"]
+                search_keywords=["직경", "지름", "파이", "크기"],
             ),
             ChunkTemplate(
                 field_type=FieldType.DIAMETER,
                 template="{field} 자 (원형)",
                 priority=0.9,
-                search_keywords=["원형", "둥근"]
+                search_keywords=["원형", "둥근"],
             ),
         ]
 
@@ -212,13 +214,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MATERIAL,
                 template="{field} 재질 크림 자",
                 priority=0.95,
-                search_keywords=["재질", "소재", "PP", "PET", "유리"]
+                search_keywords=["재질", "소재", "PP", "PET", "유리"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MATERIAL,
                 template="{field} 크림 용기",
                 priority=0.9,
-                search_keywords=["크림", "소재"]
+                search_keywords=["크림", "소재"],
             ),
         ]
 
@@ -228,13 +230,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.USE_CASE,
                 template="{field} 담는 크림 자",
                 priority=0.95,
-                search_keywords=["담다", "넣다", "크림", "용도"]
+                search_keywords=["담다", "넣다", "크림", "용도"],
             ),
             ChunkTemplate(
                 field_type=FieldType.USE_CASE,
                 template="{field} 포장용 자",
                 priority=0.9,
-                search_keywords=["포장", "용도"]
+                search_keywords=["포장", "용도"],
             ),
         ]
 
@@ -249,13 +251,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 캡",
                 priority=1.0,
-                search_keywords=["캡", "뚜껑", "마개", "cap"]
+                search_keywords=["캡", "뚜껑", "마개", "cap"],
             ),
             ChunkTemplate(
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 뚜껑",
                 priority=0.95,
-                search_keywords=["뚜껑", "마개"]
+                search_keywords=["뚜껑", "마개"],
             ),
         ]
 
@@ -265,13 +267,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.SIZE,
                 template="사이즈 {field} 캡",
                 priority=0.9,
-                search_keywords=["사이즈", "크기", "규격", "mm"]
+                search_keywords=["사이즈", "크기", "규격", "mm"],
             ),
             ChunkTemplate(
                 field_type=FieldType.SIZE,
                 template="{field} 규격 뚜껑",
                 priority=0.85,
-                search_keywords=["규격", "뚜껑"]
+                search_keywords=["규격", "뚜껑"],
             ),
         ]
 
@@ -281,19 +283,19 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.NECK,
                 template="Neck {field} 호환 캡",
                 priority=0.98,
-                search_keywords=["neck", "넥", "호환", "맞는", "파이"]
+                search_keywords=["neck", "넥", "호환", "맞는", "파이"],
             ),
             ChunkTemplate(
                 field_type=FieldType.NECK,
                 template="{field} 병에 맞는 캡",
                 priority=0.95,
-                search_keywords=["호환", "맞다", "병"]
+                search_keywords=["호환", "맞다", "병"],
             ),
             ChunkTemplate(
                 field_type=FieldType.NECK,
                 template="{field} 입구용 뚜껑",
                 priority=0.9,
-                search_keywords=["입구", "뚜껑"]
+                search_keywords=["입구", "뚜껑"],
             ),
         ]
 
@@ -303,13 +305,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MATERIAL,
                 template="{field} 재질 캡",
                 priority=0.95,
-                search_keywords=["재질", "소재", "PP", "PE"]
+                search_keywords=["재질", "소재", "PP", "PE"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MATERIAL,
                 template="{field} 플라스틱 뚜껑",
                 priority=0.9,
-                search_keywords=["플라스틱", "뚜껑"]
+                search_keywords=["플라스틱", "뚜껑"],
             ),
         ]
 
@@ -319,13 +321,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MOQ,
                 template="최소주문수량 {field}개 (캡)",
                 priority=0.95,
-                search_keywords=["MOQ", "최소주문", "수량", "개수"]
+                search_keywords=["MOQ", "최소주문", "수량", "개수"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MOQ,
                 template="{field}개부터 주문 가능한 캡",
                 priority=0.9,
-                search_keywords=["주문", "최소", "캡"]
+                search_keywords=["주문", "최소", "캡"],
             ),
         ]
 
@@ -335,7 +337,7 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MANUFACTURER,
                 template="{field} 제조 캡",
                 priority=0.95,
-                search_keywords=["제조사", "업체", "회사"]
+                search_keywords=["제조사", "업체", "회사"],
             ),
         ]
 
@@ -345,13 +347,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MOQ,
                 template="최소주문수량 {field}개 (캡)",
                 priority=0.95,
-                search_keywords=["최소주문", "MOQ", "주문량", "수량"]
+                search_keywords=["최소주문", "MOQ", "주문량", "수량"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MOQ,
                 template="{field}개 이상 주문 가능",
                 priority=0.9,
-                search_keywords=["주문", "수량", "이상"]
+                search_keywords=["주문", "수량", "이상"],
             ),
         ]
 
@@ -361,7 +363,7 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PRICE,
                 template="캡 가격 {field}원",
                 priority=0.9,
-                search_keywords=["가격", "단가", "원"]
+                search_keywords=["가격", "단가", "원"],
             ),
         ]
 
@@ -376,13 +378,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 펌프",
                 priority=1.0,
-                search_keywords=["펌프", "pump", "디스펜서"]
+                search_keywords=["펌프", "pump", "디스펜서"],
             ),
             ChunkTemplate(
                 field_type=FieldType.PRODUCT_NAME,
                 template="{field} 디스펜서",
                 priority=0.95,
-                search_keywords=["디스펜서", "dispenser"]
+                search_keywords=["디스펜서", "dispenser"],
             ),
         ]
 
@@ -392,13 +394,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.NECK,
                 template="{field} 펌프 (병 호환)",
                 priority=0.98,
-                search_keywords=["펌프", "직경", "파이", "호환"]
+                search_keywords=["펌프", "직경", "파이", "호환"],
             ),
             ChunkTemplate(
                 field_type=FieldType.NECK,
                 template="{field} 병에 맞는 펌프",
                 priority=0.95,
-                search_keywords=["호환", "맞다", "병"]
+                search_keywords=["호환", "맞다", "병"],
             ),
         ]
 
@@ -408,13 +410,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.DIAMETER,
                 template="{field} 펌프",
                 priority=0.98,
-                search_keywords=["직경", "파이", "Ø", "mm"]
+                search_keywords=["직경", "파이", "Ø", "mm"],
             ),
             ChunkTemplate(
                 field_type=FieldType.DIAMETER,
                 template="{field} 직경 디스펜서",
                 priority=0.95,
-                search_keywords=["직경", "디스펜서"]
+                search_keywords=["직경", "디스펜서"],
             ),
         ]
 
@@ -424,7 +426,7 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MATERIAL,
                 template="{field} 재질 펌프",
                 priority=0.95,
-                search_keywords=["재질", "소재", "PP", "PE"]
+                search_keywords=["재질", "소재", "PP", "PE"],
             ),
         ]
 
@@ -434,7 +436,7 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PACKAGE,
                 template="{field} 패키지 (펌프)",
                 priority=0.85,
-                search_keywords=["패키지", "포장", "박스", "단위"]
+                search_keywords=["패키지", "포장", "박스", "단위"],
             ),
         ]
 
@@ -444,7 +446,7 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MANUFACTURER,
                 template="{field} 제조 펌프",
                 priority=0.95,
-                search_keywords=["제조사", "업체", "회사"]
+                search_keywords=["제조사", "업체", "회사"],
             ),
         ]
 
@@ -454,13 +456,13 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.MOQ,
                 template="최소주문수량 {field}개 (펌프)",
                 priority=0.95,
-                search_keywords=["최소주문", "MOQ", "주문량", "수량"]
+                search_keywords=["최소주문", "MOQ", "주문량", "수량"],
             ),
             ChunkTemplate(
                 field_type=FieldType.MOQ,
                 template="{field}개 이상 주문 가능",
                 priority=0.9,
-                search_keywords=["주문", "수량", "이상"]
+                search_keywords=["주문", "수량", "이상"],
             ),
         ]
 
@@ -470,16 +472,14 @@ class CategoryTemplateRegistry:
                 field_type=FieldType.PRICE,
                 template="펌프 가격 {field}원",
                 priority=0.9,
-                search_keywords=["가격", "단가", "원"]
+                search_keywords=["가격", "단가", "원"],
             ),
         ]
 
     # ========== Public API ==========
 
     def get_templates(
-        self,
-        field_type: FieldType,
-        category: ProductCategory
+        self, field_type: FieldType, category: ProductCategory
     ) -> List[ChunkTemplate]:
         """
         카테고리에 맞는 템플릿 반환
@@ -500,7 +500,7 @@ class CategoryTemplateRegistry:
         field_type: FieldType,
         template: str,
         priority: float,
-        search_keywords: List[str]
+        search_keywords: List[str],
     ):
         """
         카테고리별 커스텀 템플릿 추가 (동적 확장)
@@ -516,7 +516,7 @@ class CategoryTemplateRegistry:
             field_type=field_type,
             template=template,
             priority=priority,
-            search_keywords=search_keywords
+            search_keywords=search_keywords,
         )
 
         if category not in self.category_templates:
@@ -538,29 +538,29 @@ if __name__ == "__main__":
             "capacity": "100ml",
             "neck": "Ø24",
             "material": "PET",
-            "use_case": ["화장수", "에센스"]
+            "use_case": ["화장수", "에센스"],
         },
         "jar": {
             "product_name": "50g 크림용기",
             "capacity": "50g",
             "diameter": "Ø60",
             "material": "PP",
-            "use_case": ["크림", "밤"]
+            "use_case": ["크림", "밤"],
         },
         "cap": {
             "product_name": "GY-20-뾰족캡B",
             "size": "Ø23.8 × 51.5",
             "neck": "Ø20",
             "material": "PP",
-            "moq": "5,000"
+            "moq": "5,000",
         },
         "pump": {
             "product_name": "Ø24 펌프 211AVP",
             "diameter": "Ø24",
             "material": "PP",
             "manufacturer": "지에프테크",
-            "package": "800ea"
-        }
+            "package": "800ea",
+        },
     }
 
     registry = CategoryTemplateRegistry()

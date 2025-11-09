@@ -4,12 +4,13 @@
 """
 
 import re
-from typing import Dict, List, Optional, Tuple
 from enum import Enum
+from typing import Dict, List, Optional, Tuple
 
 
 class Intent(str, Enum):
     """의도 타입"""
+
     SEARCH = "search"  # 제품 검색
     COMPARE = "compare"  # 제품 비교
     DETAIL = "detail"  # 상세 정보 요청
@@ -29,44 +30,70 @@ class IntentClassifier:
         # 의도별 키워드 패턴
         self.intent_patterns = {
             Intent.SEARCH: [
-                r"찾아.*?줘", r"검색", r"보여.*?줘", r"추천",
-                r"있어", r"있나", r"있을까", r"알려줘",
-                r"\d+ml", r"\d+g", r"용기", r"병", r"펌프", r"캡"
+                r"찾아.*?줘",
+                r"검색",
+                r"보여.*?줘",
+                r"추천",
+                r"있어",
+                r"있나",
+                r"있을까",
+                r"알려줘",
+                r"\d+ml",
+                r"\d+g",
+                r"용기",
+                r"병",
+                r"펌프",
+                r"캡",
             ],
-            Intent.COMPARE: [
-                r"비교", r"차이", r"어떤.*?게.*?나", r"vs",
-                r"어느.*?게", r"둘.*?중"
-            ],
-            Intent.DETAIL: [
-                r"상세", r"자세히", r"더.*?알고", r"스펙",
-                r"정보", r"어떤.*?제품"
-            ],
+            Intent.COMPARE: [r"비교", r"차이", r"어떤.*?게.*?나", r"vs", r"어느.*?게", r"둘.*?중"],
+            Intent.DETAIL: [r"상세", r"자세히", r"더.*?알고", r"스펙", r"정보", r"어떤.*?제품"],
             Intent.FILTER: [
-                r"제외", r"말고", r"빼고", r"~만", r"~이하",
-                r"~이상", r"저렴한", r"비싼", r"싼", r"값싼",
-                r"투명", r"불투명", r"프리미엄"
+                r"제외",
+                r"말고",
+                r"빼고",
+                r"~만",
+                r"~이하",
+                r"~이상",
+                r"저렴한",
+                r"비싼",
+                r"싼",
+                r"값싼",
+                r"투명",
+                r"불투명",
+                r"프리미엄",
             ],
             Intent.COMPATIBILITY: [
-                r"맞는", r"호환", r"쓸.*?수.*?있", r"가능한",
-                r"될.*?까", r"사용.*?가능", r"적합"
+                r"맞는",
+                r"호환",
+                r"쓸.*?수.*?있",
+                r"가능한",
+                r"될.*?까",
+                r"사용.*?가능",
+                r"적합",
             ],
-            Intent.PRICE: [
-                r"가격", r"얼마", r"비용", r"원", r"₩",
-                r"돈", r"값"
-            ],
+            Intent.PRICE: [r"가격", r"얼마", r"비용", r"원", r"₩", r"돈", r"값"],
             Intent.REFERENCE: [
-                r"그.*?거", r"이.*?거", r"저.*?거", r"첫.*?번째",
-                r"두.*?번째", r"마지막", r"위.*?에", r"이전",
-                r"아까", r"방금"
+                r"그.*?거",
+                r"이.*?거",
+                r"저.*?거",
+                r"첫.*?번째",
+                r"두.*?번째",
+                r"마지막",
+                r"위.*?에",
+                r"이전",
+                r"아까",
+                r"방금",
             ],
             Intent.RECOMMENDATION: [
-                r"추천", r"좋은", r"괜찮은", r"어울리는",
-                r"적합한", r"어떤.*?게.*?좋", r"뭐.*?가.*?좋"
+                r"추천",
+                r"좋은",
+                r"괜찮은",
+                r"어울리는",
+                r"적합한",
+                r"어떤.*?게.*?좋",
+                r"뭐.*?가.*?좋",
             ],
-            Intent.GREETING: [
-                r"^안녕", r"^hi", r"^hello", r"처음",
-                r"도와줘", r"도와주세요"
-            ]
+            Intent.GREETING: [r"^안녕", r"^hi", r"^hello", r"처음", r"도와줘", r"도와주세요"],
         }
 
         # 복합 패턴 (우선순위 높음)
@@ -79,11 +106,7 @@ class IntentClassifier:
             (r"(저렴|싼|비싼).*?(추천|보여)", [Intent.FILTER, Intent.RECOMMENDATION]),
         ]
 
-    def classify(
-        self,
-        query: str,
-        context: Dict = None
-    ) -> Tuple[Intent, float]:
+    def classify(self, query: str, context: Dict = None) -> Tuple[Intent, float]:
         """
         사용자 쿼리의 의도 분류
 
@@ -98,9 +121,27 @@ class IntentClassifier:
 
         # 🔥 PRIORITY: 제품 유형 키워드 감지 → 무조건 SEARCH로 분류
         # 이를 통해 짧은 제품군 쿼리("토너", "세럼")가 REFERENCE로 오분류되는 문제 해결
-        product_types = ["토너", "로션", "에센스", "세럼", "크림", "앰플",
-                        "클렌징", "샴푸", "바디워시", "미스트", "젤", "펌프", "캡",
-                        "용기", "병", "오일", "핸드크림", "아이크림", "페이스오일"]
+        product_types = [
+            "토너",
+            "로션",
+            "에센스",
+            "세럼",
+            "크림",
+            "앰플",
+            "클렌징",
+            "샴푸",
+            "바디워시",
+            "미스트",
+            "젤",
+            "펌프",
+            "캡",
+            "용기",
+            "병",
+            "오일",
+            "핸드크림",
+            "아이크림",
+            "페이스오일",
+        ]
         for ptype in product_types:
             if ptype in query:
                 # 제품군 키워드가 있으면 SEARCH intent로 강제 분류 (높은 신뢰도)
@@ -133,8 +174,7 @@ class IntentClassifier:
             context_intent = self._infer_from_context(query, context)
             if context_intent:
                 # 컨텍스트 추론은 가중치 +0.3
-                intent_scores[context_intent] = \
-                    intent_scores.get(context_intent, 0) + 0.3
+                intent_scores[context_intent] = intent_scores.get(context_intent, 0) + 0.3
 
         # 4. 최고 점수 의도 선택
         if intent_scores:
@@ -149,11 +189,7 @@ class IntentClassifier:
         # 6. UNKNOWN
         return Intent.UNKNOWN, 0.3
 
-    def _infer_from_context(
-        self,
-        query: str,
-        context: Dict
-    ) -> Optional[Intent]:
+    def _infer_from_context(self, query: str, context: Dict) -> Optional[Intent]:
         """
         컨텍스트 기반 의도 추론
 
@@ -207,7 +243,7 @@ class IntentClassifier:
             Intent.REFERENCE: "이전 대화 참조",
             Intent.RECOMMENDATION: "추천 요청",
             Intent.GREETING: "인사",
-            Intent.UNKNOWN: "알 수 없음"
+            Intent.UNKNOWN: "알 수 없음",
         }
         return descriptions.get(intent, "알 수 없음")
 
@@ -224,36 +260,46 @@ class IntentClassifier:
         entities = {}
 
         # 용량 추출 (ml, g)
-        capacity_match = re.search(r'(\d+(?:\.\d+)?)\s*(ml|g)', query, re.IGNORECASE)
+        capacity_match = re.search(r"(\d+(?:\.\d+)?)\s*(ml|g)", query, re.IGNORECASE)
         if capacity_match:
             entities["capacity"] = {
                 "value": float(capacity_match.group(1)),
-                "unit": capacity_match.group(2).lower()
+                "unit": capacity_match.group(2).lower(),
             }
 
         # 재질 추출
         materials = ["PE", "PET", "PETG", "PP"]
         for material in materials:
-            if re.search(rf'\b{material}\b', query, re.IGNORECASE):
+            if re.search(rf"\b{material}\b", query, re.IGNORECASE):
                 entities["material"] = material
 
         # 네크 사이즈 추출
-        neck_match = re.search(r'(\d+)\s*파이', query)
+        neck_match = re.search(r"(\d+)\s*파이", query)
         if neck_match:
             entities["neck_size"] = f"{neck_match.group(1)}파이"
 
         # 가격 범위 추출
-        price_match = re.search(r'(\d+)\s*원?\s*이하', query)
+        price_match = re.search(r"(\d+)\s*원?\s*이하", query)
         if price_match:
             entities["price_max"] = int(price_match.group(1))
 
-        price_match = re.search(r'(\d+)\s*원?\s*이상', query)
+        price_match = re.search(r"(\d+)\s*원?\s*이상", query)
         if price_match:
             entities["price_min"] = int(price_match.group(1))
 
         # 제품 유형 추출
-        product_types = ["토너", "로션", "에센스", "세럼", "크림", "앰플",
-                        "클렌징", "샴푸", "바디워시", "미스트"]
+        product_types = [
+            "토너",
+            "로션",
+            "에센스",
+            "세럼",
+            "크림",
+            "앰플",
+            "클렌징",
+            "샴푸",
+            "바디워시",
+            "미스트",
+        ]
         for ptype in product_types:
             if ptype in query:
                 entities["product_type"] = ptype
@@ -264,7 +310,7 @@ class IntentClassifier:
             "불투명": "opaque",
             "프리미엄": "premium",
             "저렴": "budget",
-            "오일": "oil_compatible"
+            "오일": "oil_compatible",
         }
         for keyword, attr in attributes.items():
             if keyword in query:
@@ -274,11 +320,7 @@ class IntentClassifier:
 
         return entities
 
-    def classify_detailed(
-        self,
-        query: str,
-        context: Dict = None
-    ) -> Dict:
+    def classify_detailed(self, query: str, context: Dict = None) -> Dict:
         """
         상세한 의도 분류 (의도 + 엔티티)
 
@@ -297,7 +339,7 @@ class IntentClassifier:
             "confidence": confidence,
             "intent_description": self.get_intent_description(intent),
             "entities": entities,
-            "query": query
+            "query": query,
         }
 
 

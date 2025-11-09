@@ -4,14 +4,15 @@ Load Testing: Concurrent Request Handling
 Tests system behavior under concurrent load with multiple simultaneous requests.
 Validates scalability, resource management, and performance degradation patterns.
 """
-import pytest
+
 import asyncio
-from unittest.mock import Mock, AsyncMock
-from datetime import datetime
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-import threading
+from datetime import datetime
+from unittest.mock import AsyncMock, Mock
 
+import pytest
 
 # ============================================================
 # Concurrent Request Tests
@@ -62,7 +63,7 @@ class TestConcurrentRequests:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name=f"model-{i}"
+                model_name=f"model-{i}",
             )
             for i in range(5)
         ]
@@ -222,7 +223,7 @@ class TestResourceContention:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name=f"model-{idx}"
+                model_name=f"model-{idx}",
             )
             with lock:
                 services_created.append(service)
@@ -330,7 +331,9 @@ class TestErrorHandlingUnderLoad:
                     results.append({"id": request_id, "success": False, "error": str(e)})
 
         # 50 concurrent requests with some failures
-        threads = [threading.Thread(target=request_with_possible_error, args=(i,)) for i in range(50)]
+        threads = [
+            threading.Thread(target=request_with_possible_error, args=(i,)) for i in range(50)
+        ]
         for t in threads:
             t.start()
         for t in threads:
@@ -509,7 +512,10 @@ class TestDegradationPatterns:
         # Throughput should plateau at higher loads
         assert len(throughputs) == 5
         # Last two throughputs should be similar (plateau)
-        assert abs(throughputs[-1]["throughput"] - throughputs[-2]["throughput"]) < throughputs[0]["throughput"] * 0.2
+        assert (
+            abs(throughputs[-1]["throughput"] - throughputs[-2]["throughput"])
+            < throughputs[0]["throughput"] * 0.2
+        )
 
 
 # ============================================================
@@ -531,11 +537,13 @@ class TestStateConsistency:
         def read_config():
             cfg = get_config()
             with lock:
-                configs.append({
-                    "qdrant_host": cfg.qdrant_host,
-                    "redis_host": cfg.redis_host,
-                    "embedding_model": cfg.embedding_model
-                })
+                configs.append(
+                    {
+                        "qdrant_host": cfg.qdrant_host,
+                        "redis_host": cfg.redis_host,
+                        "embedding_model": cfg.embedding_model,
+                    }
+                )
 
         # 50 concurrent reads
         threads = [threading.Thread(target=read_config) for _ in range(50)]

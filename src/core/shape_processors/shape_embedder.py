@@ -4,10 +4,11 @@ Extract shape descriptors (Hu Moments, Fourier Descriptors, Zernike Moments)
 """
 
 import logging
-import numpy as np
-import cv2
-from typing import List, Tuple, Optional, Dict, Any
 from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+
+import cv2
+import numpy as np
 from PIL import Image
 
 logger = logging.getLogger(__name__)
@@ -16,8 +17,9 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ShapeFeatures:
     """Shape feature extraction result"""
-    hu_moments: np.ndarray          # 7 Hu moments
-    fourier_descriptors: np.ndarray # Fourier descriptors
+
+    hu_moments: np.ndarray  # 7 Hu moments
+    fourier_descriptors: np.ndarray  # Fourier descriptors
     zernike_moments: Optional[np.ndarray] = None  # Zernike moments (optional)
     aspect_ratio: float = 0.0
     circularity: float = 0.0
@@ -49,7 +51,7 @@ class ShapeEmbedder:
         embedding_dim: int = 128,
         fourier_descriptors_count: int = 32,
         use_zernike: bool = False,
-        background_removal: bool = True
+        background_removal: bool = True,
     ):
         """
         Initialize Shape Embedder
@@ -70,11 +72,7 @@ class ShapeEmbedder:
             f"(dim={embedding_dim}, fourier={fourier_descriptors_count}, zernike={use_zernike})"
         )
 
-    def encode_shape(
-        self,
-        image: Image.Image,
-        return_features: bool = False
-    ) -> np.ndarray:
+    def encode_shape(self, image: Image.Image, return_features: bool = False) -> np.ndarray:
         """
         Extract shape embedding from image
 
@@ -119,8 +117,8 @@ class ShapeEmbedder:
     def _pil_to_cv2(self, pil_image: Image.Image) -> np.ndarray:
         """Convert PIL Image to OpenCV format"""
         # Convert to RGB if needed
-        if pil_image.mode != 'RGB':
-            pil_image = pil_image.convert('RGB')
+        if pil_image.mode != "RGB":
+            pil_image = pil_image.convert("RGB")
 
         # Convert to numpy array
         img_array = np.array(pil_image)
@@ -158,11 +156,7 @@ class ShapeEmbedder:
 
     def _find_contours(self, binary_image: np.ndarray) -> List[np.ndarray]:
         """Find contours in binary image"""
-        contours, _ = cv2.findContours(
-            binary_image,
-            cv2.RETR_EXTERNAL,
-            cv2.CHAIN_APPROX_SIMPLE
-        )
+        contours, _ = cv2.findContours(binary_image, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
         # Filter small contours (noise)
         min_area = 100  # pixels
@@ -170,11 +164,7 @@ class ShapeEmbedder:
 
         return filtered
 
-    def _extract_features(
-        self,
-        contour: np.ndarray,
-        binary_image: np.ndarray
-    ) -> ShapeFeatures:
+    def _extract_features(self, contour: np.ndarray, binary_image: np.ndarray) -> ShapeFeatures:
         """Extract all shape features from contour"""
         # 1. Hu Moments (7 features)
         moments = cv2.moments(contour)
@@ -195,7 +185,7 @@ class ShapeEmbedder:
         aspect_ratio = float(w) / h if h > 0 else 0.0
 
         # Circularity: 4π * area / perimeter²
-        circularity = (4 * np.pi * area) / (perimeter ** 2) if perimeter > 0 else 0.0
+        circularity = (4 * np.pi * area) / (perimeter**2) if perimeter > 0 else 0.0
 
         # Solidity: contour area / convex hull area
         hull = cv2.convexHull(contour)
@@ -208,16 +198,12 @@ class ShapeEmbedder:
             aspect_ratio=aspect_ratio,
             circularity=circularity,
             solidity=solidity,
-            contour_area=area
+            contour_area=area,
         )
 
         return features
 
-    def _compute_fourier_descriptors(
-        self,
-        contour: np.ndarray,
-        num_descriptors: int
-    ) -> np.ndarray:
+    def _compute_fourier_descriptors(self, contour: np.ndarray, num_descriptors: int) -> np.ndarray:
         """
         Compute Fourier Descriptors from contour
 
@@ -240,7 +226,7 @@ class ShapeEmbedder:
             fourier_magnitudes = fourier_magnitudes / fourier_magnitudes[0]
 
         # Take first n descriptors (skip DC component)
-        descriptors = fourier_magnitudes[1:num_descriptors+1]
+        descriptors = fourier_magnitudes[1 : num_descriptors + 1]
 
         # Pad if needed
         if len(descriptors) < num_descriptors:
@@ -269,11 +255,9 @@ class ShapeEmbedder:
         components.append(features.fourier_descriptors)
 
         # 3. Basic metrics (3)
-        basic_metrics = np.array([
-            features.aspect_ratio,
-            features.circularity,
-            features.solidity
-        ], dtype=np.float32)
+        basic_metrics = np.array(
+            [features.aspect_ratio, features.circularity, features.solidity], dtype=np.float32
+        )
         components.append(basic_metrics)
 
         # 4. Zernike moments (optional)
@@ -290,7 +274,7 @@ class ShapeEmbedder:
             embedding = np.concatenate([embedding, padding])
         elif len(embedding) > self.embedding_dim:
             # Truncate
-            embedding = embedding[:self.embedding_dim]
+            embedding = embedding[: self.embedding_dim]
 
         # Normalize to unit vector
         norm = np.linalg.norm(embedding)
@@ -299,10 +283,7 @@ class ShapeEmbedder:
 
         return embedding.astype(np.float32)
 
-    def encode_batch(
-        self,
-        images: List[Image.Image]
-    ) -> np.ndarray:
+    def encode_batch(self, images: List[Image.Image]) -> np.ndarray:
         """
         Batch encode multiple images
 
@@ -325,11 +306,7 @@ class ShapeEmbedder:
 
         return np.array(embeddings)
 
-    def similarity(
-        self,
-        embedding1: np.ndarray,
-        embedding2: np.ndarray
-    ) -> float:
+    def similarity(self, embedding1: np.ndarray, embedding2: np.ndarray) -> float:
         """
         Compute cosine similarity between two shape embeddings
 

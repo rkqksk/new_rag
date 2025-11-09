@@ -19,12 +19,12 @@ Usage:
 """
 
 import logging
-from typing import List, Dict
+from typing import Dict, List
 
 from app.rag_consultation.models import (
+    Intent,
     QueryType,
     RetrievalStrategy,
-    Intent,
 )
 
 logger = logging.getLogger(__name__)
@@ -243,8 +243,7 @@ class QueryExpander:
             )
 
             logger.info(
-                f"Expanded query into {len(unique_queries)} variations, "
-                f"top_k={params['top_k']}"
+                f"Expanded query into {len(unique_queries)} variations, " f"top_k={params['top_k']}"
             )
 
             return strategy

@@ -4,11 +4,11 @@
 """
 
 import asyncio
-from typing import Dict, List, Optional, Any
-from datetime import datetime, timedelta
-from pathlib import Path
 import json
 import math
+from datetime import datetime, timedelta
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class PopularityCalculator:
@@ -24,17 +24,17 @@ class PopularityCalculator:
     """
 
     # 행동별 가중치
-    WEIGHT_SAMPLE_REQUEST = 10.0   # 샘플 신청 (가장 강력한 구매 의도)
-    WEIGHT_CLICK = 3.0              # 클릭
-    WEIGHT_SEARCH = 1.0             # 검색 출현
-    WEIGHT_CONVERSATION = 0.5       # 대화 언급
+    WEIGHT_SAMPLE_REQUEST = 10.0  # 샘플 신청 (가장 강력한 구매 의도)
+    WEIGHT_CLICK = 3.0  # 클릭
+    WEIGHT_SEARCH = 1.0  # 검색 출현
+    WEIGHT_CONVERSATION = 0.5  # 대화 언급
 
     # 시간 감쇠 파라미터
-    DECAY_HALFLIFE_DAYS = 7         # 7일마다 절반으로 감소
+    DECAY_HALFLIFE_DAYS = 7  # 7일마다 절반으로 감소
 
     # 트렌드 계산
-    TREND_BOOST_MAX = 1.5           # 최대 1.5배 부스트
-    TREND_BOOST_MIN = 0.8           # 최소 0.8배 패널티
+    TREND_BOOST_MAX = 1.5  # 최대 1.5배 부스트
+    TREND_BOOST_MIN = 0.8  # 최소 0.8배 패널티
 
     def __init__(self, db_connection=None, backup_dir: str = "logs/analytics"):
         """
@@ -129,15 +129,9 @@ class PopularityCalculator:
         if max_score == 0:
             return {k: 0.0 for k in scores.keys()}
 
-        return {
-            product_idx: (score / max_score) * 100.0
-            for product_idx, score in scores.items()
-        }
+        return {product_idx: (score / max_score) * 100.0 for product_idx, score in scores.items()}
 
-    async def calculate_product_scores(
-        self,
-        window_days: int = 30
-    ) -> Dict[str, Dict[str, Any]]:
+    async def calculate_product_scores(self, window_days: int = 30) -> Dict[str, Dict[str, Any]]:
         """
         제품별 인기도 스코어 계산
 
@@ -178,10 +172,10 @@ class PopularityCalculator:
         # 3. 제품별 스코어 계산
         product_scores = {}
         all_products = set(
-            list(sample_requests.keys()) +
-            list(clicks.keys()) +
-            list(searches.keys()) +
-            list(conversations.keys())
+            list(sample_requests.keys())
+            + list(clicks.keys())
+            + list(searches.keys())
+            + list(conversations.keys())
         )
 
         for product_idx in all_products:
@@ -193,14 +187,10 @@ class PopularityCalculator:
 
             # 시간 감쇠 적용 스코어 계산
             sample_score = self._calculate_weighted_score(
-                sample_requests.get(product_idx, []),
-                self.WEIGHT_SAMPLE_REQUEST,
-                now
+                sample_requests.get(product_idx, []), self.WEIGHT_SAMPLE_REQUEST, now
             )
             click_score = self._calculate_weighted_score(
-                clicks.get(product_idx, []),
-                self.WEIGHT_CLICK,
-                now
+                clicks.get(product_idx, []), self.WEIGHT_CLICK, now
             )
             search_score = search_count * self.WEIGHT_SEARCH
             conversation_score = conversation_count * self.WEIGHT_CONVERSATION
@@ -223,32 +213,29 @@ class PopularityCalculator:
                 trend_percentage = 0.0
 
             product_scores[product_idx] = {
-                'total_score': total_score,
-                'normalized_score': 0.0,  # 나중에 정규화
-                'sample_request_count': sample_count,
-                'click_count': click_count,
-                'search_appearance_count': search_count,
-                'conversation_mention_count': conversation_count,
-                'recent_7d_score': recent_7d_score,
-                'previous_7d_score': previous_7d_score,
-                'trend_percentage': trend_percentage,
-                'trend_boost': trend_boost,
+                "total_score": total_score,
+                "normalized_score": 0.0,  # 나중에 정규화
+                "sample_request_count": sample_count,
+                "click_count": click_count,
+                "search_appearance_count": search_count,
+                "conversation_mention_count": conversation_count,
+                "recent_7d_score": recent_7d_score,
+                "previous_7d_score": previous_7d_score,
+                "trend_percentage": trend_percentage,
+                "trend_boost": trend_boost,
             }
 
         # 4. 정규화 (0-100)
-        raw_scores = {k: v['total_score'] for k, v in product_scores.items()}
+        raw_scores = {k: v["total_score"] for k, v in product_scores.items()}
         normalized_scores = self.normalize_scores(raw_scores)
 
         for product_idx, normalized_score in normalized_scores.items():
-            product_scores[product_idx]['normalized_score'] = normalized_score
+            product_scores[product_idx]["normalized_score"] = normalized_score
 
         return product_scores
 
     def _calculate_weighted_score(
-        self,
-        events: List[Dict],
-        base_weight: float,
-        now: datetime
+        self, events: List[Dict], base_weight: float, now: datetime
     ) -> float:
         """
         이벤트 리스트의 가중치 합계 계산 (시간 감쇠 적용)
@@ -264,7 +251,7 @@ class PopularityCalculator:
         total_score = 0.0
 
         for event in events:
-            timestamp = event.get('timestamp', now)
+            timestamp = event.get("timestamp", now)
             days_ago = (now - timestamp).total_seconds() / 86400
             decay = self.time_decay_factor(days_ago)
             total_score += base_weight * decay
@@ -272,9 +259,7 @@ class PopularityCalculator:
         return total_score
 
     async def calculate_category_scores(
-        self,
-        product_scores: Dict[str, Dict[str, Any]],
-        product_metadata: Dict[str, Dict[str, Any]]
+        self, product_scores: Dict[str, Dict[str, Any]], product_metadata: Dict[str, Dict[str, Any]]
     ) -> Dict[str, Dict[str, Dict[str, float]]]:
         """
         카테고리별 스코어 계산 (재질/용도/용량별)
@@ -300,26 +285,26 @@ class PopularityCalculator:
 
         for product_idx, score_data in product_scores.items():
             metadata = product_metadata.get(product_idx, {})
-            material = metadata.get('material', 'Unknown')
-            capacity = metadata.get('capacity_ml')
-            category = metadata.get('category', 'Unknown')
+            material = metadata.get("material", "Unknown")
+            capacity = metadata.get("capacity_ml")
+            category = metadata.get("category", "Unknown")
 
             # 재질별
             if material not in by_material:
                 by_material[material] = {}
-            by_material[material][product_idx] = score_data['normalized_score']
+            by_material[material][product_idx] = score_data["normalized_score"]
 
             # 용량별
             if capacity:
                 capacity_key = str(int(capacity))
                 if capacity_key not in by_capacity:
                     by_capacity[capacity_key] = {}
-                by_capacity[capacity_key][product_idx] = score_data['normalized_score']
+                by_capacity[capacity_key][product_idx] = score_data["normalized_score"]
 
             # 카테고리별
             if category not in by_category:
                 by_category[category] = {}
-            by_category[category][product_idx] = score_data['normalized_score']
+            by_category[category][product_idx] = score_data["normalized_score"]
 
         # 2. 각 카테고리 내에서 정규화
         for material, scores in by_material.items():
@@ -335,15 +320,27 @@ class PopularityCalculator:
         category_scores = {}
         for product_idx in product_scores.keys():
             metadata = product_metadata.get(product_idx, {})
-            material = metadata.get('material', 'Unknown')
-            capacity = metadata.get('capacity_ml')
-            category = metadata.get('category', 'Unknown')
+            material = metadata.get("material", "Unknown")
+            capacity = metadata.get("capacity_ml")
+            category = metadata.get("category", "Unknown")
 
             category_scores[product_idx] = {
-                'score_by_material': {material: by_material.get(material, {}).get(product_idx, 0.0)},
-                'score_by_capacity': {str(int(capacity)): by_capacity.get(str(int(capacity)), {}).get(product_idx, 0.0)} if capacity else {},
-                'score_by_category': {category: by_category.get(category, {}).get(product_idx, 0.0)},
-                'score_by_use': {}  # TODO: 용도별 스코어는 샘플 신청 데이터에서 추출
+                "score_by_material": {
+                    material: by_material.get(material, {}).get(product_idx, 0.0)
+                },
+                "score_by_capacity": (
+                    {
+                        str(int(capacity)): by_capacity.get(str(int(capacity)), {}).get(
+                            product_idx, 0.0
+                        )
+                    }
+                    if capacity
+                    else {}
+                ),
+                "score_by_category": {
+                    category: by_category.get(category, {}).get(product_idx, 0.0)
+                },
+                "score_by_use": {},  # TODO: 용도별 스코어는 샘플 신청 데이터에서 추출
             }
 
         return category_scores
@@ -352,7 +349,7 @@ class PopularityCalculator:
         self,
         product_scores: Dict[str, Dict[str, Any]],
         category_scores: Dict[str, Dict[str, Dict[str, float]]],
-        product_metadata: Dict[str, Dict[str, Any]]
+        product_metadata: Dict[str, Dict[str, Any]],
     ):
         """
         product_popularity 테이블 업데이트
@@ -367,7 +364,9 @@ class PopularityCalculator:
 
         if self.db:
             try:
-                await self._update_db(product_scores, category_scores, product_metadata, window_start, now)
+                await self._update_db(
+                    product_scores, category_scores, product_metadata, window_start, now
+                )
             except Exception as e:
                 print(f"[PopularityCalculator] DB 업데이트 실패: {e}")
                 await self._save_to_file(product_scores, category_scores)
@@ -381,7 +380,7 @@ class PopularityCalculator:
         category_scores: Dict,
         product_metadata: Dict,
         window_start: datetime,
-        window_end: datetime
+        window_end: datetime,
     ):
         """
         PostgreSQL DB 업데이트
@@ -459,12 +458,12 @@ class PopularityCalculator:
         backup_file = self.backup_dir / f"popularity_scores_{timestamp}.json"
 
         data = {
-            'timestamp': timestamp,
-            'product_scores': product_scores,
-            'category_scores': category_scores
+            "timestamp": timestamp,
+            "product_scores": product_scores,
+            "category_scores": category_scores,
         }
 
-        with open(backup_file, 'w', encoding='utf-8') as f:
+        with open(backup_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2, default=str)
 
         print(f"[PopularityCalculator] Saved scores to {backup_file}")

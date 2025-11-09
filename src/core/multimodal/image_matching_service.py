@@ -4,12 +4,13 @@ Visual similarity search using image and shape embeddings
 """
 
 import logging
-from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass
-from PIL import Image
-import numpy as np
+from typing import Any, Dict, List, Optional, Tuple
 
+import numpy as np
+from PIL import Image
 from qdrant_client import QdrantClient
+
 from ..shape_processors import ShapeEmbedder
 
 logger = logging.getLogger(__name__)
@@ -18,10 +19,11 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ImageMatch:
     """Image match result"""
+
     product_id: str
-    visual_score: float      # Image embedding similarity
-    shape_score: float       # Shape embedding similarity
-    combined_score: float    # Weighted combination
+    visual_score: float  # Image embedding similarity
+    shape_score: float  # Shape embedding similarity
+    combined_score: float  # Weighted combination
     payload: Dict[str, Any]
     image_url: Optional[str] = None
 
@@ -50,7 +52,7 @@ class ImageMatchingService:
         shape_embedder: ShapeEmbedder,
         collection_name: str = "products_multimodal",
         visual_weight: float = 0.6,
-        shape_weight: float = 0.4
+        shape_weight: float = 0.4,
     ):
         """
         Initialize Image Matching Service
@@ -83,7 +85,7 @@ class ImageMatchingService:
         query_image: Image.Image,
         top_k: int = 20,
         use_shape: bool = True,
-        filters: Optional[Dict] = None
+        filters: Optional[Dict] = None,
     ) -> List[ImageMatch]:
         """
         Find visually similar products
@@ -113,7 +115,7 @@ class ImageMatchingService:
             collection_name=self.collection_name,
             query_vector=("image", visual_embedding),  # Named vector
             limit=top_k * 2,  # Get more for fusion
-            query_filter=filters
+            query_filter=filters,
         )
 
         if not use_shape or shape_embedding is None:
@@ -125,7 +127,7 @@ class ImageMatchingService:
                     shape_score=0.0,
                     combined_score=point.score,
                     payload=point.payload,
-                    image_url=point.payload.get("image_url")
+                    image_url=point.payload.get("image_url"),
                 )
                 for point in visual_results
             ]
@@ -135,7 +137,7 @@ class ImageMatchingService:
             collection_name=self.collection_name,
             query_vector=("shape", shape_embedding.tolist()),  # Named vector
             limit=top_k * 2,
-            query_filter=filters
+            query_filter=filters,
         )
 
         # Combine results
@@ -150,7 +152,7 @@ class ImageMatchingService:
         query_image: Image.Image,
         top_k: int = 20,
         use_shape: bool = True,
-        filters: Optional[Dict] = None
+        filters: Optional[Dict] = None,
     ) -> List[ImageMatch]:
         """Synchronous version of find_similar"""
         import asyncio
@@ -158,10 +160,10 @@ class ImageMatchingService:
         loop = asyncio.get_event_loop()
         if loop.is_running():
             import concurrent.futures
+
             with concurrent.futures.ThreadPoolExecutor() as executor:
                 future = executor.submit(
-                    asyncio.run,
-                    self.find_similar(query_image, top_k, use_shape, filters)
+                    asyncio.run, self.find_similar(query_image, top_k, use_shape, filters)
                 )
                 return future.result()
         else:
@@ -172,23 +174,17 @@ class ImageMatchingService:
     async def _generate_visual_embedding(self, image: Image.Image) -> List[float]:
         """Generate visual embedding (OpenCLIP)"""
         # Check if embedder has async method
-        if hasattr(self.image_embedder, 'encode_image_async'):
+        if hasattr(self.image_embedder, "encode_image_async"):
             return await self.image_embedder.encode_image_async(image)
         else:
             # Run sync method in thread pool
             import asyncio
+
             loop = asyncio.get_event_loop()
-            return await loop.run_in_executor(
-                None,
-                self.image_embedder.encode_image,
-                image
-            )
+            return await loop.run_in_executor(None, self.image_embedder.encode_image, image)
 
     def _combine_results(
-        self,
-        visual_results: List,
-        shape_results: List,
-        top_k: int
+        self, visual_results: List, shape_results: List, top_k: int
     ) -> List[ImageMatch]:
         """
         Combine visual and shape search results
@@ -217,10 +213,7 @@ class ImageMatchingService:
             shape_score = shape_scores.get(product_id, 0.0)
 
             # Weighted combination
-            combined_score = (
-                self.visual_weight * visual_score +
-                self.shape_weight * shape_score
-            )
+            combined_score = self.visual_weight * visual_score + self.shape_weight * shape_score
 
             match = ImageMatch(
                 product_id=product_id,
@@ -228,7 +221,7 @@ class ImageMatchingService:
                 shape_score=shape_score,
                 combined_score=combined_score,
                 payload=payload_map.get(product_id, {}),
-                image_url=payload_map.get(product_id, {}).get("image_url")
+                image_url=payload_map.get(product_id, {}).get("image_url"),
             )
             matches.append(match)
 
@@ -239,10 +232,7 @@ class ImageMatchingService:
         return matches[:top_k]
 
     def compute_similarity(
-        self,
-        image1: Image.Image,
-        image2: Image.Image,
-        use_shape: bool = True
+        self, image1: Image.Image, image2: Image.Image, use_shape: bool = True
     ) -> Tuple[float, float, float]:
         """
         Compute similarity between two images
@@ -257,6 +247,7 @@ class ImageMatchingService:
         """
         # Generate embeddings
         import asyncio
+
         loop = asyncio.get_event_loop()
 
         visual_emb1 = loop.run_until_complete(self._generate_visual_embedding(image1))
@@ -270,10 +261,7 @@ class ImageMatchingService:
             shape_emb2 = self.shape_embedder.encode_shape(image2)
             shape_sim = self.shape_embedder.similarity(shape_emb1, shape_emb2)
 
-            combined_sim = (
-                self.visual_weight * visual_sim +
-                self.shape_weight * shape_sim
-            )
+            combined_sim = self.visual_weight * visual_sim + self.shape_weight * shape_sim
         else:
             shape_sim = 0.0
             combined_sim = visual_sim

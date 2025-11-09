@@ -20,11 +20,12 @@ Usage:
 
 import logging
 from typing import Dict, Optional
+
 from jinja2 import Template
 
 from app.rag_consultation.models import (
-    QueryType,
     FormalityLevel,
+    QueryType,
     UrgencyLevel,
 )
 

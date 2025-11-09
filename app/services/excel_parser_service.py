@@ -3,11 +3,11 @@ Excel Parser Service
 공식 Excel 파일을 파싱하여 크롤링 데이터와 비교
 """
 
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from dataclasses import dataclass
 import json
+import logging
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ExcelProduct:
     """Excel에서 추출한 제품 정보"""
+
     code: str
     spec: str
     packaging: str
@@ -74,10 +75,12 @@ class ExcelParserService:
 
             # 다중 컬럼 레이아웃 감지: Row 5에 "CODE"가 여러 개 있는지 확인
             row5_values = [cell.value for cell in sheet[5]]
-            code_columns = [idx for idx, val in enumerate(row5_values, start=1) if val == 'CODE']
+            code_columns = [idx for idx, val in enumerate(row5_values, start=1) if val == "CODE"]
 
             if len(code_columns) > 1:
-                logger.info(f"Detected multi-column layout with {len(code_columns)} products per row group")
+                logger.info(
+                    f"Detected multi-column layout with {len(code_columns)} products per row group"
+                )
                 products = self._parse_multi_column_layout(sheet, code_columns)
             else:
                 # 기존 단순 테이블 레이아웃
@@ -112,16 +115,18 @@ class ExcelParserService:
         for start_row in range(5, max_row, 10):
             # Check if this row has CODE labels
             row_values = [cell.value for cell in sheet[start_row]]
-            if 'CODE' not in row_values:
+            if "CODE" not in row_values:
                 continue
 
             # Find CODE columns in this row
-            local_code_cols = [idx for idx, val in enumerate(row_values, start=1) if val == 'CODE']
+            local_code_cols = [idx for idx, val in enumerate(row_values, start=1) if val == "CODE"]
 
             if not local_code_cols:
                 continue
 
-            logger.debug(f"Found product group at row {start_row} with {len(local_code_cols)} columns")
+            logger.debug(
+                f"Found product group at row {start_row} with {len(local_code_cols)} columns"
+            )
 
             # Extract products from this group
             for col_idx in local_code_cols:
@@ -130,25 +135,25 @@ class ExcelParserService:
                     code_cell = sheet.cell(row=start_row + 1, column=col_idx + 1)
                     code_value = code_cell.value
 
-                    if not code_value or str(code_value).startswith('='):
+                    if not code_value or str(code_value).startswith("="):
                         continue
 
                     # Spec is in col_idx + 1, row start_row+2 (after CODE+1)
                     spec_cell = sheet.cell(row=start_row + 2, column=col_idx + 1)
-                    spec_value = spec_cell.value or ''
+                    spec_value = spec_cell.value or ""
 
                     # If empty, try next row (dimensions)
-                    if not spec_value or str(spec_value).strip() == '':
+                    if not spec_value or str(spec_value).strip() == "":
                         spec_cell = sheet.cell(row=start_row + 3, column=col_idx + 1)
-                        spec_value = spec_cell.value or ''
+                        spec_value = spec_cell.value or ""
 
                     # Packaging info
                     packaging_cell = sheet.cell(row=start_row + 5, column=col_idx + 2)
-                    packaging_value = packaging_cell.value or ''
+                    packaging_value = packaging_cell.value or ""
 
                     # Mold info
                     mold_cell = sheet.cell(row=start_row + 6, column=col_idx + 2)
-                    mold_value = mold_cell.value or ''
+                    mold_value = mold_cell.value or ""
 
                     product = ExcelProduct(
                         code=str(code_value).strip(),
@@ -157,10 +162,10 @@ class ExcelParserService:
                         mold=str(mold_value),
                         cost=None,
                         price=None,
-                        production='',
-                        note='',
+                        production="",
+                        note="",
                         images=[],
-                        row_number=start_row + 1
+                        row_number=start_row + 1,
                     )
 
                     products.append(product)
@@ -186,7 +191,7 @@ class ExcelParserService:
 
         # Parse data rows (from row 2)
         for row_idx, row in enumerate(sheet.iter_rows(min_row=2), start=2):
-            code_col = headers.get('Code') or headers.get('code') or headers.get('CODE')
+            code_col = headers.get("Code") or headers.get("code") or headers.get("CODE")
             if not code_col:
                 continue
 
@@ -196,15 +201,15 @@ class ExcelParserService:
 
             product = ExcelProduct(
                 code=str(code_value),
-                spec=str(row[headers.get('Spec', 1) - 1].value or ''),
-                packaging=str(row[headers.get('포장', 2) - 1].value or ''),
-                mold=str(row[headers.get('금형', 3) - 1].value or ''),
-                cost=self._parse_number(row[headers.get('원가', 4) - 1].value),
-                price=self._parse_number(row[headers.get('판매', 5) - 1].value),
-                production=str(row[headers.get('생산량', 6) - 1].value or ''),
-                note=str(row[headers.get('비고', 7) - 1].value or ''),
+                spec=str(row[headers.get("Spec", 1) - 1].value or ""),
+                packaging=str(row[headers.get("포장", 2) - 1].value or ""),
+                mold=str(row[headers.get("금형", 3) - 1].value or ""),
+                cost=self._parse_number(row[headers.get("원가", 4) - 1].value),
+                price=self._parse_number(row[headers.get("판매", 5) - 1].value),
+                production=str(row[headers.get("생산량", 6) - 1].value or ""),
+                note=str(row[headers.get("비고", 7) - 1].value or ""),
                 images=[],
-                row_number=row_idx
+                row_number=row_idx,
             )
 
             products.append(product)
@@ -229,7 +234,7 @@ class ExcelParserService:
             filename: Excel 파일명
         """
         try:
-            if not hasattr(sheet, '_images'):
+            if not hasattr(sheet, "_images"):
                 logger.info("No images found in Excel")
                 return
 
@@ -239,7 +244,7 @@ class ExcelParserService:
                 image_filename = f"{Path(filename).stem}_img_{image_count}.png"
                 image_path = self.images_dir / image_filename
 
-                with open(image_path, 'wb') as f:
+                with open(image_path, "wb") as f:
                     f.write(image._data())
 
                 image_count += 1
@@ -251,9 +256,7 @@ class ExcelParserService:
             logger.error(f"Error extracting images: {e}")
 
     def compare_with_database(
-        self,
-        excel_products: List[ExcelProduct],
-        db_products: List[Dict[str, Any]]
+        self, excel_products: List[ExcelProduct], db_products: List[Dict[str, Any]]
     ) -> Dict[str, Any]:
         """
         Excel 데이터와 DB 데이터 비교
@@ -271,9 +274,9 @@ class ExcelParserService:
         # DB 제품 코드 맵
         db_map = {}
         for p in db_products:
-            specs = p.get('specifications', {})
-            code = specs.get('제품 코드', 'N/A')
-            if code and code != 'N/A':
+            specs = p.get("specifications", {})
+            code = specs.get("제품 코드", "N/A")
+            if code and code != "N/A":
                 db_map[code] = p
 
         # 비교
@@ -287,35 +290,33 @@ class ExcelParserService:
             else:
                 # 스펙 비교
                 db_prod = db_map[code]
-                db_specs = db_prod.get('specifications', {})
-                db_spec = db_specs.get('사양', '')
+                db_specs = db_prod.get("specifications", {})
+                db_spec = db_specs.get("사양", "")
 
                 if excel_prod.spec != db_spec:
-                    spec_mismatches.append({
-                        'code': code,
-                        'excel_spec': excel_prod.spec,
-                        'db_spec': db_spec
-                    })
+                    spec_mismatches.append(
+                        {"code": code, "excel_spec": excel_prod.spec, "db_spec": db_spec}
+                    )
 
         # DB에만 있는 제품 (제품 코드 없는 것)
         for p in db_products:
-            specs = p.get('specifications', {})
-            code = specs.get('제품 코드', 'N/A')
-            if code == 'N/A':
-                missing_codes_in_db.append(p.get('product_name', 'Unknown'))
+            specs = p.get("specifications", {})
+            code = specs.get("제품 코드", "N/A")
+            if code == "N/A":
+                missing_codes_in_db.append(p.get("product_name", "Unknown"))
 
         report = {
-            'total_excel': len(excel_products),
-            'total_db': len(db_products),
-            'total_db_with_codes': len(db_map),
-            'missing_in_db': len(missing_in_db),
-            'missing_codes_in_db': len(missing_codes_in_db),
-            'spec_mismatches': len(spec_mismatches),
-            'details': {
-                'missing_in_db': [p.code for p in missing_in_db],
-                'missing_codes': missing_codes_in_db,
-                'spec_mismatches': spec_mismatches
-            }
+            "total_excel": len(excel_products),
+            "total_db": len(db_products),
+            "total_db_with_codes": len(db_map),
+            "missing_in_db": len(missing_in_db),
+            "missing_codes_in_db": len(missing_codes_in_db),
+            "spec_mismatches": len(spec_mismatches),
+            "details": {
+                "missing_in_db": [p.code for p in missing_in_db],
+                "missing_codes": missing_codes_in_db,
+                "spec_mismatches": spec_mismatches,
+            },
         }
 
         logger.info(f"📊 Comparison Report: {report}")
@@ -327,21 +328,21 @@ class ExcelParserService:
 
         data = [
             {
-                'code': p.code,
-                'spec': p.spec,
-                'packaging': p.packaging,
-                'mold': p.mold,
-                'cost': p.cost,
-                'price': p.price,
-                'production': p.production,
-                'note': p.note,
-                'images': p.images,
-                'row_number': p.row_number
+                "code": p.code,
+                "spec": p.spec,
+                "packaging": p.packaging,
+                "mold": p.mold,
+                "cost": p.cost,
+                "price": p.price,
+                "production": p.production,
+                "note": p.note,
+                "images": p.images,
+                "row_number": p.row_number,
             }
             for p in products
         ]
 
-        with open(output_file, 'w', encoding='utf-8') as f:
+        with open(output_file, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
         logger.info(f"💾 Saved parsed data: {output_file}")

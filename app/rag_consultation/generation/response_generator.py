@@ -26,17 +26,18 @@ Usage:
     )
 """
 
-import logging
-from typing import Optional, Dict, Any
-import httpx
 import asyncio
+import logging
+from typing import Any, Dict, Optional
 
+import httpx
+
+from app.rag_consultation.generation.template_system import TemplateSystem
 from app.rag_consultation.models import (
-    QueryType,
     FormalityLevel,
+    QueryType,
     UrgencyLevel,
 )
-from app.rag_consultation.generation.template_system import TemplateSystem
 
 logger = logging.getLogger(__name__)
 
@@ -96,8 +97,7 @@ class ResponseGenerator:
         # Verify ollama_url is localhost
         if self.ollama_url != "http://localhost:11434":
             logger.warning(
-                f"Non-standard Ollama URL: {self.ollama_url}. "
-                f"Expected: http://localhost:11434"
+                f"Non-standard Ollama URL: {self.ollama_url}. " f"Expected: http://localhost:11434"
             )
 
     async def _call_ollama(
@@ -142,18 +142,13 @@ class ResponseGenerator:
                 if not generated_text:
                     raise RuntimeError("Empty response from Ollama")
 
-                logger.info(
-                    f"Generated response from Ollama "
-                    f"({len(generated_text)} chars)"
-                )
+                logger.info(f"Generated response from Ollama " f"({len(generated_text)} chars)")
 
                 return generated_text.strip()
 
         except httpx.TimeoutException as e:
             logger.error(f"Ollama request timeout: {e}")
-            raise RuntimeError(
-                f"Ollama request timeout after {self.timeout}s"
-            ) from e
+            raise RuntimeError(f"Ollama request timeout after {self.timeout}s") from e
 
         except httpx.HTTPStatusError as e:
             logger.error(f"Ollama HTTP error: {e}")
@@ -221,10 +216,7 @@ class ResponseGenerator:
                     response=raw_response,
                 )
 
-            logger.info(
-                f"Generated formatted response "
-                f"({len(formatted_response)} chars)"
-            )
+            logger.info(f"Generated formatted response " f"({len(formatted_response)} chars)")
 
             return formatted_response
 

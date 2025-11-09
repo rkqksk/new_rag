@@ -4,10 +4,10 @@
 검색 관련성 스코어 + 인기도 스코어를 결합하여 최종 랭킹 생성
 """
 
-from typing import List, Dict, Optional, Any
-from datetime import datetime, timedelta
 import json
+from datetime import datetime, timedelta
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class PopularityRanker:
@@ -22,8 +22,8 @@ class PopularityRanker:
     """
 
     # 기본 가중치
-    DEFAULT_RELEVANCE_WEIGHT = 0.7      # 관련성 70%
-    DEFAULT_POPULARITY_WEIGHT = 0.3     # 인기도 30%
+    DEFAULT_RELEVANCE_WEIGHT = 0.7  # 관련성 70%
+    DEFAULT_POPULARITY_WEIGHT = 0.3  # 인기도 30%
 
     # 신제품 보호 기간 (일)
     NEW_PRODUCT_GRACE_PERIOD = 14
@@ -103,7 +103,7 @@ class PopularityRanker:
         # 최신 파일 찾기
         score_files = sorted(
             self.cache_dir.parent.parent.glob("logs/analytics/popularity_scores_*.json"),
-            reverse=True
+            reverse=True,
         )
 
         if not score_files:
@@ -113,14 +113,12 @@ class PopularityRanker:
         latest_file = score_files[0]
         print(f"[PopularityRanker] Loading from {latest_file}")
 
-        with open(latest_file, 'r', encoding='utf-8') as f:
+        with open(latest_file, "r", encoding="utf-8") as f:
             data = json.load(f)
-            self.popularity_cache = data.get('product_scores', {})
+            self.popularity_cache = data.get("product_scores", {})
 
     def get_popularity_score(
-        self,
-        product_idx: str,
-        context_filters: Optional[Dict[str, Any]] = None
+        self, product_idx: str, context_filters: Optional[Dict[str, Any]] = None
     ) -> float:
         """
         제품의 인기도 스코어 조회
@@ -138,7 +136,7 @@ class PopularityRanker:
         scores = self.popularity_cache[product_idx]
 
         # 1. 기본 스코어
-        base_score = scores.get('normalized_score', 0.0)
+        base_score = scores.get("normalized_score", 0.0)
 
         # 2. 컨텍스트 기반 부스트
         if context_filters:
@@ -149,11 +147,7 @@ class PopularityRanker:
 
         return base_score
 
-    def _get_context_score(
-        self,
-        scores: Dict[str, Any],
-        context_filters: Dict[str, Any]
-    ) -> float:
+    def _get_context_score(self, scores: Dict[str, Any], context_filters: Dict[str, Any]) -> float:
         """
         컨텍스트 기반 스코어 계산
 
@@ -170,23 +164,23 @@ class PopularityRanker:
         context_scores = []
 
         # 재질별 스코어
-        if 'material' in context_filters:
-            material = context_filters['material']
-            score_by_material = scores.get('score_by_material', {})
+        if "material" in context_filters:
+            material = context_filters["material"]
+            score_by_material = scores.get("score_by_material", {})
             if isinstance(score_by_material, dict) and material in score_by_material:
                 context_scores.append(score_by_material[material])
 
         # 용량별 스코어
-        if 'capacity_ml' in context_filters:
-            capacity = str(int(context_filters['capacity_ml']))
-            score_by_capacity = scores.get('score_by_capacity', {})
+        if "capacity_ml" in context_filters:
+            capacity = str(int(context_filters["capacity_ml"]))
+            score_by_capacity = scores.get("score_by_capacity", {})
             if isinstance(score_by_capacity, dict) and capacity in score_by_capacity:
                 context_scores.append(score_by_capacity[capacity])
 
         # 용도별 스코어
-        if 'intended_use' in context_filters:
-            use = context_filters['intended_use']
-            score_by_use = scores.get('score_by_use', {})
+        if "intended_use" in context_filters:
+            use = context_filters["intended_use"]
+            score_by_use = scores.get("score_by_use", {})
             if isinstance(score_by_use, dict) and use in score_by_use:
                 context_scores.append(score_by_use[use])
 
@@ -200,7 +194,7 @@ class PopularityRanker:
         popularity_weight: float = DEFAULT_POPULARITY_WEIGHT,
         context_filters: Optional[Dict[str, Any]] = None,
         boost_trending: bool = True,
-        protect_new_products: bool = True
+        protect_new_products: bool = True,
     ) -> List[Dict[str, Any]]:
         """
         검색 결과 재정렬
@@ -228,15 +222,15 @@ class PopularityRanker:
 
         # 스코어 계산
         for result in search_results:
-            product_idx = result.get('product_idx')
-            relevance_score = result.get('relevance_score', 0.0)
+            product_idx = result.get("product_idx")
+            relevance_score = result.get("relevance_score", 0.0)
 
             # 인기도 스코어
             popularity_score = self.get_popularity_score(product_idx, context_filters)
 
             # 신제품 보호
             if protect_new_products:
-                is_new = self._is_new_product(result.get('metadata', {}))
+                is_new = self._is_new_product(result.get("metadata", {}))
                 if is_new and popularity_score < 20:
                     # 신제품은 최소 20점 보장
                     popularity_score = 20.0
@@ -244,7 +238,7 @@ class PopularityRanker:
             # 트렌드 부스트
             trend_boost = 1.0
             if boost_trending and product_idx in self.popularity_cache:
-                trend_percentage = self.popularity_cache[product_idx].get('trend_percentage', 0.0)
+                trend_percentage = self.popularity_cache[product_idx].get("trend_percentage", 0.0)
                 if trend_percentage > 30:  # 30% 이상 상승
                     trend_boost = 1.1  # 10% 부스트
                 elif trend_percentage > 50:  # 50% 이상 상승
@@ -252,17 +246,16 @@ class PopularityRanker:
 
             # 최종 스코어
             final_score = (
-                relevance_score * relevance_weight +
-                popularity_score * popularity_weight
+                relevance_score * relevance_weight + popularity_score * popularity_weight
             ) * trend_boost
 
             # 결과에 추가
-            result['popularity_score'] = popularity_score
-            result['trend_boost'] = trend_boost
-            result['final_score'] = final_score
+            result["popularity_score"] = popularity_score
+            result["trend_boost"] = trend_boost
+            result["final_score"] = final_score
 
         # 정렬
-        search_results.sort(key=lambda x: x['final_score'], reverse=True)
+        search_results.sort(key=lambda x: x["final_score"], reverse=True)
 
         return search_results
 
@@ -277,14 +270,14 @@ class PopularityRanker:
             신제품 여부
         """
         # 등록일 확인
-        created_at = metadata.get('created_at')
+        created_at = metadata.get("created_at")
         if not created_at:
             return False
 
         # 문자열이면 datetime으로 변환
         if isinstance(created_at, str):
             try:
-                created_at = datetime.fromisoformat(created_at.replace('Z', '+00:00'))
+                created_at = datetime.fromisoformat(created_at.replace("Z", "+00:00"))
             except:
                 return False
 
@@ -296,7 +289,7 @@ class PopularityRanker:
         self,
         top_k: int = 10,
         category_filter: Optional[str] = None,
-        material_filter: Optional[str] = None
+        material_filter: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         인기 제품 조회 (검색 없이)
@@ -316,14 +309,16 @@ class PopularityRanker:
         for product_idx, scores in self.popularity_cache.items():
             # TODO: 제품 메타데이터에서 category, material 가져오기
             # 지금은 단순히 스코어만 사용
-            filtered.append({
-                'product_idx': product_idx,
-                'popularity_score': scores.get('normalized_score', 0.0),
-                'trend_percentage': scores.get('trend_percentage', 0.0),
-            })
+            filtered.append(
+                {
+                    "product_idx": product_idx,
+                    "popularity_score": scores.get("normalized_score", 0.0),
+                    "trend_percentage": scores.get("trend_percentage", 0.0),
+                }
+            )
 
         # 정렬
-        filtered.sort(key=lambda x: x['popularity_score'], reverse=True)
+        filtered.sort(key=lambda x: x["popularity_score"], reverse=True)
 
         return filtered[:top_k]
 
@@ -331,7 +326,7 @@ class PopularityRanker:
         self,
         product_idx: str,
         relevance_score: float,
-        context_filters: Optional[Dict[str, Any]] = None
+        context_filters: Optional[Dict[str, Any]] = None,
     ) -> Dict[str, Any]:
         """
         랭킹 설명 (디버깅용)
@@ -360,7 +355,7 @@ class PopularityRanker:
         trend_boost = 1.0
         trend_percentage = 0.0
         if product_idx in self.popularity_cache:
-            trend_percentage = self.popularity_cache[product_idx].get('trend_percentage', 0.0)
+            trend_percentage = self.popularity_cache[product_idx].get("trend_percentage", 0.0)
             if trend_percentage > 30:
                 trend_boost = 1.1
             elif trend_percentage > 50:
@@ -368,8 +363,8 @@ class PopularityRanker:
 
         # 최종 스코어
         final_score = (
-            relevance_score * self.DEFAULT_RELEVANCE_WEIGHT +
-            popularity_score * self.DEFAULT_POPULARITY_WEIGHT
+            relevance_score * self.DEFAULT_RELEVANCE_WEIGHT
+            + popularity_score * self.DEFAULT_POPULARITY_WEIGHT
         ) * trend_boost
 
         # 설명 생성
@@ -379,7 +374,9 @@ class PopularityRanker:
         ]
 
         if trend_boost > 1.0:
-            explanation_parts.append(f"트렌드 부스트: {trend_boost}x (상승률 {trend_percentage:+.1f}%)")
+            explanation_parts.append(
+                f"트렌드 부스트: {trend_boost}x (상승률 {trend_percentage:+.1f}%)"
+            )
 
         if context_filters:
             explanation_parts.append(f"컨텍스트 필터 적용: {context_filters}")
@@ -388,13 +385,13 @@ class PopularityRanker:
         explanation += f" → 최종: {final_score:.2f}"
 
         return {
-            'product_idx': product_idx,
-            'relevance_score': relevance_score,
-            'popularity_score': popularity_score,
-            'context_boost': 0.0,  # TODO: 계산
-            'trend_boost': trend_boost,
-            'final_score': final_score,
-            'explanation': explanation
+            "product_idx": product_idx,
+            "relevance_score": relevance_score,
+            "popularity_score": popularity_score,
+            "context_boost": 0.0,  # TODO: 계산
+            "trend_boost": trend_boost,
+            "final_score": final_score,
+            "explanation": explanation,
         }
 
 

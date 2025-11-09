@@ -4,11 +4,10 @@ Unit tests for app/core/routing/integrated_router.py
 Tests the IntegratedRouter class that combines MCP intent detection,
 Claude model selection, and agent selection into unified routing decisions.
 """
+
 import pytest
-from app.core.routing.integrated_router import (
-    IntegratedRouter,
-    RoutingDecision
-)
+
+from app.core.routing.integrated_router import IntegratedRouter, RoutingDecision
 from app.core.routing.intent_router import Intent
 from app.core.routing.llm_router import ClaudeModel
 
@@ -27,10 +26,10 @@ def test_combined_routing_decision(integrated_router):
 
     # Verify all components are present
     assert isinstance(result, RoutingDecision)
-    assert hasattr(result, 'requires_mcp')
-    assert hasattr(result, 'claude_model')
-    assert hasattr(result, 'recommended_agents')
-    assert hasattr(result, 'execution_strategy')
+    assert hasattr(result, "requires_mcp")
+    assert hasattr(result, "claude_model")
+    assert hasattr(result, "recommended_agents")
+    assert hasattr(result, "execution_strategy")
 
 
 @pytest.mark.unit
@@ -169,13 +168,14 @@ def test_logging_routing_decisions(integrated_router):
         "claude_model": result.model_name,
         "agents": result.recommended_agents,
         "strategy": result.execution_strategy,
-        "cost_type": result.cost_type
+        "cost_type": result.cost_type,
     }
 
     # Verify log data is complete
-    assert all(key in log_data for key in [
-        "query", "requires_mcp", "claude_model", "strategy", "cost_type"
-    ])
+    assert all(
+        key in log_data
+        for key in ["query", "requires_mcp", "claude_model", "strategy", "cost_type"]
+    )
 
 
 @pytest.mark.unit

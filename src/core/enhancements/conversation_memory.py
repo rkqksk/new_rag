@@ -3,11 +3,11 @@ Conversation Memory for Context-Aware Chat
 Maintains conversation history and context
 """
 
+import json
 import logging
-from typing import List, Dict, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
-import json
+from typing import Any, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Message:
     """Single conversation message"""
+
     role: str  # 'user' or 'assistant'
     content: str
     timestamp: datetime = field(default_factory=datetime.now)
@@ -23,26 +24,27 @@ class Message:
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary"""
         return {
-            'role': self.role,
-            'content': self.content,
-            'timestamp': self.timestamp.isoformat(),
-            'metadata': self.metadata
+            "role": self.role,
+            "content": self.content,
+            "timestamp": self.timestamp.isoformat(),
+            "metadata": self.metadata,
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'Message':
+    def from_dict(cls, data: Dict[str, Any]) -> "Message":
         """Create from dictionary"""
         return cls(
-            role=data['role'],
-            content=data['content'],
-            timestamp=datetime.fromisoformat(data['timestamp']),
-            metadata=data.get('metadata', {})
+            role=data["role"],
+            content=data["content"],
+            timestamp=datetime.fromisoformat(data["timestamp"]),
+            metadata=data.get("metadata", {}),
         )
 
 
 @dataclass
 class ConversationContext:
     """Extracted conversation context"""
+
     recent_products: List[str] = field(default_factory=list)
     recent_specifications: Dict[str, str] = field(default_factory=dict)
     user_preferences: Dict[str, Any] = field(default_factory=dict)
@@ -61,10 +63,7 @@ class ConversationMemory:
     """
 
     def __init__(
-        self,
-        max_history: int = 10,
-        context_window: int = 3,
-        redis_client: Optional[Any] = None
+        self, max_history: int = 10, context_window: int = 3, redis_client: Optional[Any] = None
     ):
         """
         Initialize conversation memory
@@ -84,11 +83,7 @@ class ConversationMemory:
         logger.info(f"✅ Conversation memory initialized (max_history={max_history})")
 
     def add_message(
-        self,
-        session_id: str,
-        role: str,
-        content: str,
-        metadata: Optional[Dict[str, Any]] = None
+        self, session_id: str, role: str, content: str, metadata: Optional[Dict[str, Any]] = None
     ):
         """
         Add message to conversation history
@@ -99,11 +94,7 @@ class ConversationMemory:
             content: Message content
             metadata: Optional metadata (search results, etc.)
         """
-        message = Message(
-            role=role,
-            content=content,
-            metadata=metadata or {}
-        )
+        message = Message(role=role, content=content, metadata=metadata or {})
 
         # Initialize conversation if needed
         if session_id not in self.conversations:
@@ -114,7 +105,7 @@ class ConversationMemory:
 
         # Trim history if too long
         if len(self.conversations[session_id]) > self.max_history:
-            self.conversations[session_id] = self.conversations[session_id][-self.max_history:]
+            self.conversations[session_id] = self.conversations[session_id][-self.max_history :]
 
         # Persist to Redis if available
         if self.redis_client:
@@ -122,11 +113,7 @@ class ConversationMemory:
 
         logger.debug(f"Added {role} message to session {session_id}")
 
-    def get_history(
-        self,
-        session_id: str,
-        limit: Optional[int] = None
-    ) -> List[Message]:
+    def get_history(self, session_id: str, limit: Optional[int] = None) -> List[Message]:
         """
         Get conversation history
 
@@ -165,7 +152,7 @@ class ConversationMemory:
 
         # Extract context from messages
         for message in messages:
-            if message.role == 'user':
+            if message.role == "user":
                 # Extract products mentioned
                 products = self._extract_products(message.content)
                 context.recent_products.extend(products)
@@ -178,14 +165,14 @@ class ConversationMemory:
                 filters = self._extract_filters(message.content)
                 context.search_filters.update(filters)
 
-            elif message.role == 'assistant':
+            elif message.role == "assistant":
                 # Extract search results if available
-                if 'search_results' in message.metadata:
-                    results = message.metadata['search_results']
+                if "search_results" in message.metadata:
+                    results = message.metadata["search_results"]
                     if results:
                         # Add top result as recent product
                         top_result = results[0]
-                        if hasattr(top_result, 'product_id'):
+                        if hasattr(top_result, "product_id"):
                             context.recent_products.append(top_result.product_id)
 
         # Deduplicate
@@ -211,11 +198,11 @@ class ConversationMemory:
             summary_parts.append(f"Recent products: {', '.join(context.recent_products)}")
 
         if context.recent_specifications:
-            specs = ', '.join([f"{k}: {v}" for k, v in context.recent_specifications.items()])
+            specs = ", ".join([f"{k}: {v}" for k, v in context.recent_specifications.items()])
             summary_parts.append(f"Specifications: {specs}")
 
         if context.search_filters:
-            filters = ', '.join([f"{k}: {v}" for k, v in context.search_filters.items()])
+            filters = ", ".join([f"{k}: {v}" for k, v in context.search_filters.items()])
             summary_parts.append(f"Filters: {filters}")
 
         if not summary_parts:
@@ -223,11 +210,7 @@ class ConversationMemory:
 
         return " | ".join(summary_parts)
 
-    def enhance_query_with_context(
-        self,
-        session_id: str,
-        query: str
-    ) -> str:
+    def enhance_query_with_context(self, session_id: str, query: str) -> str:
         """
         Enhance query with conversation context
 
@@ -282,7 +265,7 @@ class ConversationMemory:
         import re
 
         # Pattern for product codes
-        pattern = r'[A-Z]{2,}-\d{2,}'
+        pattern = r"[A-Z]{2,}-\d{2,}"
         products = re.findall(pattern, text)
 
         return products
@@ -294,20 +277,20 @@ class ConversationMemory:
         specs = {}
 
         # Capacity
-        capacity_match = re.search(r'(\d+)\s*(ml|cc|L)', text, re.IGNORECASE)
+        capacity_match = re.search(r"(\d+)\s*(ml|cc|L)", text, re.IGNORECASE)
         if capacity_match:
-            specs['capacity'] = capacity_match.group(1) + capacity_match.group(2)
+            specs["capacity"] = capacity_match.group(1) + capacity_match.group(2)
 
         # Neck size
-        neck_match = re.search(r'(\d+)\s*(파이|mm)', text, re.IGNORECASE)
+        neck_match = re.search(r"(\d+)\s*(파이|mm)", text, re.IGNORECASE)
         if neck_match:
-            specs['neck'] = neck_match.group(1) + neck_match.group(2)
+            specs["neck"] = neck_match.group(1) + neck_match.group(2)
 
         # Material
-        materials = ['PET', 'PP', 'PE', 'HDPE', 'Glass']
+        materials = ["PET", "PP", "PE", "HDPE", "Glass"]
         for material in materials:
             if material.lower() in text.lower():
-                specs['material'] = material
+                specs["material"] = material
                 break
 
         return specs
@@ -317,11 +300,12 @@ class ConversationMemory:
         filters = {}
 
         # MOQ
-        if 'moq' in text.lower() or '최소' in text.lower():
+        if "moq" in text.lower() or "최소" in text.lower():
             import re
-            moq_match = re.search(r'(\d+)', text)
+
+            moq_match = re.search(r"(\d+)", text)
             if moq_match:
-                filters['moq'] = int(moq_match.group(1))
+                filters["moq"] = int(moq_match.group(1))
 
         return filters
 
@@ -362,11 +346,7 @@ class ConversationMemory:
         except Exception as e:
             logger.error(f"Failed to load from Redis: {e}")
 
-    def export_conversation(
-        self,
-        session_id: str,
-        format: str = 'json'
-    ) -> str:
+    def export_conversation(self, session_id: str, format: str = "json") -> str:
         """
         Export conversation history
 
@@ -379,19 +359,16 @@ class ConversationMemory:
         """
         messages = self.get_history(session_id)
 
-        if format == 'json':
-            return json.dumps(
-                [msg.to_dict() for msg in messages],
-                indent=2
-            )
+        if format == "json":
+            return json.dumps([msg.to_dict() for msg in messages], indent=2)
 
-        elif format == 'text':
+        elif format == "text":
             lines = []
             for msg in messages:
-                timestamp = msg.timestamp.strftime('%Y-%m-%d %H:%M:%S')
+                timestamp = msg.timestamp.strftime("%Y-%m-%d %H:%M:%S")
                 lines.append(f"[{timestamp}] {msg.role.upper()}: {msg.content}")
 
-            return '\n'.join(lines)
+            return "\n".join(lines)
 
         else:
             raise ValueError(f"Unknown format: {format}")

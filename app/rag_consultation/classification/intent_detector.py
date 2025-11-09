@@ -22,9 +22,9 @@ import logging
 import re
 from typing import Dict, List, Optional
 
-from sentence_transformers import SentenceTransformer
-from redis.asyncio import Redis
 import numpy as np
+from redis.asyncio import Redis
+from sentence_transformers import SentenceTransformer
 
 from app.rag_consultation.models import Intent, IntentDetection
 
@@ -156,9 +156,7 @@ class IntentDetector:
                 embeddings[intent] = np.mean(prototype_embeds, axis=0)
             except Exception as e:
                 logger.error(f"Failed to compute embeddings for {intent}: {e}")
-                embeddings[intent] = np.zeros(
-                    self.model.get_sentence_embedding_dimension()
-                )
+                embeddings[intent] = np.zeros(self.model.get_sentence_embedding_dimension())
         return embeddings
 
     def _get_cache_key(self, query: str) -> str:
@@ -321,9 +319,7 @@ class IntentDetector:
             # Cache result
             await self._cache_result(query, detection)
 
-            logger.info(
-                f"Detected intents: {[i.value for i in detected_intents.keys()]}"
-            )
+            logger.info(f"Detected intents: {[i.value for i in detected_intents.keys()]}")
 
             return detection
 

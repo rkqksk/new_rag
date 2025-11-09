@@ -9,12 +9,13 @@ Redis 기반 다층 캐싱 시스템
 - Layer 3: Search Result Cache (TTL: 10분)
 """
 
-import redis
-import json
 import hashlib
-from typing import Any, Optional, Dict, List
-from datetime import timedelta
+import json
 import logging
+from datetime import timedelta
+from typing import Any, Dict, List, Optional
+
+import redis
 
 logger = logging.getLogger(__name__)
 
@@ -32,11 +33,11 @@ class CacheManager:
 
     def __init__(
         self,
-        host: str = 'localhost',
+        host: str = "localhost",
         port: int = 6379,
         db: int = 0,
         password: Optional[str] = None,
-        decode_responses: bool = True
+        decode_responses: bool = True,
     ):
         """
         Initialize Cache Manager
@@ -55,7 +56,7 @@ class CacheManager:
                 db=db,
                 password=password,
                 decode_responses=decode_responses,
-                socket_connect_timeout=5
+                socket_connect_timeout=5,
             )
             # Test connection
             self.redis_client.ping()
@@ -100,12 +101,7 @@ class CacheManager:
         logger.debug(f"[Cache MISS] Exact: {query[:50]}")
         return None
 
-    def set_exact(
-        self,
-        query: str,
-        result: Dict[str, Any],
-        ttl: int = 3600  # 1 hour
-    ):
+    def set_exact(self, query: str, result: Dict[str, Any], ttl: int = 3600):  # 1 hour
         """
         정확한 쿼리 매칭 캐시 저장
 
@@ -117,11 +113,7 @@ class CacheManager:
         cache_key = self._make_exact_key(query)
 
         if self.connected:
-            self.redis_client.setex(
-                cache_key,
-                ttl,
-                json.dumps(result, ensure_ascii=False)
-            )
+            self.redis_client.setex(cache_key, ttl, json.dumps(result, ensure_ascii=False))
         else:
             # In-memory fallback (no TTL)
             self._memory_cache[cache_key] = result
@@ -139,10 +131,7 @@ class CacheManager:
     # =========================================================================
 
     def get_semantic(
-        self,
-        query: str,
-        query_embedding: List[float],
-        similarity_threshold: float = 0.95
+        self, query: str, query_embedding: List[float], similarity_threshold: float = 0.95
     ) -> Optional[Dict[str, Any]]:
         """
         의미적 유사 쿼리 캐시 조회
@@ -169,7 +158,7 @@ class CacheManager:
         query: str,
         query_embedding: List[float],
         result: Dict[str, Any],
-        ttl: int = 1800  # 30 minutes
+        ttl: int = 1800,  # 30 minutes
     ):
         """
         의미적 유사 쿼리 캐시 저장
@@ -214,10 +203,7 @@ class CacheManager:
         return None
 
     def set_search_result(
-        self,
-        query_hash: str,
-        results: List[Dict[str, Any]],
-        ttl: int = 600  # 10 minutes
+        self, query_hash: str, results: List[Dict[str, Any]], ttl: int = 600  # 10 minutes
     ):
         """
         검색 결과 캐시 저장
@@ -230,11 +216,7 @@ class CacheManager:
         cache_key = f"search:{query_hash}"
 
         if self.connected:
-            self.redis_client.setex(
-                cache_key,
-                ttl,
-                json.dumps(results, ensure_ascii=False)
-            )
+            self.redis_client.setex(cache_key, ttl, json.dumps(results, ensure_ascii=False))
         else:
             self._memory_cache[cache_key] = results
 
@@ -257,16 +239,13 @@ class CacheManager:
             MD5 해시 (16진수)
         """
         # Combine query and filters
-        combined = {
-            'query': query.lower().strip(),
-            'filters': filters or {}
-        }
+        combined = {"query": query.lower().strip(), "filters": filters or {}}
 
         # Serialize to JSON (sorted keys for consistency)
         serialized = json.dumps(combined, sort_keys=True, ensure_ascii=False)
 
         # Compute MD5 hash
-        hash_obj = hashlib.md5(serialized.encode('utf-8'))
+        hash_obj = hashlib.md5(serialized.encode("utf-8"))
         return hash_obj.hexdigest()
 
     def get_stats(self) -> Dict[str, Any]:
@@ -282,30 +261,30 @@ class CacheManager:
             }
         """
         if self.connected:
-            info = self.redis_client.info('stats')
-            memory_info = self.redis_client.info('memory')
+            info = self.redis_client.info("stats")
+            memory_info = self.redis_client.info("memory")
 
             # Calculate hit rate
-            keyspace_hits = info.get('keyspace_hits', 0)
-            keyspace_misses = info.get('keyspace_misses', 0)
+            keyspace_hits = info.get("keyspace_hits", 0)
+            keyspace_misses = info.get("keyspace_misses", 0)
             total_requests = keyspace_hits + keyspace_misses
 
             hit_rate = keyspace_hits / total_requests if total_requests > 0 else 0.0
 
             return {
-                'connected': True,
-                'total_keys': self.redis_client.dbsize(),
-                'memory_used': memory_info.get('used_memory_human', 'N/A'),
-                'hit_rate': hit_rate,
-                'keyspace_hits': keyspace_hits,
-                'keyspace_misses': keyspace_misses
+                "connected": True,
+                "total_keys": self.redis_client.dbsize(),
+                "memory_used": memory_info.get("used_memory_human", "N/A"),
+                "hit_rate": hit_rate,
+                "keyspace_hits": keyspace_hits,
+                "keyspace_misses": keyspace_misses,
             }
         else:
             return {
-                'connected': False,
-                'total_keys': len(self._memory_cache),
-                'memory_used': 'In-memory fallback',
-                'hit_rate': 0.0
+                "connected": False,
+                "total_keys": len(self._memory_cache),
+                "memory_used": "In-memory fallback",
+                "hit_rate": 0.0,
             }
 
     def clear_all(self):
@@ -342,11 +321,11 @@ if __name__ == "__main__":
 
     query1 = "20파이 캡 5,000개 주문 가능한 제품"
     result1 = {
-        'products': [
-            {'name': 'GY-20-뾰족캡B', 'score': 0.95},
-            {'name': '20파이 일반캡', 'score': 0.90}
+        "products": [
+            {"name": "GY-20-뾰족캡B", "score": 0.95},
+            {"name": "20파이 일반캡", "score": 0.90},
         ],
-        'total': 2
+        "total": 2,
     }
 
     # Set cache
@@ -367,9 +346,9 @@ if __name__ == "__main__":
     print("\n" + "-" * 80)
     print("[Test 2] Query Hash")
 
-    hash1 = CacheManager.make_query_hash("20파이 캡", {'category': 'cap'})
-    hash2 = CacheManager.make_query_hash("20파이 캡", {'category': 'cap'})
-    hash3 = CacheManager.make_query_hash("20파이 캡", {'category': 'bottle'})
+    hash1 = CacheManager.make_query_hash("20파이 캡", {"category": "cap"})
+    hash2 = CacheManager.make_query_hash("20파이 캡", {"category": "cap"})
+    hash3 = CacheManager.make_query_hash("20파이 캡", {"category": "bottle"})
 
     print(f"Hash 1: {hash1}")
     print(f"Hash 2: {hash2}")
@@ -381,10 +360,7 @@ if __name__ == "__main__":
     print("\n" + "-" * 80)
     print("[Test 3] Search Result Cache")
 
-    search_results = [
-        {'chunk_id': '001', 'score': 0.95},
-        {'chunk_id': '002', 'score': 0.90}
-    ]
+    search_results = [{"chunk_id": "001", "score": 0.95}, {"chunk_id": "002", "score": 0.90}]
 
     cache.set_search_result(hash1, search_results)
     print(f"✅ Cached search results for hash: {hash1[:16]}...")

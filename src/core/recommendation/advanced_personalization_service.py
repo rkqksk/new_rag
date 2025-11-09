@@ -7,15 +7,15 @@ Integrates all advanced personalization features:
 3. Strict compatibility filtering (hard filter)
 """
 
-import logging
-from typing import Dict, Any, List, Optional
 import json
+import logging
+from typing import Any, Dict, List, Optional
 
-from .user_profile import UserProfile, PreferenceExtractor
-from .personalized_recommender import PersonalizedRecommender, RecommendationConfig
 from .adaptive_weights import AdaptiveWeightsLearner, UserSearchFocus
-from .global_analytics import GlobalAnalytics
 from .compatibility_filter import CompatibilityFilter, CompatibilityRules
+from .global_analytics import GlobalAnalytics
+from .personalized_recommender import PersonalizedRecommender, RecommendationConfig
+from .user_profile import PreferenceExtractor, UserProfile
 
 logger = logging.getLogger(__name__)
 
@@ -39,7 +39,7 @@ class AdvancedPersonalizationService:
         enable_global_analytics: bool = True,
         enable_compatibility_filter: bool = True,
         compatibility_rules: Optional[CompatibilityRules] = None,
-        profile_ttl: int = 86400 * 30  # 30 days
+        profile_ttl: int = 86400 * 30,  # 30 days
     ):
         """
         Initialize advanced personalization service
@@ -127,7 +127,7 @@ class AdvancedPersonalizationService:
         session_id: str,
         query: str,
         results_count: int = 0,
-        previous_context: Optional[Dict[str, Any]] = None
+        previous_context: Optional[Dict[str, Any]] = None,
     ):
         """
         Track search query
@@ -157,7 +157,7 @@ class AdvancedPersonalizationService:
                 session_id=session_id,
                 query=query,
                 results_count=results_count,
-                previous_context=previous_context
+                previous_context=previous_context,
             )
 
         # Persist profile
@@ -166,7 +166,13 @@ class AdvancedPersonalizationService:
 
         logger.debug(f"Tracked search: {session_id} -> '{query}'")
 
-    def track_view(self, session_id: str, product_id: str, product: Dict[str, Any], search_context: Optional[str] = None):
+    def track_view(
+        self,
+        session_id: str,
+        product_id: str,
+        product: Dict[str, Any],
+        search_context: Optional[str] = None,
+    ):
         """Track product view"""
         profile = self.get_or_create_profile(session_id)
         self.extractor.update_profile_from_view(profile, product_id, product)
@@ -175,15 +181,21 @@ class AdvancedPersonalizationService:
             self.analytics.track_product_event(
                 session_id=session_id,
                 product_id=product_id,
-                event_type='view',
+                event_type="view",
                 product=product,
-                search_context=search_context
+                search_context=search_context,
             )
 
         if self.redis_client:
             self._persist_profile_to_redis(profile)
 
-    def track_click(self, session_id: str, product_id: str, product: Dict[str, Any], search_context: Optional[str] = None):
+    def track_click(
+        self,
+        session_id: str,
+        product_id: str,
+        product: Dict[str, Any],
+        search_context: Optional[str] = None,
+    ):
         """Track product click"""
         profile = self.get_or_create_profile(session_id)
         self.extractor.update_profile_from_click(profile, product_id, product)
@@ -192,9 +204,9 @@ class AdvancedPersonalizationService:
             self.analytics.track_product_event(
                 session_id=session_id,
                 product_id=product_id,
-                event_type='click',
+                event_type="click",
                 product=product,
-                search_context=search_context
+                search_context=search_context,
             )
 
         if self.redis_client:
@@ -207,10 +219,7 @@ class AdvancedPersonalizationService:
 
         if self.enable_global_analytics:
             self.analytics.track_product_event(
-                session_id=session_id,
-                product_id=product_id,
-                event_type='bookmark',
-                product=product
+                session_id=session_id, product_id=product_id, event_type="bookmark", product=product
             )
 
         if self.redis_client:
@@ -221,7 +230,7 @@ class AdvancedPersonalizationService:
         session_id: str,
         results: List[Dict[str, Any]],
         query: Optional[str] = None,
-        top_k: Optional[int] = None
+        top_k: Optional[int] = None,
     ) -> List[Dict[str, Any]]:
         """
         Personalize search results with all advanced features
@@ -244,9 +253,7 @@ class AdvancedPersonalizationService:
         if self.enable_compatibility_filter and profile.interaction_count > 0:
             compat_context = self.compat_filter.extract_compatibility_context(profile)
             results = self.compat_filter.filter_by_compatibility(
-                results=results,
-                user_context=compat_context,
-                query=query
+                results=results, user_context=compat_context, query=query
             )
 
         if not results:
@@ -265,18 +272,14 @@ class AdvancedPersonalizationService:
         # 3. Create recommender with adaptive weights
         if recommendation_config:
             recommender = PersonalizedRecommender(
-                config=recommendation_config,
-                preference_extractor=self.extractor
+                config=recommendation_config, preference_extractor=self.extractor
             )
         else:
             recommender = self.recommender
 
         # 4. Re-rank with personalization
         personalized = recommender.rerank(
-            results=results,
-            profile=profile,
-            query=query,
-            top_k=top_k
+            results=results, profile=profile, query=query, top_k=top_k
         )
 
         return personalized
@@ -286,7 +289,7 @@ class AdvancedPersonalizationService:
         session_id: str,
         all_products: List[Dict[str, Any]],
         top_k: int = 10,
-        category_filter: Optional[str] = None
+        category_filter: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """
         Get personalized recommendations
@@ -306,8 +309,7 @@ class AdvancedPersonalizationService:
         if self.enable_compatibility_filter and profile.interaction_count > 0:
             compat_context = self.compat_filter.extract_compatibility_context(profile)
             all_products = self.compat_filter.filter_by_compatibility(
-                results=all_products,
-                user_context=compat_context
+                results=all_products, user_context=compat_context
             )
 
         # Get adaptive weights
@@ -316,7 +318,9 @@ class AdvancedPersonalizationService:
             if focus.total_searches > 0:
                 adaptive_weights = self.weights_learner.get_adaptive_weights(focus)
                 config = RecommendationConfig(**adaptive_weights)
-                recommender = PersonalizedRecommender(config=config, preference_extractor=self.extractor)
+                recommender = PersonalizedRecommender(
+                    config=config, preference_extractor=self.extractor
+                )
             else:
                 recommender = self.recommender
         else:
@@ -324,10 +328,7 @@ class AdvancedPersonalizationService:
 
         # Get recommendations
         recommendations = recommender.get_recommendations(
-            profile=profile,
-            all_products=all_products,
-            top_k=top_k,
-            category_filter=category_filter
+            profile=profile, all_products=all_products, top_k=top_k, category_filter=category_filter
         )
 
         return recommendations
@@ -347,35 +348,35 @@ class AdvancedPersonalizationService:
         profile = self.get_or_create_profile(session_id)
 
         summary = {
-            'session_id': session_id,
-            'interactions': profile.interaction_count,
-            'preferences': {
-                'capacity': profile.get_top_preferences('capacity', top_k=3),
-                'material': profile.get_top_preferences('material', top_k=3),
-                'neck': profile.get_top_preferences('neck', top_k=3),
-                'category': profile.get_top_preferences('category', top_k=3)
+            "session_id": session_id,
+            "interactions": profile.interaction_count,
+            "preferences": {
+                "capacity": profile.get_top_preferences("capacity", top_k=3),
+                "material": profile.get_top_preferences("material", top_k=3),
+                "neck": profile.get_top_preferences("neck", top_k=3),
+                "category": profile.get_top_preferences("category", top_k=3),
             },
-            'history': {
-                'searches': len(profile.search_queries),
-                'viewed': len(profile.viewed_products),
-                'clicked': len(profile.clicked_products),
-                'bookmarked': len(profile.bookmarked_products)
-            }
+            "history": {
+                "searches": len(profile.search_queries),
+                "viewed": len(profile.viewed_products),
+                "clicked": len(profile.clicked_products),
+                "bookmarked": len(profile.bookmarked_products),
+            },
         }
 
         # Add focus if enabled
         if self.enable_adaptive_weights:
             focus = self.get_or_create_focus(session_id)
-            summary['focus'] = {
-                'dominant': focus.get_dominant_focus(),
-                'scores': {
-                    'supplier': focus.supplier_focus,
-                    'compatibility': focus.compatibility_focus,
-                    'material': focus.material_focus,
-                    'price': focus.price_focus,
-                    'category': focus.category_focus,
-                    'specification': focus.specification_focus
-                }
+            summary["focus"] = {
+                "dominant": focus.get_dominant_focus(),
+                "scores": {
+                    "supplier": focus.supplier_focus,
+                    "compatibility": focus.compatibility_focus,
+                    "material": focus.material_focus,
+                    "price": focus.price_focus,
+                    "category": focus.category_focus,
+                    "specification": focus.specification_focus,
+                },
             }
 
         return summary
@@ -383,7 +384,7 @@ class AdvancedPersonalizationService:
     def get_global_analytics_summary(self) -> Dict[str, Any]:
         """Get global analytics summary"""
         if not self.enable_global_analytics:
-            return {'error': 'Global analytics disabled'}
+            return {"error": "Global analytics disabled"}
 
         return self.analytics.get_analytics_summary()
 
@@ -394,7 +395,7 @@ class AdvancedPersonalizationService:
 
         return self.analytics.get_top_keywords(limit=limit)
 
-    def get_top_products(self, limit: int = 20, metric: str = 'click') -> List[tuple]:
+    def get_top_products(self, limit: int = 20, metric: str = "click") -> List[tuple]:
         """Get top products globally"""
         if not self.enable_global_analytics:
             return []

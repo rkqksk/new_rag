@@ -8,13 +8,13 @@ Tracks all user searches and interactions for:
 - Trending queries
 """
 
+import json
 import logging
-from typing import Dict, Any, List, Optional, Tuple
+import re
+from collections import Counter, defaultdict
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from collections import Counter, defaultdict
-import re
-import json
+from typing import Any, Dict, List, Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SearchEvent:
     """Single search event"""
+
     timestamp: datetime
     session_id: str
     query: str
@@ -33,6 +34,7 @@ class SearchEvent:
 @dataclass
 class ProductEvent:
     """Single product interaction event"""
+
     timestamp: datetime
     session_id: str
     product_id: str
@@ -45,6 +47,7 @@ class ProductEvent:
 @dataclass
 class KeywordStats:
     """Statistics for a keyword"""
+
     keyword: str
     search_count: int = 0
     total_results: int = 0
@@ -58,6 +61,7 @@ class KeywordStats:
 @dataclass
 class ProductStats:
     """Statistics for a product"""
+
     product_id: str
     view_count: int = 0
     click_count: int = 0
@@ -73,6 +77,7 @@ class ProductStats:
 @dataclass
 class SearchContext:
     """Search context pattern"""
+
     pattern: str  # e.g., "bottle -> cap", "PET -> 20파이 -> cap"
     count: int = 0
     sessions: List[str] = field(default_factory=list)
@@ -123,39 +128,73 @@ class GlobalAnalytics:
 
         # Stop words (Korean + English)
         self.stop_words = {
-            '을', '를', '이', '가', '은', '는', '의', '에', '로', '와', '과',
-            '있는', '없는', '좋은', '나쁜', '주세요', '알려주세요', '찾아주세요',
-            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for',
-            'is', 'are', 'was', 'were', 'be', 'been', 'being', 'have', 'has', 'had'
+            "을",
+            "를",
+            "이",
+            "가",
+            "은",
+            "는",
+            "의",
+            "에",
+            "로",
+            "와",
+            "과",
+            "있는",
+            "없는",
+            "좋은",
+            "나쁜",
+            "주세요",
+            "알려주세요",
+            "찾아주세요",
+            "the",
+            "a",
+            "an",
+            "and",
+            "or",
+            "but",
+            "in",
+            "on",
+            "at",
+            "to",
+            "for",
+            "is",
+            "are",
+            "was",
+            "were",
+            "be",
+            "been",
+            "being",
+            "have",
+            "has",
+            "had",
         }
 
         # Meaningful keyword patterns
         self.keyword_patterns = [
             # Capacity
-            (r'(\d+)\s*(ml|ML|미리|밀리)', 'capacity'),
-            (r'(\d+)\s*(l|L|리터)', 'capacity'),
-
+            (r"(\d+)\s*(ml|ML|미리|밀리)", "capacity"),
+            (r"(\d+)\s*(l|L|리터)", "capacity"),
             # Neck size
-            (r'(\d+)\s*파이', 'neck'),
-            (r'(\d+)\s*mm\s*(넥|neck)', 'neck'),
-
+            (r"(\d+)\s*파이", "neck"),
+            (r"(\d+)\s*mm\s*(넥|neck)", "neck"),
             # Material
-            (r'\b(PET|pet|페트|펫|PP|pp|PE|pe|PS|ps|PVC|pvc|유리|glass|초자|알루미늄|aluminum)\b', 'material'),
-
+            (
+                r"\b(PET|pet|페트|펫|PP|pp|PE|pe|PS|ps|PVC|pvc|유리|glass|초자|알루미늄|aluminum)\b",
+                "material",
+            ),
             # Category
-            (r'\b(병|보틀|bottle|용기|container|캡|cap|뚜껑|펌프|pump|디스펜서|자|jar)\b', 'category'),
-
+            (
+                r"\b(병|보틀|bottle|용기|container|캡|cap|뚜껑|펌프|pump|디스펜서|자|jar)\b",
+                "category",
+            ),
             # Supplier
-            (r'\b(춘진|onehago|원하고|freemold|프리몰드|장업|jangup)\b', 'supplier'),
-
+            (r"\b(춘진|onehago|원하고|freemold|프리몰드|장업|jangup)\b", "supplier"),
             # Business terms
-            (r'\b(MOQ|최소|가격|단가|견적|대량|도매)\b', 'business'),
-
+            (r"\b(MOQ|최소|가격|단가|견적|대량|도매)\b", "business"),
             # Shape/form
-            (r'\b(원형|사각|타원|직사각|정사각|원통|각형)\b', 'shape'),
-
+            (r"\b(원형|사각|타원|직사각|정사각|원통|각형)\b", "shape"),
             # Color
-            (r'\b(투명|반투명|불투명|화이트|블랙|실버|골드|투명|색상)\b', 'color')
+            (r"\b(투명|반투명|불투명|화이트|블랙|실버|골드|투명|색상)\b", "color"),
         ]
 
     def track_search(
@@ -163,7 +202,7 @@ class GlobalAnalytics:
         session_id: str,
         query: str,
         results_count: int,
-        previous_context: Optional[Dict[str, Any]] = None
+        previous_context: Optional[Dict[str, Any]] = None,
     ):
         """
         Track a search event
@@ -186,7 +225,7 @@ class GlobalAnalytics:
             query=query,
             parsed_keywords=keywords,
             context=previous_context or {},
-            results_count=results_count
+            results_count=results_count,
         )
 
         # Add to history
@@ -197,10 +236,7 @@ class GlobalAnalytics:
         # Update keyword statistics
         for keyword in keywords:
             if keyword not in self.keyword_stats:
-                self.keyword_stats[keyword] = KeywordStats(
-                    keyword=keyword,
-                    first_seen=timestamp
-                )
+                self.keyword_stats[keyword] = KeywordStats(keyword=keyword, first_seen=timestamp)
 
             stats = self.keyword_stats[keyword]
             stats.search_count += 1
@@ -210,11 +246,12 @@ class GlobalAnalytics:
             # Track co-occurring keywords
             for other_keyword in keywords:
                 if other_keyword != keyword:
-                    stats.co_occurring_keywords[other_keyword] = \
+                    stats.co_occurring_keywords[other_keyword] = (
                         stats.co_occurring_keywords.get(other_keyword, 0) + 1
+                    )
 
         # Update search context pattern
-        if previous_context and 'last_query' in previous_context:
+        if previous_context and "last_query" in previous_context:
             pattern = f"{previous_context['last_query']} → {query}"
             if pattern not in self.search_contexts:
                 self.search_contexts[pattern] = SearchContext(pattern=pattern)
@@ -236,7 +273,7 @@ class GlobalAnalytics:
         product_id: str,
         event_type: str,
         product: Optional[Dict[str, Any]] = None,
-        search_context: Optional[str] = None
+        search_context: Optional[str] = None,
     ):
         """
         Track a product interaction event
@@ -256,9 +293,9 @@ class GlobalAnalytics:
             session_id=session_id,
             product_id=product_id,
             event_type=event_type,
-            product_category=product.get('category') if product else None,
-            product_name=product.get('name') if product else None,
-            search_context=search_context
+            product_category=product.get("category") if product else None,
+            product_name=product.get("name") if product else None,
+            search_context=search_context,
         )
 
         # Add to history
@@ -271,26 +308,25 @@ class GlobalAnalytics:
             self.product_stats[product_id] = ProductStats(
                 product_id=product_id,
                 first_seen=timestamp,
-                category=product.get('category') if product else None,
-                name=product.get('name') if product else None
+                category=product.get("category") if product else None,
+                name=product.get("name") if product else None,
             )
 
         stats = self.product_stats[product_id]
         stats.last_seen = timestamp
 
-        if event_type == 'view':
+        if event_type == "view":
             stats.view_count += 1
-        elif event_type == 'click':
+        elif event_type == "click":
             stats.click_count += 1
-        elif event_type == 'bookmark':
+        elif event_type == "bookmark":
             stats.bookmark_count += 1
 
         # Track search keywords that led to this product
         if search_context:
             keywords = self._extract_keywords(search_context)
             for keyword in keywords:
-                stats.search_keywords[keyword] = \
-                    stats.search_keywords.get(keyword, 0) + 1
+                stats.search_keywords[keyword] = stats.search_keywords.get(keyword, 0) + 1
 
                 # Update keyword -> product link
                 if keyword in self.keyword_stats:
@@ -322,7 +358,7 @@ class GlobalAnalytics:
             for match in matches:
                 if isinstance(match, tuple):
                     # Join tuple elements
-                    keyword = ''.join(str(m) for m in match)
+                    keyword = "".join(str(m) for m in match)
                 else:
                     keyword = str(match)
 
@@ -331,21 +367,21 @@ class GlobalAnalytics:
                     keywords.append(keyword)
 
         # Extract individual words (fallback)
-        words = re.findall(r'\b\w+\b', query)
+        words = re.findall(r"\b\w+\b", query)
         for word in words:
             word = word.strip()
-            if (word and
-                len(word) > 1 and
-                word.lower() not in self.stop_words and
-                word not in keywords):
+            if (
+                word
+                and len(word) > 1
+                and word.lower() not in self.stop_words
+                and word not in keywords
+            ):
                 keywords.append(word)
 
         return keywords[:10]  # Limit to 10 keywords
 
     def get_top_keywords(
-        self,
-        limit: int = 20,
-        time_window: Optional[timedelta] = None
+        self, limit: int = 20, time_window: Optional[timedelta] = None
     ) -> List[Tuple[str, int]]:
         """
         Get top keywords by search count
@@ -360,26 +396,20 @@ class GlobalAnalytics:
         if time_window:
             cutoff = datetime.now() - time_window
             relevant_stats = {
-                k: v for k, v in self.keyword_stats.items()
-                if v.last_seen and v.last_seen > cutoff
+                k: v for k, v in self.keyword_stats.items() if v.last_seen and v.last_seen > cutoff
             }
         else:
             relevant_stats = self.keyword_stats
 
         # Sort by search count
         sorted_keywords = sorted(
-            relevant_stats.items(),
-            key=lambda x: x[1].search_count,
-            reverse=True
+            relevant_stats.items(), key=lambda x: x[1].search_count, reverse=True
         )
 
         return [(k, v.search_count) for k, v in sorted_keywords[:limit]]
 
     def get_top_products(
-        self,
-        limit: int = 20,
-        metric: str = 'click',
-        time_window: Optional[timedelta] = None
+        self, limit: int = 20, metric: str = "click", time_window: Optional[timedelta] = None
     ) -> List[Tuple[str, Dict[str, Any]]]:
         """
         Get top products by metric
@@ -395,42 +425,40 @@ class GlobalAnalytics:
         if time_window:
             cutoff = datetime.now() - time_window
             relevant_stats = {
-                k: v for k, v in self.product_stats.items()
-                if v.last_seen and v.last_seen > cutoff
+                k: v for k, v in self.product_stats.items() if v.last_seen and v.last_seen > cutoff
             }
         else:
             relevant_stats = self.product_stats
 
         # Sort by metric
         metric_map = {
-            'view': lambda s: s.view_count,
-            'click': lambda s: s.click_count,
-            'bookmark': lambda s: s.bookmark_count
+            "view": lambda s: s.view_count,
+            "click": lambda s: s.click_count,
+            "bookmark": lambda s: s.bookmark_count,
         }
 
         sort_func = metric_map.get(metric, lambda s: s.click_count)
 
         sorted_products = sorted(
-            relevant_stats.items(),
-            key=lambda x: sort_func(x[1]),
-            reverse=True
+            relevant_stats.items(), key=lambda x: sort_func(x[1]), reverse=True
         )
 
         return [
-            (product_id, {
-                'name': stats.name,
-                'category': stats.category,
-                'views': stats.view_count,
-                'clicks': stats.click_count,
-                'bookmarks': stats.bookmark_count
-            })
+            (
+                product_id,
+                {
+                    "name": stats.name,
+                    "category": stats.category,
+                    "views": stats.view_count,
+                    "clicks": stats.click_count,
+                    "bookmarks": stats.bookmark_count,
+                },
+            )
             for product_id, stats in sorted_products[:limit]
         ]
 
     def get_trending_queries(
-        self,
-        time_window: timedelta = timedelta(days=7),
-        limit: int = 10
+        self, time_window: timedelta = timedelta(days=7), limit: int = 10
     ) -> List[Tuple[str, float]]:
         """
         Get trending search queries
@@ -443,10 +471,7 @@ class GlobalAnalytics:
             List of (query, trend_score) tuples
         """
         cutoff = datetime.now() - time_window
-        recent_events = [
-            e for e in self.search_events
-            if e.timestamp > cutoff
-        ]
+        recent_events = [e for e in self.search_events if e.timestamp > cutoff]
 
         if not recent_events:
             return []
@@ -458,10 +483,7 @@ class GlobalAnalytics:
         trend_scores = {}
         for query, count in query_counts.items():
             # Get most recent timestamp
-            recent_timestamp = max(
-                e.timestamp for e in recent_events
-                if e.query == query
-            )
+            recent_timestamp = max(e.timestamp for e in recent_events if e.query == query)
 
             # Recency factor (0.0 - 1.0)
             hours_ago = (datetime.now() - recent_timestamp).total_seconds() / 3600
@@ -471,11 +493,7 @@ class GlobalAnalytics:
             trend_scores[query] = count * (1 + recency)
 
         # Sort by trend score
-        sorted_queries = sorted(
-            trend_scores.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )
+        sorted_queries = sorted(trend_scores.items(), key=lambda x: x[1], reverse=True)
 
         return sorted_queries[:limit]
 
@@ -490,9 +508,7 @@ class GlobalAnalytics:
             List of (pattern, count) tuples
         """
         sorted_patterns = sorted(
-            self.search_contexts.items(),
-            key=lambda x: x[1].count,
-            reverse=True
+            self.search_contexts.items(), key=lambda x: x[1].count, reverse=True
         )
 
         return [(p, c.count) for p, c in sorted_patterns[:limit]]
@@ -513,9 +529,7 @@ class GlobalAnalytics:
 
         stats = self.keyword_stats[keyword]
         sorted_related = sorted(
-            stats.co_occurring_keywords.items(),
-            key=lambda x: x[1],
-            reverse=True
+            stats.co_occurring_keywords.items(), key=lambda x: x[1], reverse=True
         )
 
         return [k for k, _ in sorted_related[:limit]]
@@ -534,11 +548,7 @@ class GlobalAnalytics:
             return []
 
         stats = self.product_stats[product_id]
-        sorted_keywords = sorted(
-            stats.search_keywords.items(),
-            key=lambda x: x[1],
-            reverse=True
-        )
+        sorted_keywords = sorted(stats.search_keywords.items(), key=lambda x: x[1], reverse=True)
 
         return sorted_keywords
 
@@ -550,14 +560,14 @@ class GlobalAnalytics:
             Summary dictionary
         """
         return {
-            'total_searches': len(self.search_events),
-            'total_product_events': len(self.product_events),
-            'unique_keywords': len(self.keyword_stats),
-            'unique_products': len(self.product_stats),
-            'search_contexts': len(self.search_contexts),
-            'top_keywords': self.get_top_keywords(limit=10),
-            'top_products': self.get_top_products(limit=10, metric='click'),
-            'trending_queries': self.get_trending_queries(limit=5)
+            "total_searches": len(self.search_events),
+            "total_product_events": len(self.product_events),
+            "unique_keywords": len(self.keyword_stats),
+            "unique_products": len(self.product_stats),
+            "search_contexts": len(self.search_contexts),
+            "top_keywords": self.get_top_keywords(limit=10),
+            "top_products": self.get_top_products(limit=10, metric="click"),
+            "trending_queries": self.get_trending_queries(limit=5),
         }
 
     def _persist_search_event(self, event: SearchEvent):

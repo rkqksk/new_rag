@@ -3,12 +3,12 @@ S3 Integration for Phase 7.2
 Automated data ingestion from AWS S3 and S3-compatible storage
 """
 
+import asyncio
 import logging
 import os
-from typing import List, Dict, Any, Optional, BinaryIO
 from dataclasses import dataclass
 from pathlib import Path
-import asyncio
+from typing import Any, BinaryIO, Dict, List, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class S3Object:
     """S3 object metadata"""
+
     key: str
     bucket: str
     size: int
@@ -28,6 +29,7 @@ class S3Object:
 @dataclass
 class S3DownloadResult:
     """S3 download result"""
+
     s3_object: S3Object
     local_path: str
     success: bool
@@ -69,7 +71,7 @@ class S3Integration:
         aws_secret_access_key: Optional[str] = None,
         region: str = "us-east-1",
         endpoint_url: Optional[str] = None,
-        use_ssl: bool = True
+        use_ssl: bool = True,
     ):
         """
         Initialize S3 Integration
@@ -100,22 +102,18 @@ class S3Integration:
             import boto3
 
             self.client = boto3.client(
-                's3',
+                "s3",
                 aws_access_key_id=self.aws_access_key_id,
                 aws_secret_access_key=self.aws_secret_access_key,
                 region_name=self.region,
                 endpoint_url=self.endpoint_url,
-                use_ssl=self.use_ssl
+                use_ssl=self.use_ssl,
             )
 
         return self.client
 
     async def list_objects(
-        self,
-        bucket: str,
-        prefix: str = "",
-        max_keys: int = 1000,
-        suffix: Optional[str] = None
+        self, bucket: str, prefix: str = "", max_keys: int = 1000, suffix: Optional[str] = None
     ) -> List[S3Object]:
         """
         List objects in S3 bucket
@@ -141,27 +139,23 @@ class S3Integration:
 
         try:
             # List objects
-            response = client.list_objects_v2(
-                Bucket=bucket,
-                Prefix=prefix,
-                MaxKeys=max_keys
-            )
+            response = client.list_objects_v2(Bucket=bucket, Prefix=prefix, MaxKeys=max_keys)
 
             objects = []
 
-            if 'Contents' in response:
-                for item in response['Contents']:
+            if "Contents" in response:
+                for item in response["Contents"]:
                     # Apply suffix filter if provided
-                    if suffix and not item['Key'].endswith(suffix):
+                    if suffix and not item["Key"].endswith(suffix):
                         continue
 
                     obj = S3Object(
-                        key=item['Key'],
+                        key=item["Key"],
                         bucket=bucket,
-                        size=item['Size'],
-                        last_modified=item['LastModified'].isoformat(),
-                        etag=item['ETag'].strip('"'),
-                        storage_class=item.get('StorageClass', 'STANDARD')
+                        size=item["Size"],
+                        last_modified=item["LastModified"].isoformat(),
+                        etag=item["ETag"].strip('"'),
+                        storage_class=item.get("StorageClass", "STANDARD"),
                     )
                     objects.append(obj)
 
@@ -172,11 +166,7 @@ class S3Integration:
             logger.error(f"❌ Failed to list objects: {e}")
             return []
 
-    async def download_object(
-        self,
-        s3_object: S3Object,
-        output_path: str
-    ) -> S3DownloadResult:
+    async def download_object(self, s3_object: S3Object, output_path: str) -> S3DownloadResult:
         """
         Download an object from S3
 
@@ -198,34 +188,20 @@ class S3Integration:
             os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
             # Download
-            client.download_file(
-                s3_object.bucket,
-                s3_object.key,
-                output_path
-            )
+            client.download_file(s3_object.bucket, s3_object.key, output_path)
 
             logger.info(f"✅ Downloaded: s3://{s3_object.bucket}/{s3_object.key} → {output_path}")
 
-            return S3DownloadResult(
-                s3_object=s3_object,
-                local_path=output_path,
-                success=True
-            )
+            return S3DownloadResult(s3_object=s3_object, local_path=output_path, success=True)
 
         except Exception as e:
             logger.error(f"❌ Failed to download {s3_object.key}: {e}")
             return S3DownloadResult(
-                s3_object=s3_object,
-                local_path=output_path,
-                success=False,
-                error=str(e)
+                s3_object=s3_object, local_path=output_path, success=False, error=str(e)
             )
 
     async def download_objects(
-        self,
-        s3_objects: List[S3Object],
-        output_dir: str,
-        preserve_structure: bool = True
+        self, s3_objects: List[S3Object], output_dir: str, preserve_structure: bool = True
     ) -> List[S3DownloadResult]:
         """
         Download multiple objects
@@ -269,7 +245,7 @@ class S3Integration:
         bucket: str,
         key: Optional[str] = None,
         metadata: Optional[Dict[str, str]] = None,
-        content_type: Optional[str] = None
+        content_type: Optional[str] = None,
     ) -> bool:
         """
         Upload a file to S3
@@ -301,22 +277,18 @@ class S3Integration:
             # Determine content type
             if content_type is None:
                 import mimetypes
+
                 content_type, _ = mimetypes.guess_type(file_path)
                 if content_type is None:
-                    content_type = 'application/octet-stream'
+                    content_type = "application/octet-stream"
 
             # Build extra args
-            extra_args = {'ContentType': content_type}
+            extra_args = {"ContentType": content_type}
             if metadata:
-                extra_args['Metadata'] = metadata
+                extra_args["Metadata"] = metadata
 
             # Upload
-            client.upload_file(
-                file_path,
-                bucket,
-                key,
-                ExtraArgs=extra_args
-            )
+            client.upload_file(file_path, bucket, key, ExtraArgs=extra_args)
 
             logger.info(f"✅ Uploaded: {file_path} → s3://{bucket}/{key}")
             return True
@@ -331,7 +303,7 @@ class S3Integration:
         prefix: str,
         local_dir: str,
         suffix: Optional[str] = None,
-        incremental: bool = True
+        incremental: bool = True,
     ) -> Dict[str, Any]:
         """
         Synchronize S3 bucket/prefix to local directory
@@ -364,7 +336,7 @@ class S3Integration:
             to_download = []
 
             for obj in s3_objects:
-                local_path = os.path.join(local_dir, obj.key.replace(prefix, '', 1))
+                local_path = os.path.join(local_dir, obj.key.replace(prefix, "", 1))
                 if not os.path.exists(local_path):
                     to_download.append(obj)
                 else:
@@ -379,18 +351,16 @@ class S3Integration:
 
         # Download
         results = await self.download_objects(
-            objects_to_download,
-            local_dir,
-            preserve_structure=True
+            objects_to_download, local_dir, preserve_structure=True
         )
 
         # Statistics
         stats = {
-            'total_remote_objects': len(s3_objects),
-            'downloaded': len(objects_to_download),
-            'success': sum(1 for r in results if r.success),
-            'failed': sum(1 for r in results if not r.success),
-            'skipped': len(s3_objects) - len(objects_to_download)
+            "total_remote_objects": len(s3_objects),
+            "downloaded": len(objects_to_download),
+            "success": sum(1 for r in results if r.success),
+            "failed": sum(1 for r in results if not r.success),
+            "skipped": len(s3_objects) - len(objects_to_download),
         }
 
         logger.info(
@@ -403,11 +373,7 @@ class S3Integration:
         return stats
 
     async def generate_presigned_url(
-        self,
-        bucket: str,
-        key: str,
-        expiration: int = 3600,
-        method: str = "get_object"
+        self, bucket: str, key: str, expiration: int = 3600, method: str = "get_object"
     ) -> Optional[str]:
         """
         Generate presigned URL for secure access
@@ -432,9 +398,7 @@ class S3Integration:
 
         try:
             url = client.generate_presigned_url(
-                method,
-                Params={'Bucket': bucket, 'Key': key},
-                ExpiresIn=expiration
+                method, Params={"Bucket": bucket, "Key": key}, ExpiresIn=expiration
             )
 
             logger.debug(f"Generated presigned URL for s3://{bucket}/{key}")
@@ -447,10 +411,10 @@ class S3Integration:
     def get_stats(self) -> Dict[str, Any]:
         """Get integration statistics"""
         return {
-            'region': self.region,
-            'endpoint': self.endpoint_url or 'default',
-            'use_ssl': self.use_ssl,
-            'configured': self.aws_access_key_id is not None
+            "region": self.region,
+            "endpoint": self.endpoint_url or "default",
+            "use_ssl": self.use_ssl,
+            "configured": self.aws_access_key_id is not None,
         }
 
     def __repr__(self):

@@ -4,10 +4,10 @@
 """
 
 import asyncio
-from typing import Dict, List, Optional, Any
-from datetime import datetime
 import json
+from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 
 class BehaviorTracker:
@@ -50,7 +50,7 @@ class BehaviorTracker:
         intent: str,
         product_type: Optional[str] = None,
         response_time_ms: Optional[int] = None,
-        ip_address: Optional[str] = None
+        ip_address: Optional[str] = None,
     ):
         """
         검색 로그 수집
@@ -82,8 +82,8 @@ class BehaviorTracker:
                 "product_type": product_type,
                 "response_time_ms": response_time_ms,
                 "ip_address": ip_address,
-                "searched_at": datetime.now().isoformat()
-            }
+                "searched_at": datetime.now().isoformat(),
+            },
         }
 
         await self._enqueue(data)
@@ -107,7 +107,7 @@ class BehaviorTracker:
         checked_specs: bool = False,
         checked_compatibility: bool = False,
         requested_sample: bool = False,
-        ip_address: Optional[str] = None
+        ip_address: Optional[str] = None,
     ):
         """
         클릭 이벤트 추적
@@ -153,8 +153,8 @@ class BehaviorTracker:
                 "checked_compatibility": checked_compatibility,
                 "requested_sample": requested_sample,
                 "ip_address": ip_address,
-                "clicked_at": datetime.now().isoformat()
-            }
+                "clicked_at": datetime.now().isoformat(),
+            },
         }
 
         await self._enqueue(data)
@@ -174,7 +174,7 @@ class BehaviorTracker:
         product_count: int,
         action_taken: str,
         response_time_ms: Optional[int] = None,
-        ip_address: Optional[str] = None
+        ip_address: Optional[str] = None,
     ):
         """
         대화 로그 저장
@@ -212,8 +212,8 @@ class BehaviorTracker:
                 "action_taken": action_taken,
                 "response_time_ms": response_time_ms,
                 "ip_address": ip_address,
-                "created_at": datetime.now().isoformat()
-            }
+                "created_at": datetime.now().isoformat(),
+            },
         }
 
         await self._enqueue(data)
@@ -233,7 +233,7 @@ class BehaviorTracker:
         company_name: str,
         contact_info: Dict[str, str],
         notes: Optional[str] = None,
-        ip_address: Optional[str] = None
+        ip_address: Optional[str] = None,
     ):
         """
         샘플 신청 기록
@@ -272,8 +272,8 @@ class BehaviorTracker:
                 "notes": notes,
                 "ip_address": ip_address,
                 "requested_at": datetime.now().isoformat(),
-                "status": "pending"
-            }
+                "status": "pending",
+            },
         }
 
         await self._enqueue(data)
@@ -370,9 +370,9 @@ class BehaviorTracker:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         backup_file = self.backup_dir / f"backup_{timestamp}.jsonl"
 
-        with open(backup_file, 'w', encoding='utf-8') as f:
+        with open(backup_file, "w", encoding="utf-8") as f:
             for item in batch:
-                f.write(json.dumps(item, ensure_ascii=False) + '\n')
+                f.write(json.dumps(item, ensure_ascii=False) + "\n")
 
         print(f"[BehaviorTracker] Backed up {len(batch)} records to {backup_file}")
 

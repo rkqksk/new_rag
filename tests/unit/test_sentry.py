@@ -25,7 +25,6 @@ from app.core.sentry import (
     should_sample_event,
 )
 
-
 # ============================================================
 # Test SentryConfig
 # ============================================================
@@ -148,6 +147,7 @@ class TestSentryMiddleware:
         # This test gracefully handles missing PyJWT
         try:
             import jwt
+
             has_jwt = True
         except ImportError:
             has_jwt = False
@@ -455,11 +455,7 @@ class TestSentryIntegration:
         sentry.initialize()
 
         # Capture message (should not fail even without Sentry SDK)
-        event_id = sentry.capture_message(
-            "User login failed",
-            level="warning",
-            user_id="123"
-        )
+        event_id = sentry.capture_message("User login failed", level="warning", user_id="123")
 
         # Without Sentry SDK, this returns None
         assert event_id is None

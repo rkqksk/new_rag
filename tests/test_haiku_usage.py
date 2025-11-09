@@ -5,8 +5,8 @@ API 사용량 체크용
 """
 
 import asyncio
-import sys
 import os
+import sys
 from pathlib import Path
 
 project_root = Path(__file__).parent.parent
@@ -29,7 +29,7 @@ async def test_short_responses():
         "머신러닝을 한 문장으로 설명해줘",
         "REST API란 무엇인가?",
         "Docker를 간단히 설명해줘",
-        "Git이란?"
+        "Git이란?",
     ]
 
     total_tokens = 0
@@ -39,24 +39,17 @@ async def test_short_responses():
         print(f"\n[질문 {i}] {prompt}")
 
         result = await server.call_haiku(
-            prompt=prompt,
-            max_tokens=100,  # 짧게 제한
-            temperature=0.3,
-            use_cache=False
+            prompt=prompt, max_tokens=100, temperature=0.3, use_cache=False  # 짧게 제한
         )
 
-        tokens_used = result.get('tokens', {}).get('total', 0)
-        response_text = result.get('text', 'N/A')
+        tokens_used = result.get("tokens", {}).get("total", 0)
+        response_text = result.get("text", "N/A")
 
         print(f"✓ 응답: {response_text}")
         print(f"✓ 토큰: {tokens_used}")
 
         total_tokens += tokens_used
-        results.append({
-            "question": prompt,
-            "response": response_text,
-            "tokens": tokens_used
-        })
+        results.append({"question": prompt, "response": response_text, "tokens": tokens_used})
 
     # 최종 통계
     print("\n" + "=" * 60)
@@ -69,7 +62,7 @@ async def test_short_responses():
     # API 키 사용량 (서버 내부 추적)
     usage_stats = server.api_router.get_usage_stats()
     print(f"\nAPI 키 사용량 추적:")
-    for key, stats in usage_stats.get('key_usage', {}).items():
+    for key, stats in usage_stats.get("key_usage", {}).items():
         print(f"  키: ...{key[-10:]}")
         print(f"  총 요청: {stats['request_count']}")
         print(f"  성공: {stats['success_count']}")

@@ -15,33 +15,33 @@ Usage:
 """
 
 import logging
-from typing import Optional
 import uuid
+from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from redis.asyncio import Redis
 
 from app.core.config import get_settings
-from app.rag_consultation.models import (
-    ConsultationRequest,
-    ConsultationResponse,
-)
 from app.rag_consultation.classification import (
-    QueryClassifier,
     IntentDetector,
-    ToneAnalyzer,
     LanguageDetector,
+    QueryClassifier,
+    ToneAnalyzer,
 )
 from app.rag_consultation.context import (
-    ConversationManager,
     ContextStore,
+    ConversationManager,
 )
-from app.rag_consultation.retrieval import QueryExpander
 from app.rag_consultation.generation import (
     PromptBuilder,
     ResponseGenerator,
     TemplateSystem,
 )
+from app.rag_consultation.models import (
+    ConsultationRequest,
+    ConsultationResponse,
+)
+from app.rag_consultation.retrieval import QueryExpander
 
 logger = logging.getLogger(__name__)
 

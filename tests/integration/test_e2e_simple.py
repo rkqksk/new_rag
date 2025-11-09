@@ -3,21 +3,24 @@ Simplified End-to-End Pipeline Tests
 
 Tests complete architectural flow without depending on service internals
 """
-import pytest
-from unittest.mock import Mock, AsyncMock, patch
-from datetime import datetime
+
 import uuid
+from datetime import datetime
+from unittest.mock import AsyncMock, Mock, patch
+
+import pytest
 
 
 @pytest.mark.integration
 def test_e2e_api_layer_present():
     """Test API layer is present and functional"""
     from app.api.main import app
+
     assert app is not None
-    assert hasattr(app, 'get')
-    assert hasattr(app, 'post')
-    assert hasattr(app, 'put')
-    assert hasattr(app, 'delete')
+    assert hasattr(app, "get")
+    assert hasattr(app, "post")
+    assert hasattr(app, "put")
+    assert hasattr(app, "delete")
 
 
 @pytest.mark.integration
@@ -26,7 +29,7 @@ def test_e2e_core_layer_present():
     from app.core.dependencies import get_config
     from app.core.metrics import REGISTRY
     from app.core.middleware import MetricsMiddleware
-    from app.core.routing import intent_router, llm_router, integrated_router
+    from app.core.routing import integrated_router, intent_router, llm_router
 
     assert get_config is not None
     assert REGISTRY is not None
@@ -36,9 +39,7 @@ def test_e2e_core_layer_present():
 @pytest.mark.integration
 def test_e2e_models_layer_present():
     """Test models/schemas layer is present"""
-    from app.models.schemas import (
-        QARequest, QAResponse, ConsultationRequest, ConsultationResponse
-    )
+    from app.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
 
     assert QARequest is not None
     assert QAResponse is not None
@@ -51,9 +52,9 @@ def test_e2e_config_dependency_chain():
     """Test configuration flows through dependency chain"""
     from app.core.dependencies import (
         get_config,
+        get_embedding_model,
         get_qdrant_client,
         get_redis_client,
-        get_embedding_model,
     )
 
     config = get_config()
@@ -69,12 +70,12 @@ def test_e2e_config_dependency_chain():
 def test_e2e_metrics_dependency_chain():
     """Test metrics are properly configured for pipeline"""
     from app.core.metrics import (
-        http_requests_total,
-        embedding_generation_total,
-        vector_search_total,
-        llm_query_total,
-        errors_total,
         active_requests,
+        embedding_generation_total,
+        errors_total,
+        http_requests_total,
+        llm_query_total,
+        vector_search_total,
     )
 
     # All pipeline stages should have metrics
@@ -88,12 +89,12 @@ def test_e2e_metrics_dependency_chain():
 @pytest.mark.integration
 def test_e2e_request_schema_pipeline():
     """Test request flows through schema validation"""
-    from app.models.schemas import QARequest, ConsultationRequest
+    from app.models.schemas import ConsultationRequest, QARequest
 
     # QA request pipeline
     qa_req = QARequest(question="What is machine learning?")
     assert qa_req.question == "What is machine learning?"
-    assert hasattr(qa_req, 'top_k')
+    assert hasattr(qa_req, "top_k")
 
     # Consultation request pipeline
     cons_req = ConsultationRequest(
@@ -105,7 +106,7 @@ def test_e2e_request_schema_pipeline():
 @pytest.mark.integration
 def test_e2e_response_schema_pipeline():
     """Test response flows through schema validation"""
-    from app.models.schemas import QAResponse, ConsultationResponse, ErrorResponse
+    from app.models.schemas import ConsultationResponse, ErrorResponse, QAResponse
 
     # QA response pipeline
     qa_resp = QAResponse(
@@ -114,7 +115,7 @@ def test_e2e_response_schema_pipeline():
         related_products=[],
         confidence=0.95,
         qa_id="qa_12345",
-        timestamp="2025-10-19T10:30:45Z"
+        timestamp="2025-10-19T10:30:45Z",
     )
     assert qa_resp.answer is not None
     assert qa_resp.question == "What is ML?"
@@ -122,9 +123,7 @@ def test_e2e_response_schema_pipeline():
 
     # Error response pipeline
     err_resp = ErrorResponse(
-        error="VALIDATION_ERROR",
-        message="Invalid input",
-        timestamp=datetime.utcnow().isoformat()
+        error="VALIDATION_ERROR", message="Invalid input", timestamp=datetime.utcnow().isoformat()
     )
     assert err_resp.error == "VALIDATION_ERROR"
 
@@ -161,7 +160,7 @@ def test_e2e_middleware_presence_in_pipeline():
 
     # App should have middleware stack
     assert app is not None
-    assert hasattr(app, 'middleware')
+    assert hasattr(app, "middleware")
 
 
 @pytest.mark.integration
@@ -184,17 +183,14 @@ def test_e2e_state_isolation_between_requests():
     from app.models.schemas import QARequest
 
     # Create multiple independent requests
-    requests = [
-        QARequest(question=f"Question {i}?")
-        for i in range(10)
-    ]
+    requests = [QARequest(question=f"Question {i}?") for i in range(10)]
 
     # All should be independent instances
     for i, req in enumerate(requests):
         assert req.question == f"Question {i}?"
         # Each should be unique instance
         if i > 0:
-            assert requests[i] is not requests[i-1]
+            assert requests[i] is not requests[i - 1]
 
 
 @pytest.mark.integration
@@ -235,8 +231,7 @@ def test_e2e_endpoints_defined():
     # Should have health-related endpoints
     has_root = "/" in routes
     has_health_or_metrics = any(
-        "health" in str(r).lower() or "metrics" in str(r).lower()
-        for r in app.routes
+        "health" in str(r).lower() or "metrics" in str(r).lower() for r in app.routes
     )
 
     # At minimum, app has routes defined
@@ -250,9 +245,7 @@ def test_e2e_pipeline_error_handling():
 
     # Create error response
     error = ErrorResponse(
-        error="PIPELINE_ERROR",
-        message="Test error",
-        timestamp=datetime.utcnow().isoformat()
+        error="PIPELINE_ERROR", message="Test error", timestamp=datetime.utcnow().isoformat()
     )
 
     assert error.error == "PIPELINE_ERROR"
@@ -269,10 +262,14 @@ def test_e2e_configuration_accessible():
 
     # Should have all required fields for pipeline
     required_fields = [
-        'qdrant_host', 'qdrant_port',
-        'redis_host', 'redis_port',
-        'embedding_model', 'embedding_dim',
-        'ollama_url', 'ollama_model',
+        "qdrant_host",
+        "qdrant_port",
+        "redis_host",
+        "redis_port",
+        "embedding_model",
+        "embedding_dim",
+        "ollama_url",
+        "ollama_model",
     ]
 
     for field in required_fields:
@@ -285,10 +282,7 @@ def test_e2e_scalability_multiple_requests():
     from app.models.schemas import QARequest
 
     # Create 100 requests
-    requests = [
-        QARequest(question=f"Query {i}: {uuid.uuid4()}")
-        for i in range(100)
-    ]
+    requests = [QARequest(question=f"Query {i}: {uuid.uuid4()}") for i in range(100)]
 
     assert len(requests) == 100
     # All should be valid
@@ -300,7 +294,7 @@ def test_e2e_scalability_multiple_requests():
 @pytest.mark.integration
 def test_e2e_routing_layer_available():
     """Test routing/middleware layer is available"""
-    from app.core.routing import intent_router, llm_router, integrated_router
+    from app.core.routing import integrated_router, intent_router, llm_router
 
     # All routers should be available
     assert intent_router is not None
@@ -316,10 +310,8 @@ def test_e2e_no_import_errors():
     from app.core.dependencies import get_config, override_dependencies_for_testing
     from app.core.metrics import REGISTRY
     from app.core.middleware import MetricsMiddleware
-    from app.core.routing import intent_router, llm_router, integrated_router
-    from app.models.schemas import (
-        QARequest, QAResponse, ConsultationRequest, ConsultationResponse
-    )
+    from app.core.routing import integrated_router, intent_router, llm_router
+    from app.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
 
     # All should be importable
     assert app and get_config and REGISTRY and MetricsMiddleware

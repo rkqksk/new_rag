@@ -7,20 +7,22 @@ Tests the Dependency Injection container including:
 - Service factory functions
 - Testing utilities
 """
+
+from unittest.mock import MagicMock, Mock, patch
+
 import pytest
-from unittest.mock import Mock, patch, MagicMock
-from qdrant_client import QdrantClient
 import redis
+from qdrant_client import QdrantClient
 
 from app.core.dependencies import (
     AppConfig,
     get_config,
-    get_qdrant_client,
-    get_redis_client,
-    get_embedding_model,
-    get_rag_qa_service,
     get_consultation_service,
     get_document_ingestion_service,
+    get_embedding_model,
+    get_qdrant_client,
+    get_rag_qa_service,
+    get_redis_client,
     override_dependencies_for_testing,
 )
 
@@ -51,15 +53,18 @@ def test_app_config_postgres_password_validation():
 @pytest.mark.unit
 def test_app_config_customizable_from_env():
     """Test that AppConfig can be customized via environment variables"""
-    with patch.dict('os.environ', {
-        'QDRANT_HOST': 'custom-qdrant',
-        'QDRANT_HTTP_PORT': '9999',
-        'EMBEDDING_DIM': '512',
-        'POSTGRES_PASSWORD': 'test-password'
-    }):
+    with patch.dict(
+        "os.environ",
+        {
+            "QDRANT_HOST": "custom-qdrant",
+            "QDRANT_HTTP_PORT": "9999",
+            "EMBEDDING_DIM": "512",
+            "POSTGRES_PASSWORD": "test-password",
+        },
+    ):
         config = AppConfig()
 
-        assert config.qdrant_host == 'custom-qdrant'
+        assert config.qdrant_host == "custom-qdrant"
         assert config.qdrant_port == 9999
         assert config.embedding_dim == 512
 
@@ -80,9 +85,9 @@ def test_get_config_returns_app_config():
     config = get_config()
 
     assert isinstance(config, AppConfig)
-    assert hasattr(config, 'qdrant_host')
-    assert hasattr(config, 'redis_host')
-    assert hasattr(config, 'embedding_model')
+    assert hasattr(config, "qdrant_host")
+    assert hasattr(config, "redis_host")
+    assert hasattr(config, "embedding_model")
 
 
 @pytest.mark.unit
@@ -127,6 +132,7 @@ def test_get_redis_client_singleton():
 def test_get_embedding_model_returns_transformer():
     """Test that get_embedding_model returns SentenceTransformer"""
     from sentence_transformers import SentenceTransformer
+
     model = get_embedding_model(get_config())
 
     assert isinstance(model, SentenceTransformer)
@@ -206,7 +212,7 @@ def test_mock_qdrant_from_overrides():
         mock_qdrant = mock_qdrant_factory()
 
         assert isinstance(mock_qdrant, Mock)
-        assert hasattr(mock_qdrant, 'search')
+        assert hasattr(mock_qdrant, "search")
 
 
 @pytest.mark.unit
@@ -219,8 +225,8 @@ def test_mock_redis_from_overrides():
         mock_redis = mock_redis_factory()
 
         assert isinstance(mock_redis, Mock)
-        assert hasattr(mock_redis, 'get')
-        assert hasattr(mock_redis, 'setex')
+        assert hasattr(mock_redis, "get")
+        assert hasattr(mock_redis, "setex")
 
 
 @pytest.mark.unit
@@ -233,8 +239,8 @@ def test_mock_config_from_overrides():
         mock_config = mock_config_factory()
 
         assert isinstance(mock_config, Mock)
-        assert hasattr(mock_config, 'qdrant_host')
-        assert hasattr(mock_config, 'embedding_model')
+        assert hasattr(mock_config, "qdrant_host")
+        assert hasattr(mock_config, "embedding_model")
 
 
 @pytest.mark.unit

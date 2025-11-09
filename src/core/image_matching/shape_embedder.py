@@ -4,8 +4,9 @@ Convert shape descriptors to fixed 128-dim embeddings
 """
 
 import logging
-from typing import Union, List, Optional
 from pathlib import Path
+from typing import List, Optional, Union
+
 import numpy as np
 
 logger = logging.getLogger(__name__)
@@ -28,10 +29,7 @@ class ShapeEmbedder:
     """
 
     def __init__(
-        self,
-        target_dim: int = 128,
-        use_background_removal: bool = False,
-        fourier_coeffs: int = 60
+        self, target_dim: int = 128, use_background_removal: bool = False, fourier_coeffs: int = 60
     ):
         """
         Initialize shape embedder
@@ -80,25 +78,17 @@ class ShapeEmbedder:
             # Random projection to reduce dimensions
             # Using Johnson-Lindenstrauss lemma
             np.random.seed(42)
-            self.projection_matrix = np.random.randn(
-                self.source_dim,
-                self.target_dim
-            )
+            self.projection_matrix = np.random.randn(self.source_dim, self.target_dim)
             # Normalize
             self.projection_matrix /= np.sqrt(self.source_dim)
             self.use_projection = True
 
     def is_available(self) -> bool:
         """Check if shape embedder is available"""
-        return (
-            self.contour_extractor.is_available() and
-            self.shape_descriptor.is_available()
-        )
+        return self.contour_extractor.is_available() and self.shape_descriptor.is_available()
 
     def embed_image(
-        self,
-        image_path: Union[str, Path],
-        return_metadata: bool = False
+        self, image_path: Union[str, Path], return_metadata: bool = False
     ) -> Union[List[float], tuple]:
         """
         Generate shape embedding from image
@@ -136,11 +126,7 @@ class ShapeEmbedder:
             logger.warning(f"No contours found in {image_path.name}")
             # Return zero vector
             embedding = [0.0] * self.target_dim
-            metadata = {
-                'success': False,
-                'error': 'No contours found',
-                'num_contours': 0
-            }
+            metadata = {"success": False, "error": "No contours found", "num_contours": 0}
             return (embedding, metadata) if return_metadata else embedding
 
         # Step 3: Get largest contour
@@ -166,12 +152,12 @@ class ShapeEmbedder:
             properties = self.contour_extractor.get_contour_properties(largest_contour)
 
             metadata = {
-                'success': True,
-                'num_contours': len(contours),
-                'contour_properties': properties,
-                'descriptor_dim': len(descriptor),
-                'embedding_dim': len(embedding),
-                'source_file': str(image_path)
+                "success": True,
+                "num_contours": len(contours),
+                "contour_properties": properties,
+                "descriptor_dim": len(descriptor),
+                "embedding_dim": len(embedding),
+                "source_file": str(image_path),
             }
 
             return embedding, metadata
@@ -201,12 +187,10 @@ class ShapeEmbedder:
                 return np.dot(descriptor, self.projection_matrix)
             else:
                 # Truncate
-                return descriptor[:self.target_dim]
+                return descriptor[: self.target_dim]
 
     def embed_batch(
-        self,
-        image_paths: List[Union[str, Path]],
-        show_progress: bool = True
+        self, image_paths: List[Union[str, Path]], show_progress: bool = True
     ) -> List[List[float]]:
         """
         Generate embeddings for multiple images
@@ -225,6 +209,7 @@ class ShapeEmbedder:
         if show_progress:
             try:
                 from tqdm import tqdm
+
                 iterator = tqdm(image_paths, desc="Generating shape embeddings")
             except ImportError:
                 pass
@@ -240,10 +225,7 @@ class ShapeEmbedder:
 
         return embeddings
 
-    def embed_from_contour(
-        self,
-        contour: np.ndarray
-    ) -> List[float]:
+    def embed_from_contour(self, contour: np.ndarray) -> List[float]:
         """
         Generate embedding directly from contour
 
@@ -270,10 +252,7 @@ class ShapeEmbedder:
         return embedding.tolist()
 
     def compare_embeddings(
-        self,
-        embedding1: List[float],
-        embedding2: List[float],
-        metric: str = 'cosine'
+        self, embedding1: List[float], embedding2: List[float], metric: str = "cosine"
     ) -> float:
         """
         Compare two shape embeddings
@@ -289,14 +268,14 @@ class ShapeEmbedder:
         emb1 = np.array(embedding1)
         emb2 = np.array(embedding2)
 
-        if metric == 'cosine':
+        if metric == "cosine":
             # Cosine similarity
             dot_product = np.dot(emb1, emb2)
             norm_product = np.linalg.norm(emb1) * np.linalg.norm(emb2)
             similarity = dot_product / (norm_product + 1e-10)
             return float(similarity)
 
-        elif metric == 'euclidean':
+        elif metric == "euclidean":
             # Euclidean distance (convert to similarity)
             distance = np.linalg.norm(emb1 - emb2)
             similarity = 1.0 / (1.0 + distance)
@@ -312,9 +291,4 @@ class ShapeEmbedder:
     def __repr__(self):
         status = "available" if self.is_available() else "not available"
         bg = "enabled" if self.use_background_removal else "disabled"
-        return (
-            f"ShapeEmbedder("
-            f"dim={self.target_dim}, "
-            f"bg_removal={bg}, "
-            f"status={status})"
-        )
+        return f"ShapeEmbedder(" f"dim={self.target_dim}, " f"bg_removal={bg}, " f"status={status})"

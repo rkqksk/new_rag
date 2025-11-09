@@ -3,15 +3,17 @@
 실시간 필터링 및 스마트 추천
 """
 
-from typing import Dict, List, Optional, Any, Tuple
 import json
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 
 class ComparisonEngine:
     """제품 비교 엔진"""
 
-    def __init__(self, data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"):
+    def __init__(
+        self, data_root: str = "/Users/oypnus/Project/rag-enterprise/data/crawled_products_final"
+    ):
         self.data_root = Path(data_root)
 
         # 비교 가능한 메트릭 정의
@@ -21,14 +23,10 @@ class ComparisonEngine:
             "네크사이즈": {"type": "categorical", "weight": 0.15},
             "가격": {"type": "numerical", "weight": 0.20},
             "호환성": {"type": "numerical", "weight": 0.15},
-            "투명도": {"type": "categorical", "weight": 0.05}
+            "투명도": {"type": "categorical", "weight": 0.05},
         }
 
-    def compare_products(
-        self,
-        product_idxs: List[str],
-        metrics: List[str] = None
-    ) -> Dict:
+    def compare_products(self, product_idxs: List[str], metrics: List[str] = None) -> Dict:
         """
         여러 제품 비교
 
@@ -70,14 +68,10 @@ class ComparisonEngine:
             "comparison_matrix": highlighted_matrix,
             "metrics": metrics,
             "product_count": len(products),
-            "recommendation": recommendation
+            "recommendation": recommendation,
         }
 
-    def apply_filters(
-        self,
-        products: List[Dict],
-        filters: Dict[str, Any]
-    ) -> List[Dict]:
+    def apply_filters(self, products: List[Dict], filters: Dict[str, Any]) -> List[Dict]:
         """
         동적 필터 적용
 
@@ -96,27 +90,22 @@ class ComparisonEngine:
 
         return filtered
 
-    def _generate_comparison_matrix(
-        self,
-        products: List[Dict],
-        metrics: List[str]
-    ) -> List[Dict]:
+    def _generate_comparison_matrix(self, products: List[Dict], metrics: List[str]) -> List[Dict]:
         """비교 매트릭스 생성"""
         matrix = []
 
         for metric in metrics:
-            row = {
-                "metric": metric,
-                "values": []
-            }
+            row = {"metric": metric, "values": []}
 
             for product in products:
                 value = self._extract_metric_value(product, metric)
-                row["values"].append({
-                    "product_idx": product.get("idx"),
-                    "value": value,
-                    "display": self._format_metric_value(value, metric)
-                })
+                row["values"].append(
+                    {
+                        "product_idx": product.get("idx"),
+                        "value": value,
+                        "display": self._format_metric_value(value, metric),
+                    }
+                )
 
             matrix.append(row)
 
@@ -135,7 +124,8 @@ class ComparisonEngine:
             capacity_str = specs.get("capacity", "")
             if capacity_str:
                 import re
-                match = re.search(r'(\d+(?:\.\d+)?)', capacity_str)
+
+                match = re.search(r"(\d+(?:\.\d+)?)", capacity_str)
                 if match:
                     return float(match.group(1))
             return 0
@@ -171,11 +161,7 @@ class ComparisonEngine:
         else:
             return str(value)
 
-    def _add_highlights(
-        self,
-        matrix: List[Dict],
-        metrics: List[str]
-    ) -> List[Dict]:
+    def _add_highlights(self, matrix: List[Dict], metrics: List[str]) -> List[Dict]:
         """최고/최저값 하이라이트"""
         for row in matrix:
             metric = row["metric"]
@@ -185,7 +171,11 @@ class ComparisonEngine:
 
             if metric_type == "numerical":
                 # 숫자형 메트릭
-                numeric_values = [v["value"] for v in values if isinstance(v["value"], (int, float)) and v["value"] > 0]
+                numeric_values = [
+                    v["value"]
+                    for v in values
+                    if isinstance(v["value"], (int, float)) and v["value"] > 0
+                ]
 
                 if numeric_values:
                     max_val = max(numeric_values)
@@ -210,9 +200,7 @@ class ComparisonEngine:
         return matrix
 
     def _generate_smart_recommendation(
-        self,
-        products: List[Dict],
-        comparison_matrix: List[Dict]
+        self, products: List[Dict], comparison_matrix: List[Dict]
     ) -> str:
         """
         스마트 추천 생성
@@ -245,8 +233,7 @@ class ComparisonEngine:
             if product_strengths:
                 strength_text = ", ".join(product_strengths)
                 recommendations.append(
-                    f"**{product.get('product_name')}**: "
-                    f"{strength_text}에서 최고"
+                    f"**{product.get('product_name')}**: " f"{strength_text}에서 최고"
                 )
 
         if recommendations:
@@ -307,7 +294,7 @@ class ComparisonEngine:
         for category in ["Bottle", "Cappump", "Pump", "Jar"]:
             for json_file in (self.data_root / category).rglob(f"idx_{idx}.json"):
                 try:
-                    with open(json_file, 'r', encoding='utf-8') as f:
+                    with open(json_file, "r", encoding="utf-8") as f:
                         return json.load(f)
                 except Exception:
                     continue
@@ -317,7 +304,6 @@ class ComparisonEngine:
 
 # defaultdict import
 from collections import defaultdict
-
 
 # 싱글톤 인스턴스
 _comparison_engine_instance = None

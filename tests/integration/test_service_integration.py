@@ -4,11 +4,12 @@ Service-Level Integration Tests for RAG Enterprise
 Tests core services: RAG QA, Document Ingestion, Consultation, Teacher Service
 with real mocked dependencies, validating service contracts and data flow.
 """
-import pytest
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
-from datetime import datetime
-import uuid
 
+import uuid
+from datetime import datetime
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
 
 # ============================================================
 # RAG QA Service Tests
@@ -23,26 +24,28 @@ class TestRAGQAService:
     def mock_qdrant(self):
         """Mock Qdrant client"""
         client = Mock()
-        client.search = AsyncMock(return_value=[
-            Mock(
-                id=1,
-                score=0.95,
-                payload={
-                    "text": "Machine learning is a subset of AI",
-                    "source": "test_doc",
-                    "chunk_id": 0
-                }
-            ),
-            Mock(
-                id=2,
-                score=0.87,
-                payload={
-                    "text": "Deep learning uses neural networks",
-                    "source": "test_doc",
-                    "chunk_id": 1
-                }
-            )
-        ])
+        client.search = AsyncMock(
+            return_value=[
+                Mock(
+                    id=1,
+                    score=0.95,
+                    payload={
+                        "text": "Machine learning is a subset of AI",
+                        "source": "test_doc",
+                        "chunk_id": 0,
+                    },
+                ),
+                Mock(
+                    id=2,
+                    score=0.87,
+                    payload={
+                        "text": "Deep learning uses neural networks",
+                        "source": "test_doc",
+                        "chunk_id": 1,
+                    },
+                ),
+            ]
+        )
         return client
 
     @pytest.fixture
@@ -61,12 +64,12 @@ class TestRAGQAService:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         assert service is not None
-        assert hasattr(service, 'search_products')
-        assert hasattr(service, 'answer_question')
+        assert hasattr(service, "search_products")
+        assert hasattr(service, "answer_question")
 
     @pytest.mark.asyncio
     async def test_rag_qa_service_has_required_methods(self, mock_qdrant, mock_embedding):
@@ -77,12 +80,12 @@ class TestRAGQAService:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         # Verify methods exist and are callable
-        assert callable(getattr(service, 'search_products', None))
-        assert callable(getattr(service, 'answer_question', None))
+        assert callable(getattr(service, "search_products", None))
+        assert callable(getattr(service, "answer_question", None))
 
     @pytest.mark.asyncio
     async def test_rag_qa_service_search_integration(self, mock_qdrant, mock_embedding):
@@ -93,7 +96,7 @@ class TestRAGQAService:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         # Verify Qdrant client is accessible
@@ -108,7 +111,7 @@ class TestRAGQAService:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://custom:11434",
-            model_name="custom-model"
+            model_name="custom-model",
         )
 
         assert service is not None
@@ -151,6 +154,7 @@ class TestDocumentIngestionService:
         """Test document ingestion service can be imported"""
         try:
             from app.services.document_ingestion_service import DocumentIngestionService
+
             assert DocumentIngestionService is not None
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed - document ingestion skipped")
@@ -176,7 +180,7 @@ class TestConsultationService:
         service = ConsultationService(
             search_client=mock_search_client,
             embedding_model=mock_embedding_model,
-            llm_client=mock_llm_client
+            llm_client=mock_llm_client,
         )
 
         assert service is not None
@@ -192,12 +196,12 @@ class TestConsultationService:
         service = ConsultationService(
             search_client=mock_search_client,
             embedding_model=mock_embedding_model,
-            llm_client=mock_llm_client
+            llm_client=mock_llm_client,
         )
 
         # Verify consultation methods exist
-        assert hasattr(service, 'recommend_product')
-        assert hasattr(service, 'handle_defect_inquiry')
+        assert hasattr(service, "recommend_product")
+        assert hasattr(service, "handle_defect_inquiry")
 
     def test_consultation_service_methods_callable(self):
         """Test consultation service methods are callable"""
@@ -210,7 +214,7 @@ class TestConsultationService:
         service = ConsultationService(
             search_client=mock_search_client,
             embedding_model=mock_embedding_model,
-            llm_client=mock_llm_client
+            llm_client=mock_llm_client,
         )
 
         assert callable(service.recommend_product)
@@ -233,20 +237,20 @@ class TestServiceIntegration:
         mock_search_client = Mock()
         mock_llm_client = Mock()
 
-        from app.services.rag_qa_service import RAGQAService
         from app.services.consultation_service import ConsultationService
+        from app.services.rag_qa_service import RAGQAService
 
         rag_service = RAGQAService(
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         consultation_service = ConsultationService(
             search_client=mock_search_client,
             embedding_model=mock_embedding,
-            llm_client=mock_llm_client
+            llm_client=mock_llm_client,
         )
 
         # Both should be instantiated
@@ -296,7 +300,7 @@ class TestServiceErrorHandling:
                 qdrant_client=None,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name="test-model"
+                model_name="test-model",
             )
             # If instantiation succeeds, service should exist
             assert service is not None
@@ -315,7 +319,7 @@ class TestServiceErrorHandling:
                 qdrant_client=mock_qdrant,
                 embedding_model=None,
                 ollama_url="http://localhost:11434",
-                model_name="test-model"
+                model_name="test-model",
             )
             # If instantiation succeeds
             assert service is not None
@@ -345,17 +349,18 @@ class TestServiceContracts:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         # Service contract: has search_products and answer_question methods
-        assert hasattr(service, 'search_products')
-        assert hasattr(service, 'answer_question')
+        assert hasattr(service, "search_products")
+        assert hasattr(service, "answer_question")
 
     def test_document_ingestion_service_contract(self):
         """Test document ingestion service contract (skip if unavailable)"""
         try:
             from app.services.document_ingestion_service import DocumentIngestionService
+
             assert DocumentIngestionService is not None
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed")
@@ -371,12 +376,12 @@ class TestServiceContracts:
         service = ConsultationService(
             search_client=mock_search_client,
             embedding_model=mock_embedding,
-            llm_client=mock_llm_client
+            llm_client=mock_llm_client,
         )
 
         # Service contract: has consultation methods
-        assert hasattr(service, 'recommend_product')
-        assert hasattr(service, 'handle_defect_inquiry')
+        assert hasattr(service, "recommend_product")
+        assert hasattr(service, "handle_defect_inquiry")
 
 
 # ============================================================
@@ -399,14 +404,14 @@ class TestServiceLifecycle:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         service2 = RAGQAService(
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         # Both instances should be independent
@@ -426,14 +431,14 @@ class TestServiceLifecycle:
             qdrant_client=mock_qdrant1,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="model1"
+            model_name="model1",
         )
 
         service2 = RAGQAService(
             qdrant_client=mock_qdrant2,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="model2"
+            model_name="model2",
         )
 
         # Services should have isolated state
@@ -464,7 +469,7 @@ class TestServiceScalability:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name=f"model-{i}"
+                model_name=f"model-{i}",
             )
             services.append(service)
 
@@ -485,7 +490,7 @@ class TestServiceScalability:
                 qdrant_client=mock_qdrant,
                 embedding_model=mock_embedding,
                 ollama_url="http://localhost:11434",
-                model_name="test-model"
+                model_name="test-model",
             )
             for _ in range(5)
         ]
@@ -514,7 +519,7 @@ class TestServiceConfiguration:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://custom-ollama:11434",
-            model_name="custom-model"
+            model_name="custom-model",
         )
 
         assert service is not None
@@ -531,7 +536,7 @@ class TestServiceConfiguration:
             qdrant_client=mock_qdrant,
             embedding_model=mock_embedding,
             ollama_url="http://localhost:11434",
-            model_name="test-model"
+            model_name="test-model",
         )
 
         assert service is not None

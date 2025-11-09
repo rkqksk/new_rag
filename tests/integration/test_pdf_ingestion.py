@@ -4,15 +4,16 @@ PDF Ingestion & Document Processing Tests
 Tests document ingestion service with real PDF files and various document formats.
 Validates parsing, chunking, embedding generation, and storage operations.
 """
-import pytest
-import tempfile
-import os
-from pathlib import Path
-from unittest.mock import Mock, AsyncMock, patch, MagicMock
-from datetime import datetime
-import json
-import csv
 
+import csv
+import json
+import os
+import tempfile
+from datetime import datetime
+from pathlib import Path
+from unittest.mock import AsyncMock, MagicMock, Mock, patch
+
+import pytest
 
 # ============================================================
 # PDF File Generation & Fixtures
@@ -23,12 +24,12 @@ import csv
 def temp_pdf_file():
     """Create a temporary PDF file for testing"""
     try:
-        from reportlab.pdfgen import canvas
         from reportlab.lib.pagesizes import letter
+        from reportlab.pdfgen import canvas
     except ImportError:
         pytest.skip("reportlab not installed")
 
-    with tempfile.NamedTemporaryFile(mode='wb', suffix='.pdf', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="wb", suffix=".pdf", delete=False) as f:
         pdf_path = f.name
 
     try:
@@ -49,13 +50,13 @@ def temp_pdf_file():
 @pytest.fixture
 def temp_csv_file():
     """Create a temporary CSV file for testing"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.csv', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".csv", delete=False) as f:
         csv_path = f.name
         writer = csv.writer(f)
-        writer.writerow(['Product', 'Quantity', 'Unit Price', 'Total'])
-        writer.writerow(['Steel Plate', '100', '$50', '$5000'])
-        writer.writerow(['Aluminum Rod', '50', '$75', '$3750'])
-        writer.writerow(['Copper Wire', '200', '$25', '$5000'])
+        writer.writerow(["Product", "Quantity", "Unit Price", "Total"])
+        writer.writerow(["Steel Plate", "100", "$50", "$5000"])
+        writer.writerow(["Aluminum Rod", "50", "$75", "$3750"])
+        writer.writerow(["Copper Wire", "200", "$25", "$5000"])
 
     try:
         yield csv_path
@@ -67,7 +68,7 @@ def temp_csv_file():
 @pytest.fixture
 def temp_json_file():
     """Create a temporary JSON file for testing"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", delete=False) as f:
         json_path = f.name
         data = {
             "products": [
@@ -76,15 +77,15 @@ def temp_json_file():
                     "name": "Steel Plate",
                     "specification": "High carbon steel, 3mm thickness",
                     "price": 50.00,
-                    "unit": "per piece"
+                    "unit": "per piece",
                 },
                 {
                     "id": "P002",
                     "name": "Aluminum Rod",
                     "specification": "Aluminium alloy 6061, 10mm diameter",
                     "price": 75.00,
-                    "unit": "per piece"
-                }
+                    "unit": "per piece",
+                },
             ]
         }
         json.dump(data, f, indent=2)
@@ -99,7 +100,7 @@ def temp_json_file():
 @pytest.fixture
 def temp_text_file():
     """Create a temporary text file for testing"""
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
         text_path = f.name
         f.write("Manufacturing Process Documentation\n")
         f.write("=" * 40 + "\n\n")
@@ -159,7 +160,7 @@ class TestDocumentChunk:
             text="Sample text content",
             doc_id="doc_001",
             chunk_index=0,
-            metadata={"source": "test_doc"}
+            metadata={"source": "test_doc"},
         )
 
         assert chunk.text == "Sample text content"
@@ -176,11 +177,7 @@ class TestDocumentChunk:
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed - document ingestion skipped")
 
-        chunk = DocumentChunk(
-            text="Test content",
-            doc_id="doc_002",
-            chunk_index=1
-        )
+        chunk = DocumentChunk(text="Test content", doc_id="doc_002", chunk_index=1)
 
         chunk_dict = chunk.to_dict()
 
@@ -198,18 +195,10 @@ class TestDocumentChunk:
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed - document ingestion skipped")
 
-        metadata = {
-            "source": "invoice.pdf",
-            "page": 1,
-            "section": "products",
-            "confidence": 0.95
-        }
+        metadata = {"source": "invoice.pdf", "page": 1, "section": "products", "confidence": 0.95}
 
         chunk = DocumentChunk(
-            text="Product listing content",
-            doc_id="doc_003",
-            chunk_index=0,
-            metadata=metadata
+            text="Product listing content", doc_id="doc_003", chunk_index=0, metadata=metadata
         )
 
         assert chunk.metadata == metadata
@@ -234,10 +223,13 @@ class TestDocumentIngestionService:
             pytest.skip("pytesseract not installed")
 
         # Mock the embedding model initialization
-        with patch('app.services.document_ingestion_service.SentenceTransformer', return_value=mock_embedding_model):
+        with patch(
+            "app.services.document_ingestion_service.SentenceTransformer",
+            return_value=mock_embedding_model,
+        ):
             service = DocumentIngestionService(
                 qdrant_client=mock_qdrant_client,
-                embedding_model="sentence-transformers/all-MiniLM-L6-v2"
+                embedding_model="sentence-transformers/all-MiniLM-L6-v2",
             )
 
             assert service is not None
@@ -251,13 +243,14 @@ class TestDocumentIngestionService:
         except ImportError:
             pytest.skip("pytesseract not installed")
 
-        with patch('app.services.document_ingestion_service.SentenceTransformer', return_value=mock_embedding_model):
-            service = DocumentIngestionService(
-                qdrant_client=mock_qdrant_client
-            )
+        with patch(
+            "app.services.document_ingestion_service.SentenceTransformer",
+            return_value=mock_embedding_model,
+        ):
+            service = DocumentIngestionService(qdrant_client=mock_qdrant_client)
 
-            assert hasattr(service, 'ingest_file')
-            assert hasattr(service, '_init_collection')
+            assert hasattr(service, "ingest_file")
+            assert hasattr(service, "_init_collection")
             assert callable(service.ingest_file)
 
 
@@ -276,20 +269,20 @@ class TestFileFormatProcessing:
 
         # Read CSV content
         rows = []
-        with open(temp_csv_file, 'r') as f:
+        with open(temp_csv_file, "r") as f:
             reader = csv.reader(f)
             for row in reader:
                 rows.append(row)
 
         assert len(rows) > 0
-        assert rows[0] == ['Product', 'Quantity', 'Unit Price', 'Total']
-        assert rows[1][0] == 'Steel Plate'
+        assert rows[0] == ["Product", "Quantity", "Unit Price", "Total"]
+        assert rows[1][0] == "Steel Plate"
 
     def test_json_file_processing(self, temp_json_file):
         """Test JSON file can be read and processed"""
         assert os.path.exists(temp_json_file)
 
-        with open(temp_json_file, 'r') as f:
+        with open(temp_json_file, "r") as f:
             data = json.load(f)
 
         assert "products" in data
@@ -300,7 +293,7 @@ class TestFileFormatProcessing:
         """Test text file can be read and processed"""
         assert os.path.exists(temp_text_file)
 
-        with open(temp_text_file, 'r') as f:
+        with open(temp_text_file, "r") as f:
             content = f.read()
 
         assert "Manufacturing Process" in content
@@ -349,7 +342,7 @@ class TestDocumentChunking:
         """Test converting CSV to document chunks"""
         chunks = []
 
-        with open(temp_csv_file, 'r') as f:
+        with open(temp_csv_file, "r") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 # Each row becomes a chunk with context
@@ -379,7 +372,7 @@ class TestMetadataExtraction:
             "file_size": file_stat.st_size,
             "file_type": "txt",
             "created": datetime.fromtimestamp(file_stat.st_ctime).isoformat(),
-            "modified": datetime.fromtimestamp(file_stat.st_mtime).isoformat()
+            "modified": datetime.fromtimestamp(file_stat.st_mtime).isoformat(),
         }
 
         assert metadata["file_type"] == "txt"
@@ -389,13 +382,13 @@ class TestMetadataExtraction:
 
     def test_extract_json_metadata(self, temp_json_file):
         """Test extracting metadata from JSON"""
-        with open(temp_json_file, 'r') as f:
+        with open(temp_json_file, "r") as f:
             data = json.load(f)
 
         metadata = {
             "document_type": "product_catalog",
             "item_count": len(data.get("products", [])),
-            "first_item": data["products"][0]["name"] if data.get("products") else None
+            "first_item": data["products"][0]["name"] if data.get("products") else None,
         }
 
         assert metadata["item_count"] == 2
@@ -403,14 +396,14 @@ class TestMetadataExtraction:
 
     def test_extract_csv_metadata(self, temp_csv_file):
         """Test extracting metadata from CSV"""
-        with open(temp_csv_file, 'r') as f:
+        with open(temp_csv_file, "r") as f:
             reader = csv.DictReader(f)
             rows = list(reader)
 
         metadata = {
             "document_type": "product_list",
             "row_count": len(rows),
-            "columns": reader.fieldnames
+            "columns": reader.fieldnames,
         }
 
         assert metadata["row_count"] == 3
@@ -432,7 +425,7 @@ class TestDocumentStorage:
         chunks = [
             "Steel products have high tensile strength",
             "Aluminum is lightweight and corrosion resistant",
-            "Copper has excellent electrical conductivity"
+            "Copper has excellent electrical conductivity",
         ]
 
         vectors = mock_embedding_model.encode(chunks)
@@ -444,12 +437,13 @@ class TestDocumentStorage:
 
     def test_prepare_points_for_storage(self):
         """Test preparing points for Qdrant storage"""
-        from app.services.document_ingestion_service import DocumentChunk
         from qdrant_client.models import PointStruct
+
+        from app.services.document_ingestion_service import DocumentChunk
 
         chunks = [
             DocumentChunk(text="Product A specs", doc_id="doc_1", chunk_index=0),
-            DocumentChunk(text="Product B specs", doc_id="doc_1", chunk_index=1)
+            DocumentChunk(text="Product B specs", doc_id="doc_1", chunk_index=1),
         ]
 
         # Simulate vector generation
@@ -464,8 +458,8 @@ class TestDocumentStorage:
                     "text": chunk.text,
                     "doc_id": chunk.doc_id,
                     "chunk_index": chunk.chunk_index,
-                    "metadata": chunk.metadata
-                }
+                    "metadata": chunk.metadata,
+                },
             )
             points.append(point)
 
@@ -479,22 +473,15 @@ class TestDocumentStorage:
 
         points = [
             PointStruct(
-                id=1,
-                vector=[0.1] * 384,
-                payload={"text": "Test chunk 1", "doc_id": "doc_1"}
+                id=1, vector=[0.1] * 384, payload={"text": "Test chunk 1", "doc_id": "doc_1"}
             ),
             PointStruct(
-                id=2,
-                vector=[0.2] * 384,
-                payload={"text": "Test chunk 2", "doc_id": "doc_1"}
-            )
+                id=2, vector=[0.2] * 384, payload={"text": "Test chunk 2", "doc_id": "doc_1"}
+            ),
         ]
 
         # Simulate upsert
-        mock_qdrant_client.upsert(
-            collection_name="documents",
-            points=points
-        )
+        mock_qdrant_client.upsert(collection_name="documents", points=points)
 
         # Verify upsert was called
         mock_qdrant_client.upsert.assert_called_once()
@@ -515,7 +502,7 @@ class TestDocumentIngestionErrors:
     def test_nonexistent_file_handling(self):
         """Test handling of non-existent files"""
         with pytest.raises((FileNotFoundError, IOError)):
-            with open("/nonexistent/path/file.pdf", 'r'):
+            with open("/nonexistent/path/file.pdf", "r"):
                 pass
 
     def test_corrupted_json_handling(self):
@@ -527,11 +514,11 @@ class TestDocumentIngestionErrors:
 
     def test_empty_file_handling(self):
         """Test handling of empty files"""
-        with tempfile.NamedTemporaryFile(suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(suffix=".txt", delete=False) as f:
             empty_file = f.name
 
         try:
-            with open(empty_file, 'r') as f:
+            with open(empty_file, "r") as f:
                 content = f.read()
 
             assert content == ""
@@ -543,7 +530,7 @@ class TestDocumentIngestionErrors:
         # Create a moderately sized file (10MB simulation)
         large_content = "x" * (10 * 1024 * 1024)
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
             large_file = f.name
             f.write(large_content)
 
@@ -555,7 +542,7 @@ class TestDocumentIngestionErrors:
             chunk_size = 1024 * 1024  # 1MB chunks
             chunks_read = 0
 
-            with open(large_file, 'r') as f:
+            with open(large_file, "r") as f:
                 while True:
                     chunk = f.read(chunk_size)
                     if not chunk:
@@ -582,7 +569,7 @@ class TestBatchDocumentProcessing:
             # Create multiple test files
             for i in range(5):
                 file_path = os.path.join(temp_dir, f"document_{i}.txt")
-                with open(file_path, 'w') as f:
+                with open(file_path, "w") as f:
                     f.write(f"Document {i} content")
 
             # Discover files
@@ -605,7 +592,7 @@ class TestBatchDocumentProcessing:
         assert progress[0] == 10.0
         assert progress[-1] == 100.0
         # Progress should be monotonically increasing
-        assert all(progress[i] <= progress[i+1] for i in range(len(progress)-1))
+        assert all(progress[i] <= progress[i + 1] for i in range(len(progress) - 1))
 
     def test_batch_error_resilience(self):
         """Test resilience when processing fails on some files"""
@@ -648,7 +635,7 @@ class TestDocumentProcessingPerformance:
         start = time.time()
         chunks = []
         for i in range(0, len(text), chunk_size):
-            chunks.append(text[i:i+chunk_size])
+            chunks.append(text[i : i + chunk_size])
         elapsed = time.time() - start
 
         # Should process large text quickly
@@ -680,7 +667,7 @@ class TestDocumentProcessingPerformance:
             # Create test files
             for i in range(50):
                 path = os.path.join(temp_dir, f"file_{i}.txt")
-                with open(path, 'w') as f:
+                with open(path, "w") as f:
                     f.write(f"Content {i}\n" * 100)
 
             start = time.time()
@@ -689,4 +676,3 @@ class TestDocumentProcessingPerformance:
 
             assert elapsed < 0.1
             assert len(files) == 50
-
