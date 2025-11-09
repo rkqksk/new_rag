@@ -32,6 +32,30 @@ clickhouse-driver>=0.2.9  # ClickHouse OLAP database client
 kafka-python>=2.0.2  # Kafka streaming platform
 strawberry-graphql[fastapi]>=0.248.0  # GraphQL with FastAPI integration
 
+# v7.0.0 - Open Source Production Stack
+# Security & Authentication
+python-keycloak>=3.9.0  # Keycloak OAuth2/OIDC client
+hvac>=2.1.0  # HashiCorp Vault client
+python-jose[cryptography]>=3.3.0  # JWT handling (already present)
+
+# Observability & Tracing
+opentelemetry-api>=1.22.0  # OpenTelemetry API
+opentelemetry-sdk>=1.22.0  # OpenTelemetry SDK
+opentelemetry-instrumentation-fastapi>=0.43b0  # FastAPI auto-instrumentation
+opentelemetry-instrumentation-requests>=0.43b0  # Requests instrumentation
+opentelemetry-instrumentation-redis>=0.43b0  # Redis instrumentation
+opentelemetry-instrumentation-psycopg2>=0.43b0  # PostgreSQL instrumentation
+opentelemetry-exporter-jaeger>=1.21.0  # Jaeger exporter
+opentelemetry-exporter-prometheus>=0.43b0  # Prometheus exporter
+
+# Object Storage
+minio>=7.2.3  # MinIO S3-compatible client
+boto3>=1.34.0  # AWS SDK (S3 compatibility)
+
+# ETL & Workflow
+apache-airflow>=2.8.0  # Workflow orchestration
+apache-airflow-providers-postgres>=5.10.0  # PostgreSQL provider
+
 # ML & Embeddings
 sentence-transformers>=3.3.0
 torch>=2.5.0
