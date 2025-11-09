@@ -126,6 +126,15 @@ app_logger.info("🔍 Hybrid search enabled (Dense + BM25 + Cross-Encoder)")
 app.include_router(multi_agent.router, prefix=settings.api_prefix, tags=["multi-agent"])
 app_logger.info("🤖 Multi-agent system enabled (Router + Search + Reasoning + Synthesis + Validation)")
 
+# GraphQL API (Flexible type-safe querying) ⭐ NEW v6.0.0
+try:
+    from app.graphql import create_graphql_router
+    graphql_router = create_graphql_router()
+    app.include_router(graphql_router, prefix=settings.api_prefix)
+    app_logger.info("🔷 GraphQL API enabled at /api/v1/graphql")
+except ImportError as e:
+    app_logger.warning(f"GraphQL not available: {e}")
+
 # Image processing routes (watermark removal, OCR preprocessing)
 app.include_router(image_processing.router)
 app_logger.info("🎨 Image processing endpoints enabled at /api/v1/image")
