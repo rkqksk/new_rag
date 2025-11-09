@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.routes import image_processing, excel, health, async_qa
-from app.api.v1 import admin, analytics, debug, hybrid, multi_agent, personalization, search, streaming
+from app.api.v1 import admin, analytics, analytics_realtime, debug, hybrid, multi_agent, personalization, search, streaming
 from app.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
 from app.routes import products, qa, inquiries, tracking
 from src.api.v1 import saas
@@ -113,6 +113,10 @@ app.include_router(
 )
 
 app.include_router(analytics.router, prefix=f"{settings.api_prefix}/analytics", tags=["analytics"])
+
+# Real-time Analytics routes (ClickHouse + Kafka pipeline) ⭐ NEW v6.0.0
+app.include_router(analytics_realtime.router, prefix=f"{settings.api_prefix}/analytics/realtime", tags=["analytics-realtime"])
+app_logger.info("📊 Real-time analytics enabled (ClickHouse + Kafka)")
 
 # Streaming routes (WebSocket + SSE for real-time LLM responses) ⭐ NEW v6.0.0
 app.include_router(streaming.router, prefix=settings.api_prefix, tags=["streaming"])

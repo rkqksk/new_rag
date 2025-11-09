@@ -27,6 +27,11 @@ hiredis>=3.0.0
 # Vector Database - Qdrant
 qdrant-client>=1.12.0
 
+# Analytics Stack (v6.0.0)
+clickhouse-driver>=0.2.9  # ClickHouse OLAP database client
+kafka-python>=2.0.2  # Kafka streaming platform
+strawberry-graphql[fastapi]>=0.248.0  # GraphQL with FastAPI integration
+
 # ML & Embeddings
 sentence-transformers>=3.3.0
 torch>=2.5.0
