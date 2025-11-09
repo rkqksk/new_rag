@@ -214,8 +214,16 @@ async def liveness():
 @app.get("/health/ready")
 async def readiness():
     """Readiness probe - is the app ready to serve traffic?"""
-    # TODO: Check database connections
-    return {"status": "ready", "debug_enabled": settings.debug_config.enabled}
+    from app.core.health import check_all_services
+
+    services_status = await check_all_services()
+    all_healthy = all(service["status"] == "healthy" for service in services_status.values())
+
+    return {
+        "status": "ready" if all_healthy else "degraded",
+        "debug_enabled": settings.debug_config.enabled,
+        "services": services_status
+    }
 
 
 @app.get("/")

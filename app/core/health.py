@@ -828,3 +828,27 @@ class HealthCheckOrchestrator:
 
         self.logger.warning(f"Component {component_name} not found in health checkers")
         return None
+
+
+
+# ============================================================================
+# Simple health check wrapper for /health/ready endpoint
+# ============================================================================
+
+async def check_all_services() -> Dict[str, Dict[str, str]]:
+    """
+    Simplified health check for /health/ready endpoint.
+    Returns simple status dict for each service.
+    """
+    from app.core.config import settings
+    
+    postgres_status = await check_postgres()
+    redis_status = await check_redis()
+    qdrant_status = await check_qdrant()
+    
+    return {
+        "postgres": postgres_status,
+        "redis": redis_status,
+        "qdrant": qdrant_status
+    }
+
