@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from app.api.routes import image_processing, excel, health, async_qa
-from app.api.v1 import admin, analytics, debug, personalization, search, streaming
+from app.api.v1 import admin, analytics, debug, hybrid, personalization, search, streaming
 from app.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
 from app.routes import products, qa, inquiries, tracking
 from src.api.v1 import saas
@@ -117,6 +117,10 @@ app.include_router(analytics.router, prefix=f"{settings.api_prefix}/analytics", 
 # Streaming routes (WebSocket + SSE for real-time LLM responses) ⭐ NEW v6.0.0
 app.include_router(streaming.router, prefix=settings.api_prefix, tags=["streaming"])
 app_logger.info("🔄 Streaming endpoints enabled (WebSocket + SSE)")
+
+# Hybrid Search routes (Dense + Sparse + Re-ranking) ⭐ NEW v6.0.0
+app.include_router(hybrid.router, prefix=settings.api_prefix, tags=["hybrid-search"])
+app_logger.info("🔍 Hybrid search enabled (Dense + BM25 + Cross-Encoder)")
 
 # Image processing routes (watermark removal, OCR preprocessing)
 app.include_router(image_processing.router)
