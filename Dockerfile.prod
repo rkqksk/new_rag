@@ -1,5 +1,5 @@
 # Production Dockerfile for RAG Enterprise
-FROM python:3.11-slim AS base
+FROM python:3.14-slim AS base
 
 # Set working directory
 WORKDIR /app
@@ -17,7 +17,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Multi-stage build for smaller image
-FROM python:3.11-slim
+FROM python:3.14-slim
 
 WORKDIR /app
 
