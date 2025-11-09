@@ -19,6 +19,16 @@ from app.middleware.performance_timing import PerformanceTimingMiddleware
 from app.middleware.request_logging import RequestLoggingMiddleware
 from app.middleware.request_tracing import RequestTracingMiddleware
 
+# v7.0.0+ Realtime Backend (Convex-like functionality)
+try:
+    from app.realtime.socketio_server import RealtimeServer, get_realtime_server
+    from app.realtime.postgres_notify import get_notify_manager
+    from app.realtime.redis_pubsub import get_pubsub_manager
+    REALTIME_AVAILABLE = True
+except ImportError as e:
+    REALTIME_AVAILABLE = False
+    app_logger.warning(f"Realtime backend not available: {e}")
+
 # Setup logging
 logger = setup_logging(settings.environment)
 app_logger = get_logger(__name__)
@@ -31,6 +41,18 @@ app = FastAPI(
     redoc_url=f"{settings.api_prefix}/redoc",
     description="Enterprise-grade RAG system with multi-modal search, personalization, and analytics",
 )
+
+# Mount Socket.IO realtime server (v7.0.0+)
+if REALTIME_AVAILABLE:
+    try:
+        realtime_server = get_realtime_server()
+        # Mount Socket.IO as a sub-application
+        import socketio
+        socketio_asgi = socketio.ASGIApp(realtime_server.sio, other_asgi_app=app)
+        app.mount('/socket.io', socketio_asgi)
+        app_logger.info("⚡ Socket.IO mounted at /socket.io (Convex-like realtime API)")
+    except Exception as e:
+        app_logger.warning(f"Could not mount Socket.IO: {e}")
 
 # ============================================================================
 # Middleware Stack (order matters!)
@@ -288,11 +310,113 @@ async def startup_event():
     app_logger.info(f"Debug Mode: {settings.debug_config.enabled}")
     app_logger.info(f"API Prefix: {settings.api_prefix}")
 
+    # Initialize realtime backend (v7.0.0+)
+    if REALTIME_AVAILABLE:
+        try:
+            app_logger.info("⚡ Initializing realtime backend (Convex-like)...")
+
+            # 1. Get realtime server instance
+            realtime = get_realtime_server()
+
+            # 2. Register query handlers (example)
+            @realtime.query("products")
+            async def get_products(params):
+                """Get products by material"""
+                from app.repositories.product_repository import ProductRepository
+                repo = ProductRepository()
+                material = params.get("material")
+                if material:
+                    products = await repo.get_by_material(material)
+                else:
+                    products = await repo.get_all(limit=100)
+                return [p.dict() for p in products]
+
+            @realtime.query("search_results")
+            async def get_search_results(params):
+                """Get search results"""
+                from app.services.search_service import SearchService
+                service = SearchService()
+                query = params.get("query", "")
+                top_k = params.get("top_k", 5)
+                results = await service.search(query, top_k)
+                return results
+
+            # 3. Get PostgreSQL notify manager
+            notify_manager = get_notify_manager()
+
+            # 4. Setup database triggers for realtime updates
+            if notify_manager.connection:
+                from app.realtime.postgres_notify import setup_table_notifications
+
+                # Setup triggers for key tables
+                tables_to_watch = ['products', 'inquiries', 'qa_pairs']
+                for table in tables_to_watch:
+                    try:
+                        setup_table_notifications(
+                            notify_manager.connection,
+                            table,
+                            channel=f"{table}_changes"
+                        )
+                        app_logger.info(f"✅ Database trigger created for table: {table}")
+                    except Exception as e:
+                        app_logger.warning(f"Could not create trigger for {table}: {e}")
+
+                # Listen to product changes and broadcast to Socket.IO clients
+                async def handle_product_change(channel, data):
+                    """Handle product change notifications"""
+                    app_logger.debug(f"Product changed: {data}")
+                    # Broadcast update to all subscribed clients
+                    await realtime.broadcast_update("products", {})
+
+                notify_manager.listen('product_changes', handle_product_change)
+                notify_manager.start_listener_task()
+                app_logger.info("✅ PostgreSQL LISTEN/NOTIFY activated")
+
+            # 5. Initialize Redis Pub/Sub for multi-server sync
+            pubsub = await get_pubsub_manager()
+
+            # Subscribe to query updates from other servers
+            async def handle_query_update(channel, message):
+                """Handle query updates from other servers"""
+                if message.get('type') == 'query_update':
+                    query_name = message.get('query')
+                    params = message.get('params')
+                    await realtime.broadcast_update(query_name, params)
+
+            await pubsub.subscribe_to_query_updates(handle_query_update)
+            app_logger.info("✅ Redis Pub/Sub activated")
+
+            # Store instances in app state
+            app.state.realtime = realtime
+            app.state.notify_manager = notify_manager
+            app.state.pubsub = pubsub
+
+            app_logger.info("⚡ Realtime backend ready (Socket.IO + PostgreSQL + Redis)")
+
+        except Exception as e:
+            app_logger.error(f"Failed to initialize realtime backend: {e}")
+            app_logger.warning("Continuing without realtime features")
+
 
 @app.on_event("shutdown")
 async def shutdown_event():
     """Application shutdown tasks"""
     app_logger.info("👋 RAG Enterprise API shutting down...")
+
+    # Cleanup realtime backend
+    if REALTIME_AVAILABLE and hasattr(app.state, 'realtime'):
+        try:
+            # Stop PostgreSQL listener
+            if hasattr(app.state, 'notify_manager'):
+                app.state.notify_manager.close()
+
+            # Disconnect Redis Pub/Sub
+            if hasattr(app.state, 'pubsub'):
+                await app.state.pubsub.disconnect()
+
+            app_logger.info("✅ Realtime backend cleaned up")
+        except Exception as e:
+            app_logger.error(f"Error during realtime cleanup: {e}")
 
 
 # ============================================================================

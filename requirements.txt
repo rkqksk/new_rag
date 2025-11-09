@@ -56,6 +56,13 @@ boto3>=1.34.0  # AWS SDK (S3 compatibility)
 apache-airflow>=2.8.0  # Workflow orchestration
 apache-airflow-providers-postgres>=5.10.0  # PostgreSQL provider
 
+# v7.0.0+ - Realtime Backend (Convex-like, 100% Open Source)
+python-socketio>=5.11.0  # Socket.IO server
+python-socketio[asyncio]>=5.11.0  # Async support
+aioredis>=2.0.1  # Async Redis for Pub/Sub
+watchdog>=4.0.0  # File system monitoring
+psycopg2-pool>=1.1  # Connection pooling for LISTEN/NOTIFY
+
 # ML & Embeddings
 sentence-transformers>=3.3.0
 torch>=2.5.0

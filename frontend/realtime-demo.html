@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Enterprise - Realtime Demo (Convex-like)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .status {
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .status.connected {
+            background: #1a3a1a;
+            color: #4ade80;
+            border: 1px solid #4ade80;
+        }
+
+        .status.disconnected {
+            background: #3a1a1a;
+            color: #f87171;
+            border: 1px solid #f87171;
+        }
+
+        .demo-section {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .demo-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        input, select {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px 15px;
+            background: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, opacity 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .results {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .result-item h3 {
+            font-size: 1rem;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+
+        .result-item p {
+            color: #aaa;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #2a2a2a;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            color: #888;
+            margin-right: 8px;
+        }
+
+        .live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #4ade80;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .log {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+        }
+
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .timestamp {
+            color: #666;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Realtime Backend Demo</h1>
+        <p class="subtitle">Convex-like functionality with Socket.IO + PostgreSQL + Redis</p>
+
+        <div id="status" class="status disconnected">
+            🔴 Disconnected
+        </div>
+
+        <!-- Query Subscription Demo -->
+        <div class="demo-section">
+            <h2><span class="live-indicator"></span>Query Subscription (Live Updates)</h2>
+            <p style="color: #888; margin-bottom: 15px;">
+                Subscribe to queries and get automatic updates when data changes (like Convex useQuery)
+            </p>
+
+            <div class="controls">
+                <select id="queryName">
+                    <option value="products">Products</option>
+                    <option value="search_results">Search Results</option>
+                </select>
+                <input type="text" id="queryParams" placeholder='Query params (JSON) e.g. {"material": "PET"}'>
+                <button onclick="subscribeToQuery()">Subscribe</button>
+                <button onclick="unsubscribeFromQuery()">Unsubscribe</button>
+            </div>
+
+            <div id="queryResults" class="results">
+                <p style="color: #666;">No data yet. Subscribe to a query to see results.</p>
+            </div>
+        </div>
+
+        <!-- Server Function Demo -->
+        <div class="demo-section">
+            <h2>🔧 Server Function (Execute Actions)</h2>
+            <p style="color: #888; margin-bottom: 15px;">
+                Execute server-side functions (like Convex useMutation)
+            </p>
+
+            <div class="controls">
+                <input type="text" id="functionName" placeholder="Function name (e.g., create_product)">
+                <input type="text" id="functionParams" placeholder='Function params (JSON)'>
+                <button onclick="executeFunction()">Execute</button>
+            </div>
+
+            <div id="functionResult" class="results">
+                <p style="color: #666;">No result yet.</p>
+            </div>
+        </div>
+
+        <!-- Activity Log -->
+        <div class="demo-section">
+            <h2>📋 Activity Log</h2>
+            <div id="log" class="log">
+                <div class="log-entry">
+                    <span class="timestamp">[System]</span>
+                    <span>Waiting for connection...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Socket.IO Client Library -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+
+    <script>
+        // Socket.IO connection
+        const socket = io('http://localhost:8001', {
+            path: '/socket.io',
+            transports: ['websocket', 'polling']
+        });
+
+        let currentSubscription = null;
+
+        // Connection events
+        socket.on('connect', () => {
+            log('Connected to realtime server');
+            updateStatus(true);
+        });
+
+        socket.on('disconnect', () => {
+            log('Disconnected from realtime server');
+            updateStatus(false);
+        });
+
+        // Query update events
+        socket.on('query_update', (data) => {
+            log(`Query update received: ${data.query}`);
+            displayQueryResults(data.data);
+        });
+
+        // Function result events
+        socket.on('function_result', (data) => {
+            log(`Function result: ${data.success ? 'Success' : 'Error'}`);
+            displayFunctionResult(data);
+        });
+
+        // Error events
+        socket.on('error', (error) => {
+            log(`Error: ${error.message}`, 'error');
+        });
+
+        // Subscribe to query
+        function subscribeToQuery() {
+            const queryName = document.getElementById('queryName').value;
+            const paramsStr = document.getElementById('queryParams').value;
+
+            let params = {};
+            if (paramsStr) {
+                try {
+                    params = JSON.parse(paramsStr);
+                } catch (e) {
+                    alert('Invalid JSON in params');
+                    return;
+                }
+            }
+
+            // Unsubscribe from previous query
+            if (currentSubscription) {
+                socket.emit('unsubscribe', currentSubscription);
+            }
+
+            // Subscribe to new query
+            const queryId = `${queryName}_${Date.now()}`;
+            socket.emit('subscribe', {
+                query_id: queryId,
+                query_name: queryName,
+                params: params
+            });
+
+            currentSubscription = { query_id: queryId };
+            log(`Subscribed to query: ${queryName} with params: ${JSON.stringify(params)}`);
+        }
+
+        // Unsubscribe from query
+        function unsubscribeFromQuery() {
+            if (currentSubscription) {
+                socket.emit('unsubscribe', currentSubscription);
+                log(`Unsubscribed from query: ${currentSubscription.query_id}`);
+                currentSubscription = null;
+                document.getElementById('queryResults').innerHTML = '<p style="color: #666;">Unsubscribed.</p>';
+            }
+        }
+
+        // Execute server function
+        function executeFunction() {
+            const functionName = document.getElementById('functionName').value;
+            const paramsStr = document.getElementById('functionParams').value;
+
+            if (!functionName) {
+                alert('Please enter a function name');
+                return;
+            }
+
+            let params = {};
+            if (paramsStr) {
+                try {
+                    params = JSON.parse(paramsStr);
+                } catch (e) {
+                    alert('Invalid JSON in params');
+                    return;
+                }
+            }
+
+            socket.emit('execute', {
+                function_name: functionName,
+                params: params
+            });
+
+            log(`Executing function: ${functionName}`);
+        }
+
+        // Display query results
+        function displayQueryResults(data) {
+            const container = document.getElementById('queryResults');
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="color: #666;">No results found.</p>';
+                return;
+            }
+
+            let html = '';
+            data.forEach((item, index) => {
+                html += `
+                    <div class="result-item">
+                        <h3>Result ${index + 1}</h3>
+                        <pre style="color: #aaa; white-space: pre-wrap;">${JSON.stringify(item, null, 2)}</pre>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // Display function result
+        function displayFunctionResult(result) {
+            const container = document.getElementById('functionResult');
+
+            const html = `
+                <div class="result-item">
+                    <h3>${result.success ? '✅ Success' : '❌ Error'}</h3>
+                    <pre style="color: #aaa; white-space: pre-wrap;">${JSON.stringify(result.data || result.error, null, 2)}</pre>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Update connection status
+        function updateStatus(connected) {
+            const statusEl = document.getElementById('status');
+            if (connected) {
+                statusEl.className = 'status connected';
+                statusEl.innerHTML = '🟢 Connected to Realtime Server';
+            } else {
+                statusEl.className = 'status disconnected';
+                statusEl.innerHTML = '🔴 Disconnected';
+            }
+        }
+
+        // Log activity
+        function log(message, type = 'info') {
+            const logEl = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+
+            const icon = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+
+            entry.innerHTML = `
+                <span class="timestamp">[${timestamp}]</span>
+                <span>${icon} ${message}</span>
+            `;
+
+            logEl.appendChild(entry);
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        // Auto-subscribe to products on load
+        window.addEventListener('load', () => {
+            log('Page loaded. Connecting to realtime server...');
+
+            // Wait for connection
+            setTimeout(() => {
+                if (socket.connected) {
+                    // Auto-subscribe to products
+                    document.getElementById('queryName').value = 'products';
+                    document.getElementById('queryParams').value = '{}';
+                    subscribeToQuery();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
