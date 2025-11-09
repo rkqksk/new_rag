@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket/SSE Streaming Demo - v6.0.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+            background: #f7f7f8;
+            color: #2d333a;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6e6e80;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #2d333a;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.15s;
+        }
+
+        button:hover:not(:disabled) {
+            background: #1a1d21;
+        }
+
+        button:disabled {
+            background: #d1d5db;
+            cursor: not-allowed;
+        }
+
+        .status {
+            padding: 12px;
+            background: #f4f4f4;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: #6e6e80;
+        }
+
+        .status.active {
+            background: #e8f4f8;
+            color: #0c5460;
+        }
+
+        .output {
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Courier New', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .event {
+            margin-bottom: 12px;
+            padding: 8px;
+            background: #f7f7f8;
+            border-radius: 4px;
+        }
+
+        .event-type {
+            font-weight: 600;
+            color: #2d333a;
+            margin-bottom: 4px;
+        }
+
+        .event-data {
+            color: #6e6e80;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .type-status { border-left: 4px solid #007bff; }
+        .type-token { border-left: 4px solid #28a745; }
+        .type-products_batch { border-left: 4px solid #ffc107; }
+        .type-complete { border-left: 4px solid #17a2b8; }
+        .type-error { border-left: 4px solid #dc3545; }
+
+        .mode-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .mode-btn {
+            flex: 1;
+            padding: 8px 16px;
+            background: #f4f4f4;
+            color: #6e6e80;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .mode-btn.active {
+            background: #2d333a;
+            color: white;
+            border-color: #2d333a;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔄 WebSocket/SSE Streaming Demo</h1>
+        <p class="subtitle">v6.0.0 - Real-time LLM Response Streaming</p>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" id="modeWebSocket" onclick="selectMode('websocket')">
+                WebSocket (Recommended)
+            </button>
+            <button class="mode-btn" id="modeSSE" onclick="selectMode('sse')">
+                SSE (Fallback)
+            </button>
+            <button class="mode-btn" id="modeHTTP" onclick="selectMode('http')">
+                HTTP (Legacy)
+            </button>
+        </div>
+
+        <div class="controls">
+            <input type="text" id="queryInput" placeholder="검색어를 입력하세요 (예: 50ml PET 용기)" value="50ml PET 용기">
+            <button id="sendBtn" onclick="sendQuery()">전송</button>
+            <button onclick="clearOutput()">초기화</button>
+        </div>
+
+        <div class="status" id="status">대기 중...</div>
+
+        <div class="output" id="output"></div>
+    </div>
+
+    <script src="streaming.js"></script>
+    <script>
+        let sessionId = 'demo-' + Date.now();
+        let currentMode = 'websocket';
+        let streamingClient = null;
+
+        function selectMode(mode) {
+            currentMode = mode;
+
+            // Update UI
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            const btnId = mode === 'websocket' ? 'modeWebSocket' :
+                         mode === 'sse' ? 'modeSSE' : 'modeHTTP';
+            document.getElementById(btnId).classList.add('active');
+
+            addEvent('system', `모드 변경: ${mode.toUpperCase()}`);
+        }
+
+        function updateStatus(message, active = false) {
+            const statusDiv = document.getElementById('status');
+            statusDiv.textContent = message;
+            if (active) {
+                statusDiv.classList.add('active');
+            } else {
+                statusDiv.classList.remove('active');
+            }
+        }
+
+        function addEvent(type, data) {
+            const output = document.getElementById('output');
+
+            const eventDiv = document.createElement('div');
+            eventDiv.className = `event type-${type}`;
+
+            const typeDiv = document.createElement('div');
+            typeDiv.className = 'event-type';
+            typeDiv.textContent = `[${type.toUpperCase()}]`;
+
+            const dataDiv = document.createElement('div');
+            dataDiv.className = 'event-data';
+
+            if (typeof data === 'object') {
+                dataDiv.textContent = JSON.stringify(data, null, 2);
+            } else {
+                dataDiv.textContent = data;
+            }
+
+            eventDiv.appendChild(typeDiv);
+            eventDiv.appendChild(dataDiv);
+            output.appendChild(eventDiv);
+
+            // Auto scroll
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('output').innerHTML = '';
+            updateStatus('초기화됨');
+        }
+
+        async function sendQuery() {
+            const query = document.getElementById('queryInput').value.trim();
+            if (!query) {
+                alert('검색어를 입력하세요');
+                return;
+            }
+
+            // Disable button
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+
+            clearOutput();
+            addEvent('user', `Query: ${query}`);
+            updateStatus('처리 중...', true);
+
+            try {
+                if (currentMode === 'websocket' || currentMode === 'sse') {
+                    await queryStreaming(query);
+                } else {
+                    await queryHTTP(query);
+                }
+            } catch (error) {
+                addEvent('error', error.message || error.toString());
+                updateStatus('오류 발생');
+            } finally {
+                sendBtn.disabled = false;
+            }
+        }
+
+        async function queryStreaming(query) {
+            const collections = null; // Use default
+            const materials = null;
+
+            streamingClient = new StreamingClient(sessionId, {
+                onStatus: (data, message) => {
+                    addEvent('status', data);
+                    updateStatus(data, true);
+                },
+                onToken: (data, message) => {
+                    addEvent('token', data);
+                },
+                onProductsBatch: (data, message) => {
+                    addEvent('products_batch', {
+                        count: data.length,
+                        progress: message.progress,
+                        total: message.total
+                    });
+                    updateStatus(`제품 로딩 중: ${message.progress}/${message.total}`, true);
+                },
+                onComplete: (data, message) => {
+                    addEvent('complete', {
+                        total_products: data.total_products,
+                        collections_searched: data.collections_searched
+                    });
+                    updateStatus('완료');
+                },
+                onError: (error, message) => {
+                    addEvent('error', error);
+                    updateStatus('오류 발생');
+                }
+            });
+
+            // Force mode
+            if (currentMode === 'sse') {
+                streamingClient.useWebSocket = false;
+            }
+
+            await streamingClient.query(query, { collections, materials });
+        }
+
+        async function queryHTTP(query) {
+            updateStatus('HTTP 요청 중...', true);
+
+            const response = await fetch('http://localhost:8001/chat/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    session_id: sessionId,
+                    query: query,
+                    collections: null,
+                    materials: null
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+
+            addEvent('response', {
+                total_count: data.total_count,
+                products: data.products?.length || 0,
+                answer: data.response?.substring(0, 100) + '...'
+            });
+
+            updateStatus('완료 (HTTP)');
+        }
+
+        // Auto-focus on input
+        document.getElementById('queryInput').focus();
+
+        // Enter to send
+        document.getElementById('queryInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendQuery();
+            }
+        });
+
+        // Initial message
+        addEvent('system', 'WebSocket/SSE Streaming Demo v6.0.0 initialized');
+        addEvent('system', 'Session ID: ' + sessionId);
+    </script>
+</body>
+</html>
