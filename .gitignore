@@ -5,12 +5,62 @@
 # ============================================
 # Environment & Secrets
 # ============================================
+# Environment files (NEVER commit!)
 .env
 .env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env.*.local
+.envrc
 .envrc.local
+*.env
+*.env.*
+!.env.example
+!.env.template
+
+# Secret files
 *.secret
 *.key
+*.pem
+*.p12
+*.pfx
+*.cer
+*.crt
+*.der
+*.p7b
+*.p7c
+*.spc
+
+# API Keys & Tokens
+*api_key*
+*apikey*
+*secret_key*
+*secretkey*
+*access_token*
+*accesstoken*
+*auth_token*
+*authtoken*
+*.credentials
+credentials.json
+secrets.yaml
+secrets.yml
+config/secrets.*
+
+# OAuth & Authentication
+oauth_token
+.oauth2
+client_secret*.json
+
+# Cloud Provider Credentials
+.aws/
+.gcp/
+.azure/
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
+*.tfvars
+!example.tfvars
 
 # ============================================
 # Python
@@ -75,10 +125,29 @@ yarn-error.log*
 # ============================================
 # Database & Data
 # ============================================
+# Database files
 *.sqlite3
 *.db
+*.sql
+*.dump
+*.backup
+*.bak
+
+# Database exports & backups
+database_backup/
+db_backups/
+*.sql.gz
+*.sql.zip
+dump.rdb
+mongodump/
+
+# Sensitive documents & uploads
 /documents/
 /images/
+/uploads/
+/user_data/
+/private/
+/confidential/
 
 # ============================================
 # DATA FOLDER - COMPLETE IGNORE
