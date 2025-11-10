@@ -53,8 +53,10 @@ minio>=7.2.3  # MinIO S3-compatible client
 boto3>=1.34.0  # AWS SDK (S3 compatibility)
 
 # ETL & Workflow
-apache-airflow>=2.8.0  # Workflow orchestration
-apache-airflow-providers-postgres>=5.10.0  # PostgreSQL provider
+# NOTE: Airflow는 Docker로 실행 권장 (docker-compose.yml 참조)
+# 로컬 설치 필요 시: pip install -r requirements-airflow.txt
+# apache-airflow>=2.8.0  # OPTIONAL: Docker로 실행 (설치 무겁고 시간 오래 걸림)
+# apache-airflow-providers-postgres>=5.10.0  # OPTIONAL
 
 # v7.0.0+ - Realtime Backend (Convex-like, 100% Open Source)
 python-socketio>=5.11.0  # Socket.IO server

@@ -1,0 +1,9 @@
+# Airflow 로컬 설치용 (선택적)
+# 경고: 설치 시간이 5-10분 소요되며 많은 의존성이 설치됩니다
+
+# Airflow 핵심
+apache-airflow==2.8.0
+apache-airflow-providers-postgres==5.10.0
+
+# Constraints 파일 사용 권장
+# pip install -r requirements-airflow.txt --constraint "https://raw.githubusercontent.com/apache/airflow/constraints-2.8.0/constraints-3.11.txt"
