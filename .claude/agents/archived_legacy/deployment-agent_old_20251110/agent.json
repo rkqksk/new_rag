@@ -15,7 +15,7 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/home/user/rag-enterprise"
+        "/Users/oypnus/Project/new_rag "
       ],
       "description": "File operations for deployment configs",
       "enabled": true,

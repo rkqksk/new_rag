@@ -3,7 +3,7 @@
     "filesystem": {
       "transport": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/user/rag-enterprise"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/oypnus/Project/new_rag "],
       "description": "Secure file operations for RAG Enterprise codebase",
       "enabled": true,
       "priority": 1,
@@ -12,7 +12,7 @@
     "git": {
       "transport": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "/home/user/rag-enterprise"],
+      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "/Users/oypnus/Project/new_rag "],
       "description": "Git repository operations and code search",
       "enabled": true,
       "priority": 1,

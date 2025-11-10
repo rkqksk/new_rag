@@ -34,11 +34,12 @@ services:
       - "16334:6334"
     volumes:
       - qdrant_data:/qdrant/storage
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    # healthcheck disabled - curl/wget not available in qdrant image
+    # healthcheck:
+    #   test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
 
   api:
     build: .
@@ -56,7 +57,7 @@ services:
       redis:
         condition: service_healthy
       qdrant:
-        condition: service_healthy
+        condition: service_started  # healthcheck disabled for qdrant
     command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8001/health/live"]

@@ -196,7 +196,10 @@ class UnifiedLLMService:
         temperature: float = 0.7,
     ) -> Union[str, AsyncIterator[str]]:
         """
-        Generate response with automatic routing
+        Generate response with automatic routing and fallback
+
+        Strategy: Always try NexaAI first (fast, multimodal), fallback to Ollama (quality)
+        This implements the user requirement: "NexaAI as main, Ollama as fallback"
 
         Args:
             prompt: Input prompt
@@ -220,36 +223,55 @@ class UnifiedLLMService:
             f"(reason: {routing.reason}, score: {routing.complexity_score:.2f})"
         )
 
-        try:
-            # Generate with selected engine
-            if routing.engine == ModelEngine.NEXA:
-                if not self.nexa_available:
-                    raise RuntimeError("NexaAI engine not available")
-
+        # **Hybrid Strategy: NexaAI main, Ollama fallback**
+        # Try NexaAI first (unless forced to Ollama)
+        if self.nexa_available and force_engine != ModelEngine.OLLAMA:
+            try:
                 self.stats["nexa_requests"] += 1
+
+                # Use routed model if NexaAI was selected, otherwise use default NexaAI model
+                nexa_model = routing.model if routing.engine == ModelEngine.NEXA else self.router.routing_rules["medium"]["model"]
+
+                logger.debug(f"Trying NexaAI: {nexa_model}")
 
                 return await self.nexa.generate_text(
                     prompt=prompt,
-                    model=routing.model,
+                    model=nexa_model,
                     stream=stream,
                     system_prompt=system_prompt,
                     max_tokens=max_tokens,
                     temperature=temperature,
                 )
 
-            else:  # OLLAMA
-                if not self.ollama_available:
-                    raise RuntimeError("Ollama engine not available")
+            except Exception as e:
+                logger.warning(f"NexaAI failed: {e}. Falling back to Ollama...")
+                # Continue to Ollama fallback below
 
-                self.stats["ollama_requests"] += 1
+        # Fallback to Ollama (or primary if NexaAI not available/disabled)
+        if not self.ollama_available:
+            self.stats["errors"] += 1
+            raise RuntimeError(
+                "Both NexaAI and Ollama are unavailable. Cannot generate response."
+            )
 
-                return await self.ollama.generate(
-                    prompt=prompt, model=routing.model, stream=stream, system=system_prompt
-                )
+        try:
+            self.stats["ollama_requests"] += 1
+
+            # Use routed model if Ollama was selected, otherwise use default
+            ollama_model = routing.model if routing.engine == ModelEngine.OLLAMA else self.ollama.config.default_model
+
+            logger.info(f"Using Ollama: {ollama_model}")
+
+            return await self.ollama.generate(
+                prompt=prompt,
+                model=ollama_model,
+                stream=stream,
+                system=system_prompt
+            )
 
         except Exception as e:
             self.stats["errors"] += 1
-            logger.error(f"Generation failed: {e}")
+            logger.error(f"All engines failed. Last error: {e}")
             raise
 
     async def embed(

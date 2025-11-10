@@ -85,13 +85,13 @@ class ModelRouter:
         self.routing_rules = {
             "simple": {
                 "engine": ModelEngine.NEXA,
-                "model": "Qwen3-1.7B",
-                "description": "Fast inference for simple queries",
+                "model": "Qwen3-VL-2B-Instruct-GGUF:Q4_K",
+                "description": "Fast multimodal inference for simple queries",
             },
             "medium": {
                 "engine": ModelEngine.NEXA,
-                "model": "Qwen3-VL-4B-Instruct",
-                "description": "Balanced performance for medium complexity",
+                "model": "Qwen3-VL-2B-Instruct-GGUF:Q4_K",
+                "description": "Fast multimodal inference for medium queries",
             },
             "complex": {
                 "engine": ModelEngine.OLLAMA,
@@ -100,7 +100,7 @@ class ModelRouter:
             },
             "vision": {
                 "engine": ModelEngine.NEXA,
-                "model": "Qwen3-VL-4B-Instruct",
+                "model": "Qwen3-VL-2B-Instruct-GGUF:Q4_K",
                 "description": "Vision-language processing",
             },
         }

@@ -29,7 +29,7 @@
         "-y",
         "@modelcontextprotocol/server-sqlite",
         "--db-path",
-        "/home/user/rag-enterprise/data/cache.db"
+        "/Users/oypnus/Project/new_rag /data/cache.db"
       ],
       "description": "SQLite database for caching and local data",
       "enabled": false,
@@ -42,7 +42,7 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/home/user/rag-enterprise"
+        "/Users/oypnus/Project/new_rag "
       ],
       "description": "File operations for data import/export",
       "enabled": true,
