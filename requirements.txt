@@ -154,3 +154,15 @@ mypy>=1.13.0
 
 # Utilities
 python-dotenv>=1.0.1
+
+# v7.3.0 - Professional Enterprise System
+# Advanced RAG
+rank-bm25>=0.2.2  # BM25 algorithm for hybrid search
+# sentence-transformers already included above
+
+# Distributed Web Crawling
+# beautifulsoup4, lxml, aiohttp already included above
+# playwright already included above
+
+# MES (Manufacturing Execution System)
+# Uses existing pydantic, datetime, uuid - no additional packages needed
