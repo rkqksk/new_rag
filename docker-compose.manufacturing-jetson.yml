@@ -1,0 +1,146 @@
+# Docker Compose - Advanced Manufacturing v7.1.0
+# Jetson + UR10e + Raspberry Pi Configuration
+#
+# Hardware:
+# - NVIDIA Jetson (main compute, vision inference)
+# - UR10e Robot (pick and place)
+# - Raspberry Pi (camera server)
+#
+# Cost: $0 (all hardware already owned!)
+
+version: '3.8'
+
+services:
+  # ========================================
+  # API Server on Jetson
+  # ========================================
+  api-manufacturing:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-api-jetson
+    runtime: nvidia  # Use Jetson GPU
+    ports:
+      - "8001:8001"  # API
+    environment:
+      # Physical Robot Configuration
+      UR10E_IP: "192.168.1.100"  # ⚠️ UPDATE with your UR10e IP
+      UR10E_SIMULATION: "false"  # Physical robot!
+
+      # Camera Configuration
+      CAMERA_ENABLED: "true"
+      CAMERA_URL: "http://raspberry-pi:5000"  # ⚠️ UPDATE with Pi IP
+      CAMERA_FPS: 30
+
+      # Jetson-Specific
+      CUDA_VISIBLE_DEVICES: "0"  # Use Jetson GPU
+      JETSON_MODEL: "true"
+
+      # LORA Configuration
+      LORA_MODELS_PATH: "/app/data/manufacturing/models/lora_adapters"
+      LORA_DEVICE: "cuda"  # Use GPU for inference
+
+      # Database (if needed)
+      POSTGRES_HOST: postgres
+      REDIS_HOST: redis
+      QDRANT_HOST: qdrant
+
+    volumes:
+      - ./data/manufacturing:/app/data/manufacturing
+      - ./models:/app/models
+
+    # Jetson GPU access
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu, compute, utility]
+
+    networks:
+      - rag-network
+    restart: unless-stopped
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8001
+      --workers 2
+      --log-level info
+
+  # ========================================
+  # Dashboard (on Jetson)
+  # ========================================
+  dashboard:
+    image: nginx:alpine
+    container_name: manufacturing-dashboard
+    ports:
+      - "8080:80"
+    volumes:
+      - ./frontend:/usr/share/nginx/html:ro
+    networks:
+      - rag-network
+    restart: unless-stopped
+
+  # ========================================
+  # LORA Training Service (Jetson GPU)
+  # ========================================
+  lora-trainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lora-trainer-jetson
+    runtime: nvidia
+    environment:
+      TRAINING_MODE: "jetson"
+      CUDA_VISIBLE_DEVICES: "0"
+    volumes:
+      - ./data/manufacturing:/app/data/manufacturing
+      - ./models:/app/models
+      - ./scripts:/app/scripts
+    networks:
+      - rag-network
+    restart: "no"  # Run on-demand
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu, compute]
+    command: >
+      bash -c "
+      echo 'LORA Trainer (Jetson) ready';
+      echo 'Run: docker-compose exec lora-trainer python scripts/train_lora_adapter.py --product pet_bottles';
+      tail -f /dev/null
+      "
+
+networks:
+  rag-network:
+    name: rag-network
+    driver: bridge
+
+# ========================================
+# Setup Instructions
+# ========================================
+#
+# 1. On Jetson:
+#    - Update UR10E_IP with robot IP
+#    - Update CAMERA_URL with Raspberry Pi IP
+#    - Run: docker-compose -f docker-compose.manufacturing-jetson.yml up -d
+#
+# 2. On Raspberry Pi (Camera Server):
+#    - Install: pip install opencv-python picamera2 flask
+#    - Run: python scripts/camera_server.py
+#    - Serves on: http://<pi-ip>:5000
+#
+# 3. On UR10e:
+#    - Power on robot
+#    - Enable external control mode
+#    - Note IP address (or set static IP)
+#
+# 4. Test Connection:
+#    curl -X POST http://<jetson-ip>:8001/api/v1/manufacturing/robot/connect
+#
+# 5. Start Production:
+#    curl http://<jetson-ip>:8001/api/v1/docs
