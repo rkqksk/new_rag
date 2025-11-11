@@ -1,0 +1,120 @@
+{
+  "name": "RAG Enterprise Mobile",
+  "short_name": "RAG Mobile",
+  "description": "RAG Enterprise Platform - Mobile Version",
+  "start_url": "/mobile",
+  "display": "standalone",
+  "background_color": "#667eea",
+  "theme_color": "#667eea",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/assets/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "screenshots": [
+    {
+      "src": "/assets/screenshot-mobile-1.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/screenshot-mobile-2.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "제품 검색",
+      "short_name": "검색",
+      "description": "제품 검색 바로가기",
+      "url": "/mobile/search",
+      "icons": [{"src": "/assets/search-icon.png", "sizes": "96x96"}]
+    },
+    {
+      "name": "이미지 검색",
+      "short_name": "이미지",
+      "description": "이미지로 제품 검색",
+      "url": "/mobile/image-search",
+      "icons": [{"src": "/assets/camera-icon.png", "sizes": "96x96"}]
+    },
+    {
+      "name": "작업지시",
+      "short_name": "작업",
+      "description": "작업지시 조회",
+      "url": "/mobile/work-orders",
+      "icons": [{"src": "/assets/work-icon.png", "sizes": "96x96"}]
+    },
+    {
+      "name": "대시보드",
+      "short_name": "대시보드",
+      "description": "생산 현황 대시보드",
+      "url": "/mobile/dashboard",
+      "icons": [{"src": "/assets/dashboard-icon.png", "sizes": "96x96"}]
+    }
+  ],
+  "share_target": {
+    "action": "/mobile/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url",
+      "files": [
+        {
+          "name": "image",
+          "accept": ["image/*"]
+        }
+      ]
+    }
+  },
+  "prefer_related_applications": false
+}
