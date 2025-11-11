@@ -1,0 +1,125 @@
+{
+  "dashboard": {
+    "title": "MES Pipeline Integration - v7.4.0",
+    "tags": ["mes", "pipeline", "sync"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Active MES Connections",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 0, "w": 4, "h": 4},
+        "targets": [{
+          "expr": "mes_active_connections",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "color": {"mode": "thresholds"},
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 1, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Sync Success Rate (24h)",
+        "type": "gauge",
+        "gridPos": {"x": 4, "y": 0, "w": 5, "h": 4},
+        "targets": [{
+          "expr": "rate(mes_sync_success[24h]) / rate(mes_sync_total[24h]) * 100",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "max": 100,
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 95, "color": "yellow"},
+                {"value": 99, "color": "green"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Records Synced (Last 7 days)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+        "targets": [{
+          "expr": "sum by (data_type) (rate(mes_records_synced[1h]))",
+          "legendFormat": "{{data_type}}",
+          "refId": "A"
+        }],
+        "legend": {"show": true, "alignAsTable": true, "values": true}
+      },
+      {
+        "id": 4,
+        "title": "Sync Duration (Avg)",
+        "type": "stat",
+        "gridPos": {"x": 9, "y": 0, "w": 5, "h": 4},
+        "targets": [{
+          "expr": "avg(mes_sync_duration_seconds)",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 60, "color": "yellow"},
+                {"value": 300, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Data Types Synced",
+        "type": "bargauge",
+        "gridPos": {"x": 14, "y": 0, "w": 10, "h": 6},
+        "targets": [{
+          "expr": "sum by (data_type) (mes_records_synced_total)",
+          "legendFormat": "{{data_type}}",
+          "refId": "A"
+        }],
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient"
+        }
+      },
+      {
+        "id": 6,
+        "title": "Sync Schedule Status",
+        "type": "table",
+        "gridPos": {"x": 0, "y": 10, "w": 12, "h": 5},
+        "targets": [{
+          "expr": "mes_schedule_status",
+          "format": "table",
+          "refId": "A"
+        }]
+      },
+      {
+        "id": 7,
+        "title": "Recent Sync Errors",
+        "type": "logs",
+        "gridPos": {"x": 12, "y": 10, "w": 12, "h": 5},
+        "targets": [{
+          "expr": "{job=\"mes-pipeline\"} |= \"ERROR\"",
+          "refId": "A"
+        }]
+      }
+    ],
+    "refresh": "1m",
+    "time": {"from": "now-24h", "to": "now"}
+  }
+}

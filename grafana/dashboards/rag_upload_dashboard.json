@@ -1,0 +1,119 @@
+{
+  "dashboard": {
+    "title": "RAG Data Upload Monitoring - v7.4.0",
+    "tags": ["rag", "upload", "monitoring"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Upload Statistics (Last 24h)",
+        "type": "stat",
+        "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+        "targets": [{
+          "expr": "sum(rag_upload_total)",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 100, "color": "yellow"},
+                {"value": 1000, "color": "red"}
+              ]
+            },
+            "unit": "short"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Upload Success Rate",
+        "type": "gauge",
+        "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+        "targets": [{
+          "expr": "rate(rag_upload_success[24h]) / rate(rag_upload_total[24h]) * 100",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "red"},
+                {"value": 90, "color": "yellow"},
+                {"value": 95, "color": "green"}
+              ]
+            },
+            "unit": "percent",
+            "max": 100
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Upload Trend (Last 7 days)",
+        "type": "graph",
+        "gridPos": {"x": 0, "y": 4, "w": 12, "h": 6},
+        "targets": [{
+          "expr": "rate(rag_upload_total[1h])",
+          "legendFormat": "Total Uploads",
+          "refId": "A"
+        }, {
+          "expr": "rate(rag_upload_success[1h])",
+          "legendFormat": "Successful",
+          "refId": "B"
+        }, {
+          "expr": "rate(rag_upload_errors[1h])",
+          "legendFormat": "Errors",
+          "refId": "C"
+        }],
+        "legend": {"show": true}
+      },
+      {
+        "id": 4,
+        "title": "Templates Usage",
+        "type": "piechart",
+        "gridPos": {"x": 12, "y": 0, "w": 6, "h": 5},
+        "targets": [{
+          "expr": "sum by (template_name) (rag_upload_by_template)",
+          "refId": "A"
+        }]
+      },
+      {
+        "id": 5,
+        "title": "Embedding Generation Rate",
+        "type": "stat",
+        "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
+        "targets": [{
+          "expr": "rate(rag_embeddings_generated[5m])",
+          "refId": "A"
+        }],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "ops",
+            "thresholds": {
+              "steps": [
+                {"value": 0, "color": "green"},
+                {"value": 10, "color": "yellow"},
+                {"value": 50, "color": "red"}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "Recent Upload Errors",
+        "type": "table",
+        "gridPos": {"x": 0, "y": 10, "w": 24, "h": 6},
+        "targets": [{
+          "expr": "topk(10, rag_upload_errors_detail)",
+          "format": "table",
+          "refId": "A"
+        }]
+      }
+    ],
+    "refresh": "30s",
+    "time": {"from": "now-24h", "to": "now"}
+  }
+}
