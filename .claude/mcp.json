@@ -47,33 +47,38 @@
     },
     "data-agent": {
       "path": ".claude/agents/data-agent",
-      "mcpServers": ["postgres", "sqlite"],
-      "description": "Database operations and data management",
-      "skills": ["saas-platform", "data-collector"]
+      "mcpServers": ["postgres", "sqlite", "postgres-mcp"],
+      "description": "Database operations and data management, advanced PostgreSQL",
+      "skills": ["saas-platform", "data-collector"],
+      "note": "postgres-mcp: Natural language→SQL, schema analysis, query optimization"
     },
     "code-review-agent": {
       "path": ".claude/agents/code-review-agent",
-      "mcpServers": ["github"],
-      "description": "GitHub integration and code review",
-      "skills": ["pcb-expert", "mold-expert"]
+      "mcpServers": ["github", "ast-grep-mcp"],
+      "description": "GitHub integration and code review, AST pattern analysis",
+      "skills": ["pcb-expert", "mold-expert"],
+      "note": "ast-grep-mcp: AST-based structural code search, pattern matching"
     },
     "rag-agent": {
       "path": ".claude/agents/rag-agent",
-      "mcpServers": [],
-      "description": "RAG system optimization - embeddings, chunking, search",
-      "skills": ["rag-pipeline", "embedding-expert", "chunking-expert", "nexa-rag-optimizer", "multimodal-processor"]
+      "mcpServers": ["mcp-ragex", "code-index-mcp"],
+      "description": "RAG system optimization - embeddings, chunking, search, hybrid code search",
+      "skills": ["rag-pipeline", "embedding-expert", "chunking-expert", "nexa-rag-optimizer", "multimodal-processor"],
+      "note": "mcp-ragex: Semantic+AST+Regex hybrid search | code-index-mcp: Auto indexing 16,500+ lines"
     },
     "testing-agent": {
       "path": ".claude/agents/testing-agent",
-      "mcpServers": [],
-      "description": "Automated testing - unit tests, integration tests, coverage",
-      "skills": []
+      "mcpServers": ["mcp-code-checker"],
+      "description": "Automated testing - unit tests, integration tests, coverage, code quality",
+      "skills": [],
+      "note": "mcp-code-checker: Auto pylint, pytest, mypy checks"
     },
     "deployment-agent": {
       "path": ".claude/agents/deployment-agent",
-      "mcpServers": [],
-      "description": "Deployment and DevOps - Docker, Kubernetes, CI/CD",
-      "skills": []
+      "mcpServers": ["docker-mcp"],
+      "description": "Deployment and DevOps - Docker, Kubernetes, CI/CD, container management",
+      "skills": [],
+      "note": "docker-mcp: Manage 17 Docker services, container debugging, logs"
     },
     "monitoring-agent": {
       "path": ".claude/agents/monitoring-agent",
@@ -84,10 +89,11 @@
   },
   "mcpPriorities": {
     "priority_1_no_api_key": {
-      "servers": ["filesystem", "git", "serena", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools"],
+      "servers": ["filesystem", "git", "serena", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools", "mcp-ragex", "code-index-mcp", "mcp-code-checker", "postgres-mcp", "docker-mcp", "ast-grep-mcp"],
       "description": "No API key required - use freely",
       "cost": "$0/month",
-      "location": "Main (filesystem, git, serena) + Sub-agents (rest)"
+      "location": "Main (filesystem, git, serena) + Sub-agents (rest)",
+      "phase1_additions": "mcp-ragex, code-index-mcp, mcp-code-checker, postgres-mcp, docker-mcp, ast-grep-mcp"
     },
     "priority_2_free_tier": {
       "servers": ["tavily", "github"],
@@ -109,11 +115,13 @@
     }
   },
   "metadata": {
-    "version": "2.1.0",
+    "version": "2.2.0",
     "updated": "2025-11-11",
-    "description": "Token-optimized MCP configuration with Serena semantic search - main project uses filesystem + git + serena, specialized MCPs in sub-agents",
-    "architecture": "Main project (3 MCPs: filesystem, git, serena) + Sub-agents (specialized MCPs) for parallel processing",
-    "token_strategy": "Keep main context minimal with semantic code search (Serena saves 95% tokens), delegate specialized tasks to sub-agents",
+    "description": "Token-optimized MCP configuration with Phase 1 expansion - main project uses 3 MCPs, sub-agents use 15 MCPs with progressive disclosure",
+    "architecture": "Main project (3 MCPs: filesystem, git, serena) + Sub-agents (15 MCPs across 8 agents) for parallel processing",
+    "token_strategy": "Keep main context minimal with semantic code search (Serena saves 95% tokens), delegate specialized tasks to sub-agents with lazy loading",
+    "phase1_mcps": "6 new MCPs added: mcp-ragex, code-index-mcp, mcp-code-checker, postgres-mcp, docker-mcp, ast-grep-mcp",
+    "total_mcps": "18 (3 main + 15 sub-agents)",
     "documentation": "https://github.com/modelcontextprotocol/servers",
     "serena_info": "https://github.com/oraios/serena - Semantic code retrieval and editing via LSP"
   }
