@@ -1,0 +1,418 @@
+{
+  "dashboard": {
+    "title": "MES - Manufacturing Execution System",
+    "tags": ["mes", "manufacturing", "production", "oee"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Active Work Orders",
+        "type": "stat",
+        "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT COUNT(*) as value FROM work_orders WHERE status IN ('released', 'in_progress')",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "blue" },
+                { "value": 5, "color": "green" },
+                { "value": 10, "color": "yellow" },
+                { "value": 20, "color": "red" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background",
+          "text": { "titleSize": 18, "valueSize": 48 }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Today's Production",
+        "type": "stat",
+        "gridPos": { "x": 6, "y": 0, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT SUM(quantity) as value FROM production_records WHERE DATE(timestamp) = CURRENT_DATE",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "decimals": 0,
+            "color": { "mode": "thresholds" },
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 100, "color": "yellow" },
+                { "value": 500, "color": "green" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background"
+        }
+      },
+      {
+        "id": 3,
+        "title": "First Pass Yield (FPY)",
+        "type": "gauge",
+        "gridPos": { "x": 12, "y": 0, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT COUNT(CASE WHEN quality_status = 'pass' THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0) as value FROM production_records WHERE DATE(timestamp) = CURRENT_DATE",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 90, "color": "yellow" },
+                { "value": 95, "color": "green" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 4,
+        "title": "Average OEE",
+        "type": "gauge",
+        "gridPos": { "x": 18, "y": 0, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT AVG(oee) * 100 as value FROM oee_metrics WHERE period_start >= NOW() - INTERVAL '24 hours'",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 60, "color": "yellow" },
+                { "value": 85, "color": "green" }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Work Order Status Distribution",
+        "type": "piechart",
+        "gridPos": { "x": 0, "y": 4, "w": 8, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT status, COUNT(*) as value FROM work_orders WHERE created_at >= NOW() - INTERVAL '7 days' GROUP BY status",
+            "refId": "A",
+            "format": "table"
+          }
+        ],
+        "options": {
+          "legend": { "displayMode": "table", "placement": "right" },
+          "pieType": "donut"
+        },
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "draft" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "released" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "yellow" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "in_progress" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "orange" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "completed" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "on_hold" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "grey" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "cancelled" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }]
+            }
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "title": "Production Trend (Last 24h)",
+        "type": "timeseries",
+        "gridPos": { "x": 8, "y": 4, "w": 16, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time_bucket('1 hour', timestamp) as time, SUM(quantity) as good_units, SUM(CASE WHEN quality_status = 'pass' THEN quantity ELSE 0 END) as good, SUM(CASE WHEN quality_status != 'pass' THEN quantity ELSE 0 END) as scrap FROM production_records WHERE timestamp >= NOW() - INTERVAL '24 hours' GROUP BY time ORDER BY time",
+            "refId": "A",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "custom": { "drawStyle": "bars", "fillOpacity": 60, "stacking": { "mode": "normal" } }
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "good" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "scrap" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }]
+            }
+          ]
+        }
+      },
+      {
+        "id": 7,
+        "title": "OEE Components Breakdown",
+        "type": "timeseries",
+        "gridPos": { "x": 0, "y": 12, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT period_start as time, equipment_id, availability * 100 as availability, performance * 100 as performance, quality * 100 as quality FROM oee_metrics WHERE period_start >= NOW() - INTERVAL '7 days' ORDER BY period_start",
+            "refId": "A",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "custom": { "drawStyle": "line", "fillOpacity": 10 }
+          },
+          "overrides": [
+            {
+              "matcher": { "id": "byFrameRefID", "options": "availability" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "blue" } }]
+            },
+            {
+              "matcher": { "id": "byFrameRefID", "options": "performance" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "orange" } }]
+            },
+            {
+              "matcher": { "id": "byFrameRefID", "options": "quality" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+            }
+          ]
+        }
+      },
+      {
+        "id": 8,
+        "title": "OEE by Equipment",
+        "type": "bargauge",
+        "gridPos": { "x": 12, "y": 12, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT equipment_id as metric, AVG(oee) * 100 as value FROM oee_metrics WHERE period_start >= NOW() - INTERVAL '24 hours' GROUP BY equipment_id ORDER BY value DESC",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 60, "color": "yellow" },
+                { "value": 85, "color": "green" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "displayMode": "gradient"
+        }
+      },
+      {
+        "id": 9,
+        "title": "Material Lot Status",
+        "type": "table",
+        "gridPos": { "x": 0, "y": 20, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT lot_id, material_name, quantity, unit, consumed_quantity, status, supplier, received_date FROM material_lots WHERE status IN ('available', 'in_use') ORDER BY received_date DESC LIMIT 20",
+            "refId": "A",
+            "format": "table"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "renameByName": {
+                "lot_id": "Lot ID",
+                "material_name": "Material",
+                "quantity": "Qty",
+                "unit": "Unit",
+                "consumed_quantity": "Consumed",
+                "status": "Status",
+                "supplier": "Supplier",
+                "received_date": "Received"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Top 10 Defect Types",
+        "type": "barchart",
+        "gridPos": { "x": 12, "y": 20, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT jsonb_array_elements_text(defects) as defect_type, COUNT(*) as count FROM production_records WHERE defects IS NOT NULL AND jsonb_array_length(defects) > 0 AND timestamp >= NOW() - INTERVAL '7 days' GROUP BY defect_type ORDER BY count DESC LIMIT 10",
+            "refId": "A",
+            "format": "table"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": { "mode": "palette-classic" }
+          }
+        },
+        "options": {
+          "orientation": "horizontal"
+        }
+      },
+      {
+        "id": 11,
+        "title": "Cycle Time Distribution",
+        "type": "histogram",
+        "gridPos": { "x": 0, "y": 28, "w": 12, "h": 6 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT cycle_time_sec FROM production_records WHERE timestamp >= NOW() - INTERVAL '24 hours'",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "s",
+            "custom": { "fillOpacity": 70 }
+          }
+        }
+      },
+      {
+        "id": 12,
+        "title": "Work Order Completion Rate",
+        "type": "stat",
+        "gridPos": { "x": 12, "y": 28, "w": 6, "h": 6 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT COUNT(CASE WHEN status = 'completed' AND actual_end <= planned_end THEN 1 END) * 100.0 / NULLIF(COUNT(CASE WHEN status = 'completed' THEN 1 END), 0) as value FROM work_orders WHERE actual_end >= NOW() - INTERVAL '7 days'",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 80, "color": "yellow" },
+                { "value": 95, "color": "green" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "colorMode": "background",
+          "graphMode": "area",
+          "text": { "titleSize": 16, "valueSize": 36 }
+        }
+      },
+      {
+        "id": 13,
+        "title": "Production Efficiency",
+        "type": "stat",
+        "gridPos": { "x": 18, "y": 28, "w": 6, "h": 6 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT AVG(actual_cycle_time / ideal_cycle_time) * 100 as value FROM (SELECT equipment_id, AVG(cycle_time_sec) as actual_cycle_time, 1.0 as ideal_cycle_time FROM production_records WHERE timestamp >= NOW() - INTERVAL '24 hours' GROUP BY equipment_id) subq",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "decimals": 1,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 70, "color": "yellow" },
+                { "value": 90, "color": "green" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "colorMode": "background"
+        }
+      }
+    ]
+  }
+}
