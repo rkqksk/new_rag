@@ -77,6 +77,36 @@ peft>=0.12.0  # Parameter-Efficient Fine-Tuning (LORA adapters)
 urx>=0.11.0  # Universal Robots URX library for UR10e control
 numpy>=1.26.0  # Required for coordinate transformations
 
+# v7.2.0 - Edge Computing Platform (Jetson + Raspberry Pi)
+# Computer Vision Models
+deep-sort-realtime>=1.3.2  # DeepSORT object tracking
+mediapipe>=0.10.9  # MediaPipe (pose, hands, face mesh, holistic)
+segment-anything>=1.0  # Meta's Segment Anything Model (SAM)
+face-recognition>=1.3.0  # Face recognition with dlib (requires cmake)
+
+# IoT & Sensors (Raspberry Pi GPIO/I2C/SPI)
+RPi.GPIO>=0.7.1  # Raspberry Pi GPIO interface
+smbus2>=0.4.3  # I2C bus access
+spidev>=3.6  # SPI bus access
+adafruit-circuitpython-dht>=4.0.4  # DHT temperature/humidity sensors
+adafruit-circuitpython-bme280>=2.6.25  # BME280 environmental sensor
+adafruit-circuitpython-mpu6050>=1.1.22  # MPU6050 accelerometer/gyro
+
+# Industrial Protocols
+paho-mqtt>=2.1.0  # MQTT client for IoT messaging
+pymodbus>=3.6.8  # Modbus RTU/TCP protocol
+opcua>=0.98.13  # OPC-UA industrial automation protocol
+bleak>=0.22.0  # Bluetooth Low Energy (BLE) client
+
+# Time Series & Analytics
+psutil>=6.1.0  # System monitoring (CPU, memory, disk, sensors)
+# timescaledb - PostgreSQL extension (installed via Docker)
+
+# Audio Processing (for sound anomaly detection)
+librosa>=0.10.2  # Audio analysis library
+sounddevice>=0.5.1  # Audio recording/playback
+scipy>=1.14.0  # Signal processing
+
 # OCR & Image Processing (Latest Compatible Versions)
 # Let pip resolve compatible versions automatically
 paddleocr  # Latest version
