@@ -12,6 +12,7 @@ from app.api.v1 import admin, analytics, analytics_realtime, debug, hybrid, mult
 from app.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
 from app.routes import products, qa, inquiries, tracking
 from src.api.v1 import saas
+from src.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
 from app.core.config import settings
 from app.core.exceptions import RAGEnterpriseException
 from app.core.logging import get_logger, setup_logging
@@ -164,6 +165,10 @@ except ImportError as e:
 # Advanced RAG routes (Query optimization + Conversational memory) ⭐ NEW v6.0.0
 app.include_router(rag_advanced.router, prefix=f"{settings.api_prefix}/rag", tags=["advanced-rag"])
 app_logger.info("🧠 Advanced RAG enabled (Query optimization + Citations + Conversational memory)")
+
+# Manufacturing routes (LORA + UR10e robot integration) ⭐ NEW v7.1.0
+app.include_router(manufacturing.router, prefix=settings.api_prefix, tags=["manufacturing"])
+app_logger.info("🏭 Advanced Manufacturing enabled (LORA fine-tuning + UR10e collaborative robot)")
 
 # Image processing routes (watermark removal, OCR preprocessing)
 app.include_router(image_processing.router)

@@ -1,0 +1,147 @@
+# Docker Compose - Advanced Manufacturing v7.1.0
+# LORA Vision + UR10e Robot Integration
+#
+# Services:
+# - API with manufacturing endpoints
+# - UR10e robot simulator (development)
+# - Camera service (optional)
+# - Training service (LORA adapters)
+
+version: '3.8'
+
+services:
+  # ========================================
+  # API Server (with manufacturing routes)
+  # ========================================
+  api-manufacturing:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rag-api-manufacturing
+    ports:
+      - "8001:8001"  # API
+    environment:
+      # Database
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: rag_enterprise
+      POSTGRES_USER: raguser
+      POSTGRES_PASSWORD: ragpass123
+
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      # Qdrant
+      QDRANT_HOST: qdrant
+      QDRANT_PORT: 6333
+
+      # Manufacturing Config
+      MANUFACTURING_MODE: "production"
+      UR10E_IP: "ur10e-simulator"  # Robot IP (simulator or physical)
+      UR10E_SIMULATION: "true"     # Simulation mode
+      CAMERA_ENABLED: "false"      # Camera integration
+
+      # LORA Config
+      LORA_MODELS_PATH: "/app/data/manufacturing/models/lora_adapters"
+      LORA_DATASETS_PATH: "/app/data/manufacturing/datasets"
+
+    volumes:
+      - ./data/manufacturing:/app/data/manufacturing
+      - ./models:/app/models
+    depends_on:
+      - postgres
+      - redis
+      - qdrant
+    networks:
+      - rag-network
+    restart: unless-stopped
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8001
+      --workers 4
+      --log-level info
+
+  # ========================================
+  # UR10e Robot Simulator
+  # (For development without physical robot)
+  # ========================================
+  ur10e-simulator:
+    image: python:3.11-slim
+    container_name: ur10e-simulator
+    ports:
+      - "30002:30002"  # UR10e control port
+    environment:
+      ROBOT_TYPE: "UR10e"
+      SIMULATION_MODE: "true"
+    volumes:
+      - ./scripts/ur10e_simulator.py:/app/simulator.py
+    networks:
+      - rag-network
+    restart: unless-stopped
+    command: python /app/simulator.py
+
+  # ========================================
+  # LORA Training Service
+  # (Background service for adapter training)
+  # ========================================
+  lora-trainer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lora-trainer
+    environment:
+      TRAINING_MODE: "background"
+      GPU_ENABLED: "true"
+    volumes:
+      - ./data/manufacturing:/app/data/manufacturing
+      - ./models:/app/models
+      - ./scripts:/app/scripts
+    networks:
+      - rag-network
+    restart: "no"  # Only run on-demand
+    command: >
+      bash -c "
+      echo 'LORA Trainer ready. Run training with:';
+      echo 'docker-compose exec lora-trainer python scripts/train_lora_adapter.py --product pet_bottles';
+      tail -f /dev/null
+      "
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # ========================================
+  # Camera Service (Optional)
+  # Industrial camera integration
+  # ========================================
+  camera-service:
+    image: python:3.11-slim
+    container_name: camera-service
+    environment:
+      CAMERA_TYPE: "usb"  # usb, industrial, simulation
+      CAMERA_RESOLUTION: "640x640"
+      CAMERA_FPS: 30
+    devices:
+      - /dev/video0:/dev/video0  # USB camera (if available)
+    volumes:
+      - ./scripts/camera_server.py:/app/camera_server.py
+    networks:
+      - rag-network
+    restart: unless-stopped
+    command: python /app/camera_server.py
+    profiles:
+      - with-camera  # Only start if explicitly enabled
+
+networks:
+  rag-network:
+    name: rag-network
+    driver: bridge
+
+volumes:
+  manufacturing-data:
+    driver: local
