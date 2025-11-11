@@ -17,6 +17,18 @@
       "enabled": true,
       "priority": 1,
       "note": "Core MCP - always enabled for token efficiency"
+    },
+    "serena": {
+      "transport": "stdio",
+      "command": "uvx",
+      "args": ["serena"],
+      "description": "Semantic code retrieval and editing (LSP-based) - 🎯 GAME CHANGER for token efficiency",
+      "enabled": true,
+      "priority": 1,
+      "env": {
+        "SERENA_PROJECT_ROOT": "/Users/oypnus/Project/new_rag"
+      },
+      "note": "Core MCP - Saves 95% tokens on code retrieval with semantic search"
     }
   },
   "subAgents": {
@@ -72,10 +84,10 @@
   },
   "mcpPriorities": {
     "priority_1_no_api_key": {
-      "servers": ["filesystem", "git", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools"],
+      "servers": ["filesystem", "git", "serena", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools"],
       "description": "No API key required - use freely",
       "cost": "$0/month",
-      "location": "Sub-agents (except filesystem, git)"
+      "location": "Main (filesystem, git, serena) + Sub-agents (rest)"
     },
     "priority_2_free_tier": {
       "servers": ["tavily", "github"],
@@ -97,11 +109,12 @@
     }
   },
   "metadata": {
-    "version": "2.0.0",
-    "updated": "2025-11-08",
-    "description": "Token-optimized MCP configuration - main project uses only filesystem + git, specialized MCPs in sub-agents",
-    "architecture": "Main project (2 MCPs) + Sub-agents (specialized MCPs) for parallel processing",
-    "token_strategy": "Keep main context minimal, delegate specialized tasks to sub-agents",
-    "documentation": "https://github.com/modelcontextprotocol/servers"
+    "version": "2.1.0",
+    "updated": "2025-11-11",
+    "description": "Token-optimized MCP configuration with Serena semantic search - main project uses filesystem + git + serena, specialized MCPs in sub-agents",
+    "architecture": "Main project (3 MCPs: filesystem, git, serena) + Sub-agents (specialized MCPs) for parallel processing",
+    "token_strategy": "Keep main context minimal with semantic code search (Serena saves 95% tokens), delegate specialized tasks to sub-agents",
+    "documentation": "https://github.com/modelcontextprotocol/servers",
+    "serena_info": "https://github.com/oraios/serena - Semantic code retrieval and editing via LSP"
   }
 }
