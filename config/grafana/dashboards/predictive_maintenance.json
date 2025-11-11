@@ -1,0 +1,155 @@
+{
+  "dashboard": {
+    "title": "Predictive Maintenance",
+    "tags": ["edge-computing", "maintenance", "equipment"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Equipment Health Scores",
+        "type": "gauge",
+        "gridPos": { "x": 0, "y": 0, "w": 24, "h": 6 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT DISTINCT ON (equipment_id) equipment_id as metric, health_score as value FROM equipment_health ORDER BY equipment_id, time DESC",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "red" },
+                { "value": 40, "color": "orange" },
+                { "value": 60, "color": "yellow" },
+                { "value": 80, "color": "green" }
+              ]
+            }
+          }
+        },
+        "options": {
+          "orientation": "horizontal",
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        }
+      },
+      {
+        "id": 2,
+        "title": "Equipment Status",
+        "type": "stat",
+        "gridPos": { "x": 0, "y": 6, "w": 12, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT status, COUNT(*) as count FROM (SELECT DISTINCT ON (equipment_id) equipment_id, status FROM equipment_health ORDER BY equipment_id, time DESC) as latest GROUP BY status",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "background"
+        },
+        "fieldConfig": {
+          "overrides": [
+            {
+              "matcher": { "id": "byName", "options": "healthy" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "green" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "warning" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "yellow" } }]
+            },
+            {
+              "matcher": { "id": "byName", "options": "critical" },
+              "properties": [{ "id": "color", "value": { "mode": "fixed", "fixedColor": "red" } }]
+            }
+          ]
+        }
+      },
+      {
+        "id": 3,
+        "title": "Remaining Useful Life (RUL)",
+        "type": "table",
+        "gridPos": { "x": 12, "y": 6, "w": 12, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT DISTINCT ON (equipment_id) equipment_id, status, health_score, rul_hours, time FROM equipment_health WHERE rul_hours IS NOT NULL ORDER BY equipment_id, time DESC",
+            "refId": "A",
+            "format": "table"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "renameByName": {
+                "equipment_id": "Equipment",
+                "status": "Status",
+                "health_score": "Health %",
+                "rul_hours": "RUL (hours)",
+                "time": "Last Update"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Health Score Trend",
+        "type": "timeseries",
+        "gridPos": { "x": 0, "y": 10, "w": 24, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time, equipment_id, health_score as value FROM equipment_health WHERE time >= NOW() - INTERVAL '7 days' ORDER BY time",
+            "refId": "A",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": { "drawStyle": "line", "fillOpacity": 10 },
+            "unit": "percent",
+            "min": 0,
+            "max": 100
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Anomalies Detected",
+        "type": "logs",
+        "gridPos": { "x": 0, "y": 18, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time, equipment_id, jsonb_array_elements_text(anomalies) as anomaly FROM equipment_health WHERE anomalies IS NOT NULL AND jsonb_array_length(anomalies) > 0 AND time >= NOW() - INTERVAL '24 hours' ORDER BY time DESC LIMIT 100",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Recommendations",
+        "type": "logs",
+        "gridPos": { "x": 12, "y": 18, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time, equipment_id, jsonb_array_elements_text(recommendations) as recommendation FROM equipment_health WHERE recommendations IS NOT NULL AND jsonb_array_length(recommendations) > 0 AND time >= NOW() - INTERVAL '24 hours' ORDER BY time DESC LIMIT 100",
+            "refId": "A"
+          }
+        ]
+      }
+    ]
+  }
+}

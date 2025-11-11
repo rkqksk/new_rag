@@ -1,0 +1,21 @@
+# Grafana Datasource Provisioning
+# v7.2.0 - Edge Computing Platform
+# Auto-configure TimescaleDB datasource
+
+apiVersion: 1
+
+datasources:
+  - name: TimescaleDB
+    type: postgres
+    access: proxy
+    url: postgres-timescale:5432
+    database: rag_enterprise
+    user: rag_user
+    secureJsonData:
+      password: rag_password
+    jsonData:
+      sslmode: disable
+      postgresVersion: 1600  # PostgreSQL 16
+      timescaledb: true
+    isDefault: true
+    editable: true

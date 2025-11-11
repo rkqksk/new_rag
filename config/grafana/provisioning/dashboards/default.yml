@@ -1,0 +1,17 @@
+# Grafana Dashboard Provisioning
+# v7.2.0 - Edge Computing Platform
+# Auto-load dashboards from /var/lib/grafana/dashboards
+
+apiVersion: 1
+
+providers:
+  - name: 'Edge Computing Dashboards'
+    orgId: 1
+    folder: 'Edge Computing'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: true

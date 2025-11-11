@@ -1,0 +1,143 @@
+{
+  "dashboard": {
+    "title": "IoT Sensors Overview",
+    "tags": ["edge-computing", "iot", "sensors"],
+    "timezone": "browser",
+    "schemaVersion": 38,
+    "version": 1,
+    "refresh": "5s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Temperature Sensors",
+        "type": "timeseries",
+        "gridPos": { "x": 0, "y": 0, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time, sensor_id, value FROM sensor_readings WHERE sensor_type = 'temperature' AND time >= NOW() - INTERVAL '1 hour' ORDER BY time",
+            "refId": "A",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": { "drawStyle": "line", "fillOpacity": 10 },
+            "unit": "celsius"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Vibration Sensors",
+        "type": "timeseries",
+        "gridPos": { "x": 12, "y": 0, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time, sensor_id, value FROM sensor_readings WHERE sensor_type = 'vibration' AND time >= NOW() - INTERVAL '1 hour' ORDER BY time",
+            "refId": "A",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": { "drawStyle": "line", "fillOpacity": 10 },
+            "unit": "accMS2"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "title": "Humidity",
+        "type": "gauge",
+        "gridPos": { "x": 0, "y": 8, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT value FROM sensor_readings WHERE sensor_id = 'humidity_01' ORDER BY time DESC LIMIT 1",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "percent",
+            "min": 0,
+            "max": 100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 0, "color": "blue" },
+                { "value": 30, "color": "green" },
+                { "value": 60, "color": "yellow" },
+                { "value": 80, "color": "red" }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 4,
+        "title": "Pressure",
+        "type": "gauge",
+        "gridPos": { "x": 6, "y": 8, "w": 6, "h": 4 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT value FROM sensor_readings WHERE sensor_id = 'pressure_01' ORDER BY time DESC LIMIT 1",
+            "refId": "A"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "pressurehpa",
+            "min": 900,
+            "max": 1100,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                { "value": 900, "color": "red" },
+                { "value": 980, "color": "yellow" },
+                { "value": 1000, "color": "green" },
+                { "value": 1040, "color": "yellow" }
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Sensor Stats (Last Hour)",
+        "type": "table",
+        "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT sensor_id, sensor_type, COUNT(*) as samples, AVG(value) as avg_value, MIN(value) as min_value, MAX(value) as max_value FROM sensor_readings WHERE time >= NOW() - INTERVAL '1 hour' GROUP BY sensor_id, sensor_type ORDER BY sensor_id",
+            "refId": "A",
+            "format": "table"
+          }
+        ]
+      },
+      {
+        "id": 6,
+        "title": "All Sensors (Realtime)",
+        "type": "timeseries",
+        "gridPos": { "x": 0, "y": 16, "w": 24, "h": 8 },
+        "targets": [
+          {
+            "datasource": { "type": "postgres", "uid": "TimescaleDB" },
+            "rawSql": "SELECT time, sensor_id || ' (' || sensor_type || ')' as metric, value FROM sensor_readings WHERE time >= NOW() - INTERVAL '5 minutes' ORDER BY time",
+            "refId": "A",
+            "format": "time_series"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "custom": { "drawStyle": "line", "fillOpacity": 5 }
+          }
+        }
+      }
+    ]
+  }
+}
