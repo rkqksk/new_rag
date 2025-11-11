@@ -71,6 +71,12 @@ torch>=2.5.0
 transformers>=4.47.0
 openai>=1.58.0  # OpenAI SDK for NexaAI compatibility
 
+# v7.1.0 - Advanced Manufacturing (LORA + UR10e)
+ultralytics>=8.3.0  # YOLOv8/v10 for vision inspection
+peft>=0.12.0  # Parameter-Efficient Fine-Tuning (LORA adapters)
+urx>=0.11.0  # Universal Robots URX library for UR10e control
+numpy>=1.26.0  # Required for coordinate transformations
+
 # OCR & Image Processing (Latest Compatible Versions)
 # Let pip resolve compatible versions automatically
 paddleocr  # Latest version
