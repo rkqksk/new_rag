@@ -75,10 +75,10 @@
     },
     "deployment-agent": {
       "path": ".claude/agents/deployment-agent",
-      "mcpServers": ["docker-mcp"],
-      "description": "Deployment and DevOps - Docker, Kubernetes, CI/CD, container management",
+      "mcpServers": ["docker-mcp", "kubernetes-mcp"],
+      "description": "Deployment and DevOps - Docker, Kubernetes, CI/CD, container management, K8s orchestration",
       "skills": [],
-      "note": "docker-mcp: Manage 17 Docker services, container debugging, logs"
+      "note": "docker-mcp: Manage 17 Docker services | kubernetes-mcp: K8s cluster (HPA 3-20 replicas, auto-scaling)"
     },
     "monitoring-agent": {
       "path": ".claude/agents/monitoring-agent",
@@ -89,11 +89,12 @@
   },
   "mcpPriorities": {
     "priority_1_no_api_key": {
-      "servers": ["filesystem", "git", "serena", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools", "mcp-ragex", "code-index-mcp", "mcp-code-checker", "postgres-mcp", "docker-mcp", "ast-grep-mcp"],
+      "servers": ["filesystem", "git", "serena", "fetch", "puppeteer", "shadcn-ui", "chrome-devtools", "mcp-ragex", "code-index-mcp", "mcp-code-checker", "postgres-mcp", "docker-mcp", "kubernetes-mcp", "ast-grep-mcp"],
       "description": "No API key required - use freely",
       "cost": "$0/month",
       "location": "Main (filesystem, git, serena) + Sub-agents (rest)",
-      "phase1_additions": "mcp-ragex, code-index-mcp, mcp-code-checker, postgres-mcp, docker-mcp, ast-grep-mcp"
+      "phase1_additions": "mcp-ragex, code-index-mcp, mcp-code-checker, postgres-mcp, docker-mcp, ast-grep-mcp",
+      "phase1_1_additions": "kubernetes-mcp (corrected - k8s directory exists with 13 deployment files)"
     },
     "priority_2_free_tier": {
       "servers": ["tavily", "github"],
@@ -115,13 +116,15 @@
     }
   },
   "metadata": {
-    "version": "2.2.0",
+    "version": "2.2.1",
     "updated": "2025-11-11",
-    "description": "Token-optimized MCP configuration with Phase 1 expansion - main project uses 3 MCPs, sub-agents use 15 MCPs with progressive disclosure",
-    "architecture": "Main project (3 MCPs: filesystem, git, serena) + Sub-agents (15 MCPs across 8 agents) for parallel processing",
+    "description": "Token-optimized MCP configuration with Phase 1.1 - main project uses 3 MCPs, sub-agents use 16 MCPs with progressive disclosure",
+    "architecture": "Main project (3 MCPs: filesystem, git, serena) + Sub-agents (16 MCPs across 8 agents) for parallel processing",
     "token_strategy": "Keep main context minimal with semantic code search (Serena saves 95% tokens), delegate specialized tasks to sub-agents with lazy loading",
-    "phase1_mcps": "6 new MCPs added: mcp-ragex, code-index-mcp, mcp-code-checker, postgres-mcp, docker-mcp, ast-grep-mcp",
-    "total_mcps": "18 (3 main + 15 sub-agents)",
+    "phase1_mcps": "6 MCPs: mcp-ragex, code-index-mcp, mcp-code-checker, postgres-mcp, docker-mcp, ast-grep-mcp",
+    "phase1_1_correction": "Added kubernetes-mcp (missed in Phase 1 - k8s/ directory exists with 13 K8s deployment files including HPA auto-scaling 3-20 replicas)",
+    "total_mcps": "19 (3 main + 16 sub-agents)",
+    "kubernetes_deployment": "k8s/ directory with 13 YAML files: api, postgres, qdrant, redis StatefulSets, HPA, ingress, configmap, secrets",
     "documentation": "https://github.com/modelcontextprotocol/servers",
     "serena_info": "https://github.com/oraios/serena - Semantic code retrieval and editing via LSP"
   }
