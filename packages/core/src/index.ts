@@ -6,6 +6,10 @@
 // Services
 export { apiService, ApiService } from './services/api.service'
 export { authService, AuthService } from './auth/authService'
+export { searchService, SearchService } from './services/search.service'
+export { adminService, AdminService } from './services/admin.service'
+
+// Auth Types
 export type {
   LoginCredentials,
   RegisterData,
