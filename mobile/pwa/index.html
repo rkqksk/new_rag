@@ -294,8 +294,22 @@
 
         // Functions
         function navigateTo(page) {
-            console.log('Navigate to:', page);
-            alert(`${page} 페이지로 이동합니다.`);
+            const routes = {
+                'search': 'index.html',
+                'image': 'index.html',
+                'qr': 'qr-scan.html',
+                'upload': 'upload.html',
+                'work-orders': 'work-orders.html',
+                'dashboard': 'index.html',
+                'quality': 'quality-inspection.html',
+                'chat': '../chat.html'
+            };
+
+            if (routes[page]) {
+                window.location.href = routes[page];
+            } else {
+                console.log('Navigate to:', page);
+            }
         }
 
         function switchTab(tab) {

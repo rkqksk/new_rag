@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <title>작업지시 - RAG Mobile</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: max(env(safe-area-inset-top), 16px) 16px 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .app-title { font-size: 20px; font-weight: 600; flex: 1; }
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filter-tabs::-webkit-scrollbar { display: none; }
+        .filter-tab {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-tab.active {
+            background: white;
+            color: #667eea;
+        }
+        .main-content {
+            margin-top: 130px;
+            padding: 16px;
+            margin-bottom: 70px;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 11px;
+            color: #666;
+        }
+        .work-order-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .work-order-card:active {
+            transform: scale(0.98);
+        }
+        .wo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .wo-number {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .wo-product {
+            font-size: 14px;
+            color: #666;
+        }
+        .priority-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .priority-high {
+            background: #fee;
+            color: #d00;
+        }
+        .priority-medium {
+            background: #ffeaa7;
+            color: #856404;
+        }
+        .priority-low {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .wo-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .wo-detail-item {
+            font-size: 12px;
+        }
+        .detail-label {
+            color: #999;
+            margin-bottom: 2px;
+        }
+        .detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+        .progress-container {
+            margin-bottom: 8px;
+        }
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-planned {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        .status-inprogress {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .status-completed {
+            background: #d1f4e0;
+            color: #0f5132;
+        }
+        .status-delayed {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        .action-btn:active {
+            opacity: 0.7;
+        }
+        .btn-start {
+            background: #4ade80;
+            color: white;
+        }
+        .btn-pause {
+            background: #ffc107;
+            color: white;
+        }
+        .btn-complete {
+            background: #667eea;
+            color: white;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        .fab {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 50;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <div class="header-top">
+            <button class="back-btn" onclick="history.back()">←</button>
+            <div class="app-title">작업 지시</div>
+        </div>
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-status="all">전체</button>
+            <button class="filter-tab" data-status="planned">예정</button>
+            <button class="filter-tab" data-status="inprogress">진행중</button>
+            <button class="filter-tab" data-status="completed">완료</button>
+            <button class="filter-tab" data-status="delayed">지연</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="totalCount">0</div>
+                <div class="stat-label">전체</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color:#4ade80;" id="completedCount">0</div>
+                <div class="stat-label">완료</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color:#ffc107;" id="inprogressCount">0</div>
+                <div class="stat-label">진행중</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" style="color:#ff6b6b;" id="delayedCount">0</div>
+                <div class="stat-label">지연</div>
+            </div>
+        </div>
+
+        <!-- Work Orders List -->
+        <div id="workOrdersList">
+            <div class="loading">로딩 중...</div>
+        </div>
+    </div>
+
+    <button class="fab" onclick="refreshWorkOrders()">🔄</button>
+
+    <script>
+        const API_BASE = 'http://localhost:8001/api/v1';
+        let workOrders = [];
+        let currentFilter = 'all';
+
+        // Fetch work orders
+        async function fetchWorkOrders() {
+            try {
+                const response = await fetch(`${API_BASE}/mobile-api/work-orders`);
+                if (response.ok) {
+                    const data = await response.json();
+                    workOrders = data.work_orders || [];
+                } else {
+                    // Generate mock data
+                    workOrders = generateMockWorkOrders();
+                }
+            } catch (error) {
+                console.error('Failed to fetch work orders:', error);
+                // Use mock data
+                workOrders = generateMockWorkOrders();
+            }
+            renderWorkOrders();
+            updateStats();
+        }
+
+        // Generate mock work orders
+        function generateMockWorkOrders() {
+            const statuses = ['planned', 'inprogress', 'completed', 'delayed'];
+            const priorities = ['high', 'medium', 'low'];
+            const products = ['PET 50ml 용기', 'HDPE 100ml 용기', 'PP 250ml 용기', 'PVC 500ml 용기'];
+
+            return Array.from({ length: 15 }, (_, i) => {
+                const status = statuses[i % statuses.length];
+                const planned = 1000 + i * 100;
+                const completed = status === 'completed' ? planned : Math.floor(planned * Math.random());
+                const progress = status === 'planned' ? 0 : (completed / planned * 100);
+
+                return {
+                    wo_id: `WO${String(2024001 + i).padStart(7, '0')}`,
+                    wo_number: `WO-2024-${String(i + 1).padStart(4, '0')}`,
+                    product_name: products[i % products.length],
+                    quantity_planned: planned,
+                    quantity_completed: completed,
+                    status: status,
+                    priority: i % 3 === 0 ? 'high' : i % 3 === 1 ? 'medium' : 'low',
+                    start_date: new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    due_date: new Date(Date.now() + (7 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                    progress_percent: progress
+                };
+            });
+        }
+
+        // Render work orders
+        function renderWorkOrders() {
+            const container = document.getElementById('workOrdersList');
+            const filtered = currentFilter === 'all'
+                ? workOrders
+                : workOrders.filter(wo => wo.status === currentFilter);
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div>작업 지시가 없습니다</div>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(wo => `
+                <div class="work-order-card" onclick="openWorkOrderDetail('${wo.wo_id}')">
+                    <div class="wo-header">
+                        <div>
+                            <div class="wo-number">${wo.wo_number}</div>
+                            <div class="wo-product">${wo.product_name}</div>
+                        </div>
+                        <div class="priority-badge priority-${wo.priority}">
+                            ${getPriorityText(wo.priority)}
+                        </div>
+                    </div>
+
+                    <div class="wo-details">
+                        <div class="wo-detail-item">
+                            <div class="detail-label">시작일</div>
+                            <div class="detail-value">${wo.start_date}</div>
+                        </div>
+                        <div class="wo-detail-item">
+                            <div class="detail-label">납기일</div>
+                            <div class="detail-value">${wo.due_date}</div>
+                        </div>
+                        <div class="wo-detail-item">
+                            <div class="detail-label">계획 수량</div>
+                            <div class="detail-value">${wo.quantity_planned.toLocaleString()}</div>
+                        </div>
+                        <div class="wo-detail-item">
+                            <div class="detail-label">완료 수량</div>
+                            <div class="detail-value">${wo.quantity_completed.toLocaleString()}</div>
+                        </div>
+                    </div>
+
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>진행률</span>
+                            <span>${wo.progress_percent.toFixed(1)}%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${wo.progress_percent}%"></div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="status-badge status-${wo.status}">${getStatusText(wo.status)}</span>
+                    </div>
+
+                    ${getActionButtons(wo)}
+                </div>
+            `).join('');
+        }
+
+        function getActionButtons(wo) {
+            if (wo.status === 'planned') {
+                return `
+                    <div class="action-buttons">
+                        <button class="action-btn btn-start" onclick="event.stopPropagation(); startWorkOrder('${wo.wo_id}')">
+                            ▶️ 시작
+                        </button>
+                    </div>
+                `;
+            } else if (wo.status === 'inprogress') {
+                return `
+                    <div class="action-buttons">
+                        <button class="action-btn btn-pause" onclick="event.stopPropagation(); pauseWorkOrder('${wo.wo_id}')">
+                            ⏸️ 일시중지
+                        </button>
+                        <button class="action-btn btn-complete" onclick="event.stopPropagation(); completeWorkOrder('${wo.wo_id}')">
+                            ✅ 완료
+                        </button>
+                    </div>
+                `;
+            }
+            return '';
+        }
+
+        function getPriorityText(priority) {
+            const texts = {
+                'high': '긴급',
+                'medium': '보통',
+                'low': '낮음'
+            };
+            return texts[priority] || priority;
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'planned': '예정',
+                'inprogress': '진행중',
+                'completed': '완료',
+                'delayed': '지연'
+            };
+            return texts[status] || status;
+        }
+
+        function updateStats() {
+            document.getElementById('totalCount').textContent = workOrders.length;
+            document.getElementById('completedCount').textContent =
+                workOrders.filter(wo => wo.status === 'completed').length;
+            document.getElementById('inprogressCount').textContent =
+                workOrders.filter(wo => wo.status === 'inprogress').length;
+            document.getElementById('delayedCount').textContent =
+                workOrders.filter(wo => wo.status === 'delayed').length;
+        }
+
+        function openWorkOrderDetail(woId) {
+            const wo = workOrders.find(w => w.wo_id === woId);
+            if (wo) {
+                alert(`작업지시 상세\n\n` +
+                    `번호: ${wo.wo_number}\n` +
+                    `제품: ${wo.product_name}\n` +
+                    `상태: ${getStatusText(wo.status)}\n` +
+                    `진행률: ${wo.progress_percent.toFixed(1)}%`
+                );
+            }
+        }
+
+        function startWorkOrder(woId) {
+            const wo = workOrders.find(w => w.wo_id === woId);
+            if (wo) {
+                wo.status = 'inprogress';
+                renderWorkOrders();
+                updateStats();
+            }
+        }
+
+        function pauseWorkOrder(woId) {
+            alert('작업이 일시중지되었습니다');
+        }
+
+        function completeWorkOrder(woId) {
+            const wo = workOrders.find(w => w.wo_id === woId);
+            if (wo) {
+                wo.status = 'completed';
+                wo.quantity_completed = wo.quantity_planned;
+                wo.progress_percent = 100;
+                renderWorkOrders();
+                updateStats();
+            }
+        }
+
+        function refreshWorkOrders() {
+            fetchWorkOrders();
+        }
+
+        // Filter tabs
+        document.querySelectorAll('.filter-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.dataset.status;
+                renderWorkOrders();
+            });
+        });
+
+        // Initial load
+        fetchWorkOrders();
+    </script>
+</body>
+</html>

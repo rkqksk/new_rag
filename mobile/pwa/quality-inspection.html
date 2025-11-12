@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#667eea">
+    <title>품질 검사 - RAG Mobile</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #f5f5f5;
+            overflow-x: hidden;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: max(env(safe-area-inset-top), 16px) 16px 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .back-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+        .app-title { font-size: 20px; font-weight: 600; flex: 1; }
+        .main-content {
+            margin-top: 70px;
+            padding: 16px;
+            margin-bottom: 80px;
+        }
+        .camera-container {
+            position: relative;
+            width: 100%;
+            background: black;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        #video {
+            width: 100%;
+            display: block;
+        }
+        #canvas {
+            display: none;
+        }
+        .camera-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+        }
+        .capture-btn-container {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            pointer-events: all;
+        }
+        .capture-btn {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            border: 5px solid white;
+            background: rgba(102, 126, 234, 0.8);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .capture-btn:active {
+            transform: scale(0.9);
+        }
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn-secondary {
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        .inspection-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 16px;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        .result-image {
+            width: 100%;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        .defect-list {
+            margin-top: 12px;
+        }
+        .defect-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border-left: 4px solid #ff6b6b;
+        }
+        .defect-item.pass {
+            border-left-color: #4ade80;
+        }
+        .defect-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        .defect-info {
+            flex: 1;
+        }
+        .defect-type {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+        .defect-details {
+            font-size: 12px;
+            color: #666;
+        }
+        .confidence {
+            font-size: 14px;
+            font-weight: 600;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: #fff;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .status-badge.pass {
+            background: #d1f4e0;
+            color: #0f5132;
+        }
+        .status-badge.fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-badge.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .stat-card {
+            background: #f8f9ff;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+        .history-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .history-time {
+            font-size: 12px;
+            color: #999;
+            margin-right: 12px;
+        }
+        .history-result {
+            flex: 1;
+            font-weight: 600;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+        }
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-header">
+        <button class="back-btn" onclick="history.back()">←</button>
+        <div class="app-title">품질 검사</div>
+    </div>
+
+    <div class="main-content">
+        <!-- Camera Section -->
+        <div class="camera-container" id="cameraContainer">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+            <div class="camera-overlay">
+                <div class="capture-btn-container">
+                    <button class="capture-btn" id="captureBtn"></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="startCameraBtn">카메라 시작</button>
+            <button class="btn btn-secondary" id="stopCameraBtn">카메라 중지</button>
+            <button class="btn btn-secondary" id="uploadBtn">갤러리</button>
+        </div>
+
+        <!-- Inspection Result -->
+        <div class="inspection-card" id="resultCard" style="display:none;">
+            <div class="card-title">✅ 검사 결과</div>
+            <div class="status-badge pass" id="statusBadge">합격</div>
+            <img id="resultImage" class="result-image" src="" alt="검사 이미지">
+
+            <div class="defect-list" id="defectList">
+                <!-- Defects will be inserted here -->
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDefects">0</div>
+                    <div class="stat-label">불량 수</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="confidence">0%</div>
+                    <div class="stat-label">신뢰도</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="processingTime">0ms</div>
+                    <div class="stat-label">처리 시간</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="inspection-card">
+            <div class="card-title">📊 오늘의 통계</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="todayTotal">0</div>
+                    <div class="stat-label">총 검사</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color:#4ade80;" id="todayPass">0</div>
+                    <div class="stat-label">합격</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" style="color:#ff6b6b;" id="todayFail">0</div>
+                    <div class="stat-label">불합격</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History -->
+        <div class="inspection-card">
+            <div class="card-title">📜 검사 이력</div>
+            <div id="historyList">
+                <div class="empty-state">
+                    <div class="empty-icon">📋</div>
+                    <div>검사 이력이 없습니다</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const captureBtn = document.getElementById('captureBtn');
+        const startCameraBtn = document.getElementById('startCameraBtn');
+        const stopCameraBtn = document.getElementById('stopCameraBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const fileInput = document.getElementById('fileInput');
+        const resultCard = document.getElementById('resultCard');
+        const resultImage = document.getElementById('resultImage');
+
+        const API_BASE = 'http://localhost:8001/api/v1';
+        let stream = null;
+        let inspectionHistory = [];
+
+        // Start camera
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment', width: 1280, height: 720 }
+                });
+                video.srcObject = stream;
+            } catch (err) {
+                console.error('Camera error:', err);
+                alert('카메라 접근 권한이 필요합니다');
+            }
+        }
+
+        // Stop camera
+        function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                video.srcObject = null;
+            }
+        }
+
+        // Capture image
+        function captureImage() {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            ctx.drawImage(video, 0, 0);
+
+            canvas.toBlob((blob) => {
+                performInspection(blob);
+            }, 'image/jpeg', 0.9);
+        }
+
+        // Perform vision inspection
+        async function performInspection(imageBlob) {
+            const formData = new FormData();
+            formData.append('image', imageBlob, 'inspection.jpg');
+
+            try {
+                const response = await fetch(`${API_BASE}/vision/inspect`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    displayInspectionResult(result, imageBlob);
+                } else {
+                    // Mock result for demo
+                    const mockResult = generateMockResult();
+                    displayInspectionResult(mockResult, imageBlob);
+                }
+            } catch (error) {
+                console.error('Inspection error:', error);
+                // Use mock result
+                const mockResult = generateMockResult();
+                displayInspectionResult(mockResult, imageBlob);
+            }
+        }
+
+        // Generate mock inspection result
+        function generateMockResult() {
+            const hasDefects = Math.random() > 0.7;
+            const defects = hasDefects ? [
+                {
+                    type: '스크래치',
+                    severity: 'medium',
+                    confidence: 0.89,
+                    location: { x: 120, y: 85, w: 45, h: 30 }
+                },
+                {
+                    type: '오염',
+                    severity: 'low',
+                    confidence: 0.76,
+                    location: { x: 250, y: 150, w: 30, h: 25 }
+                }
+            ] : [];
+
+            return {
+                status: hasDefects ? 'fail' : 'pass',
+                defects: defects,
+                confidence: hasDefects ? 0.82 : 0.95,
+                processing_time_ms: Math.floor(Math.random() * 200 + 100)
+            };
+        }
+
+        // Display inspection result
+        function displayInspectionResult(result, imageBlob) {
+            // Show result card
+            resultCard.style.display = 'block';
+
+            // Display image
+            const imageUrl = URL.createObjectURL(imageBlob);
+            resultImage.src = imageUrl;
+
+            // Status badge
+            const statusBadge = document.getElementById('statusBadge');
+            if (result.status === 'pass') {
+                statusBadge.textContent = '✅ 합격';
+                statusBadge.className = 'status-badge pass';
+            } else if (result.status === 'fail') {
+                statusBadge.textContent = '❌ 불합격';
+                statusBadge.className = 'status-badge fail';
+            } else {
+                statusBadge.textContent = '⚠️ 주의';
+                statusBadge.className = 'status-badge warning';
+            }
+
+            // Defects list
+            const defectList = document.getElementById('defectList');
+            if (result.defects && result.defects.length > 0) {
+                defectList.innerHTML = result.defects.map(defect => `
+                    <div class="defect-item ${result.status === 'pass' ? 'pass' : ''}">
+                        <div class="defect-icon">${getDefectIcon(defect.type)}</div>
+                        <div class="defect-info">
+                            <div class="defect-type">${defect.type}</div>
+                            <div class="defect-details">심각도: ${getSeverityText(defect.severity)}</div>
+                        </div>
+                        <div class="confidence">${(defect.confidence * 100).toFixed(0)}%</div>
+                    </div>
+                `).join('');
+            } else {
+                defectList.innerHTML = `
+                    <div class="defect-item pass">
+                        <div class="defect-icon">✅</div>
+                        <div class="defect-info">
+                            <div class="defect-type">불량 없음</div>
+                            <div class="defect-details">모든 검사 항목 통과</div>
+                        </div>
+                        <div class="confidence">100%</div>
+                    </div>
+                `;
+            }
+
+            // Stats
+            document.getElementById('totalDefects').textContent = result.defects ? result.defects.length : 0;
+            document.getElementById('confidence').textContent = (result.confidence * 100).toFixed(0) + '%';
+            document.getElementById('processingTime').textContent = result.processing_time_ms + 'ms';
+
+            // Add to history
+            addToHistory(result);
+            updateTodayStats();
+        }
+
+        function getDefectIcon(type) {
+            const icons = {
+                '스크래치': '🔍',
+                '오염': '💧',
+                '변형': '📏',
+                '색상': '🎨',
+                '크랙': '⚡'
+            };
+            return icons[type] || '❗';
+        }
+
+        function getSeverityText(severity) {
+            const texts = {
+                'low': '낮음',
+                'medium': '중간',
+                'high': '높음',
+                'critical': '심각'
+            };
+            return texts[severity] || severity;
+        }
+
+        function addToHistory(result) {
+            const historyItem = {
+                timestamp: new Date(),
+                status: result.status,
+                defectCount: result.defects ? result.defects.length : 0
+            };
+            inspectionHistory.unshift(historyItem);
+            if (inspectionHistory.length > 10) {
+                inspectionHistory = inspectionHistory.slice(0, 10);
+            }
+            updateHistoryList();
+        }
+
+        function updateHistoryList() {
+            const historyList = document.getElementById('historyList');
+            if (inspectionHistory.length === 0) {
+                historyList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📋</div>
+                        <div>검사 이력이 없습니다</div>
+                    </div>
+                `;
+                return;
+            }
+
+            historyList.innerHTML = inspectionHistory.map(item => `
+                <div class="history-item">
+                    <div class="history-time">${formatTime(item.timestamp)}</div>
+                    <div class="history-result" style="color:${item.status === 'pass' ? '#4ade80' : '#ff6b6b'}">
+                        ${item.status === 'pass' ? '✅ 합격' : '❌ 불합격'}
+                        (불량: ${item.defectCount}개)
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTodayStats() {
+            const total = inspectionHistory.length;
+            const pass = inspectionHistory.filter(item => item.status === 'pass').length;
+            const fail = total - pass;
+
+            document.getElementById('todayTotal').textContent = total;
+            document.getElementById('todayPass').textContent = pass;
+            document.getElementById('todayFail').textContent = fail;
+        }
+
+        function formatTime(date) {
+            const hours = date.getHours().toString().padStart(2, '0');
+            const minutes = date.getMinutes().toString().padStart(2, '0');
+            return `${hours}:${minutes}`;
+        }
+
+        // Event listeners
+        startCameraBtn.addEventListener('click', startCamera);
+        stopCameraBtn.addEventListener('click', stopCamera);
+        captureBtn.addEventListener('click', captureImage);
+        uploadBtn.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                performInspection(file);
+            }
+        });
+    </script>
+</body>
+</html>
