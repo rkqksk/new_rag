@@ -1,12 +1,14 @@
 # RAG Enterprise - Ultimate Open Source Platform
 
-**Version**: v7.0.0+ | **Status**: Production-Ready ✅ | **License**: MIT
+**Version**: v9.0.0 | **Status**: Multi-Platform Architecture 🚀 | **License**: MIT
 
-> **Complete Enterprise Stack**: RAG + SaaS + Manufacturing + Realtime + Infrastructure
+> **Complete Enterprise Stack**: RAG + SaaS + Manufacturing + Realtime + Multi-Platform
 >
 > **100% Open Source**: 17 services, $0/month software cost, $17,460+/year savings
 >
-> **Quick Start**: `./scripts/deploy-optimized.sh development`
+> **Multi-Platform**: Web + PWA + Mobile with 60% code reuse
+>
+> **Quick Start**: `./scripts/deploy-optimized.sh development && pnpm dev`
 
 [![](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)

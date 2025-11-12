@@ -1,4 +1,4 @@
-# RAG Enterprise - Quick Reference
+# PETER - Quick Reference
 
 **Version**: v7.0.0+ | **Status**: Ultimate Open Source Platform ✅
 
@@ -306,8 +306,6 @@ docker exec postgres pg_isready
 
 ### Main Project (Token-Optimized)
 - **filesystem** - File operations ($0)
-- **git** - Git operations ($0)
-- **serena** 🎯 - Semantic code search ($0) ⭐ GAME CHANGER
 
 ### Sub-Agents (8 Specialized Agents)
 1. **crawling-agent** - Web scraping (puppeteer, fetch, chrome-devtools)
@@ -325,29 +323,6 @@ docker exec postgres pg_isready
 - **github** - Unlimited for public repos
 
 **Config**: `.claude/mcp.json`, `.claude/agents/*/agent.json`
-
-### Serena Setup (30 seconds)
-
-**Install Serena**:
-\`\`\`bash
-# Install via uv (recommended)
-uvx serena
-
-# Verify installation
-serena --version
-\`\`\`
-
-**Already configured** in `.claude/mcp.json` - restart Claude Code to activate!
-
-**Benefits**:
-- 🚀 **95% token savings** on code retrieval
-- 🔍 **Semantic search** - find by meaning, not text
-- ✏️ **Symbol-level edits** - edit functions/classes directly
-- 🌍 **30+ languages** - Python, JS, Go, Rust, etc.
-
-**Usage**: Claude automatically uses Serena for code navigation
-
-**Examples**: `examples/serena_api_example.py`, `scripts/code-navigation.sh`
 
 ---
 

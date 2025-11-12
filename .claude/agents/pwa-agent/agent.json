@@ -1,0 +1,73 @@
+{
+  "name": "pwa-agent",
+  "version": "1.0.0",
+  "description": "Progressive Web App specialist with service workers and offline-first architecture",
+  "type": "pwa",
+  "tools": [
+    "Read",
+    "Write",
+    "Edit",
+    "Bash",
+    "Grep",
+    "Glob"
+  ],
+  "mcpServers": {
+    "workbox-mcp": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "workbox-mcp"],
+      "description": "Workbox service worker generation and caching strategies",
+      "enabled": true,
+      "priority": 1
+    },
+    "service-worker-mcp": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "service-worker-mcp"],
+      "description": "Service worker management and debugging",
+      "enabled": true,
+      "priority": 2
+    },
+    "lighthouse-mcp": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "lighthouse-mcp"],
+      "description": "PWA audit and performance optimization",
+      "enabled": true,
+      "priority": 3
+    }
+  },
+  "skills": [
+    "offline-first",
+    "app-shell",
+    "pwa-optimization"
+  ],
+  "specialization": {
+    "platforms": ["web", "mobile-web"],
+    "frameworks": ["vite", "next-pwa", "workbox"],
+    "features": [
+      "service-workers",
+      "offline-caching",
+      "background-sync",
+      "push-notifications",
+      "install-prompts",
+      "app-manifest"
+    ]
+  },
+  "workflow": {
+    "buildCommand": "vite build",
+    "testCommand": "vitest",
+    "auditCommand": "lighthouse --output json --output-path ./lighthouse-report.json",
+    "manifestValidation": "pwa-manifest-validator"
+  },
+  "configuration": {
+    "tokenReduction": true,
+    "progressiveLoading": true,
+    "maxTokensPerResponse": 4000,
+    "cacheStrategies": [
+      "cache-first",
+      "network-first",
+      "stale-while-revalidate"
+    ]
+  }
+}

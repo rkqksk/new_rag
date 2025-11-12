@@ -1,0 +1,84 @@
+{
+  "name": "design-system-agent",
+  "version": "1.0.0",
+  "description": "Design system and component library specialist for unified UI/UX across platforms",
+  "type": "design",
+  "tools": [
+    "Read",
+    "Write",
+    "Edit",
+    "Bash",
+    "Grep",
+    "Glob"
+  ],
+  "mcpServers": {
+    "storybook-mcp": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "storybook-mcp"],
+      "description": "Storybook component documentation and testing",
+      "enabled": true,
+      "priority": 1
+    },
+    "figma-mcp": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "figma-mcp"],
+      "description": "Figma design token synchronization",
+      "enabled": true,
+      "priority": 2
+    },
+    "chromatic-mcp": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": ["-y", "chromatic-mcp"],
+      "description": "Visual regression testing and UI review",
+      "enabled": true,
+      "priority": 3
+    }
+  },
+  "skills": [
+    "component-library",
+    "design-tokens",
+    "visual-testing"
+  ],
+  "specialization": {
+    "platforms": ["web", "mobile", "pwa"],
+    "frameworks": ["react", "react-native", "tailwind", "radix-ui"],
+    "features": [
+      "component-documentation",
+      "design-tokens",
+      "theme-system",
+      "accessibility",
+      "visual-regression",
+      "responsive-design",
+      "platform-variants"
+    ]
+  },
+  "workflow": {
+    "buildCommand": "build-storybook",
+    "testCommand": "test-storybook",
+    "chromaticCommand": "chromatic --project-token={token}",
+    "tokenExportCommand": "token-transformer tokens.json tokens.css"
+  },
+  "configuration": {
+    "tokenReduction": true,
+    "progressiveLoading": true,
+    "maxTokensPerResponse": 4000,
+    "componentCategories": [
+      "atoms",
+      "molecules",
+      "organisms",
+      "templates",
+      "layouts"
+    ],
+    "designTokens": {
+      "colors": true,
+      "typography": true,
+      "spacing": true,
+      "breakpoints": true,
+      "shadows": true,
+      "animations": true
+    }
+  }
+}
