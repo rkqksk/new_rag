@@ -14,6 +14,12 @@ from app.routes import products, qa, inquiries, tracking
 from src.api.v1 import saas
 from src.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
 from src.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentication
+
+# v8.5.0 Phase 9 - Advanced Infrastructure
+from src.api.routes import metrics, recommendations, search_ranking, websocket
+from src.middleware.rate_limiting import RateLimitMiddleware, RateLimitTier, RateLimitAlgorithm
+from src.middleware.error_tracking import ErrorTrackingMiddleware, RequestContextMiddleware, AnalyticsMiddleware
+
 from app.core.config import settings
 from app.core.exceptions import RAGEnterpriseException
 from app.core.logging import get_logger, setup_logging
@@ -79,6 +85,26 @@ app.add_middleware(PerformanceTimingMiddleware)
 if settings.debug_config.enabled:
     app.add_middleware(RequestLoggingMiddleware)
     app_logger.info("🔍 Debug mode enabled - Request logging active")
+
+# 5. Analytics middleware (v8.5.0) - Track all requests
+app.add_middleware(AnalyticsMiddleware, track_all_requests=True)
+
+# 6. Error tracking middleware (v8.5.0) - Automatic error capture
+app.add_middleware(ErrorTrackingMiddleware, track_performance=True, track_errors_only=False)
+
+# 7. Request context middleware (v8.5.0) - Add breadcrumbs
+app.add_middleware(RequestContextMiddleware)
+
+# 8. Rate limiting middleware (v8.5.0) - Protect against abuse
+app.add_middleware(
+    RateLimitMiddleware,
+    default_tier=RateLimitTier.FREE,
+    algorithm=RateLimitAlgorithm.SLIDING_WINDOW,
+    identifier_strategy="user_id",  # Use user_id if authenticated, fall back to IP
+    excluded_paths=["/health", "/docs", "/openapi.json", "/redoc", "/socket.io"]
+)
+
+app_logger.info("🛡️  Phase 9 middleware enabled (Analytics, Error Tracking, Rate Limiting)")
 
 # ============================================================================
 # Exception Handlers
@@ -194,6 +220,41 @@ app.include_router(
     tags=["Authentication"]
 )
 app_logger.info("🔐 JWT Authentication enabled at /api/v1/auth")
+
+# ============================================================================
+# Phase 9 - Advanced Infrastructure (v8.5.0)
+# ============================================================================
+# Metrics & Analytics API
+app.include_router(
+    metrics.router,
+    prefix=settings.api_prefix,
+    tags=["Metrics"]
+)
+app_logger.info("📊 Metrics API enabled at /api/v1/metrics")
+
+# Recommendations API
+app.include_router(
+    recommendations.router,
+    prefix=settings.api_prefix,
+    tags=["Recommendations"]
+)
+app_logger.info("🎯 Recommendations API enabled at /api/v1/recommendations")
+
+# Search Ranking API
+app.include_router(
+    search_ranking.router,
+    prefix=settings.api_prefix,
+    tags=["Search Ranking"]
+)
+app_logger.info("🏆 Search Ranking API enabled at /api/v1/search")
+
+# WebSocket Notifications API
+app.include_router(
+    websocket.router,
+    prefix=settings.api_prefix,
+    tags=["WebSocket"]
+)
+app_logger.info("⚡ WebSocket Notifications API enabled at /api/v1/ws")
 
 # ============================================================================
 # SaaS Platform - Multi-Tenancy, Authentication, Billing
