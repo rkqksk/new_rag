@@ -251,7 +251,24 @@
     <!-- Socket.IO Client Library -->
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 
+    <!-- Auth and Navigation Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/navbar.js"></script>
+
     <script>
+        // Check authentication before initializing
+        (async function() {
+            const isAuthenticated = await auth.requireAuth();
+            if (!isAuthenticated) return;
+
+            // Create navigation bar
+            createNavbar();
+
+            // Continue with app initialization
+            initRealtimeApp();
+        })();
+
+        function initRealtimeApp() {
         // Socket.IO connection
         const socket = io('http://localhost:8001', {
             path: '/socket.io',
@@ -439,6 +456,7 @@
                 }
             }, 1000);
         });
+        } // End of initRealtimeApp()
     </script>
 </body>
 </html>

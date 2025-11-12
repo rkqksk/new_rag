@@ -224,6 +224,21 @@
     </div>
 
     <script>
+        // Auth check
+        const AUTH_CONFIG = {
+            TOKEN_KEY: 'access_token',
+            USER_KEY: 'user',
+        };
+
+        function isLoggedIn() {
+            return !!localStorage.getItem(AUTH_CONFIG.TOKEN_KEY);
+        }
+
+        // Redirect to login if not authenticated
+        if (!isLoggedIn()) {
+            window.location.href = '/mobile/pwa/login.html';
+        }
+
         const API_BASE = 'http://localhost:8001/api/v1';
         let deferredPrompt;
 

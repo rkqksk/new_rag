@@ -502,7 +502,24 @@
         </div>
     </div>
 
+    <!-- Auth and Navigation Scripts -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/navbar.js"></script>
+
     <script>
+        // Check authentication before initializing
+        (async function() {
+            const isAuthenticated = await auth.requireAuth();
+            if (!isAuthenticated) return;
+
+            // Create navigation bar
+            createNavbar();
+
+            // Continue with app initialization
+            initApp();
+        })();
+
+        function initApp() {
         // 전역 변수
         let sessionId = null;
         const API_BASE = 'http://localhost:8001';
@@ -944,6 +961,7 @@
 
         // 초기화 실행
         init();
+        } // End of initApp()
     </script>
 </body>
 </html>
