@@ -13,6 +13,7 @@ from app.api import workflow_routes, consultation, dashboard_routes, ingestion_r
 from app.routes import products, qa, inquiries, tracking
 from src.api.v1 import saas
 from src.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
+from src.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentication
 from app.core.config import settings
 from app.core.exceptions import RAGEnterpriseException
 from app.core.logging import get_logger, setup_logging
@@ -182,6 +183,17 @@ if settings.debug_config.enabled:
 # Admin routes (NexaAI integration)
 app.include_router(admin.router, prefix=settings.api_prefix, tags=["admin"])
 app_logger.info("⚙️  Admin endpoints enabled at /api/v1/admin")
+
+# ============================================================================
+# Authentication - JWT-based user authentication (v8.0.0)
+# ============================================================================
+auth_router = create_auth_router()
+app.include_router(
+    auth_router,
+    prefix=settings.api_prefix,
+    tags=["Authentication"]
+)
+app_logger.info("🔐 JWT Authentication enabled at /api/v1/auth")
 
 # ============================================================================
 # SaaS Platform - Multi-Tenancy, Authentication, Billing
