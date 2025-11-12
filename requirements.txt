@@ -168,3 +168,14 @@ rank-bm25>=0.2.2  # BM25 algorithm for hybrid search
 
 # MES (Manufacturing Execution System)
 # Uses existing pydantic, datetime, uuid - no additional packages needed
+
+# v8.5.0-v8.6.0 - Phase 8-9 Advanced Infrastructure
+# Analytics & Monitoring
+prometheus-client>=0.20.0  # Prometheus metrics collection
+sentry-sdk[fastapi]>=2.18.0  # Error tracking and monitoring
+
+# Machine Learning & Math
+numpy>=1.26.0  # Numerical computing for recommendations
+
+# Real-time WebSocket (already included in fastapi/uvicorn but explicitly listed)
+# websockets>=12.0 - included with uvicorn[standard]
