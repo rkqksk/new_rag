@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { authService, UserRole } from "@rag/core"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -21,38 +22,20 @@ export default function LoginPage() {
     setError("")
 
     try {
-      const response = await fetch("/api/v1/saas/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
-
-      if (!response.ok) {
-        const data = await response.json()
-        throw new Error(data.message || "로그인 실패")
-      }
-
-      const data = await response.json()
-
-      // Store token and user info
-      localStorage.setItem("token", data.access_token)
-      localStorage.setItem("user", JSON.stringify(data.user))
+      const response = await authService.login({ email, password })
 
       // Redirect based on role
-      switch (data.user.role) {
-        case "super-user":
+      switch (response.user.role) {
+        case UserRole.SUPER_ADMIN:
           router.push("/super-admin")
           break
-        case "admin":
-        case "manager":
+        case UserRole.ADMIN:
           router.push("/admin")
           break
-        case "staff":
-        case "operator":
+        case UserRole.STAFF:
           router.push("/staff")
           break
-        case "customer-vip":
-        case "customer":
+        case UserRole.CUSTOMER:
           router.push("/customer")
           break
         default:
