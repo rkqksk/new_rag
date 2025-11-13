@@ -230,3 +230,6 @@ frontend/*.backup*
 frontend/chat.html.backup_*
 SuperClaude_Framework/
 .claude-backup*
+
+# Serena MCP cache and configuration
+.serena/
