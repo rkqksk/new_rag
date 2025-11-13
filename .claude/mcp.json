@@ -6,9 +6,18 @@
       "args": [
         "-y",
         "@modelcontextprotocol/server-filesystem",
-        "/Users/oypnus/Project/new_rag"
+        "/home/rkqksk/projects/new_rag"
       ],
       "description": "Basic filesystem operations"
+    },
+    "serena": {
+      "transport": "stdio",
+      "command": "sh",
+      "args": [
+        "-c",
+        "export PATH=\"$HOME/.local/bin:$PATH\" && uvx --from git+https://github.com/oraios/serena serena start-mcp-server --context ide-assistant --project /home/rkqksk/projects/new_rag"
+      ],
+      "description": "Serena coding agent toolkit for semantic retrieval and editing"
     }
   }
 }

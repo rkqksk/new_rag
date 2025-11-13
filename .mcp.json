@@ -4,14 +4,14 @@
 
     "filesystem": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/Users/oypnus/Project/new_rag "],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/rkqksk/projects/new_rag"],
       "description": "File system access (always available)"
     },
 
     "git": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "/Users/oypnus/Project/new_rag "],
-      "description": "Git repository operations and code search (core functionality)"
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "/home/rkqksk/projects/new_rag"],
+      "description": "Git repository operations and code search (official Python-based)"
     },
 
     "_comment_custom": "=== CUSTOM PYTHON SERVERS (Project-Specific) ===",
@@ -83,8 +83,8 @@
 
     "shadcn-ui": {
       "command": "npx",
-      "args": ["-y", "@ymadd/shadcn-ui-mcp-server"],
-      "description": "shadcn/ui components (50+ React components)"
+      "args": ["-y", "@jpisnice/shadcn-ui-mcp-server"],
+      "description": "shadcn/ui components (React, Svelte, Vue, React Native)"
     },
 
     "testsprite": {
@@ -111,7 +111,7 @@
 
     "sqlite": {
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "/Users/oypnus/Project/new_rag /data/cache.db"],
+      "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "/home/rkqksk/projects/new_rag/data/cache.db"],
       "description": "SQLite caching database"
     },
 
@@ -119,22 +119,24 @@
 
     "tavily": {
       "command": "npx",
-      "args": ["-y", "@tavily/mcp-server"],
+      "args": ["-y", "tavily-mcp"],
       "env": {"TAVILY_API_KEY": "${TAVILY_API_KEY}"},
-      "description": "AI web search (1000 free/month)",
-      "note": "Optional - https://tavily.com"
+      "description": "AI web search with real-time data, extract, map & crawl",
+      "note": "Optional - https://tavily.com - Get API key from https://app.tavily.com"
     }
   },
 
   "metadata": {
-    "version": "3.0.0",
-    "updated": "2025-11-10",
+    "version": "3.1.0",
+    "updated": "2025-11-14",
     "pattern": "progressive-disclosure",
     "description": "Unified MCP registry - agents discover and load tools on-demand for 98.7% token reduction",
-    "total_servers": 18,
+    "total_servers": 16,
     "core_servers": ["filesystem", "git", "qdrant", "ollama", "rag-orchestrator", "query-router"],
     "on_demand_servers": ["puppeteer", "playwright", "chrome-devtools", "shadcn-ui", "testsprite", "github", "postgres", "sqlite"],
     "lightweight_servers": ["fetch"],
+    "optional_servers": ["tavily"],
+    "status": "All servers verified and working (2025-11-14)",
     "token_strategy": {
       "pattern": "progressive-disclosure",
       "reduction": "98.7%",
