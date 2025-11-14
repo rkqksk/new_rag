@@ -3,6 +3,7 @@ RAG Enterprise API - Main Application
 High-end, enterprise-grade backend system with comprehensive debugging
 """
 
+import asyncio
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
