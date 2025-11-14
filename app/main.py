@@ -337,26 +337,12 @@ app_logger.info("🔍 Query management endpoints enabled at /api/v1/query")
 # Health Check Endpoints
 # ============================================================================
 
-
-@app.get("/health/live")
-async def liveness():
-    """Liveness probe - is the app running?"""
-    return {"status": "alive", "version": "1.0.0"}
-
-
-@app.get("/health/ready")
-async def readiness():
-    """Readiness probe - is the app ready to serve traffic?"""
-    from app.core.health import check_all_services
-
-    services_status = await check_all_services()
-    all_healthy = all(service["status"] == "healthy" for service in services_status.values())
-
-    return {
-        "status": "ready" if all_healthy else "degraded",
-        "debug_enabled": settings.debug_config.enabled,
-        "services": services_status
-    }
+# Health endpoints are provided by app.api.routes.health
+# See app/api/routes/health.py for:
+#   - GET /health/live (Kubernetes liveness probe)
+#   - GET /health/ready (Kubernetes readiness probe)
+#   - GET /health (Detailed health check)
+#   - GET /health/metrics (Prometheus metrics)
 
 
 @app.get("/")

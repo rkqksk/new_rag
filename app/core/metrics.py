@@ -2,7 +2,13 @@
 
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
-from app.core.prometheus_metrics import registry
+from app.core.prometheus_metrics import (
+    registry,
+    http_requests_total,
+)
+
+# Re-export for backward compatibility with tests
+REGISTRY = registry
 
 
 class MetricsCollector:

@@ -221,6 +221,9 @@ class ErrorResponse(BaseModel):
 # Export all schemas
 # ============================================================================
 
+# Import health schemas for re-export
+from app.api.routes.health import HealthCheckResponse
+
 __all__ = [
     # QA Schemas
     "QARequest",
@@ -234,4 +237,6 @@ __all__ = [
     "QASearchRequest",
     # Error Schemas
     "ErrorResponse",
+    # Health Schemas (re-exported for backward compatibility)
+    "HealthCheckResponse",
 ]
