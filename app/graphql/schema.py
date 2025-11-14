@@ -15,7 +15,7 @@ Version: v6.0.0
 """
 
 import asyncio
-from typing import List, Optional
+from typing import AsyncGenerator, List, Optional
 
 import strawberry
 from strawberry.fastapi import GraphQLRouter

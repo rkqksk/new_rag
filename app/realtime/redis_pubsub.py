@@ -21,11 +21,11 @@ import logging
 from typing import Any, Callable, Dict, List, Optional
 
 try:
-    import aioredis
-    AIOREDIS_AVAILABLE = True
+    from redis.asyncio import Redis
+    REDIS_ASYNC_AVAILABLE = True
 except ImportError:
-    AIOREDIS_AVAILABLE = False
-    aioredis = None
+    REDIS_ASYNC_AVAILABLE = False
+    Redis = None
 
 logger = logging.getLogger(__name__)
 
@@ -56,15 +56,15 @@ class RedisPubSubManager:
         Args:
             redis_url: Redis connection URL
         """
-        if not AIOREDIS_AVAILABLE:
-            logger.warning("aioredis not available. Redis Pub/Sub disabled.")
+        if not REDIS_ASYNC_AVAILABLE:
+            logger.warning("redis.asyncio not available. Redis Pub/Sub disabled.")
             self.redis = None
             self.pubsub = None
             return
 
         self.redis_url = redis_url
-        self.redis: Optional[aioredis.Redis] = None
-        self.pubsub: Optional[aioredis.client.PubSub] = None
+        self.redis: Optional[Redis] = None
+        self.pubsub = None
 
         # Subscriptions: {channel: [callbacks]}
         self.subscriptions: Dict[str, List[Callable]] = {}
@@ -76,11 +76,12 @@ class RedisPubSubManager:
 
     async def connect(self):
         """Connect to Redis"""
-        if not AIOREDIS_AVAILABLE:
+        if not REDIS_ASYNC_AVAILABLE:
             return
 
         try:
-            self.redis = await aioredis.from_url(
+            # redis.asyncio.from_url for async connection
+            self.redis = Redis.from_url(
                 self.redis_url,
                 encoding="utf-8",
                 decode_responses=True

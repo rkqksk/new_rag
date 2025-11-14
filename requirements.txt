@@ -20,9 +20,9 @@ psycopg[binary]>=3.2.0   # Modern async driver (psycopg3)
 sqlalchemy>=2.0.36
 asyncpg>=0.30.0
 
-# Redis Cache
-redis>=5.2.0
-hiredis>=3.0.0
+# Redis Cache (with async support for Python 3.11+)
+redis[asyncio]>=5.2.0  # Async support built-in (replaces aioredis)
+hiredis>=3.0.0  # C parser for performance boost
 
 # Vector Database - Qdrant
 qdrant-client>=1.12.0
@@ -63,7 +63,8 @@ boto3>=1.34.0  # AWS SDK (S3 compatibility)
 # v7.0.0+ - Realtime Backend (Convex-like, 100% Open Source)
 python-socketio>=5.11.0  # Socket.IO server
 python-socketio[asyncio]>=5.11.0  # Async support
-aioredis>=2.0.1  # Async Redis for Pub/Sub
+# aioredis>=2.0.1  # REMOVED: Incompatible with Python 3.11 (TimeoutError conflict)
+# Use redis[asyncio]>=5.2.0 instead - has async support built-in
 watchdog>=4.0.0  # File system monitoring
 psycopg2-pool>=1.1  # Connection pooling for LISTEN/NOTIFY
 
