@@ -461,7 +461,8 @@ async def startup_event():
                     params = message.get('params')
                     await realtime.broadcast_update(query_name, params)
 
-            await pubsub.subscribe_to_query_updates(handle_query_update)
+            # Run subscription in background to avoid blocking startup
+            asyncio.create_task(pubsub.subscribe_to_query_updates(handle_query_update))
             app_logger.info("✅ Redis Pub/Sub activated")
 
             # Store instances in app state
