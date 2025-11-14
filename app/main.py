@@ -52,16 +52,14 @@ app = FastAPI(
 )
 
 # Mount Socket.IO realtime server (v7.0.0+)
+# NOTE: Socket.IO is handled via ASGIApp wrapper at the end of this file
+# Don't mount it here as it creates circular dependency
 if REALTIME_AVAILABLE:
     try:
         realtime_server = get_realtime_server()
-        # Mount Socket.IO as a sub-application
-        import socketio
-        socketio_asgi = socketio.ASGIApp(realtime_server.sio, other_asgi_app=app)
-        app.mount('/socket.io', socketio_asgi)
-        app_logger.info("⚡ Socket.IO mounted at /socket.io (Convex-like realtime API)")
+        app_logger.info("⚡ Socket.IO server initialized (will be mounted via ASGIApp wrapper)")
     except Exception as e:
-        app_logger.warning(f"Could not mount Socket.IO: {e}")
+        app_logger.warning(f"Could not initialize Socket.IO: {e}")
 
 # ============================================================================
 # Middleware Stack (order matters!)
@@ -390,7 +388,8 @@ async def startup_event():
     app_logger.info(f"API Prefix: {settings.api_prefix}")
 
     # Initialize realtime backend (v7.0.0+)
-    if REALTIME_AVAILABLE:
+    # TEMPORARILY DISABLED FOR DEBUGGING
+    if False and REALTIME_AVAILABLE:
         try:
             app_logger.info("⚡ Initializing realtime backend (Convex-like)...")
 
