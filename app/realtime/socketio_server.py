@@ -61,9 +61,6 @@ class RealtimeServer:
             engineio_logger=True,
         )
 
-        # ASGI app
-        self.app = socketio.ASGIApp(self.sio)
-
         # Active subscriptions: {sid: {query_id: query_params}}
         self.subscriptions: Dict[str, Dict[str, Dict]] = {}
 

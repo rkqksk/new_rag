@@ -51,15 +51,20 @@ app = FastAPI(
     description="Enterprise-grade RAG system with multi-modal search, personalization, and analytics",
 )
 
-# Mount Socket.IO realtime server (v7.0.0+)
-# NOTE: Socket.IO is handled via ASGIApp wrapper at the end of this file
-# Don't mount it here as it creates circular dependency
-if REALTIME_AVAILABLE:
+# Socket.IO integration (v7.0.0+)
+# TODO: Fix Socket.IO mount - currently causes startup to hang
+# For now, Socket.IO will be initialized in startup_event without mounting
+if False and REALTIME_AVAILABLE:
     try:
+        import socketio
+        from app.realtime.socketio_server import get_realtime_server
         realtime_server = get_realtime_server()
-        app_logger.info("⚡ Socket.IO server initialized (will be mounted via ASGIApp wrapper)")
+        # Mount Socket.IO app (serve both Socket.IO and FastAPI)
+        socketio_asgi = socketio.ASGIApp(realtime_server.sio)
+        app.mount('/socket.io', socketio_asgi)
+        app_logger.info("⚡ Socket.IO mounted at /socket.io")
     except Exception as e:
-        app_logger.warning(f"Could not initialize Socket.IO: {e}")
+        app_logger.warning(f"Could not mount Socket.IO: {e}")
 
 # ============================================================================
 # Middleware Stack (order matters!)
@@ -388,7 +393,7 @@ async def startup_event():
     app_logger.info(f"API Prefix: {settings.api_prefix}")
 
     # Initialize realtime backend (v7.0.0+)
-    # TEMPORARILY DISABLED FOR DEBUGGING
+    # DISABLED: Realtime backend initialization blocks startup completion
     if False and REALTIME_AVAILABLE:
         try:
             app_logger.info("⚡ Initializing realtime backend (Convex-like)...")
@@ -396,28 +401,9 @@ async def startup_event():
             # 1. Get realtime server instance
             realtime = get_realtime_server()
 
-            # 2. Register query handlers (example)
-            @realtime.query("products")
-            async def get_products(params):
-                """Get products by material"""
-                from app.repositories.product_repository import ProductRepository
-                repo = ProductRepository()
-                material = params.get("material")
-                if material:
-                    products = await repo.get_by_material(material)
-                else:
-                    products = await repo.get_all(limit=100)
-                return [p.dict() for p in products]
-
-            @realtime.query("search_results")
-            async def get_search_results(params):
-                """Get search results"""
-                from app.services.search_service import SearchService
-                service = SearchService()
-                query = params.get("query", "")
-                top_k = params.get("top_k", 5)
-                results = await service.search(query, top_k)
-                return results
+            # 2. Query handlers will be registered separately
+            # (Skipping decorator-based registration in startup_event to avoid blocking)
+            app_logger.info("⚡ Realtime server instance retrieved")
 
             # 3. Get PostgreSQL notify manager
             notify_manager = get_notify_manager()
