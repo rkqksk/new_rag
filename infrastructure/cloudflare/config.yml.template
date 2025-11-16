@@ -1,0 +1,75 @@
+# Cloudflare Tunnel Configuration Template
+# 
+# Instructions:
+# 1. Replace {{TUNNEL_ID}} with your actual tunnel ID
+# 2. Replace {{DOMAIN}} with your purchased domain
+# 3. Replace {{USER}} with your Ubuntu username
+
+# Tunnel ID (from cloudflared tunnel create)
+tunnel: {{TUNNEL_ID}}
+credentials-file: /home/{{USER}}/.cloudflared/{{TUNNEL_ID}}.json
+
+ingress:
+  # Main web app (Next.js)
+  - hostname: {{DOMAIN}}
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+      http2Origin: true
+
+  # WWW subdomain (redirect to main)
+  - hostname: www.{{DOMAIN}}
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+      http2Origin: true
+
+  # API endpoint
+  - hostname: api.{{DOMAIN}}
+    service: http://localhost:8001
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+      http2Origin: true
+
+  # API documentation (Swagger)
+  - hostname: docs.{{DOMAIN}}
+    service: http://localhost:8001
+    path: /api/v1/docs
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # Monitoring (Grafana)
+  - hostname: monitor.{{DOMAIN}}
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # Admin panel
+  - hostname: admin.{{DOMAIN}}
+    service: http://localhost:8001
+    path: /admin
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+
+  # WebSocket for realtime features
+  - hostname: ws.{{DOMAIN}}
+    service: http://localhost:8001
+    originRequest:
+      noTLSVerify: true
+      connectTimeout: 30s
+      http2Origin: true
+
+  # Default catch-all (404)
+  - service: http_status:404
+
+# Logging configuration
+loglevel: info
+
+# Metrics
+metrics: localhost:38301
