@@ -5,18 +5,20 @@ import "./globals.css"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "PETER - Modern Dashboard",
-  description: "AI-powered enterprise platform with multi-tier authentication",
+  title: "RAG Enterprise",
+  description: "Ultimate RAG platform with Pure Black design",
 }
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="ko">
-      <body className={inter.className}>{children}</body>
+    <html lang="ko" className="dark">
+      <body className={inter.className}>
+        {children}
+      </body>
     </html>
   )
 }
