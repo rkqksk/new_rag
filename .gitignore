@@ -233,3 +233,36 @@ SuperClaude_Framework/
 
 # Serena MCP cache and configuration
 .serena/
+
+# ============================================
+# Monorepo (v10.0.0)
+# ============================================
+.turbo/
+.next/
+out/
+.vercel/
+.pnpm-store/
+.npmrc
+
+# Build outputs
+apps/*/dist/
+apps/*/.next/
+packages/*/dist/
+services/*/dist/
+
+# Logs
+apps/*/logs/
+packages/*/logs/
+*.log
+
+# Coverage
+apps/*/coverage/
+packages/*/coverage/
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
