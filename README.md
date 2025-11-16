@@ -1,453 +1,361 @@
-# RAG Enterprise - Ultimate Open Source Platform
+# RAG Enterprise - Ubuntu Edition
 
-**Version**: v9.3.0 | **Status**: Production Ready 🚀 | **License**: MIT
+**Version**: Initializing from v9.3.0
+**Status**: 🚀 Ready to Start
+**Target**: v10.0.0 "Unified" Platform
 
-> **Complete Enterprise Stack**: RAG + SaaS + Manufacturing + Realtime + Multi-Platform
->
-> **100% Open Source**: 17 services, $0/month software cost, $17,460+/year savings
->
-> **Multi-Platform**: Web + PWA + Mobile with 60% code reuse
->
-> **v9.0-v9.3 Features**: Backend Integration + Testing + Real-time + Offline Support
->
-> **Quick Start**: `pnpm install && pnpm dev`
-
-[![](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/downloads/)
-[![](https://img.shields.io/badge/FastAPI-0.104+-green.svg)](https://fastapi.tiangolo.com/)
-[![](https://img.shields.io/badge/Docker-Ready-blue.svg)](https://www.docker.com/)
-[![](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![](https://img.shields.io/badge/Cost-$0/month-brightgreen.svg)](#cost-comparison)
+> Complete RAG Enterprise platform optimized for Ubuntu Linux deployment
 
 ---
 
-## 🔥 What's New in v9.0-v9.3
+## 🎯 프로젝트 개요
 
-### 🎯 v9.3.0 - Real-time, Offline & Advanced Features
+### 무엇인가요?
 
-**Latest Release** - Real-time updates, optimistic UI, offline support
+**RAG Enterprise**는 100% 오픈소스 엔터프라이즈 플랫폼입니다:
+- **RAG System**: Semantic search, OCR, multi-modal
+- **SaaS Platform**: Multi-tenancy, billing, auth
+- **Manufacturing**: Vision inspection, defect detection
+- **Data Collection**: Web scraping, API polling, file parsing
+- **Real-time**: WebSocket, server-sent events
 
-- **Real-time Updates**: WebSocket integration with auto-reconnect
-- **Optimistic UI**: Instant feedback with automatic rollback
-- **Offline Support**: Operation queueing and data caching
-- **Error Boundaries**: Graceful error handling across all platforms
-- **Loading Skeletons**: Professional loading states for all UI patterns
+### 왜 중요한가요?
 
-**Guide**: [`docs/V9_3_RELEASE_NOTES.md`](docs/V9_3_RELEASE_NOTES.md)
-
-### 🧪 v9.2.0 - Testing Framework
-
-**Complete testing infrastructure** for production confidence:
-
-- **Jest + ts-jest**: TypeScript testing support
-- **30+ Unit Tests**: Auth, Search, Admin services covered
-- **70% Coverage**: Minimum coverage threshold enforced
-- **React Testing Library**: Component testing ready
-- **CI/CD Ready**: GitHub Actions integration prepared
-
-**Guide**: [`docs/V9_2_TESTING_GUIDE.md`](docs/V9_2_TESTING_GUIDE.md)
-
-### 🔌 v9.1.0 - Backend API Integration
-
-**Professional API integration layer**:
-
-- **Centralized API Client**: Auto token refresh, interceptors
-- **22 API Endpoints**: Auth, Search, Admin fully integrated
-- **200+ TypeScript Types**: Type-safe APIs throughout
-- **17 UI Components**: Platform-agnostic component library
-- **Comprehensive Docs**: 400+ line integration guide
-
-**Guide**: [`docs/V9_1_RELEASE_NOTES.md`](docs/V9_1_RELEASE_NOTES.md)
-
-### 🏗️ v9.0.0 - Multi-Platform Architecture
-
-**Monorepo transformation** for Web + PWA + Mobile:
-
-- **Turborepo**: Efficient monorepo management
-- **3 Platforms**: Next.js (Web), Vite (PWA), Expo (Mobile)
-- **Shared Packages**: @rag/core, @rag/ui, 60% code reuse
-- **Platform-Specific**: Optimizations for each platform
-- **Single Build**: One command builds all platforms
-
-**Guide**: [`docs/MULTI_PLATFORM_COMPONENT_CLASSIFICATION.md`](docs/MULTI_PLATFORM_COMPONENT_CLASSIFICATION.md)
-
-**Complete Summary**: [`docs/V9_COMPLETE_SUMMARY.md`](docs/V9_COMPLETE_SUMMARY.md)
-
----
-
-## 🔥 Previous Features (v7.0.0+)
-
-### ⚡ Realtime Backend (Convex-like)
-
-**100% Open Source Alternative** to Convex ($0/month vs $25-200+/month)
-
-- **Socket.IO Server**: Reactive queries and server functions
-- **PostgreSQL LISTEN/NOTIFY**: Database-level change detection
-- **Redis Pub/Sub**: Multi-server synchronization
-- **WebSocket**: < 10ms latency, 10,000+ concurrent connections
-- **Client SDKs**: JavaScript + Python with automatic updates
-- **Interactive Demo**: http://localhost:8080/realtime-demo.html
-
-**Files**: `app/realtime/`, `frontend/realtime-demo.html`, `examples/realtime_client_example.py`
-**Guide**: [`docs/REALTIME_BACKEND_GUIDE.md`](docs/REALTIME_BACKEND_GUIDE.md)
-
----
-
-### 🚀 Ultimate Open Source Edition (v7.0.0)
-
-**Complete production infrastructure** with $0 software costs:
-
-#### CI/CD & Automation
-- **GitHub Actions**: 5 workflows (CI, CD, CodeQL, Docker, Release)
-- **Dependabot**: Automated dependency updates
-- **Security Scanning**: CodeQL + Bandit + Safety
-
-#### Security & Authentication
-- **Keycloak**: OAuth2/OIDC SSO
-- **HashiCorp Vault**: Secret management
-- **Dynamic Credentials**: Database credential generation
-
-#### Observability & Tracing
-- **OpenTelemetry + Jaeger**: Distributed tracing
-- **Prometheus + Grafana**: Metrics and dashboards
-- **Custom Spans**: Detailed request tracing
-
-#### Data Platform
-- **MinIO**: S3-compatible object storage
-- **Apache Airflow**: ETL workflow orchestration
-- **Metabase**: Business intelligence dashboards
-
-**Guide**: [`docs/V7_COMPLETE_GUIDE.md`](docs/V7_COMPLETE_GUIDE.md)
-
----
-
-## 🎯 Core Features
-
-### RAG System
-- ✅ **Multi-Modal Search**: Text + Image + Shape recognition
-- ✅ **Atomic Chunking**: 471 products → 3,246 semantic chunks
-- ✅ **OCR Pipeline**: PaddleOCR + EasyOCR + Tesseract (3-engine fallback)
-- ✅ **Hybrid Search**: Dense + BM25 + Cross-encoder re-ranking
-- ✅ **Query Optimization**: Intelligent routing (NexaAI < 500ms / Ollama ~2s)
-- ✅ **Conversational Memory**: Context-aware conversations
-
-**Guide**: [`docs/RAG_ACTIVATION_STRATEGY.md`](docs/RAG_ACTIVATION_STRATEGY.md)
-
-### SaaS Platform
-- ✅ **Multi-Tenancy**: Row-Level Security (RLS) with PostgreSQL
-- ✅ **Authentication**: JWT (24h) + API keys (SHA-256)
-- ✅ **Billing**: Stripe integration (Free/Pro/Enterprise tiers)
-- ✅ **Usage Tracking**: Quotas, rate limiting, analytics
-- ✅ **RBAC**: Role-based access control
-
-**Guide**: [`docs/SAAS_ARCHITECTURE.md`](docs/SAAS_ARCHITECTURE.md)
-
-### Manufacturing Automation
-- ✅ **Vision Inspection**: YOLOv8/v10 defect detection
-- ✅ **Device Support**: Jetson (120 FPS) / Raspberry Pi (15 FPS)
-- ✅ **Quality Control**: SPC, defect trends, real-time alerts
-- ✅ **Edge Deployment**: TensorRT + ONNX optimization
-
-**Guide**: [`docs/MANUFACTURING_AUTOMATION.md`](docs/MANUFACTURING_AUTOMATION.md)
-
-### Data Collection
-- ✅ **Universal Collection**: Web scraping, API polling, file parsing
-- ✅ **6 File Formats**: Excel, CSV, JSON, XML, PDF, TXT
-- ✅ **3 Scraping Methods**: BeautifulSoup, Playwright, Selenium
-- ✅ **Scheduling**: APScheduler with cron triggers
-- ✅ **Auto-Retry**: Exponential backoff with error handling
-
-**Guide**: [`docs/DATA_COLLECTOR_ARCHITECTURE.md`](docs/DATA_COLLECTOR_ARCHITECTURE.md)
-
-### Realtime Features
-- ✅ **WebSocket Streaming**: Real-time LLM responses
-- ✅ **Server-Sent Events (SSE)**: Streaming data
-- ✅ **Real-time Analytics**: ClickHouse + Kafka pipeline
-- ✅ **Reactive Queries**: Socket.IO + PostgreSQL + Redis
-- ✅ **Database Triggers**: Automatic change notifications
-
-**Guides**: [`docs/REALTIME_BACKEND_GUIDE.md`](docs/REALTIME_BACKEND_GUIDE.md)
-
----
-
-## 📊 System Statistics
-
-| Metric | Value |
-|--------|-------|
-| **Services** | 17 containers |
-| **API Endpoints** | 48+ production APIs |
-| **Code** | 16,500+ lines |
-| **Tests** | 160+ test cases (95%+ coverage) |
-| **Data** | 471 products → 3,246 chunks |
-| **Search Quality** | 0.79-0.82 similarity |
-| **Response Time** | < 500ms (NexaAI) / ~2s (Ollama) |
-| **WebSocket Latency** | < 10ms |
-| **Software Cost** | **$0/month** |
-| **Annual Savings** | **$17,460+/year** |
-
----
-
-## 🏗️ Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                   Client Applications                        │
-│  Browser | Mobile | Desktop | Server-to-Server               │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                     API Gateway                              │
-│  REST | GraphQL | WebSocket | SSE | Socket.IO                │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                     Service Layer                            │
-│  RAG | SaaS | Manufacturing | Data Collection | Realtime     │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│             Security & Observability (v7.0.0)                │
-│  Keycloak | Vault | Jaeger | Prometheus | Grafana            │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                     Data Layer                               │
-│  PostgreSQL | Qdrant | Redis | ClickHouse | MinIO            │
-└─────────────────────────────────────────────────────────────┘
-                            ↓
-┌─────────────────────────────────────────────────────────────┐
-│                Processing Layer (v7.0.0)                     │
-│  Airflow (ETL) | Kafka (Streaming) | Metabase (BI)           │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**Full Architecture**: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
+- ✅ **$0/month 소프트웨어 비용** (17 services, all open-source)
+- ✅ **연간 $17,460+ 절감** (상용 솔루션 대비)
+- ✅ **Multi-platform**: Web + PWA + Mobile
+- ✅ **Production Ready**: 95%+ test coverage
+- ✅ **Korean 최적화**: 한국어 NLP, 규제 준수
 
 ---
 
 ## 🚀 Quick Start
 
-### 1. Deploy (One Command)
+### Prerequisites
 
-\`\`\`bash
-# Development environment
-./scripts/deploy-optimized.sh development
+```bash
+# Required
+- Ubuntu 20.04+ (또는 Linux)
+- Docker & Docker Compose
+- Git
+- 8GB+ RAM
+- 20GB+ disk space
+```
 
-# This will:
-# - Start 17 Docker containers
-# - Initialize databases
-# - Setup database triggers
-# - Start realtime backend
-# - Run health checks
-\`\`\`
+### 1. 프로젝트 초기화 (5분)
 
-### 2. Test Realtime Demo
+```bash
+# Clone repository (이미 했다면 스킵)
+git clone <repository-url>
+cd new_rag_ubuntu
 
-\`\`\`bash
-# Open realtime demo (NEW!)
-open http://localhost:8080/realtime-demo.html
+# claude-code-mac 브랜치에서 v9.3.0 코드 가져오기
+git merge origin/claude-code-mac --allow-unrelated-histories
 
-# Or chat interface
-open http://localhost:8080/chat.html
-\`\`\`
+# 또는 직접 체크아웃
+git checkout -b main origin/claude-code-mac
+```
 
-### 3. Test RAG Search
+### 2. 서비스 시작 (3분)
 
-\`\`\`bash
-curl -X POST http://localhost:8001/api/v1/search/ \
-  -H "Content-Type: application/json" \
-  -d '{"query":"50ml PET 용기","top_k":5}'
-\`\`\`
+```bash
+# Docker services 시작
+docker-compose up -d
 
-### 4. View Monitoring
+# Health check (30초 대기)
+sleep 30
+curl http://localhost:8001/health/ready
+```
 
-\`\`\`bash
-# API Documentation
+### 3. 확인
+
+```bash
+# API 문서
 open http://localhost:8001/api/v1/docs
 
-# Grafana Dashboards
-open http://localhost:3000  # admin/admin
+# Monitoring
+open http://localhost:3000  # Grafana (admin/admin)
+```
 
-# Jaeger Tracing
-open http://localhost:16686
-
-# MinIO Storage
-open http://localhost:9002  # minioadmin/minioadmin
-
-# Airflow ETL
-open http://localhost:8082  # admin/admin
-
-# Metabase BI
-open http://localhost:3001
-\`\`\`
-
-**Full Setup Guide**: [`docs/guides/LOCAL_SETUP.md`](docs/guides/LOCAL_SETUP.md)
+**상세 가이드**: [QUICK_START.md](QUICK_START.md)
 
 ---
 
-## 🛠️ Tech Stack
+## 📊 현재 상태
+
+### ✅ Available (v9.3.0 from claude-code-mac branch)
+
+- **17 Services**: API, PostgreSQL, Qdrant, Redis, etc.
+- **48+ API Endpoints**: Production-ready
+- **16,500+ LOC**: Fully implemented
+- **160+ Tests**: 95%+ coverage
+- **Complete Docs**: Architecture, API, guides
+- **v10.0.0 Roadmap**: 12-week integration plan
+
+### 🎯 Target (v10.0.0 "Unified")
+
+- **Single Backend**: app/ + src/ → backend/
+- **Single Frontend**: 4 frontends → 1 monorepo
+- **Code Deduplication**: 40-85% → <5%
+- **Structure Simplification**: 35+ dirs → 12 dirs
+- **Token Optimization**: 800K → 82K (-90%)
+- **Test Coverage**: 40-50% → 80%+
+
+---
+
+## 🏗️ 시스템 아키텍처
+
+### Current (v9.3.0)
+
+```
+┌─────────────────────────────────────────────────────────┐
+│             Client Applications                          │
+│  Browser | Mobile | Desktop | Server-to-Server          │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│                  API Gateway                             │
+│  REST | GraphQL | WebSocket | SSE | Socket.IO           │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│                  Service Layer                           │
+│  RAG | SaaS | Manufacturing | Collection | Realtime      │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│          Security & Observability                        │
+│  Keycloak | Vault | Jaeger | Prometheus | Grafana       │
+└─────────────────────────────────────────────────────────┘
+                          ↓
+┌─────────────────────────────────────────────────────────┐
+│                  Data Layer                              │
+│  PostgreSQL | Qdrant | Redis | ClickHouse | MinIO       │
+└─────────────────────────────────────────────────────────┘
+```
+
+### Target (v10.0.0)
+
+```
+new_rag_ubuntu/
+├── apps/                    # Multi-platform apps
+│   ├── web/                 # Next.js 14 (SSR + PWA)
+│   └── mobile/              # React Native + Expo
+├── packages/                # Shared packages
+│   ├── ui/                  # 27 components
+│   ├── core/                # Business logic
+│   └── config/              # Shared configs
+├── backend/                 # Unified Python backend
+│   ├── api/v1/              # Stable API
+│   ├── api/v2/              # Experimental
+│   └── services/            # Business services
+├── docs/                    # Documentation
+└── scripts/                 # Automation
+```
+
+---
+
+## 🛠️ 기술 스택
 
 ### Backend
 - **Python 3.11+**, FastAPI, Pydantic v2
 - PostgreSQL, Qdrant, Redis, ClickHouse, MinIO
 
-### ML/AI
-- **LLM**: NexaAI (Qwen3-1.7B/VL-4B) + Ollama (qwen2.5:7b)
-- **Embeddings**: Sentence Transformers (all-MiniLM-L6-v2, 384-dim)
-- **OCR**: PaddleOCR v2.7.0.3 + EasyOCR + Tesseract
-- **Vision**: YOLOv8/v10, TensorRT (Jetson), ONNX (Pi)
+### AI/ML
+- **LLM**: NexaAI (Qwen3), Ollama (qwen2.5, llama3.1)
+- **Embeddings**: Sentence Transformers
+- **OCR**: PaddleOCR, EasyOCR, Tesseract
+- **Vision**: YOLOv8/v10, TensorRT
 
-### Infrastructure (v7.0.0)
+### Frontend
+- **Framework**: Next.js 14, React 18, TypeScript
+- **UI**: Tailwind CSS, shadcn/ui
+- **State**: Zustand, React Query
+- **Monorepo**: Turborepo, pnpm
+
+### Infrastructure
+- **Container**: Docker, Kubernetes
 - **Security**: Keycloak, HashiCorp Vault
-- **Observability**: OpenTelemetry, Jaeger, Prometheus, Grafana
-- **Data Platform**: MinIO, Apache Airflow, Metabase
-- **CI/CD**: GitHub Actions (5 workflows)
-- **Deployment**: Docker Compose, Kubernetes ready
-
-### Realtime (v7.0.0+)
-- **WebSocket**: Socket.IO (python-socketio)
-- **Database**: PostgreSQL LISTEN/NOTIFY
-- **Messaging**: Redis Pub/Sub
-- **Clients**: JavaScript, Python
-
-**Full Stack**: [`docs/TECHNOLOGY_STACK.md`](docs/TECHNOLOGY_STACK.md)
+- **Observability**: Jaeger, Prometheus, Grafana
+- **Data**: Airflow, Kafka, Metabase
+- **CI/CD**: GitHub Actions
 
 ---
 
-## 💰 Cost Comparison
+## 📚 문서
 
-| Service Category | Our Solution | Commercial Alternative | Monthly Savings |
-|------------------|--------------|------------------------|-----------------|
-| **Realtime Backend** | Socket.IO + PostgreSQL + Redis | Convex | $25-200 |
-| **Authentication** | Keycloak | Auth0 | $240 |
-| **Secret Management** | Vault | AWS Secrets Manager | $40 |
-| **Distributed Tracing** | Jaeger | DataDog APM | $500 |
-| **Object Storage** | MinIO | AWS S3 | $50 |
-| **ETL Workflows** | Airflow | AWS Glue | $100 |
-| **Business Intelligence** | Metabase | Looker | $500 |
-| **Vector Database** | Qdrant | Pinecone | $70 |
-| **LLM Inference** | NexaAI/Ollama | OpenAI API | $200-1000 |
-| **Total** | **$0/month** | **$1,725-2,700/month** | **$1,725-2,700** |
+### 시작하기
+- **[QUICK_START.md](QUICK_START.md)** - 5분 시작 가이드
+- **[REPOSITORY_ANALYSIS_AND_ROADMAP.md](REPOSITORY_ANALYSIS_AND_ROADMAP.md)** - 종합 분석 및 발전 계획
 
-**Annual Savings**: $20,700-32,400+ 💸
+### 통합 계획 (v10.0.0)
+- **[COMPLETE_INTEGRATION_MASTER_PLAN.md](COMPLETE_INTEGRATION_MASTER_PLAN.md)** - 12주 통합 로드맵
+- **[BACKEND_MIGRATION_PLAN.md](BACKEND_MIGRATION_PLAN.md)** - Backend 통합 계획
+- **[FRONTEND_FILE_STRUCTURE_PLAN.md](FRONTEND_FILE_STRUCTURE_PLAN.md)** - Frontend 통합 계획
+- **[SUB_AGENTS_COLLABORATION_PLAN.md](SUB_AGENTS_COLLABORATION_PLAN.md)** - Sub-agent 협업 전략
 
-**Infrastructure costs** (AWS/GCP): ~$100-300/month depending on scale
-
----
-
-## 📚 Documentation
-
-### Quick Reference
-- **[CLAUDE.md](CLAUDE.md)** - Quick reference (390 lines, token-optimized)
-- **[README.md](README.md)** - This file (project overview)
-- **[PROGRESS.md](PROGRESS.md)** - Version history (v1.0.0 → v7.0.0+)
-
-### Symbol System (Token-Optimized)
-- **[SYMBOLS.md](docs/reference/SYMBOLS.md)** - Complete symbol map (215 lines, -79% reduction)
-
-### Guides
-- **[Quick Reference](docs/guides/QUICK_REFERENCE.md)** - Common commands
-- **[Local Setup](docs/guides/LOCAL_SETUP.md)** - Setup guide
-- **[Troubleshooting](docs/guides/TROUBLESHOOTING.md)** - Common issues
-- **[Deployment](docs/guides/DEPLOYMENT_GUIDE.md)** - Production deployment
-
-### Technical References
-- **[API Documentation](docs/reference/API_DOCUMENTATION.md)** - 48+ endpoints
-- **[Debug System](docs/reference/DEBUG_SYSTEM.md)** - Debug features
-
-### Architecture Deep Dives
-- **[v7.0.0 Complete Guide](docs/V7_COMPLETE_GUIDE.md)** - Ultimate platform guide
-- **[Realtime Backend](docs/REALTIME_BACKEND_GUIDE.md)** - Convex-like realtime
-- **[SaaS Platform](docs/SAAS_ARCHITECTURE.md)** - Multi-tenancy & billing
-- **[RAG System](docs/RAG_ACTIVATION_STRATEGY.md)** - RAG implementation
-- **[Data Collector](docs/DATA_COLLECTOR_ARCHITECTURE.md)** - Universal collection
-- **[Manufacturing](docs/MANUFACTURING_AUTOMATION.md)** - Vision inspection
-- **[Open Source Stack](docs/OPEN_SOURCE_ARCHITECTURE.md)** - $0/month stack
+### 상세 문서 (docs/)
+- Architecture guides
+- API documentation
+- Developer guides
+- Deployment guides
 
 ---
 
-## 🧪 Testing
+## 🗺️ 로드맵
 
-\`\`\`bash
-# Run all tests
-pytest tests/ -v
+### Phase 0: 초기화 (이번 주)
+- [x] Repository 분석
+- [x] v9.3.0 코드 확보 (claude-code-mac)
+- [x] 발전 계획 수립
+- [ ] 코드 merge
+- [ ] 환경 검증
+- [ ] 문서 정독
 
-# With coverage
-pytest tests/ --cov=src --cov=app --cov-report=html
+### Phase 1-7: v10.0.0 통합 (12주)
 
-# Specific module
-pytest tests/test_search.py -v
+| Week | Phase | Focus |
+|------|-------|-------|
+| 1 | Discovery | 분석 및 계획 |
+| 2-3 | Backend | app/ + src/ → backend/ |
+| 4-5 | Frontend | 구조 최적화 |
+| 6-9 | Migration | HTML → React |
+| 10 | Services | TypeScript 서비스 |
+| 11 | Testing | 80%+ coverage |
+| 12 | Deploy | 문서 + 배포 |
 
-# Using Makefile
-make test
-make test-cov
-\`\`\`
-
-**Test Coverage**: 160+ tests, 95%+ coverage
-
----
-
-## 🚢 Deployment
-
-### Docker Compose (Development/Staging)
-
-\`\`\`bash
-# Start all services
-docker-compose up -d
-
-# Check health
-curl http://localhost:8001/health/ready
-
-# View logs
-docker-compose logs -f api
-\`\`\`
-
-### Kubernetes (Production)
-
-\`\`\`bash
-# Apply configurations
-kubectl apply -f k8s/
-
-# Check status
-kubectl get pods -n rag-enterprise
-
-# Scale
-kubectl scale deployment api --replicas=5
-\`\`\`
-
-**Full Deployment Guide**: [`docs/guides/DEPLOYMENT_GUIDE.md`](docs/guides/DEPLOYMENT_GUIDE.md)
+**상세 계획**: [REPOSITORY_ANALYSIS_AND_ROADMAP.md](REPOSITORY_ANALYSIS_AND_ROADMAP.md)
 
 ---
 
-## 🤝 Contributing
+## 💡 주요 특징
 
-We welcome contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+### v9.3.0 (현재)
+
+✅ **RAG System**
+- Multi-modal search (text + image + shape)
+- OCR pipeline (3-engine fallback)
+- Hybrid search (dense + BM25 + reranking)
+- 471 products → 3,246 semantic chunks
+
+✅ **SaaS Platform**
+- Multi-tenancy with Row-Level Security
+- JWT + API key authentication
+- Stripe billing integration
+- Usage tracking & rate limiting
+
+✅ **Manufacturing**
+- Vision inspection (YOLOv8/v10)
+- 7 defect types detection
+- Edge AI (Jetson 120 FPS, Pi 15 FPS)
+- SPC monitoring
+
+✅ **Real-time**
+- Socket.IO reactive queries
+- PostgreSQL LISTEN/NOTIFY
+- WebSocket <10ms latency
+- 10,000+ concurrent connections
+
+### v10.0.0 (목표)
+
+✅ **Unified Architecture**
+- Single backend (backend/)
+- Single frontend (apps/)
+- Monorepo structure
+- <5% code duplication
+
+✅ **Developer Experience**
+- 90% token savings (Claude Code)
+- <5 min build time
+- Hot reload <2s
+- 80%+ test coverage
+
+✅ **Production Quality**
+- Comprehensive testing
+- Full documentation
+- CI/CD automation
+- Performance benchmarks
 
 ---
 
-## 📝 License
+## 📊 성능 메트릭
 
-MIT License - see [LICENSE](LICENSE) for details.
+### Current (v9.3.0)
+
+| Metric | Value |
+|--------|-------|
+| Services | 17 containers |
+| API Endpoints | 48+ |
+| Code | 16,500+ lines |
+| Tests | 160+ (95%+ coverage) |
+| Response Time | <500ms (NexaAI) |
+| WebSocket Latency | <10ms |
+| Search Quality | 0.79-0.82 similarity |
+
+### Target (v10.0.0)
+
+| Metric | Target |
+|--------|--------|
+| Code Duplication | <5% |
+| Build Time | <5 min |
+| Test Coverage | 80%+ |
+| Token Usage | -90% |
+| Maintenance Cost | -60% |
 
 ---
 
-## 🙏 Acknowledgments
+## 🤝 기여하기
 
-Built with ❤️ using 100% open source technologies:
-- FastAPI, PostgreSQL, Redis, Qdrant, ClickHouse, Kafka
+프로젝트는 현재 초기화 단계입니다. 기여를 환영합니다!
+
+### 현재 우선순위
+
+1. **Phase 0 완료**: claude-code-mac 코드 merge
+2. **문서 정독**: 통합 계획 이해
+3. **환경 검증**: Docker services 확인
+4. **Phase 1 준비**: Discovery 단계 준비
+
+### 다음 단계
+
+- Week 1: Discovery & Planning
+- Week 2-3: Backend Unification
+- Week 4-5: Frontend Consolidation
+
+**상세**: [REPOSITORY_ANALYSIS_AND_ROADMAP.md](REPOSITORY_ANALYSIS_AND_ROADMAP.md)
+
+---
+
+## 📝 라이선스
+
+MIT License - 자유롭게 사용, 수정, 배포 가능
+
+---
+
+## 🙏 감사
+
+100% 오픈소스 기술로 구축:
+- FastAPI, PostgreSQL, Redis, Qdrant, ClickHouse
 - Socket.IO, Keycloak, Vault, Jaeger, Prometheus, Grafana
 - MinIO, Airflow, Metabase, Docker, Kubernetes
+- React, Next.js, Turborepo
 
 ---
 
-## 📞 Support
+## 📞 지원
 
-- **Documentation**: All docs in `docs/` directory
-- **Issues**: Open an issue for bugs or feature requests
-- **Discussions**: Use GitHub Discussions for questions
+- **Documentation**: [docs/](docs/) directory
+- **Quick Start**: [QUICK_START.md](QUICK_START.md)
+- **Roadmap**: [REPOSITORY_ANALYSIS_AND_ROADMAP.md](REPOSITORY_ANALYSIS_AND_ROADMAP.md)
+- **Integration Plan**: [COMPLETE_INTEGRATION_MASTER_PLAN.md](COMPLETE_INTEGRATION_MASTER_PLAN.md)
 
 ---
 
-**v7.0.0+** | **2025-11-09** | **Production Ready** | **$0/month** | **MIT License**
+**Status**: 🚀 Ready to Start
+**Next Step**: [QUICK_START.md](QUICK_START.md)
+**Target**: v10.0.0 "Unified" in 12 weeks (or 7 weeks with sub-agents)
 
-**Quick Start**: `./scripts/deploy-optimized.sh development && open http://localhost:8080/realtime-demo.html`
-**Documentation**: See `docs/` directory or use `§symbols` for token-efficient navigation
+**From**: Empty repository
+**Via**: claude-code-mac v9.3.0
+**To**: Production-grade unified platform
+
+**Let's build! 🚀**
