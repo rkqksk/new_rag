@@ -47,6 +47,7 @@ from apps.api.core.logging import get_logger, setup_logging
 from apps.api.middleware.performance_timing import PerformanceTimingMiddleware
 from apps.api.middleware.request_logging import RequestLoggingMiddleware
 from apps.api.middleware.request_tracing import RequestTracingMiddleware
+from apps.api.middleware.smart_cache import SmartCacheMiddleware  # v11.0.0 Smart Caching
 
 # v7.0.0+ Realtime Backend (Convex-like functionality)
 try:
@@ -127,7 +128,16 @@ app.add_middleware(
     excluded_paths=["/health", "/docs", "/openapi.json", "/redoc", "/socket.io"],
 )
 
+# 9. Smart caching middleware (v11.0.0) - Redis + NGINX intelligent caching
+app.add_middleware(
+    SmartCacheMiddleware,
+    redis_url=settings.redis_url,
+    default_ttl=300,  # 5 minutes default
+    enable_warming=True,  # Pre-warm popular queries
+)
+
 app_logger.info("🛡️  Phase 9 middleware enabled (Analytics, Error Tracking, Rate Limiting)")
+app_logger.info("⚡ v11.0.0 Smart Caching enabled (Redis + NGINX, $0/month)")
 
 # ============================================================================
 # Exception Handlers
