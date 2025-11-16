@@ -8,14 +8,12 @@ from pydantic import BaseModel
 from apps.api.core.config import settings
 from apps.api.dependencies.database import get_postgres_repo, get_qdrant_repo, get_redis_repo
 from apps.api.dependencies.services import (
-    get_analytics_service,
     get_personalization_service,
     get_search_service,
 )
 from apps.api.repositories.postgres_repository import PostgresRepository
 from apps.api.repositories.qdrant_repository import QdrantRepository
 from apps.api.repositories.redis_repository import RedisRepository
-from apps.api.services.analytics_service import AnalyticsService
 from apps.api.services.personalization_service import PersonalizationService
 from apps.api.services.search_service import SearchService
 

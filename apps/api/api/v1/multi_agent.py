@@ -25,7 +25,10 @@ from typing import Dict, List, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
-from apps.api.services.multi_agent_system import MultiAgentOrchestrator, create_multi_agent_orchestrator
+from apps.api.services.multi_agent_system import (
+    MultiAgentOrchestrator,
+    create_multi_agent_orchestrator,
+)
 
 logger = logging.getLogger(__name__)
 

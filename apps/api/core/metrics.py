@@ -1,6 +1,6 @@
 """Metrics Collection and Management"""
 
-from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
+from prometheus_client import generate_latest
 
 from apps.api.core.prometheus_metrics import registry
 

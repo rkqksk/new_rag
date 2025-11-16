@@ -20,8 +20,6 @@ from pydantic import BaseModel, Field
 
 from apps.api.services.rag_optimizer import RAGOptimizer
 from apps.api.services.conversational_memory import (
-    ConversationManager,
-    ConversationSummarizer,
     HistoryAwareSearcher,
     get_conversation_manager,
 )
@@ -451,7 +449,11 @@ async def reformulate_query(
             session_id=session_id, query=query, num_context_turns=num_context_turns
         )
 
-        return {"original_query": query, "reformulated_query": reformulated, "session_id": session_id}
+        return {
+            "original_query": query,
+            "reformulated_query": reformulated,
+            "session_id": session_id,
+        }
     except Exception as e:
         logger.error(f"Query reformulation failed: {e}")
         raise HTTPException(status_code=500, detail=f"Reformulation failed: {str(e)}")

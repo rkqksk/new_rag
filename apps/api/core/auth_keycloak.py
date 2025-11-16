@@ -16,11 +16,12 @@ Version: v7.0.0
 
 import logging
 import os
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 try:
     from keycloak import KeycloakOpenID, KeycloakAdmin
     from keycloak.exceptions import KeycloakError
+
     KEYCLOAK_AVAILABLE = True
 except ImportError:
     KEYCLOAK_AVAILABLE = False
@@ -117,9 +118,7 @@ class KeycloakClient:
             Token response with access_token, refresh_token, etc.
         """
         if not self.openid:
-            raise HTTPException(
-                status_code=503, detail="Keycloak not available"
-            )
+            raise HTTPException(status_code=503, detail="Keycloak not available")
 
         try:
             token = self.openid.token(username=username, password=password)
@@ -141,9 +140,7 @@ class KeycloakClient:
             Decoded token payload
         """
         if not self.openid:
-            raise HTTPException(
-                status_code=503, detail="Keycloak not available"
-            )
+            raise HTTPException(status_code=503, detail="Keycloak not available")
 
         try:
             # Verify token signature and expiration
@@ -170,9 +167,7 @@ class KeycloakClient:
             User information
         """
         if not self.openid:
-            raise HTTPException(
-                status_code=503, detail="Keycloak not available"
-            )
+            raise HTTPException(status_code=503, detail="Keycloak not available")
 
         try:
             user_info = self.openid.userinfo(token)
@@ -212,9 +207,7 @@ class KeycloakClient:
             New token response
         """
         if not self.openid:
-            raise HTTPException(
-                status_code=503, detail="Keycloak not available"
-            )
+            raise HTTPException(status_code=503, detail="Keycloak not available")
 
         try:
             new_token = self.openid.refresh_token(refresh_token)
@@ -226,28 +219,24 @@ class KeycloakClient:
             )
 
     # Admin operations
-    def create_user(
-        self, username: str, email: str, password: str, enabled: bool = True
-    ) -> str:
+    def create_user(self, username: str, email: str, password: str, enabled: bool = True) -> str:
         """Create new user (requires admin client)"""
         if not self.admin:
-            raise HTTPException(
-                status_code=503, detail="Admin operations not available"
-            )
+            raise HTTPException(status_code=503, detail="Admin operations not available")
 
         try:
-            user_id = self.admin.create_user({
-                "username": username,
-                "email": email,
-                "enabled": enabled,
-                "credentials": [{"type": "password", "value": password, "temporary": False}],
-            })
+            user_id = self.admin.create_user(
+                {
+                    "username": username,
+                    "email": email,
+                    "enabled": enabled,
+                    "credentials": [{"type": "password", "value": password, "temporary": False}],
+                }
+            )
             logger.info(f"Created user: {username}")
             return user_id
         except KeycloakError as e:
-            raise HTTPException(
-                status_code=400, detail=f"User creation failed: {str(e)}"
-            )
+            raise HTTPException(status_code=400, detail=f"User creation failed: {str(e)}")
 
     def get_user_by_username(self, username: str) -> Optional[Dict]:
         """Get user by username"""
@@ -320,6 +309,7 @@ def require_role(role: str):
         async def admin_route(user: dict = Depends(require_role("admin"))):
             return {"message": "Admin access"}
     """
+
     async def role_checker(
         token: str = Depends(oauth2_scheme),
         keycloak: KeycloakClient = Depends(get_keycloak_client),

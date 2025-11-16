@@ -174,9 +174,7 @@ class SearchAgent:
             import sys
             from pathlib import Path
 
-            skill_path = (
-                Path(__file__).parent.parent.parent / ".claude/skills/rag-pipeline/scripts"
-            )
+            skill_path = Path(__file__).parent.parent.parent / ".claude/skills/rag-pipeline/scripts"
             if str(skill_path) not in sys.path:
                 sys.path.insert(0, str(skill_path))
 
@@ -390,7 +388,9 @@ class SynthesisAgent:
             return f"검색 결과가 부족하여 비교할 수 없습니다. {len(results)}개의 제품만 발견되었습니다."
 
         top_products = results[:3]
-        product_names = [r.get("metadata", {}).get("product_name", "알 수 없음") for r in top_products]
+        product_names = [
+            r.get("metadata", {}).get("product_name", "알 수 없음") for r in top_products
+        ]
 
         answer = f"'{query}' 검색 결과, {len(results)}개의 제품을 발견했습니다.\n\n"
         answer += f"상위 제품 비교:\n"
@@ -402,9 +402,7 @@ class SynthesisAgent:
 
         return answer
 
-    def _synthesize_recommendation(
-        self, query: str, results: List[Dict], state: AgentState
-    ) -> str:
+    def _synthesize_recommendation(self, query: str, results: List[Dict], state: AgentState) -> str:
         """Synthesize recommendation answer"""
         if not results:
             return f"'{query}'에 대한 추천 제품을 찾지 못했습니다."

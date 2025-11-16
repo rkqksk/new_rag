@@ -29,7 +29,6 @@ from pydantic import BaseModel, Field
 
 from apps.api.core.dependencies import AppConfig, get_config
 from apps.api.core.health import (
-    ComponentHealth,
     HealthCheckOrchestrator,
     HealthStatus,
 )

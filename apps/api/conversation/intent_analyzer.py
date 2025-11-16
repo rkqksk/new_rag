@@ -4,7 +4,7 @@ Analyzes user queries to understand intent and extract criteria
 """
 
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 import httpx
 

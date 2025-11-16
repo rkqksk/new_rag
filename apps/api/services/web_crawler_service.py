@@ -6,15 +6,13 @@
 """
 
 import asyncio
-import json
 import logging
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 from uuid import uuid4
 
 import aiohttp
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options

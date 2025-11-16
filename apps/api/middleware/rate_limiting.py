@@ -23,10 +23,9 @@ Version: v6.0.0
 import logging
 import time
 from enum import Enum
-from typing import Optional
 
 import redis
-from fastapi import HTTPException, Request, status
+from fastapi import Request, status
 from fastapi.responses import JSONResponse
 
 logger = logging.getLogger(__name__)
@@ -140,9 +139,7 @@ class RateLimiter:
 
         # Calculate reset time
         oldest = self.redis_client.zrange(redis_key, 0, 0, withscores=True)
-        reset_time = (
-            int(oldest[0][1] + window_seconds) if oldest else int(now + window_seconds)
-        )
+        reset_time = int(oldest[0][1] + window_seconds) if oldest else int(now + window_seconds)
 
         remaining = max(0, max_requests - current_count - (1 if allowed else 0))
 

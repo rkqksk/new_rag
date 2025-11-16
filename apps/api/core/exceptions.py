@@ -2,7 +2,7 @@
 
 import json
 import traceback
-from typing import Any, Dict, Optional, Type
+from typing import Any, Dict, Optional
 
 from fastapi import HTTPException, status
 

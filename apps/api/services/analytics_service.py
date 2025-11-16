@@ -1,7 +1,6 @@
 """AnalyticsService - Complete Integration"""
 
 import logging
-from datetime import timedelta
 from typing import Any, Dict, List
 
 logger = logging.getLogger(__name__)

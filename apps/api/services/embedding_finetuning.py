@@ -23,13 +23,12 @@ import json
 import logging
 import random
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
 from sentence_transformers import (
     InputExample,
     SentenceTransformer,
-    evaluation,
     losses,
 )
 from sentence_transformers.evaluation import InformationRetrievalEvaluator
@@ -224,9 +223,7 @@ class EmbeddingFineTuner:
             self.model = SentenceTransformer(self.base_model)
             logger.info("Base model loaded successfully")
 
-    def prepare_training_data(
-        self, triplets: List[Tuple[str, str, str]]
-    ) -> List[InputExample]:
+    def prepare_training_data(self, triplets: List[Tuple[str, str, str]]) -> List[InputExample]:
         """
         Prepare training data from triplets
 
@@ -371,7 +368,11 @@ class EmbeddingEvaluator:
         return mrr
 
     def compute_recall_at_k(
-        self, queries: List[str], corpus: List[str], relevant_docs: Dict[str, List[int]], k: int = 10
+        self,
+        queries: List[str],
+        corpus: List[str],
+        relevant_docs: Dict[str, List[int]],
+        k: int = 10,
     ) -> float:
         """
         Compute Recall@K

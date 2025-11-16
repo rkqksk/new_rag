@@ -19,10 +19,9 @@ Stack:
 Version: v7.0.0+
 """
 
-import asyncio
 import json
 import logging
-from typing import Any, Callable, Dict, List, Optional, Set
+from typing import Any, Callable, Dict, Optional
 
 import socketio
 from fastapi import FastAPI
@@ -55,7 +54,7 @@ class RealtimeServer:
         """
         # Create Socket.IO server with async support
         self.sio = socketio.AsyncServer(
-            async_mode='asgi',
+            async_mode="asgi",
             cors_allowed_origins=cors_allowed_origins,
             logger=True,
             engineio_logger=True,
@@ -83,7 +82,7 @@ class RealtimeServer:
             """Handle client connection"""
             logger.info(f"Client connected: {sid}")
             self.subscriptions[sid] = {}
-            await self.sio.emit('connected', {'sid': sid}, room=sid)
+            await self.sio.emit("connected", {"sid": sid}, room=sid)
 
         @self.sio.event
         async def disconnect(sid):
@@ -104,14 +103,14 @@ class RealtimeServer:
             }
             """
             try:
-                query_name = data.get('query')
-                params = data.get('params', {})
+                query_name = data.get("query")
+                params = data.get("params", {})
                 query_id = f"{query_name}:{json.dumps(params, sort_keys=True)}"
 
                 # Store subscription
                 self.subscriptions[sid][query_id] = {
-                    'query': query_name,
-                    'params': params,
+                    "query": query_name,
+                    "params": params,
                 }
 
                 # Execute initial query
@@ -119,26 +118,30 @@ class RealtimeServer:
                     handler = self.query_handlers[query_name]
                     result = await handler(params)
 
-                    await self.sio.emit('query_result', {
-                        'query': query_name,
-                        'query_id': query_id,
-                        'data': result,
-                    }, room=sid)
+                    await self.sio.emit(
+                        "query_result",
+                        {
+                            "query": query_name,
+                            "query_id": query_id,
+                            "data": result,
+                        },
+                        room=sid,
+                    )
 
                     logger.info(f"Subscription created: {sid} -> {query_id}")
                 else:
-                    await self.sio.emit('error', {
-                        'message': f'Query handler not found: {query_name}'
-                    }, room=sid)
+                    await self.sio.emit(
+                        "error", {"message": f"Query handler not found: {query_name}"}, room=sid
+                    )
 
             except Exception as e:
                 logger.error(f"Subscribe error: {e}")
-                await self.sio.emit('error', {'message': str(e)}, room=sid)
+                await self.sio.emit("error", {"message": str(e)}, room=sid)
 
         @self.sio.event
         async def unsubscribe(sid, data):
             """Unsubscribe from query"""
-            query_id = data.get('query_id')
+            query_id = data.get("query_id")
             if sid in self.subscriptions and query_id in self.subscriptions[sid]:
                 del self.subscriptions[sid][query_id]
                 logger.info(f"Unsubscribed: {sid} from {query_id}")
@@ -155,25 +158,29 @@ class RealtimeServer:
             }
             """
             try:
-                function_name = data.get('function')
-                args = data.get('args', {})
+                function_name = data.get("function")
+                args = data.get("args", {})
 
                 if function_name in self.query_handlers:
                     handler = self.query_handlers[function_name]
                     result = await handler(args)
 
-                    await self.sio.emit('function_result', {
-                        'function': function_name,
-                        'result': result,
-                    }, room=sid)
+                    await self.sio.emit(
+                        "function_result",
+                        {
+                            "function": function_name,
+                            "result": result,
+                        },
+                        room=sid,
+                    )
                 else:
-                    await self.sio.emit('error', {
-                        'message': f'Function not found: {function_name}'
-                    }, room=sid)
+                    await self.sio.emit(
+                        "error", {"message": f"Function not found: {function_name}"}, room=sid
+                    )
 
             except Exception as e:
                 logger.error(f"Execute error: {e}")
-                await self.sio.emit('error', {'message': str(e)}, room=sid)
+                await self.sio.emit("error", {"message": str(e)}, room=sid)
 
     # ========================================================================
     # Query Registration
@@ -201,9 +208,11 @@ class RealtimeServer:
             async def get_products(params):
                 return await db.query(...)
         """
+
         def decorator(func: Callable):
             self.register_query(name, func)
             return func
+
         return decorator
 
     # ========================================================================
@@ -220,19 +229,23 @@ class RealtimeServer:
             # Find all subscriptions for this query
             for sid, subscriptions in self.subscriptions.items():
                 for query_id, subscription in subscriptions.items():
-                    if subscription['query'] == query_name:
+                    if subscription["query"] == query_name:
                         # Check if params match (if specified)
-                        if params is None or subscription['params'] == params:
+                        if params is None or subscription["params"] == params:
                             # Execute query and send update
                             if query_name in self.query_handlers:
                                 handler = self.query_handlers[query_name]
-                                result = await handler(subscription['params'])
+                                result = await handler(subscription["params"])
 
-                                await self.sio.emit('query_update', {
-                                    'query': query_name,
-                                    'query_id': query_id,
-                                    'data': result,
-                                }, room=sid)
+                                await self.sio.emit(
+                                    "query_update",
+                                    {
+                                        "query": query_name,
+                                        "query_id": query_id,
+                                        "data": result,
+                                    },
+                                    room=sid,
+                                )
 
                                 logger.debug(f"Broadcasted update: {query_id} to {sid}")
         except Exception as e:
@@ -279,6 +292,7 @@ def get_realtime_server() -> RealtimeServer:
 # ============================================================================
 # Convenience Decorators
 # ============================================================================
+
 
 def realtime_query(name: str):
     """

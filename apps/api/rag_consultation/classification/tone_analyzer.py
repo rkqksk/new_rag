@@ -18,7 +18,7 @@ Usage:
 
 import logging
 import re
-from typing import Dict, List, Tuple
+from typing import List, Tuple
 
 from apps.api.rag_consultation.models import (
     ExpertiseLevel,

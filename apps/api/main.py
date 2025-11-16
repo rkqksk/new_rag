@@ -8,8 +8,25 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from apps.api.api.routes import image_processing, excel, health, async_qa
-from apps.api.api.v1 import admin, analytics, analytics_realtime, debug, hybrid, multi_agent, personalization, rag_advanced, search, streaming
-from apps.api.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
+from apps.api.api.v1 import (
+    admin,
+    analytics,
+    analytics_realtime,
+    debug,
+    hybrid,
+    multi_agent,
+    personalization,
+    rag_advanced,
+    search,
+    streaming,
+)
+from apps.api.api import (
+    workflow_routes,
+    consultation,
+    dashboard_routes,
+    ingestion_routes,
+    query_routes,
+)
 from apps.api.routes import products, qa, inquiries, tracking
 from apps.api.api.v1 import saas
 from apps.api.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
@@ -18,7 +35,11 @@ from apps.api.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentica
 # v8.5.0 Phase 9 - Advanced Infrastructure
 from apps.api.api.routes import metrics, recommendations, search_ranking, websocket
 from apps.api.middleware.rate_limiting import RateLimitMiddleware, RateLimitTier, RateLimitAlgorithm
-from apps.api.middleware.error_tracking import ErrorTrackingMiddleware, RequestContextMiddleware, AnalyticsMiddleware
+from apps.api.middleware.error_tracking import (
+    ErrorTrackingMiddleware,
+    RequestContextMiddleware,
+    AnalyticsMiddleware,
+)
 
 from apps.api.core.config import settings
 from apps.api.core.exceptions import RAGEnterpriseException
@@ -32,6 +53,7 @@ try:
     from apps.api.realtime.socketio_server import RealtimeServer, get_realtime_server
     from apps.api.realtime.postgres_notify import get_notify_manager
     from apps.api.realtime.redis_pubsub import get_pubsub_manager
+
     REALTIME_AVAILABLE = True
 except ImportError as e:
     REALTIME_AVAILABLE = False
@@ -56,8 +78,9 @@ if REALTIME_AVAILABLE:
         realtime_server = get_realtime_server()
         # Mount Socket.IO as a sub-application
         import socketio
+
         socketio_asgi = socketio.ASGIApp(realtime_server.sio, other_asgi_app=app)
-        app.mount('/socket.io', socketio_asgi)
+        app.mount("/socket.io", socketio_asgi)
         app_logger.info("⚡ Socket.IO mounted at /socket.io (Convex-like realtime API)")
     except Exception as e:
         app_logger.warning(f"Could not mount Socket.IO: {e}")
@@ -101,7 +124,7 @@ app.add_middleware(
     default_tier=RateLimitTier.FREE,
     algorithm=RateLimitAlgorithm.SLIDING_WINDOW,
     identifier_strategy="user_id",  # Use user_id if authenticated, fall back to IP
-    excluded_paths=["/health", "/docs", "/openapi.json", "/redoc", "/socket.io"]
+    excluded_paths=["/health", "/docs", "/openapi.json", "/redoc", "/socket.io"],
 )
 
 app_logger.info("🛡️  Phase 9 middleware enabled (Analytics, Error Tracking, Rate Limiting)")
@@ -165,7 +188,11 @@ app.include_router(
 app.include_router(analytics.router, prefix=f"{settings.api_prefix}/analytics", tags=["analytics"])
 
 # Real-time Analytics routes (ClickHouse + Kafka pipeline) ⭐ NEW v6.0.0
-app.include_router(analytics_realtime.router, prefix=f"{settings.api_prefix}/analytics/realtime", tags=["analytics-realtime"])
+app.include_router(
+    analytics_realtime.router,
+    prefix=f"{settings.api_prefix}/analytics/realtime",
+    tags=["analytics-realtime"],
+)
 app_logger.info("📊 Real-time analytics enabled (ClickHouse + Kafka)")
 
 # Streaming routes (WebSocket + SSE for real-time LLM responses) ⭐ NEW v6.0.0
@@ -178,11 +205,14 @@ app_logger.info("🔍 Hybrid search enabled (Dense + BM25 + Cross-Encoder)")
 
 # Multi-Agent System routes (Orchestrated agent workflow) ⭐ NEW v6.0.0
 app.include_router(multi_agent.router, prefix=settings.api_prefix, tags=["multi-agent"])
-app_logger.info("🤖 Multi-agent system enabled (Router + Search + Reasoning + Synthesis + Validation)")
+app_logger.info(
+    "🤖 Multi-agent system enabled (Router + Search + Reasoning + Synthesis + Validation)"
+)
 
 # GraphQL API (Flexible type-safe querying) ⭐ NEW v6.0.0
 try:
     from apps.api.graphql import create_graphql_router
+
     graphql_router = create_graphql_router()
     app.include_router(graphql_router, prefix=settings.api_prefix)
     app_logger.info("🔷 GraphQL API enabled at /api/v1/graphql")
@@ -214,56 +244,32 @@ app_logger.info("⚙️  Admin endpoints enabled at /api/v1/admin")
 # Authentication - JWT-based user authentication (v8.0.0)
 # ============================================================================
 auth_router = create_auth_router()
-app.include_router(
-    auth_router,
-    prefix=settings.api_prefix,
-    tags=["Authentication"]
-)
+app.include_router(auth_router, prefix=settings.api_prefix, tags=["Authentication"])
 app_logger.info("🔐 JWT Authentication enabled at /api/v1/auth")
 
 # ============================================================================
 # Phase 9 - Advanced Infrastructure (v8.5.0)
 # ============================================================================
 # Metrics & Analytics API
-app.include_router(
-    metrics.router,
-    prefix=settings.api_prefix,
-    tags=["Metrics"]
-)
+app.include_router(metrics.router, prefix=settings.api_prefix, tags=["Metrics"])
 app_logger.info("📊 Metrics API enabled at /api/v1/metrics")
 
 # Recommendations API
-app.include_router(
-    recommendations.router,
-    prefix=settings.api_prefix,
-    tags=["Recommendations"]
-)
+app.include_router(recommendations.router, prefix=settings.api_prefix, tags=["Recommendations"])
 app_logger.info("🎯 Recommendations API enabled at /api/v1/recommendations")
 
 # Search Ranking API
-app.include_router(
-    search_ranking.router,
-    prefix=settings.api_prefix,
-    tags=["Search Ranking"]
-)
+app.include_router(search_ranking.router, prefix=settings.api_prefix, tags=["Search Ranking"])
 app_logger.info("🏆 Search Ranking API enabled at /api/v1/search")
 
 # WebSocket Notifications API
-app.include_router(
-    websocket.router,
-    prefix=settings.api_prefix,
-    tags=["WebSocket"]
-)
+app.include_router(websocket.router, prefix=settings.api_prefix, tags=["WebSocket"])
 app_logger.info("⚡ WebSocket Notifications API enabled at /api/v1/ws")
 
 # ============================================================================
 # SaaS Platform - Multi-Tenancy, Authentication, Billing
 # ============================================================================
-app.include_router(
-    saas.router,
-    prefix=f"{settings.api_prefix}/saas",
-    tags=["SaaS Platform"]
-)
+app.include_router(saas.router, prefix=f"{settings.api_prefix}/saas", tags=["SaaS Platform"])
 app_logger.info("🏢 SaaS Platform endpoints enabled at /api/v1/saas")
 
 # ============================================================================
@@ -351,7 +357,7 @@ async def readiness():
     return {
         "status": "ready" if all_healthy else "degraded",
         "debug_enabled": settings.debug_config.enabled,
-        "services": services_status
+        "services": services_status,
     }
 
 
@@ -401,6 +407,7 @@ async def startup_event():
             async def get_products(params):
                 """Get products by material"""
                 from apps.api.repositories.product_repository import ProductRepository
+
                 repo = ProductRepository()
                 material = params.get("material")
                 if material:
@@ -413,6 +420,7 @@ async def startup_event():
             async def get_search_results(params):
                 """Get search results"""
                 from apps.api.services.search_service import SearchService
+
                 service = SearchService()
                 query = params.get("query", "")
                 top_k = params.get("top_k", 5)
@@ -427,13 +435,11 @@ async def startup_event():
                 from apps.api.realtime.postgres_notify import setup_table_notifications
 
                 # Setup triggers for key tables
-                tables_to_watch = ['products', 'inquiries', 'qa_pairs']
+                tables_to_watch = ["products", "inquiries", "qa_pairs"]
                 for table in tables_to_watch:
                     try:
                         setup_table_notifications(
-                            notify_manager.connection,
-                            table,
-                            channel=f"{table}_changes"
+                            notify_manager.connection, table, channel=f"{table}_changes"
                         )
                         app_logger.info(f"✅ Database trigger created for table: {table}")
                     except Exception as e:
@@ -446,7 +452,7 @@ async def startup_event():
                     # Broadcast update to all subscribed clients
                     await realtime.broadcast_update("products", {})
 
-                notify_manager.listen('product_changes', handle_product_change)
+                notify_manager.listen("product_changes", handle_product_change)
                 notify_manager.start_listener_task()
                 app_logger.info("✅ PostgreSQL LISTEN/NOTIFY activated")
 
@@ -456,9 +462,9 @@ async def startup_event():
             # Subscribe to query updates from other servers
             async def handle_query_update(channel, message):
                 """Handle query updates from other servers"""
-                if message.get('type') == 'query_update':
-                    query_name = message.get('query')
-                    params = message.get('params')
+                if message.get("type") == "query_update":
+                    query_name = message.get("query")
+                    params = message.get("params")
                     await realtime.broadcast_update(query_name, params)
 
             await pubsub.subscribe_to_query_updates(handle_query_update)
@@ -482,14 +488,14 @@ async def shutdown_event():
     app_logger.info("👋 RAG Enterprise API shutting down...")
 
     # Cleanup realtime backend
-    if REALTIME_AVAILABLE and hasattr(app.state, 'realtime'):
+    if REALTIME_AVAILABLE and hasattr(app.state, "realtime"):
         try:
             # Stop PostgreSQL listener
-            if hasattr(app.state, 'notify_manager'):
+            if hasattr(app.state, "notify_manager"):
                 app.state.notify_manager.close()
 
             # Disconnect Redis Pub/Sub
-            if hasattr(app.state, 'pubsub'):
+            if hasattr(app.state, "pubsub"):
                 await app.state.pubsub.disconnect()
 
             app_logger.info("✅ Realtime backend cleaned up")

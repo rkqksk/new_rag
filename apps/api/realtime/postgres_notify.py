@@ -18,12 +18,13 @@ Version: v7.0.0+
 import asyncio
 import json
 import logging
-from typing import Any, Callable, Dict, List, Optional
+from typing import Callable, Dict, List, Optional
 
 try:
     import psycopg2
     from psycopg2 import pool
     from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
+
     PSYCOPG2_AVAILABLE = True
 except ImportError:
     PSYCOPG2_AVAILABLE = False
@@ -72,11 +73,11 @@ class PostgresNotifyManager:
             return
 
         self.connection_params = {
-            'host': host,
-            'port': port,
-            'database': database,
-            'user': user,
-            'password': password,
+            "host": host,
+            "port": port,
+            "database": database,
+            "user": user,
+            "password": password,
         }
 
         self.connection = None
@@ -281,11 +282,7 @@ def create_notify_trigger_sql(table: str, channel: str) -> str:
     return sql
 
 
-def setup_table_notifications(
-    connection,
-    table: str,
-    channel: Optional[str] = None
-):
+def setup_table_notifications(connection, table: str, channel: Optional[str] = None):
     """
     Setup database triggers for table notifications
 
@@ -323,6 +320,7 @@ def get_notify_manager() -> PostgresNotifyManager:
 
     if _notify_manager is None:
         import os
+
         host = os.getenv("POSTGRES_HOST", "localhost")
         port = int(os.getenv("POSTGRES_PORT", "5432"))
         database = os.getenv("POSTGRES_DB", "rag_enterprise")
@@ -355,7 +353,7 @@ if __name__ == "__main__":
     async def handle_product_change(channel, data):
         print(f"Product changed: {data}")
 
-    manager.listen('product_changes', handle_product_change)
+    manager.listen("product_changes", handle_product_change)
 
     # Start listening (in background)
     manager.start_listener_task()

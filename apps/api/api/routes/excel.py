@@ -7,7 +7,6 @@ import logging
 from typing import Any, Dict
 
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
 from qdrant_client import QdrantClient
 
 from apps.api.core.dependencies import get_qdrant_client

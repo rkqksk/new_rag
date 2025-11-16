@@ -2,7 +2,7 @@
 
 from typing import List, Optional
 
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, UploadFile
 from pydantic import BaseModel
 
 from apps.api.dependencies.services import get_search_service

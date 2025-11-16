@@ -21,7 +21,7 @@ Version: v6.0.0
 import json
 import logging
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import redis
@@ -448,7 +448,9 @@ class HistoryAwareSearcher:
             Reformulated query
         """
         # Get conversation context
-        context_turns = self.conversation_manager.get_context(session_id, num_turns=num_context_turns)
+        context_turns = self.conversation_manager.get_context(
+            session_id, num_turns=num_context_turns
+        )
 
         if not context_turns:
             return query
@@ -482,6 +484,7 @@ class HistoryAwareSearcher:
 
         # Capacities
         import re
+
         capacity_match = re.search(r"(\d+)\s*(ml|cc|L)", text, re.IGNORECASE)
         if capacity_match:
             entities.append(capacity_match.group(0))

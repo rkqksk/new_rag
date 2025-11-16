@@ -141,7 +141,7 @@ class QueryOptimizer:
 
         # Add expanded queries
         expanded = self.expand_query(query)
-        queries.extend(expanded[:num_queries - 1])
+        queries.extend(expanded[: num_queries - 1])
 
         # Add question variations
         if not query.endswith("?"):
@@ -291,7 +291,9 @@ class ContextCompressor:
         scores = np.dot(sentence_embeddings, query_embedding)
         return scores
 
-    def remove_redundancy(self, documents: List[Dict[str, Any]], threshold: float = 0.9) -> List[Dict[str, Any]]:
+    def remove_redundancy(
+        self, documents: List[Dict[str, Any]], threshold: float = 0.9
+    ) -> List[Dict[str, Any]]:
         """
         Remove redundant documents based on similarity
 
@@ -392,7 +394,9 @@ class CitationTracker:
         sentences = re.split(r"[.!?。！？]\s*", text)
         return [s.strip() for s in sentences if s.strip()]
 
-    def _find_best_source(self, sentence: str, sources: List[Dict[str, Any]]) -> Optional[Dict[str, Any]]:
+    def _find_best_source(
+        self, sentence: str, sources: List[Dict[str, Any]]
+    ) -> Optional[Dict[str, Any]]:
         """
         Find best matching source for sentence
 
@@ -448,9 +452,7 @@ class AnswerVerifier:
         self.model = model
         logger.info("AnswerVerifier initialized")
 
-    def verify(
-        self, answer: str, sources: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def verify(self, answer: str, sources: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Verify answer against sources
 
@@ -468,10 +470,12 @@ class AnswerVerifier:
         verified_facts = []
         for fact in facts:
             is_verified = self._verify_fact(fact, sources)
-            verified_facts.append({
-                "fact": fact,
-                "verified": is_verified,
-            })
+            verified_facts.append(
+                {
+                    "fact": fact,
+                    "verified": is_verified,
+                }
+            )
 
         # Compute overall confidence
         if verified_facts:
@@ -599,9 +603,7 @@ class RAGOptimizer:
         """Add citations to answer"""
         return self.citation_tracker.add_citations(answer, sources)
 
-    def verify_answer(
-        self, answer: str, sources: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def verify_answer(self, answer: str, sources: List[Dict[str, Any]]) -> Dict[str, Any]:
         """Verify answer accuracy"""
         return self.answer_verifier.verify(answer, sources)
 

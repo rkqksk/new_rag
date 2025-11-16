@@ -16,9 +16,9 @@ Features:
 
 import asyncio
 import logging
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
 from .auth_manager import AuthCredentials, AuthenticationManager, AuthType

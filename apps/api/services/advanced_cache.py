@@ -24,7 +24,7 @@ import hashlib
 import json
 import logging
 import pickle
-from functools import lru_cache, wraps
+from functools import wraps
 from typing import Any, Callable, Optional
 
 import redis
@@ -64,9 +64,7 @@ class MultiLayerCache:
         self.l1_cache = {}
         self.l1_access_order = []
 
-        logger.info(
-            f"MultiLayerCache initialized (L1 size={l1_size}, TTL={default_ttl}s)"
-        )
+        logger.info(f"MultiLayerCache initialized (L1 size={l1_size}, TTL={default_ttl}s)")
 
     def _make_key(self, prefix: str, *args, **kwargs) -> str:
         """Generate cache key from arguments"""

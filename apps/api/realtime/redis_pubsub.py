@@ -22,6 +22,7 @@ from typing import Any, Callable, Dict, List, Optional
 
 try:
     import aioredis
+
     AIOREDIS_AVAILABLE = True
 except ImportError:
     AIOREDIS_AVAILABLE = False
@@ -81,9 +82,7 @@ class RedisPubSubManager:
 
         try:
             self.redis = await aioredis.from_url(
-                self.redis_url,
-                encoding="utf-8",
-                decode_responses=True
+                self.redis_url, encoding="utf-8", decode_responses=True
             )
             self.pubsub = self.redis.pubsub()
             logger.info("✅ Connected to Redis for Pub/Sub")
@@ -135,12 +134,7 @@ class RedisPubSubManager:
         except Exception as e:
             logger.error(f"Failed to publish to {channel}: {e}")
 
-    async def publish_query_update(
-        self,
-        query_name: str,
-        params: Dict[str, Any],
-        data: Any
-    ):
+    async def publish_query_update(self, query_name: str, params: Dict[str, Any], data: Any):
         """
         Publish query update event
 
@@ -149,19 +143,17 @@ class RedisPubSubManager:
             params: Query parameters
             data: Updated data
         """
-        await self.publish('query_updates', {
-            'type': 'query_update',
-            'query': query_name,
-            'params': params,
-            'data': data,
-        })
+        await self.publish(
+            "query_updates",
+            {
+                "type": "query_update",
+                "query": query_name,
+                "params": params,
+                "data": data,
+            },
+        )
 
-    async def publish_data_change(
-        self,
-        table: str,
-        operation: str,
-        data: Dict[str, Any]
-    ):
+    async def publish_data_change(self, table: str, operation: str, data: Dict[str, Any]):
         """
         Publish database change event
 
@@ -170,12 +162,15 @@ class RedisPubSubManager:
             operation: INSERT/UPDATE/DELETE
             data: Changed data
         """
-        await self.publish('data_changes', {
-            'type': 'data_change',
-            'table': table,
-            'operation': operation,
-            'data': data,
-        })
+        await self.publish(
+            "data_changes",
+            {
+                "type": "data_change",
+                "table": table,
+                "operation": operation,
+                "data": data,
+            },
+        )
 
     # ========================================================================
     # Subscribing
@@ -247,9 +242,9 @@ class RedisPubSubManager:
 
         try:
             async for message in self.pubsub.listen():
-                if message['type'] == 'message':
-                    channel = message['channel']
-                    payload = message['data']
+                if message["type"] == "message":
+                    channel = message["channel"]
+                    payload = message["data"]
 
                     logger.debug(f"Received message: {channel} -> {payload}")
 
@@ -279,11 +274,11 @@ class RedisPubSubManager:
 
     async def subscribe_to_query_updates(self, callback: Callable):
         """Subscribe to query update events"""
-        await self.subscribe('query_updates', callback)
+        await self.subscribe("query_updates", callback)
 
     async def subscribe_to_data_changes(self, callback: Callable):
         """Subscribe to data change events"""
-        await self.subscribe('data_changes', callback)
+        await self.subscribe("data_changes", callback)
 
 
 # ============================================================================
@@ -299,6 +294,7 @@ async def get_pubsub_manager() -> RedisPubSubManager:
 
     if _pubsub_manager is None:
         import os
+
         redis_host = os.getenv("REDIS_HOST", "localhost")
         redis_port = os.getenv("REDIS_PORT", "6379")
         redis_url = os.getenv("REDIS_URL", f"redis://{redis_host}:{redis_port}")
@@ -314,6 +310,7 @@ async def get_pubsub_manager() -> RedisPubSubManager:
 # ============================================================================
 
 if __name__ == "__main__":
+
     async def main():
         # Initialize manager
         manager = RedisPubSubManager()
@@ -323,13 +320,13 @@ if __name__ == "__main__":
         async def handle_update(channel, message):
             print(f"Received update: {message}")
 
-        await manager.subscribe('query_updates', handle_update)
+        await manager.subscribe("query_updates", handle_update)
 
         # Publish update
         await manager.publish_query_update(
-            query_name='products',
-            params={'material': 'PET'},
-            data=[{'id': '001', 'name': '50ml PET 용기'}]
+            query_name="products",
+            params={"material": "PET"},
+            data=[{"id": "001", "name": "50ml PET 용기"}],
         )
 
         # Keep running

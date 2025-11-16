@@ -4,7 +4,7 @@ Admin API Endpoints
 Provides administrative endpoints for system monitoring and configuration.
 """
 
-from typing import Dict, List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel

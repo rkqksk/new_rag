@@ -15,7 +15,7 @@ import asyncio
 import logging
 import random
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse

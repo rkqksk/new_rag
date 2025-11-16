@@ -3,8 +3,9 @@
 import logging
 from typing import Any, Dict, List
 
-from apps.api.core.recommendation import UserProfile
-from apps.api.core.recommendation.advanced_personalization_service import AdvancedPersonalizationService
+from apps.api.core.recommendation.advanced_personalization_service import (
+    AdvancedPersonalizationService,
+)
 
 logger = logging.getLogger(__name__)
 

@@ -7,12 +7,13 @@ timeouts, and service definitions.
 """
 
 from enum import Enum
-from typing import Dict, Any
+from typing import Dict
 from dataclasses import dataclass, field
 
 
 class ServicePriority(str, Enum):
     """Service execution priority levels"""
+
     HIGH = "high"
     MEDIUM = "medium"
     LOW = "low"
@@ -20,6 +21,7 @@ class ServicePriority(str, Enum):
 
 class ServiceStatus(str, Enum):
     """Service lifecycle status"""
+
     INACTIVE = "inactive"
     ACTIVATING = "activating"
     ACTIVE = "active"
@@ -29,6 +31,7 @@ class ServiceStatus(str, Enum):
 
 class AgentType(str, Enum):
     """Sub-agent types for task dispatch"""
+
     EXPLORE = "explore"  # Code exploration and discovery
     GENERAL = "general"  # General-purpose tasks
     PLAN = "plan"  # Planning and architecture
@@ -36,6 +39,7 @@ class AgentType(str, Enum):
 
 class TaskComplexity(str, Enum):
     """Task complexity levels"""
+
     SIMPLE = "simple"
     MEDIUM = "medium"
     HIGH = "high"
@@ -44,6 +48,7 @@ class TaskComplexity(str, Enum):
 @dataclass
 class ResourceLimits:
     """System resource limits configuration"""
+
     cpu_percent_max: float = 80.0  # Maximum CPU usage (%)
     memory_gb_max: float = 8.0  # Maximum memory usage (GB)
     gpu_percent_max: float = 100.0  # Maximum GPU usage (%)
@@ -53,6 +58,7 @@ class ResourceLimits:
 @dataclass
 class ServiceConfig:
     """Configuration for a single service"""
+
     name: str
     module_path: str
     priority: ServicePriority
@@ -67,6 +73,7 @@ class ServiceConfig:
 @dataclass
 class AgentConfig:
     """Configuration for sub-agent pools"""
+
     agent_type: AgentType
     max_concurrent: int
     timeout_seconds: int = 300
@@ -76,6 +83,7 @@ class AgentConfig:
 @dataclass
 class OrchestrationConfig:
     """Main orchestration system configuration"""
+
     # Resource limits
     resources: ResourceLimits = field(default_factory=ResourceLimits)
 

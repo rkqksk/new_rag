@@ -7,7 +7,6 @@ import asyncio
 import logging
 import re
 from contextlib import asynccontextmanager
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -19,8 +18,6 @@ from sentence_transformers import SentenceTransformer
 from apps.api.utils.product_utils import (
     batch_validate_products,
     enrich_product_with_metadata,
-    generate_image_urls,
-    validate_product_integrity,
 )
 
 logger = logging.getLogger(__name__)

@@ -6,9 +6,9 @@ Fast crawling for static HTML websites (no JavaScript).
 
 import logging
 import random
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin
 
 import httpx
 from bs4 import BeautifulSoup

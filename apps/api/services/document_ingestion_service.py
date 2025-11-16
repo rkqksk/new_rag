@@ -5,9 +5,6 @@
 - Qdrant 벡터 DB 저장소 연동
 """
 
-import asyncio
-import csv
-import hashlib
 import json
 import logging
 import os
@@ -19,10 +16,6 @@ from uuid import uuid4
 
 import aiohttp
 import pandas as pd
-import pytesseract
-import requests
-from bs4 import BeautifulSoup
-from PIL import Image
 from qdrant_client.models import Distance, PointStruct, VectorParams
 from sentence_transformers import SentenceTransformer
 from unstructured.partition.html import partition_html

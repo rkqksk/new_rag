@@ -20,6 +20,7 @@ from typing import Any, Dict, Optional
 
 try:
     import hvac
+
     VAULT_AVAILABLE = True
 except ImportError:
     VAULT_AVAILABLE = False
@@ -79,9 +80,7 @@ class VaultClient:
     # KV Secrets v2
     # ========================================================================
 
-    def create_or_update_secret(
-        self, path: str, secret: Dict[str, Any]
-    ) -> bool:
+    def create_or_update_secret(self, path: str, secret: Dict[str, Any]) -> bool:
         """
         Create or update secret
 
@@ -181,9 +180,7 @@ class VaultClient:
     # Convenience Methods
     # ========================================================================
 
-    def get_database_credentials(
-        self, role: str = "rag-enterprise"
-    ) -> Optional[Dict[str, str]]:
+    def get_database_credentials(self, role: str = "rag-enterprise") -> Optional[Dict[str, str]]:
         """
         Get dynamic database credentials
 
@@ -222,6 +219,7 @@ class VaultClient:
 
         try:
             import base64
+
             encoded = base64.b64encode(plaintext.encode()).decode()
             response = self.client.secrets.transit.encrypt_data(
                 name=key_name,
@@ -248,6 +246,7 @@ class VaultClient:
 
         try:
             import base64
+
             response = self.client.secrets.transit.decrypt_data(
                 name=key_name,
                 ciphertext=ciphertext,

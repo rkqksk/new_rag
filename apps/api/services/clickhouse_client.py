@@ -27,6 +27,7 @@ from typing import Any, Dict, List, Optional
 
 try:
     from clickhouse_driver import Client
+
     CLICKHOUSE_AVAILABLE = True
 except ImportError:
     CLICKHOUSE_AVAILABLE = False
@@ -104,7 +105,8 @@ class ClickHouseClient:
             return
 
         # Search logs table
-        self.client.execute("""
+        self.client.execute(
+            """
             CREATE TABLE IF NOT EXISTS search_logs (
                 timestamp DateTime,
                 session_id String,
@@ -121,10 +123,12 @@ class ClickHouseClient:
             PARTITION BY toYYYYMM(date)
             ORDER BY (date, timestamp)
             TTL date + INTERVAL 90 DAY
-        """)
+        """
+        )
 
         # User events table
-        self.client.execute("""
+        self.client.execute(
+            """
             CREATE TABLE IF NOT EXISTS user_events (
                 timestamp DateTime,
                 session_id String,
@@ -138,10 +142,12 @@ class ClickHouseClient:
             PARTITION BY toYYYYMM(date)
             ORDER BY (date, timestamp)
             TTL date + INTERVAL 90 DAY
-        """)
+        """
+        )
 
         # Search quality metrics table
-        self.client.execute("""
+        self.client.execute(
+            """
             CREATE TABLE IF NOT EXISTS search_quality (
                 timestamp DateTime,
                 query String,
@@ -156,10 +162,12 @@ class ClickHouseClient:
             PARTITION BY toYYYYMM(date)
             ORDER BY (date, timestamp)
             TTL date + INTERVAL 90 DAY
-        """)
+        """
+        )
 
         # Performance metrics table
-        self.client.execute("""
+        self.client.execute(
+            """
             CREATE TABLE IF NOT EXISTS performance_metrics (
                 timestamp DateTime,
                 endpoint String,
@@ -173,7 +181,8 @@ class ClickHouseClient:
             PARTITION BY toYYYYMM(date)
             ORDER BY (date, timestamp)
             TTL date + INTERVAL 30 DAY
-        """)
+        """
+        )
 
         logger.info("✅ ClickHouse tables created")
 
@@ -205,18 +214,20 @@ class ClickHouseClient:
                  response_time_ms, search_strategy, filters, top_k, cache_hit)
                 VALUES
                 """,
-                [{
-                    "timestamp": datetime.now(),
-                    "session_id": session_id,
-                    "user_id": user_id,
-                    "query": query,
-                    "results_count": results_count,
-                    "response_time_ms": response_time_ms,
-                    "search_strategy": search_strategy,
-                    "filters": filters,
-                    "top_k": top_k,
-                    "cache_hit": 1 if cache_hit else 0,
-                }],
+                [
+                    {
+                        "timestamp": datetime.now(),
+                        "session_id": session_id,
+                        "user_id": user_id,
+                        "query": query,
+                        "results_count": results_count,
+                        "response_time_ms": response_time_ms,
+                        "search_strategy": search_strategy,
+                        "filters": filters,
+                        "top_k": top_k,
+                        "cache_hit": 1 if cache_hit else 0,
+                    }
+                ],
             )
         except Exception as e:
             logger.error(f"Failed to insert search log: {e}")
@@ -241,15 +252,17 @@ class ClickHouseClient:
                 (timestamp, session_id, user_id, event_type, event_data, product_id, query)
                 VALUES
                 """,
-                [{
-                    "timestamp": datetime.now(),
-                    "session_id": session_id,
-                    "user_id": user_id,
-                    "event_type": event_type,
-                    "event_data": event_data,
-                    "product_id": product_id,
-                    "query": query,
-                }],
+                [
+                    {
+                        "timestamp": datetime.now(),
+                        "session_id": session_id,
+                        "user_id": user_id,
+                        "event_type": event_type,
+                        "event_data": event_data,
+                        "product_id": product_id,
+                        "query": query,
+                    }
+                ],
             )
         except Exception as e:
             logger.error(f"Failed to insert user event: {e}")
@@ -275,16 +288,18 @@ class ClickHouseClient:
                 (timestamp, query, click_position, clicks, impressions, ctr, mrr, avg_similarity)
                 VALUES
                 """,
-                [{
-                    "timestamp": datetime.now(),
-                    "query": query,
-                    "click_position": click_position,
-                    "clicks": clicks,
-                    "impressions": impressions,
-                    "ctr": ctr,
-                    "mrr": mrr,
-                    "avg_similarity": avg_similarity,
-                }],
+                [
+                    {
+                        "timestamp": datetime.now(),
+                        "query": query,
+                        "click_position": click_position,
+                        "clicks": clicks,
+                        "impressions": impressions,
+                        "ctr": ctr,
+                        "mrr": mrr,
+                        "avg_similarity": avg_similarity,
+                    }
+                ],
             )
         except Exception as e:
             logger.error(f"Failed to insert search quality: {e}")
@@ -309,15 +324,17 @@ class ClickHouseClient:
                 (timestamp, endpoint, method, status_code, response_time_ms, cpu_percent, memory_mb)
                 VALUES
                 """,
-                [{
-                    "timestamp": datetime.now(),
-                    "endpoint": endpoint,
-                    "method": method,
-                    "status_code": status_code,
-                    "response_time_ms": response_time_ms,
-                    "cpu_percent": cpu_percent,
-                    "memory_mb": memory_mb,
-                }],
+                [
+                    {
+                        "timestamp": datetime.now(),
+                        "endpoint": endpoint,
+                        "method": method,
+                        "status_code": status_code,
+                        "response_time_ms": response_time_ms,
+                        "cpu_percent": cpu_percent,
+                        "memory_mb": memory_mb,
+                    }
+                ],
             )
         except Exception as e:
             logger.error(f"Failed to insert performance metric: {e}")
@@ -326,9 +343,7 @@ class ClickHouseClient:
     # Query Methods
     # ========================================================================
 
-    def get_search_stats(
-        self, hours: int = 24
-    ) -> Dict[str, Any]:
+    def get_search_stats(self, hours: int = 24) -> Dict[str, Any]:
         """
         Get search statistics for last N hours
 
@@ -369,9 +384,7 @@ class ClickHouseClient:
 
         return self._mock_search_stats()
 
-    def get_top_queries(
-        self, hours: int = 24, limit: int = 10
-    ) -> List[Dict[str, Any]]:
+    def get_top_queries(self, hours: int = 24, limit: int = 10) -> List[Dict[str, Any]]:
         """Get most popular queries"""
         if not self.client:
             return self._mock_top_queries()
@@ -407,9 +420,7 @@ class ClickHouseClient:
 
         return self._mock_top_queries()
 
-    def get_hourly_search_trend(
-        self, hours: int = 24
-    ) -> List[Dict[str, Any]]:
+    def get_hourly_search_trend(self, hours: int = 24) -> List[Dict[str, Any]]:
         """Get hourly search volume trend"""
         if not self.client:
             return self._mock_hourly_trend()
@@ -442,9 +453,7 @@ class ClickHouseClient:
 
         return self._mock_hourly_trend()
 
-    def get_performance_by_strategy(
-        self, hours: int = 24
-    ) -> List[Dict[str, Any]]:
+    def get_performance_by_strategy(self, hours: int = 24) -> List[Dict[str, Any]]:
         """Get performance metrics by search strategy"""
         if not self.client:
             return self._mock_performance_by_strategy()
@@ -497,9 +506,24 @@ class ClickHouseClient:
     def _mock_top_queries(self) -> List[Dict[str, Any]]:
         """Mock top queries"""
         return [
-            {"query": "50ml PET 용기", "search_count": 45, "avg_response_time": 320.5, "avg_results": 92.0},
-            {"query": "100ml PP 용기", "search_count": 38, "avg_response_time": 295.3, "avg_results": 78.0},
-            {"query": "화장품 용기", "search_count": 32, "avg_response_time": 410.2, "avg_results": 156.0},
+            {
+                "query": "50ml PET 용기",
+                "search_count": 45,
+                "avg_response_time": 320.5,
+                "avg_results": 92.0,
+            },
+            {
+                "query": "100ml PP 용기",
+                "search_count": 38,
+                "avg_response_time": 295.3,
+                "avg_results": 78.0,
+            },
+            {
+                "query": "화장품 용기",
+                "search_count": 32,
+                "avg_response_time": 410.2,
+                "avg_results": 156.0,
+            },
         ]
 
     def _mock_hourly_trend(self) -> List[Dict[str, Any]]:
@@ -517,9 +541,24 @@ class ClickHouseClient:
     def _mock_performance_by_strategy(self) -> List[Dict[str, Any]]:
         """Mock performance by strategy"""
         return [
-            {"strategy": "dense", "count": 856, "avg_response_time": 298.5, "p95_response_time": 450.2},
-            {"strategy": "hybrid", "count": 312, "avg_response_time": 425.3, "p95_response_time": 680.1},
-            {"strategy": "hybrid+rerank", "count": 79, "avg_response_time": 1250.7, "p95_response_time": 1850.3},
+            {
+                "strategy": "dense",
+                "count": 856,
+                "avg_response_time": 298.5,
+                "p95_response_time": 450.2,
+            },
+            {
+                "strategy": "hybrid",
+                "count": 312,
+                "avg_response_time": 425.3,
+                "p95_response_time": 680.1,
+            },
+            {
+                "strategy": "hybrid+rerank",
+                "count": 79,
+                "avg_response_time": 1250.7,
+                "p95_response_time": 1850.3,
+            },
         ]
 
 

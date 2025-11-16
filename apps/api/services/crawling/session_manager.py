@@ -11,7 +11,6 @@ Features:
 - Multiple session storage
 """
 
-import asyncio
 import logging
 import pickle
 from dataclasses import dataclass, field

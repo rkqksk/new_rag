@@ -18,7 +18,7 @@ Version: v6.0.0
 """
 
 import logging
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Tuple
 
 import numpy as np
 from rank_bm25 import BM25Okapi
@@ -349,9 +349,7 @@ def create_hybrid_search_engine(
         Configured HybridSearchEngine instance
     """
     model = cross_encoder_model or "cross-encoder/ms-marco-MiniLM-L-6-v2"
-    return HybridSearchEngine(
-        cross_encoder_model=model, enable_cross_encoder=enable_cross_encoder
-    )
+    return HybridSearchEngine(cross_encoder_model=model, enable_cross_encoder=enable_cross_encoder)
 
 
 # ============================================================================

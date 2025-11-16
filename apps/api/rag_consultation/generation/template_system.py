@@ -19,7 +19,7 @@ Usage:
 """
 
 import logging
-from typing import Dict, Optional
+from typing import Dict
 
 from jinja2 import Template
 

@@ -20,8 +20,7 @@ Usage:
 import logging
 import re
 import uuid
-from datetime import datetime
-from typing import List, Optional
+from typing import Optional
 
 from apps.api.rag_consultation.context.context_store import ContextStore
 from apps.api.rag_consultation.models import (

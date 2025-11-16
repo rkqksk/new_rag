@@ -12,9 +12,7 @@ import httpx
 from .intent_analyzer import IntentAnalyzer
 from .states import (
     ConversationContext,
-    ConversationState,
     IntentType,
-    SearchCriteria,
     get_next_state,
 )
 

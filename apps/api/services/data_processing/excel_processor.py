@@ -14,13 +14,11 @@ Handles complex Excel files with:
 import io
 import logging
 from dataclasses import dataclass, field
-from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import openpyxl
 from openpyxl import load_workbook
-from openpyxl.utils import column_index_from_string, get_column_letter
+from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.worksheet import Worksheet
 from PIL import Image
 

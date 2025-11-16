@@ -4,7 +4,6 @@ Generates answers to product-specific questions using LLM
 Phase 1: 제품 속성 질문 응답 시스템
 """
 
-import json
 from typing import Any, Dict, Optional
 
 import httpx

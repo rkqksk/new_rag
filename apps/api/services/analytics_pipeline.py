@@ -24,7 +24,6 @@ Features:
 Version: v6.0.0
 """
 
-import asyncio
 import json
 import logging
 import os
@@ -34,6 +33,7 @@ from typing import Any, Dict, List, Optional
 try:
     from kafka import KafkaProducer, KafkaConsumer
     from kafka.errors import KafkaError
+
     KAFKA_AVAILABLE = True
 except ImportError:
     KAFKA_AVAILABLE = False

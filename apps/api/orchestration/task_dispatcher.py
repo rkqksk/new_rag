@@ -11,11 +11,9 @@ import logging
 from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 
 from .config import (
     AgentType,
-    AgentConfig,
     TaskComplexity,
     get_default_config,
 )
@@ -27,6 +25,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class Task:
     """Task definition for agent execution"""
+
     task_id: str
     description: str
     complexity: TaskComplexity
@@ -44,6 +43,7 @@ class Task:
 @dataclass
 class AgentInstance:
     """Running agent instance"""
+
     agent_id: str
     agent_type: AgentType
     status: str  # idle, busy, error
@@ -71,9 +71,7 @@ class TaskDispatcher:
         self.agent_pools: Dict[AgentType, List[AgentInstance]] = {
             agent_type: [] for agent_type in AgentType
         }
-        self.task_queue: Dict[AgentType, List[Task]] = {
-            agent_type: [] for agent_type in AgentType
-        }
+        self.task_queue: Dict[AgentType, List[Task]] = {agent_type: [] for agent_type in AgentType}
         self._task_counter = 0
         self._lock = asyncio.Lock()
 
@@ -89,7 +87,7 @@ class TaskDispatcher:
         complexity: Optional[TaskComplexity] = None,
         agent_type: Optional[AgentType] = None,
         *args,
-        **kwargs
+        **kwargs,
     ) -> tuple[bool, Any]:
         """
         Dispatch a task to an appropriate agent.
@@ -181,12 +179,12 @@ class TaskDispatcher:
         coroutines = []
         for task_def in tasks:
             coro = self.dispatch_task(
-                description=task_def.get('description', 'Parallel task'),
-                handler=task_def['handler'],
-                complexity=task_def.get('complexity'),
-                agent_type=agent_type or task_def.get('agent_type'),
-                *task_def.get('args', ()),
-                **task_def.get('kwargs', {}),
+                description=task_def.get("description", "Parallel task"),
+                handler=task_def["handler"],
+                complexity=task_def.get("complexity"),
+                agent_type=agent_type or task_def.get("agent_type"),
+                *task_def.get("args", ()),
+                **task_def.get("kwargs", {}),
             )
             coroutines.append(coro)
 
@@ -222,7 +220,7 @@ class TaskDispatcher:
 
             # Check for idle agents
             for agent in pool:
-                if agent.status == 'idle':
+                if agent.status == "idle":
                     return agent
 
             # Create new agent if under limit
@@ -231,7 +229,7 @@ class TaskDispatcher:
                 agent = AgentInstance(
                     agent_id=agent_id,
                     agent_type=agent_type,
-                    status='idle',
+                    status="idle",
                 )
                 pool.append(agent)
                 logger.info(f"Created new agent: {agent_id}")
@@ -252,7 +250,7 @@ class TaskDispatcher:
         """
         logger.info(f"Agent {agent.agent_id} executing task {task.task_id}")
 
-        agent.status = 'busy'
+        agent.status = "busy"
         agent.current_task = task
         task.started_at = datetime.utcnow()
 
@@ -281,7 +279,7 @@ class TaskDispatcher:
 
         finally:
             # Mark agent idle and process queue
-            agent.status = 'idle'
+            agent.status = "idle"
             agent.current_task = None
             await self._process_queue(task.agent_type)
 
@@ -320,15 +318,30 @@ class TaskDispatcher:
 
         # Simple task indicators
         simple_keywords = [
-            'get', 'fetch', 'read', 'list', 'show',
-            'display', 'view', 'check', 'status',
+            "get",
+            "fetch",
+            "read",
+            "list",
+            "show",
+            "display",
+            "view",
+            "check",
+            "status",
         ]
 
         # High complexity indicators
         high_keywords = [
-            'design', 'architect', 'plan', 'strategy',
-            'optimize', 'refactor', 'migrate', 'implement',
-            'multi-step', 'complex', 'advanced',
+            "design",
+            "architect",
+            "plan",
+            "strategy",
+            "optimize",
+            "refactor",
+            "migrate",
+            "implement",
+            "multi-step",
+            "complex",
+            "advanced",
         ]
 
         # Check for high complexity
@@ -342,11 +355,7 @@ class TaskDispatcher:
         # Default to medium
         return TaskComplexity.MEDIUM
 
-    def _select_agent_type(
-        self,
-        complexity: TaskComplexity,
-        description: str
-    ) -> AgentType:
+    def _select_agent_type(self, complexity: TaskComplexity, description: str) -> AgentType:
         """
         Select appropriate agent type based on complexity and description.
 
@@ -361,16 +370,29 @@ class TaskDispatcher:
 
         # Explore agent keywords
         explore_keywords = [
-            'explore', 'discover', 'find', 'search',
-            'investigate', 'analyze', 'understand',
-            'codebase', 'code', 'structure',
+            "explore",
+            "discover",
+            "find",
+            "search",
+            "investigate",
+            "analyze",
+            "understand",
+            "codebase",
+            "code",
+            "structure",
         ]
 
         # Plan agent keywords
         plan_keywords = [
-            'plan', 'design', 'architect', 'strategy',
-            'roadmap', 'organize', 'structure',
-            'multi-step', 'workflow',
+            "plan",
+            "design",
+            "architect",
+            "strategy",
+            "roadmap",
+            "organize",
+            "structure",
+            "multi-step",
+            "workflow",
         ]
 
         # Check for explore tasks
@@ -402,19 +424,19 @@ class TaskDispatcher:
             config = self.config.agents[agent_type]
             queue = self.task_queue[agent_type]
 
-            idle_count = sum(1 for a in pool if a.status == 'idle')
-            busy_count = sum(1 for a in pool if a.status == 'busy')
-            error_count = sum(1 for a in pool if a.status == 'error')
+            idle_count = sum(1 for a in pool if a.status == "idle")
+            busy_count = sum(1 for a in pool if a.status == "busy")
+            error_count = sum(1 for a in pool if a.status == "error")
 
             status[agent_type.value] = {
-                'max_concurrent': config.max_concurrent,
-                'current_agents': len(pool),
-                'idle': idle_count,
-                'busy': busy_count,
-                'error': error_count,
-                'queued_tasks': len(queue),
-                'total_tasks': sum(a.task_count for a in pool),
-                'total_errors': sum(a.error_count for a in pool),
+                "max_concurrent": config.max_concurrent,
+                "current_agents": len(pool),
+                "idle": idle_count,
+                "busy": busy_count,
+                "error": error_count,
+                "queued_tasks": len(queue),
+                "total_tasks": sum(a.task_count for a in pool),
+                "total_errors": sum(a.error_count for a in pool),
             }
 
         return status
@@ -426,10 +448,7 @@ class TaskDispatcher:
         Returns:
             Dictionary mapping agent type to queue length
         """
-        return {
-            agent_type.value: len(queue)
-            for agent_type, queue in self.task_queue.items()
-        }
+        return {agent_type.value: len(queue) for agent_type, queue in self.task_queue.items()}
 
     async def clear_queue(self, agent_type: Optional[AgentType] = None):
         """

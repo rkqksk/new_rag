@@ -8,19 +8,13 @@ import logging
 import os
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List
 
-import psycopg2
-import redis
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
-from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, PointStruct, VectorParams
-from sentence_transformers import SentenceTransformer
 
 # Import route handlers
 from apps.api.api import dashboard_routes, ingestion_routes, query_routes
@@ -34,12 +28,9 @@ from apps.api.api.routes import image as image_routes
 # Import dependency injection
 from apps.api.core.dependencies import (
     get_config,
-    get_consultation_service,
-    get_document_ingestion_service,
     get_embedding_model,
     get_qdrant_client,
     get_rag_qa_service,
-    get_redis_client,
 )
 
 # Import metrics
@@ -47,7 +38,7 @@ from apps.api.core.metrics import get_metrics_collector
 from apps.api.core.prometheus_metrics import metrics_endpoint
 
 # Import schemas
-from apps.api.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
+from apps.api.models.schemas import ConsultationRequest, QARequest
 
 # Note: workflow_routes has agent dependencies - loaded lazily if needed
 

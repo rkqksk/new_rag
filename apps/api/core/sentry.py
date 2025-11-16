@@ -13,7 +13,6 @@ Example:
     >>> app.add_middleware(SentryMiddleware)
 """
 
-import asyncio
 import hashlib
 import logging
 import os

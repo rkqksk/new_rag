@@ -10,7 +10,7 @@ Features:
 
 import io
 import logging
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
@@ -18,7 +18,6 @@ from PIL import Image
 
 from apps.api.core.ocr.image_preprocessor import ImagePreprocessor
 from apps.api.core.ocr.watermark_remover import (
-    WatermarkRemover,
     remove_color_watermark,
     remove_watermark,
 )
@@ -29,9 +28,7 @@ router = APIRouter(prefix="/api/v1/image", tags=["Image Processing"])
 
 @router.post("/remove-watermark")
 async def remove_watermark_endpoint(
-    image: UploadFile = File(
-        ..., description="Image with watermark (JPEG/PNG, max 10MB)"
-    ),
+    image: UploadFile = File(..., description="Image with watermark (JPEG/PNG, max 10MB)"),
     method: str = Form(
         "telea",
         description="Inpainting method: 'telea' (fast), 'ns' (quality), 'lama' (best)",
@@ -130,10 +127,7 @@ async def remove_watermark_endpoint(
         clean_image.save(output, format=output_format, quality=95)
         output.seek(0)
 
-        logger.info(
-            f"Watermark removal completed: {image.filename}, "
-            f"format={output_format}"
-        )
+        logger.info(f"Watermark removal completed: {image.filename}, " f"format={output_format}")
 
         # Return image
         media_type = f"image/{output_format.lower()}"
@@ -143,9 +137,7 @@ async def remove_watermark_endpoint(
         raise
     except Exception as e:
         logger.error(f"Watermark removal error: {e}", exc_info=True)
-        raise HTTPException(
-            status_code=500, detail=f"Watermark removal failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"Watermark removal failed: {str(e)}")
 
 
 @router.post("/remove-color-watermark")
@@ -154,9 +146,7 @@ async def remove_color_watermark_endpoint(
     color_r: int = Form(255, description="Red channel (0-255)", ge=0, le=255),
     color_g: int = Form(255, description="Green channel (0-255)", ge=0, le=255),
     color_b: int = Form(255, description="Blue channel (0-255)", ge=0, le=255),
-    tolerance: int = Form(
-        30, description="Color tolerance (0-255)", ge=0, le=255
-    ),
+    tolerance: int = Form(30, description="Color tolerance (0-255)", ge=0, le=255),
 ):
     """
     🎨 **Remove specific color watermarks**
@@ -253,9 +243,7 @@ async def preprocess_for_ocr_endpoint(
     **Cost**: $0/month (100% open-source)
     """
     try:
-        logger.info(
-            f"OCR preprocessing: {image.filename}, remove_watermark={remove_watermark}"
-        )
+        logger.info(f"OCR preprocessing: {image.filename}, remove_watermark={remove_watermark}")
 
         # Read image
         contents = await image.read()
@@ -285,6 +273,4 @@ async def preprocess_for_ocr_endpoint(
 
     except Exception as e:
         logger.error(f"OCR preprocessing error: {e}", exc_info=True)
-        raise HTTPException(
-            status_code=500, detail=f"OCR preprocessing failed: {str(e)}"
-        )
+        raise HTTPException(status_code=500, detail=f"OCR preprocessing failed: {str(e)}")

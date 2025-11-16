@@ -10,14 +10,13 @@ import asyncio
 import importlib
 import logging
 from typing import Dict, Any, Optional, Set
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from dataclasses import dataclass
+from datetime import datetime
 
 from .config import (
     ServiceStatus,
     ServiceConfig,
     get_default_config,
-    get_service_config,
 )
 from .resource_manager import ResourceManager
 
@@ -28,6 +27,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ServiceInstance:
     """Running service instance metadata"""
+
     name: str
     config: ServiceConfig
     status: ServiceStatus
@@ -82,8 +82,7 @@ class ServiceRouter:
 
         # Auto-activate services with auto_activate=True
         auto_activate_services = [
-            name for name, config in self.service_registry.items()
-            if config.auto_activate
+            name for name, config in self.service_registry.items() if config.auto_activate
         ]
 
         if auto_activate_services:
@@ -157,7 +156,10 @@ class ServiceRouter:
 
                 # Check dependencies
                 for dep in config.dependencies:
-                    if dep not in self.services or self.services[dep].status != ServiceStatus.ACTIVE:
+                    if (
+                        dep not in self.services
+                        or self.services[dep].status != ServiceStatus.ACTIVE
+                    ):
                         logger.warning(f"Dependency '{dep}' not active, attempting to activate")
                         dep_success, dep_message = await self.activate_service(dep)
                         if not dep_success:
@@ -169,11 +171,11 @@ class ServiceRouter:
                 try:
                     module = importlib.import_module(config.module_path)
                     # Try common initialization patterns
-                    if hasattr(module, 'get_service'):
+                    if hasattr(module, "get_service"):
                         service.instance = await module.get_service()
-                    elif hasattr(module, 'Service'):
+                    elif hasattr(module, "Service"):
                         service.instance = module.Service()
-                    elif hasattr(module, 'initialize'):
+                    elif hasattr(module, "initialize"):
                         service.instance = await module.initialize()
                     else:
                         service.instance = module
@@ -225,7 +227,10 @@ class ServiceRouter:
             if not force:
                 dependents = self._get_dependent_services(service_name)
                 if dependents:
-                    return False, f"Cannot deactivate: services {dependents} depend on '{service_name}'"
+                    return (
+                        False,
+                        f"Cannot deactivate: services {dependents} depend on '{service_name}'",
+                    )
 
             logger.info(f"Deactivating service: {service_name}")
             service.status = ServiceStatus.DEACTIVATING
@@ -238,12 +243,12 @@ class ServiceRouter:
 
                 # Graceful shutdown
                 if service.instance:
-                    if hasattr(service.instance, 'shutdown'):
+                    if hasattr(service.instance, "shutdown"):
                         try:
                             await service.instance.shutdown()
                         except Exception as e:
                             logger.warning(f"Error during service shutdown: {e}")
-                    elif hasattr(service.instance, 'close'):
+                    elif hasattr(service.instance, "close"):
                         try:
                             await service.instance.close()
                         except Exception as e:
@@ -264,11 +269,7 @@ class ServiceRouter:
                 return False, f"Deactivation failed: {e}"
 
     async def route_request(
-        self,
-        service_name: str,
-        method: str,
-        *args,
-        **kwargs
+        self, service_name: str, method: str, *args, **kwargs
     ) -> tuple[bool, Any]:
         """
         Route a request to the appropriate service.
@@ -283,7 +284,10 @@ class ServiceRouter:
             Tuple of (success, result/error)
         """
         # Activate service if not active
-        if service_name not in self.services or self.services[service_name].status != ServiceStatus.ACTIVE:
+        if (
+            service_name not in self.services
+            or self.services[service_name].status != ServiceStatus.ACTIVE
+        ):
             success, message = await self.activate_service(service_name)
             if not success:
                 logger.error(f"Failed to activate service for request: {message}")
@@ -306,7 +310,11 @@ class ServiceRouter:
                 return False, f"Method '{method}' not found on service '{service_name}'"
 
             method_func = getattr(service.instance, method)
-            result = await method_func(*args, **kwargs) if asyncio.iscoroutinefunction(method_func) else method_func(*args, **kwargs)
+            result = (
+                await method_func(*args, **kwargs)
+                if asyncio.iscoroutinefunction(method_func)
+                else method_func(*args, **kwargs)
+            )
 
             logger.debug(f"Request routed to {service_name}.{method} successfully")
 
@@ -383,7 +391,9 @@ class ServiceRouter:
             "status": service.status.value,
             "priority": service.config.priority.value,
             "activated_at": service.activated_at.isoformat() if service.activated_at else None,
-            "last_request_at": service.last_request_at.isoformat() if service.last_request_at else None,
+            "last_request_at": (
+                service.last_request_at.isoformat() if service.last_request_at else None
+            ),
             "request_count": service.request_count,
             "error_count": service.error_count,
             "idle_timeout_seconds": service.config.idle_timeout_seconds,
@@ -396,10 +406,7 @@ class ServiceRouter:
         Returns:
             Dictionary mapping service names to status info
         """
-        return {
-            name: self.get_service_status(name)
-            for name in self.services.keys()
-        }
+        return {name: self.get_service_status(name) for name in self.services.keys()}
 
     def list_available_services(self) -> Dict[str, ServiceConfig]:
         """

@@ -15,7 +15,6 @@ Version: v7.0.0
 """
 
 import logging
-import os
 from typing import Optional
 
 try:
@@ -28,6 +27,7 @@ try:
     from opentelemetry.instrumentation.requests import RequestsInstrumentor
     from opentelemetry.instrumentation.redis import RedisInstrumentor
     from opentelemetry.instrumentation.psycopg2 import Psycopg2Instrumentor
+
     OTEL_AVAILABLE = True
 except ImportError:
     OTEL_AVAILABLE = False
@@ -191,12 +191,15 @@ def trace_function(span_name: str = None):
         def my_function():
             pass
     """
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             name = span_name or f"{func.__module__}.{func.__name__}"
             with TracingContext(name):
                 return func(*args, **kwargs)
+
         return wrapper
+
     return decorator
 
 

@@ -18,11 +18,12 @@ import logging
 import os
 from datetime import timedelta
 from io import BytesIO
-from typing import BinaryIO, Dict, List, Optional, Union
+from typing import Dict, List, Optional
 
 try:
     from minio import Minio
     from minio.error import S3Error
+
     MINIO_AVAILABLE = True
 except ImportError:
     MINIO_AVAILABLE = False
@@ -216,9 +217,7 @@ class MinIOClient:
             logger.error(f"Upload failed: {e}")
             return False
 
-    def download_file(
-        self, bucket_name: str, object_name: str, file_path: str
-    ) -> bool:
+    def download_file(self, bucket_name: str, object_name: str, file_path: str) -> bool:
         """
         Download file from bucket
 

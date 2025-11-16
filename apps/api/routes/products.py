@@ -3,7 +3,6 @@ Product Routes
 Handles all product-related endpoints
 """
 
-from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
@@ -12,7 +11,6 @@ from apps.api.conversation import ConversationManager
 from apps.api.conversation.compatibility import find_compatible_accessories
 
 # Import models
-from apps.api.models.schemas import ProductSearchRequest
 from apps.api.services.ambiguity_detector import detect_ambiguity
 
 # Import services

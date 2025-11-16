@@ -56,6 +56,7 @@ def validate_installation():
             FeatureRegistry,
             OrchestrationConfig,
         )
+
         print("✓ All main classes exported")
     except ImportError as e:
         print(f"✗ Class export failed: {e}")
@@ -73,6 +74,7 @@ def validate_installation():
             FeatureCategory,
             FeatureStatus,
         )
+
         print("✓ All enums exported")
     except ImportError as e:
         print(f"✗ Enum export failed: {e}")

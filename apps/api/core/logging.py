@@ -1,11 +1,10 @@
 """Structured Logging with Context"""
 
-import json
 import logging
 import sys
 from contextvars import ContextVar
 from datetime import datetime
-from typing import Any, Dict, Optional
+from typing import Any, Optional
 
 from pythonjsonlogger import jsonlogger
 

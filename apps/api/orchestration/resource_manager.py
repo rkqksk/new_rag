@@ -28,6 +28,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ResourceAllocation:
     """Resource allocation for a service"""
+
     service_name: str
     cpu_cores: float
     memory_gb: float
@@ -39,6 +40,7 @@ class ResourceAllocation:
 @dataclass
 class SystemResources:
     """Current system resource usage"""
+
     cpu_percent: float
     memory_gb_used: float
     memory_gb_total: float
@@ -93,9 +95,7 @@ class ResourceManager:
             return
 
         logger.info(f"Starting resource monitoring (interval={interval_seconds}s)")
-        self.monitoring_task = asyncio.create_task(
-            self._monitor_loop(interval_seconds)
-        )
+        self.monitoring_task = asyncio.create_task(self._monitor_loop(interval_seconds))
 
     async def stop_monitoring(self):
         """Stop background resource monitoring."""
@@ -135,20 +135,18 @@ class ResourceManager:
         # Run blocking psutil calls in executor
         loop = asyncio.get_event_loop()
 
-        cpu_percent = await loop.run_in_executor(
-            None, psutil.cpu_percent, 0.1
-        )
+        cpu_percent = await loop.run_in_executor(None, psutil.cpu_percent, 0.1)
 
         memory = await loop.run_in_executor(None, psutil.virtual_memory)
-        disk = await loop.run_in_executor(None, psutil.disk_usage, '/')
+        disk = await loop.run_in_executor(None, psutil.disk_usage, "/")
 
         resources = SystemResources(
             cpu_percent=cpu_percent,
-            memory_gb_used=memory.used / (1024 ** 3),
-            memory_gb_total=memory.total / (1024 ** 3),
+            memory_gb_used=memory.used / (1024**3),
+            memory_gb_total=memory.total / (1024**3),
             memory_percent=memory.percent,
-            disk_gb_used=disk.used / (1024 ** 3),
-            disk_gb_total=disk.total / (1024 ** 3),
+            disk_gb_used=disk.used / (1024**3),
+            disk_gb_total=disk.total / (1024**3),
             disk_percent=disk.percent,
         )
 
@@ -193,13 +191,22 @@ class ResourceManager:
                 # Recalculate
                 total_cpu = sum(a.cpu_cores for a in self.allocations.values())
                 if total_cpu + requested_cpu > cpu_cores_available:
-                    return False, f"Insufficient CPU resources (need {requested_cpu}, available {cpu_cores_available - total_cpu})"
+                    return (
+                        False,
+                        f"Insufficient CPU resources (need {requested_cpu}, available {cpu_cores_available - total_cpu})",
+                    )
 
             if total_memory + service_config.memory_allocation_gb > self.limits.memory_gb_max:
-                return False, f"Insufficient memory (need {service_config.memory_allocation_gb}GB, max {self.limits.memory_gb_max}GB)"
+                return (
+                    False,
+                    f"Insufficient memory (need {service_config.memory_allocation_gb}GB, max {self.limits.memory_gb_max}GB)",
+                )
 
             if total_gpu + service_config.gpu_allocation > self.limits.gpu_percent_max / 100.0:
-                return False, f"Insufficient GPU resources (need {service_config.gpu_allocation}, max {self.limits.gpu_percent_max / 100.0})"
+                return (
+                    False,
+                    f"Insufficient GPU resources (need {service_config.gpu_allocation}, max {self.limits.gpu_percent_max / 100.0})",
+                )
 
             # Allocate resources
             allocation = ResourceAllocation(
@@ -264,7 +271,8 @@ class ResourceManager:
 
         # Find services with lower priority
         to_throttle = [
-            (name, alloc) for name, alloc in self.allocations.items()
+            (name, alloc)
+            for name, alloc in self.allocations.items()
             if priority_order[alloc.priority] < requesting_level
         ]
 
@@ -358,7 +366,8 @@ class ResourceManager:
                 "service_count": len(self.allocations),
             },
             "available": {
-                "cpu_cores": psutil.cpu_count() * (self.limits.cpu_percent_max / 100.0) - total_allocated_cpu,
+                "cpu_cores": psutil.cpu_count() * (self.limits.cpu_percent_max / 100.0)
+                - total_allocated_cpu,
                 "memory_gb": self.limits.memory_gb_max - total_allocated_memory,
                 "gpu_allocation": (self.limits.gpu_percent_max / 100.0) - total_allocated_gpu,
             },

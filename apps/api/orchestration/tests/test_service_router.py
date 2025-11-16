@@ -10,9 +10,6 @@ import asyncio
 from apps.api.orchestration import (
     ServiceRouter,
     ResourceManager,
-    ServiceStatus,
-    ServiceConfig,
-    ServicePriority,
 )
 
 
@@ -98,9 +95,7 @@ class TestServiceRouterWithMocks:
         # It will fail because the actual module doesn't exist,
         # but we're testing the routing logic
         success, result = await router.route_request(
-            service_name="rag",
-            method="search",
-            query="test"
+            service_name="rag", method="search", query="test"
         )
 
         # Should fail due to module import, but routing logic worked

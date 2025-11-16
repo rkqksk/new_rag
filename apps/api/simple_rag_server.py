@@ -5,7 +5,7 @@
 - 벡터 검색 + LLM 응답
 """
 
-from typing import List, Optional
+from typing import List
 
 import ollama
 import uvicorn

@@ -16,8 +16,6 @@ from sentence_transformers import SentenceTransformer
 from apps.api.utils.product_utils import (
     batch_validate_products,
     enrich_product_with_metadata,
-    generate_image_urls,
-    validate_product_integrity,
 )
 
 logger = logging.getLogger(__name__)

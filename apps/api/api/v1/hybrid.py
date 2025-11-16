@@ -19,7 +19,7 @@ import logging
 import time
 from typing import Dict, List, Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
 
 from apps.api.services.hybrid_search import HybridSearchEngine

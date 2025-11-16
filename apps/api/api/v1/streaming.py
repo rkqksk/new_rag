@@ -26,7 +26,6 @@ from typing import AsyncGenerator, Dict, Optional
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Query
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +117,9 @@ async def stream_llm_response(
         import sys
         from pathlib import Path
 
-        skill_path = Path(__file__).parent.parent.parent.parent / ".claude/skills/rag-pipeline/scripts"
+        skill_path = (
+            Path(__file__).parent.parent.parent.parent / ".claude/skills/rag-pipeline/scripts"
+        )
         if str(skill_path) not in sys.path:
             sys.path.insert(0, str(skill_path))
 
@@ -159,7 +160,9 @@ async def stream_llm_response(
             if metadata.get("capacity_value"):
                 capacity_unit = metadata.get("capacity_unit", "ml")
                 capacity_value = metadata["capacity_value"]
-                if isinstance(capacity_value, (int, float)) and capacity_value == int(capacity_value):
+                if isinstance(capacity_value, (int, float)) and capacity_value == int(
+                    capacity_value
+                ):
                     capacity_str = f"{int(capacity_value)}{capacity_unit}"
                 else:
                     capacity_str = f"{capacity_value}{capacity_unit}"
@@ -301,10 +304,7 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
                 materials = message.get("materials")
 
                 if not query:
-                    await websocket.send_json({
-                        "type": "error",
-                        "data": "Query is required"
-                    })
+                    await websocket.send_json({"type": "error", "data": "Query is required"})
                     continue
 
                 # Stream response
@@ -318,16 +318,17 @@ async def websocket_endpoint(websocket: WebSocket, session_id: str):
 
             elif message.get("type") == "ping":
                 # Keep-alive ping
-                await websocket.send_json({
-                    "type": "pong",
-                    "timestamp": asyncio.get_event_loop().time(),
-                })
+                await websocket.send_json(
+                    {
+                        "type": "pong",
+                        "timestamp": asyncio.get_event_loop().time(),
+                    }
+                )
 
             else:
-                await websocket.send_json({
-                    "type": "error",
-                    "data": f"Unknown message type: {message.get('type')}"
-                })
+                await websocket.send_json(
+                    {"type": "error", "data": f"Unknown message type: {message.get('type')}"}
+                )
 
     except WebSocketDisconnect:
         connection_manager.disconnect(session_id)

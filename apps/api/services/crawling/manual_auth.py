@@ -20,7 +20,7 @@ import pickle
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from playwright.async_api import Browser, BrowserContext, Page, async_playwright
+from playwright.async_api import async_playwright
 
 logger = logging.getLogger(__name__)
 

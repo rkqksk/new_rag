@@ -10,7 +10,7 @@ Handles common Excel parsing challenges:
 
 import logging
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict
 
 import openpyxl
 import pandas as pd

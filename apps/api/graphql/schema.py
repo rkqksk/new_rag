@@ -19,7 +19,6 @@ from typing import AsyncGenerator, List, Optional
 
 import strawberry
 from strawberry.fastapi import GraphQLRouter
-from strawberry.types import Info
 
 # ============================================================================
 # Types
@@ -207,7 +206,10 @@ class Query:
 
             # Build BM25 index
             documents = [{"metadata": source.get("metadata", {})} for source in result["sources"]]
-            dense_results = [(documents[i], source.get("score", 0.0)) for i, source in enumerate(result["sources"])]
+            dense_results = [
+                (documents[i], source.get("score", 0.0))
+                for i, source in enumerate(result["sources"])
+            ]
 
             if documents:
                 bm25_index = engine.build_bm25_index(documents)
@@ -221,7 +223,7 @@ class Query:
                 )
 
                 # Update products with hybrid scores
-                for i, (doc, score) in enumerate(hybrid_results[:len(products)]):
+                for i, (doc, score) in enumerate(hybrid_results[: len(products)]):
                     products[i].score = score
 
             strategy = "hybrid" + ("+rerank" if input.enable_reranking else "")
@@ -328,9 +330,7 @@ class Query:
             }
         """
         # TODO: Implement actual cache stats retrieval
-        return CacheStats(
-            hit_rate=0.68, total_requests=1000, cache_hits=680, cache_misses=320
-        )
+        return CacheStats(hit_rate=0.68, total_requests=1000, cache_hits=680, cache_misses=320)
 
     @strawberry.field
     async def rate_limit_info(self, api_key: Optional[str] = None) -> RateLimitInfo:

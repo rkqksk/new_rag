@@ -8,7 +8,6 @@ dependency injection system with lru_cache for singleton pattern.
 import logging
 import os
 from functools import lru_cache
-from typing import Optional
 
 import redis
 from fastapi import Depends

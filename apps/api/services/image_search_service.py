@@ -3,7 +3,6 @@ Image-based product search service using OpenCLIP embeddings
 """
 
 import logging
-import os
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -18,7 +17,6 @@ from qdrant_client import QdrantClient
 from apps.api.utils.product_utils import (
     batch_validate_products,
     enrich_product_with_metadata,
-    generate_image_urls,
 )
 
 logger = logging.getLogger(__name__)

@@ -15,8 +15,6 @@ Usage:
 """
 
 import logging
-import uuid
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from redis.asyncio import Redis
@@ -35,7 +33,6 @@ from apps.api.rag_consultation.context import (
 from apps.api.rag_consultation.generation import (
     PromptBuilder,
     ResponseGenerator,
-    TemplateSystem,
 )
 from apps.api.rag_consultation.models import (
     ConsultationRequest,
@@ -265,7 +262,7 @@ async def get_session_context(
         session_info = await conversation_manager.get_session_info(session_id)
         return session_info
 
-    except ValueError as e:
+    except ValueError:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail=f"Session not found: {session_id}",

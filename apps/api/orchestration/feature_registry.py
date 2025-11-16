@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 class FeatureCategory(str, Enum):
     """Feature categories"""
+
     RAG = "rag"
     MANUFACTURING = "manufacturing"
     DATA_COLLECTION = "data_collection"
@@ -32,6 +33,7 @@ class FeatureCategory(str, Enum):
 
 class FeatureStatus(str, Enum):
     """Feature status"""
+
     ACTIVE = "active"
     INACTIVE = "inactive"
     DEPRECATED = "deprecated"
@@ -41,6 +43,7 @@ class FeatureStatus(str, Enum):
 @dataclass
 class Feature:
     """Feature definition and tracking"""
+
     name: str
     category: FeatureCategory
     description: str
@@ -330,16 +333,16 @@ class FeatureRegistry:
 
         # Register all features
         all_features = (
-            rag_features +
-            manufacturing_features +
-            data_features +
-            analytics_features +
-            realtime_features +
-            saas_features +
-            security_features +
-            observability_features +
-            frontend_features +
-            api_features
+            rag_features
+            + manufacturing_features
+            + data_features
+            + analytics_features
+            + realtime_features
+            + saas_features
+            + security_features
+            + observability_features
+            + frontend_features
+            + api_features
         )
 
         for feature in all_features:
@@ -376,7 +379,9 @@ class FeatureRegistry:
         feature.activation_count += 1
         feature.last_activated_at = datetime.utcnow()
 
-        logger.info(f"Activated feature: {feature_name} (total activations: {feature.activation_count})")
+        logger.info(
+            f"Activated feature: {feature_name} (total activations: {feature.activation_count})"
+        )
         return True, f"Feature '{feature_name}' activated"
 
     def deactivate(self, feature_name: str, force: bool = False) -> tuple[bool, str]:
@@ -399,11 +404,13 @@ class FeatureRegistry:
         if not force:
             dependents = self._get_dependent_features(feature_name)
             active_dependents = [
-                name for name in dependents
-                if self.features[name].status == FeatureStatus.ACTIVE
+                name for name in dependents if self.features[name].status == FeatureStatus.ACTIVE
             ]
             if active_dependents:
-                return False, f"Cannot deactivate: features {active_dependents} depend on '{feature_name}'"
+                return (
+                    False,
+                    f"Cannot deactivate: features {active_dependents} depend on '{feature_name}'",
+                )
 
         # Deactivate
         feature.status = FeatureStatus.INACTIVE
@@ -419,7 +426,8 @@ class FeatureRegistry:
             List of active feature names
         """
         return [
-            name for name, feature in self.features.items()
+            name
+            for name, feature in self.features.items()
             if feature.status == FeatureStatus.ACTIVE
         ]
 
@@ -431,7 +439,8 @@ class FeatureRegistry:
             List of inactive feature names
         """
         return [
-            name for name, feature in self.features.items()
+            name
+            for name, feature in self.features.items()
             if feature.status == FeatureStatus.INACTIVE
         ]
 
@@ -445,10 +454,7 @@ class FeatureRegistry:
         Returns:
             List of feature names in category
         """
-        return [
-            name for name, feature in self.features.items()
-            if feature.category == category
-        ]
+        return [name for name, feature in self.features.items() if feature.category == category]
 
     def suggest_deactivations(self, min_activations: int = 10) -> List[str]:
         """
@@ -464,14 +470,16 @@ class FeatureRegistry:
 
         for name, feature in self.features.items():
             if (
-                feature.status == FeatureStatus.ACTIVE and
-                feature.activation_count < min_activations
+                feature.status == FeatureStatus.ACTIVE
+                and feature.activation_count < min_activations
             ):
                 # Don't suggest core features
-                if name not in ['rag_search', 'rest_api', 'jwt_auth', 'socketio_server']:
+                if name not in ["rag_search", "rest_api", "jwt_auth", "socketio_server"]:
                     suggestions.append(name)
 
-        logger.info(f"Suggested {len(suggestions)} features for deactivation (min_activations={min_activations})")
+        logger.info(
+            f"Suggested {len(suggestions)} features for deactivation (min_activations={min_activations})"
+        )
         return suggestions
 
     def get_feature_info(self, feature_name: str) -> Optional[Dict]:
@@ -494,7 +502,9 @@ class FeatureRegistry:
             "description": feature.description,
             "status": feature.status.value,
             "activation_count": feature.activation_count,
-            "last_activated_at": feature.last_activated_at.isoformat() if feature.last_activated_at else None,
+            "last_activated_at": (
+                feature.last_activated_at.isoformat() if feature.last_activated_at else None
+            ),
             "created_at": feature.created_at.isoformat(),
             "dependencies": feature.dependencies,
             "resource_requirements": feature.resource_requirements,
@@ -507,10 +517,7 @@ class FeatureRegistry:
         Returns:
             Dictionary mapping feature names to info
         """
-        return {
-            name: self.get_feature_info(name)
-            for name in self.features.keys()
-        }
+        return {name: self.get_feature_info(name) for name in self.features.keys()}
 
     def get_usage_statistics(self) -> Dict[str, any]:
         """
@@ -530,7 +537,8 @@ class FeatureRegistry:
         for category in FeatureCategory:
             category_features = self.get_features_by_category(category)
             active_in_category = sum(
-                1 for name in category_features
+                1
+                for name in category_features
                 if self.features[name].status == FeatureStatus.ACTIVE
             )
             by_category[category.value] = {

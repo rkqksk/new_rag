@@ -10,14 +10,16 @@ Integrates all existing systems:
 """
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from apps.api.core.enhancements.cross_encoder_reranker import CrossEncoderReranker
 from apps.api.core.enhancements.query_router import QueryRouter
 
 # Import existing systems from src/
 from apps.api.core.multimodal.multimodal_embedder import MultiModalEmbedder
-from apps.api.core.recommendation.advanced_personalization_service import AdvancedPersonalizationService
+from apps.api.core.recommendation.advanced_personalization_service import (
+    AdvancedPersonalizationService,
+)
 
 logger = logging.getLogger(__name__)
 
