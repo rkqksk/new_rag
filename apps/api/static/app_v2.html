@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>화장품 용기 스마트 상담 - 바로 찾고, 바로 문의하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 18px 24px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .search-examples {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .example-chip {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .example-chip:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Results Section */
+        .results-section {
+            flex: 1;
+        }
+
+        .results-header {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .results-count {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .load-more-btn {
+            padding: 10px 24px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .load-more-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .load-more-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Product Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+            background: #f9f9f9;
+        }
+
+        .product-info {
+            padding: 16px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .product-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-material {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-capacity {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .badge-code {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .product-specs {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .detail-btn {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .detail-btn:hover {
+            background: #764ba2;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #666;
+            cursor: pointer;
+            z-index: 10;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: #000;
+            background: #f0f0f0;
+        }
+
+        .modal-body {
+            padding: 40px;
+        }
+
+        .modal-header {
+            margin-bottom: 30px;
+        }
+
+        .modal-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .modal-subtitle {
+            font-size: 18px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        /* Image Gallery */
+        .image-gallery {
+            margin-bottom: 30px;
+        }
+
+        .gallery-main {
+            width: 100%;
+            height: 400px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 16px;
+            cursor: zoom-in;
+        }
+
+        .gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 8px 0;
+        }
+
+        .gallery-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            flex-shrink: 0;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .gallery-thumbnail:hover {
+            border-color: #667eea;
+        }
+
+        .gallery-thumbnail.active {
+            border-color: #667eea;
+        }
+
+        .gallery-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Product Details */
+        .detail-section {
+            margin-bottom: 30px;
+        }
+
+        .detail-section h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .detail-item {
+            padding: 16px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .detail-label {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .detail-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+
+        /* Image Zoom Modal */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+        }
+
+        .zoom-modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-content {
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .zoom-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+        }
+
+        .zoom-close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .zoom-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-size: 48px;
+            font-weight: bold;
+            cursor: pointer;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+
+        .zoom-prev {
+            left: 20px;
+        }
+
+        .zoom-next {
+            right: 20px;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            font-size: 16px;
+            color: #999;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 16px;
+            }
+
+            .modal-body {
+                padding: 24px;
+            }
+
+            .gallery-main {
+                height: 280px;
+            }
+
+            .detail-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🎨 화장품 용기 스마트 상담</h1>
+            <p>원하는 용기를 빠르게 찾고, 전문 상담을 받으세요</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput"
+                           placeholder="예: 50미리 페트, 100ml 유리병, 펌프 용기"
+                           onkeypress="if(event.key==='Enter') searchProducts()">
+                    <button class="search-btn" onclick="searchProducts()">🔍 검색</button>
+                </div>
+                <div class="search-examples">
+                    <span class="example-chip" onclick="quickSearch('50미리 페트')">50미리 페트</span>
+                    <span class="example-chip" onclick="quickSearch('100ml PE')">100ml PE</span>
+                    <span class="example-chip" onclick="quickSearch('펌프')">펌프</span>
+                    <span class="example-chip" onclick="quickSearch('자')">자</span>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="results-section">
+                <div class="results-header">
+                    <div class="results-count" id="resultsCount">검색 결과를 기다리고 있습니다</div>
+                    <button class="load-more-btn" id="loadMoreBtn" onclick="loadMore()" style="display: none;">
+                        더보기 (+6개)
+                    </button>
+                </div>
+
+                <div id="resultsContainer">
+                    <div class="empty-state">
+                        <h3>🔍 검색을 시작하세요</h3>
+                        <p>원하는 용기의 용량, 재질, 타입 등을 입력하세요</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeDetailModal()">&times;</span>
+            <div class="modal-body" id="modalBody">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Zoom Modal -->
+    <div id="zoomModal" class="zoom-modal">
+        <span class="zoom-close" onclick="closeZoomModal()">&times;</span>
+        <span class="zoom-nav zoom-prev" onclick="zoomPrev()">&#10094;</span>
+        <div class="zoom-content">
+            <img id="zoomImage" src="" alt="Zoomed Image">
+        </div>
+        <span class="zoom-nav zoom-next" onclick="zoomNext()">&#10095;</span>
+    </div>
+
+    <script>
+        // Global state
+        let allProducts = [];
+        let displayedProducts = [];
+        let currentPage = 0;
+        const productsPerPage = 6;
+        let currentDetailProduct = null;
+        let currentZoomImages = [];
+        let currentZoomIndex = 0;
+
+        // Search products
+        async function searchProducts() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) {
+                alert('검색어를 입력해주세요');
+                return;
+            }
+
+            showLoading();
+            currentPage = 0;
+            allProducts = [];
+            displayedProducts = [];
+
+            try {
+                // Fetch all matching products
+                const response = await fetch(`/api/v1/products/search?query=${encodeURIComponent(query)}&limit=100`);
+                const data = await response.json();
+
+                allProducts = data.products || [];
+
+                if (allProducts.length === 0) {
+                    showEmptyState(query);
+                } else {
+                    displayProducts();
+                }
+            } catch (error) {
+                console.error('Search error:', error);
+                alert('검색 중 오류가 발생했습니다');
+            }
+        }
+
+        // Quick search
+        function quickSearch(query) {
+            document.getElementById('searchInput').value = query;
+            searchProducts();
+        }
+
+        // Display products
+        function displayProducts() {
+            const start = currentPage * productsPerPage;
+            const end = start + productsPerPage;
+            const newProducts = allProducts.slice(start, end);
+
+            displayedProducts.push(...newProducts);
+
+            const container = document.getElementById('resultsContainer');
+            const countDiv = document.getElementById('resultsCount');
+            const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+            // Update count
+            countDiv.textContent = `총 ${allProducts.length}개 제품 중 ${displayedProducts.length}개 표시`;
+
+            // Create grid HTML
+            let html = '<div class="products-grid">';
+            displayedProducts.forEach(product => {
+                const capacity = product.capacity || 'N/A';
+                const material = product.material || 'N/A';
+                const productCode = product.product_code || 'N/A';
+                const dimensions = product.dimensions || '';
+                const moq = product.moq || 'N/A';
+
+                // Get first image or placeholder
+                const images = product.images || [];
+                const imageUrl = images.length > 0 ? images[0].url : 'https://via.placeholder.com/320x240?text=No+Image';
+
+                html += `
+                    <div class="product-card">
+                        <img src="${imageUrl}" alt="${product.product_name}" class="product-image"
+                             onerror="this.src='https://via.placeholder.com/320x240?text=No+Image'">
+                        <div class="product-info">
+                            <div class="product-name">${product.product_name}</div>
+                            <div class="product-badges">
+                                <span class="badge badge-material">${material}</span>
+                                <span class="badge badge-capacity">${capacity}</span>
+                                <span class="badge badge-code">${productCode}</span>
+                            </div>
+                            <div class="product-specs">
+                                ${dimensions ? `📐 사양: ${dimensions}<br>` : ''}
+                                📦 MOQ: ${moq}
+                            </div>
+                            <button class="detail-btn" onclick="showProductDetail('${product.product_id}')">
+                                상세 정보
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            container.innerHTML = html;
+
+            // Show/hide load more button
+            if (end < allProducts.length) {
+                loadMoreBtn.style.display = 'block';
+                loadMoreBtn.textContent = `더보기 (+${Math.min(productsPerPage, allProducts.length - end)}개)`;
+            } else {
+                loadMoreBtn.style.display = 'none';
+            }
+
+            currentPage++;
+        }
+
+        // Load more products
+        function loadMore() {
+            displayProducts();
+        }
+
+        // Show product detail
+        async function showProductDetail(productId) {
+            try {
+                const response = await fetch(`/api/v1/products/${productId}`);
+                const data = await response.json();
+                const product = data.product;
+                currentDetailProduct = product;
+
+                const modal = document.getElementById('detailModal');
+                const modalBody = document.getElementById('modalBody');
+
+                // Prepare images
+                const images = product.images || [];
+                currentZoomImages = images.map(img => img.url);
+
+                // Build modal HTML
+                let html = `
+                    <div class="modal-header">
+                        <div class="modal-title">${product.product_name}</div>
+                        <div class="modal-subtitle">${product.product_code || 'N/A'}</div>
+                    </div>
+                `;
+
+                // Image Gallery
+                if (images.length > 0) {
+                    html += `
+                        <div class="image-gallery">
+                            <div class="gallery-main" onclick="openZoomModal(0)">
+                                <img id="mainImage" src="${images[0].url}" alt="${product.product_name}">
+                            </div>
+                    `;
+
+                    if (images.length > 1) {
+                        html += '<div class="gallery-thumbnails">';
+                        images.forEach((img, index) => {
+                            html += `
+                                <div class="gallery-thumbnail ${index === 0 ? 'active' : ''}"
+                                     onclick="changeMainImage('${img.url}', ${index})">
+                                    <img src="${img.url}" alt="Thumbnail ${index + 1}">
+                                </div>
+                            `;
+                        });
+                        html += '</div>';
+                    }
+                    html += '</div>';
+                }
+
+                // Basic Information
+                html += `
+                    <div class="detail-section">
+                        <h3>📋 기본 정보</h3>
+                        <div class="detail-grid">
+                            <div class="detail-item">
+                                <div class="detail-label">제품 코드</div>
+                                <div class="detail-value">${product.product_code || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">재질</div>
+                                <div class="detail-value">${product.material || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">용량</div>
+                                <div class="detail-value">${product.capacity || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">사양</div>
+                                <div class="detail-value">${product.dimensions || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">넥 사이즈</div>
+                                <div class="detail-value">${product.neck_size || 'N/A'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">MOQ</div>
+                                <div class="detail-value">${product.moq || 'N/A'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Pricing Information
+                const pricing = product.pricing || product.specifications?.pricing;
+                if (pricing) {
+                    html += `
+                        <div class="detail-section">
+                            <h3>💰 가격 정보</h3>
+                            <div class="detail-grid">
+                                ${pricing.regular_price ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">정가</div>
+                                    <div class="detail-value">${pricing.regular_price}원</div>
+                                </div>
+                                ` : ''}
+                                ${pricing.discount_price ? `
+                                <div class="detail-item">
+                                    <div class="detail-label">할인가</div>
+                                    <div class="detail-value" style="color: #e53935;">${pricing.discount_price}원</div>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Material Details (Enrichment)
+                const matDetails = product.material_details;
+                if (matDetails && matDetails.type) {
+                    html += `
+                        <div class="detail-section">
+                            <h3>🔬 재질 상세 정보</h3>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">재질 타입</div>
+                                    <div class="detail-value">${matDetails.type || 'N/A'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">정식 명칭</div>
+                                    <div class="detail-value">${matDetails.full_name || 'N/A'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">수지 코드</div>
+                                    <div class="detail-value">${matDetails.resin_code || 'N/A'}</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">특성</div>
+                                    <div class="detail-value">${(matDetails.properties || []).join(', ') || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Capacity Category
+                const capCat = product.capacity_category;
+                if (capCat && capCat.size) {
+                    html += `
+                        <div class="detail-section">
+                            <h3>📏 용량 분류</h3>
+                            <div class="detail-grid">
+                                <div class="detail-item">
+                                    <div class="detail-label">크기</div>
+                                    <div class="detail-value">${capCat.size || 'N/A'} (${capCat.range || 'N/A'})</div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-label">추천 용도</div>
+                                    <div class="detail-value">${capCat.use_case || 'N/A'}</div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Print Area Download
+                const printUrl = product.print_area_url || product.specifications?.print_area_url;
+                if (printUrl) {
+                    html += `
+                        <div class="detail-section">
+                            <h3>🖨️ 인쇄 도면</h3>
+                            <a href="${printUrl}" class="download-btn" download>
+                                📥 인쇄 도면 다운로드
+                            </a>
+                        </div>
+                    `;
+                }
+
+                modalBody.innerHTML = html;
+                modal.classList.add('active');
+            } catch (error) {
+                console.error('Error loading product detail:', error);
+                alert('상세 정보를 불러오는 중 오류가 발생했습니다');
+            }
+        }
+
+        // Change main image
+        function changeMainImage(imageUrl, index) {
+            document.getElementById('mainImage').src = imageUrl;
+
+            // Update active thumbnail
+            const thumbnails = document.querySelectorAll('.gallery-thumbnail');
+            thumbnails.forEach((thumb, i) => {
+                if (i === index) {
+                    thumb.classList.add('active');
+                } else {
+                    thumb.classList.remove('active');
+                }
+            });
+        }
+
+        // Close detail modal
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('active');
+        }
+
+        // Open zoom modal
+        function openZoomModal(index) {
+            currentZoomIndex = index;
+            document.getElementById('zoomImage').src = currentZoomImages[currentZoomIndex];
+            document.getElementById('zoomModal').classList.add('active');
+        }
+
+        // Close zoom modal
+        function closeZoomModal() {
+            document.getElementById('zoomModal').classList.remove('active');
+        }
+
+        // Zoom navigation
+        function zoomPrev() {
+            currentZoomIndex = (currentZoomIndex - 1 + currentZoomImages.length) % currentZoomImages.length;
+            document.getElementById('zoomImage').src = currentZoomImages[currentZoomIndex];
+        }
+
+        function zoomNext() {
+            currentZoomIndex = (currentZoomIndex + 1) % currentZoomImages.length;
+            document.getElementById('zoomImage').src = currentZoomImages[currentZoomIndex];
+        }
+
+        // Utility functions
+        function showLoading() {
+            document.getElementById('resultsContainer').innerHTML = '<div class="loading">🔄 검색 중...</div>';
+            document.getElementById('resultsCount').textContent = '검색 중...';
+            document.getElementById('loadMoreBtn').style.display = 'none';
+        }
+
+        function showEmptyState(query) {
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="empty-state">
+                    <h3>😢 검색 결과가 없습니다</h3>
+                    <p>"${query}"에 대한 제품을 찾을 수 없습니다</p>
+                    <p>다른 검색어를 시도해보세요</p>
+                </div>
+            `;
+            document.getElementById('resultsCount').textContent = '검색 결과 없음';
+            document.getElementById('loadMoreBtn').style.display = 'none';
+        }
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeDetailModal();
+                closeZoomModal();
+            }
+        });
+
+        // Click outside modal to close
+        document.getElementById('detailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeDetailModal();
+            }
+        });
+
+        document.getElementById('zoomModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeZoomModal();
+            }
+        });
+    </script>
+</body>
+</html>

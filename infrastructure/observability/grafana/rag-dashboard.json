@@ -1,0 +1,31 @@
+{
+  "dashboard": {
+    "title": "RAG Enterprise - Production Monitoring",
+    "panels": [
+      {
+        "title": "API Request Rate",
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{service=\"api\"}[5m])"
+          }
+        ]
+      },
+      {
+        "title": "Search Quality (Avg Similarity)",
+        "targets": [
+          {
+            "expr": "avg(search_similarity_score)"
+          }
+        ]
+      },
+      {
+        "title": "Response Time (p95)",
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, http_request_duration_seconds_bucket)"
+          }
+        ]
+      }
+    ]
+  }
+}

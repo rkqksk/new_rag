@@ -1,0 +1,19 @@
+replicaCount: 3
+
+image:
+  repository: rag-api
+  pullPolicy: IfNotPresent
+  tag: "10.0.0"
+
+service:
+  type: ClusterIP
+  port: 8001
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+    - host: api.rag-enterprise.com
+      paths:
+        - path: /
+          pathType: Prefix

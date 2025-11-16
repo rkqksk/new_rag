@@ -84,6 +84,58 @@ curl http://localhost:8001/health/ready
 
 ---
 
+## 🤖 Claude Skills System
+
+> **Auto-Activation**: Skills automatically trigger based on keywords and context
+
+### Available Skills (9 Total)
+
+**Core Business**:
+- `rag-optimization` - RAG search quality, chunking, embeddings (30 keywords)
+- `data-collection` - Web crawling, parsing, Airflow scheduling (29 keywords)
+- `manufacturing-vision` - YOLO defect detection, quality control (25 keywords)
+- `saas-operations` - Multi-tenancy, billing, authentication (23 keywords)
+
+**Infrastructure**:
+- `deployment-automation` - K8s, Helm, GitOps, CI/CD (22 keywords)
+- `testing-suite` - pytest auto-generation, coverage (25 keywords)
+
+**Data Processing**:
+- `excel-processing` - Excel/CSV parsing, analysis (24 keywords)
+- `pdf-processing` - PDF extraction, OCR, tables (23 keywords)
+- `web-testing` - E2E testing, Playwright, accessibility (22 keywords)
+
+### Quick Usage
+
+**Auto-Activation** (Recommended):
+```
+"RAG 검색 품질 개선해줘" → rag-optimization activates
+"OneHago 크롤링" → data-collection activates
+"YOLO 불량 검사" → manufacturing-vision activates
+```
+
+**Available Tools**:
+```bash
+# Validate skills
+python .claude/skills/validate_skills.py
+
+# RAG analysis
+python .claude/skills/rag-optimization/scripts/analyze_chunks.py
+
+# Generate crawler
+python .claude/skills/data-collection/scripts/create_crawler.py --site onehago
+
+# Train YOLO
+python .claude/skills/manufacturing-vision/scripts/train_yolo.py --data data.yaml
+
+# Generate tests
+python .claude/skills/testing-suite/scripts/generate_tests.py --source src/
+```
+
+**Details**: `.claude/skills/README.md`
+
+---
+
 ## 🚀 Services (17 Total)
 
 ### Core (8)
