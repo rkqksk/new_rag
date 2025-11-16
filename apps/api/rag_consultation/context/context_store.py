@@ -21,7 +21,7 @@ from typing import Optional
 
 from redis.asyncio import Redis
 
-from app.rag_consultation.models import ConversationContext
+from apps.api.rag_consultation.models import ConversationContext
 
 logger = logging.getLogger(__name__)
 

@@ -7,8 +7,8 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 
-from app.core.dependencies import get_qdrant_client
-from app.services.image_search_service import ImageSearchService
+from apps.api.core.dependencies import get_qdrant_client
+from apps.api.services.image_search_service import ImageSearchService
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/api/v1/search", tags=["Image Search"])

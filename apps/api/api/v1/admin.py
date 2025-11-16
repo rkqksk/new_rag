@@ -9,7 +9,7 @@ from typing import Dict, List, Optional
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from src.services.unified_llm_service import get_unified_llm
+from apps.api.services.unified_llm_service import get_unified_llm
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 

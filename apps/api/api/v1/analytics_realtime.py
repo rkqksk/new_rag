@@ -21,8 +21,8 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from app.services.clickhouse_client import get_clickhouse_client
-from app.services.analytics_pipeline import track_search, track_user_event, track_performance
+from apps.api.services.clickhouse_client import get_clickhouse_client
+from apps.api.services.analytics_pipeline import track_search, track_user_event, track_performance
 
 logger = logging.getLogger(__name__)
 
@@ -304,7 +304,7 @@ async def check_analytics_health() -> Dict[str, Any]:
     client = get_clickhouse_client()
     clickhouse_available = client.client is not None
 
-    from app.services.analytics_pipeline import get_analytics_producer
+    from apps.api.services.analytics_pipeline import get_analytics_producer
     producer = get_analytics_producer()
     kafka_available = producer.producer is not None
 

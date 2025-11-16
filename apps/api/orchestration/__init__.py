@@ -6,7 +6,7 @@ Dynamic service orchestration with resource management, task dispatch,
 and feature tracking for optimized hardware usage.
 
 Usage:
-    from backend.orchestration import (
+    from apps.api.orchestration import (
         ServiceRouter,
         ResourceManager,
         TaskDispatcher,

@@ -8,8 +8,8 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 
-from app.conversation import ConversationManager
-from app.conversation.states import ConversationContext
+from apps.api.conversation import ConversationManager
+from apps.api.conversation.states import ConversationContext
 
 router = APIRouter(prefix="/api/v1", tags=["tracking"])
 

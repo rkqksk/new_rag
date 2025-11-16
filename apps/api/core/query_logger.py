@@ -4,8 +4,8 @@ import time
 from functools import wraps
 from typing import Any, Callable, Dict, Optional
 
-from app.core.config import settings
-from app.core.logging import get_logger
+from apps.api.core.config import settings
+from apps.api.core.logging import get_logger
 
 logger = get_logger(__name__)
 

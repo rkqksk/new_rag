@@ -21,7 +21,7 @@ def detect_ambiguity(
             "threshold": int
         }
     """
-    from app.services.product_search import extract_capacity
+    from apps.api.services.product_search import extract_capacity
 
     AMBIGUITY_THRESHOLD = 20
 

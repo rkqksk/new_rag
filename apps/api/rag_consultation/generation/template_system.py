@@ -23,7 +23,7 @@ from typing import Dict, Optional
 
 from jinja2 import Template
 
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.models import (
     FormalityLevel,
     QueryType,
     UrgencyLevel,

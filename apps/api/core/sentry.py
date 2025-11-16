@@ -5,7 +5,7 @@ Production-ready Sentry integration for FastAPI with intelligent error
 grouping, performance monitoring, and automatic context capture.
 
 Example:
-    >>> from app.core.sentry import get_sentry_instance, is_production
+    >>> from apps.api.core.sentry import get_sentry_instance, is_production
     >>> sentry = get_sentry_instance()
     >>> sentry.capture_exception(Exception("test"))
 
@@ -40,7 +40,7 @@ try:
 except ImportError:
     HAS_SENTRY = False
 
-from app.core.logging import get_logger
+from apps.api.core.logging import get_logger
 
 logger = get_logger(__name__)
 

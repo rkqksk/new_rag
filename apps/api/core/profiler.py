@@ -6,7 +6,7 @@ from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
-from app.core.logging import get_logger
+from apps.api.core.logging import get_logger
 
 logger = get_logger(__name__)
 

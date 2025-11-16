@@ -2,10 +2,10 @@
 
 from functools import lru_cache
 
-from app.core.config import settings
-from app.repositories.postgres_repository import PostgresRepository
-from app.repositories.qdrant_repository import QdrantRepository
-from app.repositories.redis_repository import RedisRepository
+from apps.api.core.config import settings
+from apps.api.repositories.postgres_repository import PostgresRepository
+from apps.api.repositories.qdrant_repository import QdrantRepository
+from apps.api.repositories.redis_repository import RedisRepository
 
 
 @lru_cache()

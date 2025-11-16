@@ -7,7 +7,7 @@ Demonstrates basic usage of the orchestration system.
 
 import asyncio
 import logging
-from backend.orchestration import (
+from apps.api.orchestration import (
     ServiceRouter,
     ResourceManager,
     TaskDispatcher,

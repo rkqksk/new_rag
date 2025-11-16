@@ -7,7 +7,7 @@ from typing import Any, Dict, List
 
 import httpx
 
-from app.services.embedding_service import generate_embedding
+from apps.api.services.embedding_service import generate_embedding
 
 
 async def search_qa_qdrant(

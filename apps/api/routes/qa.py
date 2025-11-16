@@ -4,7 +4,7 @@ Q&A Routes
 
 from fastapi import APIRouter, HTTPException
 
-from app.services.qa_service import search_qa_qdrant
+from apps.api.services.qa_service import search_qa_qdrant
 
 router = APIRouter(prefix="/api/v1", tags=["qa"])
 

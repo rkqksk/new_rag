@@ -22,7 +22,7 @@ from typing import Dict, List, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from app.services.hybrid_search import HybridSearchEngine
+from apps.api.services.hybrid_search import HybridSearchEngine
 
 logger = logging.getLogger(__name__)
 

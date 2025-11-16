@@ -20,7 +20,7 @@ import logging
 import re
 from typing import Dict, List, Tuple
 
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.models import (
     ExpertiseLevel,
     FormalityLevel,
     ToneAnalysis,

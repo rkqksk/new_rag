@@ -47,8 +47,8 @@ app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 session_storage: Dict[str, Dict[str, Any]] = {}
 
 # Conversation Manager for hybrid context-aware search
-from app.conversation import ConversationManager
-from app.conversation.compatibility import find_compatible_accessories
+from apps.api.conversation import ConversationManager
+from apps.api.conversation.compatibility import find_compatible_accessories
 
 conversation_manager = ConversationManager(
     ollama_url="http://localhost:11434", qdrant_url="http://localhost:6333"

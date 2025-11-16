@@ -8,14 +8,14 @@ from typing import List
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.dependencies import get_async_rag_qa_service
-from app.core.exceptions import (
+from apps.api.core.dependencies import get_async_rag_qa_service
+from apps.api.core.exceptions import (
     RAGEnterpriseException,
     create_http_exception,
     get_status_code_for_exception,
 )
-from app.models.schemas import QARequest, QAResponse
-from app.services.async_rag_qa_service import AsyncRAGQAService
+from apps.api.models.schemas import QARequest, QAResponse
+from apps.api.services.async_rag_qa_service import AsyncRAGQAService
 
 logger = logging.getLogger(__name__)
 

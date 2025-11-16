@@ -162,7 +162,7 @@ async def add_crawler_source(request: CrawlerSourceRequest):
         raise HTTPException(status_code=500, detail="Web crawler service not initialized")
 
     try:
-        from app.services.web_crawler_service import WebSource
+        from apps.api.services.web_crawler_service import WebSource
 
         source = WebSource(
             url=request.url,

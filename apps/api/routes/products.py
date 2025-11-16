@@ -8,16 +8,16 @@ from typing import Optional
 
 from fastapi import APIRouter, HTTPException
 
-from app.conversation import ConversationManager
-from app.conversation.compatibility import find_compatible_accessories
+from apps.api.conversation import ConversationManager
+from apps.api.conversation.compatibility import find_compatible_accessories
 
 # Import models
-from app.models.schemas import ProductSearchRequest
-from app.services.ambiguity_detector import detect_ambiguity
+from apps.api.models.schemas import ProductSearchRequest
+from apps.api.services.ambiguity_detector import detect_ambiguity
 
 # Import services
-from app.services.product_loader import load_products
-from app.services.product_search import filter_previous_results, search_products
+from apps.api.services.product_loader import load_products
+from apps.api.services.product_search import filter_previous_results, search_products
 
 # Initialize router
 router = APIRouter(prefix="/api/v1", tags=["products"])

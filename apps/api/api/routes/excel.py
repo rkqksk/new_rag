@@ -10,8 +10,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from qdrant_client import QdrantClient
 
-from app.core.dependencies import get_qdrant_client
-from app.services.excel_parser_service import ExcelParserService
+from apps.api.core.dependencies import get_qdrant_client
+from apps.api.services.excel_parser_service import ExcelParserService
 
 logger = logging.getLogger(__name__)
 

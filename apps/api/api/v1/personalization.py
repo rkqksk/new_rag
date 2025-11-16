@@ -5,9 +5,9 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from app.dependencies.services import get_personalization_service
-from app.services.personalization_service import PersonalizationService
-from app.services.product_loader import load_products
+from apps.api.dependencies.services import get_personalization_service
+from apps.api.services.personalization_service import PersonalizationService
+from apps.api.services.product_loader import load_products
 
 router = APIRouter()
 

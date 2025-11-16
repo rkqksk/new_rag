@@ -7,9 +7,9 @@ Provides response generation:
 - TemplateSystem: Response template management
 """
 
-from app.rag_consultation.generation.prompt_builder import PromptBuilder
-from app.rag_consultation.generation.response_generator import ResponseGenerator
-from app.rag_consultation.generation.template_system import TemplateSystem
+from apps.api.rag_consultation.generation.prompt_builder import PromptBuilder
+from apps.api.rag_consultation.generation.response_generator import ResponseGenerator
+from apps.api.rag_consultation.generation.template_system import TemplateSystem
 
 __all__ = [
     "PromptBuilder",

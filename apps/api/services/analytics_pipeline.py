@@ -41,7 +41,7 @@ except ImportError:
     KafkaConsumer = None
     KafkaError = Exception
 
-from app.services.clickhouse_client import get_clickhouse_client
+from apps.api.services.clickhouse_client import get_clickhouse_client
 
 logger = logging.getLogger(__name__)
 

@@ -163,7 +163,7 @@ def get_rag_qa_service(
     Returns:
         RAGQAService instance
     """
-    from app.services.rag_qa_service import RAGQAService
+    from apps.api.services.rag_qa_service import RAGQAService
 
     return RAGQAService(
         qdrant_client=qdrant_client,
@@ -195,7 +195,7 @@ def get_async_rag_qa_service(
     Returns:
         AsyncRAGQAService instance
     """
-    from app.services.async_rag_qa_service import AsyncRAGQAService
+    from apps.api.services.async_rag_qa_service import AsyncRAGQAService
 
     return AsyncRAGQAService(
         qdrant_client=qdrant_client,
@@ -221,7 +221,7 @@ def get_consultation_service(
     Returns:
         ConsultationService instance
     """
-    from app.services.consultation_service import ConsultationService
+    from apps.api.services.consultation_service import ConsultationService
 
     return ConsultationService(
         search_client=qdrant_client, embedding_model=embedding_model, llm_client=None
@@ -244,7 +244,7 @@ def get_document_ingestion_service(
     Returns:
         DocumentIngestionService instance
     """
-    from app.services.document_ingestion_service import DocumentIngestionService
+    from apps.api.services.document_ingestion_service import DocumentIngestionService
 
     return DocumentIngestionService(
         qdrant_client=qdrant_client, embedding_model=embedding_model, redis_client=redis_client

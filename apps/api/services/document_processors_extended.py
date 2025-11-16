@@ -10,7 +10,7 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List
 
-from app.services.document_ingestion_service import DocumentChunk
+from apps.api.services.document_ingestion_service import DocumentChunk
 
 logger = logging.getLogger(__name__)
 

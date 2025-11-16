@@ -21,7 +21,7 @@ Usage:
 import logging
 from typing import Dict, List
 
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.models import (
     Intent,
     QueryType,
     RetrievalStrategy,

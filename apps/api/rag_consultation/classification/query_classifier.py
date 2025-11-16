@@ -25,7 +25,7 @@ import numpy as np
 from redis.asyncio import Redis
 from sentence_transformers import SentenceTransformer
 
-from app.rag_consultation.models import QueryAnalysis, QueryType
+from apps.api.rag_consultation.models import QueryAnalysis, QueryType
 
 logger = logging.getLogger(__name__)
 

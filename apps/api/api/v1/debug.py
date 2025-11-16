@@ -5,19 +5,19 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
-from app.core.config import settings
-from app.dependencies.database import get_postgres_repo, get_qdrant_repo, get_redis_repo
-from app.dependencies.services import (
+from apps.api.core.config import settings
+from apps.api.dependencies.database import get_postgres_repo, get_qdrant_repo, get_redis_repo
+from apps.api.dependencies.services import (
     get_analytics_service,
     get_personalization_service,
     get_search_service,
 )
-from app.repositories.postgres_repository import PostgresRepository
-from app.repositories.qdrant_repository import QdrantRepository
-from app.repositories.redis_repository import RedisRepository
-from app.services.analytics_service import AnalyticsService
-from app.services.personalization_service import PersonalizationService
-from app.services.search_service import SearchService
+from apps.api.repositories.postgres_repository import PostgresRepository
+from apps.api.repositories.qdrant_repository import QdrantRepository
+from apps.api.repositories.redis_repository import RedisRepository
+from apps.api.services.analytics_service import AnalyticsService
+from apps.api.services.personalization_service import PersonalizationService
+from apps.api.services.search_service import SearchService
 
 router = APIRouter()
 

@@ -23,7 +23,7 @@ Usage:
 import logging
 from typing import List, Optional
 
-from app.rag_consultation.models import ExpertiseLevel, QueryType
+from apps.api.rag_consultation.models import ExpertiseLevel, QueryType
 
 logger = logging.getLogger(__name__)
 

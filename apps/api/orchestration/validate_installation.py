@@ -49,7 +49,7 @@ def validate_installation():
     # Check classes
     print("Checking exported classes...")
     try:
-        from backend.orchestration import (
+        from apps.api.orchestration import (
             ServiceRouter,
             ResourceManager,
             TaskDispatcher,
@@ -65,7 +65,7 @@ def validate_installation():
     # Check enums
     print("Checking enums...")
     try:
-        from backend.orchestration import (
+        from apps.api.orchestration import (
             ServicePriority,
             ServiceStatus,
             AgentType,
@@ -95,7 +95,7 @@ def validate_installation():
     # Quick instantiation test
     print("Testing instantiation...")
     try:
-        from backend.orchestration import (
+        from apps.api.orchestration import (
             ResourceManager,
             ServiceRouter,
             TaskDispatcher,

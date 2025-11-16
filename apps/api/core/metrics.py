@@ -2,7 +2,7 @@
 
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 
-from app.core.prometheus_metrics import registry
+from apps.api.core.prometheus_metrics import registry
 
 
 class MetricsCollector:

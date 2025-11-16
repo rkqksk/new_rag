@@ -32,8 +32,8 @@ from typing import Any, Dict, Optional
 
 import httpx
 
-from app.rag_consultation.generation.template_system import TemplateSystem
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.generation.template_system import TemplateSystem
+from apps.api.rag_consultation.models import (
     FormalityLevel,
     QueryType,
     UrgencyLevel,

@@ -18,8 +18,8 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
-from app.services.rag_optimizer import RAGOptimizer
-from app.services.conversational_memory import (
+from apps.api.services.rag_optimizer import RAGOptimizer
+from apps.api.services.conversational_memory import (
     ConversationManager,
     ConversationSummarizer,
     HistoryAwareSearcher,

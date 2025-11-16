@@ -4,10 +4,10 @@ from functools import lru_cache
 
 from fastapi import Depends
 
-from app.dependencies.database import get_postgres_repo, get_qdrant_repo, get_redis_repo
-from app.services.analytics_service import AnalyticsService
-from app.services.personalization_service import PersonalizationService
-from app.services.search_service import SearchService
+from apps.api.dependencies.database import get_postgres_repo, get_qdrant_repo, get_redis_repo
+from apps.api.services.analytics_service import AnalyticsService
+from apps.api.services.personalization_service import PersonalizationService
+from apps.api.services.search_service import SearchService
 
 
 @lru_cache()

@@ -23,8 +23,8 @@ import uuid
 from datetime import datetime
 from typing import List, Optional
 
-from app.rag_consultation.context.context_store import ContextStore
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.context.context_store import ContextStore
+from apps.api.rag_consultation.models import (
     ConversationContext,
     IntentDetection,
     QueryAnalysis,

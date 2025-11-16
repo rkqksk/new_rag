@@ -9,7 +9,7 @@ from pathlib import Path
 
 from fastapi import APIRouter
 
-from app.models.schemas import InquiryRequest, SampleRequest
+from apps.api.models.schemas import InquiryRequest, SampleRequest
 
 router = APIRouter(prefix="/api/v1", tags=["inquiries"])
 

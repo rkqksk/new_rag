@@ -13,7 +13,7 @@ import httpx
 from qdrant_client import QdrantClient
 from sentence_transformers import SentenceTransformer
 
-from app.utils.product_utils import (
+from apps.api.utils.product_utils import (
     batch_validate_products,
     enrich_product_with_metadata,
     generate_image_urls,

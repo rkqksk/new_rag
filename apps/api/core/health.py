@@ -33,8 +33,8 @@ import httpx
 import psycopg
 from redis import asyncio as aioredis
 
-from app.core.dependencies import AppConfig
-from app.core.logging import get_logger
+from apps.api.core.dependencies import AppConfig
+from apps.api.core.logging import get_logger
 
 logger = get_logger(__name__)
 
@@ -840,7 +840,7 @@ async def check_all_services() -> Dict[str, Dict[str, str]]:
     Simplified health check for /health/ready endpoint.
     Returns simple status dict for each service.
     """
-    from app.core.config import settings
+    from apps.api.core.config import settings
     
     postgres_status = await check_postgres()
     redis_status = await check_redis()

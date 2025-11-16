@@ -22,7 +22,7 @@ Production Features:
 __version__ = "1.0.0"
 __author__ = "RAG Enterprise Team"
 
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.models import (
     ConversationContext,
     IntentDetection,
     QueryAnalysis,

@@ -21,27 +21,27 @@ from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, status
 from redis.asyncio import Redis
 
-from app.core.config import get_settings
-from app.rag_consultation.classification import (
+from apps.api.core.config import get_settings
+from apps.api.rag_consultation.classification import (
     IntentDetector,
     LanguageDetector,
     QueryClassifier,
     ToneAnalyzer,
 )
-from app.rag_consultation.context import (
+from apps.api.rag_consultation.context import (
     ContextStore,
     ConversationManager,
 )
-from app.rag_consultation.generation import (
+from apps.api.rag_consultation.generation import (
     PromptBuilder,
     ResponseGenerator,
     TemplateSystem,
 )
-from app.rag_consultation.models import (
+from apps.api.rag_consultation.models import (
     ConsultationRequest,
     ConsultationResponse,
 )
-from app.rag_consultation.retrieval import QueryExpander
+from apps.api.rag_consultation.retrieval import QueryExpander
 
 logger = logging.getLogger(__name__)
 

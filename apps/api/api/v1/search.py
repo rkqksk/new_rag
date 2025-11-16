@@ -5,8 +5,8 @@ from typing import List, Optional
 from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from pydantic import BaseModel
 
-from app.dependencies.services import get_search_service
-from app.services.search_service import SearchService
+from apps.api.dependencies.services import get_search_service
+from apps.api.services.search_service import SearchService
 
 router = APIRouter()
 

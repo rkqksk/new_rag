@@ -23,16 +23,16 @@ from qdrant_client.models import Distance, PointStruct, VectorParams
 from sentence_transformers import SentenceTransformer
 
 # Import route handlers
-from app.api import dashboard_routes, ingestion_routes, query_routes
-from app.api.routes import (
+from apps.api.api import dashboard_routes, ingestion_routes, query_routes
+from apps.api.api.routes import (
     async_qa,
 )
-from app.api.routes import excel as excel_routes
-from app.api.routes import health as health_routes
-from app.api.routes import image as image_routes
+from apps.api.api.routes import excel as excel_routes
+from apps.api.api.routes import health as health_routes
+from apps.api.api.routes import image as image_routes
 
 # Import dependency injection
-from app.core.dependencies import (
+from apps.api.core.dependencies import (
     get_config,
     get_consultation_service,
     get_document_ingestion_service,
@@ -43,11 +43,11 @@ from app.core.dependencies import (
 )
 
 # Import metrics
-from app.core.metrics import get_metrics_collector
-from app.core.prometheus_metrics import metrics_endpoint
+from apps.api.core.metrics import get_metrics_collector
+from apps.api.core.prometheus_metrics import metrics_endpoint
 
 # Import schemas
-from app.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
+from apps.api.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
 
 # Note: workflow_routes has agent dependencies - loaded lazily if needed
 

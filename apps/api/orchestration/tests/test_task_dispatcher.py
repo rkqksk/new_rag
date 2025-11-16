@@ -7,7 +7,7 @@ Unit tests for TaskDispatcher class.
 
 import pytest
 import asyncio
-from backend.orchestration import (
+from apps.api.orchestration import (
     TaskDispatcher,
     AgentType,
     TaskComplexity,

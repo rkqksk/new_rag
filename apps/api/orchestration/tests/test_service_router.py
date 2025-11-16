@@ -7,7 +7,7 @@ Unit tests for ServiceRouter class.
 
 import pytest
 import asyncio
-from backend.orchestration import (
+from apps.api.orchestration import (
     ServiceRouter,
     ResourceManager,
     ServiceStatus,

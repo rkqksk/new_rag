@@ -16,8 +16,8 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.responses import StreamingResponse
 from PIL import Image
 
-from src.core.ocr.image_preprocessor import ImagePreprocessor
-from src.core.ocr.watermark_remover import (
+from apps.api.core.ocr.image_preprocessor import ImagePreprocessor
+from apps.api.core.ocr.watermark_remover import (
     WatermarkRemover,
     remove_color_watermark,
     remove_watermark,

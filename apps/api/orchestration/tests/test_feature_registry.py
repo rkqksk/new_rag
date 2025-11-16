@@ -6,7 +6,7 @@ Unit tests for FeatureRegistry class.
 """
 
 import pytest
-from backend.orchestration import (
+from apps.api.orchestration import (
     FeatureRegistry,
     FeatureCategory,
     FeatureStatus,

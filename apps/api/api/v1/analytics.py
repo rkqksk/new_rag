@@ -2,8 +2,8 @@
 
 from fastapi import APIRouter, Depends
 
-from app.dependencies.services import get_analytics_service
-from app.services.analytics_service import AnalyticsService
+from apps.api.dependencies.services import get_analytics_service
+from apps.api.services.analytics_service import AnalyticsService
 
 router = APIRouter()
 

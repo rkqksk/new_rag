@@ -27,13 +27,13 @@ from typing import Any, Dict, List, Optional
 from fastapi import APIRouter, Depends, Response, status
 from pydantic import BaseModel, Field
 
-from app.core.dependencies import AppConfig, get_config
-from app.core.health import (
+from apps.api.core.dependencies import AppConfig, get_config
+from apps.api.core.health import (
     ComponentHealth,
     HealthCheckOrchestrator,
     HealthStatus,
 )
-from app.core.metrics import MetricsCollector, get_metrics_collector
+from apps.api.core.metrics import MetricsCollector, get_metrics_collector
 
 # Application start time for uptime calculation
 _app_start_time = time.time()

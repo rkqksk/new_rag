@@ -217,7 +217,7 @@ class SearchAgent:
     async def _hybrid_search(self, state: AgentState) -> List[Dict]:
         """Execute hybrid search (dense + sparse + rerank)"""
         try:
-            from app.services.hybrid_search import HybridSearchEngine
+            from apps.api.services.hybrid_search import HybridSearchEngine
 
             engine = HybridSearchEngine(enable_cross_encoder=True)
 

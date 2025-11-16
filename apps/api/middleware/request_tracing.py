@@ -7,7 +7,7 @@ from typing import Callable
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.core.logging import correlation_id_var, get_logger, request_path_var, user_session_var
+from apps.api.core.logging import correlation_id_var, get_logger, request_path_var, user_session_var
 
 logger = get_logger(__name__)
 

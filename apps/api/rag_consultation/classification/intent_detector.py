@@ -26,7 +26,7 @@ import numpy as np
 from redis.asyncio import Redis
 from sentence_transformers import SentenceTransformer
 
-from app.rag_consultation.models import Intent, IntentDetection
+from apps.api.rag_consultation.models import Intent, IntentDetection
 
 logger = logging.getLogger(__name__)
 

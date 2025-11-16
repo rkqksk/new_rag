@@ -7,31 +7,31 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.api.routes import image_processing, excel, health, async_qa
-from app.api.v1 import admin, analytics, analytics_realtime, debug, hybrid, multi_agent, personalization, rag_advanced, search, streaming
-from app.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
-from app.routes import products, qa, inquiries, tracking
-from src.api.v1 import saas
-from src.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
-from src.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentication
+from apps.api.api.routes import image_processing, excel, health, async_qa
+from apps.api.api.v1 import admin, analytics, analytics_realtime, debug, hybrid, multi_agent, personalization, rag_advanced, search, streaming
+from apps.api.api import workflow_routes, consultation, dashboard_routes, ingestion_routes, query_routes
+from apps.api.routes import products, qa, inquiries, tracking
+from apps.api.api.v1 import saas
+from apps.api.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
+from apps.api.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentication
 
 # v8.5.0 Phase 9 - Advanced Infrastructure
-from src.api.routes import metrics, recommendations, search_ranking, websocket
-from src.middleware.rate_limiting import RateLimitMiddleware, RateLimitTier, RateLimitAlgorithm
-from src.middleware.error_tracking import ErrorTrackingMiddleware, RequestContextMiddleware, AnalyticsMiddleware
+from apps.api.api.routes import metrics, recommendations, search_ranking, websocket
+from apps.api.middleware.rate_limiting import RateLimitMiddleware, RateLimitTier, RateLimitAlgorithm
+from apps.api.middleware.error_tracking import ErrorTrackingMiddleware, RequestContextMiddleware, AnalyticsMiddleware
 
-from app.core.config import settings
-from app.core.exceptions import RAGEnterpriseException
-from app.core.logging import get_logger, setup_logging
-from app.middleware.performance_timing import PerformanceTimingMiddleware
-from app.middleware.request_logging import RequestLoggingMiddleware
-from app.middleware.request_tracing import RequestTracingMiddleware
+from apps.api.core.config import settings
+from apps.api.core.exceptions import RAGEnterpriseException
+from apps.api.core.logging import get_logger, setup_logging
+from apps.api.middleware.performance_timing import PerformanceTimingMiddleware
+from apps.api.middleware.request_logging import RequestLoggingMiddleware
+from apps.api.middleware.request_tracing import RequestTracingMiddleware
 
 # v7.0.0+ Realtime Backend (Convex-like functionality)
 try:
-    from app.realtime.socketio_server import RealtimeServer, get_realtime_server
-    from app.realtime.postgres_notify import get_notify_manager
-    from app.realtime.redis_pubsub import get_pubsub_manager
+    from apps.api.realtime.socketio_server import RealtimeServer, get_realtime_server
+    from apps.api.realtime.postgres_notify import get_notify_manager
+    from apps.api.realtime.redis_pubsub import get_pubsub_manager
     REALTIME_AVAILABLE = True
 except ImportError as e:
     REALTIME_AVAILABLE = False
@@ -182,7 +182,7 @@ app_logger.info("🤖 Multi-agent system enabled (Router + Search + Reasoning + 
 
 # GraphQL API (Flexible type-safe querying) ⭐ NEW v6.0.0
 try:
-    from app.graphql import create_graphql_router
+    from apps.api.graphql import create_graphql_router
     graphql_router = create_graphql_router()
     app.include_router(graphql_router, prefix=settings.api_prefix)
     app_logger.info("🔷 GraphQL API enabled at /api/v1/graphql")
@@ -343,7 +343,7 @@ async def liveness():
 @app.get("/health/ready")
 async def readiness():
     """Readiness probe - is the app ready to serve traffic?"""
-    from app.core.health import check_all_services
+    from apps.api.core.health import check_all_services
 
     services_status = await check_all_services()
     all_healthy = all(service["status"] == "healthy" for service in services_status.values())
@@ -400,7 +400,7 @@ async def startup_event():
             @realtime.query("products")
             async def get_products(params):
                 """Get products by material"""
-                from app.repositories.product_repository import ProductRepository
+                from apps.api.repositories.product_repository import ProductRepository
                 repo = ProductRepository()
                 material = params.get("material")
                 if material:
@@ -412,7 +412,7 @@ async def startup_event():
             @realtime.query("search_results")
             async def get_search_results(params):
                 """Get search results"""
-                from app.services.search_service import SearchService
+                from apps.api.services.search_service import SearchService
                 service = SearchService()
                 query = params.get("query", "")
                 top_k = params.get("top_k", 5)
@@ -424,7 +424,7 @@ async def startup_event():
 
             # 4. Setup database triggers for realtime updates
             if notify_manager.connection:
-                from app.realtime.postgres_notify import setup_table_notifications
+                from apps.api.realtime.postgres_notify import setup_table_notifications
 
                 # Setup triggers for key tables
                 tables_to_watch = ['products', 'inquiries', 'qa_pairs']

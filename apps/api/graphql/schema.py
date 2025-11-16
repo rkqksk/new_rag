@@ -201,7 +201,7 @@ class Query:
         strategy = "dense"
         if input.enable_hybrid:
             # Use hybrid search
-            from app.services.hybrid_search import HybridSearchEngine
+            from apps.api.services.hybrid_search import HybridSearchEngine
 
             engine = HybridSearchEngine(enable_cross_encoder=input.enable_reranking)
 
@@ -376,7 +376,7 @@ class Mutation:
               }
             }
         """
-        from app.services.multi_agent_system import create_multi_agent_orchestrator
+        from apps.api.services.multi_agent_system import create_multi_agent_orchestrator
 
         orchestrator = create_multi_agent_orchestrator()
 
@@ -414,7 +414,7 @@ class Mutation:
               invalidateCache(pattern: "query_cache:*")
             }
         """
-        from app.services.advanced_cache import get_cache
+        from apps.api.services.advanced_cache import get_cache
 
         cache = get_cache()
         cache.invalidate_pattern(pattern)
