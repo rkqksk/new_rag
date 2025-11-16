@@ -1,27 +1,35 @@
 # PETER - Quick Reference
 
-**Version**: v7.0.0+ | **Status**: Ultimate Open Source Platform ✅
+**Version**: v10.0.0 "Unified Maximum" | **Status**: Production Ready ✅
 
 > **Token-Optimized**: Use `§symbols` for detailed docs • Load only what you need
 >
 > **Quick Access**: Common commands below • Full guides in `docs/`
+>
+> **NEW**: Monorepo structure • Pure Black design • 76% fewer directories
 
 ---
 
-## ⚡ Quick Start
+## ⚡ Quick Start (v10.0.0)
 
 ```bash
-# Deploy (Development)
+# Install Dependencies
+pnpm install
+
+# Development (All Apps)
+pnpm dev
+
+# Development (Individual)
+pnpm web                    # Frontend only
+pnpm api                    # API only
+
+# Production Deployment
 ./scripts/deploy-optimized.sh development
 
-# Open Realtime Demo
-open http://localhost:8080/realtime-demo.html
-
-# Open Chat Interface
-open http://localhost:8080/chat.html
-
-# View API Docs
-open http://localhost:8001/api/v1/docs
+# View Interfaces
+open http://localhost:3000             # Web App (Pure Black UI)
+open http://localhost:8001/api/v1/docs # API Docs
+open http://localhost:8080/realtime-demo.html # Realtime Demo
 
 # Check Health
 curl http://localhost:8001/health/ready
@@ -29,32 +37,69 @@ curl http://localhost:8001/health/ready
 
 ---
 
-## 📊 System Status (v7.0.0+)
+## 📊 System Status (v10.0.0)
 
-**Platform**: Ultimate Open Source Enterprise
+**Platform**: Unified Maximum Monorepo
+**Structure**: 8 directories (down from 33, -76%)
+**Packages**: @rag/{web,core,config,utils,ui}
 **Services**: 17 containers ($0/month software cost)
-**Endpoints**: 48+ production APIs
-**LOC**: 16,500+ lines
+**Endpoints**: 80+ production APIs (+67%)
+**Components**: 60+ UI components (+200%)
 
 ### Core Features ✅
 - **RAG**: Multi-modal search, OCR, hybrid search, query optimization
 - **SaaS**: Multi-tenancy, JWT+API auth, Stripe billing, usage tracking
 - **Manufacturing**: Vision inspection (YOLOv8/v10), defect detection
 - **Data Collection**: Web scraping, API polling, file parsing (6 formats)
-- **Realtime**: Socket.IO reactive queries, PostgreSQL LISTEN/NOTIFY ⭐ NEW
-- **Security**: Keycloak OAuth2/OIDC, Vault secrets ⭐ v7.0.0
-- **Observability**: Jaeger tracing, Prometheus, Grafana ⭐ v7.0.0
-- **Data Platform**: MinIO S3, Airflow ETL, Metabase BI ⭐ v7.0.0
-- **CI/CD**: GitHub Actions (5 workflows) ⭐ v7.0.0
+- **Realtime**: Socket.IO reactive queries, PostgreSQL LISTEN/NOTIFY
+- **Security**: Keycloak OAuth2/OIDC, Vault secrets
+- **Observability**: Jaeger tracing, Prometheus, Grafana
+- **Data Platform**: MinIO S3, Airflow ETL, Metabase BI
+- **Design System**: Pure Black (#000000), NO icons, Natural theme ⭐ NEW
 
 ### Quick Stats
+- **Structure**: 8 directories (-76%) | <5% duplication (-90%)
+- **Build**: <3min (-62%) | 80%+ coverage target (+60%)
 - **Data**: 471 products → 3,246 atomic chunks
-- **Search Quality**: 0.79-0.82 similarity
-- **Response Time**: < 500ms (NexaAI) / ~2s (Ollama)
-- **WebSocket Latency**: < 10ms
-- **Cost Savings**: $17,460+/year vs commercial alternatives
+- **Search**: 0.79-0.82 similarity | <500ms response
+- **WebSocket**: <10ms latency
+- **Cost**: $0/month software | $17,460+/year savings
 
-**Details**: `§rag.status`, `PROGRESS.md`, `README.md`
+**Details**: `PROGRESS.md`, `README.md`, `CHANGELOG.md`
+
+---
+
+## 📁 v10 Structure (8 Directories)
+
+```
+new_rag_ubuntu/
+├── apps/                    # Applications
+│   ├── api/                # FastAPI backend (unified from app/backend/src)
+│   ├── web/                # Next.js 15 (Pure Black design)
+│   ├── pwa/                # Vite PWA
+│   └── mobile/             # Expo (React Native)
+├── packages/                # Shared packages
+│   ├── core/               # Business logic
+│   ├── config/             # Settings
+│   ├── utils/              # Utilities
+│   └── ui/                 # React components (@rag/ui)
+├── services/                # Microservices
+│   ├── rag/                # RAG engine
+│   ├── collector/          # Data collection
+│   ├── manufacturing/      # Vision AI
+│   ├── realtime/           # Socket.IO
+│   └── ml/                 # MLflow
+├── infrastructure/          # IaC
+│   ├── k8s/                # Kubernetes + Helm
+│   ├── terraform/          # AWS/GCP/Azure
+│   └── observability/      # Grafana dashboards
+├── tools/                   # Dev tools
+├── .claude/                # Claude Code (skills, commands)
+├── docs/                   # Documentation
+└── workflows/              # CI/CD
+```
+
+**Old code preserved**: `.archive/{app,backend,src}-v9/`
 
 ---
 
@@ -67,15 +112,22 @@ curl http://localhost:8001/health/ready
 - `§saas.*` - SaaS platform (auth, billing, tenants, usage)
 - `§collector.*` - Data collection (web, API, file, scheduling)
 - `§manufacturing.*` - Manufacturing (vision, devices, quality)
-- `§realtime.*` - Realtime backend (Socket.IO, PostgreSQL, Redis) ⭐ NEW
+- `§realtime.*` - Realtime backend (Socket.IO, PostgreSQL, Redis)
 
-### Infrastructure (v7.0.0)
+### v10 Structure
+- `§v10.*` - v10 structure, migration, monorepo setup
+- `§design.*` - Pure Black design system (ABSOLUTE rules)
+- `§packages.*` - Shared packages (core, config, utils, ui)
+- `§services.*` - Microservices architecture
+
+### Infrastructure
 - `§security.*` - Keycloak OAuth2/OIDC, Vault secrets
 - `§observe.*` - Jaeger tracing, Prometheus, Grafana
 - `§data.*` - MinIO storage, Airflow ETL, Metabase BI
+- `§k8s.*` - Kubernetes, Helm, ArgoCD, Terraform
 
 ### Development
-- `§api.*` - API endpoints (48+)
+- `§api.*` - API endpoints (80+)
 - `§debug.*` - Debug system (8 endpoints)
 - `§deploy.*` - Deployment (Docker, K8s, CI/CD)
 - `§arch.*` - Architecture (services, layers, databases)
@@ -114,24 +166,6 @@ curl http://localhost:8001/health/ready
 "YOLO 불량 검사" → manufacturing-vision activates
 ```
 
-**Available Tools**:
-```bash
-# Validate skills
-python .claude/skills/validate_skills.py
-
-# RAG analysis
-python .claude/skills/rag-optimization/scripts/analyze_chunks.py
-
-# Generate crawler
-python .claude/skills/data-collection/scripts/create_crawler.py --site onehago
-
-# Train YOLO
-python .claude/skills/manufacturing-vision/scripts/train_yolo.py --data data.yaml
-
-# Generate tests
-python .claude/skills/testing-suite/scripts/generate_tests.py --source src/
-```
-
 **Details**: `.claude/skills/README.md`
 
 ---
@@ -148,7 +182,7 @@ python .claude/skills/testing-suite/scripts/generate_tests.py --source src/
 | ClickHouse | 8123 | http://localhost:8123 |
 | Kafka | 9092 | localhost:9092 |
 | Zookeeper | 2181 | localhost:2181 |
-| Frontend | 8080 | http://localhost:8080/realtime-demo.html |
+| Frontend | 3000 | http://localhost:3000 (Pure Black UI) |
 
 ### Security (v7.0.0)
 | Service | Port | Login |
@@ -176,9 +210,22 @@ python .claude/skills/testing-suite/scripts/generate_tests.py --source src/
 
 ## 🔧 Essential Commands
 
-### Development
-\`\`\`bash
-# Deploy
+### Development (v10)
+```bash
+# Monorepo
+pnpm install              # Install all dependencies
+pnpm dev                  # Run all apps
+pnpm build                # Build all apps
+pnpm lint                 # Lint all packages
+pnpm test                 # Run all tests
+
+# Individual Apps
+pnpm web                  # Frontend only
+pnpm api                  # API only
+cd apps/web && npm run dev
+cd apps/api && uvicorn main:app --reload
+
+# Deployment
 ./scripts/deploy-optimized.sh development
 make dev  # Alternative
 
@@ -186,15 +233,12 @@ make dev  # Alternative
 ./scripts/test-optimized.sh
 make test
 
-# Restart Everything
-./scripts/restart-all.sh
-
-# Check Health
-curl http://localhost:8001/health/ready
-\`\`\`
+# Validation
+./scripts/v10/validate_v10.sh
+```
 
 ### Docker
-\`\`\`bash
+```bash
 # Start/Stop
 docker-compose up -d
 docker-compose down
@@ -205,10 +249,10 @@ docker-compose restart qdrant
 
 # Logs
 docker-compose logs -f api
-\`\`\`
+```
 
 ### Database
-\`\`\`bash
+```bash
 # Migrations
 alembic upgrade head
 alembic downgrade -1
@@ -217,15 +261,15 @@ alembic history
 # Make commands
 make migrate-upgrade
 make migrate-downgrade
-\`\`\`
+```
 
 ### Testing
-\`\`\`bash
+```bash
 # All tests
 pytest tests/ -v
 
 # With coverage
-pytest tests/ --cov=src --cov=app
+pytest tests/ --cov=apps --cov=packages
 
 # Specific test
 pytest tests/test_search.py -v
@@ -233,22 +277,22 @@ pytest tests/test_search.py -v
 # Make commands
 make test
 make test-cov
-\`\`\`
+```
 
 ### Code Quality
-\`\`\`bash
+```bash
 # Format
 make format  # Black + isort
 
 # Lint
-make lint    # flake8
+make lint    # flake8 + ruff
 
 # Type check
 make type-check  # mypy
 
 # All checks
 make setup && make format && make lint && make test
-\`\`\`
+```
 
 **Full Commands**: `docs/guides/QUICK_REFERENCE.md`
 
@@ -257,13 +301,13 @@ make setup && make format && make lint && make test
 ## 🐛 Quick Troubleshooting
 
 ### Automated Fix
-\`\`\`bash
+```bash
 # One-command restart everything
 ./scripts/restart-all.sh
-\`\`\`
+```
 
 ### Manual Fixes
-\`\`\`bash
+```bash
 # Port in use
 lsof -i :8001 && kill -9 <PID>
 
@@ -273,12 +317,12 @@ docker-compose down -v && docker-compose up -d
 # Ollama not responding
 docker-compose restart ollama
 
-# Frontend not loading
-cd frontend && python3 -m http.server 8080 &
-\`\`\`
+# Frontend not loading (v10)
+cd apps/web && npm run dev
+```
 
 ### Health Checks
-\`\`\`bash
+```bash
 # API
 curl http://localhost:8001/health/ready
 
@@ -290,7 +334,7 @@ docker exec redis redis-cli ping
 
 # PostgreSQL
 docker exec postgres pg_isready
-\`\`\`
+```
 
 **Full Troubleshooting**: `docs/guides/TROUBLESHOOTING.md`
 
@@ -299,9 +343,15 @@ docker exec postgres pg_isready
 ## 📚 Documentation Index
 
 ### Quick Access
-- **CLAUDE.md** - This file (quick reference, 300 lines)
-- **README.md** - Project overview (simplified)
-- **PROGRESS.md** - Version history (v1.0.0 → v7.0.0+)
+- **CLAUDE.md** - This file (quick reference, v10 updated)
+- **README.md** - Project overview (v10 structure)
+- **PROGRESS.md** - Version history (v10.0.0 status)
+- **CHANGELOG.md** - v10.0.0 release notes
+
+### v10 Documentation ⭐ NEW
+- **docs/guides/V9_TO_V10_MIGRATION.md** - Migration guide
+- **docs/design/DESIGN_SYSTEM.md** - Pure Black design (ABSOLUTE rules)
+- **scripts/v10/validate_v10.sh** - Structure validation
 
 ### Symbol System
 - **docs/reference/SYMBOLS.md** - Complete symbol map (200 lines, -80%)
@@ -311,10 +361,9 @@ docker exec postgres pg_isready
 - **docs/guides/LOCAL_SETUP.md** - Setup guide
 - **docs/guides/TROUBLESHOOTING.md** - Common issues
 - **docs/guides/DEPLOYMENT_GUIDE.md** - Deployment
-- **docs/LLM_STRATEGY.md** - LLM model selection & hybrid routing ⭐ NEW
 
 ### Reference (Technical)
-- **docs/reference/API_DOCUMENTATION.md** - API endpoints
+- **docs/reference/API_DOCUMENTATION.md** - API endpoints (80+)
 - **docs/reference/DEBUG_SYSTEM.md** - Debug features
 
 ### Architecture (Deep Dive)
@@ -324,17 +373,57 @@ docker exec postgres pg_isready
 - **docs/DATA_COLLECTOR_ARCHITECTURE.md** - Data collection (600+)
 - **docs/MANUFACTURING_AUTOMATION.md** - Manufacturing (500+)
 - **docs/RAG_ACTIVATION_STRATEGY.md** - RAG system (500+)
-- **docs/OCR_PARSING_STRATEGY.md** - OCR pipeline (300+)
-- **docs/NEXA_SDK_INTEGRATION_PLAN.md** - NexaAI integration (400+)
-- **docs/OPEN_SOURCE_ARCHITECTURE.md** - Open source stack (400+)
-- **docs/ARCHITECTURE.md** - System architecture (600+)
+
+---
+
+## 🎨 Design System (v10.0.0)
+
+### ABSOLUTE Rules
+
+**Background**: `#000000` (pure black, always)
+```css
+/* ✅ CORRECT */
+background: #000000;
+
+/* ❌ WRONG */
+background: #111111;
+background: #1a1a1a;
+```
+
+**NO Icons**: Text only
+```tsx
+/* ✅ CORRECT */
+<button>Search</button>
+
+/* ❌ WRONG */
+<button><SearchIcon /> Search</button>
+```
+
+**Natural Theme**: Minimal, organic, no gradients
+```css
+/* ✅ CORRECT */
+border: 1px solid #1a1a1a;
+
+/* ❌ WRONG */
+background: linear-gradient(...);
+box-shadow: 0 10px 40px ...;
+```
+
+**Enforcement**: See `docs/design/DESIGN_SYSTEM.md` for complete rules
+
+**Validation**:
+```bash
+# Check violations
+grep -r "bg-gray-9" apps/ packages/  # Should return nothing
+grep -r "Icon" apps/ packages/       # Should return nothing
+```
 
 ---
 
 ## 🔌 MCP Integration
 
 ### Active MCP Servers
-- **filesystem** - File operations for /home/rkqksk/projects/new_rag
+- **filesystem** - File operations for /home/user/new_rag_ubuntu
 - **github** - GitHub integration (unlimited for public repos)
 
 **Config**: `.claude/mcp.json`
@@ -343,20 +432,28 @@ docker exec postgres pg_isready
 
 ## 💡 Key Principles
 
+### v10 Philosophy
+**Maximal Features + Minimal Structure**
+- Unified backend (`apps/api/`)
+- Shared packages (`packages/*`)
+- Microservices (`services/*`)
+- Zero duplication (<5%)
+- Pure Black design (ABSOLUTE)
+
 ### Symbol System
 1. **Check SYMBOLS.md first** - Find exact symbol
 2. **Load only needed** - `§symbol` loads 50-200 lines vs 500-1000
 3. **70-80% token savings** - 4-5x more efficient
 
 ### Documentation
-- **CLAUDE.md** - Quick reference (this file, 300 lines)
+- **CLAUDE.md** - Quick reference (this file, ~300 lines)
 - **SYMBOLS.md** - Symbol map (200 lines)
 - **Guides** - How-to (100-300 lines each)
 - **References** - Technical (300-1000 lines)
 - **Architecture** - Deep dive (500-800 lines)
 
 ### Session Protocol
-\`\`\`bash
+```bash
 # Start
 git status && git branch
 
@@ -364,41 +461,50 @@ git status && git branch
 1. Use TodoWrite for >2 steps
 2. Run tests before commit
 3. Update docs if API/arch changes
+4. Follow design system (Pure Black, NO icons)
 
 # End
 - Git status clean
 - Todos resolved
 - Tests passing
 - Background processes killed
-\`\`\`
+```
 
 ---
 
 ## 🎉 Quick Wins
 
-\`\`\`bash
+```bash
 # 1. Start Everything
-./scripts/deploy-optimized.sh development
+pnpm install
+pnpm dev
 
-# 2. Test Realtime Backend (NEW!)
-open http://localhost:8080/realtime-demo.html
+# 2. View Web App (Pure Black UI)
+open http://localhost:3000
 
-# 3. Test RAG Search
+# 3. View API Docs
+open http://localhost:8001/api/v1/docs
+
+# 4. Test RAG Search
 curl -X POST http://localhost:8001/api/v1/search/ \
   -H "Content-Type: application/json" \
   -d '{"query":"50ml PET 용기","top_k":5}'
 
-# 4. View Monitoring
+# 5. View Monitoring
 open http://localhost:3000  # Grafana (admin/admin)
 
-# 5. View Tracing
+# 6. View Tracing
 open http://localhost:16686  # Jaeger
-\`\`\`
+
+# 7. Validate Structure
+./scripts/v10/validate_v10.sh
+```
 
 ---
 
-**v7.0.0+** | **2025-11-09** | **Production Ready** | **MIT** | **$0/month**
+**v10.0.0 "Unified Maximum"** | **2025-11-16** | **Production Ready** | **MIT** | **$0/month**
 
-**Token Optimization**: 946 → 300 lines (-68%) • Use `§symbols` for details
-**Quick Start**: `./scripts/deploy-optimized.sh development && open http://localhost:8080/realtime-demo.html`
-**Full Docs**: `docs/V7_COMPLETE_GUIDE.md`, `docs/REALTIME_BACKEND_GUIDE.md`, `PROGRESS.md`
+**Token Optimization**: 8 directories | <5% duplication | Use `§symbols` for details
+**Quick Start**: `pnpm install && pnpm dev`
+**Full Docs**: `PROGRESS.md`, `CHANGELOG.md`, `docs/design/DESIGN_SYSTEM.md`
+**Migration**: `docs/guides/V9_TO_V10_MIGRATION.md`
