@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>RAG Enterprise</title>
+    <link rel="stylesheet" href="/css/design-system.css?v=20251115">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: hsl(var(--card));
+            border-bottom: 1px solid hsl(var(--border));
+            padding: 1rem;
+        }
+
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: var(--radius);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-admin {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+        }
+
+        .role-worker {
+            background-color: hsl(var(--warning));
+            color: hsl(var(--warning-foreground));
+        }
+
+        .role-customer {
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2rem 1rem;
+        }
+
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .welcome-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: hsl(var(--muted-foreground));
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: hsl(var(--primary));
+            transform: translateY(-2px);
+        }
+
+        .feature-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--foreground));
+        }
+
+        .feature-description {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
+            line-height: 1.5;
+        }
+
+        .feature-meta {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">RAG Enterprise</div>
+            <div class="user-info">
+                <span id="userName"></span>
+                <span id="userRole" class="user-badge"></span>
+                <button class="btn btn-outline btn-sm" onclick="logout()">로그아웃</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="welcome-section">
+            <h1 class="welcome-title" id="welcomeTitle">환영합니다</h1>
+            <p class="welcome-subtitle" id="welcomeSubtitle">AI-Powered Enterprise RAG Platform</p>
+        </div>
+
+        <div class="features-grid" id="featuresGrid">
+            <!-- Features will be dynamically loaded based on role -->
+        </div>
+    </div>
+
+    <script>
+        // Check authentication
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            window.location.href = 'login.html';
+        }
+
+        // Get user info
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const userRole = (user.role === 'viewer' ? 'customer' : user.role) || 'customer';
+
+        // Display user info
+        document.getElementById('userName').textContent = user.name || '사용자';
+        const roleBadge = document.getElementById('userRole');
+        roleBadge.textContent = userRole;
+        roleBadge.classList.add('role-' + userRole);
+
+        // Role-based features
+        const allFeatures = {
+            chat: {
+                title: 'AI 검색 채팅',
+                description: '자연어로 제품을 검색하고 AI가 답변을 생성합니다.',
+                link: 'chat.html',
+                roles: ['admin', 'worker', 'customer'],
+                badges: ['인기']
+            },
+            dashboard: {
+                title: '컬렉션 관리',
+                description: 'Qdrant 벡터 DB 컬렉션을 관리하고 검색 대상을 선택합니다.',
+                link: 'dashboard.html',
+                roles: ['admin', 'worker']
+            },
+            realtime: {
+                title: '실시간 검색',
+                description: 'WebSocket 기반 실시간 검색 데모. PostgreSQL LISTEN/NOTIFY 통합.',
+                link: 'realtime-demo.html',
+                roles: ['admin', 'worker'],
+                badges: ['NEW']
+            },
+            rag: {
+                title: 'RAG 대시보드',
+                description: 'RAG 시스템 통계 및 성능 모니터링. 청크 분석, 검색 품질 지표.',
+                link: 'rag_dashboard.html',
+                roles: ['admin']
+            },
+            analytics: {
+                title: '분석 대시보드',
+                description: 'ClickHouse 기반 실시간 분석. 사용자 행동, 검색 패턴 추적.',
+                link: 'analytics-dashboard.html',
+                roles: ['admin']
+            },
+            profile: {
+                title: '프로필 설정',
+                description: '사용자 정보 및 계정 설정 관리. 비밀번호 변경, 알림 설정.',
+                link: 'profile.html',
+                roles: ['admin', 'worker', 'customer']
+            },
+            streaming: {
+                title: '스트리밍 데모',
+                description: 'SSE 기반 스트리밍 응답. 실시간 LLM 답변 생성.',
+                link: 'streaming-demo.html',
+                roles: ['admin', 'worker']
+            },
+            api: {
+                title: 'API 문서',
+                description: 'FastAPI Swagger UI. 48+ 프로덕션 엔드포인트 탐색.',
+                link: '/api/v1/docs',
+                roles: ['admin'],
+                target: '_blank'
+            }
+        };
+
+        // Auto-redirect customer to chat
+        if (userRole === 'customer') {
+            window.location.href = 'chat.html';
+        }
+
+        // Render features based on role
+        function renderFeatures() {
+            const featuresGrid = document.getElementById('featuresGrid');
+            featuresGrid.innerHTML = '';
+
+            Object.entries(allFeatures).forEach(([key, feature]) => {
+                if (feature.roles.includes(userRole)) {
+                    const card = document.createElement('a');
+                    card.href = feature.link;
+                    card.className = 'feature-card';
+                    if (feature.target) card.target = feature.target;
+
+                    let badgesHTML = '';
+                    if (feature.badges) {
+                        badgesHTML = feature.badges.map(badge =>
+                            `<span class="badge badge-default">${badge}</span>`
+                        ).join('');
+                    }
+
+                    card.innerHTML = `
+                        <div class="feature-title">${feature.title}</div>
+                        <div class="feature-description">${feature.description}</div>
+                        ${badgesHTML ? `<div class="feature-meta">${badgesHTML}</div>` : ''}
+                    `;
+
+                    featuresGrid.appendChild(card);
+                }
+            });
+        }
+
+        // Update welcome message based on role
+        const welcomeMessages = {
+            admin: '관리자 대시보드',
+            worker: '작업자 대시보드',
+            customer: '고객 포털'
+        };
+
+        document.getElementById('welcomeTitle').textContent = welcomeMessages[userRole] || '환영합니다';
+
+        // Render features
+        renderFeatures();
+
+        // Logout function
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+                localStorage.removeItem('user');
+                window.location.href = 'login.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -23,8 +23,6 @@
 
 | Command | Description | Example |
 |---------|-------------|---------|
-| `/skill` | Create new Claude Code skills | `/skill create my-skill --category dev` |
-| `/mcp` | Build MCP servers | `/mcp create github-server --language python` |
 | `/artifact` | Build interactive web artifacts | `/artifact create dashboard --components charts` |
 | `/webapp` | Test web applications | `/webapp test https://myapp.com --flow login` |
 

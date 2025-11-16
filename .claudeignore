@@ -64,6 +64,8 @@ archives/
 *.backup
 *.bak
 *.old
+docs/archive/
+docs/logs/
 
 # ============================================
 # Temporary Files
@@ -72,6 +74,10 @@ temp/
 tmp/
 *.tmp
 .DS_Store
+*.tar.gz
+*.zip
+*_backup_*.tar.gz
+cleanup_backup_*.tar.gz
 
 # ============================================
 # Claude Internal
@@ -81,6 +87,8 @@ tmp/
 .claude/logs/
 .claude/shell-snapshots/
 .claude/file-history/
+.serena/
+.agent/
 
 # ============================================
 # IDE & Tools
@@ -103,6 +111,11 @@ data/mongodb/
 htmlcov/
 .tox/
 .hypothesis/
+testsprite_tests/
+.pytest_cache/
+test-results/
+coverage/
+.nyc_output/
 
 # ============================================
 # Specific Large Reports
@@ -126,3 +139,29 @@ dev/notebooks/
 # Generated Documentation
 # ============================================
 claudedocs/
+
+# ============================================
+# Build Artifacts & Caches
+# ============================================
+.turbo/
+.next/
+.nuxt/
+dist/
+build/
+.cache/
+.ruff_cache/
+.mypy_cache/
+
+# ============================================
+# Git & Version Control
+# ============================================
+.git/
+.github/workflows/
+.githooks/
+
+# ============================================
+# Frontend Build Artifacts
+# ============================================
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

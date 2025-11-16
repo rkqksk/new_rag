@@ -95,7 +95,7 @@ class ModelRouter:
             },
             "complex": {
                 "engine": ModelEngine.OLLAMA,
-                "model": "qwen2.5:7b-instruct",
+                "model": "seungduk-yanolja/EEVE-Korean-Instruct-7B-v2.0-Preview",
                 "description": "High quality for complex reasoning",
             },
             "vision": {

@@ -3,83 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>로그인 - RAG Enterprise</title>
+    <title>Login - RAG Enterprise</title>
+    <link rel="stylesheet" href="/css/design-system.css?v=20251115">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
+            background-color: hsl(var(--muted));
         }
 
-        .login-container {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        .login-wrapper {
             width: 100%;
             max-width: 400px;
-            padding: 40px;
+            padding: 2rem 1rem;
         }
 
-        .logo {
+        .logo-section {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
         }
 
-        .logo h1 {
-            font-size: 28px;
-            color: #667eea;
-            margin-bottom: 8px;
+        .logo-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
         }
 
-        .logo p {
-            font-size: 14px;
-            color: #999;
+        .logo-subtitle {
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.25rem;
         }
 
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-group input.error {
-            border-color: #ff6b6b;
+        .form-group.error .input {
+            border-color: hsl(var(--destructive));
         }
 
         .error-message {
-            color: #ff6b6b;
-            font-size: 13px;
-            margin-top: 6px;
             display: none;
+            font-size: 0.75rem;
+            color: hsl(var(--destructive));
+            margin-top: 0.25rem;
         }
 
         .error-message.show {
@@ -90,62 +60,37 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
-            font-size: 14px;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
         }
 
         .remember-me {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 0.5rem;
+            cursor: pointer;
         }
 
         .remember-me input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
+            width: 1rem;
+            height: 1rem;
+            cursor: pointer;
         }
 
-        .forgot-password {
-            color: #667eea;
+        .forgot-link {
+            color: hsl(var(--primary));
             text-decoration: none;
+            font-weight: 500;
         }
 
-        .forgot-password:hover {
+        .forgot-link:hover {
             text-decoration: underline;
         }
 
-        .btn-login {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .btn-login:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
         .divider {
-            text-align: center;
-            margin: 24px 0;
             position: relative;
+            text-align: center;
+            margin: 1.5rem 0;
         }
 
         .divider::before {
@@ -155,25 +100,25 @@
             top: 50%;
             width: 100%;
             height: 1px;
-            background: #e0e0e0;
+            background: hsl(var(--border));
         }
 
         .divider span {
             position: relative;
-            background: white;
-            padding: 0 16px;
-            color: #999;
-            font-size: 14px;
+            background: hsl(var(--card));
+            padding: 0 1rem;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
         }
 
         .signup-link {
             text-align: center;
-            font-size: 14px;
-            color: #666;
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
         }
 
         .signup-link a {
-            color: #667eea;
+            color: hsl(var(--primary));
             text-decoration: none;
             font-weight: 600;
         }
@@ -182,116 +127,85 @@
             text-decoration: underline;
         }
 
-        .loading {
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .alert.show {
-            display: block;
-        }
-
-        .alert-success {
-            background: #d1f4e0;
-            color: #0f5132;
-            border-left: 4px solid #4ade80;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border-left: 4px solid #dc3545;
-        }
-
         .test-accounts {
-            background: #f8f9ff;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 24px;
-            font-size: 13px;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: hsl(var(--muted));
+            border-radius: var(--radius);
+            font-size: 0.75rem;
         }
 
-        .test-accounts strong {
-            display: block;
-            margin-bottom: 8px;
-            color: #667eea;
+        .test-accounts-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: hsl(var(--foreground));
         }
 
         .test-accounts p {
-            margin: 4px 0;
-            color: #666;
+            margin: 0.25rem 0;
+            color: hsl(var(--muted-foreground));
+            font-size: 0.75rem;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo">
-            <h1>🚀 RAG Enterprise</h1>
-            <p>통합 관리 시스템</p>
-        </div>
-
-        <div id="alert" class="alert"></div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">이메일</label>
-                <input type="email" id="email" name="email" placeholder="이메일을 입력하세요" required>
-                <div id="emailError" class="error-message"></div>
+    <div class="login-wrapper">
+        <div class="card">
+            <div class="logo-section">
+                <h1 class="logo-title">RAG Enterprise</h1>
+                <p class="logo-subtitle">Integrated Management System</p>
             </div>
 
-            <div class="form-group">
-                <label for="password">비밀번호</label>
-                <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
-                <div id="passwordError" class="error-message"></div>
+            <div id="alert" class="alert" style="display: none;"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label class="label" for="email">Email</label>
+                    <input type="email" id="email" name="email" class="input"
+                           placeholder="Enter your email" required>
+                    <div id="emailError" class="error-message"></div>
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="input"
+                           placeholder="Enter your password" required>
+                    <div id="passwordError" class="error-message"></div>
+                </div>
+
+                <div class="remember-forgot">
+                    <label class="remember-me">
+                        <input type="checkbox" id="remember" name="remember">
+                        <span>Remember me</span>
+                    </label>
+                    <a href="#" class="forgot-link">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;" id="loginBtn">
+                    <span id="btnText">Login</span>
+                    <span id="btnLoading" class="loading-spinner" style="display:none;"></span>
+                </button>
+            </form>
+
+            <div class="divider">
+                <span>or</span>
             </div>
 
-            <div class="remember-forgot">
-                <label class="remember-me">
-                    <input type="checkbox" id="remember" name="remember">
-                    <span>로그인 상태 유지</span>
-                </label>
-                <a href="#" class="forgot-password">비밀번호 찾기</a>
+            <div class="signup-link">
+                Don't have an account? <a href="register.html">Sign up</a>
             </div>
 
-            <button type="submit" class="btn-login" id="loginBtn">
-                <span id="btnText">로그인</span>
-                <span id="btnLoading" class="loading" style="display:none;"></span>
-            </button>
-        </form>
-
-        <div class="divider">
-            <span>또는</span>
-        </div>
-
-        <div class="signup-link">
-            계정이 없으신가요? <a href="register.html">회원가입</a>
-        </div>
-
-        <div class="test-accounts">
-            <strong>🧪 테스트 계정</strong>
-            <p><strong>Admin:</strong> admin@example.com / password123</p>
-            <p><strong>Worker:</strong> worker@example.com / password123</p>
+            <div class="test-accounts">
+                <div class="test-accounts-title">Test Accounts</div>
+                <p><strong>Admin:</strong> admin@example.com / password123</p>
+                <p><strong>Worker:</strong> worker@example.com / password123</p>
+                <p><strong>Customer:</strong> customer@example.com / password123</p>
+            </div>
         </div>
     </div>
 
     <script>
-        const API_BASE = 'http://localhost:8001/api/v1';
+        const API_BASE = window.location.origin + '/api/v1';
 
         const form = document.getElementById('loginForm');
         const emailInput = document.getElementById('email');
@@ -310,66 +224,55 @@
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-
-            // Clear previous errors
             clearErrors();
 
             const email = emailInput.value.trim();
             const password = passwordInput.value;
             const remember = document.getElementById('remember').checked;
 
-            // Client-side validation
             if (!email) {
-                showError('email', '이메일을 입력하세요');
+                showError('email', 'Please enter your email');
                 return;
             }
 
             if (!password) {
-                showError('password', '비밀번호를 입력하세요');
+                showError('password', 'Please enter your password');
                 return;
             }
 
-            // Show loading state
             setLoading(true);
 
             try {
                 const response = await fetch(`${API_BASE}/auth/login`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
-                    // Save tokens
                     localStorage.setItem('access_token', data.access_token);
                     localStorage.setItem('refresh_token', data.refresh_token);
                     localStorage.setItem('user', JSON.stringify(data.user));
 
-                    // Remember email if checked
                     if (remember) {
                         localStorage.setItem('rememberedEmail', email);
                     } else {
                         localStorage.removeItem('rememberedEmail');
                     }
 
-                    // Show success message
-                    showAlert('success', '로그인 성공! 메인 페이지로 이동합니다...');
+                    showAlert('Login successful! Redirecting...', 'success');
 
-                    // Redirect to main page after 1 second
                     setTimeout(() => {
                         window.location.href = 'index.html';
                     }, 1000);
                 } else {
-                    // Show error message
-                    showAlert('error', data.detail || '로그인에 실패했습니다');
+                    showAlert(data.detail || 'Login failed', 'destructive');
                 }
             } catch (error) {
                 console.error('Login error:', error);
-                showAlert('error', '서버 연결에 실패했습니다. 나중에 다시 시도해주세요.');
+                showAlert('Server connection failed. Please try again later.', 'destructive');
             } finally {
                 setLoading(false);
             }
@@ -384,39 +287,39 @@
         function showError(field, message) {
             const input = document.getElementById(field);
             const errorDiv = document.getElementById(field + 'Error');
-            input.classList.add('error');
+            const formGroup = input.closest('.form-group');
+
+            formGroup.classList.add('error');
             errorDiv.textContent = message;
             errorDiv.classList.add('show');
         }
 
         function clearErrors() {
-            emailInput.classList.remove('error');
-            passwordInput.classList.remove('error');
-            document.getElementById('emailError').classList.remove('show');
-            document.getElementById('passwordError').classList.remove('show');
-            alert.classList.remove('show');
+            document.querySelectorAll('.form-group').forEach(group => {
+                group.classList.remove('error');
+            });
+            document.querySelectorAll('.error-message').forEach(msg => {
+                msg.classList.remove('show');
+            });
+            alert.style.display = 'none';
         }
 
-        function showAlert(type, message) {
-            alert.className = `alert alert-${type} show`;
+        function showAlert(message, type) {
+            alert.className = `alert alert-${type}`;
             alert.textContent = message;
+            alert.style.display = 'block';
         }
 
         // Check if already logged in
         const token = localStorage.getItem('access_token');
         if (token) {
-            // Verify token is still valid
             fetch(`${API_BASE}/auth/me`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                }
+                headers: { 'Authorization': `Bearer ${token}` }
             }).then(response => {
                 if (response.ok) {
-                    // Already logged in, redirect
                     window.location.href = 'index.html';
                 }
             }).catch(() => {
-                // Token invalid, stay on login page
                 localStorage.removeItem('access_token');
                 localStorage.removeItem('refresh_token');
                 localStorage.removeItem('user');

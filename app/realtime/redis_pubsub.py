@@ -23,7 +23,8 @@ from typing import Any, Callable, Dict, List, Optional
 try:
     import aioredis
     AIOREDIS_AVAILABLE = True
-except ImportError:
+except (ImportError, TypeError):
+    # aioredis is deprecated and has compatibility issues with Python 3.11+
     AIOREDIS_AVAILABLE = False
     aioredis = None
 
@@ -299,7 +300,9 @@ async def get_pubsub_manager() -> RedisPubSubManager:
 
     if _pubsub_manager is None:
         import os
-        redis_url = os.getenv("REDIS_URL", "redis://localhost:16379")
+        redis_host = os.getenv("REDIS_HOST", "localhost")
+        redis_port = os.getenv("REDIS_PORT", "6379")
+        redis_url = os.getenv("REDIS_URL", f"redis://{redis_host}:{redis_port}")
 
         _pubsub_manager = RedisPubSubManager(redis_url=redis_url)
         await _pubsub_manager.connect()

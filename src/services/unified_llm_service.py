@@ -6,10 +6,11 @@ with intelligent routing based on query complexity and requirements.
 """
 
 import logging
+import os
 from typing import AsyncIterator, List, Optional, Union
 
 import httpx
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from src.core.model_router import ModelEngine, ModelRouter, RoutingDecision
 from src.services.nexa_service import NexaConfig, NexaService
@@ -22,7 +23,9 @@ class OllamaConfig(BaseModel):
 
     base_url: str = "http://localhost:11434"
     timeout: int = 60
-    default_model: str = "qwen2.5:7b-instruct"
+    default_model: str = Field(
+        default_factory=lambda: os.getenv("OLLAMA_MODEL", "qwen2.5:7b-instruct")
+    )
 
 
 class OllamaService:
@@ -34,7 +37,11 @@ class OllamaService:
 
     def __init__(self, config: Optional[OllamaConfig] = None):
         self.config = config or OllamaConfig()
-        logger.info(f"Ollama service initialized: {self.config.base_url}")
+        # Override default_model with environment variable if set
+        env_model = os.getenv("OLLAMA_MODEL")
+        if env_model:
+            self.config.default_model = env_model
+        logger.info(f"Ollama service initialized: {self.config.base_url} (model: {self.config.default_model})")
 
     async def generate(
         self,
@@ -85,8 +92,17 @@ class OllamaService:
                     result = response.json()
                     return result["response"]
 
+        except httpx.HTTPStatusError as e:
+            logger.error(f"Ollama HTTP error: {e.response.status_code} - {e.response.text}")
+            raise
+        except httpx.RequestError as e:
+            logger.error(f"Ollama request error: {type(e).__name__} - {str(e)}")
+            raise
+        except KeyError as e:
+            logger.error(f"Ollama response missing key: {e}")
+            raise
         except Exception as e:
-            logger.error(f"Ollama generation failed: {e}")
+            logger.error(f"Ollama generation failed: {type(e).__name__} - {str(e)}", exc_info=True)
             raise
 
     async def embed(
@@ -154,12 +170,20 @@ class UnifiedLLMService:
             ollama_config: Ollama configuration
             router_config: Model router configuration
         """
+        # Check if NexaAI should be enabled
+        enable_nexa = os.getenv("ENABLE_NEXA", "true").lower() == "true"
+
         # Initialize engines
-        try:
-            self.nexa = NexaService(nexa_config)
-            self.nexa_available = True
-        except Exception as e:
-            logger.warning(f"NexaAI not available: {e}")
+        if enable_nexa:
+            try:
+                self.nexa = NexaService(nexa_config)
+                self.nexa_available = True
+            except Exception as e:
+                logger.warning(f"NexaAI not available: {e}")
+                self.nexa = None
+                self.nexa_available = False
+        else:
+            logger.info("NexaAI disabled via ENABLE_NEXA environment variable")
             self.nexa = None
             self.nexa_available = False
 

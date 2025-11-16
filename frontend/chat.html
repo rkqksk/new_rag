@@ -1,84 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>제품 검색</title>
+    <title>Product Search - RAG Enterprise</title>
+    <link rel="stylesheet" href="/css/design-system.css?v=20251115">
     <style>
-        /* ============================================================================
-           UI/UX DESIGN CONSTANTS (FIXED - DO NOT CHANGE)
-           ============================================================================
-           ChatGPT-style Minimal Design - Gray Tones Only
-           Last Updated: 2025-11-04
-           Version: 2.0.0
-           ============================================================================ */
-
-        :root {
-            /* ===== Colors (Gray Tones Only) ===== */
-            --color-bg-main: #ffffff;
-            --color-bg-secondary: #f7f7f8;
-            --color-bg-input: #ffffff;
-            --color-bg-user: #f4f4f4;
-            --color-bg-assistant: #ffffff;
-            --color-text-primary: #2d333a;
-            --color-text-secondary: #6e6e80;
-            --color-text-placeholder: #8e8ea0;
-            --color-border: #d1d5db;
-            --color-border-focus: #9ca3af;
-            --color-hover: #ececf1;
-
-            /* ===== Typography ===== */
-            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            --font-size-base: 16px;
-            --font-size-small: 14px;
-            --font-size-tiny: 12px;
-            --font-weight-normal: 400;
-            --font-weight-medium: 500;
-            --font-weight-semibold: 600;
-            --line-height-base: 1.5;
-
-            /* ===== Layout ===== */
-            --max-width-content: 768px;
-            --card-width: 240px;
-            --card-image-height: 200px;
-
-            /* ===== Spacing ===== */
-            --spacing-xs: 8px;
-            --spacing-sm: 12px;
-            --spacing-md: 16px;
-            --spacing-lg: 24px;
-            --spacing-xl: 32px;
-
-            /* ===== Border Radius ===== */
-            --radius-sm: 6px;
-            --radius-md: 12px;
-            --radius-lg: 24px;
-
-            /* ===== Shadows ===== */
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
-            --shadow-md: 0 2px 8px rgba(0,0,0,0.08);
-
-            /* ===== Transitions ===== */
-            --transition-fast: 0.15s;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: var(--font-family);
-            background: var(--color-bg-main);
-            color: var(--color-text-primary);
             display: flex;
             flex-direction: column;
             height: 100vh;
             overflow: hidden;
         }
 
-        /* ===== Main Container ===== */
+        /* Main Container */
         .main-container {
             flex: 1;
             overflow-y: auto;
@@ -86,120 +21,116 @@
             flex-direction: column;
         }
 
-        /* ===== Messages Container ===== */
+        /* Messages Container */
         .messages-container {
             flex: 1;
-            max-width: var(--max-width-content);
+            max-width: 1024px;
             width: 100%;
             margin: 0 auto;
-            padding: var(--spacing-lg);
+            padding: 1.5rem;
         }
 
-        /* ===== Message ===== */
+        /* Message */
         .message {
-            margin-bottom: var(--spacing-lg);
-            padding: var(--spacing-md);
-            border-radius: var(--radius-sm);
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            border-radius: var(--radius);
         }
 
         .message.user {
-            background: var(--color-bg-user);
+            background: hsl(var(--muted));
         }
 
         .message.assistant {
-            background: var(--color-bg-assistant);
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
         }
 
         .message-role {
-            font-size: var(--font-size-small);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text-secondary);
-            margin-bottom: var(--spacing-xs);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.5rem;
         }
 
         .message-content {
-            font-size: var(--font-size-base);
-            line-height: var(--line-height-base);
-            color: var(--color-text-primary);
+            font-size: 1rem;
+            line-height: 1.6;
+            color: hsl(var(--foreground));
         }
 
-        /* ===== Product Grid ===== */
+        /* Product Grid */
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(var(--card-width), 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-md);
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
         .product-card {
-            background: var(--color-bg-secondary);
-            border-radius: var(--radius-md);
+            background: hsl(var(--card));
+            border-radius: var(--radius);
             overflow: hidden;
             cursor: pointer;
-            transition: all var(--transition-fast);
-            border: 1px solid var(--color-border);
+            transition: all 0.15s;
+            border: 1px solid hsl(var(--border));
         }
 
         .product-card:hover {
-            background: var(--color-hover);
             transform: translateY(-2px);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .product-image {
             width: 100%;
-            height: var(--card-image-height);
+            height: 200px;
             object-fit: contain;
-            background: var(--color-bg-main);
-            padding: var(--spacing-md);
+            background: hsl(var(--background));
+            padding: 1rem;
         }
 
         .product-info {
-            padding: var(--spacing-md);
-            border-top: 1px solid var(--color-border);
+            padding: 1rem;
+            border-top: 1px solid hsl(var(--border));
         }
 
         .product-name {
-            font-size: var(--font-size-small);
-            font-weight: var(--font-weight-semibold);
-            color: var(--color-text-primary);
-            margin-bottom: var(--spacing-xs);
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .product-spec {
-            font-size: var(--font-size-tiny);
-            color: var(--color-text-secondary);
-            margin-bottom: 4px;
+            font-size: 0.75rem;
+            color: hsl(var(--muted-foreground));
+            margin-bottom: 0.25rem;
         }
 
         .product-code {
-            font-size: var(--font-size-tiny);
-            color: var(--color-text-placeholder);
-            margin-top: var(--spacing-xs);
+            font-size: 0.75rem;
+            color: hsl(var(--muted-foreground) / 0.7);
+            margin-top: 0.5rem;
         }
 
-        /* ===== Skeleton Loading Animation ===== */
+        /* Skeleton Loading Animation */
         .product-image.loading {
             background: linear-gradient(
                 90deg,
-                var(--color-bg-secondary) 25%,
-                var(--color-hover) 50%,
-                var(--color-bg-secondary) 75%
+                hsl(var(--muted)) 25%,
+                hsl(var(--muted) / 0.5) 50%,
+                hsl(var(--muted)) 75%
             );
             background-size: 200% 100%;
             animation: skeleton-loading 1.5s ease-in-out infinite;
         }
 
         @keyframes skeleton-loading {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .product-image.loaded {
@@ -207,92 +138,88 @@
         }
 
         @keyframes fade-in {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        /* ===== Input Container (Bottom Fixed) ===== */
+        /* Input Container (Bottom Fixed) */
         .input-container {
             position: sticky;
             bottom: 0;
-            background: var(--color-bg-main);
-            border-top: 1px solid var(--color-border);
-            padding: var(--spacing-md);
+            background: hsl(var(--background));
+            border-top: 1px solid hsl(var(--border));
+            padding: 1rem;
         }
 
         .input-wrapper {
-            max-width: var(--max-width-content);
+            max-width: 1024px;
             margin: 0 auto;
             display: flex;
             align-items: center;
-            gap: var(--spacing-sm);
-            background: var(--color-bg-input);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-lg);
-            padding: var(--spacing-sm);
-            transition: border-color var(--transition-fast);
+            gap: 0.75rem;
+            background: hsl(var(--background));
+            border: 1px solid hsl(var(--input));
+            border-radius: var(--radius);
+            padding: 0.75rem;
+            transition: border-color 0.15s;
         }
 
         .input-wrapper:focus-within {
-            border-color: var(--color-border-focus);
-            box-shadow: 0 0 0 1px var(--color-border-focus);
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
         }
 
         .chat-input {
             flex: 1;
-            padding: var(--spacing-sm);
+            padding: 0.5rem;
             border: none;
             background: transparent;
-            font-size: var(--font-size-base);
-            font-family: var(--font-family);
-            color: var(--color-text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            color: hsl(var(--foreground));
             resize: none;
             outline: none;
             max-height: 200px;
         }
 
         .chat-input::placeholder {
-            color: var(--color-text-placeholder);
+            color: hsl(var(--muted-foreground) / 0.5);
         }
 
         .send-btn {
-            padding: var(--spacing-sm) var(--spacing-md);
-            background: var(--color-text-primary);
-            color: white;
+            padding: 0.5rem 1rem;
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
             border: none;
-            border-radius: var(--radius-sm);
-            font-size: var(--font-size-small);
-            font-weight: var(--font-weight-medium);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: opacity var(--transition-fast);
-            opacity: 0.8;
+            transition: opacity 0.15s;
         }
 
         .send-btn:hover:not(:disabled) {
-            opacity: 1;
+            opacity: 0.9;
         }
 
         .send-btn:disabled {
-            background: var(--color-border);
+            background: hsl(var(--muted));
+            color: hsl(var(--muted-foreground));
             cursor: not-allowed;
             opacity: 0.5;
         }
 
-        /* ===== Loading ===== */
+        /* Loading */
         .loading {
             display: flex;
             gap: 6px;
-            padding: var(--spacing-md) 0;
+            padding: 1rem 0;
         }
 
         .loading-dot {
             width: 8px;
             height: 8px;
-            background: var(--color-text-secondary);
+            background: hsl(var(--muted-foreground));
             border-radius: 50%;
             animation: pulse 1.4s infinite;
         }
@@ -316,61 +243,45 @@
             }
         }
 
-        /* ===== Collection Indicator ===== */
+        /* Collection Indicator */
         .collection-indicator {
             position: fixed;
-            top: var(--spacing-md);
-            right: var(--spacing-md);
-            background: var(--color-bg-secondary);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-sm);
-            padding: var(--spacing-xs) var(--spacing-sm);
-            font-size: var(--font-size-tiny);
-            color: var(--color-text-secondary);
+            top: 1rem;
+            right: 1rem;
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+            color: hsl(var(--muted-foreground));
             z-index: 100;
-            display: none; /* Hidden per user request */
+            display: none;
             align-items: center;
-            gap: 6px;
+            gap: 0.5rem;
         }
 
         .collection-badge {
-            background: var(--color-text-primary);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: var(--font-size-tiny);
-            font-weight: var(--font-weight-medium);
+            background: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            padding: 0.125rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
 
         .settings-link {
-            color: var(--color-text-secondary);
+            color: hsl(var(--muted-foreground));
             text-decoration: none;
-            font-size: var(--font-size-tiny);
-            margin-left: 8px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
             transition: color 0.2s;
         }
 
         .settings-link:hover {
-            color: var(--color-text-primary);
+            color: hsl(var(--foreground));
         }
 
-        /* ===== Responsive ===== */
-        @media (max-width: 768px) {
-            .messages-container {
-                padding: var(--spacing-md);
-            }
-
-            .product-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: var(--spacing-sm);
-            }
-
-            .product-image {
-                height: 160px;
-            }
-        }
-
-        /* ===== Image Gallery Modal ===== */
+        /* Image Gallery Modal */
         .gallery-modal {
             display: none;
             position: fixed;
@@ -401,13 +312,13 @@
             max-width: 100%;
             max-height: 80vh;
             object-fit: contain;
-            border-radius: var(--radius-md);
+            border-radius: var(--radius);
         }
 
         .gallery-nav {
             display: flex;
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-lg);
+            gap: 1rem;
+            margin-top: 1.5rem;
             align-items: center;
         }
 
@@ -415,11 +326,11 @@
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
-            padding: var(--spacing-sm) var(--spacing-lg);
-            border-radius: var(--radius-sm);
+            padding: 0.5rem 1.5rem;
+            border-radius: var(--radius);
             cursor: pointer;
-            font-size: var(--font-size-small);
-            transition: all var(--transition-fast);
+            font-size: 0.875rem;
+            transition: all 0.15s;
         }
 
         .gallery-btn:hover:not(:disabled) {
@@ -433,14 +344,14 @@
 
         .gallery-counter {
             color: white;
-            font-size: var(--font-size-small);
-            padding: var(--spacing-sm) var(--spacing-md);
+            font-size: 0.875rem;
+            padding: 0.5rem 1rem;
         }
 
         .gallery-close {
             position: absolute;
-            top: var(--spacing-lg);
-            right: var(--spacing-lg);
+            top: 1.5rem;
+            right: 1.5rem;
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
@@ -452,20 +363,36 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-fast);
+            transition: all 0.15s;
         }
 
         .gallery-close:hover {
             background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .messages-container {
+                padding: 1rem;
+            }
+
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .product-image {
+                height: 160px;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Collection Indicator -->
     <div class="collection-indicator" id="collectionIndicator">
-        <span>검색 대상:</span>
-        <span class="collection-badge" id="collectionBadge">로딩 중...</span>
-        <a href="dashboard.html" class="settings-link">설정</a>
+        <span>Search Target:</span>
+        <span class="collection-badge" id="collectionBadge">Loading...</span>
+        <a href="dashboard.html" class="settings-link">Settings</a>
     </div>
 
     <!-- Main Container -->
@@ -482,10 +409,10 @@
             <textarea
                 id="chatInput"
                 class="chat-input"
-                placeholder="메시지를 입력하세요..."
+                placeholder="Enter your message..."
                 rows="1"
             ></textarea>
-            <button id="sendBtn" class="send-btn" disabled>전송</button>
+            <button id="sendBtn" class="send-btn" disabled>Send</button>
         </div>
     </div>
 
@@ -495,9 +422,9 @@
             <button class="gallery-close" onclick="closeGallery()">×</button>
             <img class="gallery-image" id="galleryImage" src="" alt="Product Image">
             <div class="gallery-nav">
-                <button class="gallery-btn" id="prevBtn" onclick="prevImage()">이전</button>
+                <button class="gallery-btn" id="prevBtn" onclick="prevImage()">Previous</button>
                 <span class="gallery-counter" id="galleryCounter">1 / 1</span>
-                <button class="gallery-btn" id="nextBtn" onclick="nextImage()">다음</button>
+                <button class="gallery-btn" id="nextBtn" onclick="nextImage()">Next</button>
             </div>
         </div>
     </div>
@@ -509,22 +436,35 @@
     <script>
         // Check authentication before initializing
         (async function() {
+            console.log('[Chat] Starting authentication check...');
+            console.log('[Chat] Current URL:', window.location.href);
+            console.log('[Chat] API Base:', window.location.origin + '/api/v1');
+            console.log('[Chat] Access Token:', localStorage.getItem('access_token') ? 'EXISTS' : 'MISSING');
+            console.log('[Chat] User:', localStorage.getItem('user'));
+
             const isAuthenticated = await auth.requireAuth();
-            if (!isAuthenticated) return;
+            console.log('[Chat] Authentication result:', isAuthenticated);
+
+            if (!isAuthenticated) {
+                console.error('[Chat] Authentication failed, stopping initialization');
+                return;
+            }
 
             // Create navigation bar
+            console.log('[Chat] Creating navbar...');
             createNavbar();
 
             // Continue with app initialization
+            console.log('[Chat] Initializing app...');
             initApp();
         })();
 
         function initApp() {
-        // 전역 변수
+        // Global variables
         let sessionId = null;
-        const API_BASE = 'http://localhost:8001';
+        const API_BASE = window.location.origin + '/api/v1';
 
-        // DOM 요소
+        // DOM elements
         const mainContainer = document.getElementById('mainContainer');
         const messagesContainer = document.getElementById('messagesContainer');
         const messagesDiv = document.getElementById('messages');
@@ -532,33 +472,33 @@
         const sendBtn = document.getElementById('sendBtn');
         const collectionBadge = document.getElementById('collectionBadge');
 
-        // Collection indicator 업데이트
+        // Update collection indicator
         function updateCollectionIndicator() {
             const selectedCollections = localStorage.getItem('selected_collections');
             let collections = selectedCollections ? JSON.parse(selectedCollections) : null;
 
             if (!collections || collections.length === 0) {
-                // 기본값: 모든 활성 컬렉션
-                collectionBadge.textContent = '전체 (기본)';
+                // Default: all active collections
+                collectionBadge.textContent = 'All (Default)';
             } else if (collections.length === 1) {
-                // 단일 컬렉션
+                // Single collection
                 const collectionNames = {
-                    'chungjinkorea': '청진코리아',
-                    'onehago': '원하고'
+                    'chungjinkorea': 'ChungjinKorea',
+                    'onehago': 'Onehago'
                 };
                 collectionBadge.textContent = collectionNames[collections[0]] || collections[0];
             } else {
-                // 다중 컬렉션
-                collectionBadge.textContent = `${collections.length}개 컬렉션`;
+                // Multiple collections
+                collectionBadge.textContent = `${collections.length} Collections`;
             }
         }
 
-        // 초기화
+        // Initialize
         async function init() {
-            // 메시지 영역 초기화 (이전 대화 내역 제거)
+            // Clear message area (remove previous conversation history)
             messagesDiv.innerHTML = '';
 
-            // Collection indicator 업데이트
+            // Update collection indicator
             updateCollectionIndicator();
 
             try {
@@ -573,24 +513,24 @@
                 console.log('Session created:', sessionId);
             } catch (error) {
                 console.error('Failed to create session:', error);
-                alert('백엔드 연결 실패. 서버가 실행 중인지 확인하세요.');
+                alert('Backend connection failed. Please check if server is running.');
             }
         }
 
-        // 입력 활성화 체크
+        // Enable input check
         chatInput.addEventListener('input', () => {
             const hasText = chatInput.value.trim().length > 0;
             sendBtn.disabled = !hasText;
 
-            // 자동 높이 조절
+            // Auto height adjustment
             chatInput.style.height = 'auto';
             chatInput.style.height = Math.min(chatInput.scrollHeight, 200) + 'px';
         });
 
-        // Enter 키 전송 (한글 입력 처리)
+        // Send on Enter key (Korean input handling)
         chatInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
-                // 한글 조합 중이 아닐 때만 전송
+                // Only send if not composing Korean
                 if (!e.isComposing) {
                     e.preventDefault();
                     if (!sendBtn.disabled) {
@@ -600,31 +540,31 @@
             }
         });
 
-        // 전송 버튼
+        // Send button
         sendBtn.addEventListener('click', sendMessage);
 
-        // 메시지 전송
+        // Send message
         async function sendMessage() {
             const query = chatInput.value.trim();
             if (!query || !sessionId) return;
 
-            // 입력 초기화
+            // Reset input
             chatInput.value = '';
             chatInput.style.height = 'auto';
             sendBtn.disabled = true;
 
-            // 사용자 메시지 추가
+            // Add user message
             addMessage('user', query);
 
-            // 로딩 표시
+            // Show loading
             const loadingId = showLoading();
 
             try {
-                // localStorage에서 선택된 컬렉션 읽기
+                // Read selected collections from localStorage
                 const selectedCollections = localStorage.getItem('selected_collections');
                 const collections = selectedCollections ? JSON.parse(selectedCollections) : ['onehago_v2'];
 
-                // API 호출
+                // API call
                 const requestBody = {
                     session_id: sessionId,
                     query: query,
@@ -639,28 +579,38 @@
 
                 const data = await response.json();
 
-                // 로딩 제거
+                // Remove loading
                 removeLoading(loadingId);
 
-                // 제품 표시
-                displayProducts(data.products || []);
+                // Display LLM response if available
+                if (data.response) {
+                    addMessage('assistant', data.response);
+                }
+
+                // Display products if available
+                if (data.products && data.products.length > 0) {
+                    displayProducts(data.products);
+                } else if (!data.response) {
+                    // Only show "no results" if there's no LLM response either
+                    addMessage('assistant', 'No search results found. Please try different keywords.');
+                }
 
             } catch (error) {
                 removeLoading(loadingId);
                 console.error('Query failed:', error);
-                addMessage('assistant', '죄송합니다. 요청 처리 중 오류가 발생했습니다.');
+                addMessage('assistant', 'Sorry, an error occurred while processing your request.');
             }
 
-            // 스크롤
+            // Scroll
             scrollToBottom();
         }
 
-        // 메시지 추가
+        // Add message
         function addMessage(role, content) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${role}`;
 
-            const roleName = role === 'user' ? '사용자' : '시스템';
+            const roleName = role === 'user' ? 'User' : 'System';
 
             messageDiv.innerHTML = `
                 <div class="message-role">${roleName}</div>
@@ -671,19 +621,18 @@
             return messageDiv;
         }
 
-        // 제품 표시 - 단계적 로딩 (Progressive Loading)
-        // 한 번에 10개씩 로드하여 성능 최적화
-        let currentProducts = []; // 현재 표시할 제품 전체 목록
-        let displayedCount = 0;   // 현재까지 표시된 제품 개수
-        const PRODUCTS_PER_LOAD = 10; // 한 번에 로드할 제품 개수 (고정)
+        // Display products - Progressive Loading
+        // Load 10 at a time for performance optimization
+        let currentProducts = []; // Complete list of products to display
+        let displayedCount = 0;   // Number of products displayed so far
+        const PRODUCTS_PER_LOAD = 10; // Number of products to load at once (fixed)
 
         function displayProducts(products) {
             if (products.length === 0) {
-                addMessage('assistant', '검색 결과가 없습니다. 다른 키워드로 검색해보세요.');
                 return;
             }
 
-            // 상태 초기화
+            // Reset state
             currentProducts = products;
             displayedCount = 0;
 
@@ -691,16 +640,16 @@
             messageDiv.className = 'message assistant';
             messageDiv.id = 'products-container-' + Date.now();
 
-            // 결과 개수 헤더
+            // Result count header
             const headerHTML = `
-                <div class="message-role">검색 결과</div>
-                <div class="message-content">총 ${products.length}개 제품을 찾았습니다.</div>
+                <div class="message-role">Search Results</div>
+                <div class="message-content">Found ${products.length} products.</div>
             `;
 
             messageDiv.innerHTML = headerHTML + `<div class="product-grid" id="product-grid"></div>`;
             messagesDiv.appendChild(messageDiv);
 
-            // 초기 10개 로드
+            // Load initial 10 products
             loadMoreProducts();
         }
 
@@ -708,17 +657,17 @@
             const productGrid = document.getElementById('product-grid');
             if (!productGrid) return;
 
-            // 다음 10개 제품 가져오기
+            // Get next 10 products
             const nextProducts = currentProducts.slice(displayedCount, displayedCount + PRODUCTS_PER_LOAD);
 
             if (nextProducts.length === 0) {
-                // 더 이상 로드할 제품이 없으면 감지 영역 제거
+                // Remove trigger zone if no more products to load
                 const loadMoreTrigger = document.getElementById('load-more-trigger');
                 if (loadMoreTrigger) loadMoreTrigger.remove();
                 return;
             }
 
-            // 제품 카드 생성
+            // Create product cards
             const gridHTML = nextProducts.map(product => {
                 const specs = product.specifications || {};
 
@@ -726,7 +675,7 @@
                 const imageUrls = product.image_urls || [];
                 const mainImageUrl = imageUrls.length > 0 ? imageUrls[0] : '/placeholder.png';
 
-                // 기본 이미지 URL 처리
+                // Handle default image URL
                 const finalImageUrl = mainImageUrl.startsWith('http')
                     ? mainImageUrl
                     : `${API_BASE}/${mainImageUrl}`;
@@ -738,7 +687,7 @@
 
                 const cardId = `card-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 
-                // 디버깅: 이미지 URL 로그
+                // Debugging: Log image URL
                 console.log(`Product ${product.product_name}: ${finalImageUrl}, Total images: ${fullImageUrls.length}`);
 
                 return `
@@ -755,24 +704,24 @@
                             style="cursor: ${fullImageUrls.length > 1 ? 'pointer' : 'default'};"
                         >
                         <div class="product-info" onclick="showProductDetail('${product.idx}')">
-                            <div class="product-name">${product.product_name || '이름 없음'}</div>
-                            <div class="product-spec">재질: ${product.material || 'N/A'}</div>
-                            <div class="product-spec">용량: ${specs.capacity || 'N/A'}</div>
-                            <div class="product-spec">네크: ${specs.neck_size || 'N/A'}</div>
+                            <div class="product-name">${product.product_name || 'No Name'}</div>
+                            <div class="product-spec">Material: ${product.material || 'N/A'}</div>
+                            <div class="product-spec">Capacity: ${specs.capacity || 'N/A'}</div>
+                            <div class="product-spec">Neck: ${specs.neck_size || 'N/A'}</div>
                             ${specs.moq ? `<div class="product-spec">MOQ: ${specs.moq}</div>` : ''}
-                            ${product.company && product.company.name ? `<div class="product-spec">제조사: ${product.company.name}</div>` : ''}
-                            ${product.company && product.company.phone ? `<div class="product-spec">연락처: ${product.company.phone}</div>` : ''}
+                            ${product.company && product.company.name ? `<div class="product-spec">Manufacturer: ${product.company.name}</div>` : ''}
+                            ${product.company && product.company.phone ? `<div class="product-spec">Contact: ${product.company.phone}</div>` : ''}
                             <div class="product-code">${product.product_code || ''}</div>
                         </div>
                     </div>
                 `;
             }).join('');
 
-            // 그리드에 추가
+            // Add to grid
             productGrid.insertAdjacentHTML('beforeend', gridHTML);
             displayedCount += nextProducts.length;
 
-            // 각 이미지에 타임아웃 설정 (5초 후 자동 중단)
+            // Set timeout for each image (auto stop after 5 seconds)
             nextProducts.forEach((product, index) => {
                 const cardId = productGrid.children[displayedCount - nextProducts.length + index]?.querySelector('img')?.id;
                 if (cardId) {
@@ -780,47 +729,47 @@
                 }
             });
 
-            // 더 로드할 제품이 있으면 감지 영역 추가
+            // Add trigger zone if more products to load
             if (displayedCount < currentProducts.length) {
-                // 기존 감지 영역 제거
+                // Remove existing trigger zone
                 const existingTrigger = document.getElementById('load-more-trigger');
                 if (existingTrigger) existingTrigger.remove();
 
-                // 새 감지 영역 추가
+                // Add new trigger zone
                 const loadMoreTrigger = document.createElement('div');
                 loadMoreTrigger.id = 'load-more-trigger';
                 loadMoreTrigger.style.height = '10px';
                 loadMoreTrigger.style.marginTop = '20px';
                 loadMoreTrigger.innerHTML = `
-                    <div style="text-align: center; color: var(--color-text-secondary); font-size: var(--font-size-small);">
-                        ${displayedCount} / ${currentProducts.length} 표시 중... 스크롤하여 더 보기
+                    <div style="text-align: center; color: hsl(var(--muted-foreground)); font-size: 0.875rem;">
+                        ${displayedCount} / ${currentProducts.length} displayed... Scroll to see more
                     </div>
                 `;
                 productGrid.parentElement.appendChild(loadMoreTrigger);
 
-                // Intersection Observer로 스크롤 감지
+                // Detect scroll with Intersection Observer
                 observeLoadMore(loadMoreTrigger);
             }
         }
 
-        // Intersection Observer로 자동 로딩
+        // Auto loading with Intersection Observer
         function observeLoadMore(element) {
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
-                        // 감지 영역이 보이면 다음 10개 로드
+                        // Load next 10 when trigger zone is visible
                         loadMoreProducts();
                         observer.unobserve(entry.target);
                     }
                 });
             }, {
-                rootMargin: '100px' // 100px 전에 미리 로드
+                rootMargin: '100px' // Pre-load 100px before
             });
 
             observer.observe(element);
         }
 
-        // 이미지 로드 성공 핸들러
+        // Image load success handler
         function handleImageLoad(cardId) {
             const img = document.getElementById(cardId);
             if (img) {
@@ -829,46 +778,46 @@
             }
         }
 
-        // 이미지 로드 실패 핸들러
+        // Image load error handler
         function handleImageError(cardId) {
             const img = document.getElementById(cardId);
             if (img) {
-                // 애니메이션 즉시 중단
+                // Stop animation immediately
                 img.classList.remove('loading');
 
-                // 회색 배경으로 표시 (이미지 없음 표시)
-                img.style.background = 'var(--color-bg-secondary)';
+                // Display with gray background (no image indicator)
+                img.style.background = 'hsl(var(--muted))';
                 img.style.display = 'flex';
                 img.style.alignItems = 'center';
                 img.style.justifyContent = 'center';
 
-                // "이미지 없음" 텍스트 표시를 위해 alt 속성 유지
-                img.alt = '이미지 없음';
+                // Keep alt attribute for "no image" text display
+                img.alt = 'No Image';
 
-                // src를 빈 값으로 설정하여 더 이상 로드 시도 안함
+                // Set src to empty to stop loading attempts
                 img.src = '';
 
-                console.warn(`이미지 로드 실패: ${cardId}`);
+                console.warn(`Image load failed: ${cardId}`);
             }
         }
 
-        // 타임아웃으로 로딩 애니메이션 강제 중단 (5초 후)
+        // Force stop loading animation with timeout (after 5 seconds)
         function setupImageTimeout(cardId) {
             setTimeout(() => {
                 const img = document.getElementById(cardId);
                 if (img && img.classList.contains('loading')) {
-                    console.warn(`이미지 로드 타임아웃: ${cardId}`);
+                    console.warn(`Image load timeout: ${cardId}`);
                     handleImageError(cardId);
                 }
-            }, 5000); // 5초 타임아웃
+            }, 5000); // 5 second timeout
         }
 
-        // 제품 상세 (향후 구현)
+        // Product detail (to be implemented)
         function showProductDetail(productIdx) {
             console.log('Show detail for:', productIdx);
         }
 
-        // 로딩 표시
+        // Show loading
         function showLoading() {
             const loadingDiv = document.createElement('div');
             loadingDiv.className = 'loading';
@@ -889,7 +838,7 @@
             }
         }
 
-        // 스크롤
+        // Scroll
         function scrollToBottom() {
             mainContainer.scrollTo({
                 top: mainContainer.scrollHeight,
@@ -959,7 +908,7 @@
             }
         });
 
-        // 초기화 실행
+        // Initialize
         init();
         } // End of initApp()
     </script>

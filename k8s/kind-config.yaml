@@ -1,0 +1,42 @@
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: rag-enterprise
+nodes:
+- role: control-plane
+  kubeadmConfigPatches:
+  - |
+    kind: InitConfiguration
+    nodeRegistration:
+      kubeletExtraArgs:
+        node-labels: "ingress-ready=true"
+  extraPortMappings:
+  # HTTP
+  - containerPort: 80
+    hostPort: 80
+    protocol: TCP
+  # HTTPS
+  - containerPort: 443
+    hostPort: 443
+    protocol: TCP
+  # API Server
+  - containerPort: 8001
+    hostPort: 8001
+    protocol: TCP
+  # Frontend
+  - containerPort: 8080
+    hostPort: 8080
+    protocol: TCP
+  # Qdrant
+  - containerPort: 6333
+    hostPort: 6333
+    protocol: TCP
+  # PostgreSQL
+  - containerPort: 5432
+    hostPort: 15432
+    protocol: TCP
+  # Redis
+  - containerPort: 6379
+    hostPort: 16379
+    protocol: TCP
+- role: worker
+- role: worker

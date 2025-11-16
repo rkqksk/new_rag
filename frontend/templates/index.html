@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Enterprise - AI 검색 플랫폼</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <h1>🤖 RAG Enterprise</h1>
+                <p class="tagline">AI-Powered Semantic Search Platform</p>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-tab="search">검색</button>
+                <button class="nav-btn" data-tab="upload">업로드</button>
+                <button class="nav-btn" data-tab="analytics">분석</button>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Search Tab -->
+            <div class="tab-content active" id="search-tab">
+                <div class="search-section">
+                    <h2>제품 검색</h2>
+                    <div class="search-box">
+                        <input
+                            type="text"
+                            id="search-input"
+                            placeholder="검색어를 입력하세요... (예: 화장품 용기, 플라스틱 병)"
+                            autocomplete="off"
+                        >
+                        <button id="search-btn" class="btn-primary">
+                            🔍 검색
+                        </button>
+                    </div>
+
+                    <!-- Search Options -->
+                    <div class="search-options">
+                        <label>
+                            <input type="checkbox" id="hybrid-search" checked>
+                            하이브리드 검색 (의미 + 키워드)
+                        </label>
+                        <label>
+                            <input type="checkbox" id="use-llm">
+                            AI 답변 생성
+                        </label>
+                    </div>
+
+                    <!-- Loading -->
+                    <div class="loading" id="loading" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>검색 중...</p>
+                    </div>
+
+                    <!-- Results -->
+                    <div class="results" id="search-results"></div>
+                </div>
+            </div>
+
+            <!-- Upload Tab -->
+            <div class="tab-content" id="upload-tab">
+                <div class="upload-section">
+                    <h2>문서 업로드</h2>
+                    <div class="upload-box">
+                        <input type="file" id="file-input" accept=".pdf,.txt,.csv,.xlsx" multiple>
+                        <label for="file-input" class="upload-label">
+                            📁 파일 선택 또는 드래그 앤 드롭
+                            <span class="upload-info">PDF, TXT, CSV, XLSX 지원</span>
+                        </label>
+                        <button id="upload-btn" class="btn-primary" disabled>
+                            ⬆️ 업로드
+                        </button>
+                    </div>
+                    <div id="upload-status"></div>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div class="tab-content" id="analytics-tab">
+                <div class="analytics-section">
+                    <h2>시스템 분석</h2>
+
+                    <!-- System Health -->
+                    <div class="card">
+                        <h3>시스템 상태</h3>
+                        <div id="health-status" class="health-grid">
+                            <div class="loading">로딩 중...</div>
+                        </div>
+                    </div>
+
+                    <!-- Statistics -->
+                    <div class="card">
+                        <h3>통계</h3>
+                        <div id="statistics" class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">총 문서</span>
+                                <span class="stat-value" id="total-docs">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">총 검색</span>
+                                <span class="stat-value" id="total-searches">-</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">평균 응답시간</span>
+                                <span class="stat-value" id="avg-response">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 RAG Enterprise | v7.0.0+ |
+                <a href="/api/v1/docs" target="_blank">API 문서</a> |
+                <a href="/health/ready" target="_blank">상태 확인</a>
+            </p>
+        </footer>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

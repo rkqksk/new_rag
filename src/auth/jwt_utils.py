@@ -6,7 +6,7 @@ Handles token generation, verification, and refresh
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
 import jwt
-from passlib.context import CryptContext
+import bcrypt
 from fastapi import HTTPException, status
 
 # Configuration
@@ -15,9 +15,6 @@ ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 REFRESH_TOKEN_EXPIRE_DAYS = 7
 
-# Password hashing
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 
 class JWTUtils:
     """JWT token management utilities"""
@@ -25,12 +22,13 @@ class JWTUtils:
     @staticmethod
     def hash_password(password: str) -> str:
         """Hash a password using bcrypt"""
-        return pwd_context.hash(password)
+        salt = bcrypt.gensalt()
+        return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
     @staticmethod
     def verify_password(plain_password: str, hashed_password: str) -> bool:
         """Verify a password against its hash"""
-        return pwd_context.verify(plain_password, hashed_password)
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
     @staticmethod
     def create_access_token(

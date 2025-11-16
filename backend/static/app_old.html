@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>화장품 용기 스마트 상담 - 바로 찾고, 바로 문의하기</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Apple SD Gothic Neo', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            color: white;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.95;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 30px;
+        }
+
+        /* Smart Search Bar */
+        .search-section {
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 18px 24px;
+            font-size: 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 50px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-btn {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .search-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* Quick Filters */
+        .quick-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .filter-chip:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .filter-chip.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Results Area */
+        .results-section {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title .count {
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        /* Product Cards */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            border-color: #667eea;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .product-code {
+            font-size: 12px;
+            color: #999;
+            background: #f5f5f5;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .product-badges {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-material {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .badge-capacity {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .badge-type {
+            background: #e8f5e9;
+            color: #388e3c;
+        }
+
+        .product-specs {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .product-specs div {
+            margin-bottom: 4px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-inquiry {
+            flex: 1;
+            padding: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn-inquiry:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-details {
+            padding: 10px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Chat Section */
+        .chat-section {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-message.user {
+            justify-content: flex-end;
+        }
+
+        .chat-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .chat-message.bot .chat-bubble {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+        }
+
+        .chat-message.user .chat-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Inquiry Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .empty-state-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .empty-state-text {
+            font-size: 14px;
+            color: #999;
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧴 화장품 용기 스마트 상담</h1>
+            <p>원하는 용량 입력하고 바로 문의하세요</p>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Smart Search -->
+            <div class="search-section">
+                <div class="search-box">
+                    <input
+                        type="text"
+                        class="search-input"
+                        id="searchInput"
+                        placeholder="예: 50ml 세럼용기, 100미리 크림용기, PE 재질 용기"
+                        onkeypress="handleSearchKeypress(event)"
+                    >
+                    <button class="search-btn" onclick="performSearch()">검색</button>
+                </div>
+
+            </div>
+
+            <!-- Results -->
+            <div class="results-section" id="resultsSection">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🔍</div>
+                    <div class="empty-state-title">원하는 용량을 검색해보세요</div>
+                    <div class="empty-state-text">
+                        위에서 용량을 선택하거나 직접 검색하면<br>
+                        최적의 제품을 추천해드립니다
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Section (Hidden by default) -->
+            <div class="chat-section" id="chatSection" style="display: none;">
+                <div class="section-title">💬 AI 상담</div>
+                <div class="chat-messages" id="chatMessages"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inquiry Modal -->
+    <div class="modal" id="inquiryModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">견적 문의</div>
+                <button class="modal-close" onclick="closeInquiryModal()">×</button>
+            </div>
+
+            <div id="modalBody">
+                <form onsubmit="submitInquiry(event)">
+                    <div class="form-group">
+                        <label class="form-label">선택 제품</label>
+                        <input type="text" class="form-input" id="selectedProduct" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">회사명</label>
+                        <input type="text" class="form-input" id="companyName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">담당자명</label>
+                        <input type="text" class="form-input" id="contactName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">연락처</label>
+                        <input type="tel" class="form-input" id="contactPhone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">이메일</label>
+                        <input type="email" class="form-input" id="contactEmail" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">예상 수량</label>
+                        <input type="text" class="form-input" id="quantity" placeholder="예: 1000개">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">추가 요청사항</label>
+                        <textarea class="form-input form-textarea" id="message" placeholder="인쇄, 색상, 납기 등 요청사항을 입력해주세요"></textarea>
+                    </div>
+
+                    <button type="submit" class="form-submit">문의 보내기</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+        let currentProducts = [];
+        let currentProduct = null;
+
+        // Handle search keypress
+        function handleSearchKeypress(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+
+        // Quick search
+        function quickSearch(query) {
+            document.getElementById('searchInput').value = query;
+            performSearch();
+        }
+
+        // Perform search
+        async function performSearch() {
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.innerHTML = '<div class="loading"><div class="spinner"></div><p>검색 중...</p></div>';
+
+            try {
+                // Step 1: Search products from enhanced dictionary
+                const productsResponse = await fetch(`${API_BASE}/api/v1/products/search?query=${encodeURIComponent(query)}`);
+
+                if (!productsResponse.ok) {
+                    throw new Error('제품 검색 실패');
+                }
+
+                const productsData = await productsResponse.json();
+                currentProducts = productsData.products || [];
+
+                // Step 2: Search Q&A knowledge base
+                const qaResponse = await fetch(`${API_BASE}/api/v1/qa/search?query=${encodeURIComponent(query)}&limit=3`);
+                const qaData = qaResponse.ok ? await qaResponse.json() : { results: [] };
+
+                // Render results
+                renderSearchResults(currentProducts, qaData.results);
+
+            } catch (error) {
+                console.error('Search error:', error);
+                resultsSection.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">⚠️</div>
+                        <div class="empty-state-title">검색 중 오류가 발생했습니다</div>
+                        <div class="empty-state-text">${error.message}</div>
+                    </div>
+                `;
+            }
+        }
+
+        // Render search results
+        function renderSearchResults(products, qaResults) {
+            const resultsSection = document.getElementById('resultsSection');
+
+            if (products.length === 0) {
+                resultsSection.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">😔</div>
+                        <div class="empty-state-title">검색 결과가 없습니다</div>
+                        <div class="empty-state-text">
+                            다른 용량이나 제품을 검색해보세요<br>
+                            예: 50ml, 세럼, PE 재질
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <div class="section-title">
+                    제품 추천
+                    <span class="count">${products.length}개</span>
+                </div>
+                <div class="products-grid">
+            `;
+
+            products.forEach((product, index) => {
+                // Extract data from normalized structure
+                const capacity = product.capacity || 'N/A';
+                const material = product.material || 'N/A';
+                const moq = product.moq || 'N/A';
+                const dimensions = product.dimensions || '';
+
+                // Get first image or use placeholder
+                const images = product.images || [];
+                const imageUrl = images.length > 0 ? images[0].url : 'https://via.placeholder.com/200x200?text=No+Image';
+
+                html += `
+                    <div class="product-card" onclick="selectProduct(${index})">
+                        <div class="product-image">
+                            <img src="${imageUrl}" alt="${product.product_name}" onerror="this.src='https://via.placeholder.com/200x200?text=No+Image'">
+                        </div>
+                        <div class="product-header">
+                            <div>
+                                <div class="product-name">${product.product_name}</div>
+                                <div class="product-code">${product.product_code}</div>
+                            </div>
+                        </div>
+
+                        <div class="product-badges">
+                            <span class="badge badge-material">${material}</span>
+                            <span class="badge badge-capacity">${capacity}</span>
+                        </div>
+
+                        <div class="product-specs">
+                            ${dimensions ? `<div>📐 사양: ${dimensions}</div>` : ''}
+                            ${moq ? `<div>📦 MOQ: ${moq}</div>` : ''}
+                        </div>
+
+                        <div class="product-actions">
+                            <button class="btn-inquiry" onclick="openInquiryModal(${index}); event.stopPropagation();">
+                                💬 문의하기
+                            </button>
+                            <button class="btn-details" onclick="showProductDetails(${index}); event.stopPropagation();">
+                                상세
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += '</div>';
+
+            // Q&A section removed - only show products
+
+            resultsSection.innerHTML = html;
+        }
+
+        // Select product
+        function selectProduct(index) {
+            currentProduct = currentProducts[index];
+            console.log('Selected product:', currentProduct);
+        }
+
+        // Show product details
+        function showProductDetails(index) {
+            const product = currentProducts[index];
+            const enrichedInfo = product.enriched_info || {};
+
+            alert(`
+제품명: ${product.product_name}
+제품코드: ${product.product_code}
+재질: ${product.material}
+용량: ${product.capacity?.display || 'N/A'}
+
+${enrichedInfo.detailed_description || '상세 정보가 없습니다.'}
+            `);
+        }
+
+        // Open inquiry modal
+        function openInquiryModal(index) {
+            currentProduct = currentProducts[index];
+            document.getElementById('selectedProduct').value = `${currentProduct.product_name} (${currentProduct.product_code})`;
+            document.getElementById('inquiryModal').classList.add('active');
+        }
+
+        // Close inquiry modal
+        function closeInquiryModal() {
+            document.getElementById('inquiryModal').classList.remove('active');
+        }
+
+        // Submit inquiry
+        async function submitInquiry(event) {
+            event.preventDefault();
+
+            const inquiryData = {
+                product_id: currentProduct.product_id,
+                product_name: currentProduct.product_name,
+                product_code: currentProduct.product_code,
+                company_name: document.getElementById('companyName').value,
+                contact_name: document.getElementById('contactName').value,
+                contact_phone: document.getElementById('contactPhone').value,
+                contact_email: document.getElementById('contactEmail').value,
+                quantity: document.getElementById('quantity').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/api/v1/inquiries`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(inquiryData)
+                });
+
+                if (response.ok) {
+                    document.getElementById('modalBody').innerHTML = `
+                        <div class="success-message">
+                            <strong>✅ 문의가 접수되었습니다!</strong><br><br>
+                            담당자가 확인 후 빠른 시일 내에 연락드리겠습니다.<br>
+                            감사합니다.
+                        </div>
+                        <button class="form-submit" onclick="closeInquiryModal()">확인</button>
+                    `;
+                } else {
+                    alert('문의 전송에 실패했습니다. 다시 시도해주세요.');
+                }
+            } catch (error) {
+                console.error('Inquiry submission error:', error);
+                alert('문의 전송 중 오류가 발생했습니다.');
+            }
+        }
+
+        // Initial load: Show sample products
+        window.addEventListener('DOMContentLoaded', () => {
+            // Optionally load featured products or recent searches
+        });
+    </script>
+</body>
+</html>

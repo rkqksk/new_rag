@@ -1,7 +1,5 @@
 {
   "mcpServers": {
-    "_comment_core": "=== CORE SERVERS (Always Available) ===",
-
     "filesystem": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-filesystem", "/home/rkqksk/projects/new_rag"],
@@ -13,8 +11,6 @@
       "args": ["mcp-server-git", "--repository", "/home/rkqksk/projects/new_rag"],
       "description": "Git repository operations and code search (official Python-based)"
     },
-
-    "_comment_custom": "=== CUSTOM PYTHON SERVERS (Project-Specific) ===",
 
     "qdrant": {
       "command": "python3",
@@ -53,8 +49,6 @@
       "description": "Query router (NexaAI/Ollama selection)"
     },
 
-    "_comment_web": "=== WEB AUTOMATION (Load On-Demand) ===",
-
     "puppeteer": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
@@ -79,19 +73,10 @@
       "description": "Chrome DevTools (specialized - load on-demand)"
     },
 
-    "_comment_development": "=== DEVELOPMENT TOOLS (Load On-Demand) ===",
-
     "shadcn-ui": {
       "command": "npx",
       "args": ["-y", "@jpisnice/shadcn-ui-mcp-server"],
       "description": "shadcn/ui components (React, Svelte, Vue, React Native)"
-    },
-
-    "testsprite": {
-      "command": "npx",
-      "args": ["-y", "@testsprite/testsprite-mcp"],
-      "env": {"TESTSPRITE_API_KEY": "${TESTSPRITE_API_KEY}"},
-      "description": "AI testing automation (42% → 93% quality)"
     },
 
     "github": {
@@ -100,8 +85,6 @@
       "env": {"GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"},
       "description": "GitHub API (free for public repos)"
     },
-
-    "_comment_database": "=== DATABASES (Optional - Load On-Demand) ===",
 
     "postgres": {
       "command": "npx",
@@ -115,8 +98,6 @@
       "description": "SQLite caching database"
     },
 
-    "_comment_optional": "=== OPTIONAL SERVICES (Disabled by Default) ===",
-
     "tavily": {
       "command": "npx",
       "args": ["-y", "tavily-mcp"],
@@ -127,16 +108,16 @@
   },
 
   "metadata": {
-    "version": "3.1.0",
-    "updated": "2025-11-14",
+    "version": "3.1.1",
+    "updated": "2025-11-15",
     "pattern": "progressive-disclosure",
     "description": "Unified MCP registry - agents discover and load tools on-demand for 98.7% token reduction",
-    "total_servers": 16,
+    "total_servers": 15,
     "core_servers": ["filesystem", "git", "qdrant", "ollama", "rag-orchestrator", "query-router"],
-    "on_demand_servers": ["puppeteer", "playwright", "chrome-devtools", "shadcn-ui", "testsprite", "github", "postgres", "sqlite"],
+    "on_demand_servers": ["puppeteer", "playwright", "chrome-devtools", "shadcn-ui", "github", "postgres", "sqlite"],
     "lightweight_servers": ["fetch"],
     "optional_servers": ["tavily"],
-    "status": "All servers verified and working (2025-11-14)",
+    "status": "All servers verified and working (2025-11-15)",
     "token_strategy": {
       "pattern": "progressive-disclosure",
       "reduction": "98.7%",

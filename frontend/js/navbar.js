@@ -20,13 +20,13 @@ function createNavbar() {
                 position: sticky;
                 top: 0;
                 z-index: 1000;
-                background: white;
-                border-bottom: 1px solid #e0e0e0;
+                background: hsl(var(--background));
+                border-bottom: 1px solid hsl(var(--border));
                 padding: 12px 24px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+                box-shadow: 0 1px 3px rgba(0,0,0,0.3);
             }
 
             .navbar-left {
@@ -38,7 +38,7 @@ function createNavbar() {
             .navbar-logo {
                 font-size: 20px;
                 font-weight: 700;
-                color: #2d333a;
+                color: hsl(var(--foreground));
                 text-decoration: none;
                 display: flex;
                 align-items: center;
@@ -46,7 +46,7 @@ function createNavbar() {
             }
 
             .navbar-logo:hover {
-                color: #667eea;
+                color: hsl(var(--primary));
             }
 
             .navbar-nav {
@@ -55,23 +55,23 @@ function createNavbar() {
             }
 
             .navbar-link {
-                color: #6e6e80;
+                color: hsl(var(--muted-foreground));
                 text-decoration: none;
                 font-size: 14px;
                 font-weight: 500;
                 padding: 6px 12px;
-                border-radius: 6px;
+                border-radius: var(--radius);
                 transition: all 0.15s;
             }
 
             .navbar-link:hover {
-                background: #f7f7f8;
-                color: #2d333a;
+                background: hsl(var(--accent));
+                color: hsl(var(--accent-foreground));
             }
 
             .navbar-link.active {
-                background: #f4f4f4;
-                color: #2d333a;
+                background: hsl(var(--muted));
+                color: hsl(var(--foreground));
             }
 
             .navbar-right {
@@ -85,25 +85,25 @@ function createNavbar() {
                 align-items: center;
                 gap: 10px;
                 padding: 6px 12px;
-                background: #f7f7f8;
-                border-radius: 8px;
+                background: hsl(var(--card));
+                border-radius: var(--radius);
                 cursor: pointer;
                 transition: background 0.15s;
             }
 
             .navbar-user:hover {
-                background: #ececf1;
+                background: hsl(var(--muted));
             }
 
             .navbar-avatar {
                 width: 32px;
                 height: 32px;
                 border-radius: 50%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                background: hsl(var(--primary));
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                color: white;
+                color: hsl(var(--primary-foreground));
                 font-weight: 600;
                 font-size: 14px;
             }
@@ -116,20 +116,20 @@ function createNavbar() {
             .navbar-user-name {
                 font-size: 14px;
                 font-weight: 600;
-                color: #2d333a;
+                color: hsl(var(--foreground));
             }
 
             .navbar-user-role {
                 font-size: 12px;
-                color: #6e6e80;
+                color: hsl(var(--muted-foreground));
             }
 
             .navbar-logout {
                 padding: 8px 16px;
                 background: transparent;
-                border: 1px solid #d1d5db;
-                border-radius: 6px;
-                color: #6e6e80;
+                border: 1px solid hsl(var(--border));
+                border-radius: var(--radius);
+                color: hsl(var(--muted-foreground));
                 font-size: 14px;
                 font-weight: 500;
                 cursor: pointer;
@@ -137,9 +137,9 @@ function createNavbar() {
             }
 
             .navbar-logout:hover {
-                background: #f7f7f8;
-                border-color: #9ca3af;
-                color: #2d333a;
+                background: hsl(var(--accent));
+                border-color: hsl(var(--border));
+                color: hsl(var(--accent-foreground));
             }
 
             /* Dropdown menu */
@@ -152,10 +152,10 @@ function createNavbar() {
                 top: 100%;
                 right: 0;
                 margin-top: 8px;
-                background: white;
-                border: 1px solid #e0e0e0;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                background: hsl(var(--popover));
+                border: 1px solid hsl(var(--border));
+                border-radius: var(--radius);
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
                 min-width: 200px;
                 display: none;
                 z-index: 1001;
@@ -168,11 +168,11 @@ function createNavbar() {
             .navbar-dropdown-item {
                 display: block;
                 padding: 12px 16px;
-                color: #2d333a;
+                color: hsl(var(--popover-foreground));
                 text-decoration: none;
                 font-size: 14px;
                 transition: background 0.15s;
-                border-bottom: 1px solid #f7f7f8;
+                border-bottom: 1px solid hsl(var(--border));
             }
 
             .navbar-dropdown-item:last-child {
@@ -180,15 +180,15 @@ function createNavbar() {
             }
 
             .navbar-dropdown-item:hover {
-                background: #f7f7f8;
+                background: hsl(var(--accent));
             }
 
             .navbar-dropdown-item.danger {
-                color: #dc2626;
+                color: hsl(var(--destructive));
             }
 
             .navbar-dropdown-item.danger:hover {
-                background: #fef2f2;
+                background: hsl(var(--destructive) / 0.1);
             }
 
             /* Mobile responsive */
@@ -214,7 +214,7 @@ function createNavbar() {
 
         <div class="navbar-left">
             <a href="/chat.html" class="navbar-logo">
-                🚀 RAG Enterprise
+                RAG Enterprise
             </a>
             <nav class="navbar-nav">
                 <a href="/chat.html" class="navbar-link" data-page="chat">제품 검색</a>
@@ -232,8 +232,8 @@ function createNavbar() {
                     </div>
                 </div>
                 <div class="navbar-dropdown-menu" id="userDropdown">
-                    <a href="/profile.html" class="navbar-dropdown-item">👤 내 프로필</a>
-                    <a href="#" class="navbar-dropdown-item danger" onclick="handleLogout(event)">🚪 로그아웃</a>
+                    <a href="/profile.html" class="navbar-dropdown-item">내 프로필</a>
+                    <a href="#" class="navbar-dropdown-item danger" onclick="handleLogout(event)">로그아웃</a>
                 </div>
             </div>
         </div>

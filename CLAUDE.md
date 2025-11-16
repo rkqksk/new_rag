@@ -259,6 +259,7 @@ docker exec postgres pg_isready
 - **docs/guides/LOCAL_SETUP.md** - Setup guide
 - **docs/guides/TROUBLESHOOTING.md** - Common issues
 - **docs/guides/DEPLOYMENT_GUIDE.md** - Deployment
+- **docs/LLM_STRATEGY.md** - LLM model selection & hybrid routing ⭐ NEW
 
 ### Reference (Technical)
 - **docs/reference/API_DOCUMENTATION.md** - API endpoints
@@ -278,51 +279,13 @@ docker exec postgres pg_isready
 
 ---
 
-## 🎨 Active SKILLs
-
-### RAG & Data
-- **rag-pipeline** - RAG orchestration
-- **chunking-expert** - Advanced chunking strategies ⭐
-- **embedding-expert** - Embedding optimization ⭐
-- **nexa-rag-optimizer** - Query optimization
-- **multimodal-processor** - Multi-modal processing
-- **data-collector** - Universal data collection ⭐
-
-### Platform
-- **saas-platform** - SaaS management ⭐
-- **frontend-platform** - UI design system ⭐
-- **debugging-expert** - Chrome DevTools debugging ⭐
-
-### Domain
-- **manufacturing-expert** - Manufacturing docs ⭐
-- **packaging-expert** - Packaging docs ⭐
-- **web-crawler-pipeline** - Web scraping automation ⭐
-
-**Location**: `.claude/skills/` (progressive disclosure)
-
----
-
 ## 🔌 MCP Integration
 
-### Main Project (Token-Optimized)
-- **filesystem** - File operations ($0)
+### Active MCP Servers
+- **filesystem** - File operations for /home/rkqksk/projects/new_rag
+- **github** - GitHub integration (unlimited for public repos)
 
-### Sub-Agents (8 Specialized Agents)
-1. **crawling-agent** - Web scraping (puppeteer, fetch, chrome-devtools)
-2. **frontend-agent** - React/Tailwind (shadcn-ui, chrome-devtools)
-3. **data-agent** - Database ops (postgres, sqlite)
-4. **code-review-agent** - PR reviews (github)
-5. **rag-agent** - RAG optimization (pure Python)
-6. **testing-agent** - Test automation (pytest)
-7. **deployment-agent** - Docker/K8s (CLI)
-8. **monitoring-agent** - Performance (Prometheus/Grafana)
-
-**Priority MCPs**:
-- ⭐ **testsprite** - AI testing (1000 free/month, 42% → 93% quality)
-- **tavily** - AI search (1000 free/month)
-- **github** - Unlimited for public repos
-
-**Config**: `.claude/mcp.json`, `.claude/agents/*/agent.json`
+**Config**: `.claude/mcp.json`
 
 ---
 

@@ -14,6 +14,7 @@ from app.routes import products, qa, inquiries, tracking
 from src.api.v1 import saas
 from src.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
 from src.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentication
+from src.api import chat  # v8.2.0 Contextual Chat API
 
 # v8.5.0 Phase 9 - Advanced Infrastructure
 from src.api.routes import metrics, recommendations, search_ranking, websocket
@@ -31,11 +32,13 @@ from app.middleware.request_tracing import RequestTracingMiddleware
 try:
     from app.realtime.socketio_server import RealtimeServer, get_realtime_server
     from app.realtime.postgres_notify import get_notify_manager
-    from app.realtime.redis_pubsub import get_pubsub_manager
+    # Temporarily disabled due to aioredis Python 3.11 compatibility issue
+    # from app.realtime.redis_pubsub import get_pubsub_manager
     REALTIME_AVAILABLE = True
-except ImportError as e:
+except (ImportError, TypeError) as e:
     REALTIME_AVAILABLE = False
-    app_logger.warning(f"Realtime backend not available: {e}")
+    logger = logging.getLogger(__name__)
+    logger.warning(f"Realtime backend not available: {e}")
 
 # Setup logging
 logger = setup_logging(settings.environment)
@@ -222,6 +225,16 @@ app.include_router(
 app_logger.info("🔐 JWT Authentication enabled at /api/v1/auth")
 
 # ============================================================================
+# Chat API - Contextual conversational search (v8.2.0)
+# ============================================================================
+app.include_router(
+    chat.router,
+    prefix=settings.api_prefix,
+    tags=["Chat"]
+)
+app_logger.info("💬 Chat API enabled at /api/v1/chat")
+
+# ============================================================================
 # Phase 9 - Advanced Infrastructure (v8.5.0)
 # ============================================================================
 # Metrics & Analytics API
@@ -399,25 +412,15 @@ async def startup_event():
             # 2. Register query handlers (example)
             @realtime.query("products")
             async def get_products(params):
-                """Get products by material"""
-                from app.repositories.product_repository import ProductRepository
-                repo = ProductRepository()
-                material = params.get("material")
-                if material:
-                    products = await repo.get_by_material(material)
-                else:
-                    products = await repo.get_all(limit=100)
-                return [p.dict() for p in products]
+                """Get products by material - placeholder"""
+                # TODO: Implement when product repository is ready
+                return []
 
             @realtime.query("search_results")
             async def get_search_results(params):
-                """Get search results"""
-                from app.services.search_service import SearchService
-                service = SearchService()
-                query = params.get("query", "")
-                top_k = params.get("top_k", 5)
-                results = await service.search(query, top_k)
-                return results
+                """Get search results - placeholder"""
+                # TODO: Implement when search service is ready
+                return []
 
             # 3. Get PostgreSQL notify manager
             notify_manager = get_notify_manager()
@@ -440,36 +443,38 @@ async def startup_event():
                         app_logger.warning(f"Could not create trigger for {table}: {e}")
 
                 # Listen to product changes and broadcast to Socket.IO clients
-                async def handle_product_change(channel, data):
-                    """Handle product change notifications"""
-                    app_logger.debug(f"Product changed: {data}")
-                    # Broadcast update to all subscribed clients
-                    await realtime.broadcast_update("products", {})
+                # Temporarily disabled - causing startup hang
+                # async def handle_product_change(channel, data):
+                #     """Handle product change notifications"""
+                #     app_logger.debug(f"Product changed: {data}")
+                #     # Broadcast update to all subscribed clients
+                #     await realtime.broadcast_update("products", {})
 
-                notify_manager.listen('product_changes', handle_product_change)
-                notify_manager.start_listener_task()
-                app_logger.info("✅ PostgreSQL LISTEN/NOTIFY activated")
+                # notify_manager.listen('product_changes', handle_product_change)
+                # notify_manager.start_listener_task()
+                app_logger.info("✅ PostgreSQL LISTEN/NOTIFY activated (listener disabled temporarily)")
 
             # 5. Initialize Redis Pub/Sub for multi-server sync
-            pubsub = await get_pubsub_manager()
+            # Temporarily disabled due to aioredis Python 3.11 compatibility issue
+            # pubsub = await get_pubsub_manager()
 
             # Subscribe to query updates from other servers
-            async def handle_query_update(channel, message):
-                """Handle query updates from other servers"""
-                if message.get('type') == 'query_update':
-                    query_name = message.get('query')
-                    params = message.get('params')
-                    await realtime.broadcast_update(query_name, params)
+            # async def handle_query_update(channel, message):
+            #     """Handle query updates from other servers"""
+            #     if message.get('type') == 'query_update':
+            #         query_name = message.get('query')
+            #         params = message.get('params')
+            #         await realtime.broadcast_update(query_name, params)
 
-            await pubsub.subscribe_to_query_updates(handle_query_update)
-            app_logger.info("✅ Redis Pub/Sub activated")
+            # await pubsub.subscribe_to_query_updates(handle_query_update)
+            # app_logger.info("✅ Redis Pub/Sub activated")
 
             # Store instances in app state
             app.state.realtime = realtime
             app.state.notify_manager = notify_manager
-            app.state.pubsub = pubsub
+            # app.state.pubsub = pubsub
 
-            app_logger.info("⚡ Realtime backend ready (Socket.IO + PostgreSQL + Redis)")
+            app_logger.info("⚡ Realtime backend ready (Socket.IO + PostgreSQL)")
 
         except Exception as e:
             app_logger.error(f"Failed to initialize realtime backend: {e}")

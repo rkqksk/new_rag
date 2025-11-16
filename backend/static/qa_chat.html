@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAG Enterprise - 제품 상담 챗봇</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 800px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+        .message-text {
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .products-list {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .product-item {
+            background: #f8f9fa;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 4px;
+        }
+
+        .product-info {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .confidence-high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .confidence-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .confidence-low {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            max-width: 70%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .typing-indicator.active {
+            display: inline-block;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 5px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: typing 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .input-container {
+            padding: 20px 30px;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+        }
+
+        .input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        #messageInput {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        #messageInput:focus {
+            border-color: #667eea;
+        }
+
+        #sendButton {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        #sendButton:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        #sendButton:active {
+            transform: translateY(0);
+        }
+
+        #sendButton:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .timestamp {
+            font-size: 11px;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #dc3545;
+        }
+
+        /* Scrollbar styling */
+        .chat-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: #5568d3;
+        }
+
+        /* Product detail modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #aaa;
+            cursor: pointer;
+            border: none;
+            background: none;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .modal-close:hover {
+            color: #000;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+            padding-right: 30px;
+        }
+
+        .modal-header h2 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+            font-size: 22px;
+        }
+
+        .modal-category {
+            color: #999;
+            font-size: 14px;
+        }
+
+        .modal-body {
+            margin-bottom: 20px;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            margin-bottom: 15px;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .modal-specification {
+            background: #f0f0ff;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 3px solid #667eea;
+        }
+
+        .spec-title {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            font-size: 13px;
+            color: #333;
+        }
+
+        .spec-label {
+            font-weight: 500;
+            color: #666;
+        }
+
+        .spec-value {
+            color: #333;
+            font-weight: 600;
+        }
+
+        /* Compact specs table styling */
+        .modal-specs-table {
+            background-color: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 15px 0;
+            display: none;
+        }
+
+        .modal-specs-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .modal-specs-table td {
+            padding: 8px 12px;
+            font-size: 14px;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        .modal-specs-table td:last-child {
+            border-right: none;
+        }
+
+        .modal-description {
+            color: #333;
+            line-height: 1.6;
+            font-size: 13px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal-button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-button-close {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .modal-button-close:hover {
+            background: #d0d0d0;
+        }
+
+        /* Clickable product items */
+        .product-item {
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-item:hover {
+            background: #f0f0ff;
+            border-left-color: #5568d3;
+        }
+
+        /* Drag-and-drop image upload styles */
+        .dropzone-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(102, 126, 234, 0.95);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: white;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .dropzone-overlay.active {
+            display: flex;
+        }
+
+        .dropzone-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .image-preview-card {
+            display: none;
+            background: #f0f0ff;
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 30px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .image-preview-card.active {
+            display: block;
+        }
+
+        .preview-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .preview-thumbnail {
+            width: 100px;
+            height: 100px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 2px solid #667eea;
+        }
+
+        .preview-info {
+            flex: 1;
+        }
+
+        .preview-filename {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .preview-size {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .preview-remove {
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .preview-remove:hover {
+            background: #c82333;
+        }
+
+        .preview-search-options {
+            margin-top: 15px;
+        }
+
+        .preview-text-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        .preview-text-input:focus {
+            border-color: #5568d3;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .preview-search-button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .preview-search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .upload-icon-button {
+            padding: 15px 20px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.2s;
+        }
+
+        .upload-icon-button:hover {
+            background: #f0f0ff;
+            transform: translateY(-2px);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        /* Image search results styling */
+        .image-results {
+            margin-top: 15px;
+        }
+
+        .similarity-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🤖 RAG Enterprise 제품 상담</h1>
+            <p>제품에 대해 무엇이든 물어보세요!</p>
+        </div>
+
+        <div class="chat-container" id="chatContainer">
+            <div class="message bot">
+                <div class="message-content">
+                    <div class="message-text">
+                        안녕하세요! 저는 RAG Enterprise 제품 상담 챗봇입니다.
+                        용기, 병, 뚜껑 등 제품에 대해 궁금한 점을 물어보세요.
+                        예: "50ml 용기 추천해줘", "브로우 용기가 뭐야?"
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <div class="input-wrapper">
+                <input
+                    type="text"
+                    id="messageInput"
+                    placeholder="질문을 입력하세요..."
+                    autocomplete="off"
+                >
+            </div>
+            <button class="upload-icon-button" id="uploadButton" title="이미지로 검색">📷</button>
+            <button id="sendButton">전송</button>
+        </div>
+    </div>
+
+    <!-- Drag-and-Drop Overlay -->
+    <div class="dropzone-overlay" id="dropzone">
+        <div class="dropzone-icon">📤</div>
+        <div>이미지를 여기에 드롭하세요</div>
+        <div style="font-size: 14px; margin-top: 10px; opacity: 0.8;">JPEG, JPG, PNG (최대 5MB)</div>
+    </div>
+
+    <!-- Image Preview Card -->
+    <div class="image-preview-card" id="imagePreview">
+        <div class="preview-header">
+            <img id="previewThumbnail" class="preview-thumbnail" src="" alt="Preview">
+            <div class="preview-info">
+                <div class="preview-filename" id="previewFilename"></div>
+                <div class="preview-size" id="previewSize"></div>
+            </div>
+            <button class="preview-remove" id="removeImage">✕</button>
+        </div>
+        <div class="preview-search-options">
+            <input
+                type="text"
+                class="preview-text-input"
+                id="imageQueryText"
+                placeholder="선택사항: 추가 검색어 입력 (예: 50ml, PET 재질)"
+            >
+            <button class="preview-search-button" id="imageSearchButton">🔍 이미지로 검색</button>
+        </div>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="fileInput" accept="image/jpeg,image/jpg,image/png">
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProductModal()">&times;</button>
+            <div class="modal-header">
+                <h2 id="modalProductName"></h2>
+                <div class="modal-category" id="modalProductCategory"></div>
+            </div>
+            <div class="modal-body">
+                <!-- Product Image -->
+                <div class="modal-image" id="modalProductImage">
+                    🖼️ 이미지 준비 중
+                </div>
+
+                <!-- Compact Specification Table -->
+                <div class="modal-specs-table" id="modalSpecsTable">
+                    <table id="specsTableContent"></table>
+                </div>
+
+                <!-- Print Area Download Link -->
+                <div id="printAreaLink" style="display:none; margin-bottom: 15px;">
+                    <a href="#" id="printAreaUrl" target="_blank" style="color: #667eea; text-decoration: none; font-weight: 600;">
+                        📄 인쇄영역 다운로드
+                    </a>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-button modal-button-close" onclick="closeProductModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = window.location.origin;
+        const chatContainer = document.getElementById('chatContainer');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Send message on button click
+        sendButton.addEventListener('click', sendMessage);
+
+        // Send message on Enter key
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const question = messageInput.value.trim();
+
+            if (!question) return;
+
+            // Disable input
+            messageInput.disabled = true;
+            sendButton.disabled = true;
+
+            // Add user message
+            addMessage('user', question);
+
+            // Clear input
+            messageInput.value = '';
+
+            // Show typing indicator
+            const typingIndicator = addTypingIndicator();
+
+            try {
+                // Call API
+                const response = await fetch(`${API_BASE_URL}/api/v1/qa/ask`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        collection: 'products_all',
+                        top_k: 3
+                    })
+                });
+
+                // Remove typing indicator
+                typingIndicator.remove();
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Add bot response
+                addBotResponse(data);
+
+            } catch (error) {
+                console.error('Error:', error);
+                typingIndicator.remove();
+                addErrorMessage('죄송합니다. 응답을 처리하는 중 오류가 발생했습니다. 다시 시도해주세요.');
+            } finally {
+                // Re-enable input
+                messageInput.disabled = false;
+                sendButton.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.textContent = text;
+
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString('ko-KR');
+
+            contentDiv.appendChild(textDiv);
+            contentDiv.appendChild(timestamp);
+            messageDiv.appendChild(contentDiv);
+            chatContainer.appendChild(messageDiv);
+
+            scrollToBottom();
+        }
+
+        function addBotResponse(data) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            // Answer text
+            const textDiv = document.createElement('div');
+            textDiv.className = 'message-text';
+            textDiv.textContent = data.answer;
+            contentDiv.appendChild(textDiv);
+
+            // Related products
+            if (data.related_products && data.related_products.length > 0) {
+                const productsDiv = document.createElement('div');
+                productsDiv.className = 'products-list';
+                productsDiv.innerHTML = '<strong>관련 제품:</strong>';
+
+                data.related_products.forEach((product, index) => {
+                    const productItem = document.createElement('div');
+                    productItem.className = 'product-item';
+                    productItem.setAttribute('data-product-id', product.product_id);
+                    productItem.setAttribute('data-product-name', product.product_name);
+                    productItem.setAttribute('data-product-category', product.category);
+
+                    // 제품 스펙에서 가격 정보 추출 (specifications 필드)
+                    const specs = product.specifications || {};
+                    let priceInfo = '';
+                    if (specs.regular_price) {
+                        priceInfo = ` | 가격: ${specs.regular_price.toLocaleString()}원`;
+                    } else if (specs.selling_price) {
+                        priceInfo = ` | 가격: ${specs.selling_price.toLocaleString()}원`;
+                    } else if (specs.supply_price) {
+                        priceInfo = ` | 가격: ${specs.supply_price.toLocaleString()}원`;
+                    }
+
+                    productItem.innerHTML = `
+                        <div class="product-name">${index + 1}. ${product.product_name}</div>
+                        <div class="product-info">
+                            카테고리: ${product.category} |
+                            유사도: ${(product.similarity_score * 100).toFixed(1)}%${priceInfo}
+                        </div>
+                    `;
+                    // Add click event to open product modal
+                    productItem.addEventListener('click', () => {
+                        openProductModal(product.product_id, product.product_name, product.category);
+                    });
+                    productsDiv.appendChild(productItem);
+                });
+
+                contentDiv.appendChild(productsDiv);
+            }
+
+            // Confidence badge
+            const confidence = data.confidence;
+            const confidenceBadge = document.createElement('div');
+            confidenceBadge.className = `confidence-badge ${getConfidenceClass(confidence)}`;
+            confidenceBadge.textContent = `신뢰도: ${(confidence * 100).toFixed(0)}%`;
+            contentDiv.appendChild(confidenceBadge);
+
+            // Timestamp
+            const timestamp = document.createElement('div');
+            timestamp.className = 'timestamp';
+            timestamp.textContent = new Date().toLocaleTimeString('ko-KR');
+            contentDiv.appendChild(timestamp);
+
+            messageDiv.appendChild(contentDiv);
+            chatContainer.appendChild(messageDiv);
+
+            scrollToBottom();
+        }
+
+        function addTypingIndicator() {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator active';
+            typingDiv.innerHTML = `
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            `;
+
+            messageDiv.appendChild(typingDiv);
+            chatContainer.appendChild(messageDiv);
+            scrollToBottom();
+
+            return messageDiv;
+        }
+
+        function addErrorMessage(errorText) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = errorText;
+            chatContainer.appendChild(errorDiv);
+            scrollToBottom();
+        }
+
+        function getConfidenceClass(confidence) {
+            if (confidence >= 0.7) return 'confidence-high';
+            if (confidence >= 0.5) return 'confidence-medium';
+            return 'confidence-low';
+        }
+
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        // Focus input on load
+        window.addEventListener('load', () => {
+            messageInput.focus();
+        });
+
+        // Product modal functions
+        async function openProductModal(productId, productName, category) {
+            try {
+                // Fetch product details from API
+                const response = await fetch(`${API_BASE_URL}/api/v1/products/${productId}`);
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const productData = await response.json();
+
+                // Update modal header
+                document.getElementById('modalProductName').textContent = productData.product_name;
+                document.getElementById('modalProductCategory').textContent = `카테고리: ${productData.category}`;
+
+                // Update product image with improved scaling
+                const imageElement = document.getElementById('modalProductImage');
+                if (productData.image_url) {
+                    imageElement.innerHTML = `<img src="${productData.image_url}" alt="제품 이미지" style="width:100%; height:100%; object-fit:contain; max-width:100%; max-height:100%; padding:10px; background-color:#f5f5f5;">`;
+                } else {
+                    imageElement.innerHTML = `🖼️ 이미지 준비 중<br><small>제품 ${productData.product_name}</small>`;
+                }
+
+                // Update compact specification table with pricing
+                const specsTableElement = document.getElementById('modalSpecsTable');
+                const specsTableContent = document.getElementById('specsTableContent');
+                if (productData.specification) {
+                    const specs = productData.specification;
+                    const price = productData.price;
+
+                    // Primary price display (정상가, 판매가, 공급가 순서)
+                    let priceDisplay = '-';
+                    if (price && price.primary_price) {
+                        priceDisplay = `${price.primary_price.toLocaleString()}원`;
+                        if (price.primary_price_label) {
+                            priceDisplay += ` (${price.primary_price_label})`;
+                        }
+                    }
+
+                    const tableHTML = `
+                        <tr>
+                            <td><strong>제품 코드:</strong> ${specs.product_code || '-'}</td>
+                            <td><strong>용량:</strong> ${specs.capacity || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>재질:</strong> ${specs.material || '-'}</td>
+                            <td><strong>사양:</strong> ${specs.dimension || '-'}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><strong>가격:</strong> ${priceDisplay}</td>
+                        </tr>
+                        ${productData.moq ? `<tr><td colspan="2"><strong>MOQ:</strong> ${productData.moq}</td></tr>` : ''}
+                    `;
+                    specsTableContent.innerHTML = tableHTML;
+                    specsTableElement.style.display = 'block';
+                } else {
+                    specsTableElement.style.display = 'none';
+                }
+
+                // Update print area link
+                const printAreaLinkDiv = document.getElementById('printAreaLink');
+                const printAreaUrl = document.getElementById('printAreaUrl');
+                if (productData.print_area_url) {
+                    printAreaUrl.href = productData.print_area_url;
+                    printAreaLinkDiv.style.display = 'block';
+                } else {
+                    printAreaLinkDiv.style.display = 'none';
+                }
+
+                // Show modal
+                const modal = document.getElementById('productModal');
+                modal.classList.add('active');
+
+                // Close modal when clicking outside
+                modal.onclick = function(e) {
+                    if (e.target === modal) {
+                        closeProductModal();
+                    }
+                };
+
+            } catch (error) {
+                console.error('Error fetching product details:', error);
+                alert('제품 상세 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.');
+            }
+        }
+
+        function closeProductModal() {
+            const modal = document.getElementById('productModal');
+            modal.classList.remove('active');
+        }
+
+        // Close modal when pressing Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeProductModal();
+            }
+        });
+
+        // ===== IMAGE UPLOAD & DRAG-AND-DROP FUNCTIONALITY =====
+
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadButton = document.getElementById('uploadButton');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewThumbnail = document.getElementById('previewThumbnail');
+        const previewFilename = document.getElementById('previewFilename');
+        const previewSize = document.getElementById('previewSize');
+        const removeImageButton = document.getElementById('removeImage');
+        const imageSearchButton = document.getElementById('imageSearchButton');
+        const imageQueryText = document.getElementById('imageQueryText');
+
+        let selectedFile = null;
+
+        // Prevent default drag behaviors on entire document
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Show dropzone overlay on drag enter
+        document.body.addEventListener('dragenter', (e) => {
+            if (e.dataTransfer.types.includes('Files')) {
+                dropzone.classList.add('active');
+            }
+        });
+
+        // Hide dropzone when dragging over it (to avoid flickering)
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+        });
+
+        // Hide dropzone when leaving
+        dropzone.addEventListener('dragleave', (e) => {
+            if (e.target === dropzone) {
+                dropzone.classList.remove('active');
+            }
+        });
+
+        // Handle file drop
+        dropzone.addEventListener('drop', (e) => {
+            dropzone.classList.remove('active');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFile(files[0]);
+            }
+        });
+
+        // Upload button click
+        uploadButton.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        // Handle file validation and preview
+        function handleFile(file) {
+            // Validate file type
+            const validTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+            if (!validTypes.includes(file.type)) {
+                alert('지원되지 않는 파일 형식입니다. JPEG, JPG, PNG 파일만 업로드 가능합니다.');
+                return;
+            }
+
+            // Validate file size (5MB max)
+            const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+            if (file.size > maxSize) {
+                alert(`파일 크기가 너무 큽니다. 최대 5MB까지 업로드 가능합니다. (현재: ${(file.size / (1024 * 1024)).toFixed(1)}MB)`);
+                return;
+            }
+
+            // Store file
+            selectedFile = file;
+
+            // Show preview
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewThumbnail.src = e.target.result;
+                previewFilename.textContent = file.name;
+                previewSize.textContent = `크기: ${(file.size / 1024).toFixed(1)} KB`;
+                imagePreview.classList.add('active');
+
+                // Scroll to preview
+                imagePreview.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Remove image preview
+        removeImageButton.addEventListener('click', () => {
+            selectedFile = null;
+            imagePreview.classList.remove('active');
+            imageQueryText.value = '';
+            fileInput.value = '';
+        });
+
+        // Image search button click
+        imageSearchButton.addEventListener('click', async () => {
+            if (!selectedFile) {
+                alert('이미지를 먼저 업로드해주세요.');
+                return;
+            }
+
+            // Disable button during search
+            imageSearchButton.disabled = true;
+            imageSearchButton.textContent = '🔍 검색 중...';
+
+            // Show typing indicator
+            const typingIndicator = addTypingIndicator();
+
+            try {
+                // Create FormData
+                const formData = new FormData();
+                formData.append('image', selectedFile);
+                formData.append('top_k', '5');
+
+                // Add optional text query
+                const queryText = imageQueryText.value.trim();
+                if (queryText) {
+                    formData.append('query', queryText);
+                }
+
+                // Call image search API
+                const response = await fetch(`${API_BASE_URL}/api/v1/search/image`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Remove typing indicator
+                typingIndicator.remove();
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || `API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Display image search results
+                displayImageSearchResults(data);
+
+                // Clear preview after successful search
+                selectedFile = null;
+                imagePreview.classList.remove('active');
+                imageQueryText.value = '';
+                fileInput.value = '';
+
+            } catch (error) {
+                console.error('Image search error:', error);
+                typingIndicator.remove();
+                addErrorMessage(`이미지 검색 실패: ${error.message}`);
+            } finally {
+                // Re-enable button
+                imageSearchButton.disabled = false;
+                imageSearchButton.textContent = '🔍 이미지로 검색';
+            }
+        });
+
+        // Display image search results
+        function displayImageSearchResults(data) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message bot';
+
+            const contentDiv = document.createElement('div');
+            contentDiv.className = 'message-content';
+
+            // Search summary
+            const summaryText = document.createElement('div');
+            summaryText.className = 'message-text';
+            summaryText.textContent = `🖼️ 이미지 검색 결과 (${data.count}개 제품 발견)`;
+            if (data.query_text) {
+                summaryText.textContent += ` - 필터: "${data.query_text}"`;
+            }
+            contentDiv.appendChild(summaryText);
+
+            // Results list
+            if (data.results && data.results.length > 0) {
+                const resultsDiv = document.createElement('div');
+                resultsDiv.className = 'products-list image-results';
+
+                data.results.forEach((product, index) => {
+                    const productItem = document.createElement('div');
+                    productItem.className = 'product-item';
+                    productItem.setAttribute('data-product-id', product.product_id);
+                    productItem.innerHTML = `
+                        <div class="product-name">
+                            ${index + 1}. ${product.product_name}
+                            <span class="similarity-badge">${(product.similarity_score * 100).toFixed(1)}% 유사</span>
+                        </div>
+                        <div class="product-info">
+                            카테고리: ${product.category} |
+                            검색 방식: ${product.match_type === 'hybrid' ? '이미지+텍스트' : '이미지'}
+                        </div>
+                    `;
+
+                    // Add click event to open modal
+                    productItem.addEventListener('click', () => {
+                        openProductModal(product.product_id, product.product_name, product.category);
+                    });
+
+                    resultsDiv.appendChild(productItem);
+                });
+
+                contentDiv.appendChild(resultsDiv);
+            }
+
+            // Processing info
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'timestamp';
+            infoDiv.textContent = `처리 시간: ${data.processing_time_ms}ms | ${new Date().toLocaleTimeString('ko-KR')}`;
+            contentDiv.appendChild(infoDiv);
+
+            messageDiv.appendChild(contentDiv);
+            chatContainer.appendChild(messageDiv);
+
+            scrollToBottom();
+        }
+    </script>
+</body>
+</html>

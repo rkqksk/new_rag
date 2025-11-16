@@ -5,6 +5,7 @@ Version: v8.5.0
 """
 
 import logging
+import os
 from typing import Dict, Any, Optional, Tuple
 from datetime import datetime, timedelta
 import asyncio
@@ -57,13 +58,17 @@ class RateLimiterService:
         },
     }
 
-    def __init__(self, redis_url: str = "redis://localhost:16379/1"):
+    def __init__(self, redis_url: str = None):
         """
         Initialize rate limiter service
 
         Args:
             redis_url: Redis connection URL
         """
+        if redis_url is None:
+            redis_host = os.getenv("REDIS_HOST", "localhost")
+            redis_port = os.getenv("REDIS_PORT", "6379")
+            redis_url = f"redis://{redis_host}:{redis_port}/1"
         self.redis_url = redis_url
         self.redis_client = None
 
@@ -487,7 +492,7 @@ class RateLimiterService:
 _rate_limiter = None
 
 
-def get_rate_limiter(redis_url: str = "redis://localhost:16379/1") -> RateLimiterService:
+def get_rate_limiter(redis_url: str = None) -> RateLimiterService:
     """Get rate limiter service singleton"""
     global _rate_limiter
     if _rate_limiter is None:

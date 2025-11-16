@@ -197,7 +197,7 @@ MOCK_USERS = {
     "admin@example.com": {
         "id": "user_admin_001",
         "email": "admin@example.com",
-        "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYZ3H.ftQdS",  # "password123"
+        "password_hash": "$2b$12$nA11165x3Henx.IrqQZzM.3Wj.c3lxdmwRBb5RpOrTqjej4MC8/m6",  # "password123"
         "name": "관리자",
         "phone": "010-0000-0000",
         "role": UserRole.ADMIN,
@@ -208,10 +208,21 @@ MOCK_USERS = {
     "worker@example.com": {
         "id": "user_worker_001",
         "email": "worker@example.com",
-        "password_hash": "$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewY5GyYZ3H.ftQdS",  # "password123"
+        "password_hash": "$2b$12$nA11165x3Henx.IrqQZzM.3Wj.c3lxdmwRBb5RpOrTqjej4MC8/m6",  # "password123"
         "name": "작업자",
         "phone": "010-1111-1111",
         "role": UserRole.WORKER,
+        "status": UserStatus.ACTIVE,
+        "created_at": datetime(2024, 1, 1, 0, 0, 0),
+        "last_login": None,
+    },
+    "customer@example.com": {
+        "id": "user_customer_001",
+        "email": "customer@example.com",
+        "password_hash": "$2b$12$nA11165x3Henx.IrqQZzM.3Wj.c3lxdmwRBb5RpOrTqjej4MC8/m6",  # "password123"
+        "name": "고객",
+        "phone": "010-2222-2222",
+        "role": UserRole.VIEWER,  # Using VIEWER as customer role
         "status": UserStatus.ACTIVE,
         "created_at": datetime(2024, 1, 1, 0, 0, 0),
         "last_login": None,

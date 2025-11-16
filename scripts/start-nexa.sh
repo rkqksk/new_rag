@@ -80,11 +80,10 @@ echo ""
 
 echo -e "${BLUE}[Step 2/6]${NC} Pulling required models..."
 
-# List of required models
+# List of required models (실제 HuggingFace에 존재하는 모델)
 MODELS=(
-    "NexaAI/Qwen3-1.7B-GGUF"
-    "NexaAI/Qwen3-VL-4B-Instruct-GGUF"
-    "NexaAI/EmbeddingGemma-GGUF"
+    "Qwen/Qwen2.5-1.5B-Instruct"
+    "Qwen/Qwen2.5-7B-Instruct"
 )
 
 for model in "${MODELS[@]}"; do

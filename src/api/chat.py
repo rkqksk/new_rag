@@ -28,7 +28,9 @@ Usage Example:
 """
 
 import json
+import logging
 import os
+import time
 from typing import Any, Dict, List, Optional
 
 from fastapi import APIRouter, HTTPException, WebSocket, WebSocketDisconnect
@@ -43,6 +45,12 @@ from src.core.intent_classifier import get_intent_classifier
 from src.core.rag_pipeline import RAGPipeline
 from src.core.reference_resolver import get_reference_resolver
 from src.services.contextual_rag import ContextualRAG
+
+# Unified LLM Service (NexaAI + Ollama hybrid)
+from src.services.unified_llm_service import UnifiedLLMService, NexaConfig, OllamaConfig
+
+# Logger
+logger = logging.getLogger(__name__)
 
 
 # Pydantic 모델
@@ -122,6 +130,23 @@ class SessionStatsResponse(BaseModel):
     last_activity: str
 
 
+class VLMQueryRequest(BaseModel):
+    """VLM 이미지 검색 요청"""
+
+    image_url: Optional[str] = Field(None, description="이미지 URL")
+    image_base64: Optional[str] = Field(None, description="Base64 인코딩된 이미지")
+    query: str = Field(..., description="이미지에 대한 질문 또는 검색 쿼리")
+
+
+class VLMQueryResponse(BaseModel):
+    """VLM 이미지 검색 응답"""
+
+    query: str
+    response: str
+    model_used: str
+    processing_time: float
+
+
 # Router 생성
 router = APIRouter(prefix="/chat", tags=["chat"])
 
@@ -129,6 +154,7 @@ router = APIRouter(prefix="/chat", tags=["chat"])
 _conv_manager: Optional[ConversationManager] = None
 _contextual_rag: Optional[ContextualRAG] = None
 _rag_pipeline: Optional[RAGPipeline] = None
+_unified_llm: Optional[UnifiedLLMService] = None
 
 # Feature flag: Vector RAG 사용 여부
 USE_VECTOR_RAG = os.getenv("USE_VECTOR_RAG", "true").lower() == "true"
@@ -138,7 +164,10 @@ def get_conv_manager() -> ConversationManager:
     """ConversationManager 싱글톤"""
     global _conv_manager
     if _conv_manager is None:
-        _conv_manager = ConversationManager(redis_url="redis://localhost:6379/0")
+        redis_host = os.getenv("REDIS_HOST", "redis")
+        redis_port = os.getenv("REDIS_PORT", "6379")
+        redis_url = f"redis://{redis_host}:{redis_port}/0"
+        _conv_manager = ConversationManager(redis_url=redis_url)
     return _conv_manager
 
 
@@ -169,9 +198,8 @@ def get_rag_pipeline() -> RAGPipeline:
 
         embedding_service = EmbeddingService(model_name="all-MiniLM-L6-v2")
 
-        # Docker 컨테이너에서 Mac의 Qdrant 접근: host.docker.internal 사용
-        # Mac 로컬에서는 localhost 사용
-        qdrant_host = os.getenv("QDRANT_HOST", "host.docker.internal")
+        # Docker environment: use service names
+        qdrant_host = os.getenv("QDRANT_HOST", "qdrant")
         qdrant_port = os.getenv("QDRANT_HTTP_PORT", "6333")
         qdrant_url = f"http://{qdrant_host}:{qdrant_port}"
 
@@ -188,6 +216,45 @@ def get_rag_pipeline() -> RAGPipeline:
         )
 
     return _rag_pipeline
+
+
+def get_unified_llm() -> UnifiedLLMService:
+    """UnifiedLLMService 싱글톤 (NexaAI + Ollama hybrid)"""
+    global _unified_llm
+    if _unified_llm is None:
+        # NexaAI configuration
+        nexa_host = os.getenv("NEXA_HOST", "localhost")
+        nexa_port = os.getenv("NEXA_PORT", "8080")
+        nexa_vlm_model = os.getenv("NEXA_VLM_MODEL", "NexaAI/Qwen3-VL-4B-Instruct-GGUF")
+        nexa_config = NexaConfig(
+            base_url=f"http://{nexa_host}:{nexa_port}/v1",
+            default_text_model="Qwen3-1.7B",
+            default_vision_model=nexa_vlm_model,
+            default_embedding_model="EmbeddingGemma"
+        )
+
+        # Ollama configuration
+        ollama_host = os.getenv("OLLAMA_HOST", "localhost")
+        ollama_port = os.getenv("OLLAMA_PORT", "11434")
+        ollama_model = os.getenv("OLLAMA_MODEL", "seungduk-yanolja/EEVE-Korean-Instruct-7B-v2.0-Preview")
+        ollama_config = OllamaConfig(
+            base_url=f"http://{ollama_host}:{ollama_port}",
+            default_model=ollama_model
+        )
+
+        # Router configuration (enable_nexa/enable_ollama will be set by UnifiedLLMService)
+        router_config = {
+            "simple_threshold": 0.3,
+            "complex_threshold": 0.7
+        }
+
+        _unified_llm = UnifiedLLMService(
+            nexa_config=nexa_config,
+            ollama_config=ollama_config,
+            router_config=router_config
+        )
+
+    return _unified_llm
 
 
 # API 엔드포인트
@@ -323,6 +390,59 @@ async def chat_query(request: ChatQueryRequest):
                     }
                 )
 
+            # Generate enhanced response using UnifiedLLMService
+            llm_service = get_unified_llm()
+
+            # Determine if this is a product search or general conversation
+            if products:
+                # Product search with results - provide context
+                product_context = "\n".join([
+                    f"- {p['product_name']} ({p['material']}, {p['specifications'].get('capacity', 'N/A')})"
+                    for p in products[:5]  # Top 5 products
+                ])
+
+                enhanced_prompt = f"""사용자 질문: {request.query}
+
+검색된 제품:
+{product_context}
+
+총 {len(products)}개의 제품을 찾았습니다. 사용자에게 친절하고 간결하게 검색 결과를 설명해주세요."""
+            else:
+                # No products found - determine if general conversation or failed search
+                intent = skill_result.get("intent", {})
+                intent_type = intent.get("intent", "unknown") if isinstance(intent, dict) else "unknown"
+
+                if intent_type == "search" or intent_type == "product_search":
+                    # Product search intent but no results
+                    enhanced_prompt = f"""사용자가 다음과 같이 제품을 검색했지만 결과가 없습니다:
+"{request.query}"
+
+사용자에게 친절하게:
+1. 검색 결과가 없다고 알려주고
+2. 다른 키워드로 검색하도록 제안하거나
+3. 비슷한 대안을 제시해주세요.
+
+간결하고 도움이 되는 응답을 작성하세요."""
+                else:
+                    # General conversation - just respond naturally
+                    enhanced_prompt = f"""사용자가 다음과 같이 말했습니다:
+"{request.query}"
+
+제품 검색 시스템이지만, 일반적인 대화나 질문에도 친절하게 응답해주세요.
+간결하고 도움이 되는 응답을 작성하세요."""
+
+            # Generate response using hybrid LLM (auto-routes to NexaAI or Ollama)
+            try:
+                llm_response = await llm_service.generate(
+                    prompt=enhanced_prompt,
+                    max_tokens=200,
+                    temperature=0.7
+                )
+            except Exception as e:
+                # Fallback to skill answer if LLM fails
+                logger.error(f"LLM generation failed: {e}")
+                llm_response = skill_result.get("answer", "죄송합니다. 응답 생성 중 오류가 발생했습니다.")
+
             return ChatQueryResponse(
                 session_id=request.session_id,
                 query=request.query,
@@ -332,7 +452,7 @@ async def chat_query(request: ChatQueryRequest):
                 },
                 reference_resolved=False,
                 products=products,
-                response=skill_result["answer"],
+                response=llm_response,
                 total_count=len(products),
                 matched_profile=None,
                 exact_capacity=None,
@@ -345,6 +465,43 @@ async def chat_query(request: ChatQueryRequest):
             result = await contextual_rag.query(
                 session_id=request.session_id, user_query=request.query
             )
+
+            # Add LLM enhancement to file-based search results
+            llm_service = get_unified_llm()
+            products = result.get("products", [])
+
+            if products:
+                # Products found - enhance with LLM
+                product_context = "\n".join([
+                    f"- {p.get('product_name', 'N/A')} ({p.get('material', 'N/A')})"
+                    for p in products[:5]
+                ])
+
+                enhanced_prompt = f"""사용자 질문: {request.query}
+
+검색된 제품:
+{product_context}
+
+총 {len(products)}개의 제품을 찾았습니다. 사용자에게 친절하고 간결하게 검색 결과를 설명해주세요."""
+            else:
+                # No products - general conversation
+                enhanced_prompt = f"""사용자가 다음과 같이 말했습니다:
+"{request.query}"
+
+제품 검색 시스템이지만, 일반적인 대화나 질문에도 친절하게 응답해주세요.
+간결하고 도움이 되는 응답을 작성하세요."""
+
+            try:
+                llm_response = await llm_service.generate(
+                    prompt=enhanced_prompt,
+                    max_tokens=200,
+                    temperature=0.7
+                )
+                result["response"] = llm_response
+            except Exception as e:
+                logger.error(f"LLM generation failed in file-based search: {e}")
+                # Keep original response if LLM fails
+
             return ChatQueryResponse(**result)
 
     except Exception as e:
@@ -537,6 +694,79 @@ async def list_collections(enabled_only: bool = True, embedded_only: bool = True
         return {"status": "success", "collections": result["collections"], "total": result["total"]}
 
     except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/vlm_query", response_model=VLMQueryResponse)
+async def vlm_query(request: VLMQueryRequest):
+    """
+    VLM 이미지 검색 엔드포인트
+
+    Args:
+        request: VLM 쿼리 요청 (이미지 URL 또는 base64, 텍스트 쿼리)
+
+    Returns:
+        VLM 분석 결과
+    """
+    try:
+        start_time = time.time()
+
+        # Validate input
+        if not request.image_url and not request.image_base64:
+            raise HTTPException(
+                status_code=400,
+                detail="Either image_url or image_base64 must be provided"
+            )
+
+        # Get unified LLM service
+        unified_llm = get_unified_llm()
+
+        # Check if NexaAI is enabled
+        if not unified_llm.router_config.get("enable_nexa", False):
+            raise HTTPException(
+                status_code=503,
+                detail="VLM service is not enabled. Set ENABLE_NEXA=true in environment."
+            )
+
+        # Prepare image input
+        if request.image_url:
+            image_input = request.image_url
+        else:
+            # For base64, prefix with data URI scheme
+            image_input = f"data:image/jpeg;base64,{request.image_base64}"
+
+        # Call VLM through NexaAI
+        try:
+            response_text = await unified_llm.vision_query(
+                image=image_input,
+                prompt=request.query
+            )
+        except AttributeError:
+            # Fallback if vision_query is not implemented
+            raise HTTPException(
+                status_code=501,
+                detail="VLM vision_query method not implemented in UnifiedLLMService"
+            )
+        except Exception as e:
+            logger.error(f"VLM query failed: {str(e)}")
+            raise HTTPException(
+                status_code=500,
+                detail=f"VLM processing failed: {str(e)}"
+            )
+
+        processing_time = time.time() - start_time
+
+        return VLMQueryResponse(
+            query=request.query,
+            response=response_text,
+            model_used=os.getenv("NEXA_VLM_MODEL", "NexaAI/Qwen3-VL-4B-Instruct-GGUF"),
+            processing_time=processing_time
+        )
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"VLM query error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

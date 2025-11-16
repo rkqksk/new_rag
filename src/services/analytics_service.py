@@ -5,6 +5,7 @@ Version: v8.5.0
 """
 
 import logging
+import os
 from typing import Dict, Any, Optional, List
 from datetime import datetime, timedelta
 from collections import defaultdict
@@ -18,13 +19,17 @@ logger = logging.getLogger(__name__)
 class AnalyticsService:
     """Real-time analytics and metrics service"""
 
-    def __init__(self, redis_url: str = "redis://localhost:16379/0"):
+    def __init__(self, redis_url: str = None):
         """
         Initialize analytics service
 
         Args:
             redis_url: Redis connection URL
         """
+        if redis_url is None:
+            redis_host = os.getenv("REDIS_HOST", "localhost")
+            redis_port = os.getenv("REDIS_PORT", "6379")
+            redis_url = f"redis://{redis_host}:{redis_port}/0"
         self.redis_url = redis_url
         self.redis_client = None
 
@@ -462,7 +467,7 @@ class AnalyticsService:
 _analytics_service = None
 
 
-def get_analytics_service(redis_url: str = "redis://localhost:16379/0") -> AnalyticsService:
+def get_analytics_service(redis_url: str = None) -> AnalyticsService:
     """Get analytics service singleton"""
     global _analytics_service
     if _analytics_service is None:

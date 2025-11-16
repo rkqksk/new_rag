@@ -72,6 +72,9 @@ sentence-transformers>=3.3.0
 torch>=2.5.0
 transformers>=4.47.0
 openai>=1.58.0  # OpenAI SDK for NexaAI compatibility
+# nexaai - NexaAI CLI installed via installer script (PyPI package platform compatibility issues)
+anthropic>=0.39.0  # Anthropic SDK for Claude API
+bcrypt>=5.0.0  # Secure password hashing (replaces passlib for Python 3.11 compatibility)
 
 # v7.1.0 - Advanced Manufacturing (LORA + UR10e)
 ultralytics>=8.3.0  # YOLOv8/v10 for vision inspection

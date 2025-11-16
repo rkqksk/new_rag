@@ -2,20 +2,27 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: rag-enterprise-ingress
+  namespace: rag-enterprise
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/limit-rps: "100"
-    nginx.ingress.kubernetes.io/websocket-services: "rag-enterprise-api-service"
+    nginx.ingress.kubernetes.io/websocket-services: "rag-api-service"
 spec:
   ingressClassName: nginx
   rules:
-  - host: rag-enterprise.example.com
-    http:
+  - http:
       paths:
-      - path: /api
+      - path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: rag-api-service
+            port:
+              number: 8001
+      - path: /
         pathType: Prefix
         backend:
           service:
-            name: rag-enterprise-api-service
+            name: rag-api-service
             port:
-              number: 80
+              number: 8001

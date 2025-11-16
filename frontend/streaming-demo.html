@@ -4,153 +4,146 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebSocket/SSE Streaming Demo - v6.0.0</title>
+    <link rel="stylesheet" href="/css/design-system.css?v=20251115">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
-            background: #f7f7f8;
-            color: #2d333a;
-            padding: 20px;
+            padding: 2rem;
+            background-color: hsl(var(--muted) / 0.3);
         }
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        .page-header {
+            margin-bottom: 2rem;
         }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 8px;
+        .page-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .subtitle {
-            color: #6e6e80;
-            font-size: 14px;
-            margin-bottom: 24px;
+        .page-subtitle {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .mode-btn {
+            padding: 0.75rem 1rem;
+            background-color: hsl(var(--secondary));
+            color: hsl(var(--secondary-foreground));
+            border: 2px solid hsl(var(--border));
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            text-align: center;
+        }
+
+        .mode-btn:hover {
+            background-color: hsl(var(--accent));
+        }
+
+        .mode-btn.active {
+            background-color: hsl(var(--primary));
+            color: hsl(var(--primary-foreground));
+            border-color: hsl(var(--primary));
         }
 
         .controls {
             display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
-        input[type="text"] {
+        .controls .input {
             flex: 1;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 16px;
         }
 
-        button {
-            padding: 12px 24px;
-            background: #2d333a;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.15s;
+        .status-bar {
+            padding: 0.75rem 1rem;
+            background-color: hsl(var(--muted));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+            color: hsl(var(--muted-foreground));
         }
 
-        button:hover:not(:disabled) {
-            background: #1a1d21;
+        .status-bar.active {
+            background-color: hsl(142.1 76.2% 96.3%);
+            color: hsl(142.1 76.2% 36.3%);
+            border-color: hsl(142.1 76.2% 86.3%);
         }
 
-        button:disabled {
-            background: #d1d5db;
-            cursor: not-allowed;
-        }
-
-        .status {
-            padding: 12px;
-            background: #f4f4f4;
-            border-radius: 6px;
-            margin-bottom: 16px;
-            font-size: 14px;
-            color: #6e6e80;
-        }
-
-        .status.active {
-            background: #e8f4f8;
-            color: #0c5460;
-        }
-
-        .output {
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            padding: 16px;
+        .output-container {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1rem;
             min-height: 200px;
             max-height: 400px;
             overflow-y: auto;
-            font-family: 'Monaco', 'Courier New', monospace;
-            font-size: 13px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8rem;
             line-height: 1.6;
         }
 
         .event {
-            margin-bottom: 12px;
-            padding: 8px;
-            background: #f7f7f8;
-            border-radius: 4px;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            background-color: hsl(var(--muted));
+            border-radius: var(--radius);
+            border-left: 3px solid hsl(var(--border));
         }
 
         .event-type {
             font-weight: 600;
-            color: #2d333a;
-            margin-bottom: 4px;
+            color: hsl(var(--foreground));
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
         }
 
         .event-data {
-            color: #6e6e80;
+            color: hsl(var(--muted-foreground));
             white-space: pre-wrap;
             word-break: break-word;
         }
 
-        .type-status { border-left: 4px solid #007bff; }
-        .type-token { border-left: 4px solid #28a745; }
-        .type-products_batch { border-left: 4px solid #ffc107; }
-        .type-complete { border-left: 4px solid #17a2b8; }
-        .type-error { border-left: 4px solid #dc3545; }
+        .type-status { border-left-color: hsl(221.2 83.2% 53.3%); }
+        .type-token { border-left-color: hsl(142.1 76.2% 36.3%); }
+        .type-products_batch { border-left-color: hsl(47.9 95.8% 53.1%); }
+        .type-complete { border-left-color: hsl(188.7 85.0% 40.0%); }
+        .type-error { border-left-color: hsl(var(--destructive)); }
+        .type-user { border-left-color: hsl(var(--primary)); }
+        .type-system { border-left-color: hsl(var(--muted-foreground)); }
+        .type-response { border-left-color: hsl(262.1 83.3% 57.8%); }
 
-        .mode-selector {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
+        @media (max-width: 768px) {
+            .mode-selector {
+                grid-template-columns: 1fr;
+            }
 
-        .mode-btn {
-            flex: 1;
-            padding: 8px 16px;
-            background: #f4f4f4;
-            color: #6e6e80;
-            border: 2px solid transparent;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .mode-btn.active {
-            background: #2d333a;
-            color: white;
-            border-color: #2d333a;
+            .controls {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔄 WebSocket/SSE Streaming Demo</h1>
-        <p class="subtitle">v6.0.0 - Real-time LLM Response Streaming</p>
+        <div class="page-header">
+            <h1 class="page-title">WebSocket/SSE Streaming Demo</h1>
+            <p class="page-subtitle">v6.0.0 - Real-time LLM Response Streaming</p>
+        </div>
 
         <div class="mode-selector">
             <button class="mode-btn active" id="modeWebSocket" onclick="selectMode('websocket')">
@@ -164,15 +157,25 @@
             </button>
         </div>
 
-        <div class="controls">
-            <input type="text" id="queryInput" placeholder="검색어를 입력하세요 (예: 50ml PET 용기)" value="50ml PET 용기">
-            <button id="sendBtn" onclick="sendQuery()">전송</button>
-            <button onclick="clearOutput()">초기화</button>
+        <div class="card">
+            <div class="card-content">
+                <div class="controls">
+                    <input
+                        type="text"
+                        id="queryInput"
+                        class="input"
+                        placeholder="검색어를 입력하세요 (예: 50ml PET 용기)"
+                        value="50ml PET 용기"
+                    >
+                    <button id="sendBtn" class="btn btn-primary" onclick="sendQuery()">전송</button>
+                    <button class="btn btn-secondary" onclick="clearOutput()">초기화</button>
+                </div>
+
+                <div class="status-bar" id="status">대기 중...</div>
+
+                <div class="output-container" id="output"></div>
+            </div>
         </div>
-
-        <div class="status" id="status">대기 중...</div>
-
-        <div class="output" id="output"></div>
     </div>
 
     <script src="streaming.js"></script>
@@ -214,7 +217,7 @@
 
             const typeDiv = document.createElement('div');
             typeDiv.className = 'event-type';
-            typeDiv.textContent = `[${type.toUpperCase()}]`;
+            typeDiv.textContent = `[${type}]`;
 
             const dataDiv = document.createElement('div');
             dataDiv.className = 'event-data';

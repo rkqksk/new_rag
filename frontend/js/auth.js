@@ -5,7 +5,7 @@
  */
 
 const AUTH_CONFIG = {
-    API_BASE: 'http://localhost:8001/api/v1',
+    API_BASE: window.location.origin + '/api/v1',
     TOKEN_KEY: 'access_token',
     REFRESH_KEY: 'refresh_token',
     USER_KEY: 'user',
@@ -187,35 +187,50 @@ class AuthManager {
      * Verify current authentication status with server
      */
     async verifyAuth() {
+        console.log('[Auth] verifyAuth() called');
         const accessToken = this.getAccessToken();
         if (!accessToken) {
+            console.error('[Auth] No access token found');
             return false;
         }
+        console.log('[Auth] Access token exists');
 
         // Check if token is expiring soon
         if (this.isTokenExpiringSoon(accessToken)) {
-            console.log('Token expiring soon, refreshing...');
+            console.log('[Auth] Token expiring soon, refreshing...');
             const refreshed = await this.refreshAccessToken();
-            if (!refreshed) return false;
+            if (!refreshed) {
+                console.error('[Auth] Token refresh failed');
+                return false;
+            }
+            console.log('[Auth] Token refreshed successfully');
         }
 
         try {
-            const response = await fetch(`${AUTH_CONFIG.API_BASE}/auth/me`, {
+            const url = `${AUTH_CONFIG.API_BASE}/auth/me`;
+            console.log('[Auth] Calling:', url);
+
+            const response = await fetch(url, {
                 headers: {
                     'Authorization': `Bearer ${this.getAccessToken()}`,
                 },
             });
 
+            console.log('[Auth] Response status:', response.status);
+            console.log('[Auth] Response ok:', response.ok);
+
             if (response.ok) {
                 const user = await response.json();
+                console.log('[Auth] User verified:', user.email);
                 localStorage.setItem(AUTH_CONFIG.USER_KEY, JSON.stringify(user));
                 return true;
             } else {
-                console.error('Auth verification failed:', response.status);
+                const errorText = await response.text();
+                console.error('[Auth] Auth verification failed:', response.status, errorText);
                 return false;
             }
         } catch (error) {
-            console.error('Auth verification error:', error);
+            console.error('[Auth] Auth verification error:', error);
             return false;
         }
     }
@@ -252,13 +267,20 @@ class AuthManager {
      * Call this on protected pages
      */
     async requireAuth() {
+        console.log('[Auth] requireAuth() called');
+
         if (!this.isLoggedIn()) {
+            console.error('[Auth] Not logged in, redirecting to login');
             window.location.href = '/login.html';
             return false;
         }
+        console.log('[Auth] User is logged in');
 
         const isValid = await this.verifyAuth();
+        console.log('[Auth] Verification result:', isValid);
+
         if (!isValid) {
+            console.error('[Auth] Verification failed, clearing auth and redirecting');
             this.clearAuth();
             window.location.href = '/login.html';
             return false;
@@ -266,9 +288,11 @@ class AuthManager {
 
         // Start auto-refresh if not already scheduled
         if (!this.refreshTimer) {
+            console.log('[Auth] Scheduling token refresh');
             this.scheduleTokenRefresh();
         }
 
+        console.log('[Auth] Authentication successful');
         return true;
     }
 

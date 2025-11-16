@@ -3,156 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RAG Enterprise - Realtime Demo (Convex-like)</title>
+    <title>RAG Enterprise - Realtime Demo</title>
+    <link rel="stylesheet" href="/css/design-system.css?v=20251115">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f0f0f;
-            color: #e0e0e0;
-            padding: 20px;
+            padding: 2rem;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .page-header {
+            margin-bottom: 2rem;
         }
 
-        h1 {
+        .page-title {
             font-size: 2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .subtitle {
-            color: #888;
-            margin-bottom: 30px;
-        }
-
-        .status {
-            padding: 10px 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
             font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .status.connected {
-            background: #1a3a1a;
-            color: #4ade80;
-            border: 1px solid #4ade80;
+        .page-subtitle {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
         }
 
-        .status.disconnected {
-            background: #3a1a1a;
-            color: #f87171;
-            border: 1px solid #f87171;
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius);
+            font-weight: 500;
+            font-size: 0.875rem;
+            margin-bottom: 1.5rem;
         }
 
-        .demo-section {
-            background: #1a1a1a;
-            border: 1px solid #333;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
+        .status-indicator.connected {
+            background-color: hsl(142.1 76.2% 96.3%);
+            color: hsl(142.1 76.2% 36.3%);
+            border: 1px solid hsl(142.1 76.2% 86.3%);
         }
 
-        .demo-section h2 {
-            font-size: 1.5rem;
-            margin-bottom: 15px;
-            color: #fff;
+        .status-indicator.disconnected {
+            background-color: hsl(var(--destructive) / 0.1);
+            color: hsl(var(--destructive));
+            border: 1px solid hsl(var(--destructive) / 0.3);
         }
 
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-        }
-
-        input, select {
-            flex: 1;
-            min-width: 200px;
-            padding: 10px 15px;
-            background: #2a2a2a;
-            border: 1px solid #444;
-            border-radius: 6px;
-            color: #e0e0e0;
-            font-size: 14px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-        }
-
-        button:hover {
-            transform: translateY(-2px);
-            opacity: 0.9;
-        }
-
-        button:active {
-            transform: translateY(0);
-        }
-
-        .results {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
-            max-height: 400px;
-            overflow-y: auto;
-        }
-
-        .result-item {
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-        }
-
-        .result-item h3 {
-            font-size: 1rem;
-            color: #667eea;
-            margin-bottom: 8px;
-        }
-
-        .result-item p {
-            color: #aaa;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            background: #2a2a2a;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            color: #888;
-            margin-right: 8px;
-        }
-
-        .live-indicator {
-            display: inline-block;
+        .status-dot {
             width: 8px;
             height: 8px;
-            background: #4ade80;
             border-radius: 50%;
-            margin-right: 8px;
+            background-color: currentColor;
+        }
+
+        .status-dot.pulse {
             animation: pulse 2s infinite;
         }
 
@@ -161,20 +64,109 @@
             50% { opacity: 0.5; }
         }
 
-        .log {
-            background: #0a0a0a;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 15px;
+        .demo-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background-color: hsl(142.1 76.2% 36.3%);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .controls {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .controls .input,
+        .controls select {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .controls select {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            border: 1px solid hsl(var(--input));
+            border-radius: var(--radius);
+            background-color: hsl(var(--background));
+            color: hsl(var(--foreground));
+            transition: border-color 0.15s ease;
+        }
+
+        .controls select:focus {
+            outline: none;
+            border-color: hsl(var(--ring));
+            box-shadow: 0 0 0 3px hsl(var(--ring) / 0.1);
+        }
+
+        .results-container {
+            background-color: hsl(var(--muted));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .result-item {
+            background-color: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .result-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .result-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: hsl(var(--primary));
+            margin-bottom: 0.5rem;
+        }
+
+        .result-content {
+            color: hsl(var(--muted-foreground));
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .result-content pre {
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: 'Courier New', monospace;
+        }
+
+        .log-container {
+            background-color: hsl(var(--muted));
+            border: 1px solid hsl(var(--border));
+            border-radius: var(--radius);
+            padding: 1rem;
             max-height: 200px;
             overflow-y: auto;
             font-family: 'Courier New', monospace;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .log-entry {
-            padding: 4px 0;
-            border-bottom: 1px solid #1a1a1a;
+            padding: 0.25rem 0;
+            border-bottom: 1px solid hsl(var(--border));
+            color: hsl(var(--foreground));
         }
 
         .log-entry:last-child {
@@ -182,67 +174,98 @@
         }
 
         .timestamp {
-            color: #666;
-            margin-right: 8px;
+            color: hsl(var(--muted-foreground));
+            margin-right: 0.5rem;
+        }
+
+        .empty-state {
+            color: hsl(var(--muted-foreground));
+            text-align: center;
+            padding: 2rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚡ Realtime Backend Demo</h1>
-        <p class="subtitle">Convex-like functionality with Socket.IO + PostgreSQL + Redis</p>
+        <div class="page-header">
+            <h1 class="page-title">Realtime Backend Demo</h1>
+            <p class="page-subtitle">Convex-like functionality with Socket.IO + PostgreSQL + Redis</p>
+        </div>
 
-        <div id="status" class="status disconnected">
-            🔴 Disconnected
+        <div id="status" class="status-indicator disconnected">
+            <span class="status-dot"></span>
+            <span>Disconnected</span>
         </div>
 
         <!-- Query Subscription Demo -->
         <div class="demo-section">
-            <h2><span class="live-indicator"></span>Query Subscription (Live Updates)</h2>
-            <p style="color: #888; margin-bottom: 15px;">
-                Subscribe to queries and get automatic updates when data changes (like Convex useQuery)
-            </p>
+            <div class="card">
+                <div class="card-header">
+                    <div class="section-header">
+                        <span class="live-indicator"></span>
+                        <h2 class="card-title">Query Subscription (Live Updates)</h2>
+                    </div>
+                    <p class="card-description">
+                        Subscribe to queries and get automatic updates when data changes (like Convex useQuery)
+                    </p>
+                </div>
 
-            <div class="controls">
-                <select id="queryName">
-                    <option value="products">Products</option>
-                    <option value="search_results">Search Results</option>
-                </select>
-                <input type="text" id="queryParams" placeholder='Query params (JSON) e.g. {"material": "PET"}'>
-                <button onclick="subscribeToQuery()">Subscribe</button>
-                <button onclick="unsubscribeFromQuery()">Unsubscribe</button>
-            </div>
+                <div class="card-content">
+                    <div class="controls">
+                        <select id="queryName" class="input">
+                            <option value="products">Products</option>
+                            <option value="search_results">Search Results</option>
+                        </select>
+                        <input type="text" id="queryParams" class="input" placeholder='Query params (JSON) e.g. {"material": "PET"}'>
+                        <button class="btn btn-primary" onclick="subscribeToQuery()">Subscribe</button>
+                        <button class="btn btn-secondary" onclick="unsubscribeFromQuery()">Unsubscribe</button>
+                    </div>
 
-            <div id="queryResults" class="results">
-                <p style="color: #666;">No data yet. Subscribe to a query to see results.</p>
+                    <div id="queryResults" class="results-container">
+                        <p class="empty-state">No data yet. Subscribe to a query to see results.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Server Function Demo -->
         <div class="demo-section">
-            <h2>🔧 Server Function (Execute Actions)</h2>
-            <p style="color: #888; margin-bottom: 15px;">
-                Execute server-side functions (like Convex useMutation)
-            </p>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Server Function (Execute Actions)</h2>
+                    <p class="card-description">
+                        Execute server-side functions (like Convex useMutation)
+                    </p>
+                </div>
 
-            <div class="controls">
-                <input type="text" id="functionName" placeholder="Function name (e.g., create_product)">
-                <input type="text" id="functionParams" placeholder='Function params (JSON)'>
-                <button onclick="executeFunction()">Execute</button>
-            </div>
+                <div class="card-content">
+                    <div class="controls">
+                        <input type="text" id="functionName" class="input" placeholder="Function name (e.g., create_product)">
+                        <input type="text" id="functionParams" class="input" placeholder='Function params (JSON)'>
+                        <button class="btn btn-primary" onclick="executeFunction()">Execute</button>
+                    </div>
 
-            <div id="functionResult" class="results">
-                <p style="color: #666;">No result yet.</p>
+                    <div id="functionResult" class="results-container">
+                        <p class="empty-state">No result yet.</p>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- Activity Log -->
         <div class="demo-section">
-            <h2>📋 Activity Log</h2>
-            <div id="log" class="log">
-                <div class="log-entry">
-                    <span class="timestamp">[System]</span>
-                    <span>Waiting for connection...</span>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Activity Log</h2>
+                </div>
+
+                <div class="card-content">
+                    <div id="log" class="log-container">
+                        <div class="log-entry">
+                            <span class="timestamp">[System]</span>
+                            <span>Waiting for connection...</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -270,7 +293,7 @@
 
         function initRealtimeApp() {
         // Socket.IO connection
-        const socket = io('http://localhost:8001', {
+        const socket = io(window.location.origin, {
             path: '/socket.io',
             transports: ['websocket', 'polling']
         });
@@ -306,7 +329,7 @@
         });
 
         // Subscribe to query
-        function subscribeToQuery() {
+        window.subscribeToQuery = function() {
             const queryName = document.getElementById('queryName').value;
             const paramsStr = document.getElementById('queryParams').value;
 
@@ -338,17 +361,17 @@
         }
 
         // Unsubscribe from query
-        function unsubscribeFromQuery() {
+        window.unsubscribeFromQuery = function() {
             if (currentSubscription) {
                 socket.emit('unsubscribe', currentSubscription);
                 log(`Unsubscribed from query: ${currentSubscription.query_id}`);
                 currentSubscription = null;
-                document.getElementById('queryResults').innerHTML = '<p style="color: #666;">Unsubscribed.</p>';
+                document.getElementById('queryResults').innerHTML = '<p class="empty-state">Unsubscribed.</p>';
             }
         }
 
         // Execute server function
-        function executeFunction() {
+        window.executeFunction = function() {
             const functionName = document.getElementById('functionName').value;
             const paramsStr = document.getElementById('functionParams').value;
 
@@ -380,7 +403,7 @@
             const container = document.getElementById('queryResults');
 
             if (!data || data.length === 0) {
-                container.innerHTML = '<p style="color: #666;">No results found.</p>';
+                container.innerHTML = '<p class="empty-state">No results found.</p>';
                 return;
             }
 
@@ -388,8 +411,10 @@
             data.forEach((item, index) => {
                 html += `
                     <div class="result-item">
-                        <h3>Result ${index + 1}</h3>
-                        <pre style="color: #aaa; white-space: pre-wrap;">${JSON.stringify(item, null, 2)}</pre>
+                        <h3 class="result-title">Result ${index + 1}</h3>
+                        <div class="result-content">
+                            <pre>${JSON.stringify(item, null, 2)}</pre>
+                        </div>
                     </div>
                 `;
             });
@@ -401,10 +426,16 @@
         function displayFunctionResult(result) {
             const container = document.getElementById('functionResult');
 
+            const statusBadge = result.success
+                ? '<span class="badge badge-success">Success</span>'
+                : '<span class="badge badge-destructive">Error</span>';
+
             const html = `
                 <div class="result-item">
-                    <h3>${result.success ? '✅ Success' : '❌ Error'}</h3>
-                    <pre style="color: #aaa; white-space: pre-wrap;">${JSON.stringify(result.data || result.error, null, 2)}</pre>
+                    <h3 class="result-title">${statusBadge}</h3>
+                    <div class="result-content">
+                        <pre>${JSON.stringify(result.data || result.error, null, 2)}</pre>
+                    </div>
                 </div>
             `;
 
@@ -414,12 +445,17 @@
         // Update connection status
         function updateStatus(connected) {
             const statusEl = document.getElementById('status');
+            const dot = statusEl.querySelector('.status-dot');
+            const text = statusEl.querySelector('span:last-child');
+
             if (connected) {
-                statusEl.className = 'status connected';
-                statusEl.innerHTML = '🟢 Connected to Realtime Server';
+                statusEl.className = 'status-indicator connected';
+                dot.classList.add('pulse');
+                text.textContent = 'Connected to Realtime Server';
             } else {
-                statusEl.className = 'status disconnected';
-                statusEl.innerHTML = '🔴 Disconnected';
+                statusEl.className = 'status-indicator disconnected';
+                dot.classList.remove('pulse');
+                text.textContent = 'Disconnected';
             }
         }
 
@@ -431,11 +467,11 @@
             const entry = document.createElement('div');
             entry.className = 'log-entry';
 
-            const icon = type === 'error' ? '❌' : type === 'success' ? '✅' : 'ℹ️';
+            const prefix = type === 'error' ? '[ERROR]' : type === 'success' ? '[SUCCESS]' : '[INFO]';
 
             entry.innerHTML = `
                 <span class="timestamp">[${timestamp}]</span>
-                <span>${icon} ${message}</span>
+                <span>${prefix} ${message}</span>
             `;
 
             logEl.appendChild(entry);
