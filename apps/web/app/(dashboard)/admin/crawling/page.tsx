@@ -30,7 +30,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { PlayCircle, PlusCircle, RefreshCw, Database, Globe, Clock, Trash2, Power, PowerOff } from "lucide-react"
 import { useBulkSelect } from "@/hooks/useBulkSelect"
 import { toast } from "sonner"
 
@@ -266,7 +265,7 @@ export default function CrawlingPage() {
                         onClick={handleBulkEnable}
                         className="gap-1"
                       >
-                        <Power className="h-4 w-4" />
+                        On
                         활성화
                       </Button>
                       <Button
@@ -275,13 +274,13 @@ export default function CrawlingPage() {
                         onClick={handleBulkDisable}
                         className="gap-1"
                       >
-                        <PowerOff className="h-4 w-4" />
+                        Off
                         비활성화
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="destructive" size="sm" className="gap-1">
-                            <Trash2 className="h-4 w-4" />
+                            Delete
                             삭제
                           </Button>
                         </AlertDialogTrigger>
@@ -315,12 +314,12 @@ export default function CrawlingPage() {
                     >
                       {isLoading ? (
                         <>
-                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Refresh
                           크롤링 중...
                         </>
                       ) : (
                         <>
-                          <PlayCircle className="h-4 w-4" />
+                          Start
                           전체 크롤링 시작
                         </>
                       )}
@@ -387,7 +386,7 @@ export default function CrawlingPage() {
                           disabled={isLoading}
                           className="gap-1"
                         >
-                          <PlayCircle className="h-3 w-3" />
+                          Start
                           크롤링
                         </Button>
                       </TableCell>
@@ -411,7 +410,7 @@ export default function CrawlingPage() {
                   </CardDescription>
                 </div>
                 <Button variant="outline" onClick={loadHistory} className="gap-2">
-                  <RefreshCw className="h-4 w-4" />
+                  Refresh
                   새로고침
                 </Button>
               </div>
@@ -485,7 +484,7 @@ export default function CrawlingPage() {
                       setSelectedResult(result)
                     }}
                   >
-                    <Globe className="mr-2 h-4 w-4" />
+                    Web
                     {source.name}
                   </Button>
                 ))}
@@ -653,7 +652,7 @@ export default function CrawlingPage() {
                 </div>
 
                 <Button type="submit" className="w-full gap-2">
-                  <PlusCircle className="h-4 w-4" />
+                  +
                   소스 추가
                 </Button>
               </form>

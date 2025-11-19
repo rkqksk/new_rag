@@ -12,16 +12,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import {
-  Search,
-  X,
-  Filter,
-  Download,
-  ChevronDown,
-  ChevronUp,
-  Calendar,
-  SlidersHorizontal
-} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
@@ -149,14 +139,12 @@ export function AdvancedSearch({
       {/* Quick Search Bar */}
       <div className="flex items-center gap-2">
         {/* Keyword Search */}
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-stone-500" />
+        <div className="flex-1">
           <Input
             placeholder={placeholder}
             value={filters.keyword}
             onChange={(e) => handleFilterChange("keyword", e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-            className="pl-10"
           />
         </div>
 
@@ -200,30 +188,23 @@ export function AdvancedSearch({
           onClick={() => setIsExpanded(!isExpanded)}
           className="gap-2"
         >
-          <SlidersHorizontal className="h-4 w-4" />
           고급 필터
           {activeFilterCount > 0 && (
             <span className="ml-1 px-1.5 py-0.5 text-xs bg-blue-600 text-white rounded-full">
               {activeFilterCount}
             </span>
           )}
-          {isExpanded ? (
-            <ChevronUp className="h-4 w-4 ml-1" />
-          ) : (
-            <ChevronDown className="h-4 w-4 ml-1" />
-          )}
+          <span className="ml-1">{isExpanded ? "▲" : "▼"}</span>
         </Button>
 
         {/* Search Button */}
-        <Button onClick={handleSearch} className="gap-2">
-          <Search className="h-4 w-4" />
+        <Button onClick={handleSearch}>
           검색
         </Button>
 
         {/* Clear Filters */}
         {activeFilterCount > 0 && (
-          <Button variant="ghost" onClick={handleClearFilters} className="gap-2">
-            <X className="h-4 w-4" />
+          <Button variant="ghost" onClick={handleClearFilters}>
             초기화
           </Button>
         )}
@@ -234,7 +215,6 @@ export function AdvancedSearch({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Filter className="h-5 w-5" />
               고급 검색 필터
             </CardTitle>
             <CardDescription>
@@ -245,8 +225,7 @@ export function AdvancedSearch({
             {/* Date Range */}
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="dateFrom" className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
+                <Label htmlFor="dateFrom">
                   시작 날짜
                 </Label>
                 <Input
@@ -257,8 +236,7 @@ export function AdvancedSearch({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="dateTo" className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4" />
+                <Label htmlFor="dateTo">
                   종료 날짜
                 </Label>
                 <Input
@@ -299,11 +277,7 @@ export function AdvancedSearch({
                     className="w-full justify-between"
                   >
                     {filters.sortOrder === "asc" ? "오름차순" : "내림차순"}
-                    {filters.sortOrder === "asc" ? (
-                      <ChevronUp className="h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4" />
-                    )}
+                    <span>{filters.sortOrder === "asc" ? "▲" : "▼"}</span>
                   </Button>
                 </div>
               </div>
@@ -317,17 +291,15 @@ export function AdvancedSearch({
                   <Button
                     variant="outline"
                     onClick={() => handleExport("csv")}
-                    className="flex-1 gap-2"
+                    className="flex-1"
                   >
-                    <Download className="h-4 w-4" />
                     CSV로 내보내기
                   </Button>
                   <Button
                     variant="outline"
                     onClick={() => handleExport("json")}
-                    className="flex-1 gap-2"
+                    className="flex-1"
                   >
-                    <Download className="h-4 w-4" />
                     JSON으로 내보내기
                   </Button>
                 </div>
@@ -339,8 +311,7 @@ export function AdvancedSearch({
               <Button variant="outline" onClick={handleClearFilters}>
                 초기화
               </Button>
-              <Button onClick={handleSearch} className="gap-2">
-                <Search className="h-4 w-4" />
+              <Button onClick={handleSearch}>
                 검색 적용
               </Button>
             </div>
@@ -351,7 +322,6 @@ export function AdvancedSearch({
       {/* Active Filters Display */}
       {activeFilterCount > 0 && !isExpanded && (
         <div className="flex items-center gap-2 text-sm text-stone-400">
-          <Filter className="h-4 w-4" />
           <span>활성 필터: {activeFilterCount}개</span>
           <Button
             variant="link"

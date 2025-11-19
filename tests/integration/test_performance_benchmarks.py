@@ -23,7 +23,7 @@ class TestDIPerfomance:
 
     def test_get_config_latency(self):
         """Test config retrieval latency"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         # Warm up
         get_config()
@@ -41,7 +41,7 @@ class TestDIPerfomance:
 
     def test_dependency_resolution_batch(self):
         """Test batch dependency resolution"""
-        from app.core.dependencies import (
+        from apps.api.core.dependencies import (
             get_config,
             get_embedding_model,
             get_qdrant_client,
@@ -62,7 +62,7 @@ class TestDIPerfomance:
 
     def test_singleton_cache_effectiveness(self):
         """Test singleton cache is effective"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         # First call (cache miss)
         cfg1 = get_config()
@@ -90,7 +90,7 @@ class TestSchemaValidationPerformance:
 
     def test_qa_request_validation_latency(self):
         """Test QA request validation latency"""
-        from app.models.schemas import QARequest
+        from apps.api.models.schemas import QARequest
 
         start = time.time()
         for i in range(1000):
@@ -104,7 +104,7 @@ class TestSchemaValidationPerformance:
 
     def test_consultation_request_validation_latency(self):
         """Test consultation request validation latency"""
-        from app.models.schemas import ConsultationRequest
+        from apps.api.models.schemas import ConsultationRequest
 
         start = time.time()
         for i in range(1000):
@@ -118,7 +118,7 @@ class TestSchemaValidationPerformance:
 
     def test_response_schema_serialization(self):
         """Test response schema serialization performance"""
-        from app.models.schemas import QAResponse
+        from apps.api.models.schemas import QAResponse
 
         responses = [
             QAResponse(
@@ -153,7 +153,7 @@ class TestServiceInstantiationPerformance:
 
     def test_rag_qa_service_instantiation_latency(self):
         """Test RAG QA service instantiation latency"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()
@@ -175,7 +175,7 @@ class TestServiceInstantiationPerformance:
 
     def test_consultation_service_instantiation(self):
         """Test consultation service instantiation"""
-        from app.services.consultation_service import ConsultationService
+        from apps.api.services.consultation_service import ConsultationService
 
         mock_search = Mock()
         mock_embedding = Mock()
@@ -193,7 +193,7 @@ class TestServiceInstantiationPerformance:
 
     def test_bulk_service_creation_with_pool(self):
         """Test bulk service creation with thread pool"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         def create_service(idx):
             mock_qdrant = Mock()
@@ -226,7 +226,7 @@ class TestMetricsPerformance:
 
     def test_counter_increment_throughput(self):
         """Test counter metric increment throughput"""
-        from app.core.metrics import http_requests_total
+        from apps.api.core.metrics import http_requests_total
 
         metric = http_requests_total.labels(method="GET", endpoint="/health", status="200")
 
@@ -242,7 +242,7 @@ class TestMetricsPerformance:
 
     def test_histogram_observe_throughput(self):
         """Test histogram observation throughput"""
-        from app.core.metrics import http_request_duration_seconds
+        from apps.api.core.metrics import http_request_duration_seconds
 
         metric = http_request_duration_seconds.labels(method="GET", endpoint="/health")
 
@@ -256,7 +256,7 @@ class TestMetricsPerformance:
 
     def test_gauge_set_throughput(self):
         """Test gauge set throughput"""
-        from app.core.metrics import active_requests
+        from apps.api.core.metrics import active_requests
 
         # Get labeled metric (active_requests requires 'endpoint' label)
         metric = active_requests.labels(endpoint="/api/query")
@@ -281,7 +281,7 @@ class TestConfigurationAccessPatterns:
 
     def test_repeated_config_access(self):
         """Test repeated configuration access pattern"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         config = get_config()
 
@@ -299,7 +299,7 @@ class TestConfigurationAccessPatterns:
 
     def test_config_field_access_cache(self):
         """Test config field access caching"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         config = get_config()
         # Cache all fields locally
@@ -331,7 +331,7 @@ class TestRequestProcessingPipeline:
 
     def test_request_creation_to_response_schema(self):
         """Test request creation through response creation"""
-        from app.models.schemas import QARequest, QAResponse
+        from apps.api.models.schemas import QARequest, QAResponse
 
         start = time.time()
         for i in range(1000):
@@ -353,7 +353,7 @@ class TestRequestProcessingPipeline:
 
     def test_batch_request_processing(self):
         """Test batch request processing"""
-        from app.models.schemas import QARequest
+        from apps.api.models.schemas import QARequest
 
         requests = [QARequest(question=f"Q{i}?") for i in range(500)]
 
@@ -419,7 +419,7 @@ class TestMemoryEfficiency:
 
     def test_singleton_memory_efficiency(self):
         """Test singleton pattern saves memory"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         # Get config multiple times
         configs = [get_config() for _ in range(100)]
@@ -429,7 +429,7 @@ class TestMemoryEfficiency:
 
     def test_service_instance_independence(self):
         """Test service instances don't hold unnecessary references"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         services = []
         for i in range(10):
@@ -458,7 +458,7 @@ class TestBottleneckIdentification:
 
     def test_schema_validation_vs_dict_creation(self):
         """Compare schema validation vs plain dict"""
-        from app.models.schemas import QARequest
+        from apps.api.models.schemas import QARequest
 
         # Schema validation
         start = time.time()
@@ -477,7 +477,7 @@ class TestBottleneckIdentification:
 
     def test_service_creation_vs_mock_creation(self):
         """Compare service creation vs mock creation"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         # Service creation
         start = time.time()
@@ -511,8 +511,8 @@ class TestCriticalPathAnalysis:
 
     def test_config_to_service_critical_path(self):
         """Measure config → service creation critical path"""
-        from app.core.dependencies import get_config
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.core.dependencies import get_config
+        from apps.api.services.rag_qa_service import RAGQAService
 
         start = time.time()
         for i in range(100):
@@ -532,7 +532,7 @@ class TestCriticalPathAnalysis:
 
     def test_request_validation_critical_path(self):
         """Measure request validation critical path"""
-        from app.models.schemas import ConsultationRequest, QARequest
+        from apps.api.models.schemas import ConsultationRequest, QARequest
 
         start = time.time()
         for i in range(500):

@@ -1,0 +1,56 @@
+{
+  "mcpServers": {
+    "filesystem": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/home/rkqksk/projects/new_rag"
+      ],
+      "description": "Basic filesystem operations",
+      "disabled": false
+    },
+    "serena": {
+      "transport": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-serena"
+      ],
+      "description": "Code navigation and editing (OPTIMIZED)",
+      "disabled": false,
+      "settings": {
+        "maxAnswerChars": 5000,
+        "cacheEnabled": true,
+        "lazyLoad": true
+      },
+      "rateLimit": {
+        "requestsPerMinute": 30,
+        "burstSize": 10
+      }
+    },
+    "github": {
+      "type": "managed",
+      "description": "GitHub integration (OPTIONAL - disabled by default)",
+      "disabled": true,
+      "note": "Enable only if you need GitHub API access. Free for public repos.",
+      "settings": {
+        "rateLimit": {
+          "requestsPerMinute": 10
+        }
+      }
+    }
+  },
+  "optimizations": {
+    "tokenBudget": {
+      "total": 200000,
+      "reserved": 50000,
+      "mcp_max_per_call": 5000
+    },
+    "caching": {
+      "enabled": true,
+      "ttl_seconds": 3600
+    }
+  }
+}

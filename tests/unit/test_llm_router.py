@@ -7,7 +7,7 @@ selection between Claude Haiku 4.5 and Sonnet 4.5 based on query complexity.
 
 import pytest
 
-from app.core.routing.llm_router import (
+from apps.api.core.routing.llm_router import (
     ClaudeModel,
     ClaudeRouter,
     ComplexityAnalyzer,

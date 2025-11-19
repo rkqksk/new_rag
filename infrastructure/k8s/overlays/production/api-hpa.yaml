@@ -1,0 +1,89 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: api-hpa
+  namespace: rag-production
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: api
+  minReplicas: 3
+  maxReplicas: 20
+  metrics:
+  # CPU-based scaling
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+
+  # Memory-based scaling
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+
+  # Custom metric: Request rate (from Prometheus)
+  - type: Pods
+    pods:
+      metric:
+        name: http_requests_per_second
+      target:
+        type: AverageValue
+        averageValue: "100"
+
+  # Custom metric: P95 response time (from Prometheus)
+  - type: Pods
+    pods:
+      metric:
+        name: http_request_duration_p95_seconds
+      target:
+        type: AverageValue
+        averageValue: "500m"  # 500ms
+
+  # Custom metric: Queue depth (Redis-based)
+  - type: External
+    external:
+      metric:
+        name: redis_queue_length
+        selector:
+          matchLabels:
+            queue_name: "rag_tasks"
+      target:
+        type: AverageValue
+        averageValue: "10"
+
+  # Custom metric: Active connections
+  - type: Pods
+    pods:
+      metric:
+        name: active_websocket_connections
+      target:
+        type: AverageValue
+        averageValue: "500"
+
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300  # 5 minutes
+      policies:
+      - type: Percent
+        value: 25  # Scale down max 25% at a time
+        periodSeconds: 60
+      - type: Pods
+        value: 2  # Or max 2 pods at a time
+        periodSeconds: 60
+      selectPolicy: Min
+    scaleUp:
+      stabilizationWindowSeconds: 60  # 1 minute
+      policies:
+      - type: Percent
+        value: 50  # Scale up max 50% at a time
+        periodSeconds: 30
+      - type: Pods
+        value: 5  # Or max 5 pods at a time
+        periodSeconds: 30
+      selectPolicy: Max

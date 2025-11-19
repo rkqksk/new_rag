@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.core.health import (
+from apps.api.core.health import (
     ClaudeAPIHealthChecker,
     ComponentHealth,
     HealthCheckOrchestrator,

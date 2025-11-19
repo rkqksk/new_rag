@@ -25,7 +25,7 @@ class TestConcurrentRequests:
 
     def test_concurrent_api_requests_100(self):
         """Test 100 concurrent API requests"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         config = get_config()
         assert config is not None
@@ -51,7 +51,7 @@ class TestConcurrentRequests:
 
     def test_concurrent_embedding_service_calls(self):
         """Test concurrent embedding service requests"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()
@@ -75,7 +75,7 @@ class TestConcurrentRequests:
 
     def test_concurrent_schema_validation(self):
         """Test concurrent schema validation"""
-        from app.models.schemas import QARequest
+        from apps.api.models.schemas import QARequest
 
         def validate_request(request_id):
             """Validate a request schema"""
@@ -95,7 +95,7 @@ class TestConcurrentRequests:
 
     def test_concurrent_configuration_access(self):
         """Test concurrent configuration access"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         configs = []
         lock = threading.Lock()
@@ -189,7 +189,7 @@ class TestResourceContention:
 
     def test_config_singleton_under_contention(self):
         """Test singleton pattern holds under concurrent access"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         seen_configs = set()
         lock = threading.Lock()
@@ -211,7 +211,7 @@ class TestResourceContention:
 
     def test_service_independence_under_load(self):
         """Test services remain independent under concurrent load"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         services_created = []
         lock = threading.Lock()
@@ -529,7 +529,7 @@ class TestStateConsistency:
 
     def test_config_consistency_concurrent(self):
         """Test configuration consistency under concurrent access"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         configs = []
         lock = threading.Lock()
@@ -558,7 +558,7 @@ class TestStateConsistency:
 
     def test_schema_validation_consistency(self):
         """Test schema validation consistency under load"""
-        from app.models.schemas import QARequest
+        from apps.api.models.schemas import QARequest
 
         validations = []
         lock = threading.Lock()

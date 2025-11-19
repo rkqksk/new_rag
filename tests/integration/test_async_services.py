@@ -44,7 +44,7 @@ class TestRAGQAServiceAsync:
     async def test_rag_service_search_products_async(self, mock_qdrant_async, mock_embedding_async):
         """Test async search_products method"""
         try:
-            from app.services.rag_qa_service import RAGQAService
+            from apps.api.services.rag_qa_service import RAGQAService
         except ImportError:
             pytest.skip("Required dependencies not installed")
 
@@ -63,7 +63,7 @@ class TestRAGQAServiceAsync:
     async def test_concurrent_searches(self, mock_qdrant_async, mock_embedding_async):
         """Test multiple concurrent search operations"""
         try:
-            from app.services.rag_qa_service import RAGQAService
+            from apps.api.services.rag_qa_service import RAGQAService
         except ImportError:
             pytest.skip("Required dependencies not installed")
 
@@ -96,7 +96,7 @@ class TestRAGQAServiceAsync:
     async def test_async_search_with_timeout(self, mock_qdrant_async, mock_embedding_async):
         """Test async search with timeout handling"""
         try:
-            from app.services.rag_qa_service import RAGQAService
+            from apps.api.services.rag_qa_service import RAGQAService
         except ImportError:
             pytest.skip("Required dependencies not installed")
 

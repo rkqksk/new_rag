@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.repositories.qdrant_repository import QdrantRepository
+from apps.api.repositories.qdrant_repository import QdrantRepository
 
 
 @pytest.mark.unit

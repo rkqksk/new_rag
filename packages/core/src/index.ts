@@ -55,15 +55,19 @@ export type {
 // Configuration
 export { API_CONFIG, API_ENDPOINTS, HTTP_STATUS, ERROR_MESSAGES } from './config/api.config'
 
-// Types
+// Types - Enums must be exported as values, not types
+export {
+  UserRole,
+  TenantStatus,
+  SubscriptionPlan,
+  JobStatus,
+} from './types/api.types'
+
 export type {
   User,
-  UserRole,
   LoginResponse,
   RegisterResponse,
   Tenant,
-  TenantStatus,
-  SubscriptionPlan,
   ApiKey,
   UsageMetrics,
   UsageLimits,
@@ -74,7 +78,6 @@ export type {
   AnalyticsOverview,
   PopularQuery,
   CrawlingJob,
-  JobStatus,
   CrawlingScheduler,
   Webhook,
   ApiResponse,

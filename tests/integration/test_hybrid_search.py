@@ -5,8 +5,8 @@ Integration tests for Hybrid Search (v6.0.0)
 import pytest
 from fastapi.testclient import TestClient
 
-from app.main import app
-from app.services.hybrid_search import HybridSearchEngine, create_hybrid_search_engine
+from apps.api.main import app
+from apps.api.services.hybrid_search import HybridSearchEngine, create_hybrid_search_engine
 
 
 class TestHybridSearchEngine:

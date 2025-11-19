@@ -7,17 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import {
-  MessageSquare,
-  Plus,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  XCircle,
-  Send,
-  Paperclip,
-} from "lucide-react"
-
 interface Ticket {
   id: string
   subject: string
@@ -151,7 +140,7 @@ export default function SupportPage() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-800">
-                  <Clock className="h-5 w-5 text-stone-400" />
+                  Time
                 </div>
                 <div>
                   <p className="text-xs text-stone-400">대기중</p>
@@ -166,7 +155,7 @@ export default function SupportPage() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-800">
-                  <AlertCircle className="h-5 w-5 text-stone-400" />
+                  ⚠
                 </div>
                 <div>
                   <p className="text-xs text-stone-400">처리중</p>
@@ -207,7 +196,7 @@ export default function SupportPage() {
             ))}
           </div>
           <Button onClick={() => setShowNewTicket(!showNewTicket)}>
-            <Plus className="mr-2 h-4 w-4" />
+            +
             새 티켓
           </Button>
         </div>
@@ -261,7 +250,7 @@ export default function SupportPage() {
                       취소
                     </Button>
                     <Button>
-                      <Send className="mr-2 h-4 w-4" />
+                      Send
                       제출
                     </Button>
                   </div>

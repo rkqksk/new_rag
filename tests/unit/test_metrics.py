@@ -11,7 +11,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from prometheus_client import CollectorRegistry
 
-from app.core.metrics import (
+from apps.api.core.metrics import (
     LLMQueryTracker,
     MetricsCollector,
     RequestTracker,

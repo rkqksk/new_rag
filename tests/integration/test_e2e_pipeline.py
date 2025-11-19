@@ -23,7 +23,7 @@ import pytest
 async def test_e2e_document_ingestion_pipeline():
     """Test end-to-end document ingestion pipeline"""
     try:
-        from app.services.document_ingestion_service import DocumentIngestionService
+        from apps.api.services.document_ingestion_service import DocumentIngestionService
     except ModuleNotFoundError:
         pytest.skip("Document ingestion service dependencies not available (pytesseract, etc.)")
 
@@ -60,7 +60,7 @@ async def test_e2e_document_ingestion_pipeline():
 async def test_e2e_query_to_response_pipeline():
     """Test end-to-end query processing pipeline"""
     try:
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
     except ModuleNotFoundError:
         pytest.skip("RAG QA service dependencies not available")
 
@@ -90,7 +90,7 @@ def test_e2e_document_to_embedding_to_vector_storage():
     """Test document → embedding → Qdrant pipeline"""
     from sentence_transformers import SentenceTransformer
 
-    from app.core.dependencies import get_config
+    from apps.api.core.dependencies import get_config
 
     config = get_config()
 
@@ -117,7 +117,7 @@ def test_e2e_document_to_embedding_to_vector_storage():
 @pytest.mark.integration
 def test_e2e_config_chain():
     """Test configuration chain for entire pipeline"""
-    from app.core.dependencies import (
+    from apps.api.core.dependencies import (
         get_config,
         get_embedding_model,
         get_qdrant_client,
@@ -148,7 +148,7 @@ def test_e2e_config_chain():
 @pytest.mark.integration
 def test_e2e_service_dependency_chain():
     """Test complete dependency chain for services"""
-    from app.core.dependencies import (
+    from apps.api.core.dependencies import (
         get_config,
         override_dependencies_for_testing,
     )
@@ -167,7 +167,7 @@ def test_e2e_service_dependency_chain():
 @pytest.mark.integration
 def test_e2e_metrics_collection_setup():
     """Test metrics collection is properly set up for pipeline"""
-    from app.core.metrics import (
+    from apps.api.core.metrics import (
         active_requests,
         embedding_generation_total,
         errors_total,
@@ -195,7 +195,7 @@ def test_e2e_metrics_collection_setup():
 @pytest.mark.integration
 def test_e2e_schema_validation_pipeline():
     """Test schema validation through entire pipeline"""
-    from app.models.schemas import (
+    from apps.api.models.schemas import (
         ConsultationRequest,
         ConsultationResponse,
         QARequest,
@@ -226,7 +226,7 @@ def test_e2e_schema_validation_pipeline():
 @pytest.mark.integration
 def test_e2e_error_handling_pipeline():
     """Test error handling through pipeline"""
-    from app.models.schemas import ErrorResponse
+    from apps.api.models.schemas import ErrorResponse
 
     # Test error response
     error = ErrorResponse(
@@ -243,8 +243,8 @@ def test_e2e_error_handling_pipeline():
 @pytest.mark.integration
 def test_e2e_middleware_in_pipeline():
     """Test metrics middleware is integrated in pipeline"""
-    from app.api.main import app
-    from app.core.middleware import MetricsMiddleware
+    from apps.api.main import app
+    from apps.api.core.middleware import MetricsMiddleware
 
     # Middleware should be in app
     assert app is not None
@@ -257,7 +257,7 @@ def test_e2e_middleware_in_pipeline():
 @pytest.mark.integration
 async def test_e2e_async_pipeline_flow():
     """Test async flow through entire pipeline"""
-    from app.services.rag_qa_service import RAGQAService
+    from apps.api.services.rag_qa_service import RAGQAService
 
     # Setup mocks for async operations
     mock_qdrant = Mock()
@@ -283,28 +283,28 @@ def test_e2e_data_flow_through_layers():
     """Test data flows correctly through architectural layers"""
 
     # Layer 1: API
-    from app.api.main import app
+    from apps.api.main import app
 
     assert app is not None
 
     # Layer 2: Core
-    from app.core.dependencies import get_config
-    from app.core.metrics import REGISTRY
-    from app.core.middleware import MetricsMiddleware
+    from apps.api.core.dependencies import get_config
+    from apps.api.core.metrics import REGISTRY
+    from apps.api.core.middleware import MetricsMiddleware
 
     assert get_config is not None
     assert REGISTRY is not None
     assert MetricsMiddleware is not None
 
     # Layer 3: Services
-    from app.services.document_ingestion_service import DocumentIngestionService
-    from app.services.rag_qa_service import RAGQAService
+    from apps.api.services.document_ingestion_service import DocumentIngestionService
+    from apps.api.services.rag_qa_service import RAGQAService
 
     assert RAGQAService is not None
     assert DocumentIngestionService is not None
 
     # Layer 4: Models
-    from app.models.schemas import QARequest, QAResponse
+    from apps.api.models.schemas import QARequest, QAResponse
 
     assert QARequest is not None
     assert QAResponse is not None
@@ -313,7 +313,7 @@ def test_e2e_data_flow_through_layers():
 @pytest.mark.integration
 def test_e2e_configuration_flow():
     """Test configuration flows through entire application"""
-    from app.core.dependencies import get_config
+    from apps.api.core.dependencies import get_config
 
     config = get_config()
 
@@ -333,7 +333,7 @@ def test_e2e_configuration_flow():
 @pytest.mark.integration
 def test_e2e_metrics_flow():
     """Test metrics flow through pipeline"""
-    from app.core.metrics import (
+    from apps.api.core.metrics import (
         active_requests,
         embedding_generation_total,
         errors_total,
@@ -362,10 +362,10 @@ def test_e2e_import_chain():
     # This test ensures there are no circular imports or missing dependencies
 
     # Start from API layer
-    from app.api.main import app
+    from apps.api.main import app
 
     # Go through core
-    from app.core.dependencies import (
+    from apps.api.core.dependencies import (
         get_config,
         get_embedding_model,
         get_qdrant_client,
@@ -373,17 +373,17 @@ def test_e2e_import_chain():
     )
 
     # Go through models
-    from app.models.schemas import (
+    from apps.api.models.schemas import (
         ConsultationRequest,
         ConsultationResponse,
         QARequest,
         QAResponse,
     )
-    from app.services.consultation_service import ConsultationService
-    from app.services.document_ingestion_service import DocumentIngestionService
+    from apps.api.services.consultation_service import ConsultationService
+    from apps.api.services.document_ingestion_service import DocumentIngestionService
 
     # Go through services
-    from app.services.rag_qa_service import RAGQAService
+    from apps.api.services.rag_qa_service import RAGQAService
 
     # Verify all are importable
     assert app is not None
@@ -399,8 +399,8 @@ def test_e2e_import_chain():
 @pytest.mark.integration
 def test_e2e_no_missing_dependencies():
     """Test that no component is missing its dependencies"""
-    from app.core.dependencies import override_dependencies_for_testing
-    from app.services.rag_qa_service import RAGQAService
+    from apps.api.core.dependencies import override_dependencies_for_testing
+    from apps.api.services.rag_qa_service import RAGQAService
 
     overrides = override_dependencies_for_testing()
 
@@ -432,7 +432,7 @@ def test_e2e_no_missing_dependencies():
 @pytest.mark.integration
 def test_e2e_pipeline_robustness():
     """Test pipeline handles missing/invalid data gracefully"""
-    from app.models.schemas import QARequest
+    from apps.api.models.schemas import QARequest
 
     # Test with minimum valid input
     request = QARequest(question="Q?")
@@ -452,7 +452,7 @@ def test_e2e_pipeline_robustness():
 @pytest.mark.integration
 def test_e2e_pipeline_state_isolation():
     """Test that pipeline state is properly isolated between requests"""
-    from app.core.dependencies import get_config, override_dependencies_for_testing
+    from apps.api.core.dependencies import get_config, override_dependencies_for_testing
 
     # Get config twice - should be same instance (singleton)
     config1 = get_config()
@@ -471,7 +471,7 @@ def test_e2e_pipeline_state_isolation():
 @pytest.mark.integration
 def test_e2e_pipeline_scalability():
     """Test pipeline can handle scale (multiple requests)"""
-    from app.models.schemas import QARequest
+    from apps.api.models.schemas import QARequest
 
     # Create multiple requests
     requests = [QARequest(question=f"Question {i}?") for i in range(100)]
@@ -485,7 +485,7 @@ def test_e2e_pipeline_scalability():
 @pytest.mark.integration
 def test_e2e_pipeline_health_check():
     """Test health check endpoints in pipeline"""
-    from app.api.main import app
+    from apps.api.main import app
 
     # App should have health endpoints
     routes = [route.path for route in app.routes]

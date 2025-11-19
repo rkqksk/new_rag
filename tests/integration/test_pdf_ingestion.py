@@ -152,7 +152,7 @@ class TestDocumentChunk:
     def test_document_chunk_creation(self):
         """Test creating a document chunk"""
         try:
-            from app.services.document_ingestion_service import DocumentChunk
+            from apps.api.services.document_ingestion_service import DocumentChunk
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed - document ingestion skipped")
 
@@ -173,7 +173,7 @@ class TestDocumentChunk:
     def test_document_chunk_to_dict(self):
         """Test chunk conversion to dictionary"""
         try:
-            from app.services.document_ingestion_service import DocumentChunk
+            from apps.api.services.document_ingestion_service import DocumentChunk
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed - document ingestion skipped")
 
@@ -191,7 +191,7 @@ class TestDocumentChunk:
     def test_document_chunk_with_metadata(self):
         """Test chunk with rich metadata"""
         try:
-            from app.services.document_ingestion_service import DocumentChunk
+            from apps.api.services.document_ingestion_service import DocumentChunk
         except ModuleNotFoundError:
             pytest.skip("pytesseract not installed - document ingestion skipped")
 
@@ -218,7 +218,7 @@ class TestDocumentIngestionService:
     def test_service_instantiation(self, mock_qdrant_client, mock_embedding_model):
         """Test service can be instantiated"""
         try:
-            from app.services.document_ingestion_service import DocumentIngestionService
+            from apps.api.services.document_ingestion_service import DocumentIngestionService
         except ImportError:
             pytest.skip("pytesseract not installed")
 
@@ -239,7 +239,7 @@ class TestDocumentIngestionService:
     def test_service_has_required_methods(self, mock_qdrant_client, mock_embedding_model):
         """Test service has required methods"""
         try:
-            from app.services.document_ingestion_service import DocumentIngestionService
+            from apps.api.services.document_ingestion_service import DocumentIngestionService
         except ImportError:
             pytest.skip("pytesseract not installed")
 
@@ -439,7 +439,7 @@ class TestDocumentStorage:
         """Test preparing points for Qdrant storage"""
         from qdrant_client.models import PointStruct
 
-        from app.services.document_ingestion_service import DocumentChunk
+        from apps.api.services.document_ingestion_service import DocumentChunk
 
         chunks = [
             DocumentChunk(text="Product A specs", doc_id="doc_1", chunk_index=0),

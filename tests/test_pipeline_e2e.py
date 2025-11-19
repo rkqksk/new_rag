@@ -19,8 +19,8 @@ from pathlib import Path
 # 프로젝트 루트 추가
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from app.services.evaluation_service import ConsultationType, RAGASEvaluator
-from app.services.teacher_service import (
+from apps.api.services.evaluation_service import ConsultationType, RAGASEvaluator
+from apps.api.services.teacher_service import (
     TeacherGenerationRequest,
     TeacherService,
     TrainingDataExporter,

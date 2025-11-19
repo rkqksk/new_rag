@@ -17,21 +17,21 @@ from pathlib import Path
 
 import pytest
 
-from app.services.crawling.auth_manager import AuthCredentials, AuthenticationManager, AuthType
-from app.services.crawling.dynamic_crawler import DynamicCrawler, PlaywrightConfig
-from app.services.crawling.evasion import AntiDetectionManager, EvasionConfig, RateLimiter
-from app.services.crawling.multi_strategy_crawler import (
+from apps.api.services.crawling.auth_manager import AuthCredentials, AuthenticationManager, AuthType
+from apps.api.services.crawling.dynamic_crawler import DynamicCrawler, PlaywrightConfig
+from apps.api.services.crawling.evasion import AntiDetectionManager, EvasionConfig, RateLimiter
+from apps.api.services.crawling.multi_strategy_crawler import (
     CrawlConfig,
     CrawlMethod,
     MultiStrategyCrawler,
 )
-from app.services.crawling.session_manager import SessionManager
+from apps.api.services.crawling.session_manager import SessionManager
 
 # Import crawling services
-from app.services.crawling.static_crawler import StaticCrawler, StaticCrawlerConfig
+from apps.api.services.crawling.static_crawler import StaticCrawler, StaticCrawlerConfig
 
 # Import data processing services
-from app.services.data_processing.excel_processor import (
+from apps.api.services.data_processing.excel_processor import (
     AdvancedExcelProcessor,
     ExcelProcessorConfig,
     process_excel_file,

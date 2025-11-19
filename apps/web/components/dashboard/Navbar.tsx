@@ -1,6 +1,5 @@
 "use client"
 
-import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { NotificationCenter } from "@/components/dashboard/NotificationCenter"
 
@@ -20,11 +19,9 @@ export function Navbar({ title, subtitle }: NavbarProps) {
         </div>
 
         {/* Search */}
-        <div className="relative w-64">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-stone-500" />
+        <div className="w-64">
           <Input
             placeholder="검색..."
-            className="pl-9"
           />
         </div>
 

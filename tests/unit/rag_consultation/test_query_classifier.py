@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock
 import numpy as np
 import pytest
 
-from app.rag_consultation.classification.query_classifier import QueryClassifier
-from app.rag_consultation.models import QueryType
+from apps.api.rag_consultation.classification.query_classifier import QueryClassifier
+from apps.api.rag_consultation.models import QueryType
 
 
 @pytest.fixture

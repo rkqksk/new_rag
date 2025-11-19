@@ -4,18 +4,6 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  Bell,
-  BellOff,
-  Check,
-  CheckCheck,
-  X,
-  AlertCircle,
-  Info,
-  CheckCircle,
-  AlertTriangle,
-  Trash2
-} from "lucide-react"
 import { cn } from "@/lib/utils"
 import { toast } from "sonner"
 
@@ -124,14 +112,14 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
   const getIcon = (type: Notification["type"]) => {
     switch (type) {
       case "success":
-        return <CheckCircle className="h-5 w-5 text-green-400" />
+        return <span className="text-green-400 font-bold">✓</span>
       case "warning":
-        return <AlertTriangle className="h-5 w-5 text-yellow-400" />
+        return <span className="text-yellow-400 font-bold">⚠</span>
       case "error":
-        return <AlertCircle className="h-5 w-5 text-red-400" />
+        return <span className="text-red-400 font-bold">✕</span>
       case "info":
       default:
-        return <Info className="h-5 w-5 text-blue-400" />
+        return <span className="text-blue-400 font-bold">ⓘ</span>
     }
   }
 
@@ -159,7 +147,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
         onClick={() => setIsOpen(!isOpen)}
         className="relative"
       >
-        {unreadCount > 0 ? <Bell className="h-5 w-5" /> : <BellOff className="h-5 w-5" />}
+        <span className="text-lg">{unreadCount > 0 ? "Notifications" : "No notifications"}</span>
         {unreadCount > 0 && (
           <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-red-600 text-white text-xs">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -180,7 +168,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                 onClick={() => setIsOpen(false)}
                 className="h-8 w-8"
               >
-                <X className="h-4 w-4" />
+                ×
               </Button>
             </div>
 
@@ -215,7 +203,6 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                 className="flex-1 text-xs"
                 disabled={unreadCount === 0}
               >
-                <CheckCheck className="mr-1 h-3 w-3" />
                 모두 읽음
               </Button>
               <Button
@@ -224,7 +211,6 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                 onClick={clearAll}
                 className="flex-1 text-xs text-red-400 hover:text-red-300"
               >
-                <Trash2 className="mr-1 h-3 w-3" />
                 모두 삭제
               </Button>
             </div>
@@ -234,7 +220,6 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
           <div className="overflow-y-auto max-h-[450px]">
             {filteredNotifications.length === 0 ? (
               <div className="p-8 text-center text-stone-500">
-                <Bell className="h-12 w-12 mx-auto mb-2 opacity-50" />
                 <p className="text-sm">알림이 없습니다</p>
               </div>
             ) : (
@@ -299,7 +284,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                                 onClick={() => markAsRead(notification.id)}
                                 title="읽음으로 표시"
                               >
-                                <Check className="h-3 w-3" />
+                                ✓
                               </Button>
                             )}
                             <Button
@@ -309,7 +294,7 @@ export function NotificationCenter({ className }: NotificationCenterProps) {
                               onClick={() => deleteNotification(notification.id)}
                               title="삭제"
                             >
-                              <X className="h-3 w-3" />
+                              ×
                             </Button>
                           </div>
                         </div>

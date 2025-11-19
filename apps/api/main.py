@@ -28,7 +28,7 @@ from apps.api.api import (
     query_routes,
 )
 from apps.api.routes import products, qa, inquiries, tracking
-from apps.api.api.v1 import saas
+# from apps.api.api.v1 import saas  # TODO: SaaS module not yet implemented
 from apps.api.api.routes import manufacturing  # v7.1.0 Advanced Manufacturing
 from apps.api.api.routes.auth import create_auth_router  # v8.0.0 JWT Authentication
 
@@ -279,8 +279,9 @@ app_logger.info("⚡ WebSocket Notifications API enabled at /api/v1/ws")
 # ============================================================================
 # SaaS Platform - Multi-Tenancy, Authentication, Billing
 # ============================================================================
-app.include_router(saas.router, prefix=f"{settings.api_prefix}/saas", tags=["SaaS Platform"])
-app_logger.info("🏢 SaaS Platform endpoints enabled at /api/v1/saas")
+# TODO: SaaS Platform not yet implemented
+# app.include_router(saas.router, prefix=f"{settings.api_prefix}/saas", tags=["SaaS Platform"])
+# app_logger.info("🏢 SaaS Platform endpoints enabled at /api/v1/saas")
 
 # ============================================================================
 # Product Management - Products, Q&A, Inquiries

@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.repositories.postgres_repository import PostgresRepository
+from apps.api.repositories.postgres_repository import PostgresRepository
 
 
 @pytest.mark.unit

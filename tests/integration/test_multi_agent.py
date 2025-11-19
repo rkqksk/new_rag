@@ -5,8 +5,8 @@ Integration tests for Multi-Agent System (v6.0.0)
 import pytest
 from fastapi.testclient import TestClient
 
-from app.main import app
-from app.services.multi_agent_system import (
+from apps.api.main import app
+from apps.api.services.multi_agent_system import (
     MultiAgentOrchestrator,
     RouterAgent,
     SearchAgent,

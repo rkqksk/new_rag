@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@rag/core": ["./packages/core/src"],
+      "@rag/core/*": ["./packages/core/src/*"],
+      "@rag/ui": ["./packages/ui/src"],
+      "@rag/ui/*": ["./packages/ui/src/*"],
+      "@rag/config": ["./packages/config/src"],
+      "@rag/config/*": ["./packages/config/src/*"],
+      "@rag/utils": ["./packages/utils/src"],
+      "@rag/utils/*": ["./packages/utils/src/*"],
+      "@rag/mobile-ui": ["./packages/mobile-ui/src"],
+      "@rag/mobile-ui/*": ["./packages/mobile-ui/src/*"]
+    }
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    ".next",
+    "coverage",
+    ".turbo",
+    "apps/api"
+  ]
+}

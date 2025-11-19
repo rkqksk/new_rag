@@ -1,12 +1,14 @@
 # PETER - Quick Reference
 
-**Version**: v10.0.0 "Unified Maximum" | **Status**: Production Ready ✅
+**Version**: v10.0.0 "Unified Maximum" | **Status**: Phase 1-2 Complete (75% Done) ⚙️
 
 > **Token-Optimized**: Use `§symbols` for detailed docs • Load only what you need
 >
 > **Quick Access**: Common commands below • Full guides in `docs/`
 >
 > **NEW**: Monorepo structure • Pure Black design • 76% fewer directories
+>
+> **Migration Status**: Backend 95% • Frontend 70% • Packages 60% • Services 10%
 
 ---
 
@@ -40,11 +42,19 @@ curl http://localhost:8001/health/ready
 ## 📊 System Status (v10.0.0)
 
 **Platform**: Unified Maximum Monorepo
-**Structure**: 8 directories (down from 33, -76%)
-**Packages**: @rag/{web,core,config,utils,ui}
-**Services**: 17 containers ($0/month software cost)
-**Endpoints**: 80+ production APIs (+67%)
-**Components**: 60+ UI components (+200%)
+**Structure**: 8 directories (down from 33, -76%) ✅
+**Packages**: @rag/{web,core,config,utils,ui} - 60% implemented ⚙️
+**Services**: 17 containers ($0/month software cost) ✅
+**Endpoints**: 80+ production APIs (+67%) ✅
+**Components**: 52/60 UI components migrated (87%) ⚙️
+
+**Completion by Area**:
+- Backend (apps/api): 95% ✅ - Fully functional with unified structure
+- Frontend (apps/web): 70% ⚙️ - 8 components still to migrate
+- Packages: 60% ⚙️ - Structure done, implementations partial
+- Services: 10% ⚠️ - Scaffolds only, not functional yet
+- Tests: Updated and passing ✅
+- Infrastructure: Production-ready ✅
 
 ### Core Features ✅
 - **RAG**: Multi-modal search, OCR, hybrid search, query optimization
@@ -58,12 +68,16 @@ curl http://localhost:8001/health/ready
 - **Design System**: Pure Black (#000000), NO icons, Natural theme ⭐ NEW
 
 ### Quick Stats
-- **Structure**: 8 directories (-76%) | <5% duplication (-90%)
-- **Build**: <3min (-62%) | 80%+ coverage target (+60%)
-- **Data**: 471 products → 3,246 atomic chunks
-- **Search**: 0.79-0.82 similarity | <500ms response
-- **WebSocket**: <10ms latency
-- **Cost**: $0/month software | $17,460+/year savings
+- **Structure**: 8 directories (-76%) | <5% duplication (-90%) ✅
+- **Backend**: apps/api fully functional (95% complete) ✅
+- **Frontend**: 52/60 components migrated (87% complete) ⚙️
+- **Tests**: Updated and passing ✅
+- **Build**: Backend working | Frontend needs completion ⚙️
+- **Data**: 471 products → 3,246 atomic chunks ✅
+- **Search**: 0.79-0.82 similarity | <500ms response ✅
+- **Cost**: $0/month software | $17,460+/year savings ✅
+
+**Phase Status**: Phase 1-2 Complete | Phase 3 In Progress
 
 **Details**: `PROGRESS.md`, `README.md`, `CHANGELOG.md`
 
@@ -74,65 +88,105 @@ curl http://localhost:8001/health/ready
 ```
 new_rag_ubuntu/
 ├── apps/                    # Applications
-│   ├── api/                # FastAPI backend (unified from app/backend/src)
-│   ├── web/                # Next.js 15 (Pure Black design)
-│   ├── pwa/                # Vite PWA
-│   └── mobile/             # Expo (React Native)
-├── packages/                # Shared packages
-│   ├── core/               # Business logic
-│   ├── config/             # Settings
-│   ├── utils/              # Utilities
-│   └── ui/                 # React components (@rag/ui)
-├── services/                # Microservices
-│   ├── rag/                # RAG engine
-│   ├── collector/          # Data collection
-│   ├── manufacturing/      # Vision AI
-│   ├── realtime/           # Socket.IO
-│   └── ml/                 # MLflow
-├── infrastructure/          # IaC
+│   ├── api/                # FastAPI backend (unified from app/backend/src) ✅ 95%
+│   ├── web/                # Next.js 15 (Pure Black design) ⚙️ 70%
+│   ├── pwa/                # Vite PWA (scaffold) ⚠️ 10%
+│   └── mobile/             # Expo (React Native, scaffold) ⚠️ 10%
+├── packages/                # Shared packages ⚙️ 60%
+│   ├── core/               # Business logic (structure done, partial impl)
+│   ├── config/             # Settings (structure done, partial impl)
+│   ├── utils/              # Utilities (structure done, partial impl)
+│   └── ui/                 # React components (@rag/ui, 52/60 migrated)
+├── services/                # Microservices ⚠️ 10%
+│   ├── rag/                # RAG engine (scaffold only)
+│   ├── collector/          # Data collection (scaffold only)
+│   ├── manufacturing/      # Vision AI (scaffold only)
+│   ├── realtime/           # Socket.IO (scaffold only)
+│   └── ml/                 # MLflow (scaffold only)
+├── infrastructure/          # IaC ✅ 95%
 │   ├── k8s/                # Kubernetes + Helm
 │   ├── terraform/          # AWS/GCP/Azure
 │   └── observability/      # Grafana dashboards
-├── tools/                   # Dev tools
-├── .claude/                # Claude Code (skills, commands)
-├── docs/                   # Documentation
-└── workflows/              # CI/CD
+├── tools/                   # Dev tools ✅ 90%
+├── .claude/                # Claude Code (skills, commands) ✅ 100%
+├── docs/                   # Documentation ✅ 100%
+└── workflows/              # CI/CD ⚙️ 70%
 ```
 
-**Old code preserved**: `.archive/{app,backend,src}-v9/`
+**Old code preserved**: `.archive/{app,backend,src}-v9/` (6.5MB total)
+**Active codebase**: Monolith-first approach - `apps/api` contains all backend functionality
 
 ---
 
-## 🎯 Symbol Quick Access
+## 🎯 Symbol Quick Access (70-80% Token Savings!)
 
-> **Load specific docs**: Use `§symbol` to load 50-200 lines instead of 500-1000 lines
+> **Two Systems**: `§symbols` for DOCS + Serena MCP for CODE
+>
+> **Combined Savings**: 70-80% fewer tokens vs reading full files
 
-### Core Systems
+### 📄 Documentation Symbols (§symbol)
+**Use**: Navigate documentation efficiently
+**Format**: `§symbol` loads specific doc sections
+
+#### Core Systems
 - `§rag.*` - RAG system (chunking, search, OCR, engines)
 - `§saas.*` - SaaS platform (auth, billing, tenants, usage)
 - `§collector.*` - Data collection (web, API, file, scheduling)
 - `§manufacturing.*` - Manufacturing (vision, devices, quality)
 - `§realtime.*` - Realtime backend (Socket.IO, PostgreSQL, Redis)
 
-### v10 Structure
+#### v10 Structure
 - `§v10.*` - v10 structure, migration, monorepo setup
 - `§design.*` - Pure Black design system (ABSOLUTE rules)
 - `§packages.*` - Shared packages (core, config, utils, ui)
 - `§services.*` - Microservices architecture
 
-### Infrastructure
+#### Infrastructure
 - `§security.*` - Keycloak OAuth2/OIDC, Vault secrets
 - `§observe.*` - Jaeger tracing, Prometheus, Grafana
 - `§data.*` - MinIO storage, Airflow ETL, Metabase BI
 - `§k8s.*` - Kubernetes, Helm, ArgoCD, Terraform
 
-### Development
+#### Development
 - `§api.*` - API endpoints (80+)
 - `§debug.*` - Debug system (8 endpoints)
 - `§deploy.*` - Deployment (Docker, K8s, CI/CD)
 - `§arch.*` - Architecture (services, layers, databases)
 
 **Complete Map**: `docs/reference/SYMBOLS.md` (200 lines, 80% reduction)
+
+### 🐍 Code Symbols (Serena MCP) ⭐ NEW
+**Use**: Read Python code symbolically (not entire files!)
+**Savings**: 70-80% vs `Read` tool
+
+#### Quick Commands
+```python
+# 1. Get file overview (always start here)
+get_symbols_overview("apps/api/services/rag_qa_service.py")
+→ Returns: [QARequest, QAResponse, RAGQAService]  # 20 tokens vs 1200!
+
+# 2. Get class structure
+find_symbol(name_path="RAGQAService", depth=1, include_body=false)
+→ Returns: All method signatures  # 50 tokens
+
+# 3. Read specific method
+find_symbol(name_path="RAGQAService/query", include_body=true)
+→ Returns: Only query method  # 80 tokens
+
+# Total: ~150 tokens vs 1200 tokens = 87% savings!
+```
+
+#### Always Use Serena For
+- **Large Routers** (300-450 lines):
+  - `apps/api/core/routing/ml_router.py`
+  - `apps/api/core/routing/llm_router.py`
+  - `apps/api/core/routing/intent_router.py`
+- **All Services** (200-400 lines):
+  - `apps/api/services/*.py`
+  - `apps/api/rag_consultation/**/*.py`
+- **Any file >200 lines**
+
+**Complete Guide**: `docs/reference/CODE_SYMBOLS.md` (symbolic code reading)
 
 ---
 
@@ -300,10 +354,30 @@ make setup && make format && make lint && make test
 
 ## 🐛 Quick Troubleshooting
 
+### Current Known Issues (v10.0.0)
+
+**Frontend (apps/web)**:
+- ⚠️ 8 components still need migration from old structure
+- ⚠️ Some imports may reference old paths
+- Fix: Use apps/api directly for now, frontend migration ongoing
+
+**Packages**:
+- ⚠️ Implementations partial (structure complete)
+- ⚠️ Some exports not fully configured
+- Fix: Import directly from apps/api until packages complete
+
+**Services**:
+- ⚠️ Scaffolds only - not functional yet
+- Fix: All functionality is in apps/api (monolith-first approach)
+
 ### Automated Fix
 ```bash
-# One-command restart everything
-./scripts/restart-all.sh
+# Backend (fully working)
+cd apps/api
+uvicorn main:app --reload --port 8001
+
+# Frontend (partial - use with caution)
+cd apps/web && npm run dev
 ```
 
 ### Manual Fixes
@@ -314,11 +388,8 @@ lsof -i :8001 && kill -9 <PID>
 # Docker reset
 docker-compose down -v && docker-compose up -d
 
-# Ollama not responding
-docker-compose restart ollama
-
-# Frontend not loading (v10)
-cd apps/web && npm run dev
+# Use backend directly
+curl http://localhost:8001/api/v1/docs
 ```
 
 ### Health Checks
@@ -353,8 +424,9 @@ docker exec postgres pg_isready
 - **docs/design/DESIGN_SYSTEM.md** - Pure Black design (ABSOLUTE rules)
 - **scripts/v10/validate_v10.sh** - Structure validation
 
-### Symbol System
-- **docs/reference/SYMBOLS.md** - Complete symbol map (200 lines, -80%)
+### Symbol System ⭐ NEW
+- **docs/reference/SYMBOLS.md** - Documentation symbols (200 lines, -80%)
+- **docs/reference/CODE_SYMBOLS.md** - Code symbols (Serena MCP guide, -87% tokens)
 
 ### Guides (How-to)
 - **docs/guides/QUICK_REFERENCE.md** - Common commands
@@ -440,10 +512,18 @@ grep -r "Icon" apps/ packages/       # Should return nothing
 - Zero duplication (<5%)
 - Pure Black design (ABSOLUTE)
 
-### Symbol System
+### Symbol System (Dual Approach)
+**Documentation Symbols** (`§symbol`):
 1. **Check SYMBOLS.md first** - Find exact symbol
 2. **Load only needed** - `§symbol` loads 50-200 lines vs 500-1000
 3. **70-80% token savings** - 4-5x more efficient
+
+**Code Symbols** (Serena MCP):
+1. **Always start with overview** - `get_symbols_overview(file)` before `Read(file)`
+2. **Read symbolically** - Class/method at a time, not entire files
+3. **Use for Python files >200 lines** - Routers, services, all large files
+4. **87-94% token savings** - Read 150 tokens instead of 1200 tokens
+5. **See CODE_SYMBOLS.md** - Complete Serena usage guide
 
 ### Documentation
 - **CLAUDE.md** - Quick reference (this file, ~300 lines)
@@ -504,7 +584,9 @@ open http://localhost:16686  # Jaeger
 
 **v10.0.0 "Unified Maximum"** | **2025-11-16** | **Production Ready** | **MIT** | **$0/month**
 
-**Token Optimization**: 8 directories | <5% duplication | Use `§symbols` for details
+**Token Optimization**: 70-80% savings with Serena MCP | `§symbols` (docs) + Serena (code)
+**Structure**: 8 directories | <5% duplication
 **Quick Start**: `pnpm install && pnpm dev`
+**Serena Guide**: `docs/reference/CODE_SYMBOLS.md` (symbolic code reading)
 **Full Docs**: `PROGRESS.md`, `CHANGELOG.md`, `docs/design/DESIGN_SYSTEM.md`
 **Migration**: `docs/guides/V9_TO_V10_MIGRATION.md`

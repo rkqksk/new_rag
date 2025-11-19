@@ -226,7 +226,7 @@ def test_client():
     """FastAPI test client"""
     from fastapi.testclient import TestClient
 
-    from app.main import app
+    from apps.api.main import app
 
     return TestClient(app)
 

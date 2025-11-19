@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import httpx
 import pytest
 
-from app.rag_consultation.generation.response_generator import ResponseGenerator
-from app.rag_consultation.models import FormalityLevel, QueryType, UrgencyLevel
+from apps.api.rag_consultation.generation.response_generator import ResponseGenerator
+from apps.api.rag_consultation.models import FormalityLevel, QueryType, UrgencyLevel
 
 
 @pytest.fixture

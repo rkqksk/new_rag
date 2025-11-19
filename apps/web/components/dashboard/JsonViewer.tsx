@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-import { ChevronDown, ChevronRight, Copy, Check, Download, FileText, Table } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { copyToClipboard } from "@/lib/utils/copy"
@@ -44,7 +43,6 @@ export function JsonViewer({ data, defaultExpanded = false, maxHeight = "400px",
             onClick={handleExportCSV}
             className="h-8 px-2 text-stone-400 hover:text-stone-100"
           >
-            <Table className="mr-1 h-4 w-4" />
             CSV
           </Button>
           <Button
@@ -53,7 +51,6 @@ export function JsonViewer({ data, defaultExpanded = false, maxHeight = "400px",
             onClick={handleExportJSON}
             className="h-8 px-2 text-stone-400 hover:text-stone-100"
           >
-            <FileText className="mr-1 h-4 w-4" />
             JSON
           </Button>
           <Button
@@ -62,17 +59,7 @@ export function JsonViewer({ data, defaultExpanded = false, maxHeight = "400px",
             onClick={handleCopy}
             className="h-8 px-2 text-stone-400 hover:text-stone-100"
           >
-            {copied ? (
-              <>
-                <Check className="mr-1 h-4 w-4" />
-                Copied
-              </>
-            ) : (
-              <>
-                <Copy className="mr-1 h-4 w-4" />
-                Copy
-              </>
-            )}
+            {copied ? "Copied" : "Copy"}
           </Button>
         </div>
       </div>
@@ -160,11 +147,7 @@ function JsonNode({ data, level, defaultExpanded = false, name }: JsonNodeProps)
           className="flex cursor-pointer items-center gap-1 text-stone-400 hover:text-stone-100"
           onClick={() => setExpanded(!expanded)}
         >
-          {expanded ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          )}
+          <span className="w-4 text-center">{expanded ? "▼" : "▶"}</span>
           {name && <span className="text-stone-500">{name}: </span>}
           <span>[{data.length}]</span>
         </div>
@@ -202,11 +185,7 @@ function JsonNode({ data, level, defaultExpanded = false, name }: JsonNodeProps)
           className="flex cursor-pointer items-center gap-1 text-stone-400 hover:text-stone-100"
           onClick={() => setExpanded(!expanded)}
         >
-          {expanded ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          )}
+          <span className="w-4 text-center">{expanded ? "▼" : "▶"}</span>
           {name && <span className="text-stone-500">{name}: </span>}
           <span>{"{"}{keys.length}{"}"}</span>
         </div>

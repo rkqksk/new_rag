@@ -5,8 +5,6 @@ import { Navbar } from "@/components/dashboard/Navbar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Package, Truck, CheckCircle, Clock, XCircle, Eye, Download } from "lucide-react"
-
 interface Order {
   id: string
   date: string
@@ -173,7 +171,7 @@ export default function OrdersPage() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-800">
-                  <CheckCircle className="h-5 w-5 text-stone-400" />
+                  ✓
                 </div>
                 <div>
                   <p className="text-xs text-stone-400">배송완료</p>
@@ -313,12 +311,12 @@ export default function OrdersPage() {
                     </div>
                     <div className="flex gap-2">
                       <Button variant="outline" size="sm">
-                        <Eye className="mr-2 h-4 w-4" />
+                        Show
                         상세보기
                       </Button>
                       {order.status === "delivered" && (
                         <Button variant="outline" size="sm">
-                          <Download className="mr-2 h-4 w-4" />
+                          Download
                           영수증
                         </Button>
                       )}

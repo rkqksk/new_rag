@@ -1,0 +1,346 @@
+{
+  "analysis_metadata": {
+    "generated_date": "2025-11-19",
+    "analyzer": "Claude Code",
+    "project": "new_rag",
+    "version": "v10",
+    "status": "READY_FOR_EXECUTION"
+  },
+  "summary": {
+    "total_test_files": 97,
+    "files_needing_updates": 7,
+    "files_already_correct": 90,
+    "percentage_needing_updates": 7.2
+  },
+  "import_patterns": {
+    "from_app": {
+      "count": 1,
+      "status": "NEEDS_FIX",
+      "description": "Legacy v9 pattern"
+    },
+    "from_backend": {
+      "count": 0,
+      "status": "CLEAN",
+      "description": "No backend imports found"
+    },
+    "import_app": {
+      "count": 0,
+      "status": "CLEAN",
+      "description": "No direct app imports"
+    },
+    "import_backend": {
+      "count": 0,
+      "status": "CLEAN",
+      "description": "No direct backend imports"
+    },
+    "from_apps_api": {
+      "count": 246,
+      "status": "WORKING",
+      "description": "Correct v10 pattern, but 19 instances have redundant .api."
+    },
+    "from_apps_api_api": {
+      "count": 19,
+      "status": "NEEDS_FIX",
+      "description": "Redundant double .api. in path"
+    }
+  },
+  "breakdown_by_category": {
+    "unit_tests": {
+      "total_files": 27,
+      "files_using_apps_api": 20,
+      "files_needing_fix": 0,
+      "location": "tests/unit/"
+    },
+    "integration_tests": {
+      "total_files": 33,
+      "files_using_apps_api": 22,
+      "files_needing_fix": 6,
+      "location": "tests/integration/"
+    },
+    "e2e_tests": {
+      "total_files": 0,
+      "files_using_apps_api": 0,
+      "files_needing_fix": 0,
+      "location": "tests/e2e/"
+    },
+    "root_tests": {
+      "total_files": 28,
+      "files_using_apps_api": 3,
+      "files_needing_fix": 0,
+      "location": "tests/"
+    },
+    "other": {
+      "total_files": 7,
+      "files_using_apps_api": 0,
+      "files_needing_fix": 0,
+      "location": "tests/*/[various]"
+    },
+    "conftest_files": {
+      "total_files": 2,
+      "files_needing_fix": 1,
+      "locations": [
+        "tests/conftest.py (NEEDS FIX)",
+        "tests/integration/conftest.py (CLEAN)"
+      ]
+    }
+  },
+  "files_requiring_updates": [
+    {
+      "priority": "CRITICAL",
+      "file": "tests/conftest.py",
+      "issues": [
+        {
+          "line": 229,
+          "current": "from app.main import app",
+          "fixed": "from apps.api.main import app",
+          "reason": "Legacy v9 import pattern"
+        }
+      ],
+      "impact": "HIGH - Used by all test files for TestClient fixture",
+      "total_issues": 1
+    },
+    {
+      "priority": "HIGH",
+      "file": "tests/integration/test_api_integration.py",
+      "issues": [
+        {
+          "line": 12,
+          "current": "from apps.api.api.main import app",
+          "fixed": "from apps.api.main import app",
+          "reason": "Redundant .api. in path"
+        }
+      ],
+      "impact": "MEDIUM - Integration test file",
+      "total_issues": 1
+    },
+    {
+      "priority": "HIGH",
+      "file": "tests/integration/test_app_initialization.py",
+      "issues": [
+        {
+          "lines": [16, 108, 118, 244, 269],
+          "current": "from apps.api.api.main import app",
+          "fixed": "from apps.api.main import app",
+          "reason": "Redundant .api. in path"
+        }
+      ],
+      "impact": "MEDIUM - Integration test file",
+      "total_issues": 5
+    },
+    {
+      "priority": "HIGH",
+      "file": "tests/integration/test_e2e_pipeline.py",
+      "issues": [
+        {
+          "lines": [246, 286, 365, 488],
+          "current": "from apps.api.api.main import app",
+          "fixed": "from apps.api.main import app",
+          "reason": "Redundant .api. in path"
+        }
+      ],
+      "impact": "MEDIUM - E2E test file",
+      "total_issues": 4
+    },
+    {
+      "priority": "HIGH",
+      "file": "tests/integration/test_e2e_simple.py",
+      "issues": [
+        {
+          "lines": [17, 155, 200, 213, 226, 309],
+          "current": "from apps.api.api.main import app",
+          "fixed": "from apps.api.main import app",
+          "reason": "Redundant .api. in path"
+        }
+      ],
+      "impact": "MEDIUM - E2E test file",
+      "total_issues": 6
+    },
+    {
+      "priority": "MEDIUM",
+      "file": "tests/integration/test_nexa_integration.py",
+      "issues": [
+        {
+          "line": 22,
+          "current": "from apps.api.api.v1.admin import health_check",
+          "fixed": "from apps.api.v1.admin import health_check",
+          "reason": "Redundant .api. in path"
+        },
+        {
+          "line": 31,
+          "current": "from apps.api.api.v1.admin import get_stats",
+          "fixed": "from apps.api.v1.admin import get_stats",
+          "reason": "Redundant .api. in path"
+        }
+      ],
+      "impact": "LOW - Integration test with skipped tests",
+      "total_issues": 2
+    },
+    {
+      "priority": "MEDIUM",
+      "file": "tests/integration/test_product_loading.py",
+      "issues": [
+        {
+          "line": 6,
+          "current": "from apps.api.api.v1.personalization import get_all_products, _product_cache",
+          "fixed": "from apps.api.v1.personalization import get_all_products, _product_cache",
+          "reason": "Redundant .api. in path"
+        }
+      ],
+      "impact": "LOW - Product loading test",
+      "total_issues": 1
+    }
+  ],
+  "top_module_imports": [
+    {"module": "apps.api.core.metrics", "count": 44},
+    {"module": "apps.api.core.dependencies", "count": 36},
+    {"module": "apps.api.services.rag_qa_service", "count": 30},
+    {"module": "apps.api.models.schemas", "count": 29},
+    {"module": "apps.api.api.main", "count": 16, "note": "Should be apps.api.main"},
+    {"module": "apps.api.services.document_ingestion_service", "count": 11},
+    {"module": "apps.api.core.middleware", "count": 10},
+    {"module": "apps.api.main", "count": 8, "note": "Correct pattern"},
+    {"module": "apps.api.services.consultation_service", "count": 7}
+  ],
+  "update_strategy": {
+    "method": "automated_sed_script",
+    "script_location": "scripts/fix-test-imports.sh",
+    "commands_count": 3,
+    "backup_enabled": true,
+    "backup_location": ".backups/test-imports-TIMESTAMP/",
+    "sed_commands": [
+      "sed -i 's/from app\\.main import app/from apps.api.main import app/' tests/conftest.py",
+      "sed -i 's/from apps\\.api\\.api\\.main import/from apps.api.main import/g' [4 files]",
+      "sed -i 's/from apps\\.api\\.api\\.v1\\./from apps.api.v1./g' [2 files]"
+    ]
+  },
+  "estimated_time": {
+    "automated_script": "< 1 minute",
+    "validation_testing": "5-10 minutes",
+    "manual_review": "15 minutes (optional)",
+    "total": "15-20 minutes"
+  },
+  "risk_assessment": {
+    "risk_level": "LOW",
+    "breaking_changes": false,
+    "rollback_available": true,
+    "tests_affected_count": 7,
+    "tests_affected_percentage": 7.2,
+    "rationale": [
+      "Only import path changes (no logic changes)",
+      "90 files already using correct pattern",
+      "Automated script with verification",
+      "Full backup before changes",
+      "Easy rollback via git or backups"
+    ]
+  },
+  "validation_plan": {
+    "pre_update": [
+      "grep -r 'from app\\.main' tests/",
+      "grep -r 'from apps\\.api\\.api\\.' tests/"
+    ],
+    "post_update": [
+      "grep -r 'from app\\.main' tests/ (should return nothing)",
+      "grep -r 'from apps\\.api\\.api\\.' tests/ (should return nothing)",
+      "grep 'from apps\\.api\\.main' tests/conftest.py (should find 1)"
+    ],
+    "test_execution": [
+      "pytest tests/conftest.py -v",
+      "pytest tests/integration/test_api_integration.py -v",
+      "pytest tests/integration/test_app_initialization.py -v",
+      "pytest tests/integration/test_e2e_pipeline.py -v",
+      "pytest tests/integration/test_e2e_simple.py -v",
+      "pytest tests/integration/test_nexa_integration.py -v",
+      "pytest tests/integration/test_product_loading.py -v",
+      "pytest tests/integration/ -v",
+      "pytest tests/ -v"
+    ]
+  },
+  "deliverables": [
+    {
+      "name": "TEST_IMPORT_ANALYSIS.md",
+      "size_kb": 11,
+      "description": "Complete detailed analysis with line-by-line breakdown"
+    },
+    {
+      "name": "TEST_IMPORT_QUICK_FIX.md",
+      "size_kb": 4.5,
+      "description": "Quick reference card with three-step execution guide"
+    },
+    {
+      "name": "scripts/fix-test-imports.sh",
+      "size_kb": 6.5,
+      "description": "Automated fix script with backups and verification"
+    },
+    {
+      "name": "test_import_analysis.json",
+      "size_kb": 8,
+      "description": "This JSON report with structured data"
+    }
+  ],
+  "architecture_context": {
+    "v9_structure": {
+      "path": "app/api/main.py",
+      "import": "from app.main import app"
+    },
+    "v10_structure": {
+      "path": "apps/api/main.py",
+      "import": "from apps.api.main import app"
+    },
+    "redundant_pattern": {
+      "path": "apps/api/api/main.py (legacy location)",
+      "import": "from apps.api.api.main import app (redundant)",
+      "note": "The double .api. exists because v10 migration moved app/ to apps/api/, but some routes are still in apps/api/api/ subdirectory"
+    }
+  },
+  "next_actions": [
+    {
+      "step": 1,
+      "action": "Review documentation",
+      "commands": ["cat TEST_IMPORT_ANALYSIS.md", "cat TEST_IMPORT_QUICK_FIX.md"]
+    },
+    {
+      "step": 2,
+      "action": "Execute automated fix",
+      "commands": ["./scripts/fix-test-imports.sh"]
+    },
+    {
+      "step": 3,
+      "action": "Verify changes",
+      "commands": [
+        "grep -r 'from app\\.main' tests/",
+        "grep -r 'from apps\\.api\\.api\\.' tests/"
+      ]
+    },
+    {
+      "step": 4,
+      "action": "Run tests",
+      "commands": [
+        "pytest tests/conftest.py -v",
+        "pytest tests/integration/ -v",
+        "pytest tests/ -v"
+      ]
+    },
+    {
+      "step": 5,
+      "action": "Commit changes",
+      "commands": [
+        "git add tests/",
+        "git commit -m 'fix(tests): Update import paths for v10 migration (apps/api)'"
+      ]
+    }
+  ],
+  "rollback_procedures": [
+    {
+      "method": "automated_backups",
+      "command": "cp .backups/test-imports-TIMESTAMP/* tests/"
+    },
+    {
+      "method": "git_checkout",
+      "command": "git checkout tests/conftest.py tests/integration/test_*.py"
+    },
+    {
+      "method": "git_reset",
+      "command": "git reset --hard HEAD"
+    }
+  ]
+}

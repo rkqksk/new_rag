@@ -36,7 +36,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Webhook, Plus, Trash2, Send, CheckCircle, XCircle } from "lucide-react"
 import { toast } from "sonner"
 
 interface WebhookConfig {
@@ -298,7 +297,7 @@ export default function WebhooksPage() {
 
             <div className="flex gap-2">
               <Button onClick={handleAddWebhook} disabled={!newWebhook.name || !newWebhook.url} className="flex-1">
-                <Plus className="mr-2 h-4 w-4" />
+                +
                 Webhook 추가
               </Button>
               <Button variant="outline" onClick={() => setShowAddForm(false)} className="flex-1">
@@ -321,7 +320,7 @@ export default function WebhooksPage() {
             </div>
             {!showAddForm && (
               <Button onClick={() => setShowAddForm(true)} className="gap-2">
-                <Plus className="h-4 w-4" />
+                +
                 Webhook 추가
               </Button>
             )}
@@ -370,12 +369,12 @@ export default function WebhooksPage() {
                         size="sm"
                         onClick={() => handleTestWebhook(webhook)}
                       >
-                        <Send className="h-4 w-4" />
+                        Send
                       </Button>
                       <AlertDialog>
                         <AlertDialogTrigger asChild>
                           <Button variant="ghost" size="sm" className="text-stone-400 hover:text-stone-300">
-                            <Trash2 className="h-4 w-4" />
+                            Delete
                           </Button>
                         </AlertDialogTrigger>
                         <AlertDialogContent>
@@ -440,7 +439,7 @@ export default function WebhooksPage() {
                     </TableCell>
                     <TableCell>
                       {log.status === "success" ? (
-                        <CheckCircle className="h-5 w-5 text-stone-400" />
+                        ✓
                       ) : (
                         <XCircle className="h-5 w-5 text-stone-500" />
                       )}

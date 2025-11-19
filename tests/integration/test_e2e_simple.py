@@ -14,7 +14,7 @@ import pytest
 @pytest.mark.integration
 def test_e2e_api_layer_present():
     """Test API layer is present and functional"""
-    from app.api.main import app
+    from apps.api.main import app
 
     assert app is not None
     assert hasattr(app, "get")
@@ -26,10 +26,10 @@ def test_e2e_api_layer_present():
 @pytest.mark.integration
 def test_e2e_core_layer_present():
     """Test core/infrastructure layer is present"""
-    from app.core.dependencies import get_config
-    from app.core.metrics import REGISTRY
-    from app.core.middleware import MetricsMiddleware
-    from app.core.routing import integrated_router, intent_router, llm_router
+    from apps.api.core.dependencies import get_config
+    from apps.api.core.metrics import REGISTRY
+    from apps.api.core.middleware import MetricsMiddleware
+    from apps.api.core.routing import integrated_router, intent_router, llm_router
 
     assert get_config is not None
     assert REGISTRY is not None
@@ -39,7 +39,7 @@ def test_e2e_core_layer_present():
 @pytest.mark.integration
 def test_e2e_models_layer_present():
     """Test models/schemas layer is present"""
-    from app.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
+    from apps.api.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
 
     assert QARequest is not None
     assert QAResponse is not None
@@ -50,7 +50,7 @@ def test_e2e_models_layer_present():
 @pytest.mark.integration
 def test_e2e_config_dependency_chain():
     """Test configuration flows through dependency chain"""
-    from app.core.dependencies import (
+    from apps.api.core.dependencies import (
         get_config,
         get_embedding_model,
         get_qdrant_client,
@@ -69,7 +69,7 @@ def test_e2e_config_dependency_chain():
 @pytest.mark.integration
 def test_e2e_metrics_dependency_chain():
     """Test metrics are properly configured for pipeline"""
-    from app.core.metrics import (
+    from apps.api.core.metrics import (
         active_requests,
         embedding_generation_total,
         errors_total,
@@ -89,7 +89,7 @@ def test_e2e_metrics_dependency_chain():
 @pytest.mark.integration
 def test_e2e_request_schema_pipeline():
     """Test request flows through schema validation"""
-    from app.models.schemas import ConsultationRequest, QARequest
+    from apps.api.models.schemas import ConsultationRequest, QARequest
 
     # QA request pipeline
     qa_req = QARequest(question="What is machine learning?")
@@ -106,7 +106,7 @@ def test_e2e_request_schema_pipeline():
 @pytest.mark.integration
 def test_e2e_response_schema_pipeline():
     """Test response flows through schema validation"""
-    from app.models.schemas import ConsultationResponse, ErrorResponse, QAResponse
+    from apps.api.models.schemas import ConsultationResponse, ErrorResponse, QAResponse
 
     # QA response pipeline
     qa_resp = QAResponse(
@@ -131,7 +131,7 @@ def test_e2e_response_schema_pipeline():
 @pytest.mark.integration
 def test_e2e_dependency_injection_chain():
     """Test DI resolves all dependencies without circular refs"""
-    from app.core.dependencies import (
+    from apps.api.core.dependencies import (
         get_config,
         override_dependencies_for_testing,
     )
@@ -152,8 +152,8 @@ def test_e2e_dependency_injection_chain():
 @pytest.mark.integration
 def test_e2e_middleware_presence_in_pipeline():
     """Test middleware is integrated in API pipeline"""
-    from app.api.main import app
-    from app.core.middleware import MetricsMiddleware
+    from apps.api.main import app
+    from apps.api.core.middleware import MetricsMiddleware
 
     # Middleware should be importable
     assert MetricsMiddleware is not None
@@ -166,7 +166,7 @@ def test_e2e_middleware_presence_in_pipeline():
 @pytest.mark.integration
 def test_e2e_singleton_pattern_preserved():
     """Test singleton pattern is preserved through pipeline"""
-    from app.core.dependencies import get_config
+    from apps.api.core.dependencies import get_config
 
     config1 = get_config()
     config2 = get_config()
@@ -180,7 +180,7 @@ def test_e2e_singleton_pattern_preserved():
 @pytest.mark.integration
 def test_e2e_state_isolation_between_requests():
     """Test state is properly isolated between requests"""
-    from app.models.schemas import QARequest
+    from apps.api.models.schemas import QARequest
 
     # Create multiple independent requests
     requests = [QARequest(question=f"Question {i}?") for i in range(10)]
@@ -197,9 +197,9 @@ def test_e2e_state_isolation_between_requests():
 def test_e2e_full_import_path():
     """Test full import path works without circular dependencies"""
     # This exercises the entire import chain
-    from app.api.main import app  # Layer 1: API
-    from app.core.dependencies import get_config  # Layer 2: Core
-    from app.models.schemas import QARequest  # Layer 3: Models
+    from apps.api.main import app  # Layer 1: API
+    from apps.api.core.dependencies import get_config  # Layer 2: Core
+    from apps.api.models.schemas import QARequest  # Layer 3: Models
 
     # If we got here, no circular imports
     assert app is not None
@@ -210,8 +210,8 @@ def test_e2e_full_import_path():
 @pytest.mark.integration
 def test_e2e_metrics_integrated_with_app():
     """Test metrics are integrated into app"""
-    from app.api.main import app
-    from app.core.metrics import REGISTRY
+    from apps.api.main import app
+    from apps.api.core.metrics import REGISTRY
 
     # App should be present
     assert app is not None
@@ -223,7 +223,7 @@ def test_e2e_metrics_integrated_with_app():
 @pytest.mark.integration
 def test_e2e_endpoints_defined():
     """Test all required endpoints are defined"""
-    from app.api.main import app
+    from apps.api.main import app
 
     # Get all routes
     routes = [route.path for route in app.routes]
@@ -241,7 +241,7 @@ def test_e2e_endpoints_defined():
 @pytest.mark.integration
 def test_e2e_pipeline_error_handling():
     """Test error handling through pipeline"""
-    from app.models.schemas import ErrorResponse
+    from apps.api.models.schemas import ErrorResponse
 
     # Create error response
     error = ErrorResponse(
@@ -256,7 +256,7 @@ def test_e2e_pipeline_error_handling():
 @pytest.mark.integration
 def test_e2e_configuration_accessible():
     """Test configuration is accessible throughout pipeline"""
-    from app.core.dependencies import get_config
+    from apps.api.core.dependencies import get_config
 
     config = get_config()
 
@@ -279,7 +279,7 @@ def test_e2e_configuration_accessible():
 @pytest.mark.integration
 def test_e2e_scalability_multiple_requests():
     """Test pipeline can handle multiple concurrent requests"""
-    from app.models.schemas import QARequest
+    from apps.api.models.schemas import QARequest
 
     # Create 100 requests
     requests = [QARequest(question=f"Query {i}: {uuid.uuid4()}") for i in range(100)]
@@ -294,7 +294,7 @@ def test_e2e_scalability_multiple_requests():
 @pytest.mark.integration
 def test_e2e_routing_layer_available():
     """Test routing/middleware layer is available"""
-    from app.core.routing import integrated_router, intent_router, llm_router
+    from apps.api.core.routing import integrated_router, intent_router, llm_router
 
     # All routers should be available
     assert intent_router is not None
@@ -306,12 +306,12 @@ def test_e2e_routing_layer_available():
 def test_e2e_no_import_errors():
     """Test entire codebase can be imported without errors"""
     # If this test runs without exception, entire import chain works
-    from app.api.main import app
-    from app.core.dependencies import get_config, override_dependencies_for_testing
-    from app.core.metrics import REGISTRY
-    from app.core.middleware import MetricsMiddleware
-    from app.core.routing import integrated_router, intent_router, llm_router
-    from app.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
+    from apps.api.main import app
+    from apps.api.core.dependencies import get_config, override_dependencies_for_testing
+    from apps.api.core.metrics import REGISTRY
+    from apps.api.core.middleware import MetricsMiddleware
+    from apps.api.core.routing import integrated_router, intent_router, llm_router
+    from apps.api.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
 
     # All should be importable
     assert app and get_config and REGISTRY and MetricsMiddleware

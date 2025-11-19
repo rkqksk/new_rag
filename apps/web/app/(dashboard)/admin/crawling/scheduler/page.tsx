@@ -35,7 +35,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
-import { Clock, Plus, Trash2, Play, Pause } from "lucide-react"
 import { toast } from "sonner"
 
 interface Schedule {
@@ -257,7 +256,7 @@ export default function SchedulerPage() {
 
             <div className="flex gap-2">
               <Button onClick={handleAddSchedule} className="flex-1">
-                <Plus className="mr-2 h-4 w-4" />
+                +
                 스케줄 추가
               </Button>
               <Button
@@ -284,7 +283,7 @@ export default function SchedulerPage() {
             </div>
             {!showAddForm && (
               <Button onClick={() => setShowAddForm(true)} className="gap-2">
-                <Plus className="h-4 w-4" />
+                +
                 스케줄 추가
               </Button>
             )}
@@ -340,7 +339,7 @@ export default function SchedulerPage() {
                     <AlertDialog>
                       <AlertDialogTrigger asChild>
                         <Button variant="ghost" size="sm" className="text-stone-400 hover:text-stone-300">
-                          <Trash2 className="h-4 w-4" />
+                          Delete
                         </Button>
                       </AlertDialogTrigger>
                       <AlertDialogContent>

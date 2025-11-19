@@ -36,7 +36,6 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { UserPlus, Mail, Trash2, Shield, Copy, Clock, CheckCircle, XCircle } from "lucide-react"
 import { toast } from "sonner"
 import { copyToClipboard } from "@/lib/utils/copy"
 
@@ -279,7 +278,7 @@ export default function TeamManagementPage() {
                   </CardDescription>
                 </div>
                 <Button onClick={() => setShowInviteForm(!showInviteForm)} className="gap-2">
-                  <UserPlus className="h-4 w-4" />
+                  Add User
                   팀원 초대
                 </Button>
               </div>
@@ -326,7 +325,7 @@ export default function TeamManagementPage() {
                     </div>
                     <div className="flex gap-2">
                       <Button onClick={handleInvite} className="gap-2">
-                        <Mail className="h-4 w-4" />
+                        Email
                         초대장 보내기
                       </Button>
                       <Button variant="outline" onClick={() => setShowInviteForm(false)}>
@@ -392,7 +391,7 @@ export default function TeamManagementPage() {
                         <AlertDialog>
                           <AlertDialogTrigger asChild>
                             <Button variant="ghost" size="sm" className="text-stone-400 hover:text-stone-300">
-                              <Trash2 className="h-4 w-4" />
+                              Delete
                             </Button>
                           </AlertDialogTrigger>
                           <AlertDialogContent className="bg-stone-950 border-stone-800">
@@ -462,12 +461,12 @@ export default function TeamManagementPage() {
                       <TableCell>
                         {invite.status === "pending" ? (
                           <div className="flex items-center gap-1 text-stone-400">
-                            <Clock className="h-4 w-4" />
+                            Time
                             <span className="text-sm">대기 중</span>
                           </div>
                         ) : invite.status === "accepted" ? (
                           <div className="flex items-center gap-1 text-stone-300">
-                            <CheckCircle className="h-4 w-4" />
+                            ✓
                             <span className="text-sm">수락됨</span>
                           </div>
                         ) : (
@@ -489,7 +488,7 @@ export default function TeamManagementPage() {
                               copyToClipboard(invite.invite_link)
                             }}
                           >
-                            <Copy className="h-4 w-4" />
+                            Copy
                           </Button>
                           {invite.status === "pending" && (
                             <Button
@@ -498,7 +497,7 @@ export default function TeamManagementPage() {
                               onClick={() => handleCancelInvite(invite.id)}
                               className="text-stone-400 hover:text-stone-300"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              Delete
                             </Button>
                           )}
                         </div>
@@ -558,7 +557,7 @@ export default function TeamManagementPage() {
                     <Badge className={getRoleColor(roleInfo.role)}>
                       {roleInfo.label}
                     </Badge>
-                    <Shield className="h-5 w-5 text-stone-500" />
+                    Admin
                   </div>
                   <CardTitle className="text-stone-100 text-lg">{roleInfo.label}</CardTitle>
                   <CardDescription className="text-stone-400">
@@ -571,7 +570,7 @@ export default function TeamManagementPage() {
                     <ul className="space-y-1">
                       {roleInfo.permissions.map((perm) => (
                         <li key={perm} className="flex items-center gap-2 text-sm text-stone-400">
-                          <CheckCircle className="h-3 w-3 text-stone-400" />
+                          ✓
                           {perm}
                         </li>
                       ))}

@@ -3,8 +3,8 @@ Integration tests for product loading (in-memory caching)
 """
 
 import pytest
-from app.api.v1.personalization import get_all_products, _product_cache
-from app.services.product_loader import load_products
+from apps.api.v1.personalization import get_all_products, _product_cache
+from apps.api.services.product_loader import load_products
 
 
 class TestProductLoading:

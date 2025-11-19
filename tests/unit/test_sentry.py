@@ -15,7 +15,7 @@ import pytest
 from fastapi import FastAPI, Request
 from fastapi.testclient import TestClient
 
-from app.core.sentry import (
+from apps.api.core.sentry import (
     Environment,
     SentryConfig,
     SentryIntegration,

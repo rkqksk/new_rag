@@ -14,7 +14,7 @@ Strategy:
 import logging
 from dataclasses import dataclass
 from enum import Enum
-from typing import Dict
+from typing import Dict, Optional
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +46,11 @@ class ModelSelection:
     complexity_score: ComplexityScore
     reason: str
     cost_type: str  # "deposit" or "max"
+
+    # ML-enhanced fields (optional)
+    ml_confidence: Optional[float] = None
+    predicted_latency_ms: Optional[float] = None
+    predicted_quality: Optional[float] = None  # "deposit" or "max"
 
 
 class ComplexityAnalyzer:
@@ -256,6 +261,61 @@ class ClaudeRouter:
             return True
 
         return False
+
+    def route_with_ml(
+        self,
+        query: str,
+        context: Dict = None,
+        user_id: Optional[str] = None,
+        use_ml: bool = True,
+    ) -> ModelSelection:
+        """
+        Enhanced routing with ML-based decision making
+
+        Args:
+            query: User query
+            context: Additional context
+            user_id: User ID for personalization
+            use_ml: Whether to use ML router (True) or fallback to rule-based (False)
+
+        Returns:
+            ModelSelection with enhanced metrics
+        """
+        if context is None:
+            context = {}
+
+        # Try ML routing first (if enabled and model is trained)
+        if use_ml:
+            try:
+                from apps.api.core.routing.ml_router import ml_router
+
+                model_name, ml_metrics = ml_router.route(query, context, user_id)
+
+                # Get complexity score from traditional analyzer
+                complexity_score = self.complexity_analyzer.analyze(query)
+
+                # Map model name to ClaudeModel enum
+                model_map = {
+                    "claude-haiku-4.5": ClaudeModel.HAIKU_4_5,
+                    "claude-sonnet-4.5": ClaudeModel.SONNET_4_5,
+                }
+                model = model_map.get(model_name, ClaudeModel.HAIKU_4_5)
+
+                return ModelSelection(
+                    model=model,
+                    complexity_score=complexity_score,
+                    reason=f"ML-based routing (confidence: {ml_metrics.confidence:.2f})",
+                    cost_type="deposit" if model == ClaudeModel.HAIKU_4_5 else "max",
+                    ml_confidence=ml_metrics.confidence,
+                    predicted_latency_ms=ml_metrics.predicted_latency_ms,
+                    predicted_quality=ml_metrics.predicted_quality,
+                )
+
+            except Exception as e:
+                logger.warning(f"ML routing failed: {e}, falling back to rule-based")
+
+        # Fallback to traditional rule-based routing
+        return self.route(query, context)
 
 
 # 전역 라우터 인스턴스

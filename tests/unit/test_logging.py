@@ -17,7 +17,7 @@ from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 
-from app.core.logging import (
+from apps.api.core.logging import (
     PerformanceMetrics,
     RequestContext,
     SensitiveDataFilter,

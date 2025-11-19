@@ -13,7 +13,7 @@ Tests Pydantic models for API request/response validation including:
 import pytest
 from pydantic import ValidationError
 
-from app.models.schemas import (
+from apps.api.models.schemas import (
     ConsultationRequest,
     ConsultationResponse,
     ErrorResponse,

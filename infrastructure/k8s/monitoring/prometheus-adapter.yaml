@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-adapter-config
+  namespace: monitoring
+data:
+  config.yaml: |
+    rules:
+    # HTTP request rate (requests per second)
+    - seriesQuery: 'http_requests_total{namespace="rag-production"}'
+      resources:
+        overrides:
+          namespace: {resource: "namespace"}
+          pod: {resource: "pod"}
+      name:
+        matches: "^http_requests_total"
+        as: "http_requests_per_second"
+      metricsQuery: 'rate(http_requests_total{<<.LabelMatchers>>}[2m])'
+
+    # P95 response time
+    - seriesQuery: 'http_request_duration_seconds{namespace="rag-production"}'
+      resources:
+        overrides:
+          namespace: {resource: "namespace"}
+          pod: {resource: "pod"}
+      name:
+        matches: "^http_request_duration_seconds"
+        as: "http_request_duration_p95_seconds"
+      metricsQuery: 'histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{<<.LabelMatchers>>}[2m]))'
+
+    # Active WebSocket connections
+    - seriesQuery: 'websocket_connections{namespace="rag-production"}'
+      resources:
+        overrides:
+          namespace: {resource: "namespace"}
+          pod: {resource: "pod"}
+      name:
+        matches: "^websocket_connections"
+        as: "active_websocket_connections"
+      metricsQuery: 'websocket_connections{<<.LabelMatchers>>}'
+
+    # Redis queue length (external metric)
+    - seriesQuery: 'redis_queue_length{queue_name="rag_tasks"}'
+      resources:
+        template: <<.Resource>>
+      name:
+        matches: "^redis_queue_length"
+        as: "redis_queue_length"
+      metricsQuery: 'redis_queue_length{<<.LabelMatchers>>}'
+
+    # LLM API latency
+    - seriesQuery: 'llm_api_latency_seconds{namespace="rag-production"}'
+      resources:
+        overrides:
+          namespace: {resource: "namespace"}
+          pod: {resource: "pod"}
+      name:
+        matches: "^llm_api_latency_seconds"
+        as: "llm_api_latency_p99_seconds"
+      metricsQuery: 'histogram_quantile(0.99, rate(llm_api_latency_seconds_bucket{<<.LabelMatchers>>}[5m]))'
+
+    # Vector search latency
+    - seriesQuery: 'vector_search_duration_seconds{namespace="rag-production"}'
+      resources:
+        overrides:
+          namespace: {resource: "namespace"}
+          pod: {resource: "pod"}
+      name:
+        matches: "^vector_search_duration_seconds"
+        as: "vector_search_duration_p95_seconds"
+      metricsQuery: 'histogram_quantile(0.95, rate(vector_search_duration_seconds_bucket{<<.LabelMatchers>>}[2m]))'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus-adapter
+  namespace: monitoring
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: prometheus-adapter
+  template:
+    metadata:
+      labels:
+        app: prometheus-adapter
+    spec:
+      serviceAccountName: prometheus-adapter
+      containers:
+      - name: prometheus-adapter
+        image: registry.k8s.io/prometheus-adapter/prometheus-adapter:v0.11.1
+        args:
+        - --prometheus-url=http://prometheus:9090
+        - --config=/etc/adapter/config.yaml
+        - --logtostderr=true
+        - --metrics-relist-interval=1m
+        volumeMounts:
+        - name: config
+          mountPath: /etc/adapter
+          readOnly: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+      volumes:
+      - name: config
+        configMap:
+          name: prometheus-adapter-config

@@ -1,0 +1,318 @@
+"""
+Simplified End-to-End Pipeline Tests
+
+Tests complete architectural flow without depending on service internals
+"""
+
+import uuid
+from datetime import datetime
+from unittest.mock import AsyncMock, Mock, patch
+
+import pytest
+
+
+@pytest.mark.integration
+def test_e2e_api_layer_present():
+    """Test API layer is present and functional"""
+    from apps.api.api.main import app
+
+    assert app is not None
+    assert hasattr(app, "get")
+    assert hasattr(app, "post")
+    assert hasattr(app, "put")
+    assert hasattr(app, "delete")
+
+
+@pytest.mark.integration
+def test_e2e_core_layer_present():
+    """Test core/infrastructure layer is present"""
+    from apps.api.core.dependencies import get_config
+    from apps.api.core.metrics import REGISTRY
+    from apps.api.core.middleware import MetricsMiddleware
+    from apps.api.core.routing import integrated_router, intent_router, llm_router
+
+    assert get_config is not None
+    assert REGISTRY is not None
+    assert MetricsMiddleware is not None
+
+
+@pytest.mark.integration
+def test_e2e_models_layer_present():
+    """Test models/schemas layer is present"""
+    from apps.api.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
+
+    assert QARequest is not None
+    assert QAResponse is not None
+    assert ConsultationRequest is not None
+    assert ConsultationResponse is not None
+
+
+@pytest.mark.integration
+def test_e2e_config_dependency_chain():
+    """Test configuration flows through dependency chain"""
+    from apps.api.core.dependencies import (
+        get_config,
+        get_embedding_model,
+        get_qdrant_client,
+        get_redis_client,
+    )
+
+    config = get_config()
+
+    # Verify all config required by downstream services
+    assert config.qdrant_host and config.qdrant_port
+    assert config.redis_host and config.redis_port
+    assert config.embedding_model and config.embedding_dim > 0
+    assert config.ollama_url and config.ollama_model
+
+
+@pytest.mark.integration
+def test_e2e_metrics_dependency_chain():
+    """Test metrics are properly configured for pipeline"""
+    from apps.api.core.metrics import (
+        active_requests,
+        embedding_generation_total,
+        errors_total,
+        http_requests_total,
+        llm_query_total,
+        vector_search_total,
+    )
+
+    # All pipeline stages should have metrics
+    assert http_requests_total.labels is not None
+    assert embedding_generation_total.labels is not None
+    assert vector_search_total.labels is not None
+    assert llm_query_total.labels is not None
+    assert active_requests.labels is not None
+
+
+@pytest.mark.integration
+def test_e2e_request_schema_pipeline():
+    """Test request flows through schema validation"""
+    from apps.api.models.schemas import ConsultationRequest, QARequest
+
+    # QA request pipeline
+    qa_req = QARequest(question="What is machine learning?")
+    assert qa_req.question == "What is machine learning?"
+    assert hasattr(qa_req, "top_k")
+
+    # Consultation request pipeline
+    cons_req = ConsultationRequest(
+        requirements="Want portable and durable products for outdoor use"
+    )
+    assert cons_req.requirements == "Want portable and durable products for outdoor use"
+
+
+@pytest.mark.integration
+def test_e2e_response_schema_pipeline():
+    """Test response flows through schema validation"""
+    from apps.api.models.schemas import ConsultationResponse, ErrorResponse, QAResponse
+
+    # QA response pipeline
+    qa_resp = QAResponse(
+        question="What is ML?",
+        answer="Machine learning is AI",
+        related_products=[],
+        confidence=0.95,
+        qa_id="qa_12345",
+        timestamp="2025-10-19T10:30:45Z",
+    )
+    assert qa_resp.answer is not None
+    assert qa_resp.question == "What is ML?"
+    assert qa_resp.qa_id == "qa_12345"
+
+    # Error response pipeline
+    err_resp = ErrorResponse(
+        error="VALIDATION_ERROR", message="Invalid input", timestamp=datetime.utcnow().isoformat()
+    )
+    assert err_resp.error == "VALIDATION_ERROR"
+
+
+@pytest.mark.integration
+def test_e2e_dependency_injection_chain():
+    """Test DI resolves all dependencies without circular refs"""
+    from apps.api.core.dependencies import (
+        get_config,
+        override_dependencies_for_testing,
+    )
+
+    # Config is foundational
+    config = get_config()
+    assert config is not None
+
+    # Overrides provide alternatives
+    overrides = override_dependencies_for_testing()
+    assert len(overrides) > 0
+
+    # All overrides are factories
+    for factory in overrides.values():
+        assert callable(factory)
+
+
+@pytest.mark.integration
+def test_e2e_middleware_presence_in_pipeline():
+    """Test middleware is integrated in API pipeline"""
+    from apps.api.api.main import app
+    from apps.api.core.middleware import MetricsMiddleware
+
+    # Middleware should be importable
+    assert MetricsMiddleware is not None
+
+    # App should have middleware stack
+    assert app is not None
+    assert hasattr(app, "middleware")
+
+
+@pytest.mark.integration
+def test_e2e_singleton_pattern_preserved():
+    """Test singleton pattern is preserved through pipeline"""
+    from apps.api.core.dependencies import get_config
+
+    config1 = get_config()
+    config2 = get_config()
+    config3 = get_config()
+
+    # All should be same instance
+    assert config1 is config2
+    assert config2 is config3
+
+
+@pytest.mark.integration
+def test_e2e_state_isolation_between_requests():
+    """Test state is properly isolated between requests"""
+    from apps.api.models.schemas import QARequest
+
+    # Create multiple independent requests
+    requests = [QARequest(question=f"Question {i}?") for i in range(10)]
+
+    # All should be independent instances
+    for i, req in enumerate(requests):
+        assert req.question == f"Question {i}?"
+        # Each should be unique instance
+        if i > 0:
+            assert requests[i] is not requests[i - 1]
+
+
+@pytest.mark.integration
+def test_e2e_full_import_path():
+    """Test full import path works without circular dependencies"""
+    # This exercises the entire import chain
+    from apps.api.api.main import app  # Layer 1: API
+    from apps.api.core.dependencies import get_config  # Layer 2: Core
+    from apps.api.models.schemas import QARequest  # Layer 3: Models
+
+    # If we got here, no circular imports
+    assert app is not None
+    assert get_config is not None
+    assert QARequest is not None
+
+
+@pytest.mark.integration
+def test_e2e_metrics_integrated_with_app():
+    """Test metrics are integrated into app"""
+    from apps.api.api.main import app
+    from apps.api.core.metrics import REGISTRY
+
+    # App should be present
+    assert app is not None
+
+    # Metrics registry should be initialized
+    assert REGISTRY is not None
+
+
+@pytest.mark.integration
+def test_e2e_endpoints_defined():
+    """Test all required endpoints are defined"""
+    from apps.api.api.main import app
+
+    # Get all routes
+    routes = [route.path for route in app.routes]
+
+    # Should have health-related endpoints
+    has_root = "/" in routes
+    has_health_or_metrics = any(
+        "health" in str(r).lower() or "metrics" in str(r).lower() for r in app.routes
+    )
+
+    # At minimum, app has routes defined
+    assert len(routes) > 0
+
+
+@pytest.mark.integration
+def test_e2e_pipeline_error_handling():
+    """Test error handling through pipeline"""
+    from apps.api.models.schemas import ErrorResponse
+
+    # Create error response
+    error = ErrorResponse(
+        error="PIPELINE_ERROR", message="Test error", timestamp=datetime.utcnow().isoformat()
+    )
+
+    assert error.error == "PIPELINE_ERROR"
+    assert error.message == "Test error"
+    assert error.timestamp is not None
+
+
+@pytest.mark.integration
+def test_e2e_configuration_accessible():
+    """Test configuration is accessible throughout pipeline"""
+    from apps.api.core.dependencies import get_config
+
+    config = get_config()
+
+    # Should have all required fields for pipeline
+    required_fields = [
+        "qdrant_host",
+        "qdrant_port",
+        "redis_host",
+        "redis_port",
+        "embedding_model",
+        "embedding_dim",
+        "ollama_url",
+        "ollama_model",
+    ]
+
+    for field in required_fields:
+        assert hasattr(config, field), f"Missing config field: {field}"
+
+
+@pytest.mark.integration
+def test_e2e_scalability_multiple_requests():
+    """Test pipeline can handle multiple concurrent requests"""
+    from apps.api.models.schemas import QARequest
+
+    # Create 100 requests
+    requests = [QARequest(question=f"Query {i}: {uuid.uuid4()}") for i in range(100)]
+
+    assert len(requests) == 100
+    # All should be valid
+    for req in requests:
+        assert req.question is not None
+        assert len(req.question) > 0
+
+
+@pytest.mark.integration
+def test_e2e_routing_layer_available():
+    """Test routing/middleware layer is available"""
+    from apps.api.core.routing import integrated_router, intent_router, llm_router
+
+    # All routers should be available
+    assert intent_router is not None
+    assert llm_router is not None
+    assert integrated_router is not None
+
+
+@pytest.mark.integration
+def test_e2e_no_import_errors():
+    """Test entire codebase can be imported without errors"""
+    # If this test runs without exception, entire import chain works
+    from apps.api.api.main import app
+    from apps.api.core.dependencies import get_config, override_dependencies_for_testing
+    from apps.api.core.metrics import REGISTRY
+    from apps.api.core.middleware import MetricsMiddleware
+    from apps.api.core.routing import integrated_router, intent_router, llm_router
+    from apps.api.models.schemas import ConsultationRequest, ConsultationResponse, QARequest, QAResponse
+
+    # All should be importable
+    assert app and get_config and REGISTRY and MetricsMiddleware
+    assert intent_router and llm_router and QARequest

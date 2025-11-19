@@ -40,6 +40,45 @@
 | **§rag.engines** | docs/NEXA_SDK_INTEGRATION_PLAN.md | 400+ |
 | **§rag.pipeline** | docs/RAG_ACTIVATION_STRATEGY.md:50-200 | 150 |
 
+### §rag.advancement - RAG Advancement Plan (v10.5.0 → v11.0.0) ⭐ NEW
+
+**Full Document**: `docs/planning/RAG_ADVANCEMENT_PLAN.md` (1642 lines)
+
+**Quick Access Symbols** (80% token savings):
+
+| Symbol | Load This | Lines | Content |
+|--------|-----------|-------|---------|
+| **§rag.advancement.overview** | RAG_ADVANCEMENT_PLAN.md:1-66 | 66 | Executive summary + Zero-cost strategy |
+| **§rag.advancement.current** | RAG_ADVANCEMENT_PLAN.md:67-313 | 247 | Current implementation status (7/10) |
+| **§rag.advancement.phase1** | RAG_ADVANCEMENT_PLAN.md:316-495 | 180 | Phase 1: Parent-Child + HyDE (Week 1-2) |
+| **§rag.advancement.phase2** | RAG_ADVANCEMENT_PLAN.md:496-830 | 335 | Phase 2: Corrective + Self-RAG (Week 3-6) |
+| **§rag.advancement.phase3** | RAG_ADVANCEMENT_PLAN.md:831-1141 | 311 | Phase 3: Graph + Agentic RAG (Week 7-10) |
+| **§rag.advancement.metrics** | RAG_ADVANCEMENT_PLAN.md:1142-1249 | 108 | Performance targets + KPIs |
+| **§rag.advancement.implementation** | RAG_ADVANCEMENT_PLAN.md:1250-1398 | 149 | File structure + Testing strategy |
+| **§rag.advancement.risk** | RAG_ADVANCEMENT_PLAN.md:1399-1509 | 111 | Risk analysis + Timeline |
+| **§rag.advancement.references** | RAG_ADVANCEMENT_PLAN.md:1510-1642 | 133 | Comparisons + References + Next steps |
+
+**Token Efficiency**:
+- Full load: 1642 lines ≈ 6500 tokens
+- Symbol load: 66-335 lines ≈ 250-1300 tokens
+- **Savings: 75-96% tokens**
+
+**Usage Examples**:
+```
+Task: "Phase 1 어떻게 구현해?"
+→ Load §rag.advancement.phase1 (180 lines)
+   Instead of full doc (1642 lines)
+   Savings: 89% tokens
+
+Task: "현재 상태 확인"
+→ Load §rag.advancement.current (247 lines)
+   Savings: 85% tokens
+
+Task: "전체 계획 개요"
+→ Load §rag.advancement.overview (66 lines)
+   Savings: 96% tokens
+```
+
 ### §ocr - OCR Pipeline
 
 | Symbol | Load This | Lines |

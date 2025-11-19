@@ -13,7 +13,7 @@ import pytest
 def test_app_imports_successfully():
     """Test that main app module imports without errors"""
     try:
-        from app.api.main import app
+        from apps.api.main import app
 
         assert app is not None
         assert hasattr(app, "get")
@@ -25,7 +25,7 @@ def test_app_imports_successfully():
 @pytest.mark.integration
 def test_config_loads_successfully():
     """Test that configuration loads from environment"""
-    from app.core.dependencies import get_config
+    from apps.api.core.dependencies import get_config
 
     config = get_config()
     assert config is not None
@@ -37,7 +37,7 @@ def test_config_loads_successfully():
 @pytest.mark.integration
 def test_metrics_registry_initialized():
     """Test that Prometheus metrics registry is initialized"""
-    from app.core.metrics import REGISTRY, http_requests_total
+    from apps.api.core.metrics import REGISTRY, http_requests_total
 
     assert REGISTRY is not None
     assert http_requests_total is not None
@@ -46,7 +46,7 @@ def test_metrics_registry_initialized():
 @pytest.mark.integration
 def test_dependency_injection_available():
     """Test that dependency injection functions are available"""
-    from app.core.dependencies import (
+    from apps.api.core.dependencies import (
         get_config,
         get_embedding_model,
         get_qdrant_client,
@@ -64,7 +64,7 @@ def test_dependency_injection_available():
 @pytest.mark.integration
 def test_schemas_importable():
     """Test that all schemas are importable"""
-    from app.models.schemas import (
+    from apps.api.models.schemas import (
         ConsultationRequest,
         ConsultationResponse,
         ErrorResponse,
@@ -84,7 +84,7 @@ def test_schemas_importable():
 @pytest.mark.integration
 def test_middleware_importable():
     """Test that middleware is importable"""
-    from app.core.middleware import MetricsMiddleware
+    from apps.api.core.middleware import MetricsMiddleware
 
     assert MetricsMiddleware is not None
 
@@ -93,7 +93,7 @@ def test_middleware_importable():
 def test_routes_registered():
     """Test that route modules can be imported"""
     try:
-        from app.api import dashboard_routes, ingestion_routes, query_routes
+        from apps.api.api import dashboard_routes, ingestion_routes, query_routes
 
         assert dashboard_routes.router is not None
         assert query_routes.router is not None
@@ -105,7 +105,7 @@ def test_routes_registered():
 @pytest.mark.integration
 def test_app_has_metrics_endpoint():
     """Test that app has metrics endpoint defined"""
-    from app.api.main import app
+    from apps.api.main import app
 
     # Check if metrics route is registered
     routes = [route.path for route in app.routes]
@@ -115,7 +115,7 @@ def test_app_has_metrics_endpoint():
 @pytest.mark.integration
 def test_app_has_health_endpoint():
     """Test that app has health endpoint defined"""
-    from app.api.main import app
+    from apps.api.main import app
 
     routes = [route.path for route in app.routes]
     assert "/health" in routes or any("health" in str(route) for route in app.routes)
@@ -124,7 +124,7 @@ def test_app_has_health_endpoint():
 @pytest.mark.integration
 def test_override_dependencies_works():
     """Test that test dependency overrides can be configured"""
-    from app.core.dependencies import override_dependencies_for_testing
+    from apps.api.core.dependencies import override_dependencies_for_testing
 
     overrides = override_dependencies_for_testing()
     assert overrides is not None
@@ -135,7 +135,7 @@ def test_override_dependencies_works():
 @pytest.mark.integration
 def test_config_validation():
     """Test that config validates required fields"""
-    from app.core.dependencies import AppConfig
+    from apps.api.core.dependencies import AppConfig
 
     try:
         # Should raise ValueError if POSTGRES_PASSWORD not set
@@ -154,7 +154,7 @@ def test_services_instantiable_with_mocks():
     """Test that services can be instantiated with mocked dependencies"""
     from unittest.mock import Mock
 
-    from app.services.rag_qa_service import RAGQAService
+    from apps.api.services.rag_qa_service import RAGQAService
 
     mock_qdrant = Mock()
     mock_model = Mock()
@@ -171,7 +171,7 @@ def test_services_instantiable_with_mocks():
 @pytest.mark.integration
 def test_health_check_response_schema():
     """Test that HealthCheckResponse schema is valid"""
-    from app.models.schemas import HealthCheckResponse
+    from apps.api.models.schemas import HealthCheckResponse
 
     response = HealthCheckResponse(
         api="healthy", qdrant=True, redis=True, postgres=True, timestamp="2025-10-19T10:45:00Z"
@@ -182,7 +182,7 @@ def test_health_check_response_schema():
 @pytest.mark.integration
 def test_error_response_schema():
     """Test that ErrorResponse schema is valid"""
-    from app.models.schemas import ErrorResponse
+    from apps.api.models.schemas import ErrorResponse
 
     response = ErrorResponse(
         error="VALIDATION_ERROR", message="Test error message", timestamp="2025-10-19T10:45:00Z"
@@ -194,7 +194,7 @@ def test_error_response_schema():
 @pytest.mark.integration
 def test_qa_request_schema_validation():
     """Test that QARequest schema validates input"""
-    from app.models.schemas import QARequest
+    from apps.api.models.schemas import QARequest
 
     # Valid request
     request = QARequest(question="What is AI?")
@@ -208,7 +208,7 @@ def test_qa_request_schema_validation():
 @pytest.mark.integration
 def test_metrics_functions_callable():
     """Test that metric recording functions are callable"""
-    from app.core.metrics import (
+    from apps.api.core.metrics import (
         embedding_generation_total,
         http_request_duration_seconds,
         http_requests_total,
@@ -227,7 +227,7 @@ def test_middleware_dispatch_signature():
     """Test that middleware has correct dispatch signature"""
     import inspect
 
-    from app.core.middleware import MetricsMiddleware
+    from apps.api.core.middleware import MetricsMiddleware
 
     # Check dispatch method exists
     assert hasattr(MetricsMiddleware, "dispatch")
@@ -241,7 +241,7 @@ def test_middleware_dispatch_signature():
 @pytest.mark.integration
 def test_app_cors_configured():
     """Test that CORS middleware is configured"""
-    from app.api.main import app
+    from apps.api.main import app
 
     # Check that middleware is in the middleware stack (at least metrics or CORS)
     middleware_count = len(app.user_middleware) if hasattr(app, "user_middleware") else 0
@@ -253,7 +253,7 @@ def test_app_cors_configured():
 @pytest.mark.integration
 def test_dependencies_singleton_pattern():
     """Test that dependencies follow singleton pattern"""
-    from app.core.dependencies import get_config
+    from apps.api.core.dependencies import get_config
 
     config1 = get_config()
     config2 = get_config()
@@ -266,9 +266,9 @@ def test_dependencies_singleton_pattern():
 def test_no_circular_imports():
     """Test that main app has no circular import issues"""
     # If we got here, the app imported successfully
-    from app.api.main import app
-    from app.core.dependencies import get_config
-    from app.models.schemas import QARequest
+    from apps.api.main import app
+    from apps.api.core.dependencies import get_config
+    from apps.api.models.schemas import QARequest
 
     # All should be importable without circular dependency errors
     assert app is not None

@@ -9,8 +9,8 @@ from unittest.mock import AsyncMock, MagicMock, Mock, patch
 import pytest
 from starlette.testclient import TestClient
 
-from app.api.main import app
-from app.core.dependencies import override_dependencies_for_testing
+from apps.api.main import app
+from apps.api.core.dependencies import override_dependencies_for_testing
 
 
 @pytest.fixture

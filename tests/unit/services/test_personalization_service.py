@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.services.personalization_service import PersonalizationService
+from apps.api.services.personalization_service import PersonalizationService
 
 
 @pytest.mark.unit

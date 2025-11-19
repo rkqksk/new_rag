@@ -58,7 +58,7 @@ class TestRAGQAService:
     @pytest.mark.asyncio
     async def test_rag_qa_service_instantiation(self, mock_qdrant, mock_embedding):
         """Test RAG QA service can be instantiated with mocked dependencies"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         service = RAGQAService(
             qdrant_client=mock_qdrant,
@@ -74,7 +74,7 @@ class TestRAGQAService:
     @pytest.mark.asyncio
     async def test_rag_qa_service_has_required_methods(self, mock_qdrant, mock_embedding):
         """Test RAG QA service has all required methods"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         service = RAGQAService(
             qdrant_client=mock_qdrant,
@@ -90,7 +90,7 @@ class TestRAGQAService:
     @pytest.mark.asyncio
     async def test_rag_qa_service_search_integration(self, mock_qdrant, mock_embedding):
         """Test RAG QA service integrates with Qdrant"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         service = RAGQAService(
             qdrant_client=mock_qdrant,
@@ -105,7 +105,7 @@ class TestRAGQAService:
 
     def test_rag_qa_service_with_custom_parameters(self, mock_qdrant, mock_embedding):
         """Test RAG QA service accepts custom parameters"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         service = RAGQAService(
             qdrant_client=mock_qdrant,
@@ -153,7 +153,7 @@ class TestDocumentIngestionService:
     def test_document_ingestion_service_import_available(self):
         """Test document ingestion service can be imported"""
         try:
-            from app.services.document_ingestion_service import DocumentIngestionService
+            from apps.api.services.document_ingestion_service import DocumentIngestionService
 
             assert DocumentIngestionService is not None
         except ModuleNotFoundError:
@@ -171,7 +171,7 @@ class TestConsultationService:
 
     def test_consultation_service_instantiation(self):
         """Test consultation service can be instantiated"""
-        from app.services.consultation_service import ConsultationService
+        from apps.api.services.consultation_service import ConsultationService
 
         mock_search_client = Mock()
         mock_embedding_model = Mock()
@@ -187,7 +187,7 @@ class TestConsultationService:
 
     def test_consultation_service_has_required_methods(self):
         """Test consultation service has required methods"""
-        from app.services.consultation_service import ConsultationService
+        from apps.api.services.consultation_service import ConsultationService
 
         mock_search_client = Mock()
         mock_embedding_model = Mock()
@@ -205,7 +205,7 @@ class TestConsultationService:
 
     def test_consultation_service_methods_callable(self):
         """Test consultation service methods are callable"""
-        from app.services.consultation_service import ConsultationService
+        from apps.api.services.consultation_service import ConsultationService
 
         mock_search_client = Mock()
         mock_embedding_model = Mock()
@@ -237,8 +237,8 @@ class TestServiceIntegration:
         mock_search_client = Mock()
         mock_llm_client = Mock()
 
-        from app.services.consultation_service import ConsultationService
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.consultation_service import ConsultationService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         rag_service = RAGQAService(
             qdrant_client=mock_qdrant,
@@ -259,7 +259,7 @@ class TestServiceIntegration:
 
     def test_service_dependency_injection_chain(self):
         """Test services can be instantiated through DI chain"""
-        from app.core.dependencies import override_dependencies_for_testing
+        from apps.api.core.dependencies import override_dependencies_for_testing
 
         overrides = override_dependencies_for_testing()
 
@@ -269,7 +269,7 @@ class TestServiceIntegration:
 
     def test_service_configuration_validation(self):
         """Test service configuration is properly validated"""
-        from app.core.dependencies import get_config
+        from apps.api.core.dependencies import get_config
 
         config = get_config()
 
@@ -291,7 +291,7 @@ class TestServiceErrorHandling:
 
     def test_service_handles_missing_qdrant_client(self):
         """Test service handles None Qdrant client gracefully"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_embedding = Mock()
 
@@ -310,7 +310,7 @@ class TestServiceErrorHandling:
 
     def test_service_handles_missing_embedding_model(self):
         """Test service handles None embedding model"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
 
@@ -339,7 +339,7 @@ class TestServiceContracts:
 
     def test_rag_qa_service_contract(self):
         """Test RAG QA service fulfills its contract"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()
@@ -359,7 +359,7 @@ class TestServiceContracts:
     def test_document_ingestion_service_contract(self):
         """Test document ingestion service contract (skip if unavailable)"""
         try:
-            from app.services.document_ingestion_service import DocumentIngestionService
+            from apps.api.services.document_ingestion_service import DocumentIngestionService
 
             assert DocumentIngestionService is not None
         except ModuleNotFoundError:
@@ -367,7 +367,7 @@ class TestServiceContracts:
 
     def test_consultation_service_contract(self):
         """Test consultation service fulfills its contract"""
-        from app.services.consultation_service import ConsultationService
+        from apps.api.services.consultation_service import ConsultationService
 
         mock_search_client = Mock()
         mock_embedding = Mock()
@@ -395,7 +395,7 @@ class TestServiceLifecycle:
 
     def test_service_instantiation_idempotency(self):
         """Test services can be instantiated multiple times"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()
@@ -421,7 +421,7 @@ class TestServiceLifecycle:
 
     def test_service_state_isolation(self):
         """Test services don't share state across instances"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant1 = Mock()
         mock_qdrant2 = Mock()
@@ -458,7 +458,7 @@ class TestServiceScalability:
 
     def test_multiple_service_instances(self):
         """Test creating multiple service instances for scale"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         services = []
         for i in range(10):
@@ -479,7 +479,7 @@ class TestServiceScalability:
 
     def test_service_concurrent_instantiation(self):
         """Test services can be instantiated concurrently"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()
@@ -510,7 +510,7 @@ class TestServiceConfiguration:
 
     def test_service_accepts_custom_configuration(self):
         """Test services accept custom configuration"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()
@@ -526,7 +526,7 @@ class TestServiceConfiguration:
 
     def test_service_configuration_validation(self):
         """Test service validates configuration"""
-        from app.services.rag_qa_service import RAGQAService
+        from apps.api.services.rag_qa_service import RAGQAService
 
         mock_qdrant = Mock()
         mock_embedding = Mock()

@@ -22,7 +22,6 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { TrendingUp, TrendingDown, Activity, Zap, Clock, AlertTriangle } from "lucide-react"
 import { useSorting } from "@/hooks/useSorting"
 
 interface APIUsage {
@@ -275,7 +274,7 @@ export default function AnalyticsPage() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Clock className="h-4 w-4 text-stone-500" />
+                          Time
                           <span className={`text-sm ${endpoint.avg_response_time > 1000 ? 'text-stone-400' : 'text-stone-300'}`}>
                             {endpoint.avg_response_time}ms
                           </span>
@@ -284,7 +283,7 @@ export default function AnalyticsPage() {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           {endpoint.error_rate > 2 ? (
-                            <AlertTriangle className="h-4 w-4 text-stone-400" />
+                            ⚠
                           ) : null}
                           <span className={`text-sm ${endpoint.error_rate > 2 ? 'text-stone-400' : 'text-stone-300'}`}>
                             {endpoint.error_rate}%
@@ -392,7 +391,7 @@ export default function AnalyticsPage() {
                               <div className={`flex items-center gap-1 text-xs ${
                                 parseFloat(trend) >= 0 ? 'text-stone-300' : 'text-stone-400'
                               }`}>
-                                {parseFloat(trend) >= 0 ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                                {parseFloat(trend) >= 0 ? ↗ : ↘}
                                 {Math.abs(parseFloat(trend))}%
                               </div>
                             )}

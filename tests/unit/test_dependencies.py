@@ -14,7 +14,7 @@ import pytest
 import redis
 from qdrant_client import QdrantClient
 
-from app.core.dependencies import (
+from apps.api.core.dependencies import (
     AppConfig,
     get_config,
     get_consultation_service,

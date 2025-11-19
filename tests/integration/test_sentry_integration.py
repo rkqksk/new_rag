@@ -15,7 +15,7 @@ from unittest.mock import MagicMock, Mock, patch
 import pytest
 from fastapi import FastAPI
 
-from app.core.sentry import (
+from apps.api.core.sentry import (
     Environment,
     SentryConfig,
     SentryIntegration,
@@ -323,7 +323,7 @@ class TestEnvironmentDetection:
 
     def test_is_production_with_various_environments(self) -> None:
         """Test is_production with different environment values."""
-        from app.core.sentry import is_production
+        from apps.api.core.sentry import is_production
 
         # Test production
         with patch.dict("os.environ", {"ENVIRONMENT": "production"}):
@@ -356,7 +356,7 @@ class TestSamplingIntegration:
 
     def test_sampling_with_various_rates(self) -> None:
         """Test sampling with different rates."""
-        from app.core.sentry import should_sample_event
+        from apps.api.core.sentry import should_sample_event
 
         sample_rates = {
             "critical": 1.0,

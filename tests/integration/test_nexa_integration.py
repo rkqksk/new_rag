@@ -19,7 +19,7 @@ class TestAdminEndpoints:
         """Test /api/v1/admin/health"""
         # This test validates the admin health endpoint exists
         # and can be imported without errors
-        from app.api.v1.admin import health_check
+        from apps.api.v1.admin import health_check
 
         assert health_check is not None
 
@@ -28,7 +28,7 @@ class TestAdminEndpoints:
         """Test /api/v1/admin/stats"""
         # This test validates the admin stats endpoint exists
         # and can be imported without errors
-        from app.api.v1.admin import get_stats
+        from apps.api.v1.admin import get_stats
 
         assert get_stats is not None
 

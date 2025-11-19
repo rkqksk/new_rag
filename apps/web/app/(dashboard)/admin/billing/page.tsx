@@ -4,8 +4,6 @@ import { Navbar } from "@/components/dashboard/Navbar"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { CreditCard, Download, Calendar, TrendingUp } from "lucide-react"
-
 export default function BillingPage() {
   return (
     <div>
@@ -129,7 +127,7 @@ export default function BillingPage() {
                 <CardDescription>등록된 결제 방법</CardDescription>
               </div>
               <Button variant="outline" size="sm">
-                <CreditCard className="mr-2 h-4 w-4" />
+                Card
                 새 카드 추가
               </Button>
             </div>
@@ -146,7 +144,7 @@ export default function BillingPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-14 items-center justify-center rounded bg-stone-800">
-                      <CreditCard className="h-5 w-5 text-stone-400" />
+                      Card
                     </div>
                     <div>
                       <p className="text-sm font-medium text-stone-100">
@@ -180,7 +178,7 @@ export default function BillingPage() {
                 <CardDescription>최근 청구서 및 결제 내역</CardDescription>
               </div>
               <Button variant="outline" size="sm">
-                <Download className="mr-2 h-4 w-4" />
+                Download
                 전체 다운로드
               </Button>
             </div>
@@ -199,7 +197,7 @@ export default function BillingPage() {
                 >
                   <div className="flex items-center gap-4">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-800">
-                      <Calendar className="h-5 w-5 text-stone-400" />
+                      Date
                     </div>
                     <div>
                       <p className="text-sm font-medium text-stone-100">{invoice.id}</p>
@@ -212,7 +210,7 @@ export default function BillingPage() {
                       {invoice.status === "paid" ? "지불 완료" : "대기"}
                     </Badge>
                     <Button variant="ghost" size="sm">
-                      <Download className="h-4 w-4" />
+                      Download
                     </Button>
                   </div>
                 </div>
@@ -249,7 +247,7 @@ export default function BillingPage() {
               ))}
             </div>
             <div className="mt-4 flex items-center justify-center gap-2 text-sm text-stone-400">
-              <TrendingUp className="h-4 w-4 text-stone-600" />
+              ↗
               <span>평균 월 증가율: 8.5%</span>
             </div>
           </CardContent>

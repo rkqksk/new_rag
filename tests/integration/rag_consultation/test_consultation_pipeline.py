@@ -10,21 +10,21 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from redis.asyncio import Redis
 
-from app.rag_consultation.classification import (
+from apps.api.rag_consultation.classification import (
     IntentDetector,
     QueryClassifier,
     ToneAnalyzer,
 )
-from app.rag_consultation.context import (
+from apps.api.rag_consultation.context import (
     ContextStore,
     ConversationManager,
 )
-from app.rag_consultation.generation import (
+from apps.api.rag_consultation.generation import (
     PromptBuilder,
     ResponseGenerator,
 )
-from app.rag_consultation.models import Intent, QueryType
-from app.rag_consultation.retrieval import QueryExpander
+from apps.api.rag_consultation.models import Intent, QueryType
+from apps.api.rag_consultation.retrieval import QueryExpander
 
 
 @pytest.fixture

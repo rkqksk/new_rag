@@ -4,7 +4,7 @@ from unittest.mock import AsyncMock, MagicMock, call, patch
 
 import pytest
 
-from app.services.search_service import SearchService
+from apps.api.services.search_service import SearchService
 
 
 @pytest.mark.unit

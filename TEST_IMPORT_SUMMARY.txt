@@ -1,0 +1,231 @@
+================================================================================
+TEST IMPORT PATH ANALYSIS - FINAL REPORT
+================================================================================
+Generated: 2025-11-19 12:36 UTC
+Project: new_rag v10 Migration
+Status: READY FOR EXECUTION ✓
+
+================================================================================
+EXECUTIVE SUMMARY
+================================================================================
+
+Analyzed 97 Python test files to identify import path changes needed for the
+apps/api v10 migration.
+
+KEY FINDINGS:
+  ✓ 90 files (92.8%) already using correct v10 imports
+  ✗ 7 files (7.2%) require updates
+  ✓ No legacy backend.* imports found
+  ✗ 1 critical file (conftest.py) affects all tests
+  ✗ 19 redundant apps.api.api.* import instances
+
+RISK ASSESSMENT: LOW
+  - Only import path changes (no logic modifications)
+  - Automatic backups enabled
+  - Full rollback available (git + .backups/)
+  - Limited scope (7 of 97 files)
+
+TIME ESTIMATE: 15-20 minutes total
+
+================================================================================
+FILES REQUIRING UPDATES
+================================================================================
+
+CRITICAL PRIORITY (1 file):
+  tests/conftest.py
+    Line 229: from app.main → from apps.api.main
+    Impact: HIGH (used by all test files for TestClient fixture)
+
+INTEGRATION TESTS (6 files):
+  1. tests/integration/test_api_integration.py (1 import)
+  2. tests/integration/test_app_initialization.py (5 imports)
+  3. tests/integration/test_e2e_pipeline.py (4 imports)
+  4. tests/integration/test_e2e_simple.py (6 imports)
+  5. tests/integration/test_nexa_integration.py (2 imports)
+  6. tests/integration/test_product_loading.py (1 import)
+
+  All fix: apps.api.api.* → apps.api.*
+
+Total import issues: 20 across 7 files
+
+================================================================================
+DELIVERABLES
+================================================================================
+
+Documentation:
+  [X] TEST_IMPORT_README.md (5.7 KB) - Main index & overview
+  [X] TEST_IMPORT_ANALYSIS.md (11 KB) - Complete detailed analysis
+  [X] TEST_IMPORT_QUICK_FIX.md (4.5 KB) - Quick reference guide
+
+Data:
+  [X] test_import_analysis.json (10 KB) - Structured JSON export
+
+Automation:
+  [X] scripts/fix-test-imports.sh (6.5 KB) - Automated fix script
+
+Total: 5 files, ~38 KB documentation
+
+================================================================================
+EXECUTION PLAN
+================================================================================
+
+Step 1: Review Documentation
+  $ cat TEST_IMPORT_QUICK_FIX.md
+
+Step 2: Execute Automated Fix
+  $ ./scripts/fix-test-imports.sh
+
+Step 3: Verify Changes
+  $ grep -r "from app\.main" tests/           # Should be empty
+  $ grep -r "from apps\.api\.api\." tests/     # Should be empty
+
+Step 4: Run Tests
+  $ pytest tests/conftest.py -v
+  $ pytest tests/integration/ -v
+  $ pytest tests/ -v
+
+Step 5: Commit Changes
+  $ git add tests/ scripts/ TEST_IMPORT*.md test_import*.json
+  $ git commit -m "fix(tests): Update import paths for v10 migration"
+
+================================================================================
+IMPORT STATISTICS
+================================================================================
+
+Pattern                     Count    Status
+--------------------------------------------------
+from apps.api.*             246      ✓ Correct (working)
+from apps.api.api.*         19       ✗ Redundant (needs fix)
+from app.main               1        ✗ Legacy (needs fix)
+from backend.*              0        ✓ Clean
+import app.*                0        ✓ Clean
+import backend.*            0        ✓ Clean
+
+Top Imported Modules:
+  1. apps.api.core.metrics (44)
+  2. apps.api.core.dependencies (36)
+  3. apps.api.services.rag_qa_service (30)
+  4. apps.api.models.schemas (29)
+  5. apps.api.api.main (16) ← Should be apps.api.main
+
+================================================================================
+TEST FILE BREAKDOWN
+================================================================================
+
+Category              Total    Using apps.api    Need Fix    % Fix Needed
+------------------------------------------------------------------------
+Unit Tests            27       20                0           0%
+Integration Tests     33       22                6           18%
+E2E Tests             0        0                 0           0%
+Root Tests            28       3                 0           0%
+Other                 7        0                 0           0%
+Conftest Files        2        -                 1           50%
+------------------------------------------------------------------------
+TOTAL                 97       45                7           7.2%
+
+================================================================================
+VALIDATION CHECKLIST
+================================================================================
+
+Pre-Execution:
+  [ ] Git working directory is clean
+  [ ] Reviewed TEST_IMPORT_QUICK_FIX.md
+  [ ] Understood changes being made
+
+Execution:
+  [ ] Ran ./scripts/fix-test-imports.sh
+  [ ] Script completed without errors
+  [ ] Backups created in .backups/
+
+Post-Execution:
+  [ ] Old patterns verified gone
+  [ ] New patterns verified present
+  [ ] tests/conftest.py loads correctly
+  [ ] Integration tests pass
+  [ ] Full test suite passes
+  [ ] Changes committed to git
+
+================================================================================
+ROLLBACK PROCEDURES
+================================================================================
+
+Option 1 - Automatic Backups:
+  $ BACKUP_DIR=$(ls -dt .backups/test-imports-* | head -1)
+  $ cp $BACKUP_DIR/* tests/
+
+Option 2 - Git Checkout:
+  $ git checkout tests/conftest.py tests/integration/test_*.py
+
+Option 3 - Git Reset:
+  $ git reset --hard HEAD
+
+================================================================================
+ARCHITECTURE CONTEXT
+================================================================================
+
+v9 Structure (Old):
+  app/api/main.py           → from app.main import app
+  
+v10 Structure (Current):
+  apps/api/main.py          → from apps.api.main import app ✓
+  apps/api/api/main.py      → from apps.api.api.main import app ✗ (redundant)
+
+The redundant .api. pattern exists because v10 migration moved app/ to apps/api/,
+but some routes are still nested in apps/api/api/ subdirectory (legacy structure).
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+✓ Script execution completes without errors
+✓ No "from app.main" in tests/conftest.py
+✓ No "from apps.api.api.*" in any test files  
+✓ Backups created successfully
+✓ pytest tests/conftest.py -v passes
+✓ pytest tests/integration/ -v passes
+✓ pytest tests/ -v shows no new failures
+✓ Git diff shows only import path changes
+
+================================================================================
+NEXT ACTIONS
+================================================================================
+
+IMMEDIATE:
+  1. Review TEST_IMPORT_README.md for complete index
+  2. Execute ./scripts/fix-test-imports.sh
+  3. Verify changes with grep commands
+  4. Run test suite
+
+FOLLOW-UP:
+  1. Update CHANGELOG.md with migration notes
+  2. Commit changes with descriptive message
+  3. Consider PR to main branch if applicable
+  4. Archive analysis files for future reference
+
+================================================================================
+DOCUMENTATION ACCESS
+================================================================================
+
+Main Index:        TEST_IMPORT_README.md (start here)
+Quick Reference:   TEST_IMPORT_QUICK_FIX.md (3-step guide)
+Full Analysis:     TEST_IMPORT_ANALYSIS.md (complete details)
+JSON Data:         test_import_analysis.json (structured export)
+Fix Script:        scripts/fix-test-imports.sh (automation)
+This Summary:      TEST_IMPORT_SUMMARY.txt (executive overview)
+
+================================================================================
+CONCLUSION
+================================================================================
+
+Analysis is complete and comprehensive. All import issues have been identified,
+documented, and automated for fixing.
+
+The migration is low-risk, well-documented, and ready for execution.
+
+RECOMMENDATION: Execute ./scripts/fix-test-imports.sh
+
+================================================================================
+END OF REPORT
+Generated: 2025-11-19 12:36 UTC
+Status: READY FOR EXECUTION ✓
+================================================================================

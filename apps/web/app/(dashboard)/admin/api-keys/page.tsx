@@ -6,8 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Key, Copy, Trash2, Eye, EyeOff, Plus, Activity } from "lucide-react"
-
 interface ApiKey {
   id: string
   name: string
@@ -91,7 +89,7 @@ export default function ApiKeysPage() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-800">
-                  <Key className="h-5 w-5 text-stone-400" />
+                  Key
                 </div>
                 <div>
                   <p className="text-xs text-stone-400">총 API 키</p>
@@ -104,7 +102,7 @@ export default function ApiKeysPage() {
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-stone-800">
-                  <Activity className="h-5 w-5 text-stone-400" />
+                  Activity
                 </div>
                 <div>
                   <p className="text-xs text-stone-400">활성 키</p>
@@ -142,7 +140,7 @@ export default function ApiKeysPage() {
                 <CardDescription>등록된 API 키 및 사용 현황</CardDescription>
               </div>
               <Button>
-                <Plus className="mr-2 h-4 w-4" />
+                +
                 새 키 생성
               </Button>
             </div>
@@ -180,9 +178,9 @@ export default function ApiKeysPage() {
                           onClick={() => toggleKeyVisibility(apiKey.id)}
                         >
                           {showKey[apiKey.id] ? (
-                            <EyeOff className="h-4 w-4" />
+                            Hide
                           ) : (
-                            <Eye className="h-4 w-4" />
+                            Show
                           )}
                         </Button>
                         <Button
@@ -190,7 +188,7 @@ export default function ApiKeysPage() {
                           size="sm"
                           onClick={() => copyToClipboard(apiKey.key)}
                         >
-                          <Copy className="h-4 w-4" />
+                          Copy
                         </Button>
                       </div>
 
@@ -227,7 +225,7 @@ export default function ApiKeysPage() {
                     </div>
 
                     <Button variant="ghost" size="sm" className="text-stone-400 hover:text-stone-100">
-                      <Trash2 className="h-4 w-4" />
+                      Delete
                     </Button>
                   </div>
                 </div>

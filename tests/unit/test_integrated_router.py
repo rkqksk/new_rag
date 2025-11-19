@@ -7,9 +7,9 @@ Claude model selection, and agent selection into unified routing decisions.
 
 import pytest
 
-from app.core.routing.integrated_router import IntegratedRouter, RoutingDecision
-from app.core.routing.intent_router import Intent
-from app.core.routing.llm_router import ClaudeModel
+from apps.api.core.routing.integrated_router import IntegratedRouter, RoutingDecision
+from apps.api.core.routing.intent_router import Intent
+from apps.api.core.routing.llm_router import ClaudeModel
 
 
 @pytest.fixture

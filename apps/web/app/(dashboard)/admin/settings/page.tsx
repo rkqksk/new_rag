@@ -10,8 +10,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { useFeatures } from "@/contexts/FeatureContext"
 import { Feature } from "@/lib/features"
-import { Search, RefreshCw, Power, PowerOff, RotateCcw } from "lucide-react"
-
 export default function SettingsPage() {
   const { features, toggle, enableAll, disableAll, resetToDefaults, getFeaturesByCategory } = useFeatures()
   const [searchQuery, setSearchQuery] = useState("")
@@ -96,7 +94,7 @@ export default function SettingsPage() {
       {/* Quick Actions */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-stone-500" />
+          
           <Input
             placeholder="기능 검색..."
             value={searchQuery}
@@ -105,15 +103,15 @@ export default function SettingsPage() {
           />
         </div>
         <Button variant="outline" onClick={enableAll} className="gap-2">
-          <Power className="h-4 w-4" />
+          On
           전체 활성화
         </Button>
         <Button variant="outline" onClick={disableAll} className="gap-2">
-          <PowerOff className="h-4 w-4" />
+          Off
           전체 비활성화
         </Button>
         <Button variant="outline" onClick={resetToDefaults} className="gap-2">
-          <RotateCcw className="h-4 w-4" />
+          Reset
           기본값 복원
         </Button>
       </div>

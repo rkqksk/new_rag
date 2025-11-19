@@ -6,8 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, Filter, Star, ShoppingCart, Heart } from "lucide-react"
-
 interface Product {
   id: string
   name: string
@@ -132,7 +130,7 @@ export default function SearchPage() {
           <CardContent className="p-4">
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-stone-500" />
+                
                 <Input
                   placeholder="제품명, 코드, 재질로 검색..."
                   className="pl-9"
@@ -141,7 +139,7 @@ export default function SearchPage() {
                 />
               </div>
               <Button variant="outline">
-                <Filter className="mr-2 h-4 w-4" />
+                Filter
                 필터
               </Button>
             </div>

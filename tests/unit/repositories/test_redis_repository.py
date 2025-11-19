@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.repositories.redis_repository import RedisRepository
+from apps.api.repositories.redis_repository import RedisRepository
 
 
 @pytest.mark.unit

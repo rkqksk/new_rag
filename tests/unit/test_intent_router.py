@@ -7,7 +7,7 @@ and MCP tool routing decisions.
 
 import pytest
 
-from app.core.routing.intent_router import Intent, IntentDetector, IntentResult
+from apps.api.core.routing.intent_router import Intent, IntentDetector, IntentResult
 
 
 @pytest.fixture
