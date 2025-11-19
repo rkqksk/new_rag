@@ -266,7 +266,17 @@ find_symbol(name_path="RAGQAService/query", include_body=true)
 
 ### Development (v10)
 ```bash
-# Monorepo
+# Monorepo Setup (one-time)
+./setup.sh                # Full setup with Docker
+./setup.sh --skip-docker  # Setup without Docker
+./setup.sh --skip-data    # Setup without seeding
+
+# Monorepo Build
+./build-all.sh            # Standard build
+./build-all.sh --parallel # Fast parallel build
+./build-all.sh --production # Production optimized
+
+# Monorepo Development
 pnpm install              # Install all dependencies
 pnpm dev                  # Run all apps
 pnpm build                # Build all apps
@@ -344,11 +354,17 @@ make lint    # flake8 + ruff
 # Type check
 make type-check  # mypy
 
+# Pre-commit hooks (automatic on commit)
+pre-commit install           # Install hooks
+pre-commit run --all-files   # Run all hooks manually
+pre-commit autoupdate        # Update hook versions
+
 # All checks
 make setup && make format && make lint && make test
 ```
 
 **Full Commands**: `docs/guides/QUICK_REFERENCE.md`
+**Automation Guide**: `docs/guides/AUTOMATION_SCRIPTS.md` ⭐ NEW
 
 ---
 

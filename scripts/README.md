@@ -1,248 +1,335 @@
 # Scripts Directory
 
-**Reorganized**: 2025-11-03
-**Active Scripts**: 12
-**Archived Scripts**: 290+
+**Version**: v10.0.0
+**Status**: Production Ready
+
+This directory contains automation scripts for the PETER v10.0.0 monorepo.
 
 ---
 
-## 🚀 Active Scripts (Production Ready)
+## Core Automation Scripts
+
+### 1. setup.sh (Project Root)
+**Location**: `/home/rkqksk/projects/new_rag/setup.sh`
+
+One-command project setup for fresh environments.
+
+```bash
+# Full setup
+./setup.sh
+
+# Without Docker
+./setup.sh --skip-docker
+
+# Without data seeding
+./setup.sh --skip-data
+
+# Help
+./setup.sh --help
+```
+
+**What it does**:
+- Checks system requirements (Python 3.11+, Node 18+, Docker, pnpm)
+- Installs Python dependencies (requirements.txt)
+- Installs Node dependencies (pnpm install)
+- Sets up .env file
+- Starts Docker services
+- Initializes databases
+- Runs migrations
+- Seeds initial data
+- Verifies setup
+
+**Time**: 3-5 minutes
+
+---
+
+### 2. build-all.sh (Project Root)
+**Location**: `/home/rkqksk/projects/new_rag/build-all.sh`
+
+Build all apps and packages in correct dependency order.
+
+```bash
+# Standard build
+./build-all.sh
+
+# Fast parallel build
+./build-all.sh --parallel
+
+# Production optimized build
+./build-all.sh --production
+
+# Skip linting
+./build-all.sh --skip-lint
+
+# Help
+./build-all.sh --help
+```
+
+**What it does**:
+- Pre-build checks
+- TypeScript type checking
+- Linting (ESLint, Prettier, Black, Flake8)
+- Builds packages in order (config → utils → core → ui)
+- Builds apps (api, web, pwa)
+- Generates build report
+
+**Time**: 2-3 minutes (1-2 with --parallel)
+
+---
+
+## Other Scripts
 
 ### Deployment
-```bash
-deploy.sh          # Deploy application to production
-rollback.sh        # Rollback to previous version
-```
+- `deploy-optimized.sh` - Deploy to environments
+- `deploy-production.sh` - Production deployment
+- `rollback.sh` - Rollback deployment
 
-### Application Servers
-```bash
-run_chat_server.py      # Start chat/conversation server
-run_comparison_server.py # Start product comparison server
-```
+### Testing
+- `test-all.sh` - Run all tests
+- `test-optimized.sh` - Optimized test run
+- `benchmark.sh` - Performance benchmarks
+- `load-test.sh` - Load testing
 
-### System Management
-```bash
-start_all.sh       # Start all services
-start_frontend.sh  # Start frontend only
-stop_all.sh        # Stop all services
-```
+### Database
+- `db-migrate.sh` - Run migrations
+- `migrate_to_hierarchical_chunks.py` - Migrate to hierarchical chunks
+- `create_multimodal_collection.py` - Create multimodal Qdrant collection
 
-### Documentation
-```
-README.md                        # This file
-MONITOR_USAGE.md                 # Monitoring guide
-PRODUCTION_CRAWLER_GUIDE.md      # Crawler operation guide
-README_BACKGROUND_WORKERS.md     # Background worker guide
-README_encoding_fix.md           # Encoding fix documentation
-```
+### Health & Monitoring
+- `health-check.sh` - Check service health
+- `analyze-performance.py` - Performance analysis
+- `train-predictive-alerts.py` - Train ML models for alerts
 
----
+### Development
+- `dev.sh` - Start development environment
+- `fix-file-watchers.sh` - Fix file watcher limits
+- `setup-ssh-keepalive.sh` - SSH keepalive configuration
 
-## 📁 Subdirectories
+### Security
+- `sast-scan.sh` - Static security scanning
+- `security-audit.sh` - Security audit
+- `pre-release-checklist.sh` - Pre-release checks
 
-### crawlers/
-Production crawler implementations (15 files)
-- `chungjin_crawler.py` - ChunjinKorea crawler
-- `complete_crawler.py` - Full-featured crawler
-- `material_based_crawler.py` - Material-based crawling
-- Browser automation utilities
+### Validation
+- `validate-v10.sh` - Validate v10 structure
+- `final-validation.sh` - Final validation before release
 
-### data_processing/
-Data processing pipelines (3 files)
-- Category organization scripts
-- RAG embedding pipeline
-
-### maintenance/
-Maintenance utilities (1 file)
-- Auto-documentation organizer
+### Build & Optimization
+- `optimize-bundle.sh` - Optimize bundle size
 
 ---
 
-## 📦 Archive Structure
+## Pre-commit Hooks
 
-All legacy/experimental/test scripts have been moved to `archive/`:
+**Location**: `.pre-commit-config.yaml` (project root)
 
-```
-archive/
-├── crawlers/          # Old crawler versions (150+ files)
-│   ├── onehago_*.py   # Onehago crawler iterations
-│   ├── freemold_*.py  # Freemold crawler iterations
-│   ├── crawl_*.py     # Various crawler experiments
-│   └── phase*.py      # Phase-based crawlers
-│
-├── analysis/          # Analysis & test scripts (50+ files)
-│   ├── analyze_*.py
-│   ├── test_*.py
-│   ├── debug_*.py
-│   └── investigate_*.py
-│
-├── data_processing/   # Data processing one-offs (40+ files)
-│   ├── fix_*.py
-│   ├── update_*.py
-│   ├── add_*.py
-│   └── enhance_*.py
-│
-├── monitoring/        # Monitoring scripts (20+ files)
-│   ├── monitor_*.py
-│   ├── check_*.py
-│   └── validation_*.py
-│
-├── deployment/        # Launcher scripts (30+ files)
-│   ├── launch_*.sh
-│   ├── run_*.sh
-│   └── restart_*.sh
-│
-├── setup/             # Setup scripts (15+ files)
-│   ├── setup_*.sh
-│   ├── install_*.sh
-│   └── cleanup.sh
-│
-├── one_off/           # One-time utilities (50+ files)
-│   ├── batch_*.py
-│   ├── calculate_*.py
-│   ├── convert_*.py
-│   └── reorganize_*.py
-│
-└── experiments/       # Experimental code (30+ files)
-    ├── *_test.py
-    ├── *_worker.py
-    └── *_orchestrator.py
-```
-
-**Total Archived**: 290+ scripts
-
----
-
-## 📊 Statistics
-
-### Before Cleanup
-- Total scripts: 300+
-- Organization: Chaotic
-- Find things: Hard
-- Maintainability: Poor
-
-### After Cleanup
-- Active scripts: 12
-- Archived scripts: 290+
-- Organization: Clear
-- Find things: Easy
-- Maintainability: Excellent
-
-### Breakdown by Category
-
-| Category | Active | Archived | Total |
-|----------|--------|----------|-------|
-| Deployment | 2 | 30 | 32 |
-| Servers | 2 | 0 | 2 |
-| Management | 3 | 0 | 3 |
-| Documentation | 5 | 0 | 5 |
-| Crawlers | 0 (subdir) | 150+ | 150+ |
-| Analysis | 0 | 50+ | 50+ |
-| Data Processing | 0 (subdir) | 40+ | 40+ |
-| Others | 0 | 20+ | 20+ |
-
----
-
-## 🔄 Usage
-
-### Running Active Scripts
+Automatic code quality enforcement on every commit.
 
 ```bash
-# Start services
-./start_all.sh
+# Install
+pip install pre-commit
+pre-commit install
 
-# Run chat server
-python run_chat_server.py
+# Run manually
+pre-commit run --all-files
 
-# Deploy to production
-./deploy.sh
-
-# Stop services
-./stop_all.sh
+# Update hooks
+pre-commit autoupdate
 ```
 
-### Accessing Archived Scripts
+**Hooks**:
+- Python: black, isort, flake8, mypy
+- TypeScript: prettier, eslint
+- General: trailing whitespace, EOF newlines, YAML/JSON validation
+- Security: detect-secrets, private key detection
+- Design System: no icons, pure black backgrounds
 
-If you need an archived script:
+---
+
+## Usage Patterns
+
+### First Time Setup
+```bash
+# 1. Clone repository
+git clone <repo-url>
+cd new_rag
+
+# 2. Run setup
+./setup.sh
+
+# 3. Install pre-commit hooks
+pip install pre-commit
+pre-commit install
+
+# 4. Start development
+pnpm dev
+```
+
+### Daily Development
+```bash
+# Start development
+pnpm dev
+
+# Make changes
+# ... edit code ...
+
+# Commit (pre-commit hooks run automatically)
+git add .
+git commit -m "feat: add feature"
+
+# Build for testing
+./build-all.sh --parallel
+```
+
+### Before Deployment
+```bash
+# Build production
+./build-all.sh --production
+
+# Run tests
+./scripts/test-all.sh
+
+# Security checks
+./scripts/security-audit.sh
+
+# Validate
+./scripts/validate-v10.sh
+
+# Deploy
+./scripts/deploy-production.sh
+```
+
+---
+
+## Script Guidelines
+
+### Creating New Scripts
+
+1. **Naming**: Use kebab-case (e.g., `my-script.sh`)
+2. **Shebang**: Always start with `#!/bin/bash`
+3. **Set flags**: Use `set -e` to exit on error
+4. **Colors**: Use color codes for output (RED, GREEN, YELLOW, BLUE, NC)
+5. **Help**: Include `--help` flag
+6. **Location**: Add to `/scripts/` directory
+7. **Executable**: Make executable with `chmod +x`
+8. **Documentation**: Add to this README
+
+### Script Template
 
 ```bash
-# Find script in archive
-find archive -name "*pattern*.py"
+#!/bin/bash
 
-# Copy back if needed
-cp archive/crawlers/old_crawler.py .
+################################################################################
+# Script Name - Brief Description
+################################################################################
+# Purpose: Detailed description
+# Usage: ./script-name.sh [OPTIONS]
+# Author: PETER Team
+# Version: 10.0.0
+################################################################################
 
-# Or run directly
-python archive/experiments/test_feature.py
+set -e  # Exit on error
+
+# Color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Configuration
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Helper functions
+print_success() { echo -e "${GREEN}✓${NC} $1"; }
+print_error() { echo -e "${RED}✗${NC} $1"; }
+print_warning() { echo -e "${YELLOW}!${NC} $1"; }
+print_info() { echo -e "${BLUE}→${NC} $1"; }
+
+# Main function
+main() {
+    print_info "Starting..."
+    # ... script logic ...
+    print_success "Complete!"
+}
+
+main "$@"
 ```
 
 ---
 
-## 🛠 Maintenance
+## Performance Metrics
 
-### Adding New Scripts
+| Script | Time | Network | Disk |
+|--------|------|---------|------|
+| setup.sh | 3-5 min | ~500MB | ~2GB |
+| setup.sh --skip-docker | 1-2 min | ~200MB | ~500MB |
+| build-all.sh | 2-3 min | - | ~50MB |
+| build-all.sh --parallel | 1-2 min | - | ~50MB |
+| pre-commit hooks | 5-15s | - | - |
 
-**For production scripts:**
-1. Add to root level
-2. Make executable: `chmod +x script.sh`
-3. Update this README
+---
 
-**For experimental scripts:**
-1. Add to appropriate `archive/` subdirectory
-2. Document in subdirectory README
+## Troubleshooting
 
-**For specialized scripts:**
-1. Add to appropriate subdirectory (crawlers/, data_processing/, maintenance/)
-2. Update subdirectory documentation
-
-### Archiving Scripts
-
-When a script is no longer actively used:
-
+### setup.sh fails
 ```bash
-# Move to appropriate archive category
-mv old_script.py archive/experiments/
+# Check requirements
+python3 --version  # Need 3.11+
+node --version     # Need 18+
+docker --version   # Need Docker
+pnpm --version     # Need pnpm
 
-# Update this README if it was listed
+# Install missing dependencies
+sudo apt install python3.11 nodejs docker.io
+npm install -g pnpm
+```
+
+### build-all.sh fails
+```bash
+# Check node_modules
+ls -la node_modules/  # Should exist
+pnpm install          # Reinstall if needed
+
+# Check types
+pnpm run type-check
+
+# Increase memory (if OOM)
+export NODE_OPTIONS="--max-old-space-size=4096"
+```
+
+### pre-commit hooks fail
+```bash
+# Run manually to see errors
+pre-commit run --all-files
+
+# Update hooks
+pre-commit autoupdate
+
+# Clear cache
+pre-commit clean
+pre-commit install --install-hooks
 ```
 
 ---
 
-## 📝 Script Naming Conventions
+## Documentation
 
-### Active Scripts
-- **Deployment**: `deploy.sh`, `rollback.sh`
-- **Servers**: `run_*.py`
-- **Management**: `start_*.sh`, `stop_*.sh`
-
-### Archived Scripts
-- **Crawlers**: `crawl_*.py`, `*_crawler.py`
-- **Analysis**: `analyze_*.py`, `test_*.py`
-- **Processing**: `fix_*.py`, `update_*.py`, `add_*.py`
-- **Utilities**: `calculate_*.py`, `generate_*.py`
-- **Phase-based**: `phase*.py`
+**Complete Guide**: `docs/guides/AUTOMATION_SCRIPTS.md`
+**Quick Reference**: `CLAUDE.md` → Essential Commands
+**API Reference**: `docs/reference/API_DOCUMENTATION.md`
 
 ---
 
-## 🚨 Important Notes
+## Support
 
-1. **Do not delete archive/** - Scripts may be needed for reference
-2. **Keep root clean** - Only essential production scripts at root
-3. **Use subdirectories** - Specialized scripts go in crawlers/, data_processing/, maintenance/
-4. **Document changes** - Update this README when adding/removing scripts
-5. **Test before deleting** - Always move to archive first, don't delete
-
----
-
-## 📞 Support
-
-For questions about scripts:
-- See: `/docs/ARCHITECTURE.md`
-- See: `/CLAUDE.md`
-- Check: `PRODUCTION_CRAWLER_GUIDE.md`
-- Check: `MONITOR_USAGE.md`
+For issues or questions:
+1. Check documentation: `docs/guides/AUTOMATION_SCRIPTS.md`
+2. Check troubleshooting: `docs/guides/TROUBLESHOOTING.md`
+3. Check CLAUDE.md for quick reference
 
 ---
 
-**Last Updated**: 2025-11-03
-**Maintained By**: RAG Enterprise Team
+**Version**: v10.0.0
+**Last Updated**: 2025-11-19
+**Maintainer**: PETER Team

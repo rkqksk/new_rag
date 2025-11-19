@@ -106,6 +106,58 @@ repos:
         name: 📝 markdownlint
         args: ['--fix']
 
+  # ============================================================================
+  # TypeScript/JavaScript - Prettier
+  # ============================================================================
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        name: 💅 Prettier (code formatter)
+        types_or: [javascript, jsx, ts, tsx, json, css, scss, markdown]
+        args: ['--write']
+
+  # ============================================================================
+  # TypeScript/JavaScript - ESLint
+  # ============================================================================
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v8.56.0
+    hooks:
+      - id: eslint
+        name: 🔍 ESLint (linter)
+        types_or: [javascript, jsx, ts, tsx]
+        args: ['--fix', '--max-warnings=0']
+        additional_dependencies:
+          - eslint@8.56.0
+          - '@typescript-eslint/parser@6.19.0'
+          - '@typescript-eslint/eslint-plugin@6.19.0'
+
+  # ============================================================================
+  # v10 Design System - NO Icons Rule
+  # ============================================================================
+  - repo: local
+    hooks:
+      - id: no-icons
+        name: 🚫 Validate NO Icons (lucide-react)
+        entry: bash -c 'if grep -r "lucide-react" apps/ packages/ --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js"; then echo "ERROR: lucide-react icons found! v10 design system uses text only."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: no-icon-imports
+        name: 🚫 Validate NO Icon Imports
+        entry: bash -c 'if grep -r "Icon" apps/ packages/ --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js" | grep -E "(import.*Icon|from.*icon)"; then echo "ERROR: Icon imports found! v10 design system uses text only."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: pure-black-background
+        name: ⚫ Validate Pure Black Background
+        entry: bash -c 'if grep -r "bg-gray-9\|background.*#[^0][0-9a-fA-F]\{5\}\|bg-\[#[^0][0-9a-fA-F]\{5\}\]" apps/ packages/ --include="*.tsx" --include="*.ts" --include="*.jsx" --include="*.js" --include="*.css"; then echo "WARNING: Non-black background found! v10 design uses #000000 only."; exit 1; fi'
+        language: system
+        pass_filenames: false
+        always_run: true
+
 # ============================================================================
 # Configuration
 # ============================================================================

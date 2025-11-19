@@ -1,6 +1,10 @@
-# RAG Enterprise Backend Tests
+# Test Suite Documentation
 
-Comprehensive test suite for the RAG Enterprise backend system.
+**Version**: v10.0.0
+**Last Updated**: 2025-11-19
+**Total Tests**: 83 files
+
+Comprehensive test suite for RAG Enterprise Platform covering unit, integration, and E2E tests.
 
 ## Test Structure
 
@@ -23,26 +27,69 @@ tests/
     └── test_health_endpoints.py
 ```
 
+## Quick Start
+
+### Prerequisites
+```bash
+# Install Python dependencies
+pip install -r requirements.txt
+
+# Install Node.js dependencies
+pnpm install
+
+# Install Playwright browsers
+npx playwright install
+
+# Start required services
+docker-compose up -d
+```
+
 ## Running Tests
 
 ### Run all tests
 ```bash
-pytest tests/
+# All tests (unit + integration + E2E)
+pnpm test
+
+# Or explicitly
+pytest tests/ -v && npx playwright test
 ```
 
 ### Run unit tests only
 ```bash
-pytest tests/unit/ -m unit
+pnpm test:unit
+# or
+pytest tests/unit/ -v
 ```
 
 ### Run integration tests only
 ```bash
-pytest tests/integration/ -m integration
+pnpm test:integration
+# or
+pytest tests/integration/ -v
+```
+
+### Run E2E tests
+```bash
+pnpm test:e2e
+# or
+npx playwright test
+
+# Interactive UI mode
+pnpm test:e2e:ui
+
+# Debug mode
+pnpm test:e2e:debug
 ```
 
 ### Run with coverage
 ```bash
-pytest tests/ --cov=app --cov-report=html --cov-report=term
+pnpm test:coverage
+# or
+pytest tests/ --cov=apps.api --cov=packages --cov-report=html
+
+# Open coverage report
+pnpm test:coverage:open
 ```
 
 ### Run specific test file
@@ -55,10 +102,16 @@ pytest tests/unit/services/test_search_service.py -v
 pytest tests/unit/services/test_search_service.py::TestSearchService::test_search_with_cache_hit -v
 ```
 
-## Test Coverage Target
+## Test Coverage
 
-- **Target**: 95%+ coverage
-- **Current**: Run `pytest --cov=app --cov-report=term` to see current coverage
+- **Target**: 80%+ coverage
+- **Current**: 72-78% (estimated)
+- **Report**: See `reports/TEST_COVERAGE_REPORT.md`
+
+### E2E Tests Added (v10.0.0)
+- ✅ `backend-health.spec.ts` - Backend health checks
+- ✅ `search-flow.spec.ts` - Search functionality
+- ✅ `frontend-loads.spec.ts` - Frontend loading & performance
 
 ## Writing Tests
 
