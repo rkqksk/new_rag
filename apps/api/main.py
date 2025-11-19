@@ -48,6 +48,7 @@ from apps.api.middleware.performance_timing import PerformanceTimingMiddleware
 from apps.api.middleware.request_logging import RequestLoggingMiddleware
 from apps.api.middleware.request_tracing import RequestTracingMiddleware
 from apps.api.middleware.smart_cache import SmartCacheMiddleware  # v11.0.0 Smart Caching
+from apps.api.middleware.security_headers import SecurityHeadersMiddleware  # v10.1.0 Security
 
 # v7.0.0+ Realtime Backend (Convex-like functionality)
 try:
@@ -91,13 +92,25 @@ if REALTIME_AVAILABLE:
 # ============================================================================
 
 # 1. CORS middleware (first to handle preflight)
+# v10.1.0 Security Update: Restrict CORS to specific origins from environment
+cors_origins = settings.cors_origins_list
+
+# Development: Also allow ngrok tunnel
+if settings.environment == "development":
+    ngrok_origins = [origin for origin in cors_origins if "ngrok" in origin]
+    app_logger.info(f"🔧 Development mode: ngrok origins allowed: {ngrok_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=cors_origins,  # ✅ From environment configuration
+    allow_credentials=settings.cors_allow_credentials,
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],  # ✅ Explicit methods
+    allow_headers=["Content-Type", "Authorization", "X-Request-ID", "X-Trace-ID"],  # ✅ Whitelist
 )
+app_logger.info(f"🌐 CORS enabled for {len(cors_origins)} origins: {', '.join(cors_origins[:3])}{'...' if len(cors_origins) > 3 else ''}")
+
+# 1.5. Security headers (v10.1.0) - Add security headers to all responses
+app.add_middleware(SecurityHeadersMiddleware, environment=settings.environment)
 
 # 2. Request tracing (correlation IDs)
 app.add_middleware(RequestTracingMiddleware)

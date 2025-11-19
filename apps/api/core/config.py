@@ -55,10 +55,33 @@ class Settings(BaseSettings):
     debug: bool = Field(default=False)
     api_prefix: str = Field(default="/api/v1")
 
+    # CORS Configuration (v10.1.0 Security Update)
+    cors_origins: str = Field(
+        default="http://localhost:3000,http://localhost:8080",
+        env="CORS_ORIGINS"
+    )
+    cors_allow_credentials: bool = Field(default=True, env="CORS_ALLOW_CREDENTIALS")
+
     database: DatabaseConfig = Field(default_factory=DatabaseConfig)
     redis: RedisConfig = Field(default_factory=RedisConfig)
     qdrant: QdrantConfig = Field(default_factory=QdrantConfig)
     debug_config: DebugConfig = Field(default_factory=DebugConfig)
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        """Parse comma-separated CORS origins into list"""
+        return [origin.strip() for origin in self.cors_origins.split(",") if origin.strip()]
+
+    @property
+    def postgres_url(self) -> str:
+        """Alias for database URL"""
+        return self.database.url
+
+    @property
+    def redis_url(self) -> str:
+        """Redis connection URL"""
+        password_part = f":{self.redis.password}@" if self.redis.password else ""
+        return f"redis://{password_part}{self.redis.host}:{self.redis.port}/{self.redis.db}"
 
     class Config:
         env_file = ".env"
