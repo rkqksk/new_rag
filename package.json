@@ -12,6 +12,7 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
     "test": "turbo run test",
     "test:unit": "pytest tests/unit/ -v",
     "test:integration": "pytest tests/integration/ -v",
